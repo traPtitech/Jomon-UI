@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: weekly
+      time: '05:00'
+    open-pull-requests-limit: 10
+    versioning-strategy: increase
+    reviewers:
+      - FujishigeTemma
+    target-branch: "master"
+    labels:
+      - "dependencies"

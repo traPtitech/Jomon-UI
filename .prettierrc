@@ -17,5 +17,10 @@
   "proseWrap": "preserve",
   "htmlWhitespaceSensitivity": "css",
   "vueIndentScriptAndStyle": false,
-  "endOfLine": "auto"
+  "endOfLine": "auto",
+  "importOrder": [
+    "^/@/store/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true
 }

@@ -1,0 +1,27 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "parserOptions": {
+    "parser": "@typescript-eslint/parser"
+  },
+  "extends": [
+    "plugin:vue/vue3-essential",
+    "eslint:recommended",
+    "@vue/typescript/recommended",
+    "@vue/prettier",
+    "@vue/prettier/@typescript-eslint"
+  ],
+  "rules": {
+    "no-console": "warn",
+    "no-debugger": "warn",
+    "vue/attributes-order": [
+      "warn",
+      {
+        "alphabetical": true
+      }
+    ]
+  }
+}

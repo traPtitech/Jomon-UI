@@ -1,10 +1,10 @@
 <template>
   <main>
-    <header v-if="$route.meta.title" class="bg-white shadow">
-      <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold leading-tight text-gray-900">
-          {{ $route.meta.title }}
-        </h1>
+    <header class="shadow min-h-12">
+      <div class="flex gap-2">
+        <router-link to="/requests"><div>申請一覧</div></router-link>
+        <router-link to="/transactions"><div>入出金記録一覧</div></router-link>
+        <router-link to="/groups"><div>グループ一覧</div></router-link>
       </div>
     </header>
 

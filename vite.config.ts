@@ -1,21 +1,19 @@
-import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import compress from 'vite-plugin-compress'
-import path from 'path'
 import https from 'https'
+import path from 'path'
+import brotli from 'rollup-plugin-brotli'
+import { defineConfig } from 'vite'
+import WindiCSS from 'vite-plugin-windicss'
 
-const keepAliveAgent = new https.Agent({ keepAlive: true });
-const DEV_SERVER_PROXY_HOST = "https://jomon-dev.tokyotech.org"
+const keepAliveAgent = new https.Agent({ keepAlive: true })
+const DEV_SERVER_PROXY_HOST = 'https://jomon-dev.tokyotech.org'
 
 export default defineConfig({
-  plugins: [
-    vue(),
-    compress() // 現状brotli圧縮したやつしか配信しない
-  ],
+  plugins: [vue(), brotli(), WindiCSS()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, '/src'),
-    },
+      '@': path.resolve(__dirname, '/src')
+    }
   },
   server: {
     open: true,
@@ -26,5 +24,5 @@ export default defineConfig({
         agent: keepAliveAgent
       }
     }
-  },
+  }
 })

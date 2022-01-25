@@ -11,13 +11,13 @@
     "check": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@heroicons/vue": "^1.0.5",
     "pinia": "^2.0.9",
     "vue": "^3.2.22",
     "vue-router": "^4.0.12"
   },
   "devDependencies": {
     "@headlessui/vue": "^1.4.2",
-    "@heroicons/vue": "^1.0.5",
     "@openapitools/openapi-generator-cli": "^2.4.16",
     "@trivago/prettier-plugin-sort-imports": "^3.1.1",
     "@types/node": "^16.11.7",

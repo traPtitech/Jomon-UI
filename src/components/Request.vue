@@ -30,18 +30,18 @@ type Props = { request: Request }
 const props = defineProps<Props>()
 const dateFormatter = computed(
   () => (date: string) =>
-    date.split('T')[0].split('-')[0] +
+    date.split('-')[0] +
     '年' +
-    date.split('T')[0].split('-')[1] +
+    date.split('-')[1] +
     '月' +
-    date.split('T')[0].split('-')[2] +
+    date.split('-')[2].split('T')[0] +
     '日'
 )
 </script>
 
 <template>
   <router-link :to="'/requests/' + props.request.id">
-    <div class="flex justify-around">
+    <div class="flex justify-around hover:bg-gray-100">
       <div class="flex-1 text-center">{{ props.request.status }}</div>
       <div class="flex-1 text-center">{{ props.request.title }}</div>
       <div class="flex-1 text-center">
@@ -50,7 +50,13 @@ const dateFormatter = computed(
       <div class="flex-1 text-center">
         {{ dateFormatter(props.request.created_at) }}
       </div>
-      <div class="flex-1 text-center">{{ props.request.amount }}</div>
+      <div class="flex-1 text-center">{{ props.request.amount }}円</div>
+      <div class="flex-1 text-center">
+        <span v-for="tag in props.request.tags" :key="tag.id"
+          >{{ tag.name }},</span
+        >
+      </div>
+      <div class="flex-1 text-center">{{ props.request.group.name }}</div>
     </div>
   </router-link>
 </template>

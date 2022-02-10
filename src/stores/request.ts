@@ -46,11 +46,11 @@ export const useRequestStore = defineStore('request', {
   getters: {
     dateFormatter() {
       return (date: string) => {
-        date.split('T')[0].split('-')[0] +
+        date.split('-')[0] +
           '年' +
-          date.split('T')[0].split('-')[1] +
+          date.split('-')[1] +
           '月' +
-          date.split('T')[0].split('-')[2] +
+          date.split('-')[2].split('T')[0] +
           '日'
       }
     }

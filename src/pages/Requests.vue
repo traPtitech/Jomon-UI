@@ -31,8 +31,8 @@ function open() {
       <div class="flex-1 text-center">グループ</div>
     </div>
     <ul class="w-full mr-auto ml-auto">
-      <li v-for="request in requests" :key="request.id">
-        <Request :request="request" />
+      <li v-for="(request, index) in requests" :key="request.id">
+        <Request :index="index" />
       </li>
     </ul>
   </div>

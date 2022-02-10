@@ -1,5 +1,14 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useRequestStore } from '../stores/request'
+import { useTagAndGroupStore } from '../stores/tagAndGroup'
+import { useUserStore } from '../stores/user'
+const requestStore = useRequestStore()
+const userStore = useUserStore()
+const tagAndGroupStore = useTagAndGroupStore()
+const { params } = storeToRefs(requestStore)
+const { users } = storeToRefs(userStore)
+const { tags, groups } = storeToRefs(tagAndGroupStore)
 const type_items = [
   { type: 'club', jpn: '部費利用申請' },
   { type: 'contest', jpn: '大会等旅費補助申請' },
@@ -13,69 +22,6 @@ const state_items = [
   { state: 'accepted', jpn: '払い戻し待ち' },
   { state: 'fully_repaid', jpn: '払い戻し完了' }
 ]
-const tag_items = [
-  {
-    id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    name: '2020講習会',
-    description: '2020年度講習会',
-    created_at: '2022-01-25T14:06:32.381Z',
-    updated_at: '2022-01-25T14:06:32.381Z'
-  },
-  {
-    id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    name: '2021講習会',
-    description: '2021年度講習会',
-    created_at: '2022-01-27T14:06:32.381Z',
-    updated_at: '2022-01-27T14:06:32.381Z'
-  }
-]
-const group_items = [
-  {
-    id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    name: 'SysAd',
-    description: 'SysAd班',
-    budget: 250000,
-    created_at: '2022-01-25T14:06:32.381Z',
-    updated_at: '2022-01-25T14:06:32.381Z'
-  },
-  {
-    id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    name: 'Game',
-    description: 'Game班',
-    budget: 50000,
-    created_at: '2022-01-27T14:06:32.381Z',
-    updated_at: '2022-01-27T14:06:32.381Z'
-  }
-]
-const users = [
-  {
-    name: 'nagatech',
-    display_name: 'ながてち',
-    admin: true,
-    created_at: '2022-01-25T13:45:37.048Z',
-    updated_at: '2022-01-25T13:45:37.048Z',
-    deleted_at: '2022-01-25T13:45:37.048Z'
-  },
-  {
-    name: 'mehm8128',
-    display_name: 'mehm8128',
-    admin: false,
-    created_at: '2022-01-27T13:45:37.048Z',
-    updated_at: '2022-01-27T13:45:37.048Z',
-    deleted_at: '2022-01-27T13:45:37.048Z'
-  }
-]
-const params = ref({
-  sort: 'created_at',
-  current_state: '',
-  year: '',
-  target: '',
-  type: '',
-  since: '',
-  until: '',
-  tag: '',
-  group: ''
-})
 function sortCreatedAsc() {
   params.value.sort = 'created_at'
 }
@@ -87,22 +33,6 @@ function sortTitleAsc() {
 }
 function sortTitleDesc() {
   params.value.sort = '-title'
-}
-function getRequests() {
-  /*getリクエスト*/
-}
-function resetParams() {
-  params.value = {
-    sort: 'created_at',
-    current_state: '',
-    year: '',
-    target: '',
-    type: '',
-    since: '',
-    until: '',
-    tag: '',
-    group: ''
-  }
 }
 </script>
 
@@ -152,20 +82,20 @@ function resetParams() {
         <!--複数選択をもうちょいいい感じにできるようにする-->
         <!--ライブラリならvue-select、vue-multiselectとかよさそう-->
         <option value="">タグ</option>
-        <option v-for="(tag, index) in tag_items" :key="index">
+        <option v-for="(tag, index) in tags" :key="index">
           {{ tag.name }}
         </option>
       </select>
       <select v-model="params.group">
         <option value="">グループ</option>
-        <option v-for="(group, index) in group_items" :key="index">
+        <option v-for="(group, index) in groups" :key="index">
           {{ group.name }}
         </option>
       </select>
     </div>
     <div class="flex justify-around">
-      <button @click="getRequests">絞り込み</button>
-      <button @click="resetParams">リセット</button>
+      <button @click="requestStore.getRequests">絞り込み</button>
+      <button @click="requestStore.resetParams">リセット</button>
     </div>
   </div>
 </template>

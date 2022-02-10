@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import Transaction from '../components/Transaction.vue'
+import FilteringTransaction from '../components/FilteringTransaction.vue'
 const transactions = [
   {
     id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -82,7 +83,7 @@ const transactions = [
 
 <template>
   <dev class="flex justify-evenly">
-    <dev class="min-w-80 min-h-80 text-center border-3">aaaa</dev>
+    <FilteringTransaction />
     <dev class="border-3 min-w-150 w-3/5">
       <h1 class="text-center border">入出金記録</h1>
       <dev class="text-center border flex">

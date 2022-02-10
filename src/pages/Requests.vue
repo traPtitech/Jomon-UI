@@ -19,6 +19,20 @@ const requests = [
         description: '2020年度講習会',
         created_at: '2022-01-25T13:29:19.918Z',
         updated_at: '2022-01-25T13:29:19.918Z'
+      },
+      {
+        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: '2020講習会',
+        description: '2020年度講習会',
+        created_at: '2022-01-25T13:29:19.918Z',
+        updated_at: '2022-01-25T13:29:19.918Z'
+      },
+      {
+        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        name: '2020講習会',
+        description: '2020年度講習会',
+        created_at: '2022-01-25T13:29:19.918Z',
+        updated_at: '2022-01-25T13:29:19.918Z'
       }
     ],
     group: {
@@ -52,6 +66,8 @@ function open() {
       <div class="flex-1 text-center">申請者</div>
       <div class="flex-1 text-center">申請日</div>
       <div class="flex-1 text-center">金額</div>
+      <div class="flex-1 text-center">タグ</div>
+      <div class="flex-1 text-center">グループ</div>
     </div>
     <ul class="w-full mr-auto ml-auto">
       <li v-for="request in requests" :key="request.id">

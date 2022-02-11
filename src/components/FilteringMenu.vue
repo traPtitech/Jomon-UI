@@ -16,11 +16,11 @@ const type_items = [
   { type: 'public', jpn: '渉外交通費補助' }
 ]
 const state_items = [
-  { state: 'submitted', jpn: '提出済み' },
+  { state: 'submitted', jpn: '承認待ち' },
   { state: 'rejected', jpn: '却下' },
   { state: 'fix_required', jpn: '要修正' },
-  { state: 'accepted', jpn: '払い戻し待ち' },
-  { state: 'fully_repaid', jpn: '払い戻し完了' }
+  { state: 'accepted', jpn: '承認済み' },
+  { state: 'fully_repaid', jpn: '返済完了' }
 ]
 function sortCreatedAsc() {
   params.value.sort = 'created_at'

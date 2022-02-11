@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { useRequestStore } from '../stores/request'
+import StatusChip from './StatusChip.vue'
 const requestStore = useRequestStore()
 const { requests, dateFormatter } = storeToRefs(requestStore)
 type Props = { index: number }
@@ -10,7 +11,9 @@ const props = defineProps<Props>()
 <template>
   <router-link :to="'/requests/' + requests[props.index].id">
     <div class="flex justify-around hover:bg-gray-100">
-      <div class="flex-1 text-center">{{ requests[props.index].status }}</div>
+      <div class="flex-1 text-center">
+        <StatusChip :status="requests[props.index].status" />
+      </div>
       <div class="flex-1 text-center">{{ requests[props.index].title }}</div>
       <div class="flex-1 text-center">
         {{ requests[props.index].created_by }}

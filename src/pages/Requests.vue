@@ -2,7 +2,7 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import FilteringMenu from '../components/FilteringMenu.vue'
-import Request from '../components/Request.vue'
+import Request2 from '../components/Request2.vue'
 import { useRequestStore } from '../stores/request'
 const requestStore = useRequestStore()
 const { requests } = storeToRefs(requestStore)
@@ -20,8 +20,8 @@ function open() {
       <FilteringMenu v-if="isOpen" class="absolute right-8 top-8" />
     </div>
   </div>
-  <div class="w-9/10 mr-auto ml-auto">
-    <div class="flex justify-around">
+  <div class="w-6/10 mr-auto ml-auto border-solid border-black border-2">
+    <!-- <div class="flex justify-around">
       <div class="flex-1 text-center">状態</div>
       <div class="flex-1 text-center">タイトル</div>
       <div class="flex-1 text-center">申請者</div>
@@ -29,10 +29,10 @@ function open() {
       <div class="flex-1 text-center">金額</div>
       <div class="flex-1 text-center">タグ</div>
       <div class="flex-1 text-center">グループ</div>
-    </div>
+    </div> -->
     <ul class="w-full mr-auto ml-auto">
       <li v-for="(request, index) in requests" :key="request.id">
-        <Request :index="index" />
+        <Request2 :index="index" />
       </li>
     </ul>
   </div>

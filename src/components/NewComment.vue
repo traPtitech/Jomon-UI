@@ -1,15 +1,29 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+import { useRequestDetailStore } from '../stores/requestDetail'
+const requestDetailStore = useRequestDetailStore()
+const { request } = storeToRefs(requestDetailStore)
 const kind = ref('comment')
 const status = ref('submitted')
 const comment = ref('')
 function submit() {
-  kind.value = 'comment'
-  status.value = 'submitted'
-  comment.value = ''
+  if (kind.value === 'comment') {
+    const commentRequest = { comment: comment.value }
+    requestDetailStore.postComment(request.value.id, commentRequest)
+    kind.value = 'comment'
+    comment.value = ''
+  }
+  if (kind.value === 'statusChange') {
+    const statusRequest = { status: status.value, reason: comment.value }
+    requestDetailStore.putStatus(request.value.id, statusRequest)
+    kind.value = 'statusChange'
+    status.value = 'submitted'
+    comment.value = ''
+  }
 }
 </script>
-
+// todo:権限周りを整える
 <template>
   <div class="flex flex-col mt-4">
     <div class="flex justify-between">

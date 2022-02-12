@@ -17,6 +17,22 @@ function statusToJpn(status: string) {
       return 'ERROR'
   }
 }
+function statusColor(status: string) {
+  switch (status) {
+    case 'submitted':
+      return 'bg-yellow-500 text-white-500'
+    case 'rejected':
+      return 'bg-gray-500 text-black-500'
+    case 'fix_required':
+      return 'bg-red-500 text-white-500'
+    case 'accepted':
+      return 'bg-blue-500 text-white-500'
+    case 'fully_repaid':
+      return 'bg-green-500 text-black-500'
+    default:
+      return 'ERROR'
+  }
+}
 </script>
 
 <template>

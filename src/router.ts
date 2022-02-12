@@ -4,6 +4,10 @@ const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/requests' },
   { path: '/requests', component: () => import('./pages/Requests.vue') },
   {
+    path: '/request/:id',
+    component: () => import('./pages/RequestDetails.vue')
+  },
+  {
     path: '/transactions',
     component: () => import('./pages/Transactions.vue')
   },

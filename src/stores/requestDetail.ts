@@ -45,6 +45,14 @@ type Log = {
   index: number
 }
 
+type CommentRequest = {
+  comment: string
+}
+type StatusRequest = {
+  status: string
+  reason: string
+}
+
 export const useRequestDetailStore = defineStore('requestDetail', {
   state: () => ({
     request: {
@@ -133,9 +141,15 @@ export const useRequestDetailStore = defineStore('requestDetail', {
     }
   },
   actions: {
-    async getRequestDetail(id: string) {
-      const response: RequestDetail = await axios.get('/api/requests' + id)
+    async getRequestDetail(id: string | string[]) {
+      const response: RequestDetail = await axios.get('/api/requests/' + id)
       this.request = response
+    },
+    async postComment(id: string, commentRequest: CommentRequest) {
+      await axios.post('/api/requests/' + id + '/comments', commentRequest)
+    },
+    async putStatus(id: string, statusRequest: StatusRequest) {
+      await axios.put('/api/requests/' + id + '/status', statusRequest)
     }
   }
 })

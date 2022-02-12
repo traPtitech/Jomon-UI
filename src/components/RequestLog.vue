@@ -9,15 +9,17 @@ const props = defineProps<Props>()
 </script>
 
 <template>
-  <div class="border border-solid border-black">
+  <div class="border border-solid border-black mb-4">
     <div v-if="kind === 'comment'">
       <span>{{ request.comments[props.index].user }}がコメントしました。</span>
       <div>{{ request.comments[props.index].comment }}</div>
-      <span>{{
-        requestDetailStore.dateFormatter(
-          request.comments[props.index].created_at
-        )
-      }}</span>
+      <div class="text-right">
+        <span>{{
+          requestDetailStore.dateFormatter(
+            request.comments[props.index].created_at
+          )
+        }}</span>
+      </div>
     </div>
     <div v-if="kind === 'statusChange'">
       <span>{{ request.statuses[props.index].created_by }}が申請の状態を</span>
@@ -26,11 +28,13 @@ const props = defineProps<Props>()
       <div v-if="request.statuses[props.index].reason">
         理由：{{ request.statuses[props.index].reason }}
       </div>
-      <span>{{
-        requestDetailStore.dateFormatter(
-          request.statuses[props.index].created_at
-        )
-      }}</span>
+      <div class="text-right">
+        <span>{{
+          requestDetailStore.dateFormatter(
+            request.statuses[props.index].created_at
+          )
+        }}</span>
+      </div>
     </div>
   </div>
 </template>

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
+import example from '../assets/mehm8128.png'
 import { useRequestDetailStore } from '../stores/requestDetail'
 import StatusChip from './StatusChip.vue'
 const requestDetailStore = useRequestDetailStore()
@@ -24,37 +25,46 @@ function handleFix() {
         修正
       </button>
     </div>
-    <div>
-      <span>タイトル</span>
-      <br />
-      <span>{{ request.title }}</span>
+    <div class="flex justify-between">
+      <div class="flex flex-col">
+        <div>
+          <span>タイトル</span>
+          <br />
+          <span>{{ request.title }}</span>
+        </div>
+        <div>
+          <span>申請日</span>
+          <br />
+          <span>{{
+            requestDetailStore.dateFormatter(request.created_at)
+          }}</span>
+        </div>
+        <div>
+          <span>申請者</span>
+          <!--APIになかったので不明-->
+        </div>
+        <div>
+          <span>支払金額</span>
+          <br />
+          <span>{{ request.amount }}</span>
+        </div>
+        <div>
+          <span>タグ</span>
+          <br />
+          <span v-for="tag in request.tags" :key="tag.id">{{ tag.name }},</span>
+        </div>
+        <div>
+          <span>グループ</span>
+          <br />
+          <span>{{ request.group.name }}</span>
+        </div>
+        <div>
+          <span>詳細</span>
+          <br />
+          <span>{{ request.content }}</span>
+        </div>
+      </div>
+      <img alt="example" class="w-3/7 mt-4 mr-12" :src="example" />
     </div>
-    <div>
-      <span>申請日</span>
-      <br />
-      <span>{{ requestDetailStore.dateFormatter(request.created_at) }}</span>
-    </div>
-    <div>
-      <span>申請者</span>
-      <!--APIになかったので不明-->
-    </div>
-    <div>
-      <span>支払金額</span>
-      <br />
-      <span>{{ request.amount }}</span>
-    </div>
-    <div>
-      <span>タグ</span>
-      <br />
-      <span v-for="tag in request.tags" :key="tag.id">{{ tag.name }},</span>
-    </div>
-    <div>
-      <span>グループ</span>
-      <br />
-      <span>{{ request.group.name }}</span>
-    </div>
-    <span>詳細</span>
-    <br />
-    <span>{{ request.content }}</span>
   </div>
 </template>

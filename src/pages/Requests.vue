@@ -32,6 +32,16 @@ function open() {
     <ul class="w-full mr-auto ml-auto">
       <li v-for="(request, index) in requests" :key="request.id">
         <Request2 :index="index" />
+        <div
+          class="
+            w-29/30
+            bg-gray-400
+            border border-solid border-gray-400
+            mr-auto
+            ml-auto
+          "
+        />
+        <!-- todo:デザイン改善 -->
       </li>
     </ul>
   </div>

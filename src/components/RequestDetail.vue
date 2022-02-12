@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import example from '../assets/mehm8128.png'
+import { useFileStore } from '../stores/file'
 import { useRequestDetailStore } from '../stores/requestDetail'
 import StatusChip from './StatusChip.vue'
 const requestDetailStore = useRequestDetailStore()
+const fileStore = useFileStore()
+const { files } = storeToRefs(fileStore)
 const { request } = storeToRefs(requestDetailStore)
 const status = 'submitted'
 function handleFix() {
@@ -17,7 +19,9 @@ function handleFix() {
       <span class="text-3xl"
         >申請詳細<!--申請の種類を分けるかどうかが不明--></span
       >
-      <StatusChip :status="status" />
+      <StatusChip
+        :status="status"
+      /><!--statusがdetailsに存在しないのでどうなるか不明-->
       <button
         class="w-20 h-10 border border-solid border-black"
         @click="handleFix"
@@ -64,7 +68,14 @@ function handleFix() {
           <span>{{ request.content }}</span>
         </div>
       </div>
-      <img alt="example" class="w-3/7 mt-4 mr-12" :src="example" />
+      <div class="w-3/7 mt-4 mr-12">
+        <img
+          v-for="file in files"
+          :key="file.file"
+          alt="example"
+          :src="file.file"
+        />
+      </div>
     </div>
   </div>
 </template>

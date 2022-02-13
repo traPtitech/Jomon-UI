@@ -2,10 +2,13 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useRequestDetailStore } from '../stores/requestDetail'
+import { useUserStore } from '../stores/user'
 const requestDetailStore = useRequestDetailStore()
+const userStore = useUserStore()
 const { request } = storeToRefs(requestDetailStore)
+const { me } = storeToRefs(userStore)
 const kind = ref('comment')
-const status = ref('submitted')
+const status = ref('')
 const comment = ref('')
 function submit() {
   if (kind.value === 'comment') {
@@ -18,25 +21,54 @@ function submit() {
     const statusRequest = { status: status.value, reason: comment.value }
     requestDetailStore.putStatus(request.value.id, statusRequest)
     kind.value = 'statusChange'
-    status.value = 'submitted'
+    status.value = ''
     comment.value = ''
   }
 }
 </script>
-// todo:権限周りを整える
+
 <template>
   <div class="flex flex-col mt-4">
     <div class="flex justify-between">
       <select v-model="kind">
         <option value="comment">コメント</option>
-        <option value="statusChange">状態変更</option>
+        <option
+          v-if="me.admin || request.created_by == me.name"
+          value="statusChange"
+        >
+          状態変更
+        </option>
       </select>
       <select v-if="kind === 'statusChange'" v-model="status">
-        <option value="submitted">承認待ち</option>
-        <option value="fix_required">要修正</option>
-        <option value="accepted">承認済み</option>
+        <option disabled value="">申請の状態を選択</option>
+        <option
+          v-if="
+            request.status === 'fix_required' ||
+            (me.admin && request.status === 'accepted')
+          "
+          value="submitted"
+        >
+          承認待ち
+        </option>
+        <option
+          v-if="me.admin && request.status === 'submitted'"
+          value="fix_required"
+        >
+          要修正
+        </option>
+        <option
+          v-if="me.admin && request.status === 'submitted'"
+          value="accepted"
+        >
+          承認済み
+        </option>
         <option value="fully_repaid">返済完了</option>
-        <option value="rejected">却下</option>
+        <option
+          v-if="me.admin && request.status === 'submitted'"
+          value="rejected"
+        >
+          却下
+        </option>
       </select>
     </div>
     <textarea

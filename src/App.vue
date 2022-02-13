@@ -1,6 +1,8 @@
 <script lang="ts" setup>
+import { useRoute } from 'vue-router'
 import NewRequestButton from './components/NewRequestButton.vue'
 import Logo from '/@/components/Logo.vue'
+const route = useRoute()
 </script>
 <template>
   <main>
@@ -8,7 +10,9 @@ import Logo from '/@/components/Logo.vue'
       <Logo />
       <div class="flex flex-1 px-2 justify-between">
         <div class="flex gap-2">
-          <router-link to="/requests"><div>申請一覧</div></router-link>
+          <router-link to="/requests?pageIndex=1"
+            ><div>申請一覧</div></router-link
+          >
           <router-link to="/transactions"
             ><div>入出金記録一覧</div></router-link
           >
@@ -18,6 +22,6 @@ import Logo from '/@/components/Logo.vue'
       </div>
     </header>
 
-    <router-view />
+    <router-view :key="route.fullPath" /><!--ページング処理時の再描画を促す -->
   </main>
 </template>

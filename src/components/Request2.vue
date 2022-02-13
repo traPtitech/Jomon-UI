@@ -22,8 +22,12 @@ const props = defineProps<Props>()
       </div>
       <div class="flex-grow">
         <div class="">{{ requests[props.index].title }}</div>
-        <div class="">申請者：{{ requests[props.index].created_by }}</div>
-        <div class="">グループ：{{ requests[props.index].group.name }}</div>
+        <div>
+          <span class="mr-8"
+            >申請者：{{ requests[props.index].created_by }}</span
+          >
+          <span class="">グループ：{{ requests[props.index].group.name }}</span>
+        </div>
         <div class="">
           <span
             v-for="tag in requests[props.index].tags"

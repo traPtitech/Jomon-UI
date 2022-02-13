@@ -78,6 +78,8 @@ export const useRequestDetailStore = defineStore('requestDetail', {
       amount: 1200,
       title: 'SysAd講習会の開催費用',
       content: 'サーバー代 1200円',
+      created_by: 'mehm8128',
+      status: 'submitted',
       comments: [
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -97,6 +99,20 @@ export const useRequestDetailStore = defineStore('requestDetail', {
         }
       ],
       tags: [
+        {
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          name: '2020講習会',
+          description: '2020年度講習会',
+          created_at: '2022-02-12T08:01:37.838Z',
+          updated_at: '2022-02-12T08:01:37.838Z'
+        },
+        {
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          name: '2020講習会',
+          description: '2020年度講習会',
+          created_at: '2022-02-12T08:01:37.838Z',
+          updated_at: '2022-02-12T08:01:37.838Z'
+        },
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           name: '2020講習会',

@@ -15,7 +15,7 @@ type UserRequest = {
   admin: boolean
 }
 
-export const useUserStore = defineStore('users', {
+export const useUserStore = defineStore('user', {
   state: () => ({
     me: {
       name: 'mehm8128',

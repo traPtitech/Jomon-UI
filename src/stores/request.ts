@@ -494,6 +494,9 @@ export const useRequestStore = defineStore('request', {
       })
       this.requests = response
     },
+    async postRequest(request: Request) {
+      await axios.post('/api/requests', request)
+    },
     resetParams() {
       this.params = {
         sort: 'created_at',

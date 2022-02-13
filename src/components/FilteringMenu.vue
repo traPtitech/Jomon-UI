@@ -1,14 +1,17 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
+import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
-import { useTagAndGroupStore } from '../stores/tagAndGroup'
+import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
 const requestStore = useRequestStore()
 const userStore = useUserStore()
-const tagAndGroupStore = useTagAndGroupStore()
+const tagStore = useTagStore()
+const groupStore = useGroupStore()
 const { params } = storeToRefs(requestStore)
 const { users } = storeToRefs(userStore)
-const { tags, groups } = storeToRefs(tagAndGroupStore)
+const { tags } = storeToRefs(tagStore)
+const { groups } = storeToRefs(groupStore)
 const type_items = [
   { type: 'club', jpn: '部費利用申請' },
   { type: 'contest', jpn: '大会等旅費補助申請' },
@@ -35,7 +38,7 @@ function sortTitleDesc() {
   params.value.sort = '-title'
 }
 </script>
-
+//todo:日時のバリデーション追加
 <template>
   <div
     class="
@@ -48,10 +51,40 @@ function sortTitleDesc() {
     "
   >
     <div class="flex justify-around">
-      <button @click="sortCreatedAsc">日付昇順</button>
-      <button @click="sortCreatedDesc">日付降順</button>
-      <button @click="sortTitleAsc">タイトル昇順</button>
-      <button @click="sortTitleDesc">タイトル降順</button>
+      <button
+        :class="
+          params.sort === 'created_at' ? 'border border-solid border-black' : ''
+        "
+        @click="sortCreatedAsc"
+      >
+        日付昇順
+      </button>
+      <button
+        :class="
+          params.sort === '-created_at'
+            ? 'border border-solid border-black'
+            : ''
+        "
+        @click="sortCreatedDesc"
+      >
+        日付降順
+      </button>
+      <button
+        :class="
+          params.sort === 'title' ? 'border border-solid border-black' : ''
+        "
+        @click="sortTitleAsc"
+      >
+        タイトル昇順
+      </button>
+      <button
+        :class="
+          params.sort === '-title' ? 'border border-solid border-black' : ''
+        "
+        @click="sortTitleDesc"
+      >
+        タイトル降順
+      </button>
     </div>
     <div class="flex flex-col justify-around flex-1">
       <input v-model="params.year" placeholder="年度" />

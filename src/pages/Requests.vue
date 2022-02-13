@@ -4,14 +4,23 @@ import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import FilteringMenu from '../components/FilteringMenu.vue'
 import Request2 from '../components/Request2.vue'
+import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
+import { useTagStore } from '../stores/tag'
+import { useUserStore } from '../stores/user'
 const route = useRoute()
 const pageIndex = Number(route.query.pageIndex)
 const requestStore = useRequestStore()
+const tagStore = useTagStore()
+const groupStore = useGroupStore()
+const userStore = useUserStore()
 const { requestsLength, requestsFilter } = storeToRefs(requestStore)
 const isOpen = ref(false)
 onMounted(() => {
   requestStore.getRequests()
+  tagStore.getTags()
+  groupStore.getGroups()
+  userStore.getUsers()
 })
 function open() {
   isOpen.value = !isOpen.value

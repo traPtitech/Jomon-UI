@@ -47,14 +47,14 @@ function open() {
   <div class="text-center">
     <router-link
       v-show="pageIndex !== 1"
-      :to="'/requests/?pageIndex=' + String(pageIndex - 1)"
+      :to="'/requests/?pageIndex=' + (pageIndex - 1).toString()"
       ><span class="border border-solid border-black">
         前のページへ
       </span></router-link
     >
     <router-link
       v-show="Math.ceil(requestsLength() / 7) !== pageIndex"
-      :to="'/requests/?pageIndex=' + String(pageIndex + 1)"
+      :to="'/requests/?pageIndex=' + (pageIndex + 1).toString()"
       ><span class="border border-solid border-black">
         次のページへ
       </span></router-link

@@ -1,12 +1,18 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import FilteringMenu from '../components/FilteringMenu.vue'
 import Request2 from '../components/Request2.vue'
 import { useRequestStore } from '../stores/request'
+const route = useRoute()
+const pageIndex = Number(route.query.pageIndex)
 const requestStore = useRequestStore()
-const { requests } = storeToRefs(requestStore)
+const { requestsLength, requestsFilter } = storeToRefs(requestStore)
 const isOpen = ref(false)
+onMounted(() => {
+  requestStore.getRequests()
+})
 function open() {
   isOpen.value = !isOpen.value
 }
@@ -31,7 +37,10 @@ function open() {
       <div class="flex-1 text-center">グループ</div>
     </div> -->
     <ul class="w-full mr-auto ml-auto">
-      <li v-for="(request, index) in requests" :key="request.id">
+      <li
+        v-for="(request, index) in requestsFilter(pageIndex)"
+        :key="request.id"
+      >
         <Request2 :index="index" />
         <div
           class="
@@ -45,5 +54,21 @@ function open() {
         <!-- todo:デザイン改善 -->
       </li>
     </ul>
+  </div>
+  <div class="text-center">
+    <router-link
+      v-show="pageIndex !== 1"
+      :to="'/requests/?pageIndex=' + String(pageIndex - 1)"
+      ><span class="border border-solid border-black">
+        前のページへ
+      </span></router-link
+    >
+    <router-link
+      v-show="Math.ceil(requestsLength() / 7) !== pageIndex"
+      :to="'/requests/?pageIndex=' + String(pageIndex + 1)"
+      ><span class="border border-solid border-black">
+        次のページへ
+      </span></router-link
+    >
   </div>
 </template>

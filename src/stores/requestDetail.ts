@@ -141,7 +141,7 @@ export const useRequestDetailStore = defineStore('requestDetail', {
     }
   },
   actions: {
-    async getRequestDetail(id: string | string[]) {
+    async getRequestDetail(id: string) {
       const response: RequestDetail = await axios.get('/api/requests/' + id)
       this.request = response
     },

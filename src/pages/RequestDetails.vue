@@ -10,7 +10,7 @@ const requestDetailStore = useRequestDetailStore()
 const { request } = storeToRefs(requestDetailStore)
 const fileStore = useFileStore()
 const route = useRoute()
-const id = route.params.id
+const id = route.params.id.toString()
 onMounted(() => {
   requestDetailStore.getRequestDetail(id)
   fileStore.getFile(request.value.files)

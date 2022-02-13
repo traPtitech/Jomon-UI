@@ -49,7 +49,9 @@ function open() {
             border border-solid border-gray-400
             mr-auto
             ml-auto
+            mt-1
           "
+          :class="index === 6 ? 'bg-white border-none' : ''"
         />
         <!-- todo:デザイン改善 -->
       </li>
@@ -58,14 +60,14 @@ function open() {
   <div class="text-center">
     <router-link
       v-show="pageIndex !== 1"
-      :to="'/requests/?pageIndex=' + String(pageIndex - 1)"
+      :to="'/requests/?pageIndex=' + (pageIndex - 1).toString()"
       ><span class="border border-solid border-black">
         前のページへ
       </span></router-link
     >
     <router-link
       v-show="Math.ceil(requestsLength() / 7) !== pageIndex"
-      :to="'/requests/?pageIndex=' + String(pageIndex + 1)"
+      :to="'/requests/?pageIndex=' + (pageIndex + 1).toString()"
       ><span class="border border-solid border-black">
         次のページへ
       </span></router-link

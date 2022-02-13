@@ -20,7 +20,7 @@ export const useUserStore = defineStore('user', {
     me: {
       name: 'mehm8128',
       display_name: 'mehm8128',
-      admin: false,
+      admin: true,
       created_at: '2022-01-27T13:45:37.048Z',
       updated_at: '2022-01-27T13:45:37.048Z',
       deleted_at: '2022-01-27T13:45:37.048Z'

@@ -6,6 +6,8 @@ type RequestDetail = {
   amount: number
   title: string
   content: string
+  created_by: string
+  status: string
   comments: {
     id: string
     user: string
@@ -37,6 +39,22 @@ type RequestDetail = {
   }
   created_at: string
   updated_at: string
+}
+
+type RequestRequest = {
+  created_by: string
+  amount: number
+  title: string
+  content: string
+  tags: {
+    name: string
+    description: string
+  }[]
+  group: {
+    name: string
+    description: string
+    budget: number
+  }
 }
 
 type Log = {
@@ -141,12 +159,28 @@ export const useRequestDetailStore = defineStore('requestDetail', {
     }
   },
   actions: {
-    async getRequestDetail(id: string) {
+    async getRequestDetail(id: string | string[]) {
       const response: RequestDetail = await axios.get('/api/requests/' + id)
       this.request = response
     },
+    async putRequest(id: string, request: RequestRequest) {
+      await axios.put('/api/requests/' + id, request)
+    },
     async postComment(id: string, commentRequest: CommentRequest) {
       await axios.post('/api/requests/' + id + '/comments', commentRequest)
+    },
+    async putComment(
+      id: string,
+      commentId: string,
+      commentRequest: CommentRequest
+    ) {
+      await axios.put(
+        '/api/requests/' + id + '/comments' + commentId,
+        commentRequest
+      )
+    },
+    async deleteComment(id: string, commentId: string) {
+      await axios.delete('/api/requests/' + id + '/comments' + commentId)
     },
     async putStatus(id: string, statusRequest: StatusRequest) {
       await axios.put('/api/requests/' + id + '/status', statusRequest)

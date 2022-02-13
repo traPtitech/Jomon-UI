@@ -21,6 +21,7 @@ onMounted(() => {
   tagStore.getTags()
   groupStore.getGroups()
   userStore.getUsers()
+  userStore.getMe()
 })
 function open() {
   isOpen.value = !isOpen.value

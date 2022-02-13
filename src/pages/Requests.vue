@@ -69,16 +69,17 @@ function open() {
       </li>
     </ul>
   </div>
-  <div class="text-center">
+  <div class="text-center mt-2">
     <router-link
-      v-show="pageIndex !== 1"
+      :class="pageIndex !== 1 ? '' : 'invisible'"
       :to="'/requests/?pageIndex=' + (pageIndex - 1).toString()"
       ><span class="border border-solid border-black">
         前のページへ
       </span></router-link
     >
+    <span class="mr-2 ml-2">{{ pageIndex }}</span>
     <router-link
-      v-show="Math.ceil(requestsLength() / 7) !== pageIndex"
+      :class="Math.ceil(requestsLength() / 7) !== pageIndex ? '' : 'invisible'"
       :to="'/requests/?pageIndex=' + (pageIndex + 1).toString()"
       ><span class="border border-solid border-black">
         次のページへ

@@ -29,7 +29,7 @@ function handleFix() {
         修正
       </button>
     </div>
-    <div class="flex justify-between">
+    <div class="flex justify-between h-4/5">
       <div class="flex flex-col">
         <div>
           <span>タイトル</span>
@@ -68,13 +68,20 @@ function handleFix() {
           <span>{{ request.content }}</span>
         </div>
       </div>
-      <div class="w-3/7 mt-4 mr-12">
+      <div
+        v-if="files.length"
+        class="w-4/7 mt-4 mr-12 overflow-x-scroll flex items-start"
+      >
         <img
           v-for="file in files"
           :key="file.file"
-          alt="example"
+          alt="file.name"
+          class="h-full"
           :src="file.file"
         />
+      </div>
+      <div v-else class="w-4/7 text-center mr-auto ml-auto">
+        画像はありません
       </div>
     </div>
   </div>

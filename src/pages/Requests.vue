@@ -61,9 +61,12 @@ function open() {
             ml-auto
             mt-1
           "
-          :class="index === 6 ? 'bg-white border-none' : ''"
+          :class="
+            index === requestsFilter(pageIndex).length - 1
+              ? 'bg-white border-none'
+              : ''
+          "
         />
-        <!-- todo:デザイン改善 -->
       </li>
     </ul>
   </div>

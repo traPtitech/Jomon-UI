@@ -2,10 +2,13 @@
 import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+
 import RequestDetail from '../components/RequestDetail.vue'
+import RequestImage from '../components/RequestImage.vue'
 import RequestLogs from '../components/RequestLogs.vue'
 import { useFileStore } from '../stores/file'
 import { useRequestDetailStore } from '../stores/requestDetail'
+
 const requestDetailStore = useRequestDetailStore()
 const { request } = storeToRefs(requestDetailStore)
 const fileStore = useFileStore()
@@ -18,8 +21,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex justify-around mt-4">
+  <div class="mt-4">
     <RequestDetail />
-    <RequestLogs />
+    <div class="flex">
+      <RequestLogs />
+      <RequestImage />
+    </div>
   </div>
 </template>

@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
+
 import { useRequestDetailStore } from '../stores/requestDetail'
 import StatusChip from './StatusChip.vue'
+
 const requestDetailStore = useRequestDetailStore()
 const { request } = storeToRefs(requestDetailStore)
 type Props = { kind: string; index: number }
@@ -9,7 +11,7 @@ const props = defineProps<Props>()
 </script>
 
 <template>
-  <div class="border border-solid border-black mb-4">
+  <div class="border border-solid border-black m-2">
     <div v-if="kind === 'comment'">
       <span>{{ request.comments[props.index].user }}がコメントしました。</span>
       <div>{{ request.comments[props.index].comment }}</div>

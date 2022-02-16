@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
+
 import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
+
 const requestStore = useRequestStore()
 const userStore = useUserStore()
 const tagStore = useTagStore()
@@ -12,12 +14,6 @@ const { params } = storeToRefs(requestStore)
 const { users } = storeToRefs(userStore)
 const { tags } = storeToRefs(tagStore)
 const { groups } = storeToRefs(groupStore)
-const type_items = [
-  { type: 'club', jpn: '部費利用申請' },
-  { type: 'contest', jpn: '大会等旅費補助申請' },
-  { type: 'event', jpn: 'イベント交通費補助申請' },
-  { type: 'public', jpn: '渉外交通費補助' }
-]
 const state_items = [
   { state: 'submitted', jpn: '承認待ち' },
   { state: 'rejected', jpn: '却下' },
@@ -36,19 +32,12 @@ function sortTitleAsc() {
 }
 function sortTitleDesc() {
   params.value.sort = '-title'
-}
+} //todo:日時のバリデーション追加
 </script>
-//todo:日時のバリデーション追加
+
 <template>
   <div
-    class="
-      flex flex-col
-      justify-evenly
-      w-440px
-      h-300px
-      bg-blue-100
-      border-2 border-gray-500
-    "
+    class="flex flex-col justify-evenly w-440px h-300px border-2 border-gray-500"
   >
     <div class="flex justify-around">
       <button
@@ -87,11 +76,18 @@ function sortTitleDesc() {
       </button>
     </div>
     <div class="flex flex-col justify-around flex-1">
-      <input v-model="params.year" placeholder="年度" />
       <div class="flex justify-around">
-        <input v-model="params.since" placeholder="xxxx-xx-xx" />
+        <input
+          v-model="params.since"
+          placeholder="xxxx-xx-xx"
+          class="border border-solid border-black"
+        />
         <span>～</span>
-        <input v-model="params.until" placeholder="xxxx-xx-xx" />
+        <input
+          v-model="params.until"
+          placeholder="xxxx-xx-xx"
+          class="border border-solid border-black"
+        />
       </div>
       <select v-model="params.target">
         <option value="">申請者</option>
@@ -103,12 +99,6 @@ function sortTitleDesc() {
         <option value="">現在の状態</option>
         <option v-for="(state, index) in state_items" :key="index">
           {{ state.jpn }}
-        </option>
-      </select>
-      <select v-model="params.type">
-        <option value="">申請タイプ</option>
-        <option v-for="(type, index) in type_items" :key="index">
-          {{ type.jpn }}
         </option>
       </select>
       <select v-model="params.tag">

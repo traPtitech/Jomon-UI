@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
+
 import { useRequestStore } from '../stores/request'
 import StatusChip from './StatusChip.vue'
+
 const requestStore = useRequestStore()
 const { requests, dateFormatter } = storeToRefs(requestStore)
 type Props = { index: number }
@@ -16,11 +18,8 @@ const props = defineProps<Props>()
       </div>
       <div class="flex-grow">
         <div class="">{{ requests[props.index].title }}</div>
-        <div>
-          <span class="mr-8"
-            >申請者：{{ requests[props.index].created_by }}</span
-          >
-          <span class="">グループ：{{ requests[props.index].group.name }}</span>
+        <div class="">
+          <span>グループ：{{ requests[props.index].group.name }}</span>
         </div>
         <div class="">
           <span
@@ -33,9 +32,17 @@ const props = defineProps<Props>()
       </div>
       <div class="text-center flex flex-col justify-between mr-4">
         <div class="">
-          {{ dateFormatter(requests[props.index].created_at) }}
+          <span class="mr-4"
+            >申請者：{{ requests[props.index].created_by }}</span
+          >
+          <span
+            >申請日：{{ dateFormatter(requests[props.index].created_at) }}</span
+          >
         </div>
-        <div class="">{{ requests[props.index].amount }}円</div>
+
+        <div class="text-right text-4xl">
+          <span class="">{{ requests[props.index].amount }}円</span>
+        </div>
       </div>
     </div>
   </router-link>

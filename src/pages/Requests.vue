@@ -31,10 +31,11 @@ onMounted(() => {
   <div class="flex justify-between">
     <div class="flex-grow">
       <h1 class="text-3xl mt-2 text-center">申請一覧</h1>
-      <div
-        class="w-9/10 mt-4 mr-auto ml-auto border-solid border-black border-2"
-      >
-        <!-- <div class="flex justify-around">
+      <div class="h-140">
+        <div
+          class="w-9/10 mt-4 mr-auto ml-auto border-solid border-black border-2"
+        >
+          <!-- <div class="flex justify-around">
       <div class="flex-1 text-center">状態</div>
       <div class="flex-1 text-center">タイトル</div>
       <div class="flex-1 text-center">申請者</div>
@@ -43,24 +44,25 @@ onMounted(() => {
       <div class="flex-1 text-center">タグ</div>
       <div class="flex-1 text-center">グループ</div>
     </div> -->
-        <ul class="w-full mr-auto ml-auto">
-          <li
-            v-for="(request, index) in requestsFilter(pageIndex)"
-            :key="request.id"
-          >
-            <Request2 :index="index" />
-            <div
-              class="w-29/30 bg-gray-400 border border-solid border-gray-400 mr-auto ml-auto mt-1"
-              :class="
-                index === requestsFilter(pageIndex).length - 1
-                  ? 'bg-white border-none'
-                  : ''
-              "
-            />
-          </li>
-        </ul>
+          <ul class="w-full mr-auto ml-auto">
+            <li
+              v-for="(request, index) in requestsFilter(pageIndex)"
+              :key="request.id"
+            >
+              <Request2 :index="index" />
+              <div
+                class="w-29/30 bg-gray-400 border border-solid border-gray-400 mr-auto ml-auto"
+                :class="
+                  index === requestsFilter(pageIndex).length - 1
+                    ? 'bg-white border-none'
+                    : ''
+                "
+              />
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="text-center w-full mt-2">
+      <div class="text-center w-full">
         <!-- 絶対位置でページの下部に置きたい(フルで入っていないときに上の方に表示されてしまうため) -->
         <div class="flex justify-center">
           <router-link

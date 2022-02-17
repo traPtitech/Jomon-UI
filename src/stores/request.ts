@@ -9,7 +9,6 @@ type Request = {
   created_by: string
   amount: number
   title: string
-  content: string
   tags: {
     id: string
     name: string
@@ -30,13 +29,27 @@ type Request = {
 type Params = {
   sort: string
   current_state: string
-  year: string
   target: string
-  type: string
   since: string
   until: string
   tag: string
   group: string
+}
+
+type RequestRequest = {
+  created_by: string
+  amount: number
+  title: string
+  content: string
+  tags: {
+    name: string
+    description: string
+  }[]
+  group: {
+    name: string
+    description: string
+    budget: number
+  }
 }
 
 export const useRequestStore = defineStore('request', {
@@ -50,7 +63,7 @@ export const useRequestStore = defineStore('request', {
         created_by: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         amount: 1200,
         title: 'SysAd講習会の開催費用',
-        content: 'サーバー代 1200円',
+
         tags: [
           {
             id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -91,7 +104,6 @@ export const useRequestStore = defineStore('request', {
         created_by: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         amount: 1200,
         title: 'SysAd講習会の開催費用',
-        content: 'サーバー代 1200円',
         tags: [
           {
             id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -132,7 +144,6 @@ export const useRequestStore = defineStore('request', {
         created_by: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         amount: 1200,
         title: 'SysAd講習会の開催費用',
-        content: 'サーバー代 1200円',
         tags: [
           {
             id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -173,7 +184,6 @@ export const useRequestStore = defineStore('request', {
         created_by: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         amount: 1200,
         title: 'SysAd講習会の開催費用',
-        content: 'サーバー代 1200円',
         tags: [
           {
             id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -214,7 +224,6 @@ export const useRequestStore = defineStore('request', {
         created_by: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         amount: 1200,
         title: 'SysAd講習会の開催費用',
-        content: 'サーバー代 1200円',
         tags: [
           {
             id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -255,7 +264,6 @@ export const useRequestStore = defineStore('request', {
         created_by: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         amount: 1200,
         title: 'SysAd講習会の開催費用',
-        content: 'サーバー代 1200円',
         tags: [
           {
             id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -296,7 +304,6 @@ export const useRequestStore = defineStore('request', {
         created_by: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         amount: 1200,
         title: 'SysAd講習会の開催費用',
-        content: 'サーバー代 1200円',
         tags: [
           {
             id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -337,7 +344,6 @@ export const useRequestStore = defineStore('request', {
         created_by: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         amount: 1200,
         title: 'SysAd講習会の開催費用',
-        content: 'サーバー代 1200円',
         tags: [
           {
             id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -378,7 +384,6 @@ export const useRequestStore = defineStore('request', {
         created_by: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         amount: 1200,
         title: 'SysAd講習会の開催費用',
-        content: 'サーバー代 1200円',
         tags: [
           {
             id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -419,7 +424,6 @@ export const useRequestStore = defineStore('request', {
         created_by: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         amount: 1200,
         title: 'SysAd講習会の開催費用',
-        content: 'サーバー代 1200円',
         tags: [
           {
             id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -456,9 +460,7 @@ export const useRequestStore = defineStore('request', {
     params: {
       sort: 'created_at',
       current_state: '',
-      year: '',
       target: '',
-      type: '',
       since: '',
       until: '',
       tag: '',
@@ -494,16 +496,14 @@ export const useRequestStore = defineStore('request', {
       })
       this.requests = response
     },
-    async postRequest(request: Request) {
+    async postRequest(request: RequestRequest) {
       await axios.post('/api/requests', request)
     },
     resetParams() {
       this.params = {
         sort: 'created_at',
         current_state: '',
-        year: '',
         target: '',
-        type: '',
         since: '',
         until: '',
         tag: '',

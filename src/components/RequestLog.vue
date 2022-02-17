@@ -11,32 +11,36 @@ const props = defineProps<Props>()
 </script>
 
 <template>
-  <div class="border border-solid border-black m-2">
-    <div v-if="kind === 'comment'">
-      <span>{{ request.comments[props.index].user }}がコメントしました。</span>
-      <div>{{ request.comments[props.index].comment }}</div>
-      <div class="text-right">
+  <div class="m-2">
+    <div v-if="kind === 'comment'" class="border border-solid border-black">
+      <div class="flex justify-between">
+        <span
+          >{{ request.comments[props.index].user }}がコメントしました。</span
+        >
         <span>{{
           requestDetailStore.dateFormatter(
             request.comments[props.index].created_at
           )
         }}</span>
       </div>
+      <div>{{ request.comments[props.index].comment }}</div>
     </div>
-    <div v-if="kind === 'statusChange'">
-      <span>{{ request.statuses[props.index].created_by }}が申請の状態を</span>
-      <StatusChip :status="request.statuses[props.index].status" />
-      <span>にしました。</span>
-      <div v-if="request.statuses[props.index].reason">
-        理由：{{ request.statuses[props.index].reason }}
+    <div
+      v-if="kind === 'statusChange'"
+      class="flex justify-between w-9/10 ml-8 border border-solid border-black"
+    >
+      <div>
+        <span
+          >{{ request.statuses[props.index].created_by }}が申請の状態を</span
+        >
+        <StatusChip :status="request.statuses[props.index].status" />
+        <span>にしました。</span>
       </div>
-      <div class="text-right">
-        <span>{{
-          requestDetailStore.dateFormatter(
-            request.statuses[props.index].created_at
-          )
-        }}</span>
-      </div>
+      <span>{{
+        requestDetailStore.dateFormatter(
+          request.statuses[props.index].created_at
+        )
+      }}</span>
     </div>
   </div>
 </template>

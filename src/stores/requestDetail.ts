@@ -5,7 +5,6 @@ type RequestDetail = {
   id: string
   amount: number
   title: string
-  content: string
   created_by: string
   status: string
   comments: {
@@ -19,7 +18,6 @@ type RequestDetail = {
   statuses: {
     created_by: string
     status: string
-    reason: string
     created_at: string
   }[]
   tags: {
@@ -45,7 +43,7 @@ type RequestRequest = {
   created_by: string
   amount: number
   title: string
-  content: string
+  comment: string
   tags: {
     name: string
     description: string
@@ -68,7 +66,7 @@ type CommentRequest = {
 }
 type StatusRequest = {
   status: string
-  reason: string
+  comment: string
 }
 
 export const useRequestDetailStore = defineStore('requestDetail', {
@@ -77,10 +75,16 @@ export const useRequestDetailStore = defineStore('requestDetail', {
       id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       amount: 1200,
       title: 'SysAd講習会の開催費用',
-      content: 'サーバー代 1200円',
       created_by: 'mehm8128',
       status: 'submitted',
       comments: [
+        {
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          user: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          comment: 'サーバー代',
+          created_at: '2022-02-11T08:01:38.838Z',
+          updated_at: '2022-02-11T08:01:38.838Z'
+        },
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           user: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -94,7 +98,6 @@ export const useRequestDetailStore = defineStore('requestDetail', {
         {
           created_by: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           status: 'submitted',
-          reason: 'これは雑すぎますね。',
           created_at: '2022-02-12T08:01:37.838Z'
         }
       ],

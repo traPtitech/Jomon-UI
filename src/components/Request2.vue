@@ -12,7 +12,7 @@ const props = defineProps<Props>()
 
 <template>
   <router-link :to="'/requests/' + requests[props.index].id">
-    <div class="flex hover:bg-gray-100">
+    <div class="flex hover:bg-gray-100 pb-1">
       <div class="flex items-center">
         <StatusChip :status="requests[props.index].status" />
       </div>

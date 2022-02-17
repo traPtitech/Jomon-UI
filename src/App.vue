@@ -1,13 +1,18 @@
 <script lang="ts" setup>
 import { useRoute } from 'vue-router'
+
 import NewRequestButton from './components/NewRequestButton.vue'
 import Logo from '/@/components/Logo.vue'
+
 const route = useRoute()
 </script>
 <template>
   <main>
     <header class="flex shadow min-h-12 w-full items-center">
-      <Logo />
+      <router-link to="/"
+        ><!--Jomonという文字のロゴも入れたい-->
+        <Logo />
+      </router-link>
       <div class="flex flex-1 px-2 justify-between">
         <div class="flex gap-2">
           <router-link to="/requests?pageIndex=1"

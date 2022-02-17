@@ -66,7 +66,7 @@ onMounted(() => {
         <div class="flex justify-center">
           <router-link
             class="w-24 h-8 block border border-solid border-black"
-            :class="pageIndex === 1 ? 'bg-gray-200' : ''"
+            :class="pageIndex === 1 ? 'bg-gray-200 cursor-default' : ''"
             :to="
               pageIndex !== 1
                 ? '/requests/?pageIndex=' + (pageIndex - 1).toString()
@@ -80,7 +80,7 @@ onMounted(() => {
             ].slice(1)"
             :key="index"
             class="mr-2 ml-2 w-8 h-8 block border border-solid border-black"
-            :class="index === pageIndex ? 'bg-blue-300' : ''"
+            :class="index === pageIndex ? 'bg-blue-300 cursor-default' : ''"
             :to="'/requests/?pageIndex=' + index.toString()"
           >
             <span>{{ index }}</span></router-link

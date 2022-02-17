@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+
 import { useRequestDetailStore } from '../stores/requestDetail'
 import { useUserStore } from '../stores/user'
+
 const requestDetailStore = useRequestDetailStore()
 const userStore = useUserStore()
 const { request } = storeToRefs(requestDetailStore)
@@ -18,7 +20,7 @@ function submit() {
     comment.value = ''
   }
   if (kind.value === 'statusChange') {
-    const statusRequest = { status: status.value, reason: comment.value }
+    const statusRequest = { status: status.value }
     requestDetailStore.putStatus(request.value.id, statusRequest)
     kind.value = 'statusChange'
     status.value = ''

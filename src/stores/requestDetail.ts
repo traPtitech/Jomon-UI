@@ -66,7 +66,6 @@ type CommentRequest = {
 }
 type StatusRequest = {
   status: string
-  comment: string
 }
 
 export const useRequestDetailStore = defineStore('requestDetail', {

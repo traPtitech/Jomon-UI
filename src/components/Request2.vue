@@ -39,7 +39,6 @@ const props = defineProps<Props>()
             >申請日：{{ dateFormatter(requests[props.index].created_at) }}</span
           >
         </div>
-
         <div class="text-right text-4xl">
           <span class="">{{ requests[props.index].amount }}円</span>
         </div>

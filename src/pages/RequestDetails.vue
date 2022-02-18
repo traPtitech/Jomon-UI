@@ -5,7 +5,6 @@ import { useRoute } from 'vue-router'
 
 import NewComment from '../components/NewComment.vue'
 import RequestDetail from '../components/RequestDetail.vue'
-import RequestImage from '../components/RequestImage.vue'
 import RequestLogs from '../components/RequestLogs.vue'
 import { useFileStore } from '../stores/file'
 import { useRequestDetailStore } from '../stores/requestDetail'
@@ -19,6 +18,12 @@ onMounted(() => {
   requestDetailStore.getRequestDetail(id)
   fileStore.getFile(request.value.files)
 })
+function createTransaction() {
+  alert('show modal')
+}
+function goToTransactions() {
+  alert('go to transactions')
+}
 </script>
 
 <template>
@@ -26,7 +31,23 @@ onMounted(() => {
     <RequestDetail />
     <div class="flex">
       <RequestLogs />
-      <NewComment />
+      <div class="w-1/3">
+        <NewComment />
+        <div class="flex flex-col mt-8">
+          <button
+            @click="createTransaction"
+            class="w-2/3 border border-solid border-black mb-4 mr-auto ml-auto"
+          >
+            この申請から入出金記録を作成する
+          </button>
+          <button
+            @click="goToTransactions"
+            class="w-2/3 border border-solid border-black mr-auto ml-auto"
+          >
+            この申請の入出金記録へ移動
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>

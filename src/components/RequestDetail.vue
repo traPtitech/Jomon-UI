@@ -20,6 +20,7 @@ function changeStatus(status: string) {
     status: status
   }
   requestDetailStore.putStatus(request.value.id, statusRequest)
+  requestDetailStore.getRequestDetail(request.value.id)
   alert('ステータスを' + status + 'に変更しました')
 }
 </script>

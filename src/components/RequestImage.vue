@@ -7,14 +7,13 @@ const fileStore = useFileStore()
 const { files } = storeToRefs(fileStore)
 </script>
 <template>
-  <!-- もうちょいいい感じにしたい -->
-  <div class="w-3/7">
-    <div v-if="files.length" class="mt-4 ml-4 mr-4 overflow-x-scroll flex">
+  <div>
+    <div v-if="files.length" class="mt-4 ml-4 mr-4 flex overflow-x-scroll">
       <img
         v-for="file in files"
         :key="file.file"
         alt="file.name"
-        class="flex-shrink-0 w-1/2"
+        class="h-64"
         :src="file.file"
       />
     </div>

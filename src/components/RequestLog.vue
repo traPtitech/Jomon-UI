@@ -25,18 +25,11 @@ const props = defineProps<Props>()
       </div>
       <div>{{ request.comments[props.index].comment }}</div>
     </div>
-    <div
-      v-if="kind === 'statusChange'"
-      class="flex justify-between w-9/10 ml-8 border border-solid border-black"
-    >
-      <div>
-        <span
-          >{{ request.statuses[props.index].created_by }}が申請の状態を</span
-        >
-        <StatusChip :status="request.statuses[props.index].status" />
-        <span>にしました。</span>
-      </div>
-      <span>{{
+    <div v-if="kind === 'statusChange'" class="w-9/10 ml-8">
+      <span>{{ request.statuses[props.index].created_by }}が申請の状態を</span>
+      <StatusChip :status="request.statuses[props.index].status" />
+      <span>にしました。</span>
+      <span class="ml-4">{{
         requestDetailStore.dateFormatter(
           request.statuses[props.index].created_at
         )

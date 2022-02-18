@@ -465,7 +465,8 @@ export const useRequestStore = defineStore('request', {
       until: '',
       tag: '',
       group: ''
-    } as Params
+    } as Params,
+    isModalOpen: false
   }),
   getters: {
     requestsLength() {

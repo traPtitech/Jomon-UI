@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import FilteringMenu from '../components/FilteringMenu.vue'
+import NewRequestModal from '../components/NewRequestModal.vue'
 import Request from '../components/Request.vue'
 import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
@@ -16,7 +17,8 @@ const requestStore = useRequestStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const userStore = useUserStore()
-const { requestsLength, requestsFilter } = storeToRefs(requestStore)
+const { requestsLength, requestsFilter, isModalOpen } =
+  storeToRefs(requestStore)
 
 onMounted(() => {
   requestStore.getRequests()
@@ -25,12 +27,13 @@ onMounted(() => {
   userStore.getUsers()
   userStore.getMe()
 })
-function createNewReqeuest() {
-  alert('create new request')
+function changeIsModalOpen() {
+  isModalOpen.value = !isModalOpen.value
 }
 </script>
 
 <template>
+  <NewRequestModal v-if="isModalOpen" />
   <div class="flex justify-between">
     <div class="flex-grow">
       <div class="flex relative">
@@ -39,7 +42,7 @@ function createNewReqeuest() {
         </div>
         <div class="ml-auto mr-12 mt-4 z-1">
           <button
-            @click="createNewReqeuest"
+            @click="changeIsModalOpen"
             class="text-xl border border-solid border-black"
           >
             申請の新規作成
@@ -69,7 +72,6 @@ function createNewReqeuest() {
         </div>
       </div>
       <div class="text-center w-full">
-        <!-- 絶対位置でページの下部に置きたい(フルで入っていないときに上の方に表示されてしまうため) -->
         <div class="flex justify-center">
           <router-link
             class="w-24 h-8 block border border-solid border-black"

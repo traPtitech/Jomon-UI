@@ -1,12 +1,22 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 
 import NewRequestButton from './components/NewRequestButton.vue'
+import { useRequestStore } from './stores/request'
 import Logo from '/@/components/Logo.vue'
 
+const requestStore = useRequestStore()
+const { isModalOpen } = storeToRefs(requestStore)
 const route = useRoute()
 </script>
 <template>
+  <div
+    :class="
+      isModalOpen ? 'absolute h-full w-full z-2 bg-gray-500 opacity-50' : ''
+    "
+    @click="isModalOpen = false"
+  ></div>
   <main>
     <header class="flex shadow min-h-12 w-full items-center">
       <router-link to="/"

@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
+import NewComment from '../components/NewComment.vue'
 import RequestDetail from '../components/RequestDetail.vue'
 import RequestImage from '../components/RequestImage.vue'
 import RequestLogs from '../components/RequestLogs.vue'
@@ -25,7 +26,7 @@ onMounted(() => {
     <RequestDetail />
     <div class="flex">
       <RequestLogs />
-      <RequestImage />
+      <NewComment />
     </div>
   </div>
 </template>

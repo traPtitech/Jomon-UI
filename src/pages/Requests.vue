@@ -4,7 +4,7 @@ import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 import FilteringMenu from '../components/FilteringMenu.vue'
-import Request2 from '../components/Request2.vue'
+import Request from '../components/Request.vue'
 import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
 import { useTagStore } from '../stores/tag'
@@ -25,31 +25,37 @@ onMounted(() => {
   userStore.getUsers()
   userStore.getMe()
 })
+function createNewReqeuest() {
+  alert('create new request')
+}
 </script>
 
 <template>
   <div class="flex justify-between">
     <div class="flex-grow">
-      <h1 class="text-3xl mt-2 text-center">申請一覧</h1>
+      <div class="flex relative">
+        <div class="text-3xl mt-2 text-center absolute right-1 left-1">
+          申請一覧
+        </div>
+        <div class="ml-auto mr-12 mt-4 z-1">
+          <button
+            @click="createNewReqeuest"
+            class="text-xl border border-solid border-black"
+          >
+            申請の新規作成
+          </button>
+        </div>
+      </div>
       <div class="h-140">
         <div
           class="w-9/10 mt-4 mr-auto ml-auto border-solid border-black border-2"
         >
-          <!-- <div class="flex justify-around">
-      <div class="flex-1 text-center">状態</div>
-      <div class="flex-1 text-center">タイトル</div>
-      <div class="flex-1 text-center">申請者</div>
-      <div class="flex-1 text-center">申請日</div>
-      <div class="flex-1 text-center">金額</div>
-      <div class="flex-1 text-center">タグ</div>
-      <div class="flex-1 text-center">グループ</div>
-    </div> -->
           <ul class="w-full mr-auto ml-auto">
             <li
               v-for="(request, index) in requestsFilter(pageIndex)"
               :key="request.id"
             >
-              <Request2 :index="index" />
+              <Request :index="index" />
               <div
                 class="w-29/30 bg-gray-400 border border-solid border-gray-400 mr-auto ml-auto"
                 :class="

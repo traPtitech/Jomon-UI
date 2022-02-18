@@ -2,23 +2,26 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
+import { useRequestStore } from '../stores/request'
 import { useRequestDetailStore } from '../stores/requestDetail'
 
 const requestDetailStore = useRequestDetailStore()
+const requestStore = useRequestStore()
 const { request } = storeToRefs(requestDetailStore)
 const comment = ref('')
 function submit() {
   const commentRequest = { comment: comment.value }
   requestDetailStore.postComment(request.value.id, commentRequest)
+  requestStore.getRequests()
   comment.value = ''
 }
 </script>
 
 <template>
-  <div class="w-1/3 flex flex-col mt-12 mr-4 ml-4">
+  <div class="mt-12 mr-4 ml-4">
     <textarea
       v-model="comment"
-      class="resize-none h-20"
+      class="resize-none h-20 w-full"
       placeholder="コメント"
     ></textarea>
     <div class="text-right">

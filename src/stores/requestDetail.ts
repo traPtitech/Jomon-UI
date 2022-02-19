@@ -88,8 +88,8 @@ export const useRequestDetailStore = defineStore('requestDetail', {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           user: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           comment: 'コメント内容',
-          created_at: '2022-02-12T08:01:38.838Z',
-          updated_at: '2022-02-12T08:01:38.838Z'
+          created_at: '2022-02-14T08:01:38.838Z',
+          updated_at: '2022-02-14T08:01:38.838Z'
         }
       ],
       files: ['3fa85f64-5717-4562-b3fc-2c963f66afa6'],

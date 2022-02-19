@@ -7,6 +7,7 @@ import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
+import NewTagModal from './NewTagModal.vue'
 
 const requestStore = useRequestStore()
 const userStore = useUserStore()
@@ -25,6 +26,7 @@ const request = ref({
   group: ''
 })
 const image = ref()
+const isTagModalOpen = ref(false)
 function postRequest() {
   alert(
     'ここでrequestの送信、レスポンスのrequestIdを使って画像を送信\nまた、タグやグループの新規作成があれば先に送っておいてレスポンスのidを使ってrequestを送る'
@@ -39,12 +41,24 @@ function handleImageChange(e: Event) {
   }
   fileStore.postFile('aaa', file.name, image.value)
 }
+function handleTagModalIsOpen() {
+  isTagModalOpen.value = !isTagModalOpen.value
+}
 </script>
 
 <template>
+  <NewTagModal v-if="isTagModalOpen" />
   <div
-    class="bg-white w-2/3 h-2/3 absolute z-3 inset-0 m-auto border border-solid border-black"
+    class="bg-white w-240 h-120 absolute z-3 inset-0 m-auto border border-solid border-black"
   >
+    <div
+      :class="
+        isTagModalOpen
+          ? 'absolute h-full w-full z-2 bg-gray-500 opacity-50'
+          : ''
+      "
+      @click="isTagModalOpen = false"
+    ></div>
     <h1 class="text-3xl text-center mt-4 mb-4">申請の新規作成</h1>
     <div class="flex flex-col justify-between ml-12 text-xl h-4/5">
       <span>申請者：{{ me.name }}</span>
@@ -76,6 +90,12 @@ function handleImageChange(e: Event) {
             {{ tag.name }}
           </option>
         </select>
+        <button
+          @click="handleTagModalIsOpen"
+          class="border border-solid border-black ml-8"
+        >
+          タグを新規作成
+        </button>
       </div>
       <div>
         <span>グループ：</span>

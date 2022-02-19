@@ -13,6 +13,7 @@ import Logo from '/@/components/Logo.vue'
             ><div>入出金記録一覧</div></router-link
           >
           <router-link to="/groups"><div>グループ一覧</div></router-link>
+          <router-link to="/admins"><div>管理ページ</div></router-link>
         </div>
         <NewRequestButton />
       </div>

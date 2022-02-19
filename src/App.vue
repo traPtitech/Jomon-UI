@@ -13,10 +13,11 @@ const route = useRoute()
 <template>
   <div
     :class="
-      isModalOpen ? 'absolute h-full w-full z-2 bg-gray-500 opacity-50' : ''
+      isModalOpen ? 'absolute h-screen w-screen z-2 bg-gray-500 opacity-50' : ''
     "
     @click="isModalOpen = false"
   ></div>
+  <!--作成をやめますかみたいな確認画面出した方がいいかも-->
   <main>
     <header class="flex shadow min-h-12 w-full items-center">
       <router-link to="/"

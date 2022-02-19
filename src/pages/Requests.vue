@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router'
 
 import FilteringMenu from '../components/FilteringMenu.vue'
 import NewRequestModal from '../components/NewRequestModal.vue'
+import PaginationBar from '../components/PaginationBar.vue'
 import Request from '../components/Request.vue'
 import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
@@ -71,44 +72,12 @@ function changeIsModalOpen() {
           </ul>
         </div>
       </div>
-      <div class="text-center w-full">
-        <div class="flex justify-center">
-          <router-link
-            class="w-24 h-8 block border border-solid border-black"
-            :class="pageIndex === 1 ? 'bg-gray-200 cursor-default' : ''"
-            :to="
-              pageIndex !== 1
-                ? '/requests/?pageIndex=' + (pageIndex - 1).toString()
-                : '/requests/?pageIndex=1'
-            "
-            ><span class=""> 前のページへ </span></router-link
-          >
-          <router-link
-            v-for="index in [
-              ...Array(Math.ceil(requestsLength() / 7) + 1).keys()
-            ].slice(1)"
-            :key="index"
-            class="mr-2 ml-2 w-8 h-8 block border border-solid border-black"
-            :class="index === pageIndex ? 'bg-blue-300 cursor-default' : ''"
-            :to="'/requests/?pageIndex=' + index.toString()"
-          >
-            <span>{{ index }}</span></router-link
-          >
-          <router-link
-            class="w-24 h-8 block border border-solid border-black"
-            :class="
-              pageIndex === Math.ceil(requestsLength() / 7) ? 'bg-gray-200' : ''
-            "
-            :to="
-              pageIndex !== Math.ceil(requestsLength() / 7)
-                ? '/requests/?pageIndex=' + (pageIndex + 1).toString()
-                : '/requests/?pageIndex=' +
-                  Math.ceil(requestsLength() / 7).toString()
-            "
-            ><span class=""> 次のページへ </span></router-link
-          >
-        </div>
-      </div>
+      <PaginationBar
+        :pageIndex="pageIndex"
+        :itemLength="requestsLength()"
+        :unit="7"
+        kind="requests"
+      />
     </div>
     <div class="mt-20 mr-8">
       <FilteringMenu />

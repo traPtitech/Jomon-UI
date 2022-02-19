@@ -159,7 +159,9 @@ export const useRequestDetailStore = defineStore('requestDetail', {
       }
     },
     logs() {
+      //2つの配列(commentsとstatuses)の中身の型が違うので1つにまとめ、ソートして表示ができない
       let array = new Array<Log>()
+      //2つの配列からcreated_at、種類、インデックスだけ取り出して1つの配列にまとめる
       for (let i = 0; i < this.request.comments.length; i++) {
         array = array.concat([
           {
@@ -178,12 +180,14 @@ export const useRequestDetailStore = defineStore('requestDetail', {
           }
         ])
       }
+      //created_atでソート
       array = array.sort(function (a, b) {
         if (a.created_at > b.created_at) return 1
         if (b.created_at > a.created_at) return -1
         return 0
       })
       return array
+      //その後この配列のkindで配列を選び、indexでindexを選ぶことで2つの配列をいい感じに並べ替えられる
     }
   },
   actions: {

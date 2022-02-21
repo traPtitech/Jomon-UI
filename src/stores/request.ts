@@ -938,6 +938,7 @@ export const useRequestStore = defineStore('request', {
       }
     ], //new Array<Request>()
     params: {
+      //storeじゃなくてよさそう
       sort: 'created_at',
       current_state: '',
       target: '',
@@ -946,6 +947,7 @@ export const useRequestStore = defineStore('request', {
       tag: '',
       group: ''
     } as Params,
+    tagList: new Array<string>(),
     isModalOpen: false
   }),
   getters: {
@@ -972,6 +974,13 @@ export const useRequestStore = defineStore('request', {
   },
   actions: {
     async getRequests() {
+      for (let i = 0; i < this.tagList.length; i++) {
+        if (i === 0) {
+          this.params.tag = this.tagList[i]
+        } else {
+          this.params.tag += ',' + this.tagList[i]
+        }
+      }
       const response: Request[] = await axios.get('/api/requests', {
         params: this.params
       })

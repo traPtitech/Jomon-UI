@@ -1,5 +1,8 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css'
 
 import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
@@ -10,17 +13,18 @@ const requestStore = useRequestStore()
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
-const { params } = storeToRefs(requestStore)
+const { params, tagList } = storeToRefs(requestStore)
 const { users } = storeToRefs(userStore)
 const { tags } = storeToRefs(tagStore)
 const { groups } = storeToRefs(groupStore)
-const state_items = [
+
+const states = ref([
   { state: 'submitted', jpn: '承認待ち' },
   { state: 'rejected', jpn: '却下' },
   { state: 'fix_required', jpn: '要修正' },
   { state: 'accepted', jpn: '承認済み' },
   { state: 'fully_repaid', jpn: '返済完了' }
-]
+])
 function sortCreatedAsc() {
   params.value.sort = 'created_at'
 }
@@ -89,32 +93,35 @@ function sortTitleDesc() {
           class="border border-solid border-black"
         />
       </div>
-      <select v-model="params.target">
-        <option value="">申請者</option>
-        <option v-for="(user, index) in users" :key="index">
-          {{ user.name }}
-        </option>
-      </select>
-      <select v-model="params.current_state">
-        <option value="">現在の状態</option>
-        <option v-for="(state, index) in state_items" :key="index">
-          {{ state.jpn }}
-        </option>
-      </select>
-      <select v-model="params.tag">
-        <!--複数選択をもうちょいいい感じにできるようにする-->
-        <!--ライブラリならvue-select、vue-multiselectとかよさそう-->
-        <option value="">タグ</option>
-        <option v-for="(tag, index) in tags" :key="index">
-          {{ tag.name }}
-        </option>
-      </select>
-      <select v-model="params.group">
-        <option value="">グループ</option>
-        <option v-for="(group, index) in groups" :key="index">
-          {{ group.name }}
-        </option>
-      </select>
+      <v-select
+        v-model="params.target"
+        :options="users"
+        :reduce="(user:any) => user.name"
+        label="name"
+        placeholder="申請者"
+      ></v-select>
+      <v-select
+        v-model="params.current_state"
+        :options="states"
+        :reduce="(state:any) => state.state"
+        label="jpn"
+        placeholder="申請の状態"
+      ></v-select>
+      <v-select
+        v-model="tagList"
+        :options="tags"
+        :reduce="(tag:any) => tag.id"
+        label="name"
+        placeholder="タグ"
+        multiple
+      ></v-select>
+      <v-select
+        v-model="params.group"
+        :options="groups"
+        :reduce="(group:any) => group.id"
+        label="name"
+        placeholder="グループ"
+      ></v-select>
     </div>
     <div class="flex justify-around">
       <button @click="requestStore.getRequests">絞り込み</button>

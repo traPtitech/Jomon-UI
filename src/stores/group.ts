@@ -39,7 +39,7 @@ export const useGroupStore = defineStore('group', {
         updated_at: '2022-01-25T14:06:32.381Z'
       },
       {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
         name: 'Game',
         description: 'Game班',
         budget: 50000,

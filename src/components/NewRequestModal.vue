@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css'
 
 import { useFileStore } from '../stores/file'
 import { useGroupStore } from '../stores/group'
@@ -22,12 +24,13 @@ const request = ref({
   amount: 0,
   title: '',
   comment: '',
-  tags: [],
-  group: ''
+  tags: [] as string[],
+  group: null
 })
 const image = ref()
 const isTagModalOpen = ref(false)
 function postRequest() {
+  console.log(request.value)
   alert(
     'ここでrequestの送信、レスポンスのrequestIdを使って画像を送信\nまた、タグやグループの新規作成があれば先に送っておいてレスポンスのidを使ってrequestを送る'
   )
@@ -84,12 +87,16 @@ function handleTagModalIsOpen() {
         />
       </div>
       <div>
-        <span>タグ：</span
-        ><select v-model="request.tags" class="w-1/3">
-          <option v-for="(tag, index) in tags" :key="index">
-            {{ tag.name }}
-          </option>
-        </select>
+        <span>タグ：</span>
+        <v-select
+          v-model="request.tags"
+          :options="tags"
+          :reduce="(tag:any) => tag.id"
+          label="name"
+          placeholder="タグ"
+          multiple
+          class="w-2/3"
+        ></v-select>
         <button
           @click="handleTagModalIsOpen"
           class="border border-solid border-black ml-8"
@@ -99,11 +106,14 @@ function handleTagModalIsOpen() {
       </div>
       <div>
         <span>グループ：</span>
-        <select v-model="request.group" class="w-1/3">
-          <option v-for="(group, index) in groups" :key="index">
-            {{ group.name }}
-          </option>
-        </select>
+        <v-select
+          v-model="request.group"
+          :options="groups"
+          :reduce="(group:any) => group.id"
+          label="name"
+          placeholder="グループ"
+          class="w-2/3"
+        ></v-select>
       </div>
       <div>
         <span>画像：</span>

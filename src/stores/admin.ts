@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-type AdminsRequest = {
+type AdminRequest = {
   id: string
 }
 
@@ -14,11 +14,11 @@ export const useAdminStore = defineStore('admin', {
       const response: string[] = await axios.get('/api/admins')
       this.admins = response
     },
-    async postAdmin(admin: AdminsRequest) {
+    async postAdmin(admin: AdminRequest) {
       await axios.post('/api/admins', admin)
     },
     async deleteAdmin(admin: string) {
-      await axios.delete('/api/admins' + admin)
+      await axios.delete('/api/admins/' + admin)
     }
   }
 })

@@ -27,15 +27,19 @@ const states = ref([
 ])
 function sortCreatedAsc() {
   params.value.sort = 'created_at'
+  requestStore.getRequests()
 }
 function sortCreatedDesc() {
   params.value.sort = '-created_at'
+  requestStore.getRequests()
 }
 function sortTitleAsc() {
   params.value.sort = 'title'
+  requestStore.getRequests()
 }
 function sortTitleDesc() {
   params.value.sort = '-title'
+  requestStore.getRequests()
 } //todo:日時のバリデーション追加
 </script>
 
@@ -106,6 +110,7 @@ function sortTitleDesc() {
         :reduce="(state:any) => state.state"
         label="jpn"
         placeholder="申請の状態"
+        :searchable="false"
       ></v-select>
       <v-select
         v-model="tagList"

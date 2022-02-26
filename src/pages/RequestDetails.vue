@@ -19,10 +19,12 @@ onMounted(() => {
   fileStore.getFile(request.value.files)
 })
 function createTransaction() {
-  alert('show modal')
+  alert('モーダル表示時にrouteのパスからrequest idを取ってきて渡す')
 }
 function goToTransactions() {
-  alert('go to transactions')
+  alert(
+    '/transaction?requestID=へ移動か、GET /requests/{requestID}にtransaction(もしくはそのid)が入ってるならモーダルで一覧を表示'
+  )
 }
 </script>
 

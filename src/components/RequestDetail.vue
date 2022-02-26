@@ -11,9 +11,10 @@ const { me } = storeToRefs(userStore)
 const { request } = storeToRefs(requestDetailStore)
 function handleFix() {
   alert('修正画面へ')
+  //ToDo:修正画面作る(作成画面モーダル流用でよさそう、詳細、画像を編集できるようにするかを考える=>コメントの編集は不可なのでできないようにした方がよさそう)
 }
 function handleAddTag() {
-  alert('タグ追加ダイアログを出す')
+  alert('タグ追加ダイアログを出す(これいらない気が)')
 }
 function changeStatus(status: string) {
   const statusRequest = {

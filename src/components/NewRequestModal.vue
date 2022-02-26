@@ -19,6 +19,14 @@ const fileStore = useFileStore()
 const { me } = storeToRefs(userStore)
 const { tags } = storeToRefs(tagStore)
 const { groups } = storeToRefs(groupStore)
+type RequestRequest = {
+  created_by: string
+  amount: number
+  title: string
+  comment: string
+  tags: string[]
+  group: string | null
+}
 const request = ref({
   created_by: me.value.name,
   amount: 0,
@@ -26,7 +34,7 @@ const request = ref({
   comment: '',
   tags: [] as string[],
   group: null
-})
+} as RequestRequest)
 const image = ref()
 const isTagModalOpen = ref(false)
 function postRequest() {
@@ -77,7 +85,7 @@ function handleTagModalIsOpen() {
         <input
           v-model="request.amount"
           class="border border-solid border-black"
-        />
+        /><!-- //バリデーション -->
       </div>
       <div>
         <span>詳細：</span>

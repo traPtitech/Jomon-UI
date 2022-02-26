@@ -28,12 +28,12 @@ type Request = {
 
 type Params = {
   sort: string
-  current_state: string
-  target: string
+  current_state: string | null
+  target: string | null
   since: string
   until: string
-  tag: string
-  group: string
+  tag: string | null
+  group: string | null
 }
 
 type RequestRequest = {
@@ -940,12 +940,12 @@ export const useRequestStore = defineStore('request', {
     params: {
       //storeじゃなくてよさそう
       sort: 'created_at',
-      current_state: '',
-      target: '',
+      current_state: null,
+      target: null,
       since: '',
       until: '',
-      tag: '',
-      group: ''
+      tag: null,
+      group: null
     } as Params,
     tagList: new Array<string>(),
     isModalOpen: false

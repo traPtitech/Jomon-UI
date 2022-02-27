@@ -1,18 +1,19 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 
+import { useRequestStore } from '../stores/request'
 import { useRequestDetailStore } from '../stores/requestDetail'
 import { useUserStore } from '../stores/user'
+import FixRequestModal from './FixRequestModal.vue'
 import StatusChip from './StatusChip.vue'
 
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
+const requestStore = useRequestStore()
 const { me } = storeToRefs(userStore)
 const { request } = storeToRefs(requestDetailStore)
-function handleFix() {
-  alert('修正画面へ')
-  //ToDo:修正画面作る(作成画面モーダル流用でよさそう、詳細、画像を編集できるようにするかを考える=>コメントの編集は不可なのでできないようにした方がよさそう)
-}
+const { isModalOpen } = storeToRefs(requestStore)
+
 function handleAddTag() {
   alert('タグ追加ダイアログを出す(これいらない気が)')
 }
@@ -24,9 +25,13 @@ function changeStatus(status: string) {
   requestDetailStore.getRequestDetail(request.value.id)
   alert('ステータスを' + status + 'に変更しました')
 }
+function handleFix() {
+  isModalOpen.value = !isModalOpen.value
+}
 </script>
 
 <template>
+  <FixRequestModal v-if="isModalOpen" />
   <div class="w-full">
     <div class="flex justify-between text-center mt-6 ml-12">
       <div class="flex">
@@ -38,6 +43,7 @@ function changeStatus(status: string) {
               request.status === 'fix_required' ||
               (me.admin && request.status === 'accepted')
             "
+            @click="changeStatus('submitted')"
             class="border border-solid border-black rounded-md mr-4 mt-2"
           >
             承認待ちにする

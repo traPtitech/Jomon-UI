@@ -4,18 +4,17 @@ import { ref } from 'vue'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 
-import { useFileStore } from '../stores/file'
 import { useGroupStore } from '../stores/group'
-import { useRequestStore } from '../stores/request'
+import { useRequestDetailStore } from '../stores/requestDetail'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
 import NewTagModal from './NewTagModal.vue'
 
-const requestStore = useRequestStore()
+const requestDetailStore = useRequestDetailStore()
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
-const fileStore = useFileStore()
+const { request } = storeToRefs(requestDetailStore)
 const { me } = storeToRefs(userStore)
 const { tags } = storeToRefs(tagStore)
 const { groups } = storeToRefs(groupStore)
@@ -23,34 +22,22 @@ type RequestRequest = {
   created_by: string
   amount: number
   title: string
-  comment: string
   tags: string[]
   group: string | null
 }
-const request = ref({
-  created_by: me.value.name,
-  amount: 0,
-  title: '',
-  comment: '',
+const willPutRequest = ref({
+  created_by: request.value.created_by,
+  amount: request.value.amount,
+  title: request.value.title,
   tags: [] as string[],
   group: null
 } as RequestRequest)
-const image = ref()
 const isTagModalOpen = ref(false)
-function postRequest() {
+function putRequest() {
   console.log(request.value)
   alert(
     'ここでrequestの送信、レスポンスのrequestIdを使って画像を送信\nまた、タグやグループの新規作成があれば先に送っておいてレスポンスのidを使ってrequestを送る'
   )
-}
-function handleImageChange(e: Event) {
-  const file = (e.target as HTMLInputElement).files![0]
-  const reader = new FileReader()
-  reader.readAsDataURL(file)
-  reader.onload = () => {
-    image.value = reader.result
-  }
-  fileStore.postFile('aaa', file.name, image.value)
 }
 function handleTagModalIsOpen() {
   isTagModalOpen.value = !isTagModalOpen.value
@@ -70,29 +57,22 @@ function handleTagModalIsOpen() {
       "
       @click="isTagModalOpen = false"
     ></div>
-    <h1 class="text-3xl text-center mt-4 mb-4">申請の新規作成</h1>
+    <h1 class="text-3xl text-center mt-4 mb-4">申請の修正</h1>
     <div class="flex flex-col justify-between ml-12 text-xl h-4/5">
       <span>申請者：{{ me.name }}</span>
       <div>
         <span>タイトル：</span>
         <input
-          v-model="request.title"
+          v-model="willPutRequest.title"
           class="border border-solid border-black w-4/5"
         />
       </div>
       <div>
         <span>金額：</span>
         <input
-          v-model="request.amount"
+          v-model="willPutRequest.amount"
           class="border border-solid border-black"
         /><!-- //ToDo:バリデーション -->
-      </div>
-      <div>
-        <span>詳細：</span>
-        <textarea
-          v-model="request.comment"
-          class="border border-solid border-black resize-none w-4/5"
-        />
       </div>
       <div>
         <span>タグ：</span>
@@ -123,15 +103,8 @@ function handleTagModalIsOpen() {
           class="w-2/3"
         ></v-select>
       </div>
-      <div>
-        <span>画像：</span>
-        <input type="file" @change="e => handleImageChange(e)" />
-      </div>
-      <div>
-        <img v-if="image" :src="image" alt="uploadedFile" class="h-32" />
-      </div>
       <div class="text-center">
-        <button @click="postRequest" class="w-32">申請を作成する</button>
+        <button @click="putRequest" class="w-32">申請を修正する</button>
       </div>
     </div>
   </div>

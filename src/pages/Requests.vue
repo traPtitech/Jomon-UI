@@ -35,8 +35,8 @@ function changeIsModalOpen() {
 
 <template>
   <NewRequestModal v-if="isModalOpen" />
-  <div class="flex justify-between h-[calc(100%-3rem)]">
-    <div class="flex-grow relative">
+  <div class="flex justify-between">
+    <div class="flex-grow">
       <div class="flex relative">
         <div class="text-3xl mt-2 text-center absolute right-1 left-1">
           申請一覧
@@ -50,7 +50,9 @@ function changeIsModalOpen() {
           </button>
         </div>
       </div>
-      <div>
+      <div
+        :class="pageIndex === Math.ceil(requestsLength() / 7) ? 'h-138' : ''"
+      >
         <div
           class="w-9/10 mt-4 mr-auto ml-auto border-solid border-black border-2"
         >
@@ -72,12 +74,14 @@ function changeIsModalOpen() {
           </ul>
         </div>
       </div>
-      <PaginationBar
-        :pageIndex="pageIndex"
-        :itemLength="requestsLength()"
-        :unit="7"
-        kind="requests"
-      />
+      <div class="mt-4">
+        <PaginationBar
+          :pageIndex="pageIndex"
+          :itemLength="requestsLength()"
+          :unit="7"
+          kind="requests"
+        />
+      </div>
     </div>
     <div class="mt-20 mr-8">
       <FilteringMenu />

@@ -2,17 +2,14 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
-import { useRequestStore } from '../stores/request'
 import { useRequestDetailStore } from '../stores/requestDetail'
 
 const requestDetailStore = useRequestDetailStore()
-const requestStore = useRequestStore()
 const { request } = storeToRefs(requestDetailStore)
 const comment = ref('')
 function submit() {
   const commentRequest = { comment: comment.value }
   requestDetailStore.postComment(request.value.id, commentRequest)
-  requestStore.getRequests()
   comment.value = ''
 }
 </script>

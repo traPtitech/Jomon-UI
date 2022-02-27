@@ -14,18 +14,18 @@ const props = defineProps<Props>()
         class="w-24 h-8 block border border-solid border-black"
         :class="pageIndex === 1 ? 'bg-gray-200 cursor-default' : ''"
         :to="
-          pageIndex !== 1
-            ? `/${kind}/?pageIndex=` + (pageIndex - 1).toString()
-            : `/${kind}/?pageIndex=1`
+          pageIndex === 1
+            ? `/${kind}/?pageIndex=1`
+            : `/${kind}/?pageIndex=` + (pageIndex - 1).toString()
         "
-        ><span class=""> 前のページへ </span></router-link
+        ><span class="">前のページへ</span></router-link
       >
       <router-link
-        v-for="index in Math.ceil(itemLength / unit) <= 6
+        v-for="index in Math.ceil(itemLength / unit) <= 8
           ? [...Array(Math.ceil(itemLength / unit)).keys()]
-          : pageIndex >= 5
+          : pageIndex >= 6
           ? [...Array(2).keys()]
-          : [...Array(5).keys()]"
+          : [...Array(6).keys()]"
         :key="index"
         class="mr-2 ml-2 w-8 h-8 block border border-solid border-black"
         :class="index + 1 === pageIndex ? 'bg-blue-300 cursor-default' : ''"
@@ -33,14 +33,14 @@ const props = defineProps<Props>()
       >
         <span>{{ index + 1 }}</span></router-link
       >
-      <span v-if="Math.ceil(itemLength / unit) >= 8">...</span>
+      <span v-if="Math.ceil(itemLength / unit) >= 9">...</span>
 
       <router-link
-        v-for="index in pageIndex <= 4 ? null : [...Array(5).keys()]"
+        v-for="index in pageIndex <= 5 ? null : [...Array(5).keys()]"
         v-if="
-          Math.ceil(itemLength / unit) >= 5 &&
-          5 <= pageIndex &&
-          pageIndex < Math.ceil(itemLength / unit) - 3
+          Math.ceil(itemLength / unit) >= 10 &&
+          6 <= pageIndex &&
+          pageIndex <= Math.ceil(itemLength / unit) - 5
         "
         class="mr-2 ml-2 w-8 h-8 block border border-solid border-black"
         :class="index === 2 ? 'bg-blue-300 cursor-default' : ''"
@@ -49,12 +49,12 @@ const props = defineProps<Props>()
         <span>{{ index + pageIndex - 2 }}</span>
       </router-link>
 
-      <span v-if="Math.ceil(itemLength / unit) >= 8">...</span>
+      <span v-if="Math.ceil(itemLength / unit) >= 9">...</span>
       <router-link
-        v-if="Math.ceil(itemLength / unit) >= 7"
-        v-for="index in pageIndex >= Math.ceil(itemLength / unit) - 3 &&
-        pageIndex !== 4
-          ? [...Array(5).keys()].reverse()
+        v-for="index in Math.ceil(itemLength / unit) <= 8
+          ? null
+          : pageIndex >= Math.ceil(itemLength / unit) - 4
+          ? [...Array(6).keys()].reverse()
           : [...Array(2).keys()].reverse()"
         :key="index"
         class="mr-2 ml-2 w-8 h-8 block border border-solid border-black"
@@ -78,7 +78,7 @@ const props = defineProps<Props>()
             ? `/${kind}/?pageIndex=` + (pageIndex + 1).toString()
             : `/${kind}/?pageIndex=` + Math.ceil(itemLength / unit).toString()
         "
-        ><span class=""> 次のページへ </span></router-link
+        ><span class="">次のページへ</span></router-link
       >
     </div>
   </div>

@@ -47,12 +47,15 @@ export const useTagStore = defineStore('tag', {
     },
     async postTag(tag: TagRequest) {
       await axios.post('/api/tags', tag)
+      this.getTags()
     },
     async putTag(id: string, tag: TagRequest) {
       await axios.put('/api/tags/' + id, tag)
+      this.getTags()
     },
     async deleteTag(id: string) {
       await axios.delete('/api/tags' + id)
+      this.getTags()
     }
   }
 })

@@ -40,16 +40,9 @@ type RequestRequest = {
   created_by: string
   amount: number
   title: string
-  content: string
-  tags: {
-    name: string
-    description: string
-  }[]
-  group: {
-    name: string
-    description: string
-    budget: number
-  }
+  comment: string
+  tags: string[]
+  group: string
 }
 
 export const useRequestStore = defineStore('request', {

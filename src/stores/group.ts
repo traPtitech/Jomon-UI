@@ -58,12 +58,15 @@ export const useGroupStore = defineStore('group', {
     },
     async postGroup(group: GroupRequest) {
       await axios.post('/api/groups', group)
+      this.getGroups()
     },
     async putGroup(group: GroupRequest, id: string) {
       await axios.put('/api/groups' + id, group)
+      this.getGroups()
     },
     async deleteGroup(id: string) {
       await axios.delete('/api/groups' + id)
+      this.getGroups()
     },
     async getGroupMembers(id: string) {
       const response: Members = await axios.get('/api/groups' + id + '/members')
@@ -71,9 +74,11 @@ export const useGroupStore = defineStore('group', {
     },
     async postGroupMember(id: string, member: Member) {
       await axios.post('/api/groups' + id + '/members', member)
+      this.getGroupMembers(id)
     },
     async deleteGroupMember(id: string, member: Member) {
       await axios.delete('/api/groups' + id + '/members', { data: member })
+      this.getGroupMembers(id)
     },
     async getGroupOwners(id: string) {
       const response: Owners = await axios.get('/api/groups' + id + '/owners')
@@ -81,9 +86,11 @@ export const useGroupStore = defineStore('group', {
     },
     async postGroupOwner(id: string, owner: Member) {
       await axios.post('/api/groups' + id + '/owners', owner)
+      this.getGroupOwners(id)
     },
     async deleteGroupOwner(id: string, owner: Member) {
       await axios.delete('/api/groups' + id + '/owners', { data: owner })
+      this.getGroupOwners(id)
     }
   }
 })

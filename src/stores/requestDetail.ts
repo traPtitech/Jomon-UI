@@ -43,16 +43,8 @@ type RequestRequest = {
   created_by: string
   amount: number
   title: string
-  comment: string
-  tags: {
-    name: string
-    description: string
-  }[]
-  group: {
-    name: string
-    description: string
-    budget: number
-  }
+  tags: string[]
+  group: string | null
 }
 
 type Log = {
@@ -112,23 +104,23 @@ export const useRequestDetailStore = defineStore('requestDetail', {
       ],
       tags: [
         {
-          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa5',
           name: '2020講習会',
           description: '2020年度講習会',
-          created_at: '2022-02-12T08:01:37.838Z',
-          updated_at: '2022-02-12T08:01:37.838Z'
+          created_at: '2020-02-12T08:01:37.838Z',
+          updated_at: '2020-02-12T08:01:37.838Z'
         },
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          name: '2020講習会',
-          description: '2020年度講習会',
-          created_at: '2022-02-12T08:01:37.838Z',
-          updated_at: '2022-02-12T08:01:37.838Z'
+          name: '2021講習会',
+          description: '2021年度講習会',
+          created_at: '2021-02-12T08:01:37.838Z',
+          updated_at: '2021-02-12T08:01:37.838Z'
         },
         {
-          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          name: '2020講習会',
-          description: '2020年度講習会',
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
+          name: '2022講習会',
+          description: '2022年度講習会',
           created_at: '2022-02-12T08:01:37.838Z',
           updated_at: '2022-02-12T08:01:37.838Z'
         }
@@ -191,31 +183,21 @@ export const useRequestDetailStore = defineStore('requestDetail', {
     }
   },
   actions: {
-    async getRequestDetail(id: string | string[]) {
+    async getRequestDetail(id: string) {
       const response: RequestDetail = await axios.get('/api/requests/' + id)
       this.request = response
     },
     async putRequest(id: string, request: RequestRequest) {
       await axios.put('/api/requests/' + id, request)
+      this.getRequestDetail(id)
     },
     async postComment(id: string, commentRequest: CommentRequest) {
       await axios.post('/api/requests/' + id + '/comments', commentRequest)
-    },
-    async putComment(
-      id: string,
-      commentId: string,
-      commentRequest: CommentRequest
-    ) {
-      await axios.put(
-        '/api/requests/' + id + '/comments' + commentId,
-        commentRequest
-      )
-    },
-    async deleteComment(id: string, commentId: string) {
-      await axios.delete('/api/requests/' + id + '/comments' + commentId)
+      this.getRequestDetail(id)
     },
     async putStatus(id: string, statusRequest: StatusRequest) {
       await axios.put('/api/requests/' + id + '/status', statusRequest)
+      this.getRequestDetail(id)
     }
   }
 })

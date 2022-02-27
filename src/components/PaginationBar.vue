@@ -21,15 +21,54 @@ const props = defineProps<Props>()
         ><span class=""> 前のページへ </span></router-link
       >
       <router-link
-        v-for="index in [
-          ...Array(Math.ceil(itemLength / unit) + 1).keys()
-        ].slice(1)"
+        v-for="index in Math.ceil(itemLength / unit) <= 6
+          ? [...Array(Math.ceil(itemLength / unit)).keys()]
+          : pageIndex >= 5
+          ? [...Array(2).keys()]
+          : [...Array(5).keys()]"
         :key="index"
         class="mr-2 ml-2 w-8 h-8 block border border-solid border-black"
-        :class="index === pageIndex ? 'bg-blue-300 cursor-default' : ''"
-        :to="`/${kind}/?pageIndex=` + index.toString()"
+        :class="index + 1 === pageIndex ? 'bg-blue-300 cursor-default' : ''"
+        :to="`/${kind}/?pageIndex=` + (index + 1).toString()"
       >
-        <span>{{ index }}</span></router-link
+        <span>{{ index + 1 }}</span></router-link
+      >
+      <span v-if="Math.ceil(itemLength / unit) >= 8">...</span>
+
+      <router-link
+        v-for="index in pageIndex <= 4 ? null : [...Array(5).keys()]"
+        v-if="
+          Math.ceil(itemLength / unit) >= 5 &&
+          5 <= pageIndex &&
+          pageIndex < Math.ceil(itemLength / unit) - 3
+        "
+        class="mr-2 ml-2 w-8 h-8 block border border-solid border-black"
+        :class="index === 2 ? 'bg-blue-300 cursor-default' : ''"
+        :to="`/${kind}/?pageIndex=` + (index + pageIndex - 2).toString()"
+      >
+        <span>{{ index + pageIndex - 2 }}</span>
+      </router-link>
+
+      <span v-if="Math.ceil(itemLength / unit) >= 8">...</span>
+      <router-link
+        v-if="Math.ceil(itemLength / unit) >= 7"
+        v-for="index in pageIndex >= Math.ceil(itemLength / unit) - 3 &&
+        pageIndex !== 4
+          ? [...Array(5).keys()].reverse()
+          : [...Array(2).keys()].reverse()"
+        :key="index"
+        class="mr-2 ml-2 w-8 h-8 block border border-solid border-black"
+        :class="
+          pageIndex === Math.ceil(itemLength / unit) - index
+            ? 'bg-blue-300 cursor-default'
+            : ''
+        "
+        :to="
+          `/${kind}/?pageIndex=` +
+          (Math.ceil(itemLength / unit) - index).toString()
+        "
+      >
+        <span>{{ Math.ceil(itemLength / unit) - index }}</span></router-link
       >
       <router-link
         class="w-24 h-8 block border border-solid border-black"

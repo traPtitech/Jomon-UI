@@ -35,8 +35,8 @@ function changeIsModalOpen() {
 
 <template>
   <NewRequestModal v-if="isModalOpen" />
-  <div class="flex justify-between">
-    <div class="flex-grow">
+  <div class="flex justify-between h-[calc(100%-3rem)]">
+    <div class="flex-grow relative">
       <div class="flex relative">
         <div class="text-3xl mt-2 text-center absolute right-1 left-1">
           申請一覧
@@ -50,7 +50,7 @@ function changeIsModalOpen() {
           </button>
         </div>
       </div>
-      <div class="h-140">
+      <div>
         <div
           class="w-9/10 mt-4 mr-auto ml-auto border-solid border-black border-2"
         >

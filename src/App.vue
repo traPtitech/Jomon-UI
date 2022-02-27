@@ -18,7 +18,7 @@ const route = useRoute()
     @click="isModalOpen = false"
   ></div>
   <!--作成をやめますかみたいな確認画面出した方がいいかも-->
-  <main>
+  <main class="h-screen">
     <header class="flex shadow min-h-12 w-full items-center">
       <router-link to="/"
         ><!--Jomonという文字のロゴも入れたい-->

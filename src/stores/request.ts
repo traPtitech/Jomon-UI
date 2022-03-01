@@ -40,7 +40,7 @@ type RequestRequest = {
   created_by: string
   amount: number
   title: string
-  comment: string
+  content: string
   tags: string[]
   group: string
 }

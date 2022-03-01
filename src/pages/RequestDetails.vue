@@ -22,9 +22,7 @@ function createTransaction() {
   alert('モーダル表示時にrouteのパスからrequest idを取ってきて渡す')
 }
 function goToTransactions() {
-  alert(
-    '/transaction?requestID=へ移動か、GET /requests/{requestID}にtransaction(もしくはそのid)が入ってるならモーダルで一覧を表示'
-  )
+  alert('/transaction?requestID=へ移動')
 }
 </script>
 
@@ -34,7 +32,6 @@ function goToTransactions() {
     <div class="flex">
       <RequestLogs />
       <div class="w-1/3">
-        <NewComment />
         <div class="flex flex-col mt-8">
           <button
             @click="createTransaction"
@@ -49,6 +46,7 @@ function goToTransactions() {
             この申請の入出金記録へ移動
           </button>
         </div>
+        <NewComment />
       </div>
     </div>
   </div>

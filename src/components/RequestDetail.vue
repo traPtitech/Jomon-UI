@@ -1,22 +1,31 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css'
 
+import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
 import { useRequestDetailStore } from '../stores/requestDetail'
+import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
-import FixRequestModal from './FixRequestModal.vue'
+import NewTagModal from './NewTagModal.vue'
 import StatusChip from './StatusChip.vue'
 
+const tagStore = useTagStore()
+const groupStore = useGroupStore()
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
 const requestStore = useRequestStore()
-const { me } = storeToRefs(userStore)
-const { request } = storeToRefs(requestDetailStore)
 const { isModalOpen } = storeToRefs(requestStore)
+const { tags } = storeToRefs(tagStore)
+const { groups } = storeToRefs(groupStore)
+const { me, users } = storeToRefs(userStore)
+const { request, putRequestRequest } = storeToRefs(requestDetailStore)
+const isFixMode = ref('')
 
-function handleAddTag() {
-  alert('タグ追加ダイアログを出す(これいらない気が)')
-}
+const fixedValue = ref(putRequestRequest.value)
+
 function changeStatus(status: string) {
   const statusRequest = {
     status: status
@@ -24,18 +33,110 @@ function changeStatus(status: string) {
   requestDetailStore.putStatus(request.value.id, statusRequest)
   requestDetailStore.getRequestDetail(request.value.id)
   alert('ステータスを' + status + 'に変更しました')
+} //確認ダイアログほしい
+function changeIsFixMode(kind: string) {
+  switch (kind) {
+    case 'title':
+      if (isFixMode.value === 'title') {
+        requestDetailStore.putRequest(request.value.id, {
+          ...putRequestRequest.value,
+          title: fixedValue.value.title
+        })
+        isFixMode.value = ''
+      } else {
+        isFixMode.value = 'title'
+      }
+      break
+    case 'amount':
+      if (isFixMode.value === 'amount') {
+        requestDetailStore.putRequest(request.value.id, {
+          ...putRequestRequest.value,
+          amount: fixedValue.value.amount
+        })
+        isFixMode.value = ''
+      } else {
+        isFixMode.value = 'amount'
+      }
+      break
+    case 'content':
+      if (isFixMode.value === 'content') {
+        requestDetailStore.putRequest(request.value.id, {
+          ...putRequestRequest.value,
+          content: fixedValue.value.content
+        })
+        isFixMode.value = ''
+      } else {
+        isFixMode.value = 'content'
+      }
+      break
+    case 'targets':
+      if (isFixMode.value === 'target') {
+        requestDetailStore.putRequest(request.value.id, {
+          ...putRequestRequest.value,
+          targets: fixedValue.value.targets
+        })
+        isFixMode.value = ''
+      } else {
+        isFixMode.value = 'targets'
+      }
+      break
+    case 'group':
+      if (isFixMode.value === 'group') {
+        requestDetailStore.putRequest(request.value.id, {
+          ...putRequestRequest.value,
+          group: fixedValue.value.group
+        })
+        isFixMode.value = ''
+      } else {
+        isFixMode.value = 'group'
+      }
+      break
+    case 'tags':
+      if (isFixMode.value === 'tags') {
+        requestDetailStore.putRequest(request.value.id, {
+          ...putRequestRequest.value,
+          tags: fixedValue.value.tags
+        })
+        isFixMode.value = ''
+      } else {
+        isFixMode.value = 'tags'
+      }
+      break
+  }
 }
-function handleFix() {
+function handleModalIsOpen() {
   isModalOpen.value = !isModalOpen.value
 }
 </script>
 
 <template>
-  <FixRequestModal v-if="isModalOpen" />
+  <NewTagModal v-if="isModalOpen" />
   <div class="w-full">
     <div class="flex justify-between text-center mt-6 ml-12">
       <div class="flex">
-        <span class="text-3xl mr-2">{{ request.title }}</span>
+        <div v-if="!(isFixMode === 'title')">
+          <span class="text-3xl mr-2">{{ request.title }}</span
+          ><button
+            v-if="request.created_by === me.name"
+            class="border border-solid border-black mr-2"
+            @click="changeIsFixMode('title')"
+          >
+            修正
+          </button>
+        </div>
+        <div v-if="isFixMode === 'title'">
+          <input
+            v-model="fixedValue.title"
+            type="text"
+            class="w-100"
+            placeholder="タイトル"
+          /><button
+            class="border border-solid border-black ml-2 mr-2"
+            @click="changeIsFixMode('title')"
+          >
+            完了
+          </button>
+        </div>
         <StatusChip :status="request.status" />
         <div class="ml-2">
           <button
@@ -71,34 +172,164 @@ function handleFix() {
           </button>
         </div>
       </div>
-      <div class="">
+      <div>
+        <div v-if="!(isFixMode === 'group')" class="ml-12 inline">
+          <span class="mr-2">グループ：{{ request.group.name }}</span
+          ><button
+            v-if="request.created_by === me.name"
+            class="border border-solid border-black mr-2"
+            @click="changeIsFixMode('group')"
+          >
+            修正
+          </button>
+        </div>
+        <div v-if="isFixMode === 'group'" class="ml-12 inline">
+          <v-select
+            v-model="fixedValue.group"
+            :options="groups"
+            :reduce="(group:any) => group.id"
+            label="name"
+            placeholder="グループ"
+            class="w-64 inline-block"
+          ></v-select>
+          <button
+            class="border border-solid border-black ml-2 mr-2"
+            @click="changeIsFixMode('group')"
+          >
+            完了
+          </button>
+        </div>
         <span class="mr-4">申請者：{{ request.created_by }}</span>
         <span class="mr-4"
           >申請日：{{ requestDetailStore.dateFormatter(request.created_at) }}
         </span>
-        <span class="text-2xl">金額：{{ request.amount }}円</span>
-        <button
-          class="w-20 h-10 ml-4 mr-4 border border-solid border-black"
-          @click="handleFix"
+        <div v-if="!(isFixMode === 'amount')" class="inline">
+          <span class="text-2xl mr-2">金額：{{ request.amount }}円</span
+          ><button
+            v-if="request.created_by === me.name"
+            class="border border-solid border-black mr-2"
+            @click="changeIsFixMode('amount')"
+          >
+            修正
+          </button>
+        </div>
+        <div v-if="isFixMode === 'amount'" class="inline">
+          金額：<input
+            v-model="fixedValue.amount"
+            type="text"
+            class="w-30"
+            placeholder="金額"
+          />円<button
+            class="border border-solid border-black ml-2 mr-2"
+            @click="changeIsFixMode('amount')"
+          >
+            完了
+          </button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="mt-4">
+        <div v-if="!(isFixMode === 'tags')" class="ml-12 inline">
+          <span>タグ：</span>
+          <span
+            v-for="tag in request.tags"
+            :key="tag.id"
+            class="border border-solid border-black rounded mr-2"
+            >{{ tag.name }}</span
+          ><button
+            v-if="request.created_by === me.name"
+            class="border border-solid border-black"
+            @click="changeIsFixMode('tags')"
+          >
+            修正
+          </button>
+        </div>
+        <div v-if="isFixMode === 'tags'" class="ml-12 inline">
+          <v-select
+            v-model="fixedValue.tags"
+            :options="tags"
+            label="name"
+            placeholder="タグ"
+            multiple
+            class="w-200 inline-block"
+          ></v-select>
+          <button
+            @click="handleModalIsOpen"
+            class="border border-solid border-black ml-4"
+          >
+            タグを新規作成
+          </button>
+          <button
+            class="border border-solid border-black ml-2 mr-2"
+            @click="changeIsFixMode('tags')"
+          >
+            完了
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="ml-12 mt-4 flex">
+      <span>詳細：</span>
+      <div
+        v-if="!(isFixMode === 'content')"
+        class="h-16 w-200 border border-solid border-black"
+      >
+        <span class="mr-2">{{ request.content }}</span
+        ><button
+          v-if="request.created_by === me.name"
+          class="border border-solid border-black mr-2"
+          @click="changeIsFixMode('content')"
         >
           修正
         </button>
       </div>
-    </div>
-    <div>
-      <span class="ml-12">グループ：</span>
-      <span>{{ request.group.name }}</span>
-      <div class="ml-12">
-        <span>タグ：</span>
-        <span
-          v-for="tag in request.tags"
-          :key="tag.id"
-          class="border border-solid border-black rounded mr-2"
-          >{{ tag.name }}</span
+      <div v-if="isFixMode === 'content'">
+        <textarea
+          v-model="fixedValue.content"
+          type="text"
+          class="resize-none w-200"
+          placeholder="タイトル"
+        /><button
+          class="border border-solid border-black ml-2 mr-2"
+          @click="changeIsFixMode('content')"
         >
-        <button class="border border-solid border-black" @click="handleAddTag">
-          タグを追加
+          完了
         </button>
+      </div>
+      <div class="ml-30">
+        <span>払い戻し対象者：</span>
+        <div v-if="!(isFixMode === 'targets')" class="inline">
+          <span
+            v-for="target in request.targets"
+            :key="target.id"
+            class="mr-2"
+            >{{ target.target }}</span
+          ><button
+            v-if="request.created_by === me.name"
+            class="border border-solid border-black mr-2"
+            @click="changeIsFixMode('targets')"
+          >
+            修正
+          </button>
+        </div>
+        <div v-if="isFixMode === 'targets'" class="inline-block">
+          <v-select
+            v-model="fixedValue.targets"
+            :options="users"
+            :reduce="(user:any) => user.name"
+            label="name"
+            placeholder="払い戻し対象者"
+            multiple
+            class="w-100 inline-block"
+          ></v-select>
+          <button
+            class="border border-solid border-black ml-2 mr-2"
+            @click="changeIsFixMode('targets')"
+          >
+            完了
+          </button>
+        </div>
       </div>
     </div>
     <div

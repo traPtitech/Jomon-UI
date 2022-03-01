@@ -24,19 +24,18 @@ const route = useRoute()
   <!--作成をやめますかみたいな確認画面出した方がいいかも-->
   <main class="h-screen">
     <header class="flex shadow min-h-12 w-full items-center">
-      <router-link to="/"
-        ><!--Jomonという文字のロゴも入れたい-->
+      <router-link to="/">
         <Logo />
       </router-link>
       <div class="flex flex-1 px-2 justify-between">
-        <div class="flex gap-2">
+        <div class="flex gap-2 items-center">
           <router-link to="/requests?pageIndex=1"
-            ><div>申請一覧</div></router-link
+            ><span>申請一覧</span></router-link
           >
           <router-link to="/transactions"
-            ><div>入出金記録一覧</div></router-link
+            ><span>入出金記録一覧</span></router-link
           >
-          <router-link to="/groups"><div>グループ一覧</div></router-link>
+          <router-link to="/groups"><span>グループ一覧</span></router-link>
         </div>
         <Icon :name="me.name" />
       </div>

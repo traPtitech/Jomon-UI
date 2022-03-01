@@ -1,6 +1,16 @@
 <script lang="ts" setup>
+import {
+  ThumbUpIcon,
+  CloudUploadIcon,
+  ExclamationIcon,
+  XCircleIcon,
+  CheckCircleIcon
+} from '@heroicons/vue/solid'
+import { ref } from 'vue'
+
 type Props = { status: string }
 const props = defineProps<Props>()
+const flag = ref(false)
 function statusToJpn(status: string) {
   switch (status) {
     case 'submitted':
@@ -33,13 +43,37 @@ function statusColor(status: string) {
       return 'ERROR'
   }
 }
+function handleMouseOver() {
+  flag.value = true
+}
+function handleMouseLeave() {
+  flag.value = false
+}
 </script>
 
 <template>
-  <div
-    class="rounded-1/2 w-8 h-8 inline-block"
-    :class="statusColor(props.status)"
-  >
-    <span class=""></span>
+  <div class="relative inline">
+    <div v-if="flag" class="absolute top-4 left-4 w-16 h-8 bg-gray-100 z-1">
+      {{ statusToJpn(status) }}
+    </div>
+    <div
+      @mouseover="handleMouseOver"
+      @mouseleave="handleMouseLeave"
+      class="w-8 h-8 inline-block align-bottom"
+    >
+      <!-- <div class="rounded-1/2 w-8 h-8 inline-block" :class="statusColor(status)"> -->
+      <!--ToDo:色変える-->
+      <CloudUploadIcon v-if="status === 'submitted'" class="text-blue-500" />
+      <XCircleIcon v-else-if="status === 'rejected'" class="text-red-500" />
+      <ExclamationIcon
+        v-else-if="status === 'fix_required'"
+        class="text-yellow-500"
+      />
+      <ThumbUpIcon v-else-if="status === 'accepted'" class="text-blue-200" />
+      <CheckCircleIcon
+        v-else-if="status === 'fully_repaid'"
+        class="text-green-500"
+      />
+    </div>
   </div>
 </template>

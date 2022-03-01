@@ -17,6 +17,7 @@ const { logs } = storeToRefs(requestDetailStore)
       <ul>
         <li v-for="log in logs" :key="log.created_at.toDateString">
           <RequestLog :index="log.index" :kind="log.kind" />
+          <div class="h-8 w-1 bg-gray-300 ml-14"></div>
         </li>
       </ul>
     </div>

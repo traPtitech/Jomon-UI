@@ -53,7 +53,9 @@ function handleMouseLeave() {
 
 <template>
   <div class="relative inline">
-    <div v-if="flag" class="absolute top-4 left-4 w-16 h-8 bg-gray-100 z-1">
+    <div
+      v-if="flag"
+      class="absolute top-6 left-6 w-16 h-6 bg-gray-100 z-1 shadow-md text-center">
       {{ statusToJpn(status) }}
     </div>
     <div

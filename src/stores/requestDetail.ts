@@ -106,14 +106,14 @@ export const useRequestDetailStore = defineStore('requestDetail', {
       comments: [
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          user: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          user: 'mehm8128',
           comment: 'サーバー代',
           created_at: '2022-02-11T08:01:38.838Z',
           updated_at: '2022-02-11T08:01:38.838Z'
         },
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          user: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          user: 'mehm8128',
           comment: 'コメント内容',
           created_at: '2022-02-14T08:01:38.838Z',
           updated_at: '2022-02-14T08:01:38.838Z'
@@ -122,17 +122,17 @@ export const useRequestDetailStore = defineStore('requestDetail', {
       files: ['3fa85f64-5717-4562-b3fc-2c963f66afa6'],
       statuses: [
         {
-          created_by: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          created_by: 'mehm8128',
           status: 'submitted',
           created_at: '2022-02-12T08:01:37.838Z'
         },
         {
-          created_by: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          created_by: 'mehm8128',
           status: 'fix_required',
           created_at: '2022-02-13T08:01:37.838Z'
         },
         {
-          created_by: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          created_by: 'mehm8128',
           status: 'submitted',
           created_at: '2022-02-18T08:01:37.838Z'
         }

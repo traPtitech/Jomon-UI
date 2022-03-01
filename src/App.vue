@@ -13,9 +13,6 @@ const userStore = useUserStore()
 const { isModalOpen } = storeToRefs(requestStore)
 const { me } = storeToRefs(userStore)
 const route = useRoute()
-function get() {
-  axios.get('https://q.trap.jp/api/v3/public/icon/mehm8128')
-}
 </script>
 <template>
   <div

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { PencilIcon } from '@heroicons/vue/solid'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import vSelect from 'vue-select'
@@ -70,7 +71,7 @@ function changeIsFixMode(kind: string) {
       }
       break
     case 'targets':
-      if (isFixMode.value === 'target') {
+      if (isFixMode.value === 'targets') {
         requestDetailStore.putRequest(request.value.id, {
           ...putRequestRequest.value,
           targets: fixedValue.value.targets
@@ -115,13 +116,13 @@ function handleModalIsOpen() {
     <div class="flex justify-between text-center mt-6 ml-12">
       <div class="flex">
         <div v-if="!(isFixMode === 'title')">
-          <span class="text-3xl mr-2">{{ request.title }}</span
+          <span class="text-3xl">{{ request.title }}</span
           ><button
             v-if="request.created_by === me.name"
-            class="border border-solid border-black mr-2"
+            class="mr-2"
             @click="changeIsFixMode('title')"
           >
-            修正
+            <PencilIcon class="h-6 w-6" />
           </button>
         </div>
         <div v-if="isFixMode === 'title'">
@@ -174,13 +175,13 @@ function handleModalIsOpen() {
       </div>
       <div>
         <div v-if="!(isFixMode === 'group')" class="ml-12 inline">
-          <span class="mr-2">グループ：{{ request.group.name }}</span
+          <span>グループ：{{ request.group.name }}</span
           ><button
             v-if="request.created_by === me.name"
-            class="border border-solid border-black mr-2"
+            class="mr-2"
             @click="changeIsFixMode('group')"
           >
-            修正
+            <PencilIcon class="h-6 w-6" />
           </button>
         </div>
         <div v-if="isFixMode === 'group'" class="ml-12 inline">
@@ -204,13 +205,13 @@ function handleModalIsOpen() {
           >申請日：{{ requestDetailStore.dateFormatter(request.created_at) }}
         </span>
         <div v-if="!(isFixMode === 'amount')" class="inline">
-          <span class="text-2xl mr-2">金額：{{ request.amount }}円</span
+          <span class="text-2xl">金額：{{ request.amount }}円</span
           ><button
             v-if="request.created_by === me.name"
-            class="border border-solid border-black mr-2"
+            class="mr-2"
             @click="changeIsFixMode('amount')"
           >
-            修正
+            <PencilIcon class="h-6 w-6" />
           </button>
         </div>
         <div v-if="isFixMode === 'amount'" class="inline">
@@ -233,16 +234,16 @@ function handleModalIsOpen() {
         <div v-if="!(isFixMode === 'tags')" class="ml-12 inline">
           <span>タグ：</span>
           <span
-            v-for="tag in request.tags"
+            v-for="(tag, index) in request.tags"
             :key="tag.id"
-            class="border border-solid border-black rounded mr-2"
+            :class="index !== 0 ? 'ml-2' : ''"
+            class="border border-solid border-black rounded"
             >{{ tag.name }}</span
           ><button
             v-if="request.created_by === me.name"
-            class="border border-solid border-black"
             @click="changeIsFixMode('tags')"
           >
-            修正
+            <PencilIcon class="h-6 w-6" />
           </button>
         </div>
         <div v-if="isFixMode === 'tags'" class="ml-12 inline">
@@ -275,13 +276,12 @@ function handleModalIsOpen() {
         v-if="!(isFixMode === 'content')"
         class="h-16 w-200 border border-solid border-black"
       >
-        <span class="mr-2">{{ request.content }}</span
+        <span>{{ request.content }}</span
         ><button
           v-if="request.created_by === me.name"
-          class="border border-solid border-black mr-2"
           @click="changeIsFixMode('content')"
         >
-          修正
+          <PencilIcon class="h-6 w-6" />
         </button>
       </div>
       <div v-if="isFixMode === 'content'">
@@ -300,17 +300,14 @@ function handleModalIsOpen() {
       <div class="ml-30">
         <span>払い戻し対象者：</span>
         <div v-if="!(isFixMode === 'targets')" class="inline">
-          <span
-            v-for="target in request.targets"
-            :key="target.id"
-            class="mr-2"
-            >{{ target.target }}</span
+          <span v-for="target in request.targets" :key="target.id" class="">{{
+            target.target
+          }}</span
           ><button
             v-if="request.created_by === me.name"
-            class="border border-solid border-black mr-2"
             @click="changeIsFixMode('targets')"
           >
-            修正
+            <PencilIcon class="h-6 w-6" />
           </button>
         </div>
         <div v-if="isFixMode === 'targets'" class="inline-block">

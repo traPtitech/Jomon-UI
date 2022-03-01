@@ -7,6 +7,8 @@ type RequestDetail = {
   title: string
   created_by: string
   status: string
+  content: string
+  targets: Target[]
   comments: {
     id: string
     user: string
@@ -38,12 +40,36 @@ type RequestDetail = {
   created_at: string
   updated_at: string
 }
+type Target = {
+  id: string
+  target: string
+  paid_at: string
+  created_at: string
+}
 
 type RequestRequest = {
   created_by: string
   amount: number
   title: string
+  content: string
+  targets: string[]
   tags: string[]
+  group: string | null
+}
+type Tag = {
+  id: string
+  name: string
+  description: string
+  created_at: string
+  updated_at: string
+}
+type RequestRequest2 = {
+  created_by: string
+  amount: number
+  title: string
+  content: string
+  targets: string[]
+  tags: Tag[]
   group: string | null
 }
 
@@ -68,6 +94,15 @@ export const useRequestDetailStore = defineStore('requestDetail', {
       title: 'SysAd講習会の開催費用',
       created_by: 'mehm8128',
       status: 'submitted',
+      content: 'サーバー代',
+      targets: [
+        {
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          target: 'mehm8128',
+          paid_at: '2020-01-01',
+          created_at: '2020-01-01'
+        }
+      ],
       comments: [
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -180,6 +215,22 @@ export const useRequestDetailStore = defineStore('requestDetail', {
       })
       return array
       //その後この配列のkindで配列を選び、indexでindexを選ぶことで2つの配列をいい感じに並べ替えられる
+    },
+    putRequestRequest() {
+      let targets = new Array<string>()
+      for (let i = 0; i < this.request.targets.length; i++) {
+        targets = targets.concat([this.request.targets[i].target])
+      }
+      const requestRequest: RequestRequest2 = {
+        created_by: this.request.created_by,
+        amount: this.request.amount,
+        title: this.request.title,
+        content: this.request.content,
+        targets: targets,
+        tags: this.request.tags,
+        group: this.request.group.id
+      }
+      return requestRequest
     }
   },
   actions: {
@@ -187,8 +238,16 @@ export const useRequestDetailStore = defineStore('requestDetail', {
       const response: RequestDetail = await axios.get('/api/requests/' + id)
       this.request = response
     },
-    async putRequest(id: string, request: RequestRequest) {
-      await axios.put('/api/requests/' + id, request)
+    async putRequest(id: string, request: RequestRequest2) {
+      let tags = new Array<string>()
+      for (let i = 0; i < request.tags.length; i++) {
+        tags = tags.concat([request.tags[i].id])
+      }
+      const requestRequest: RequestRequest = {
+        ...this.putRequestRequest,
+        tags: tags
+      }
+      await axios.put('/api/requests/' + id, requestRequest)
       this.getRequestDetail(id)
     },
     async postComment(id: string, commentRequest: CommentRequest) {

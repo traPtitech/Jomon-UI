@@ -36,7 +36,10 @@ function statusColor(status: string) {
 </script>
 
 <template>
-  <div class="rounded-1/2 w-8 h-8" :class="statusColor(props.status)">
+  <div
+    class="rounded-1/2 w-8 h-8 inline-block"
+    :class="statusColor(props.status)"
+  >
     <span class=""></span>
   </div>
 </template>

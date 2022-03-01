@@ -1,14 +1,21 @@
 <script lang="ts" setup>
+import axios from 'axios'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 
-import NewRequestButton from './components/NewRequestButton.vue'
+import Icon from './components/Icon.vue'
 import { useRequestStore } from './stores/request'
+import { useUserStore } from './stores/user'
 import Logo from '/@/components/Logo.vue'
 
 const requestStore = useRequestStore()
+const userStore = useUserStore()
 const { isModalOpen } = storeToRefs(requestStore)
+const { me } = storeToRefs(userStore)
 const route = useRoute()
+function get() {
+  axios.get('https://q.trap.jp/api/v3/public/icon/mehm8128')
+}
 </script>
 <template>
   <div
@@ -34,7 +41,7 @@ const route = useRoute()
           >
           <router-link to="/groups"><div>グループ一覧</div></router-link>
         </div>
-        <NewRequestButton />
+        <Icon :name="me.name" />
       </div>
     </header>
 

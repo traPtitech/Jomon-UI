@@ -41,7 +41,7 @@ function changeIsModalOpen() {
         <div class="text-3xl mt-2 text-center absolute right-1 left-1">
           申請一覧
         </div>
-        <div class="ml-auto mr-12 mt-4 z-1">
+        <div class="ml-auto mr-40 mt-4 z-1">
           <button
             @click="changeIsModalOpen"
             class="text-xl border border-solid border-black"
@@ -50,11 +50,12 @@ function changeIsModalOpen() {
           </button>
         </div>
       </div>
+      <div class="h-20">filteringmenu {{ requestsLength() }}件取得しました</div>
       <div
         :class="pageIndex === Math.ceil(requestsLength() / 7) ? 'h-138' : ''"
       >
         <div
-          class="w-9/10 mt-4 mr-auto ml-auto border-solid border-black border-2"
+          class="w-3/4 mt-4 mr-auto ml-auto border-solid border-black border-2"
         >
           <ul class="w-full mr-auto ml-auto">
             <li
@@ -82,10 +83,6 @@ function changeIsModalOpen() {
           kind="requests"
         />
       </div>
-    </div>
-    <div class="mt-20 mr-8">
-      <FilteringMenu />
-      {{ requestsLength() }}件取得しました
     </div>
   </div>
 </template>

@@ -36,19 +36,7 @@ function statusColor(status: string) {
 </script>
 
 <template>
-  <div
-    class="
-      inline-flex
-      w-24
-      h-12
-      justify-center
-      items-center
-      align-middle
-      rounded-md
-      mx-1
-    "
-    :class="statusColor(props.status)"
-  >
-    <span class="align-middle">{{ statusToJpn(props.status) }}</span>
+  <div class="rounded-1/2 w-8 h-8" :class="statusColor(props.status)">
+    <span class=""></span>
   </div>
 </template>

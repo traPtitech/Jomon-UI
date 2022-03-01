@@ -21,13 +21,13 @@ const props = defineProps<Props>()
             {{ request.comments[props.index].user }}がコメントしました。</span
           >
         </span>
-        <span>{{
+        <span class="mr-2 mt-2">{{
           requestDetailStore.dateFormatter(
             request.comments[props.index].created_at
           )
         }}</span>
       </div>
-      <div class="ml-12">
+      <div class="ml-12 mb-2">
         コメント：{{ request.comments[props.index].comment }}
       </div>
     </div>

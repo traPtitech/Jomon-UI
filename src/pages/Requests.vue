@@ -50,7 +50,8 @@ function changeIsModalOpen() {
           </button>
         </div>
       </div>
-      <div class="h-20">filteringmenu {{ requestsLength() }}件取得しました</div>
+      <RequestFilteringMenu class="mt-4 mb-2" />
+      <span class="ml-50"> {{ requestsLength() }}件取得しました</span>
       <div
         :class="pageIndex === Math.ceil(requestsLength() / 7) ? 'h-138' : ''"
       >

@@ -50,6 +50,7 @@ function changeIsFixMode(kind: string) {
       break
     case 'amount':
       if (isFixMode.value === 'amount') {
+        //todo:バリデーション
         requestDetailStore.putRequest(request.value.id, {
           ...putRequestRequest.value,
           amount: fixedValue.value.amount
@@ -274,9 +275,9 @@ function handleModalIsOpen() {
       <span>詳細：</span>
       <div
         v-if="!(isFixMode === 'content')"
-        class="h-16 w-200 border border-solid border-black"
+        class="h-16 w-200 border border-solid border-gray-300"
       >
-        <span>{{ request.content }}</span
+        <span class="ml-2">{{ request.content }}</span
         ><button
           v-if="request.created_by === me.name"
           @click="changeIsFixMode('content')"

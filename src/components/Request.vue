@@ -13,15 +13,12 @@ const props = defineProps<Props>()
 <template>
   <router-link :to="'/requests/' + requests[props.index].id">
     <div class="flex hover:bg-gray-100 pb-1">
-      <div class="flex items-center">
+      <div class="mt-2 mr-2 ml-1">
         <StatusChip :status="requests[props.index].status" />
       </div>
       <div class="flex-grow">
-        <div class="">{{ requests[props.index].title }}</div>
-        <div class="">
-          <span>グループ：{{ requests[props.index].group.name }}</span>
-        </div>
-        <div class="">
+        <div class="text-xl">{{ requests[props.index].title }}</div>
+        <div class="mt-2">
           <span
             v-for="tag in requests[props.index].tags"
             :key="tag.id"
@@ -32,6 +29,9 @@ const props = defineProps<Props>()
       </div>
       <div class="text-center flex flex-col justify-between mr-4">
         <div class="">
+          <span class="mr-4"
+            >グループ：{{ requests[props.index].group.name }}</span
+          >
           <span class="mr-4"
             >申請者：{{ requests[props.index].created_by }}</span
           >

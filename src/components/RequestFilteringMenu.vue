@@ -25,112 +25,79 @@ const states = ref([
   { state: 'accepted', jpn: '承認済み' },
   { state: 'fully_repaid', jpn: '返済完了' }
 ])
-function sortCreatedAsc() {
-  params.value.sort = 'created_at'
+function sortByCreatedAt() {
+  if (params.value.sort === 'created_at') {
+    params.value.sort = '-createdAt'
+  } else {
+    params.value.sort = 'created_at'
+  }
   requestStore.getRequests()
 }
-function sortCreatedDesc() {
-  params.value.sort = '-created_at'
-  requestStore.getRequests()
-}
-function sortTitleAsc() {
-  params.value.sort = 'title'
-  requestStore.getRequests()
-}
-function sortTitleDesc() {
-  params.value.sort = '-title'
-  requestStore.getRequests()
-} //todo:日時のバリデーション追加
+//todo:日時のバリデーション追加
 </script>
 
 <template>
-  <div
-    class="flex flex-col justify-evenly w-440px h-300px border-2 border-gray-500"
-  >
-    <div class="flex justify-around">
-      <button
-        :class="
-          params.sort === 'created_at' ? 'border border-solid border-black' : ''
-        "
-        @click="sortCreatedAsc"
-      >
-        日付昇順
-      </button>
-      <button
-        :class="
-          params.sort === '-created_at'
-            ? 'border border-solid border-black'
-            : ''
-        "
-        @click="sortCreatedDesc"
-      >
-        日付降順
-      </button>
-      <button
-        :class="
-          params.sort === 'title' ? 'border border-solid border-black' : ''
-        "
-        @click="sortTitleAsc"
-      >
-        タイトル昇順
-      </button>
-      <button
-        :class="
-          params.sort === '-title' ? 'border border-solid border-black' : ''
-        "
-        @click="sortTitleDesc"
-      >
-        タイトル降順
-      </button>
+  <div class="flex justify-around">
+    <button
+      :class="
+        params.sort === 'created_at'
+          ? 'border border-solid border-gray-400 p-1'
+          : ''
+      "
+      @click="sortByCreatedAt"
+    >
+      日付順
+    </button>
+    <div class="mt-1">
+      <input
+        v-model="params.since"
+        placeholder="xxxx-xx-xx"
+        class="border border-solid border-gray-300 w-20"
+      />
+      <span>～</span>
+      <input
+        v-model="params.until"
+        placeholder="xxxx-xx-xx"
+        class="border border-solid border-gray-300 w-20"
+      />
     </div>
-    <div class="flex flex-col justify-around flex-1">
-      <div class="flex justify-around">
-        <input
-          v-model="params.since"
-          placeholder="xxxx-xx-xx"
-          class="border border-solid border-black"
-        />
-        <span>～</span>
-        <input
-          v-model="params.until"
-          placeholder="xxxx-xx-xx"
-          class="border border-solid border-black"
-        />
-      </div>
-      <v-select
-        v-model="params.target"
-        :options="users"
-        :reduce="(user:any) => user.name"
-        label="name"
-        placeholder="申請者"
-      ></v-select>
-      <v-select
-        v-model="params.current_state"
-        :options="states"
-        :reduce="(state:any) => state.state"
-        label="jpn"
-        placeholder="申請の状態"
-        :searchable="false"
-      ></v-select>
-      <v-select
-        v-model="tagList"
-        :options="tags"
-        :reduce="(tag:any) => tag.id"
-        label="name"
-        placeholder="タグ"
-        multiple
-      ></v-select>
-      <v-select
-        v-model="params.group"
-        :options="groups"
-        :reduce="(group:any) => group.id"
-        label="name"
-        placeholder="グループ"
-      ></v-select>
-    </div>
-    <div class="flex justify-around">
-      <button @click="requestStore.getRequests">絞り込み</button>
-      <button @click="requestStore.resetParams">リセット</button>
-    </div>
+    <v-select
+      v-model="params.target"
+      @close="requestStore.getRequests"
+      :options="users"
+      :reduce="(user:any) => user.name"
+      label="name"
+      placeholder="申請者"
+      class="w-64"
+    ></v-select>
+    <v-select
+      v-model="params.current_state"
+      @close="requestStore.getRequests"
+      :options="states"
+      :reduce="(state:any) => state.state"
+      label="jpn"
+      placeholder="申請の状態"
+      :searchable="false"
+      class="w-64"
+    ></v-select>
+    <v-select
+      v-model="params.group"
+      @close="requestStore.getRequests"
+      :options="groups"
+      :reduce="(group:any) => group.id"
+      label="name"
+      placeholder="グループ"
+      class="w-64"
+    ></v-select>
+    <v-select
+      v-model="tagList"
+      @close="requestStore.getRequests"
+      :options="tags"
+      :reduce="(tag:any) => tag.id"
+      label="name"
+      placeholder="タグ"
+      multiple
+      class="w-100"
+    ></v-select>
   </div>
 </template>

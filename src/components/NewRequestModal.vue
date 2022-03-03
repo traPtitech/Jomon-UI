@@ -10,6 +10,7 @@ import { useRequestStore } from '../stores/request'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
 import { Request } from '../types/requestTypes'
+import MarkdownIt from './MarkdownIt.vue'
 import NewTagModal from './NewTagModal.vue'
 
 const requestStore = useRequestStore()
@@ -32,6 +33,7 @@ const request = ref({
 } as Request)
 const image = ref()
 const isTagModalOpen = ref(false)
+
 function postRequest() {
   console.log(request.value)
   alert(
@@ -55,7 +57,7 @@ function handleTagModalIsOpen() {
 <template>
   <NewTagModal v-if="isTagModalOpen" />
   <div
-    class="bg-white w-240 h-120 absolute z-3 inset-0 m-auto border border-solid border-black"
+    class="bg-white w-300 h-150 absolute z-3 inset-0 m-auto border border-solid border-black"
   >
     <div
       :class="
@@ -66,31 +68,39 @@ function handleTagModalIsOpen() {
       @click="isTagModalOpen = false"
     ></div>
     <h1 class="text-3xl text-center mt-4 mb-4">申請の新規作成</h1>
-    <div class="flex flex-col justify-between ml-12 text-xl h-4/5">
-      <span>申請者：{{ me.name }}</span>
+    <div class="flex flex-col justify-between ml-12 h-4/5">
+      <span class="text-xl">申請者：{{ me.name }}</span>
       <div>
-        <span>タイトル：</span>
+        <span class="text-xl">タイトル：</span>
         <input
           v-model="request.title"
           class="border border-solid border-black w-4/5"
         />
       </div>
       <div>
-        <span>金額：</span>
+        <span class="text-xl">金額：</span>
         <input
           v-model="request.amount"
           class="border border-solid border-black"
         /><!-- //ToDo:バリデーション -->
       </div>
       <div>
-        <span>詳細：</span>
+        <span class="text-xl">詳細：</span>
         <textarea
           v-model="request.content"
-          class="border border-solid border-black resize-none w-4/5"
+          class="h-32 leading-tight border border-solid border-black resize-none w-4/5"
         />
       </div>
+      <details>
+        <summary>MDプレビュー</summary>
+        <MarkdownIt
+          :text="request.content"
+          :class="request.content ? 'border border-solid border-gray-200' : ''"
+          class="pl-2 pr-2 ml-4"
+        />
+      </details>
       <div>
-        <span>タグ：</span>
+        <span class="text-xl">タグ：</span>
         <v-select
           v-model="request.tags"
           :options="tags"
@@ -102,13 +112,13 @@ function handleTagModalIsOpen() {
         ></v-select>
         <button
           @click="handleTagModalIsOpen"
-          class="border border-solid border-black ml-8"
+          class="border border-solid border-black ml-8 text-xl"
         >
           タグを新規作成
         </button>
       </div>
       <div>
-        <span>グループ：</span>
+        <span class="text-xl">グループ：</span>
         <v-select
           v-model="request.group"
           :options="groups"
@@ -119,14 +129,16 @@ function handleTagModalIsOpen() {
         ></v-select>
       </div>
       <div>
-        <span>画像：</span>
+        <span class="text-xl">画像：</span>
         <input type="file" @change="e => handleImageChange(e)" />
       </div>
       <div>
         <img v-if="image" :src="image" alt="uploadedFile" class="h-32" />
       </div>
       <div class="text-center">
-        <button @click="postRequest" class="w-32">申請を作成する</button>
+        <button @click="postRequest" class="w-32 text-xl">
+          申請を作成する
+        </button>
       </div>
     </div>
   </div>

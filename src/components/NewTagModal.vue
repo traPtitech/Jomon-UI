@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 
 import { useTagStore } from '../stores/tag'
+import MarkdownIt from './MarkdownIt.vue'
 
 const tagStore = useTagStore()
 const tag = ref({
@@ -31,9 +32,17 @@ function postTag() {
         <span>詳細：</span>
         <textarea
           v-model="tag.description"
-          class="border border-solid border-black resize-none w-2/3"
+          class="h-32 leading-tight border border-solid border-black resize-none w-2/3"
         />
       </div>
+      <details>
+        <summary>MDプレビュー</summary>
+        <MarkdownIt
+          :text="tag.description"
+          :class="tag.description ? 'border border-solid border-gray-200' : ''"
+          class="pl-2 pr-2 ml-4"
+        />
+      </details>
       <div class="text-center">
         <button @click="postTag">タグを作成する</button>
       </div>

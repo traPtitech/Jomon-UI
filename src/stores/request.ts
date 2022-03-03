@@ -1,49 +1,7 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-type Request = {
-  id: string
-  status: string
-  created_at: string
-  updated_at: string
-  created_by: string
-  amount: number
-  title: string
-  tags: {
-    id: string
-    name: string
-    description: string
-    created_at: string
-    updated_at: string
-  }[]
-  group: {
-    id: string
-    name: string
-    description: string
-    budget: number
-    created_at: string
-    updated_at: string
-  }
-}
-
-type Params = {
-  sort: string
-  current_state: string | null
-  target: string | null
-  since: string
-  until: string
-  tag: string | null
-  group: string | null
-}
-
-type RequestRequest = {
-  created_by: string
-  amount: number
-  title: string
-  content: string
-  tags: string[]
-  group: string
-}
+import { Params, Request, RequestResponse } from '../types/requestTypes'
 
 export const useRequestStore = defineStore('request', {
   state: () => ({
@@ -86,7 +44,7 @@ export const useRequestStore = defineStore('request', {
         created_at: '2022-01-25T13:29:19.918Z',
         updated_at: '2022-01-25T13:29:19.918Z'
       }
-    }), //new Array<Request>()
+    }), //new Array<RequestResponse>()
     params: {
       //storeじゃなくてよさそう
       sort: 'created_at',
@@ -131,13 +89,16 @@ export const useRequestStore = defineStore('request', {
           this.params.tag += ',' + this.tagList[i]
         }
       }
-      const response: Request[] = await axios.get('/api/requests', {
+      const response: RequestResponse[] = await axios.get('/api/requests', {
         params: this.params
       })
       this.requests = response
     },
-    async postRequest(request: RequestRequest) {
-      const response: Request = await axios.post('/api/requests', request)
+    async postRequest(request: Request) {
+      const response: RequestResponse = await axios.post(
+        '/api/requests',
+        request
+      )
       this.requests.unshift(response)
     },
     resetParams() {

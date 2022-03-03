@@ -1,19 +1,16 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-type File = {
-  file: string
-  name: string
-}
+import { FileResponse } from '../types/fileTypes'
 
 export const useFileStore = defineStore('file', {
   state: () => ({
-    files: new Array<File>()
+    files: new Array<FileResponse>()
   }),
   actions: {
     async getFile(ids: string[]) {
       for (let i = 0; i < ids.length; i++) {
-        const response: File = await axios.get('/api/files/' + ids[i])
+        const response: FileResponse = await axios.get('/api/files/' + ids[i])
         this.files.concat(response)
       }
     },

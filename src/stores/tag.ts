@@ -1,20 +1,7 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-type Tag = {
-  id: string
-  name: string
-  description: string
-  created_at: string
-  updated_at: string
-}
-type Tags = {
-  tags: Tag[]
-}
-type TagRequest = {
-  name: string
-  description: string
-}
+import { Tag, TagResponse, TagsResponse } from '../types/tagTypes'
 
 export const useTagStore = defineStore('tag', {
   state: () => ({
@@ -33,23 +20,23 @@ export const useTagStore = defineStore('tag', {
         created_at: '2022-01-27T14:06:32.381Z',
         updated_at: '2022-01-27T14:06:32.381Z'
       }
-    ], //new Array<Tag>()
-    tag: {} as Tag
+    ], //new Array<TagResponse>()
+    tag: {} as TagResponse
   }),
   actions: {
     async getTags() {
-      const response: Tags = await axios.get('/api/tags')
+      const response: TagsResponse = await axios.get('/api/tags')
       this.tags = response.tags
     },
     async getTag(id: string) {
-      const response: Tag = await axios.get('/api/tags/' + id)
+      const response: TagResponse = await axios.get('/api/tags/' + id)
       this.tag = response
     },
-    async postTag(tag: TagRequest) {
+    async postTag(tag: Tag) {
       await axios.post('/api/tags', tag)
       this.getTags()
     },
-    async putTag(id: string, tag: TagRequest) {
+    async putTag(id: string, tag: Tag) {
       await axios.put('/api/tags/' + id, tag)
       this.getTags()
     },

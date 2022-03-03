@@ -1,90 +1,10 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-type RequestDetail = {
-  id: string
-  amount: number
-  title: string
-  created_by: string
-  status: string
-  content: string
-  targets: Target[]
-  comments: {
-    id: string
-    user: string
-    comment: string
-    created_at: string
-    updated_at: string
-  }[]
-  files: string[]
-  statuses: {
-    created_by: string
-    status: string
-    created_at: string
-  }[]
-  tags: {
-    id: string
-    name: string
-    description: string
-    created_at: string
-    updated_at: string
-  }[]
-  group: {
-    id: string
-    name: string
-    description: string
-    budget: number
-    created_at: string
-    updated_at: string
-  }
-  created_at: string
-  updated_at: string
-}
-type Target = {
-  id: string
-  target: string
-  paid_at: string
-  created_at: string
-}
-
-type RequestRequest = {
-  created_by: string
-  amount: number
-  title: string
-  content: string
-  targets: string[]
-  tags: string[]
-  group: string | null
-}
-type Tag = {
-  id: string
-  name: string
-  description: string
-  created_at: string
-  updated_at: string
-}
-type RequestRequest2 = {
-  created_by: string
-  amount: number
-  title: string
-  content: string
-  targets: string[]
-  tags: Tag[]
-  group: string | null
-}
-
-type Log = {
-  created_at: Date
-  kind: string
-  index: number
-}
-
-type CommentRequest = {
-  comment: string
-}
-type StatusRequest = {
-  status: string
-}
+import {
+    Comment, Log, Request2, RequestDetailResponse, Status, TargetResponse
+} from '../types/requestsTypes'
+import { Request } from '../types/requestTypes'
 
 export const useRequestDetailStore = defineStore('requestDetail', {
   state: () => ({
@@ -170,7 +90,7 @@ export const useRequestDetailStore = defineStore('requestDetail', {
       },
       created_at: '2022-02-12T08:01:37.838Z',
       updated_at: '2022-02-12T08:01:37.838Z'
-    } as RequestDetail
+    } as RequestDetailResponse
   }),
   getters: {
     dateFormatter() {
@@ -221,7 +141,7 @@ export const useRequestDetailStore = defineStore('requestDetail', {
       for (let i = 0; i < this.request.targets.length; i++) {
         targets = targets.concat([this.request.targets[i].target])
       }
-      const requestRequest: RequestRequest2 = {
+      const requestRequest: Request2 = {
         created_by: this.request.created_by,
         amount: this.request.amount,
         title: this.request.title,
@@ -235,26 +155,28 @@ export const useRequestDetailStore = defineStore('requestDetail', {
   },
   actions: {
     async getRequestDetail(id: string) {
-      const response: RequestDetail = await axios.get('/api/requests/' + id)
+      const response: RequestDetailResponse = await axios.get(
+        '/api/requests/' + id
+      )
       this.request = response
     },
-    async putRequest(id: string, request: RequestRequest2) {
+    async putRequest(id: string, request: Request2) {
       let tags = new Array<string>()
       for (let i = 0; i < request.tags.length; i++) {
         tags = tags.concat([request.tags[i].id])
       }
-      const requestRequest: RequestRequest = {
+      const requestRequest: Request = {
         ...this.putRequestRequest,
         tags: tags
       }
       await axios.put('/api/requests/' + id, requestRequest)
       this.getRequestDetail(id)
     },
-    async postComment(id: string, commentRequest: CommentRequest) {
+    async postComment(id: string, commentRequest: Comment) {
       await axios.post('/api/requests/' + id + '/comments', commentRequest)
       this.getRequestDetail(id)
     },
-    async putStatus(id: string, statusRequest: StatusRequest) {
+    async putStatus(id: string, statusRequest: Status) {
       await axios.put('/api/requests/' + id + '/status', statusRequest)
       this.getRequestDetail(id)
     }

@@ -9,6 +9,7 @@ import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
+import { Request } from '../types/requestTypes'
 import NewTagModal from './NewTagModal.vue'
 
 const requestStore = useRequestStore()
@@ -19,22 +20,16 @@ const fileStore = useFileStore()
 const { me } = storeToRefs(userStore)
 const { tags } = storeToRefs(tagStore)
 const { groups } = storeToRefs(groupStore)
-type RequestRequest = {
-  created_by: string
-  amount: number
-  title: string
-  comment: string
-  tags: string[]
-  group: string | null
-}
+
 const request = ref({
   created_by: me.value.name,
   amount: 0,
   title: '',
-  comment: '',
+  targets: [] as string[], //todo:入力フォーム作る
+  content: '',
   tags: [] as string[],
   group: null
-} as RequestRequest)
+} as Request)
 const image = ref()
 const isTagModalOpen = ref(false)
 function postRequest() {
@@ -90,7 +85,7 @@ function handleTagModalIsOpen() {
       <div>
         <span>詳細：</span>
         <textarea
-          v-model="request.comment"
+          v-model="request.content"
           class="border border-solid border-black resize-none w-4/5"
         />
       </div>

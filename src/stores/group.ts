@@ -1,31 +1,9 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-type Group = {
-  id: string
-  name: string
-  description: string
-  budget: number
-  created_at: string
-  updated_at: string
-}
-type Groups = {
-  groups: Group[]
-}
-type GroupRequest = {
-  name: string
-  description: string
-  budget: number
-}
-type Member = {
-  id: string
-}
-type Members = {
-  members: Member[]
-}
-type Owners = {
-  oweners: Member[]
-}
+import {
+    Group, GroupResponse, GroupsResponse, Member, MembersResponse, OwnersResponse
+} from '../types/groupTypes'
 
 export const useGroupStore = defineStore('group', {
   state: () => ({
@@ -46,21 +24,21 @@ export const useGroupStore = defineStore('group', {
         created_at: '2022-01-27T14:06:32.381Z',
         updated_at: '2022-01-27T14:06:32.381Z'
       }
-    ], //new Array<Group>()
-    group: {} as Group,
+    ], //new Array<GroupResponse>()
+    group: {} as GroupResponse,
     groupMembers: new Array<Member>(),
     groupOwners: new Array<Member>()
   }),
   actions: {
     async getGroups() {
-      const response: Groups = await axios.get('/api/groups')
+      const response: GroupsResponse = await axios.get('/api/groups')
       this.groups = response.groups
     },
-    async postGroup(group: GroupRequest) {
+    async postGroup(group: Group) {
       await axios.post('/api/groups', group)
       this.getGroups()
     },
-    async putGroup(group: GroupRequest, id: string) {
+    async putGroup(group: Group, id: string) {
       await axios.put('/api/groups' + id, group)
       this.getGroups()
     },
@@ -69,7 +47,9 @@ export const useGroupStore = defineStore('group', {
       this.getGroups()
     },
     async getGroupMembers(id: string) {
-      const response: Members = await axios.get('/api/groups' + id + '/members')
+      const response: MembersResponse = await axios.get(
+        '/api/groups' + id + '/members'
+      )
       this.groupMembers = response.members
     },
     async postGroupMember(id: string, member: Member) {
@@ -81,7 +61,9 @@ export const useGroupStore = defineStore('group', {
       this.getGroupMembers(id)
     },
     async getGroupOwners(id: string) {
-      const response: Owners = await axios.get('/api/groups' + id + '/owners')
+      const response: OwnersResponse = await axios.get(
+        '/api/groups' + id + '/owners'
+      )
       this.groupOwners = response.oweners
     },
     async postGroupOwner(id: string, owner: Member) {

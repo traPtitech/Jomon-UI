@@ -53,7 +53,7 @@ function changeIsModalOpen() {
       <RequestFilteringMenu class="mt-4 mb-2" />
       <span class="ml-50"> {{ requestsLength() }}件取得しました</span>
       <div
-        :class="pageIndex === Math.ceil(requestsLength() / 7) ? 'h-138' : ''"
+        :class="pageIndex === Math.ceil(requestsLength() / 7) ? 'h-123' : ''"
       >
         <div
           class="w-3/4 mt-4 mr-auto ml-auto border-solid border-black border-2"

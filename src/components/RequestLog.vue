@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia'
 
 import { useRequestDetailStore } from '../stores/requestDetail'
 import Icon from './Icon.vue'
+import MarkdownIt from './MarkdownIt.vue'
 import StatusChip from './StatusChip.vue'
 
 const requestDetailStore = useRequestDetailStore()
@@ -28,7 +29,10 @@ const props = defineProps<Props>()
         }}</span>
       </div>
       <div class="ml-12 mb-2">
-        コメント：{{ request.comments[props.index].comment }}
+        コメント：<MarkdownIt
+          :text="request.comments[props.index].comment"
+          class="inline-block"
+        />
       </div>
     </div>
     <div v-if="kind === 'statusChange'" class="w-9/10 ml-8 flex">

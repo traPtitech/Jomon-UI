@@ -14,7 +14,9 @@ export const useRequestDetailStore = defineStore('requestDetail', {
       title: 'SysAd講習会の開催費用',
       created_by: 'mehm8128',
       status: 'submitted',
-      content: 'サーバー代',
+      content: `# aaaaa
+- aaa
+  - bbb`,
       targets: [
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -27,14 +29,14 @@ export const useRequestDetailStore = defineStore('requestDetail', {
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           user: 'mehm8128',
-          comment: 'サーバー代',
+          comment: '# aaaaa\n- aaa \n  - bbb',
           created_at: '2022-02-11T08:01:38.838Z',
           updated_at: '2022-02-11T08:01:38.838Z'
         },
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           user: 'mehm8128',
-          comment: 'コメント内容',
+          comment: '**コメント内容**',
           created_at: '2022-02-14T08:01:38.838Z',
           updated_at: '2022-02-14T08:01:38.838Z'
         }

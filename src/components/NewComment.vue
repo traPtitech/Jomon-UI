@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import { useRequestDetailStore } from '../stores/requestDetail'
+import MarkdownIt from './MarkdownIt.vue'
 
 const requestDetailStore = useRequestDetailStore()
 const { request } = storeToRefs(requestDetailStore)
@@ -29,5 +30,13 @@ function submit() {
         コメントする
       </button>
     </div>
+    <details>
+      <summary>MDプレビュー</summary>
+      <MarkdownIt
+        :text="comment"
+        :class="comment ? 'border border-solid border-gray-200' : ''"
+        class="pl-2 pr-2 ml-4"
+      />
+    </details>
   </div>
 </template>

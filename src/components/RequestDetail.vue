@@ -10,6 +10,7 @@ import { useRequestStore } from '../stores/request'
 import { useRequestDetailStore } from '../stores/requestDetail'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
+import MarkdownIt from './MarkdownIt.vue'
 import NewTagModal from './NewTagModal.vue'
 import StatusChip from './StatusChip.vue'
 
@@ -273,24 +274,26 @@ function handleModalIsOpen() {
     </div>
     <div class="ml-12 mt-4 flex">
       <span>詳細：</span>
-      <div
-        v-if="!(isFixMode === 'content')"
-        class="h-16 w-200 border border-solid border-gray-300"
-      >
-        <span class="ml-2">{{ request.content }}</span
-        ><button
+      <div v-if="!(isFixMode === 'content')" class="flex items-start">
+        <div
+          class="h-32 w-200 border border-solid border-gray-300 overflow-y-scroll"
+        >
+          <span class="ml-2"><MarkdownIt :text="request.content" /></span>
+        </div>
+        <button
           v-if="request.created_by === me.name"
           @click="changeIsFixMode('content')"
         >
           <PencilIcon class="h-6 w-6" />
         </button>
       </div>
+
       <div v-if="isFixMode === 'content'">
         <textarea
           v-model="fixedValue.content"
           type="text"
           class="resize-none w-200"
-          placeholder="タイトル"
+          placeholder="詳細"
         /><button
           class="border border-solid border-black ml-2 mr-2"
           @click="changeIsFixMode('content')"

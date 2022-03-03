@@ -30,7 +30,7 @@ function addAdmins() {
 }
 </script>
 <template>
-  <div>
+  <div class="ml-4">
     <h1 class="text-3xl text-center mt-4 mb-4">管理ページ</h1>
     <div>
       <ul class="flex">
@@ -43,7 +43,7 @@ function addAdmins() {
         </li>
       </ul>
     </div>
-    <div>
+    <div class="mt-4">
       <v-select
         v-model="addList"
         label="name"
@@ -51,7 +51,7 @@ function addAdmins() {
         placeholder="管理者を追加"
         :reduce="(user:any) => user.name"
         multiple
-        class="w-1/2"
+        class="w-1/2 mb-2"
       ></v-select>
       <button
         @click="addAdmins"
@@ -60,13 +60,13 @@ function addAdmins() {
         管理者に追加
       </button>
     </div>
-    <div>
+    <div class="mt-4">
       <v-select
         v-model="deleteList"
         :options="admins"
         placeholder="管理者から削除"
         multiple
-        class="w-1/2"
+        class="w-1/2 mb-2"
       ></v-select>
       <button
         @click="deleteAdmins"

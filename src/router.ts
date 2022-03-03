@@ -8,6 +8,10 @@ const routes: RouteRecordRaw[] = [
     component: () => import('./pages/Transactions.vue')
   },
   { path: '/groups', component: () => import('./pages/Groups.vue') },
+  {
+    path: '/requests/:group_id',
+    component: () => import('./pages/Groups.vue')
+  },
   { path: '/:path(.*)', component: () => import('./pages/NotFound.vue') }
 ]
 

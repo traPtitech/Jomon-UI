@@ -1,6 +1,10 @@
 <script lang="ts" setup>
+import { useRoute } from 'vue-router'
+
 import NewRequestButton from './components/NewRequestButton.vue'
 import Logo from '/@/components/Logo.vue'
+
+const route = useRoute()
 </script>
 <template>
   <main>
@@ -12,12 +16,14 @@ import Logo from '/@/components/Logo.vue'
           <router-link to="/transactions"
             ><div>入出金記録一覧</div></router-link
           >
-          <router-link to="/groups"><div>グループ一覧</div></router-link>
+          <router-link to="/groups?pageIndex=1"
+            ><div>グループ一覧</div></router-link
+          >
         </div>
         <NewRequestButton />
       </div>
     </header>
 
-    <router-view />
+    <router-view :key="route.fullPath" />
   </main>
 </template>

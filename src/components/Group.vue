@@ -11,15 +11,15 @@ const props = defineProps<Props>()
 
 <template>
   <router-link :to="'/groups/' + groups[props.index].id">
-    <div class="flex justify-around items-center hover:bg-gray-100">
-      <div class="flex-1 text-center">{{ groups[props.index].name }}</div>
-      <div class="flex-1 text-center">
+    <div class="flex justify-around items-center hover:bg-gray-100 h-12">
+      <div class="w-1/10 text-center">{{ groups[props.index].name }}</div>
+      <div class="w-1/5 text-center">
         {{ groups[props.index].id }}
       </div>
-      <div class="flex-1 text-center">
+      <div class="w-2/5 text-center">
         {{ groups[props.index].description }}
       </div>
-      <div class="flex-1 text-center">
+      <div class="w-1/10 text-center">
         {{ groups[props.index].budget }}
       </div>
     </div>

@@ -34,7 +34,8 @@ export const useGroupStore = defineStore('group', {
     groups: Array(100).fill({
       id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       name: 'SysAd',
-      description: 'SysAd班',
+      description:
+        'traPの活動に必要な部内インフラの管理・開発を行います。メンバーの創作活動を支える重要な仕事です。また、技術や知識を身につけるために部内で勉強会を行ったり、webサービスを高速化する大会やトラブルシューティングの大会に出場したりもしています。',
       budget: 250000,
       created_at: '2022-01-25T14:06:32.381Z',
       updated_at: '2022-01-25T14:06:32.381Z'
@@ -58,8 +59,18 @@ export const useGroupStore = defineStore('group', {
     },
     groupsFilter() {
       return (index: number) => {
-        return this.groups.slice((index - 1) * 10, index * 10)
+        return this.omitGroupDescription.slice((index - 1) * 10, index * 10)
       }
+    },
+    omitGroupDescription() {
+      let returnGroups: Group[] = this.groups
+      for (let i = 0; i < this.groups.length; i++) {
+        if (returnGroups[i].description.length > 60) {
+          returnGroups[i].description =
+            returnGroups[i].description.slice(0, 60) + '...'
+        }
+      }
+      return returnGroups
     }
   },
   actions: {

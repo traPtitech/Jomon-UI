@@ -16,6 +16,8 @@ type GroupRequest = {
   name: string
   description: string
   budget: number
+  owners: string[]
+  members: string[]
 }
 type Members = {
   members: string[]
@@ -29,160 +31,14 @@ type Owners = {
 
 export const useGroupStore = defineStore('group', {
   state: () => ({
-    groups: [
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'SysAd',
-        description: 'SysAd班',
-        budget: 250000,
-        created_at: '2022-01-25T14:06:32.381Z',
-        updated_at: '2022-01-25T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      }
-    ], //new Array<Group>()
+    groups: Array(100).fill({
+      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+      name: 'SysAd',
+      description: 'SysAd班',
+      budget: 250000,
+      created_at: '2022-01-25T14:06:32.381Z',
+      updated_at: '2022-01-25T14:06:32.381Z'
+    }), //new Array<Group>()
     group: {} as Group,
     groupMembers: [
       '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -212,7 +68,18 @@ export const useGroupStore = defineStore('group', {
       this.groups = response.groups
     },
     async postGroup(group: GroupRequest) {
-      await axios.post('/api/groups', group)
+      const willPostGroup = {
+        name: group.name,
+        description: group.description,
+        budget: group.budget
+      }
+      const res: Group = await axios.post('/api/groups', willPostGroup)
+      for (let i = 0; i < group.owners.length; i++) {
+        this.postGroupOwner(res.id, { id: group.owners[i] })
+      }
+      for (let i = 0; i < group.members.length; i++) {
+        this.postGroupMember(res.id, { id: group.members[i] })
+      }
       this.getGroups()
     },
     async putGroup(group: GroupRequest, id: string) {

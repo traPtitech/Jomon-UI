@@ -1,0 +1,91 @@
+<script lang="ts" setup>
+import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css'
+
+import { useGroupStore } from '../stores/group'
+import { useUserStore } from '../stores/user'
+
+const userStore = useUserStore()
+const groupStore = useGroupStore()
+const { users } = storeToRefs(userStore)
+type Group = {
+  name: string
+  description: string
+  budget: number
+  owners: string[]
+  members: string[]
+}
+const group = ref({
+  name: '',
+  description: '',
+  budget: 0,
+  owners: [] as string[],
+  members: [] as string[]
+} as Group)
+
+function postRequest() {
+  alert('ここでgroupの送信。ownersとmembersは別にしてPOSTする')
+  groupStore.postGroup(group.value)
+}
+</script>
+
+<template>
+  <div
+    class="bg-white w-240 h-120 absolute z-3 inset-0 m-auto border border-solid border-black"
+  >
+    <h1 class="text-3xl text-center mt-4 mb-4">グループの新規作成</h1>
+    <div class="flex flex-col justify-between ml-12 text-xl h-4/5">
+      <div>
+        <span>グループ名</span>
+        <input
+          v-model="group.name"
+          class="border border-solid border-black w-4/5"
+        />
+      </div>
+      <div>
+        <span>詳細：</span>
+        <textarea
+          v-model="group.description"
+          class="border border-solid border-black resize-none w-4/5"
+        />
+      </div>
+      <div>
+        <span>予算：</span>
+        <input
+          v-model="group.budget"
+          class="border border-solid border-black"
+        /><!-- //ToDo:バリデーション -->
+      </div>
+      <div>
+        <span>管理者：</span>
+        <v-select
+          v-model="group.owners"
+          :options="users"
+          :reduce="(user:any) => user.name"
+          label="name"
+          placeholder="管理者"
+          multiple
+          class="w-2/3"
+        ></v-select>
+        注意：管理者は自動でメンバーには入りません。
+      </div>
+      <div>
+        <span>メンバー：</span>
+        <v-select
+          v-model="group.members"
+          :options="users"
+          :reduce="(user:any) => user.name"
+          label="name"
+          placeholder="メンバー"
+          multiple
+          class="w-2/3"
+        ></v-select>
+      </div>
+      <div class="text-center">
+        <button @click="postRequest" class="w-52">グループを作成する</button>
+      </div>
+    </div>
+  </div>
+</template>

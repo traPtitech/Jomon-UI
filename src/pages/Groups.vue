@@ -4,27 +4,38 @@ import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 import Group from '../components/Group.vue'
+import NewGroupModal from '../components/NewGroupModal.vue'
 import PaginationBar from '../components/PaginationBar.vue'
 import { useGroupStore } from '../stores/group'
+import { useRequestStore } from '../stores/request'
 
 const route = useRoute()
 const pageIndex = Number(route.query.pageIndex)
+const requestStore = useRequestStore()
 const groupStore = useGroupStore()
+const { isModalOpen } = storeToRefs(requestStore)
 const { groupsFilter, groupsLength } = storeToRefs(groupStore)
 
 onMounted(() => {
   groupStore.getGroups()
 })
+function changeIsModalOpen() {
+  isModalOpen.value = !isModalOpen.value
+}
 </script>
 
 <template>
+  <NewGroupModal v-if="isModalOpen" />
   <div>
     <div class="flex relative mt-2 mb-2">
       <div class="text-3xl mt-2 text-center absolute right-1 left-1">
         グループ一覧
       </div>
       <div class="ml-auto mr-70 mt-4 z-1">
-        <button class="text-xl border border-solid border-black">
+        <button
+          class="text-xl border border-solid border-black"
+          @click="changeIsModalOpen"
+        >
           グループの新規作成
         </button>
       </div>

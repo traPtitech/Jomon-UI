@@ -1,13 +1,12 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css'
 
 import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
+import VueSelect from './VueSelect.vue'
 
 const requestStore = useRequestStore()
 const userStore = useUserStore()
@@ -27,7 +26,7 @@ const states = ref([
 ])
 function sortByCreatedAt() {
   if (params.value.sort === 'created_at') {
-    params.value.sort = '-createdAt'
+    params.value.sort = '-created_at'
   } else {
     params.value.sort = 'created_at'
   }
@@ -39,14 +38,12 @@ function sortByCreatedAt() {
 <template>
   <div class="flex justify-around">
     <button
-      :class="
-        params.sort === 'created_at'
-          ? 'border border-solid border-gray-400 p-1'
-          : ''
-      "
+      class="p-1 border border-solid border-gray-300"
+      :class="params.sort === 'created_at' ? '' : 'bg-gray-200'"
       @click="sortByCreatedAt"
     >
-      日付順
+      日付順 <span v-if="params.sort === 'created_at'" class="text-xs">▼</span
+      ><span v-if="params.sort === '-created_at'" class="text-xs">▲</span>
     </button>
     <div class="mt-1">
       <input
@@ -61,7 +58,7 @@ function sortByCreatedAt() {
         class="border border-solid border-gray-300 w-20"
       />
     </div>
-    <v-select
+    <VueSelect
       v-model="params.target"
       @close="requestStore.getRequests"
       :options="users"
@@ -69,8 +66,8 @@ function sortByCreatedAt() {
       label="name"
       placeholder="申請者"
       class="w-64"
-    ></v-select>
-    <v-select
+    ></VueSelect>
+    <VueSelect
       v-model="params.current_state"
       @close="requestStore.getRequests"
       :options="states"
@@ -79,8 +76,8 @@ function sortByCreatedAt() {
       placeholder="申請の状態"
       :searchable="false"
       class="w-64"
-    ></v-select>
-    <v-select
+    ></VueSelect>
+    <VueSelect
       v-model="params.group"
       @close="requestStore.getRequests"
       :options="groups"
@@ -88,8 +85,8 @@ function sortByCreatedAt() {
       label="name"
       placeholder="グループ"
       class="w-64"
-    ></v-select>
-    <v-select
+    ></VueSelect>
+    <VueSelect
       v-model="tagList"
       @close="requestStore.getRequests"
       :options="tags"
@@ -98,6 +95,6 @@ function sortByCreatedAt() {
       placeholder="タグ"
       multiple
       class="w-100"
-    ></v-select>
+    ></VueSelect>
   </div>
 </template>

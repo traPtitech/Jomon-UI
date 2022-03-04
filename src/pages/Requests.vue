@@ -51,11 +51,17 @@ function changeIsModalOpen() {
         </div>
       </div>
       <RequestFilteringMenu class="mt-4 mb-2" />
-      <span class="ml-50"> {{ requestsLength() }}件取得しました</span>
+      <span v-if="requestsLength() !== 0" class="ml-50">
+        {{ requestsLength() }}件取得しました</span
+      >
+      <span v-if="requestsLength() === 0" class="ml-50">
+        条件に一致する申請は見つかりませんでした</span
+      >
       <div
         :class="pageIndex === Math.ceil(requestsLength() / 7) ? 'h-123' : ''"
       >
         <div
+          v-if="requestsLength() !== 0"
           class="w-3/4 mt-4 mr-auto ml-auto border-solid border-black border-2"
         >
           <ul class="w-full mr-auto ml-auto">

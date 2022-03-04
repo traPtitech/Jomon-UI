@@ -8,7 +8,7 @@ type Props = {
 const props = defineProps<Props>()
 </script>
 <template>
-  <div class="text-center w-full">
+  <div v-if="itemLength !== 0" class="text-center w-full">
     <div class="flex justify-center">
       <router-link
         class="w-24 h-8 block border border-solid border-black"

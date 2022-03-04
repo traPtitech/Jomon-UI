@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css'
 
 import { useFileStore } from '../stores/file'
 import { useGroupStore } from '../stores/group'
@@ -12,6 +10,7 @@ import { useUserStore } from '../stores/user'
 import { Request } from '../types/requestTypes'
 import MarkdownIt from './MarkdownIt.vue'
 import NewTagModal from './NewTagModal.vue'
+import VueSelect from './VueSelect.vue'
 
 const requestStore = useRequestStore()
 const userStore = useUserStore()
@@ -101,7 +100,7 @@ function handleTagModalIsOpen() {
       </details>
       <div>
         <span class="text-xl">タグ：</span>
-        <v-select
+        <VueSelect
           v-model="request.tags"
           :options="tags"
           :reduce="(tag:any) => tag.id"
@@ -109,7 +108,7 @@ function handleTagModalIsOpen() {
           placeholder="タグ"
           multiple
           class="w-2/3"
-        ></v-select>
+        ></VueSelect>
         <button
           @click="handleTagModalIsOpen"
           class="border border-solid border-black ml-8 text-xl"
@@ -119,14 +118,14 @@ function handleTagModalIsOpen() {
       </div>
       <div>
         <span class="text-xl">グループ：</span>
-        <v-select
+        <VueSelect
           v-model="request.group"
           :options="groups"
           :reduce="(group:any) => group.id"
           label="name"
           placeholder="グループ"
           class="w-2/3"
-        ></v-select>
+        ></VueSelect>
       </div>
       <div>
         <span class="text-xl">画像：</span>

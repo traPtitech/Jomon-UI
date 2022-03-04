@@ -2,8 +2,6 @@
 import { PencilIcon } from '@heroicons/vue/solid'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css'
 
 import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
@@ -13,6 +11,7 @@ import { useUserStore } from '../stores/user'
 import MarkdownIt from './MarkdownIt.vue'
 import NewTagModal from './NewTagModal.vue'
 import StatusChip from './StatusChip.vue'
+import VueSelect from './VueSelect.vue'
 
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
@@ -187,14 +186,14 @@ function handleModalIsOpen() {
           </button>
         </div>
         <div v-if="isFixMode === 'group'" class="ml-12 inline">
-          <v-select
+          <VueSelect
             v-model="fixedValue.group"
             :options="groups"
             :reduce="(group:any) => group.id"
             label="name"
             placeholder="グループ"
             class="w-64 inline-block"
-          ></v-select>
+          ></VueSelect>
           <button
             class="border border-solid border-black ml-2 mr-2"
             @click="changeIsFixMode('group')"
@@ -249,14 +248,14 @@ function handleModalIsOpen() {
           </button>
         </div>
         <div v-if="isFixMode === 'tags'" class="ml-12 inline">
-          <v-select
+          <VueSelect
             v-model="fixedValue.tags"
             :options="tags"
             label="name"
             placeholder="タグ"
             multiple
             class="w-200 inline-block"
-          ></v-select>
+          ></VueSelect>
           <button
             @click="handleModalIsOpen"
             class="border border-solid border-black ml-4"

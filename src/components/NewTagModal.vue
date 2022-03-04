@@ -9,8 +9,7 @@ const tag = ref({
   description: ''
 })
 function postTag() {
-  alert('タグの作成')
-  console.log(tag.value)
+  tagStore.postTag(tag.value)
 }
 </script>
 

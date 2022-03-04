@@ -1,16 +1,14 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import { useRequestDetailStore } from '../stores/requestDetail'
 import MarkdownIt from './MarkdownIt.vue'
 
 const requestDetailStore = useRequestDetailStore()
-const { request } = storeToRefs(requestDetailStore)
 const comment = ref('')
 function submit() {
   const commentRequest = { comment: comment.value }
-  requestDetailStore.postComment(request.value.id, commentRequest)
+  requestDetailStore.postComment(requestDetailStore.request.id, commentRequest)
   comment.value = ''
 }
 </script>

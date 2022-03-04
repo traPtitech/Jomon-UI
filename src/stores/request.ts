@@ -99,7 +99,8 @@ export const useRequestStore = defineStore('request', {
         '/api/requests',
         request
       )
-      this.requests.unshift(response)
+      this.getRequests()
+      return response.id
     },
     resetParams() {
       this.params = {

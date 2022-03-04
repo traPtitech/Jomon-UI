@@ -1,18 +1,15 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-
 import { useFileStore } from '../stores/file'
 
 const fileStore = useFileStore()
-const { files } = storeToRefs(fileStore)
 </script>
 <template>
   <div>
-    <div v-if="files.length" class="mt-4 ml-4 mr-4">
+    <div v-if="fileStore.files.length" class="mt-4 ml-4 mr-4">
       <details>
         <summary>画像</summary>
         <img
-          v-for="file in files"
+          v-for="file in fileStore.files"
           :key="file.file"
           alt="file.name"
           class="w-2/3"

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import axios from 'axios'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 
@@ -11,7 +10,6 @@ import Logo from '/@/components/Logo.vue'
 const requestStore = useRequestStore()
 const userStore = useUserStore()
 const { isModalOpen } = storeToRefs(requestStore)
-const { me } = storeToRefs(userStore)
 const route = useRoute()
 </script>
 <template>
@@ -37,7 +35,7 @@ const route = useRoute()
           >
           <router-link to="/groups"><span>グループ一覧</span></router-link>
         </div>
-        <Icon :name="me.name" />
+        <Icon :name="userStore.me.name" />
       </div>
     </header>
 

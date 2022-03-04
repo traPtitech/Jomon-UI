@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import { useFileStore } from '../stores/file'
@@ -17,12 +16,9 @@ const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const fileStore = useFileStore()
-const { me } = storeToRefs(userStore)
-const { tags } = storeToRefs(tagStore)
-const { groups } = storeToRefs(groupStore)
 
 const request = ref({
-  created_by: me.value.name,
+  created_by: userStore.me.name,
   amount: 0,
   title: '',
   targets: [] as string[], //todo:入力フォーム作る
@@ -31,13 +27,12 @@ const request = ref({
   group: null
 } as Request)
 const image = ref()
+const imageName = ref('')
 const isTagModalOpen = ref(false)
 
-function postRequest() {
-  console.log(request.value)
-  alert(
-    'ここでrequestの送信、レスポンスのrequestIdを使って画像を送信\nまた、タグやグループの新規作成があれば先に送っておいてレスポンスのidを使ってrequestを送る'
-  )
+async function postRequest() {
+  const id = await requestStore.postRequest(request.value)
+  fileStore.postFile(id, imageName.value, image.value)
 }
 function handleImageChange(e: Event) {
   const file = (e.target as HTMLInputElement).files![0]
@@ -45,8 +40,8 @@ function handleImageChange(e: Event) {
   reader.readAsDataURL(file)
   reader.onload = () => {
     image.value = reader.result
+    imageName.value = file.name
   }
-  fileStore.postFile('aaa', file.name, image.value)
 }
 function handleTagModalIsOpen() {
   isTagModalOpen.value = !isTagModalOpen.value
@@ -68,7 +63,7 @@ function handleTagModalIsOpen() {
     ></div>
     <h1 class="text-3xl text-center mt-4 mb-4">申請の新規作成</h1>
     <div class="flex flex-col justify-between ml-12 h-4/5">
-      <span class="text-xl">申請者：{{ me.name }}</span>
+      <span class="text-xl">申請者：{{ userStore.me.name }}</span>
       <div>
         <span class="text-xl">タイトル：</span>
         <input
@@ -102,7 +97,7 @@ function handleTagModalIsOpen() {
         <span class="text-xl">タグ：</span>
         <VueSelect
           v-model="request.tags"
-          :options="tags"
+          :options="tagStore.tags"
           :reduce="(tag:any) => tag.id"
           label="name"
           placeholder="タグ"
@@ -120,7 +115,7 @@ function handleTagModalIsOpen() {
         <span class="text-xl">グループ：</span>
         <VueSelect
           v-model="request.group"
-          :options="groups"
+          :options="groupStore.groups"
           :reduce="(group:any) => group.id"
           label="name"
           placeholder="グループ"
@@ -132,7 +127,7 @@ function handleTagModalIsOpen() {
         <input type="file" @change="e => handleImageChange(e)" />
       </div>
       <div>
-        <img v-if="image" :src="image" alt="uploadedFile" class="h-32" />
+        <img v-if="image" :src="image" :alt="imageName" class="h-32" />
       </div>
       <div class="text-center">
         <button @click="postRequest" class="w-32 text-xl">

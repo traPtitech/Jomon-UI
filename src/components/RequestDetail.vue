@@ -19,28 +19,24 @@ const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
 const requestStore = useRequestStore()
 const { isModalOpen } = storeToRefs(requestStore)
-const { tags } = storeToRefs(tagStore)
-const { groups } = storeToRefs(groupStore)
-const { me, users } = storeToRefs(userStore)
-const { request, putRequestRequest } = storeToRefs(requestDetailStore)
 const isFixMode = ref('')
 
-const fixedValue = ref(putRequestRequest.value)
+const fixedValue = ref(requestDetailStore.putRequestRequest)
 
 function changeStatus(status: string) {
   const statusRequest = {
     status: status
   }
-  requestDetailStore.putStatus(request.value.id, statusRequest)
-  requestDetailStore.getRequestDetail(request.value.id)
+  requestDetailStore.putStatus(requestDetailStore.request.id, statusRequest)
+  requestDetailStore.getRequestDetail(requestDetailStore.request.id)
   alert('ステータスを' + status + 'に変更しました')
 } //確認ダイアログほしい
 function changeIsFixMode(kind: string) {
   switch (kind) {
     case 'title':
       if (isFixMode.value === 'title') {
-        requestDetailStore.putRequest(request.value.id, {
-          ...putRequestRequest.value,
+        requestDetailStore.putRequest(requestDetailStore.request.id, {
+          ...requestDetailStore.putRequestRequest,
           title: fixedValue.value.title
         })
         isFixMode.value = ''
@@ -51,8 +47,8 @@ function changeIsFixMode(kind: string) {
     case 'amount':
       if (isFixMode.value === 'amount') {
         //todo:バリデーション
-        requestDetailStore.putRequest(request.value.id, {
-          ...putRequestRequest.value,
+        requestDetailStore.putRequest(requestDetailStore.request.id, {
+          ...requestDetailStore.putRequestRequest,
           amount: fixedValue.value.amount
         })
         isFixMode.value = ''
@@ -62,8 +58,8 @@ function changeIsFixMode(kind: string) {
       break
     case 'content':
       if (isFixMode.value === 'content') {
-        requestDetailStore.putRequest(request.value.id, {
-          ...putRequestRequest.value,
+        requestDetailStore.putRequest(requestDetailStore.request.id, {
+          ...requestDetailStore.putRequestRequest,
           content: fixedValue.value.content
         })
         isFixMode.value = ''
@@ -73,8 +69,8 @@ function changeIsFixMode(kind: string) {
       break
     case 'targets':
       if (isFixMode.value === 'targets') {
-        requestDetailStore.putRequest(request.value.id, {
-          ...putRequestRequest.value,
+        requestDetailStore.putRequest(requestDetailStore.request.id, {
+          ...requestDetailStore.putRequestRequest,
           targets: fixedValue.value.targets
         })
         isFixMode.value = ''
@@ -84,8 +80,8 @@ function changeIsFixMode(kind: string) {
       break
     case 'group':
       if (isFixMode.value === 'group') {
-        requestDetailStore.putRequest(request.value.id, {
-          ...putRequestRequest.value,
+        requestDetailStore.putRequest(requestDetailStore.request.id, {
+          ...requestDetailStore.putRequestRequest,
           group: fixedValue.value.group
         })
         isFixMode.value = ''
@@ -95,8 +91,8 @@ function changeIsFixMode(kind: string) {
       break
     case 'tags':
       if (isFixMode.value === 'tags') {
-        requestDetailStore.putRequest(request.value.id, {
-          ...putRequestRequest.value,
+        requestDetailStore.putRequest(requestDetailStore.request.id, {
+          ...requestDetailStore.putRequestRequest,
           tags: fixedValue.value.tags
         })
         isFixMode.value = ''
@@ -117,9 +113,9 @@ function handleModalIsOpen() {
     <div class="flex justify-between text-center mt-6 ml-12">
       <div class="flex">
         <div v-if="!(isFixMode === 'title')">
-          <span class="text-3xl">{{ request.title }}</span
+          <span class="text-3xl">{{ requestDetailStore.request.title }}</span
           ><button
-            v-if="request.created_by === me.name"
+            v-if="requestDetailStore.request.created_by === userStore.me.name"
             class="mr-2"
             @click="changeIsFixMode('title')"
           >
@@ -139,12 +135,13 @@ function handleModalIsOpen() {
             完了
           </button>
         </div>
-        <StatusChip :status="request.status" />
+        <StatusChip :status="requestDetailStore.request.status" />
         <div class="ml-2">
           <button
             v-if="
-              request.status === 'fix_required' ||
-              (me.admin && request.status === 'accepted')
+              requestDetailStore.request.status === 'fix_required' ||
+              (userStore.me.admin &&
+                requestDetailStore.request.status === 'accepted')
             "
             @click="changeStatus('submitted')"
             class="border border-solid border-black rounded-md mr-4 mt-2"
@@ -152,21 +149,30 @@ function handleModalIsOpen() {
             承認待ちにする
           </button>
           <button
-            v-if="me.admin && request.status === 'submitted'"
+            v-if="
+              userStore.me.admin &&
+              requestDetailStore.request.status === 'submitted'
+            "
             @click="changeStatus('fix_required')"
             class="border border-solid border-black rounded-md mr-4 mt-2"
           >
             要修正にする
           </button>
           <button
-            v-if="me.admin && request.status === 'submitted'"
+            v-if="
+              userStore.me.admin &&
+              requestDetailStore.request.status === 'submitted'
+            "
             @click="changeStatus('accepted')"
             class="border border-solid border-black rounded-md mr-4 mt-2"
           >
             承認済みにする
           </button>
           <button
-            v-if="me.admin && request.status === 'submitted'"
+            v-if="
+              userStore.me.admin &&
+              requestDetailStore.request.status === 'submitted'
+            "
             @click="changeStatus('rejected')"
             class="border border-solid border-black rounded-md mr-4 mt-2"
           >
@@ -176,9 +182,9 @@ function handleModalIsOpen() {
       </div>
       <div>
         <div v-if="!(isFixMode === 'group')" class="ml-12 inline">
-          <span>グループ：{{ request.group.name }}</span
+          <span>グループ：{{ requestDetailStore.request.group.name }}</span
           ><button
-            v-if="request.created_by === me.name"
+            v-if="requestDetailStore.request.created_by === userStore.me.name"
             class="mr-2"
             @click="changeIsFixMode('group')"
           >
@@ -188,7 +194,7 @@ function handleModalIsOpen() {
         <div v-if="isFixMode === 'group'" class="ml-12 inline">
           <VueSelect
             v-model="fixedValue.group"
-            :options="groups"
+            :options="groupStore.groups"
             :reduce="(group:any) => group.id"
             label="name"
             placeholder="グループ"
@@ -201,14 +207,21 @@ function handleModalIsOpen() {
             完了
           </button>
         </div>
-        <span class="mr-4">申請者：{{ request.created_by }}</span>
         <span class="mr-4"
-          >申請日：{{ requestDetailStore.dateFormatter(request.created_at) }}
+          >申請者：{{ requestDetailStore.request.created_by }}</span
+        >
+        <span class="mr-4"
+          >申請日：{{
+            requestDetailStore.dateFormatter(
+              requestDetailStore.request.created_at
+            )
+          }}
         </span>
         <div v-if="!(isFixMode === 'amount')" class="inline">
-          <span class="text-2xl">金額：{{ request.amount }}円</span
+          <span class="text-2xl"
+            >金額：{{ requestDetailStore.request.amount }}円</span
           ><button
-            v-if="request.created_by === me.name"
+            v-if="requestDetailStore.request.created_by === userStore.me.name"
             class="mr-2"
             @click="changeIsFixMode('amount')"
           >
@@ -235,13 +248,13 @@ function handleModalIsOpen() {
         <div v-if="!(isFixMode === 'tags')" class="ml-12 inline">
           <span>タグ：</span>
           <span
-            v-for="(tag, index) in request.tags"
+            v-for="(tag, index) in requestDetailStore.request.tags"
             :key="tag.id"
             :class="index !== 0 ? 'ml-2' : ''"
             class="border border-solid border-black rounded"
             >{{ tag.name }}</span
           ><button
-            v-if="request.created_by === me.name"
+            v-if="requestDetailStore.request.created_by === userStore.me.name"
             @click="changeIsFixMode('tags')"
           >
             <PencilIcon class="h-6 w-6" />
@@ -250,7 +263,7 @@ function handleModalIsOpen() {
         <div v-if="isFixMode === 'tags'" class="ml-12 inline">
           <VueSelect
             v-model="fixedValue.tags"
-            :options="tags"
+            :options="tagStore.tags"
             label="name"
             placeholder="タグ"
             multiple
@@ -277,10 +290,12 @@ function handleModalIsOpen() {
         <div
           class="h-32 w-200 border border-solid border-gray-300 overflow-y-scroll"
         >
-          <span class="ml-2"><MarkdownIt :text="request.content" /></span>
+          <span class="ml-2"
+            ><MarkdownIt :text="requestDetailStore.request.content"
+          /></span>
         </div>
         <button
-          v-if="request.created_by === me.name"
+          v-if="requestDetailStore.request.created_by === userStore.me.name"
           @click="changeIsFixMode('content')"
         >
           <PencilIcon class="h-6 w-6" />
@@ -303,11 +318,13 @@ function handleModalIsOpen() {
       <div class="ml-30">
         <span>払い戻し対象者：</span>
         <div v-if="!(isFixMode === 'targets')" class="inline">
-          <span v-for="target in request.targets" :key="target.id" class="">{{
-            target.target
-          }}</span
+          <span
+            v-for="target in requestDetailStore.request.targets"
+            :key="target.id"
+            class=""
+            >{{ target.target }}</span
           ><button
-            v-if="request.created_by === me.name"
+            v-if="requestDetailStore.request.created_by === userStore.me.name"
             @click="changeIsFixMode('targets')"
           >
             <PencilIcon class="h-6 w-6" />
@@ -316,7 +333,7 @@ function handleModalIsOpen() {
         <div v-if="isFixMode === 'targets'" class="inline-block">
           <v-select
             v-model="fixedValue.targets"
-            :options="users"
+            :options="userStore.users"
             :reduce="(user:any) => user.name"
             label="name"
             placeholder="払い戻し対象者"

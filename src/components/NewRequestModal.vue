@@ -21,7 +21,7 @@ const request = ref({
   created_by: userStore.me.name,
   amount: 0,
   title: '',
-  targets: [] as string[], //todo:入力フォーム作る
+  targets: [] as string[],
   content: '',
   tags: [] as string[],
   group: null
@@ -51,12 +51,12 @@ function handleTagModalIsOpen() {
 <template>
   <NewTagModal v-if="isTagModalOpen" />
   <div
-    class="bg-white w-300 h-150 absolute z-3 inset-0 m-auto border border-solid border-black"
+    class="bg-white w-300 h-150 absolute z-3 inset-0 m-auto border border-solid border-black overflow-y-scroll"
   >
     <div
       :class="
         isTagModalOpen
-          ? 'absolute h-full w-full z-2 bg-gray-500 opacity-50'
+          ? 'absolute h-screen w-full z-2 bg-gray-500 opacity-50'
           : ''
       "
       @click="isTagModalOpen = false"
@@ -87,30 +87,28 @@ function handleTagModalIsOpen() {
       </div>
       <details>
         <summary>MDプレビュー</summary>
-        <MarkdownIt
-          :text="request.content"
+        <!--幅を広くしたいけどなぜかできない-->
+        <div
           :class="request.content ? 'border border-solid border-gray-200' : ''"
-          class="pl-2 pr-2 ml-4"
-        />
+          class="pl-2 pr-2 w-4/5"
+        >
+          <MarkdownIt :text="request.content" class="w-full" />
+        </div>
       </details>
       <div>
-        <span class="text-xl">タグ：</span>
+        <span class="text-xl">払い戻し対象者：</span>
         <VueSelect
-          v-model="request.tags"
-          :options="tagStore.tags"
-          :reduce="(tag:any) => tag.id"
+          v-model="request.targets"
+          :options="userStore.users"
+          :reduce="(user:any) => user.name"
           label="name"
-          placeholder="タグ"
+          placeholder="払い戻し対象者"
           multiple
+          :closeOnSelect="false"
           class="w-2/3"
         ></VueSelect>
-        <button
-          @click="handleTagModalIsOpen"
-          class="border border-solid border-black ml-8 text-xl"
-        >
-          タグを新規作成
-        </button>
       </div>
+
       <div>
         <span class="text-xl">グループ：</span>
         <VueSelect
@@ -123,6 +121,25 @@ function handleTagModalIsOpen() {
         ></VueSelect>
       </div>
       <div>
+        <span class="text-xl">タグ：</span>
+        <VueSelect
+          v-model="request.tags"
+          :options="tagStore.tags"
+          :reduce="(tag:any) => tag.id"
+          label="name"
+          placeholder="タグ"
+          multiple
+          :closeOnSelect="false"
+          class="w-2/3"
+        ></VueSelect>
+        <button
+          @click="handleTagModalIsOpen"
+          class="border border-solid border-black ml-8 text-xl"
+        >
+          タグを新規作成
+        </button>
+      </div>
+      <div>
         <span class="text-xl">画像：</span>
         <input type="file" @change="e => handleImageChange(e)" />
       </div>
@@ -130,7 +147,7 @@ function handleTagModalIsOpen() {
         <img v-if="image" :src="image" :alt="imageName" class="h-32" />
       </div>
       <div class="text-center">
-        <button @click="postRequest" class="w-32 text-xl">
+        <button @click="postRequest" class="w-32 text-xl mb-4">
           申請を作成する
         </button>
       </div>

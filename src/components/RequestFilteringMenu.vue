@@ -12,10 +12,7 @@ const requestStore = useRequestStore()
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
-const { params, tagList } = storeToRefs(requestStore)
-const { users } = storeToRefs(userStore)
-const { tags } = storeToRefs(tagStore)
-const { groups } = storeToRefs(groupStore)
+const { params } = storeToRefs(requestStore)
 
 const states = ref([
   { state: 'submitted', jpn: '承認待ち' },
@@ -61,7 +58,7 @@ function sortByCreatedAt() {
     <VueSelect
       v-model="params.target"
       @close="requestStore.getRequests"
-      :options="users"
+      :options="userStore.users"
       :reduce="(user:any) => user.name"
       label="name"
       placeholder="申請者"
@@ -80,16 +77,16 @@ function sortByCreatedAt() {
     <VueSelect
       v-model="params.group"
       @close="requestStore.getRequests"
-      :options="groups"
+      :options="groupStore.groups"
       :reduce="(group:any) => group.id"
       label="name"
       placeholder="グループ"
       class="w-64"
     ></VueSelect>
     <VueSelect
-      v-model="tagList"
+      v-model="requestStore.tagList"
       @close="requestStore.getRequests"
-      :options="tags"
+      :options="tagStore.tags"
       :reduce="(tag:any) => tag.id"
       label="name"
       placeholder="タグ"

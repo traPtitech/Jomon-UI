@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -10,13 +9,12 @@ import { useFileStore } from '../stores/file'
 import { useRequestDetailStore } from '../stores/requestDetail'
 
 const requestDetailStore = useRequestDetailStore()
-const { request } = storeToRefs(requestDetailStore)
 const fileStore = useFileStore()
 const route = useRoute()
 const id = route.params.request_id.toString()
 onMounted(() => {
   requestDetailStore.getRequestDetail(id)
-  fileStore.getFile(request.value.files)
+  fileStore.getFile(requestDetailStore.request.files)
 })
 function createTransaction() {
   alert('モーダル表示時にrouteのパスからrequest idを取ってきて渡す')

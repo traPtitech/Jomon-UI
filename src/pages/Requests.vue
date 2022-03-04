@@ -18,8 +18,7 @@ const requestStore = useRequestStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const userStore = useUserStore()
-const { requestsLength, requestsFilter, isModalOpen } =
-  storeToRefs(requestStore)
+const { isModalOpen } = storeToRefs(requestStore)
 
 onMounted(() => {
   requestStore.getRequests()
@@ -51,29 +50,33 @@ function changeIsModalOpen() {
         </div>
       </div>
       <RequestFilteringMenu class="mt-4 mb-2" />
-      <span v-if="requestsLength() !== 0" class="ml-50">
-        {{ requestsLength() }}件取得しました</span
+      <span v-if="requestStore.requestsLength() !== 0" class="ml-50">
+        {{ requestStore.requestsLength() }}件取得しました</span
       >
-      <span v-if="requestsLength() === 0" class="ml-50">
+      <span v-if="requestStore.requestsLength() === 0" class="ml-50">
         条件に一致する申請は見つかりませんでした</span
       >
       <div
-        :class="pageIndex === Math.ceil(requestsLength() / 7) ? 'h-123' : ''"
+        :class="
+          pageIndex === Math.ceil(requestStore.requestsLength() / 7)
+            ? 'h-123'
+            : ''
+        "
       >
         <div
-          v-if="requestsLength() !== 0"
+          v-if="requestStore.requestsLength() !== 0"
           class="w-3/4 mt-4 mr-auto ml-auto border-solid border-black border-2"
         >
           <ul class="w-full mr-auto ml-auto">
             <li
-              v-for="(request, index) in requestsFilter(pageIndex)"
+              v-for="(request, index) in requestStore.requestsFilter(pageIndex)"
               :key="request.id"
             >
               <Request :index="index" />
               <div
                 class="w-29/30 bg-gray-400 border border-solid border-gray-400 mr-auto ml-auto"
                 :class="
-                  index === requestsFilter(pageIndex).length - 1
+                  index === requestStore.requestsFilter(pageIndex).length - 1
                     ? 'bg-white border-none'
                     : ''
                 "
@@ -85,7 +88,7 @@ function changeIsModalOpen() {
       <div class="mt-4">
         <PaginationBar
           :pageIndex="pageIndex"
-          :itemLength="requestsLength()"
+          :itemLength="requestStore.requestsLength()"
           :unit="7"
           kind="requests"
         />

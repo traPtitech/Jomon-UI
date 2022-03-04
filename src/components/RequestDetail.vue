@@ -267,6 +267,7 @@ function handleModalIsOpen() {
             label="name"
             placeholder="タグ"
             multiple
+            :closeOnSelect="false"
             class="w-200 inline-block"
           ></VueSelect>
           <button
@@ -290,9 +291,9 @@ function handleModalIsOpen() {
         <div
           class="h-32 w-200 border border-solid border-gray-300 overflow-y-scroll"
         >
-          <span class="ml-2"
-            ><MarkdownIt :text="requestDetailStore.request.content"
-          /></span>
+          <div class="ml-2">
+            <MarkdownIt :text="requestDetailStore.request.content" />
+          </div>
         </div>
         <button
           v-if="requestDetailStore.request.created_by === userStore.me.name"
@@ -301,12 +302,11 @@ function handleModalIsOpen() {
           <PencilIcon class="h-6 w-6" />
         </button>
       </div>
-
       <div v-if="isFixMode === 'content'">
         <textarea
           v-model="fixedValue.content"
           type="text"
-          class="resize-none w-200"
+          class="resize-none w-200 h-32 p-0"
           placeholder="詳細"
         /><button
           class="border border-solid border-black ml-2 mr-2"
@@ -331,15 +331,16 @@ function handleModalIsOpen() {
           </button>
         </div>
         <div v-if="isFixMode === 'targets'" class="inline-block">
-          <v-select
+          <VueSelect
             v-model="fixedValue.targets"
             :options="userStore.users"
             :reduce="(user:any) => user.name"
             label="name"
             placeholder="払い戻し対象者"
             multiple
+            :closeOnSelect="false"
             class="w-100 inline-block"
-          ></v-select>
+          ></VueSelect>
           <button
             class="border border-solid border-black ml-2 mr-2"
             @click="changeIsFixMode('targets')"

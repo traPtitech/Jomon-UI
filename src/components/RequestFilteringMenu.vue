@@ -91,6 +91,7 @@ function sortByCreatedAt() {
       label="name"
       placeholder="タグ"
       multiple
+      :closeOnSelect="false"
       class="w-100"
     ></VueSelect>
   </div>

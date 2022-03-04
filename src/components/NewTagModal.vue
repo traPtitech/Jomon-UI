@@ -15,7 +15,7 @@ function postTag() {
 
 <template>
   <div
-    class="bg-white w-160 h-90 absolute z-4 inset-0 m-auto border border-solid border-black"
+    class="bg-white w-200 h-100 absolute z-4 inset-0 m-auto border border-solid border-black"
   >
     <h1 class="text-3xl text-center mt-4 mb-4">タグの新規作成</h1>
     <div class="flex flex-col justify-around ml-12 text-xl h-4/5">

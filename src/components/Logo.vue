@@ -2,5 +2,5 @@
 const a = ''
 </script>
 <template>
-  <img alt="logo" class="h-8 m-2 w-10" src="/logo.svg" />
+  <img alt="logo" class="h-8 m-2 w-10" src="/logo2.svg" />
 </template>

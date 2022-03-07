@@ -2,7 +2,7 @@ import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
-  { path: '/', redirect: '/requests' },
+  { path: '/', redirect: '/requests?pageIndex=1' },
   { path: '/requests', component: () => import('./pages/Requests.vue') },
   {
     path: '/transactions',

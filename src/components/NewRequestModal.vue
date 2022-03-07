@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import { useFileStore } from '../stores/file'
@@ -16,6 +17,7 @@ const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const fileStore = useFileStore()
+const { isModalOpen2 } = storeToRefs(requestStore)
 
 const request = ref({
   created_by: userStore.me.name,
@@ -28,7 +30,6 @@ const request = ref({
 } as Request)
 const image = ref()
 const imageName = ref('')
-const isTagModalOpen = ref(false)
 
 async function postRequest() {
   const id = await requestStore.postRequest(request.value)
@@ -44,23 +45,15 @@ function handleImageChange(e: Event) {
   }
 }
 function handleTagModalIsOpen() {
-  isTagModalOpen.value = !isTagModalOpen.value
+  isModalOpen2.value = !isModalOpen2.value
 }
 </script>
 
 <template>
-  <NewTagModal v-if="isTagModalOpen" />
+  <NewTagModal v-if="isModalOpen2" />
   <div
-    class="bg-white w-300 h-150 absolute z-3 inset-0 m-auto border border-solid border-black overflow-y-scroll"
+    class="bg-white w-300 h-150 absolute z-3 inset-0 m-auto overflow-y-scroll"
   >
-    <div
-      :class="
-        isTagModalOpen
-          ? 'absolute h-screen w-full z-2 bg-gray-500 opacity-50'
-          : ''
-      "
-      @click="isTagModalOpen = false"
-    ></div>
     <h1 class="text-3xl text-center mt-4 mb-4">申請の新規作成</h1>
     <div class="flex flex-col justify-between ml-12 h-4/5">
       <span class="text-xl">申請者：{{ userStore.me.name }}</span>
@@ -76,7 +69,7 @@ function handleTagModalIsOpen() {
         <input
           v-model="request.amount"
           class="border border-solid border-black"
-        /><!-- //ToDo:バリデーション -->
+        />円<!-- //ToDo:バリデーション -->
       </div>
       <div>
         <span class="text-xl">詳細：</span>

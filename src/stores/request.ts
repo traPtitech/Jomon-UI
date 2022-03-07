@@ -1,7 +1,17 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-import { Params, Request, RequestResponse } from '../types/requestTypes'
+import { Params, Request, RequestResponse } from '../types/requestsTypes'
+
+const defaultParams = {
+  sort: 'created_at',
+  current_state: null,
+  target: null,
+  since: '',
+  until: '',
+  tag: null,
+  group: null
+}
 
 export const useRequestStore = defineStore('request', {
   state: () => ({
@@ -45,16 +55,6 @@ export const useRequestStore = defineStore('request', {
         updated_at: '2022-01-25T13:29:19.918Z'
       }
     }), //new Array<RequestResponse>()
-    params: {
-      //storeじゃなくてよさそう
-      sort: 'created_at',
-      current_state: null,
-      target: null,
-      since: '',
-      until: '',
-      tag: null,
-      group: null
-    } as Params,
     tagList: new Array<string>(),
     isModalOpen: false,
     isModalOpen2: false
@@ -82,25 +82,23 @@ export const useRequestStore = defineStore('request', {
     }
   },
   actions: {
-    async getRequests() {
+    async getRequests(params: Params = defaultParams) {
+      const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
       if (
-        (this.params.since === '' &&
-          /^20[0-9]{2}-[0-9]{1,2}-[0-9]{1,2}$/.test(this.params.until)) ||
-        (this.params.until === '' &&
-          /^20[0-9]{2}-[0-9]{1,2}-[0-9]{1,2}$/.test(this.params.since)) ||
-        (/^20[0-9]{2}-[0-9]{1,2}-[0-9]{1,2}$/.test(this.params.since) &&
-          /^20[0-9]{2}-[0-9]{1,2}-[0-9]{1,2}$/.test(this.params.until)) ||
-        (this.params.since === '' && this.params.until === '')
+        (params.since === '' && rule.test(params.until)) ||
+        (params.until === '' && rule.test(params.since)) ||
+        (rule.test(params.since) && rule.test(params.until)) ||
+        (params.since === '' && params.until === '')
       ) {
         for (let i = 0; i < this.tagList.length; i++) {
           if (i === 0) {
-            this.params.tag = this.tagList[i]
+            params.tag = this.tagList[i]
           } else {
-            this.params.tag += ',' + this.tagList[i]
+            params.tag += ',' + this.tagList[i]
           }
         }
         const response: RequestResponse[] = await axios.get('/api/requests', {
-          params: this.params
+          params: params
         })
         this.requests = response
       } else {
@@ -114,17 +112,6 @@ export const useRequestStore = defineStore('request', {
       )
       this.getRequests()
       return response.id
-    },
-    resetParams() {
-      this.params = {
-        sort: 'created_at',
-        current_state: null,
-        target: null,
-        since: '',
-        until: '',
-        tag: null,
-        group: null
-      }
     }
   }
 })

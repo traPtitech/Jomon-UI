@@ -1,19 +1,27 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
+import { Params } from '../types/requestsTypes'
 import VueSelect from './VueSelect.vue'
 
 const requestStore = useRequestStore()
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
-const { params } = storeToRefs(requestStore)
 
+const params = ref({
+  sort: 'created_at',
+  current_state: null,
+  target: null,
+  since: '',
+  until: '',
+  tag: null,
+  group: null
+} as Params)
 const states = ref([
   { state: 'submitted', jpn: '承認待ち' },
   { state: 'rejected', jpn: '却下' },
@@ -27,7 +35,7 @@ function sortByCreatedAt() {
   } else {
     params.value.sort = 'created_at'
   }
-  requestStore.getRequests()
+  requestStore.getRequests(params.value)
 }
 //todo:日時のバリデーション追加
 </script>

@@ -1,103 +1,54 @@
 <script lang="ts" setup>
+import { onMounted } from '@vue/runtime-core'
+import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
 import Transaction from '../components/Transaction.vue'
-import FilteringTransaction from '../components/FilteringTransaction.vue'
-const transactions = [
-  {
-    id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    amount: 1200,
-    target: 'hoge株式会社',
-    tags: [
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: '2020講習会',
-        description: '2020年度講習会',
-        created_at: '2022-02-09T14:03:53.278Z',
-        updated_at: '2022-02-09T14:03:53.278Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: '2020講習会',
-        description: '2020年度講習会',
-        created_at: '2022-02-09T14:03:53.278Z',
-        updated_at: '2022-02-09T14:03:53.278Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: '2020講習会',
-        description: '2020年度講習会',
-        created_at: '2022-02-09T14:03:53.278Z',
-        updated_at: '2022-02-09T14:03:53.278Z'
-      }
-    ],
-    group: {
-      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      name: 'SysAd',
-      description: 'SysAd班',
-      budget: 250000,
-      created_at: '2022-02-09T14:03:53.278Z',
-      updated_at: '2022-02-09T14:03:53.278Z'
-    },
-    created_at: '2022-02-09T14:03:53.278Z',
-    updated_at: '2022-02-09T14:03:53.278Z'
-  },
-  {
-    id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    amount: 1200,
-    target: 'hoge株式会社',
-    tags: [
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: '2020講習会',
-        description: '2020年度講習会',
-        created_at: '2022-02-09T14:03:53.278Z',
-        updated_at: '2022-02-09T14:03:53.278Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: '2020講習会',
-        description: '2020年度講習会',
-        created_at: '2022-02-09T14:03:53.278Z',
-        updated_at: '2022-02-09T14:03:53.278Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: '2020講習会',
-        description: '2020年度講習会',
-        created_at: '2022-02-09T14:03:53.278Z',
-        updated_at: '2022-02-09T14:03:53.278Z'
-      }
-    ],
-    group: {
-      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      name: 'SysAd',
-      description: 'SysAd班',
-      budget: 250000,
-      created_at: '2022-02-09T14:03:53.278Z',
-      updated_at: '2022-02-09T14:03:53.278Z'
-    },
-    created_at: '2022-02-09T14:03:53.278Z',
-    updated_at: '2022-02-09T14:03:53.278Z'
-  }
-]
+// import NewTransactionModal from '../components/NewTransactionModal.vue'
+import { useTransactionStore } from '../stores/transaction'
+
+const route = useRoute()
+const pageIndex = Number(route.query.pageIndex)
+const transactionStore = useTransactionStore()
+const { isModalOpen } = storeToRefs(transactionStore)
+function changeIsModalOpen() {
+  isModalOpen.value = !isModalOpen.value
+}
 </script>
 
 <template>
-  <dev class="flex justify-evenly">
-    <FilteringTransaction />
-    <dev class="border-3 min-w-150 w-3/5">
-      <h1 class="text-center border">入出金記録</h1>
-      <dev class="text-center border flex">
-        <dev class="w-1/6">年 月 日</dev>
-        <dev class="w-1/6">取引額</dev>
-        <dev class="w-1/6">取引相手</dev>
-        <dev class="w-1/6">取引グループ</dev>
-        <dev class="w-1/3">タグ</dev>
-      </dev>
+  <!-- <NewTransactionModal v-if="isModalOpen" /> -->
+  <div class="flex">
+    <div class="font-bold text-2xl">入出金記録</div>
+    <div>新規作成</div>
+  </div>
+  <div
+    :class="
+      pageIndex === Math.ceil(transactionStore.transactionsLength() / 10)
+        ? 'h-123'
+        : ''
+    "
+  >
+    <div
+      v-if="transactionStore.transactionsLength() !== 0"
+      class="min-w-150 w-3/5 m-auto"
+    >
+      <div class="text-center flex">
+        <div class="w-1/6">年 月 日</div>
+        <div class="w-1/6">取引額</div>
+        <div class="w-1/6">取引相手</div>
+        <div class="w-1/6">取引グループ</div>
+        <div class="w-1/3">タグ</div>
+      </div>
       <ul>
-        <li v-for="transaction in transactions" :key="transaction.id">
-          <Transaction :transaction="transaction" />
+        <li
+          v-for="(transaction, index) in transactionStore.transactionsFilter(
+            pageIndex
+          )"
+          :key="transaction.id"
+        >
+          <Transaction :index="index" />
         </li>
       </ul>
-    </dev>
-  </dev>
+    </div>
+  </div>
 </template>

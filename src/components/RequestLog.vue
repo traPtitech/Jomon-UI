@@ -31,7 +31,8 @@ const props = defineProps<Props>()
         }}</span>
       </div>
       <div class="ml-12 mb-2">
-        コメント：<MarkdownIt
+        <span class="align-top">コメント：</span
+        ><MarkdownIt
           :text="requestDetailStore.request.comments[props.index].comment"
           class="inline-block"
         />
@@ -49,7 +50,8 @@ const props = defineProps<Props>()
       >
       <StatusChip
         :status="requestDetailStore.request.statuses[props.index].status"
-      />
+        :text="true"
+      /><!--todo:文字の高さずれるのどうにかする-->
       <span>にしました。</span>
       <span class="ml-4">{{
         requestDetailStore.dateFormatter(

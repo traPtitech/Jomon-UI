@@ -9,7 +9,7 @@ import Logo from '/@/components/Logo.vue'
 
 const requestStore = useRequestStore()
 const userStore = useUserStore()
-const { isModalOpen } = storeToRefs(requestStore)
+const { isModalOpen, isModalOpen2 } = storeToRefs(requestStore)
 const route = useRoute()
 </script>
 <template>
@@ -18,6 +18,14 @@ const route = useRoute()
       isModalOpen ? 'absolute h-screen w-screen z-2 bg-gray-500 opacity-50' : ''
     "
     @click="isModalOpen = false"
+  ></div>
+  <div
+    :class="
+      isModalOpen2
+        ? 'absolute h-screen w-screen z-4 bg-gray-500 opacity-50'
+        : ''
+    "
+    @click="isModalOpen2 = false"
   ></div>
   <!--作成をやめますかみたいな確認画面出した方がいいかも-->
   <main class="h-screen">

@@ -56,7 +56,8 @@ export const useRequestStore = defineStore('request', {
       group: null
     } as Params,
     tagList: new Array<string>(),
-    isModalOpen: false
+    isModalOpen: false,
+    isModalOpen2: false
   }),
   getters: {
     requestsLength() {

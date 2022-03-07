@@ -8,5 +8,5 @@ const md = MarkdownIt({
 })
 </script>
 <template>
-  <div v-html="md.render(text)" class="prose break-words"></div>
+  <div v-html="md.render(text)" class="text-sm prose break-words"></div>
 </template>

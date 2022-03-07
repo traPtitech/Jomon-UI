@@ -119,7 +119,7 @@ function handleModalIsOpen() {
             class="mr-2"
             @click="changeIsFixMode('title')"
           >
-            <PencilIcon class="h-6 w-6" />
+            <PencilIcon class="h-6 w-6 text-gray-500" />
           </button>
         </div>
         <div v-if="isFixMode === 'title'">
@@ -188,7 +188,7 @@ function handleModalIsOpen() {
             class="mr-2"
             @click="changeIsFixMode('group')"
           >
-            <PencilIcon class="h-6 w-6" />
+            <PencilIcon class="h-6 w-6 text-gray-500" />
           </button>
         </div>
         <div v-if="isFixMode === 'group'" class="ml-12 inline">
@@ -225,7 +225,7 @@ function handleModalIsOpen() {
             class="mr-2"
             @click="changeIsFixMode('amount')"
           >
-            <PencilIcon class="h-6 w-6" />
+            <PencilIcon class="h-6 w-6 text-gray-500" />
           </button>
         </div>
         <div v-if="isFixMode === 'amount'" class="inline">
@@ -257,7 +257,7 @@ function handleModalIsOpen() {
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             @click="changeIsFixMode('tags')"
           >
-            <PencilIcon class="h-6 w-6" />
+            <PencilIcon class="h-6 w-6 text-gray-500" />
           </button>
         </div>
         <div v-if="isFixMode === 'tags'" class="ml-12 inline">
@@ -299,7 +299,7 @@ function handleModalIsOpen() {
           v-if="requestDetailStore.request.created_by === userStore.me.name"
           @click="changeIsFixMode('content')"
         >
-          <PencilIcon class="h-6 w-6" />
+          <PencilIcon class="h-6 w-6 text-gray-500" />
         </button>
       </div>
       <div v-if="isFixMode === 'content'">
@@ -327,7 +327,7 @@ function handleModalIsOpen() {
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             @click="changeIsFixMode('targets')"
           >
-            <PencilIcon class="h-6 w-6" />
+            <PencilIcon class="h-6 w-6 text-gray-500" />
           </button>
         </div>
         <div v-if="isFixMode === 'targets'" class="inline-block">

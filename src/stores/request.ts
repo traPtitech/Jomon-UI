@@ -83,17 +83,29 @@ export const useRequestStore = defineStore('request', {
   },
   actions: {
     async getRequests() {
-      for (let i = 0; i < this.tagList.length; i++) {
-        if (i === 0) {
-          this.params.tag = this.tagList[i]
-        } else {
-          this.params.tag += ',' + this.tagList[i]
+      if (
+        (this.params.since === '' &&
+          /^20[0-9]{2}-[0-9]{1,2}-[0-9]{1,2}$/.test(this.params.until)) ||
+        (this.params.until === '' &&
+          /^20[0-9]{2}-[0-9]{1,2}-[0-9]{1,2}$/.test(this.params.since)) ||
+        (/^20[0-9]{2}-[0-9]{1,2}-[0-9]{1,2}$/.test(this.params.since) &&
+          /^20[0-9]{2}-[0-9]{1,2}-[0-9]{1,2}$/.test(this.params.until)) ||
+        (this.params.since === '' && this.params.until === '')
+      ) {
+        for (let i = 0; i < this.tagList.length; i++) {
+          if (i === 0) {
+            this.params.tag = this.tagList[i]
+          } else {
+            this.params.tag += ',' + this.tagList[i]
+          }
         }
+        const response: RequestResponse[] = await axios.get('/api/requests', {
+          params: this.params
+        })
+        this.requests = response
+      } else {
+        alert('日付が不正です')
       }
-      const response: RequestResponse[] = await axios.get('/api/requests', {
-        params: this.params
-      })
-      this.requests = response
     },
     async postRequest(request: Request) {
       const response: RequestResponse = await axios.post(

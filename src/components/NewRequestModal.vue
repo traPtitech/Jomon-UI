@@ -32,8 +32,12 @@ const image = ref()
 const imageName = ref('')
 
 async function postRequest() {
-  const id = await requestStore.postRequest(request.value)
-  fileStore.postFile(id, imageName.value, image.value)
+  if (/^[1-9][0-9]*$|^0$/.test(request.value.amount.toString())) {
+    const id = await requestStore.postRequest(request.value)
+    fileStore.postFile(id, imageName.value, image.value)
+  } else {
+    alert('金額が不正です')
+  }
 }
 function handleImageChange(e: Event) {
   const file = (e.target as HTMLInputElement).files![0]
@@ -52,19 +56,19 @@ function handleTagModalIsOpen() {
 <template>
   <NewTagModal v-if="isModalOpen2" />
   <div
-    class="bg-white w-300 h-150 absolute z-3 inset-0 m-auto overflow-y-scroll"
+    class="bg-white w-300 h-180 absolute z-3 inset-0 m-auto overflow-y-scroll"
   >
     <h1 class="text-3xl text-center mt-4 mb-4">申請の新規作成</h1>
     <div class="flex flex-col justify-between ml-12 h-4/5">
-      <span class="text-xl">申請者：{{ userStore.me.name }}</span>
-      <div>
+      <span class="text-xl mb-2">申請者：{{ userStore.me.name }}</span>
+      <div class="mb-2">
         <span class="text-xl">タイトル：</span>
         <input
           v-model="request.title"
           class="border border-solid border-black w-4/5"
         />
       </div>
-      <div>
+      <div class="mb-2">
         <span class="text-xl">金額：</span>
         <input
           v-model="request.amount"
@@ -72,13 +76,13 @@ function handleTagModalIsOpen() {
         />円<!-- //ToDo:バリデーション -->
       </div>
       <div>
-        <span class="text-xl">詳細：</span>
+        <span class="text-xl align-top">詳細：</span>
         <textarea
           v-model="request.content"
           class="h-32 leading-tight border border-solid border-black resize-none w-4/5"
         />
       </div>
-      <details>
+      <details class="mb-2">
         <summary>MDプレビュー</summary>
         <!--幅を広くしたいけどなぜかできない-->
         <div
@@ -88,7 +92,7 @@ function handleTagModalIsOpen() {
           <MarkdownIt :text="request.content" class="w-full" />
         </div>
       </details>
-      <div>
+      <div class="mb-2">
         <span class="text-xl">払い戻し対象者：</span>
         <VueSelect
           v-model="request.targets"
@@ -98,11 +102,10 @@ function handleTagModalIsOpen() {
           placeholder="払い戻し対象者"
           multiple
           :closeOnSelect="false"
-          class="w-2/3"
+          class="w-2/3 inline-block"
         ></VueSelect>
       </div>
-
-      <div>
+      <div class="mb-2">
         <span class="text-xl">グループ：</span>
         <VueSelect
           v-model="request.group"
@@ -110,10 +113,10 @@ function handleTagModalIsOpen() {
           :reduce="(group:any) => group.id"
           label="name"
           placeholder="グループ"
-          class="w-2/3"
+          class="w-2/3 inline-block"
         ></VueSelect>
       </div>
-      <div>
+      <div class="mb-2">
         <span class="text-xl">タグ：</span>
         <VueSelect
           v-model="request.tags"
@@ -123,7 +126,7 @@ function handleTagModalIsOpen() {
           placeholder="タグ"
           multiple
           :closeOnSelect="false"
-          class="w-2/3"
+          class="w-2/3 inline-block"
         ></VueSelect>
         <button
           @click="handleTagModalIsOpen"
@@ -132,11 +135,14 @@ function handleTagModalIsOpen() {
           タグを新規作成
         </button>
       </div>
-      <div>
+      <div class="mb-4">
         <span class="text-xl">画像：</span>
         <input type="file" @change="e => handleImageChange(e)" />
       </div>
       <div>
+        <div :class="image ? '' : 'h-32'">
+          <span v-if="!image">画像プレビュー</span>
+        </div>
         <img v-if="image" :src="image" :alt="imageName" class="h-32" />
       </div>
       <div class="text-center">

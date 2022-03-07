@@ -23,5 +23,8 @@
         "alphabetical": true
       }
     ]
+  },
+  "globals": {
+    "defineProps": "readonly"
   }
 }

@@ -25,7 +25,7 @@ function postTag() {
         />
       </div>
       <div>
-        <span>詳細：</span>
+        <span class="align-top">詳細：</span>
         <textarea
           v-model="tag.description"
           class="h-32 leading-tight border border-solid border-black resize-none w-2/3"

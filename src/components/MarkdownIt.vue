@@ -7,6 +7,7 @@ const md = MarkdownIt({
   breaks: true
 })
 </script>
+
 <template>
   <div v-html="md.render(text)" class="text-sm prose break-words"></div>
 </template>

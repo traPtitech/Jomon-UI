@@ -45,14 +45,14 @@ function sortByCreatedAt() {
     <div class="mt-1">
       <input
         v-model="params.since"
-        placeholder="xxxx-xx-xx"
-        class="border border-solid border-gray-300 w-20"
+        placeholder="YYYY-MM-DD"
+        class="border border-solid border-gray-300 w-28 h-8"
       />
       <span>～</span>
       <input
         v-model="params.until"
-        placeholder="xxxx-xx-xx"
-        class="border border-solid border-gray-300 w-20"
+        placeholder="YYYY-MM-DD"
+        class="border border-solid border-gray-300 w-28 h-8"
       />
     </div>
     <VueSelect

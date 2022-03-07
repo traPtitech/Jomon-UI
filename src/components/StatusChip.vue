@@ -8,8 +8,10 @@ import {
 } from '@heroicons/vue/solid'
 import { ref } from 'vue'
 
-type Props = { status: string }
-const props = defineProps<Props>()
+type Props = { status: string; text: boolean }
+const props = withDefaults(defineProps<Props>(), {
+  text: false
+})
 const flag = ref(false)
 function statusToJpn(status: string) {
   switch (status) {
@@ -54,7 +56,7 @@ function handleMouseLeave() {
 <template>
   <div class="relative inline">
     <div
-      v-if="flag"
+      v-if="flag && !text"
       class="absolute top-6 left-6 w-16 h-6 bg-gray-100 z-1 shadow-md text-center"
     >
       {{ statusToJpn(status) }}
@@ -62,21 +64,29 @@ function handleMouseLeave() {
     <div
       @mouseover="handleMouseOver"
       @mouseleave="handleMouseLeave"
-      class="w-8 h-8 inline-block"
+      class="ml-4 mr-4"
     >
-      <!-- <div class="rounded-1/2 w-8 h-8 inline-block" :class="statusColor(status)"> -->
       <!--ToDo:色変える-->
-      <CloudUploadIcon v-if="status === 'submitted'" class="text-blue-500" />
-      <XCircleIcon v-else-if="status === 'rejected'" class="text-red-500" />
+      <CloudUploadIcon
+        v-if="status === 'submitted'"
+        class="text-blue-500 w-8 inline-block"
+      />
+      <XCircleIcon v-else-if="status === 'rejected'" class="text-red-500 w-8" />
       <ExclamationIcon
         v-else-if="status === 'fix_required'"
-        class="text-yellow-500"
+        class="text-yellow-500 w-8"
       />
-      <ThumbUpIcon v-else-if="status === 'accepted'" class="text-blue-200" />
+      <ThumbUpIcon
+        v-else-if="status === 'accepted'"
+        class="text-blue-200 w-8"
+      />
       <CheckCircleIcon
         v-else-if="status === 'fully_repaid'"
-        class="text-green-500"
+        class="text-green-500 w-8"
       />
+      <span v-if="text === true" class="align-top">{{
+        statusToJpn(status)
+      }}</span>
     </div>
   </div>
 </template>

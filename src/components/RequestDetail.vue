@@ -135,7 +135,7 @@ function handleModalIsOpen() {
             完了
           </button>
         </div>
-        <StatusChip :status="requestDetailStore.request.status" />
+        <StatusChip :status="requestDetailStore.request.status" :text="true" />
         <div class="ml-2">
           <button
             v-if="
@@ -154,7 +154,7 @@ function handleModalIsOpen() {
               requestDetailStore.request.status === 'submitted'
             "
             @click="changeStatus('fix_required')"
-            class="border border-solid border-black rounded-md mr-4 mt-2"
+            class="border border-solid border-black rounded-md mr-4"
           >
             要修正にする
           </button>
@@ -164,7 +164,7 @@ function handleModalIsOpen() {
               requestDetailStore.request.status === 'submitted'
             "
             @click="changeStatus('accepted')"
-            class="border border-solid border-black rounded-md mr-4 mt-2"
+            class="border border-solid border-black rounded-md mr-4"
           >
             承認済みにする
           </button>
@@ -174,7 +174,7 @@ function handleModalIsOpen() {
               requestDetailStore.request.status === 'submitted'
             "
             @click="changeStatus('rejected')"
-            class="border border-solid border-black rounded-md mr-4 mt-2"
+            class="border border-solid border-black rounded-md mr-4"
           >
             却下する
           </button>

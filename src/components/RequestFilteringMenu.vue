@@ -37,7 +37,6 @@ function sortByCreatedAt() {
   }
   requestStore.getRequests(params.value)
 }
-//todo:日時のバリデーション追加
 </script>
 
 <template>

@@ -1,47 +1,7 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-type Transaction = {
-  id: string
-  amount: number
-  target: string
-  request_id: string
-  tags: {
-    id: string
-    name: string
-    description: string
-    created_at: string
-    updated_at: string
-  }[]
-  group: {
-    id: string
-    name: string
-    description: string
-    budget: number
-    created_at: string
-    updated_at: string
-  }
-  created_at: string
-}
-
-type Params = {
-  sort: string
-  request_id: string | null
-  target: string | null
-  year: number | null
-  since: string
-  until: string
-  tag: string | null
-  group: string | null
-}
-
-type TransactionRequest = {
-  amount: number
-  target: string
-  request_id: string
-  tags: string[]
-  group: string
-}
+import { Transaction, Params, TransactionRequest } from '../types/transaction'
 
 export const useTransactionStore = defineStore('transaction', {
   state: () => ({
@@ -54,7 +14,14 @@ export const useTransactionStore = defineStore('transaction', {
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           name: '2020講習会',
-          description: '2020年度講習会',
+          description: '2020年度講',
+          created_at: '2022-02-09T14:03:53.278Z',
+          updated_at: '2022-02-09T14:03:53.278Z'
+        },
+        {
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          name: '2020講習会',
+          description: '2020年度講習会ああああああ',
           created_at: '2022-02-09T14:03:53.278Z',
           updated_at: '2022-02-09T14:03:53.278Z'
         },
@@ -68,7 +35,28 @@ export const useTransactionStore = defineStore('transaction', {
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           name: '2020講習会',
-          description: '2020年度講習会',
+          description: '2020年度講習会sssssssssssss',
+          created_at: '2022-02-09T14:03:53.278Z',
+          updated_at: '2022-02-09T14:03:53.278Z'
+        },
+        {
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          name: '2020講習会',
+          description: '2020年度講',
+          created_at: '2022-02-09T14:03:53.278Z',
+          updated_at: '2022-02-09T14:03:53.278Z'
+        },
+        {
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          name: '2020講習会',
+          description: '2020年度講',
+          created_at: '2022-02-09T14:03:53.278Z',
+          updated_at: '2022-02-09T14:03:53.278Z'
+        },
+        {
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          name: '2020講習会',
+          description: '2020年度講',
           created_at: '2022-02-09T14:03:53.278Z',
           updated_at: '2022-02-09T14:03:53.278Z'
         }
@@ -93,7 +81,7 @@ export const useTransactionStore = defineStore('transaction', {
       tag: null,
       group: null
     } as Params,
-    tagList: new Array<string>(),
+    // tagList: new Array<string>(),
     isModalOpen: false
   }),
   getters: {
@@ -102,7 +90,7 @@ export const useTransactionStore = defineStore('transaction', {
     },
     transactionsFilter() {
       return (index: number) => {
-        return this.transactions.slice((index - 1) * 10, index * 10)
+        return this.transactions.slice((index - 1) * 13, index * 13)
       }
     },
     dateFormatter() {
@@ -120,13 +108,13 @@ export const useTransactionStore = defineStore('transaction', {
   },
   actions: {
     async getTransactions() {
-      for (let i = 0; i < this.tagList.length; i++) {
-        if (i === 0) {
-          this.params.tag = this.tagList[i]
-        } else {
-          this.params.tag += ',' + this.tagList[i]
-        }
-      }
+      // for (let i = 0; i < this.tagList.length; i++) {
+      //   if (i === 0) {
+      //     this.params.tag = this.tagList[i]
+      //   } else {
+      //     this.params.tag += ',' + this.tagList[i]
+      //   }
+      // }
       const response: Transaction[] = await axios.get('/api/transactions', {
         params: this.params
       })

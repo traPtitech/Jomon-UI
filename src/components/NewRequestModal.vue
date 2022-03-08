@@ -73,7 +73,7 @@ function handleTagModalIsOpen() {
         <input
           v-model="request.amount"
           class="border border-solid border-black"
-        />円<!-- //ToDo:バリデーション -->
+        />円
       </div>
       <div>
         <span class="text-xl align-top">詳細：</span>

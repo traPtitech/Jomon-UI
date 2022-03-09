@@ -198,7 +198,7 @@ function handleModalIsOpen() {
             :reduce="(group:any) => group.id"
             label="name"
             placeholder="グループ"
-            class="w-64 inline-block"
+            class="w-60 inline-block"
           ></VueSelect>
           <button
             class="border border-solid border-black ml-2 mr-2"

@@ -14,7 +14,7 @@ const props = defineProps<Props>()
   <router-link :to="'/requests/' + requests[props.index].id">
     <div class="flex hover:bg-gray-100 pb-1">
       <div class="mt-auto mb-auto mr-2 ml-1">
-        <StatusChip :status="requests[props.index].status" />
+        <StatusChip :status="requests[props.index].status" :text="false" />
       </div>
       <div class="flex-grow">
         <div class="text-xl">{{ requests[props.index].title }}</div>

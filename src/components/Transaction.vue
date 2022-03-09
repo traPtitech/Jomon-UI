@@ -2,7 +2,9 @@
 import { LinkIcon } from '@heroicons/vue/outline'
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
+
 import { useTransactionStore } from '../stores/transaction'
+
 const transactionStore = useTransactionStore()
 const { transactions, dateFormatter } = storeToRefs(transactionStore)
 type Props = { index: number }
@@ -19,8 +21,9 @@ function handleMouseLeave() {
 <template>
   <div class="flex">
     <router-link
+      v-if="transactions[props.index].request !== ''"
       class="flex w-3/5"
-      :to="'requests/' + transactions[props.index].request_id"
+      :to="'requests/' + transactions[props.index].request"
     >
       <div class="w-1/4 text-center text-sky-500">
         {{ dateFormatter(transactions[props.index].created_at) }}
@@ -35,6 +38,20 @@ function handleMouseLeave() {
         {{ transactions[props.index].group.description }}
       </div>
     </router-link>
+    <div v-else class="flex w-3/5">
+      <div class="w-1/4 text-center">
+        {{ dateFormatter(transactions[props.index].created_at) }}
+      </div>
+      <div class="w-1/4 text-center">
+        {{ transactions[props.index].amount }}
+      </div>
+      <div class="w-1/4 text-center">
+        {{ transactions[props.index].target }}
+      </div>
+      <div class="w-1/4 text-center">
+        {{ transactions[props.index].group.description }}
+      </div>
+    </div>
     <div
       class="w-2/5 pl-8 relative"
       @mouseleave="handleMouseLeave"
@@ -82,7 +99,10 @@ function handleMouseLeave() {
         </span>
         <span>...</span>
       </span>
-      <router-link :to="'/transactions/' + transactions[props.index].id" class="ml-2 w-5 h-5 inline-block">
+      <router-link
+        :to="'/transactions/' + transactions[props.index].id"
+        class="ml-2 w-5 h-5 inline-block"
+      >
         <LinkIcon />
       </router-link>
     </div>

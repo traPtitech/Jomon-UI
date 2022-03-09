@@ -1,6 +1,6 @@
 import vue from '@vitejs/plugin-vue'
-import https from 'https'
-import path from 'path'
+import * as https from 'https'
+import * as path from 'path'
 import brotli from 'rollup-plugin-brotli'
 import { defineConfig } from 'vite'
 import WindiCSS from 'vite-plugin-windicss'

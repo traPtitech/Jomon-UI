@@ -6,17 +6,22 @@ import { BookOpenIcon, PlusCircleIcon } from '@heroicons/vue/solid'
 
 import PaginationBar from '../components/PaginationBar.vue'
 import Transaction from '../components/Transaction.vue'
-// import NewTransactionModal from '../components/NewTransactionModal.vue'
-import { useTransactionStore } from '../stores/transaction'
 import FilteringTransactionMenu from '../components/FilteringTransactionMenu.vue'
+import { useTransactionStore } from '../stores/transaction'
+import { useGroupStore } from '../stores/group'
+import { useTagStore } from '../stores/tag'
 
 const route = useRoute()
 const pageIndex = Number(route.query.pageIndex)
 const transactionStore = useTransactionStore()
+const groupStore = useGroupStore()
+const tagStore = useTagStore()
 const { isModalOpen } = storeToRefs(transactionStore)
 
 onMounted(() => {
   transactionStore.getTransactions()
+  groupStore.getGroups()
+  tagStore.getTags()
 })
 function changeIsModalOpen() {
   isModalOpen.value = !isModalOpen.value
@@ -33,10 +38,6 @@ function changeIsModalOpen() {
       @click="changeIsModalOpen"
     />
   </div>
-  <div v-if="transactionStore.transactionsLength() !== 0" class="ml-30">
-    {{ transactionStore.transactionsLength() }}件取得しました
-  </div>
-  <div v-else class="ml-30">条件に一致する申請は見つかりませんでした</div>
   <div
     :class="
       pageIndex === Math.ceil(transactionStore.transactionsLength() / 13)
@@ -61,6 +62,10 @@ function changeIsModalOpen() {
         </li>
       </ul>
     </div>
+    <div v-if="transactionStore.transactionsLength() !== 0" class="ml-30">
+      {{ transactionStore.transactionsLength() }}件取得しました
+    </div>
+    <div v-else class="ml-30">条件に一致する申請は見つかりませんでした</div>
     <div class="mt-4">
       <PaginationBar
         :itemLength="transactionStore.transactionsLength()"

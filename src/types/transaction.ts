@@ -23,7 +23,7 @@ export type Transaction = {
 
 export type Params = {
   sort: string
-  request_id: string | null
+  request: string | null
   target: string | null
   year: number | null
   since: string

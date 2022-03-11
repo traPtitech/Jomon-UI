@@ -22,13 +22,13 @@ const params = ref({
   tag: null,
   group: null
 } as Params)
-const states = ref([
+const states = [
   { state: 'submitted', jpn: '承認待ち' },
   { state: 'rejected', jpn: '却下' },
   { state: 'fix_required', jpn: '要修正' },
   { state: 'accepted', jpn: '承認済み' },
   { state: 'fully_repaid', jpn: '返済完了' }
-])
+]
 function sortByCreatedAt() {
   if (params.value.sort === 'created_at') {
     params.value.sort = '-created_at'
@@ -36,6 +36,18 @@ function sortByCreatedAt() {
     params.value.sort = 'created_at'
   }
   requestStore.getRequests(params.value)
+}
+function filterByDate() {
+  const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
+  //todo:余裕があればもっとしっかりバリデーション
+  if (
+    (params.value.since === '' && rule.test(params.value.until)) ||
+    (params.value.until === '' && rule.test(params.value.since)) ||
+    (rule.test(params.value.since) && rule.test(params.value.until)) ||
+    (params.value.since === '' && params.value.until === '')
+  ) {
+    requestStore.getRequests(params.value)
+  }
 }
 </script>
 
@@ -51,12 +63,14 @@ function sortByCreatedAt() {
     </button>
     <div class="mt-1">
       <input
+        @input="filterByDate"
         v-model="params.since"
         placeholder="YYYY-MM-DD"
         class="border border-solid border-gray-300 w-28 h-8"
-      />
+      /><!--@changeによってフォームにフォーカスがあって何かキーが押されたときに日付の形式が正しければGETが送信される-->
       <span>～</span>
       <input
+        @input="filterByDate"
         v-model="params.until"
         placeholder="YYYY-MM-DD"
         class="border border-solid border-gray-300 w-28 h-8"
@@ -64,7 +78,7 @@ function sortByCreatedAt() {
     </div>
     <VueSelect
       v-model="params.target"
-      @close="requestStore.getRequests"
+      @close="requestStore.getRequests(params)"
       :options="userStore.users"
       :reduce="(user:any) => user.name"
       label="name"
@@ -73,7 +87,7 @@ function sortByCreatedAt() {
     ></VueSelect>
     <VueSelect
       v-model="params.current_state"
-      @close="requestStore.getRequests"
+      @close="requestStore.getRequests(params)"
       :options="states"
       :reduce="(state:any) => state.state"
       label="jpn"
@@ -83,7 +97,7 @@ function sortByCreatedAt() {
     ></VueSelect>
     <VueSelect
       v-model="params.group"
-      @close="requestStore.getRequests"
+      @close="requestStore.getRequests(params)"
       :options="groupStore.groups"
       :reduce="(group:any) => group.id"
       label="name"
@@ -92,7 +106,7 @@ function sortByCreatedAt() {
     ></VueSelect>
     <VueSelect
       v-model="requestStore.tagList"
-      @close="requestStore.getRequests"
+      @close="requestStore.getRequests(params)"
       :options="tagStore.tags"
       :reduce="(tag:any) => tag.id"
       label="name"

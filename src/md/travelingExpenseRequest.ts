@@ -1,4 +1,4 @@
-const md = `
+const travelingExpenseRequestTemplate = `
 # 交通費利用申請
 
 ## 目的
@@ -8,4 +8,4 @@ const md = `
 
 
 `
-export default md
+export default travelingExpenseRequestTemplate

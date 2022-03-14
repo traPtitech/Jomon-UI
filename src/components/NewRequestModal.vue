@@ -2,6 +2,8 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
+import clubBudgetRequest from '../md/clubBudgetRequest'
+import travelingExpenseRequest from '../md/travelingExpenseRequest'
 import { useFileStore } from '../stores/file'
 import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
@@ -18,6 +20,12 @@ const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const fileStore = useFileStore()
 const { isModalOpen2 } = storeToRefs(requestStore)
+
+const selectedTemplate = ref('')
+const templates = [
+  { name: '部費利用申請', value: 'clubBudgetRequest' },
+  { name: '交通費申請', value: 'travelingExpenseRequest' }
+]
 
 const request = ref({
   created_by: userStore.me.name,
@@ -51,6 +59,14 @@ function handleImageChange(e: Event) {
 function handleTagModalIsOpen() {
   isModalOpen2.value = !isModalOpen2.value
 }
+function setTemplate(selectedTemplate: string) {
+  request.value.content =
+    selectedTemplate === 'clubBudgetRequest'
+      ? clubBudgetRequest
+      : selectedTemplate === 'travelingExpenseRequest'
+      ? travelingExpenseRequest
+      : ''
+}
 </script>
 
 <template>
@@ -75,11 +91,23 @@ function handleTagModalIsOpen() {
           class="border border-solid border-black"
         />円
       </div>
+      <div class="text-right mr-20 mb-2">
+        <VueSelect
+          v-model="selectedTemplate"
+          @close="setTemplate(selectedTemplate)"
+          :options="templates"
+          :reduce="(template:any) => template.value"
+          label="name"
+          placeholder="テンプレートを選択"
+          class="w-1/3 inline-block"
+        >
+        </VueSelect>
+      </div>
       <div>
         <span class="text-xl align-top">詳細：</span>
         <textarea
           v-model="request.content"
-          class="h-32 leading-tight border border-solid border-black resize-none w-4/5"
+          class="h-60 leading-tight border border-solid border-black resize-none w-4/5 p-1"
         />
       </div>
       <details class="mb-2">

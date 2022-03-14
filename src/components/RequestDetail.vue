@@ -126,7 +126,7 @@ function handleModalIsOpen() {
           <input
             v-model="fixedValue.title"
             type="text"
-            class="w-100"
+            class="w-100 p-1"
             placeholder="タイトル"
           /><button
             class="border border-solid border-black ml-2 mr-2"
@@ -232,7 +232,7 @@ function handleModalIsOpen() {
           金額：<input
             v-model="fixedValue.amount"
             type="text"
-            class="w-30"
+            class="w-30 p-1"
             placeholder="金額"
           />円<button
             class="border border-solid border-black ml-2 mr-2"
@@ -261,6 +261,7 @@ function handleModalIsOpen() {
           </button>
         </div>
         <div v-if="isFixMode === 'tags'" class="ml-12 inline">
+          <span>タグ：</span>
           <VueSelect
             v-model="fixedValue.tags"
             :options="tagStore.tags"
@@ -306,7 +307,7 @@ function handleModalIsOpen() {
         <textarea
           v-model="fixedValue.content"
           type="text"
-          class="resize-none w-200 h-32 p-0"
+          class="resize-none w-200 h-30 p-0"
           placeholder="詳細"
         /><button
           class="border border-solid border-black ml-2 mr-2"

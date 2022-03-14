@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { XCircleIcon } from '@heroicons/vue/solid'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
@@ -9,6 +10,7 @@ import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
+import { File } from '../types/fileTypes'
 import { Request } from '../types/requestsTypes'
 import MarkdownIt from './MarkdownIt.vue'
 import NewTagModal from './NewTagModal.vue'
@@ -36,24 +38,28 @@ const request = ref({
   tags: [] as string[],
   group: null
 } as Request)
-const image = ref()
-const imageName = ref('')
+const images = ref([] as File[])
 
 async function postRequest() {
   if (/^[1-9][0-9]*$|^0$/.test(request.value.amount.toString())) {
     const id = await requestStore.postRequest(request.value)
-    fileStore.postFile(id, imageName.value, image.value)
+    for (let i = 0; i < images.value.length; i++) {
+      fileStore.postFile(id, images.value[i].name, images.value[i].src)
+    }
   } else {
     alert('金額が不正です')
   }
 }
 function handleImageChange(e: Event) {
   const file = (e.target as HTMLInputElement).files![0]
+  console.log(file)
   const reader = new FileReader()
+  console.log(reader)
   reader.readAsDataURL(file)
   reader.onload = () => {
-    image.value = reader.result
-    imageName.value = file.name
+    images.value = images.value.concat([
+      { name: file.name, src: reader.result!.toString() }
+    ])
   }
 }
 function handleTagModalIsOpen() {
@@ -66,6 +72,9 @@ function setTemplate(selectedTemplate: string) {
       : selectedTemplate === 'travelingExpenseRequest'
       ? travelingExpenseRequestTemplate
       : ''
+}
+function deleteImage(index: number) {
+  images.value.splice(index, 1)
 }
 </script>
 
@@ -165,13 +174,26 @@ function setTemplate(selectedTemplate: string) {
       </div>
       <div class="mb-4">
         <span class="text-xl">画像：</span>
-        <input type="file" @change="e => handleImageChange(e)" />
+        <input type="file" @change="e => handleImageChange(e)" multiple />
       </div>
       <div>
-        <div :class="image ? '' : 'h-32'">
-          <span v-if="!image">画像プレビュー</span>
+        <div
+          v-if="images.length === 0"
+          :class="images.length === 0 ? 'h-32' : ''"
+        >
+          <span>画像プレビュー</span>
         </div>
-        <img v-if="image" :src="image" :alt="imageName" class="h-32" />
+        <div v-if="images.length !== 0" class="flex">
+          <div v-for="(image, index) in images" class="relative">
+            <img :src="image.src" :alt="image.name" class="h-32" />
+            <button
+              @click="deleteImage(index)"
+              class="absolute top-0 right-0 w-6 h-6"
+            >
+              <XCircleIcon />
+            </button>
+          </div>
+        </div>
       </div>
       <div class="text-center">
         <button @click="postRequest" class="w-32 text-xl mb-4">

@@ -14,7 +14,7 @@ export const useFileStore = defineStore('file', {
         this.files.concat(response)
       }
     },
-    async postFile(request_id: string, name: string, file: Blob) {
+    async postFile(request_id: string, name: string, file: string) {
       const formData = new FormData()
       formData.append('file', file)
       formData.append('name', name)

@@ -2,8 +2,8 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
-import clubBudgetRequest from '../md/clubBudgetRequest'
-import travelingExpenseRequest from '../md/travelingExpenseRequest'
+import clubBudgetRequestTemplate from '../md/clubBudgetRequest.md?raw'
+import travelingExpenseRequestTemplate from '../md/travelingExpenseRequest.md?raw'
 import { useFileStore } from '../stores/file'
 import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
@@ -62,9 +62,9 @@ function handleTagModalIsOpen() {
 function setTemplate(selectedTemplate: string) {
   request.value.content =
     selectedTemplate === 'clubBudgetRequest'
-      ? clubBudgetRequest
+      ? clubBudgetRequestTemplate
       : selectedTemplate === 'travelingExpenseRequest'
-      ? travelingExpenseRequest
+      ? travelingExpenseRequestTemplate
       : ''
 }
 </script>

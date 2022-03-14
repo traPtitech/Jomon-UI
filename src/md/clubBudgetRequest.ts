@@ -1,4 +1,4 @@
-const md = `
+const clubBudgetRequestTemplate = `
 # 部費利用申請
 
 ## 申請用途
@@ -11,6 +11,6 @@ const md = `
 - 理由 1
 - 理由 2
 `
-export default md
+export default clubBudgetRequestTemplate
 
 //mdファイルをexportできるようにしたい＝＞ライブラリ使うかwebpackの設定いじる？

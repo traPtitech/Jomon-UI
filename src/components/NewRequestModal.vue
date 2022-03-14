@@ -22,8 +22,10 @@ const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const fileStore = useFileStore()
 const { isModalOpen2 } = storeToRefs(requestStore)
+const imageExtensions = /.(jpg|png|jpeg|tiff|jfif|tif|webp|vif)$/
+const inputImageRef = ref()
 
-const selectedTemplate = ref('')
+const selectedTemplate = ref(null)
 const templates = [
   { name: '部費利用申請', value: 'clubBudgetRequest' },
   { name: '交通費申請', value: 'travelingExpenseRequest' }
@@ -51,27 +53,36 @@ async function postRequest() {
   }
 }
 function handleImageChange(e: Event) {
-  const file = (e.target as HTMLInputElement).files![0]
-  console.log(file)
-  const reader = new FileReader()
-  console.log(reader)
-  reader.readAsDataURL(file)
-  reader.onload = () => {
-    images.value = images.value.concat([
-      { name: file.name, src: reader.result!.toString() }
-    ])
+  if ((e.target as HTMLInputElement).files) {
+    for (let i = 0; i < (e.target as HTMLInputElement).files!.length; i++) {
+      const file = (e.target as HTMLInputElement).files![i]
+      if (file.name.match(imageExtensions)) {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => {
+          images.value = images.value.concat([
+            { name: file.name, src: reader.result!.toString() }
+          ])
+        }
+      } else {
+        alert('画像ファイル以外はアップロードできません')
+        inputImageRef.value.value = null
+      }
+    }
   }
 }
 function handleTagModalIsOpen() {
   isModalOpen2.value = !isModalOpen2.value
 }
-function setTemplate(selectedTemplate: string) {
-  request.value.content =
-    selectedTemplate === 'clubBudgetRequest'
-      ? clubBudgetRequestTemplate
-      : selectedTemplate === 'travelingExpenseRequest'
-      ? travelingExpenseRequestTemplate
-      : ''
+function setTemplate(selectedTemplate: string | null) {
+  if (selectedTemplate) {
+    request.value.content =
+      selectedTemplate === 'clubBudgetRequest'
+        ? clubBudgetRequestTemplate
+        : selectedTemplate === 'travelingExpenseRequest'
+        ? travelingExpenseRequestTemplate
+        : ''
+  }
 }
 function deleteImage(index: number) {
   images.value.splice(index, 1)
@@ -150,7 +161,7 @@ function deleteImage(index: number) {
           :reduce="(group:any) => group.id"
           label="name"
           placeholder="グループ"
-          class="w-2/3 inline-block"
+          class="w-1/3 inline-block"
         ></VueSelect>
       </div>
       <div class="mb-2">
@@ -174,7 +185,13 @@ function deleteImage(index: number) {
       </div>
       <div class="mb-4">
         <span class="text-xl">画像：</span>
-        <input type="file" @change="e => handleImageChange(e)" multiple />
+        <input
+          type="file"
+          @change="e => handleImageChange(e)"
+          multiple
+          accept="image/*"
+          ref="inputImageRef"
+        />
       </div>
       <div>
         <div

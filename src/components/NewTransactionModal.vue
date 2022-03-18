@@ -44,7 +44,7 @@ function postTransaction() {
     <div class="flex flex-col justify-between ml-12 h-4/5">
       <div class="text-xl">
         <span>紐づけられている申請：</span>
-        <span v-if="request_id">あり</span>
+        <span v-if="request_id">{{ requestDetailStore.request.title }}</span>
         <span v-if="!request_id">なし</span>
       </div>
       <div class="mb-2">

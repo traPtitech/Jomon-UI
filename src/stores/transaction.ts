@@ -82,7 +82,6 @@ export const useTransactionStore = defineStore('transaction', {
       group: null
     } as Params,
     // tagList: new Array<string>(),
-    isModalOpen: false,
     isTargetSearchOpen: false
   }),
   getters: {

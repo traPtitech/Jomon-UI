@@ -66,9 +66,9 @@ function handleImageChange(e: Event) {
         }
       } else {
         alert('画像ファイル以外はアップロードできません')
-        inputImageRef.value.value = null
       }
     }
+    inputImageRef.value.value = null
   }
 }
 function handleTagModalIsOpen() {

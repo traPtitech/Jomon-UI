@@ -18,7 +18,7 @@ const groupStore = useGroupStore()
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
 const requestStore = useRequestStore()
-const { isModalOpen } = storeToRefs(requestStore)
+const { isModalOpen2 } = storeToRefs(requestStore)
 const isFixMode = ref('')
 
 const fixedValue = ref(requestDetailStore.putRequestRequest)
@@ -103,12 +103,12 @@ function changeIsFixMode(kind: string) {
   }
 }
 function handleModalIsOpen() {
-  isModalOpen.value = !isModalOpen.value
+  isModalOpen2.value = !isModalOpen2.value
 }
 </script>
 
 <template>
-  <NewTagModal v-if="isModalOpen" />
+  <NewTagModal v-if="isModalOpen2" />
   <div class="w-full">
     <div class="flex justify-between text-center mt-6 ml-12">
       <div class="flex">

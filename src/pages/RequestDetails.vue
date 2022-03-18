@@ -1,15 +1,20 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 import NewComment from '../components/NewComment.vue'
+import NewTransactionModal from '../components/NewTransactionModal.vue'
 import RequestDetail from '../components/RequestDetail.vue'
 import RequestLogs from '../components/RequestLogs.vue'
 import { useFileStore } from '../stores/file'
+import { useRequestStore } from '../stores/request'
 import { useRequestDetailStore } from '../stores/requestDetail'
 
+const requestStore = useRequestStore()
 const requestDetailStore = useRequestDetailStore()
 const fileStore = useFileStore()
+const { isModalOpen } = storeToRefs(requestStore)
 const route = useRoute()
 const id = route.params.request_id.toString()
 onMounted(() => {
@@ -17,7 +22,7 @@ onMounted(() => {
   fileStore.getFile(requestDetailStore.request.files)
 })
 function createTransaction() {
-  alert('モーダル表示時にrouteのパスからrequest idを取ってきて渡す')
+  isModalOpen.value = true
 }
 function goToTransactions() {
   alert('/transaction?requestID=へ移動')
@@ -25,6 +30,7 @@ function goToTransactions() {
 </script>
 
 <template>
+  <NewTransactionModal v-if="isModalOpen" :request_id="id" />
   <div class="mt-4">
     <RequestDetail />
     <div class="flex">

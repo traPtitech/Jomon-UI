@@ -7,6 +7,7 @@ import NewRequestModal from '../components/NewRequestModal.vue'
 import PaginationBar from '../components/PaginationBar.vue'
 import Request from '../components/Request.vue'
 import RequestFilteringMenu from '../components/RequestFilteringMenu.vue'
+import { useGeneralStore } from '../stores/general'
 import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
 import { useTagStore } from '../stores/tag'
@@ -14,11 +15,12 @@ import { useUserStore } from '../stores/user'
 
 const route = useRoute()
 const pageIndex = Number(route.query.pageIndex)
+const generalStore = useGeneralStore()
 const requestStore = useRequestStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const userStore = useUserStore()
-const { isModalOpen } = storeToRefs(requestStore)
+const { isModalOpen } = storeToRefs(generalStore)
 
 onMounted(() => {
   requestStore.getRequests()

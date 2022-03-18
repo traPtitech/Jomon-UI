@@ -8,13 +8,13 @@ import NewTransactionModal from '../components/NewTransactionModal.vue'
 import RequestDetail from '../components/RequestDetail.vue'
 import RequestLogs from '../components/RequestLogs.vue'
 import { useFileStore } from '../stores/file'
-import { useRequestStore } from '../stores/request'
+import { useGeneralStore } from '../stores/general'
 import { useRequestDetailStore } from '../stores/requestDetail'
 
-const requestStore = useRequestStore()
+const generalStore = useGeneralStore()
 const requestDetailStore = useRequestDetailStore()
 const fileStore = useFileStore()
-const { isModalOpen } = storeToRefs(requestStore)
+const { isModalOpen } = storeToRefs(generalStore)
 const route = useRoute()
 const id = route.params.request_id.toString()
 onMounted(() => {

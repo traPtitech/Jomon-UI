@@ -3,13 +3,13 @@ import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 
 import Icon from './components/Icon.vue'
-import { useRequestStore } from './stores/request'
+import { useGeneralStore } from './stores/general'
 import { useUserStore } from './stores/user'
 import Logo from '/@/components/Logo.vue'
 
-const requestStore = useRequestStore()
+const generalStore = useGeneralStore()
 const userStore = useUserStore()
-const { isModalOpen, isModalOpen2 } = storeToRefs(requestStore)
+const { isModalOpen, isModalOpen2 } = storeToRefs(generalStore)
 const route = useRoute()
 </script>
 <template>

@@ -6,6 +6,7 @@ import { ref } from 'vue'
 import clubBudgetRequestTemplate from '../md/clubBudgetRequest.md?raw'
 import travelingExpenseRequestTemplate from '../md/travelingExpenseRequest.md?raw'
 import { useFileStore } from '../stores/file'
+import { useGeneralStore } from '../stores/general'
 import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
 import { useTagStore } from '../stores/tag'
@@ -16,12 +17,13 @@ import MarkdownIt from './MarkdownIt.vue'
 import NewTagModal from './NewTagModal.vue'
 import VueSelect from './VueSelect.vue'
 
+const generalStore = useGeneralStore()
 const requestStore = useRequestStore()
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const fileStore = useFileStore()
-const { isModalOpen2 } = storeToRefs(requestStore)
+const { isModalOpen2 } = storeToRefs(generalStore)
 const imageExtensions = /.(jpg|png|jpeg|tiff|jfif|tif|webp|vif)$/
 const inputImageRef = ref()
 

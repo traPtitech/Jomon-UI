@@ -3,8 +3,8 @@ import { PencilIcon } from '@heroicons/vue/solid'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
+import { useGeneralStore } from '../stores/general'
 import { useGroupStore } from '../stores/group'
-import { useRequestStore } from '../stores/request'
 import { useRequestDetailStore } from '../stores/requestDetail'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
@@ -17,8 +17,8 @@ const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
-const requestStore = useRequestStore()
-const { isModalOpen2 } = storeToRefs(requestStore)
+const generalStore = useGeneralStore()
+const { isModalOpen2 } = storeToRefs(generalStore)
 const isFixMode = ref('')
 
 const fixedValue = ref(requestDetailStore.putRequestRequest)

@@ -1,48 +1,16 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-type Request = {
-  id: string
-  status: string
-  created_at: string
-  updated_at: string
-  created_by: string
-  amount: number
-  title: string
-  tags: {
-    id: string
-    name: string
-    description: string
-    created_at: string
-    updated_at: string
-  }[]
-  group: {
-    id: string
-    name: string
-    description: string
-    budget: number
-    created_at: string
-    updated_at: string
-  }
-}
+import { Params, Request, RequestResponse } from '../types/requestsTypes'
 
-type Params = {
-  sort: string
-  current_state: string | null
-  target: string | null
-  since: string
-  until: string
-  tag: string | null
-  group: string | null
-}
-
-type RequestRequest = {
-  created_by: string
-  amount: number
-  title: string
-  content: string
-  tags: string[]
-  group: string
+const defaultParams = {
+  sort: 'created_at',
+  current_state: null,
+  target: null,
+  since: '',
+  until: '',
+  tag: null,
+  group: null
 }
 
 export const useRequestStore = defineStore('request', {
@@ -86,19 +54,10 @@ export const useRequestStore = defineStore('request', {
         created_at: '2022-01-25T13:29:19.918Z',
         updated_at: '2022-01-25T13:29:19.918Z'
       }
-    }), //new Array<Request>()
-    params: {
-      //storeじゃなくてよさそう
-      sort: 'created_at',
-      current_state: null,
-      target: null,
-      since: '',
-      until: '',
-      tag: null,
-      group: null
-    } as Params,
+    }), //new Array<RequestResponse>()
     tagList: new Array<string>(),
-    isModalOpen: false
+    isModalOpen: false,
+    isModalOpen2: false
   }),
   getters: {
     requestsLength() {
@@ -123,33 +82,36 @@ export const useRequestStore = defineStore('request', {
     }
   },
   actions: {
-    async getRequests() {
-      for (let i = 0; i < this.tagList.length; i++) {
-        if (i === 0) {
-          this.params.tag = this.tagList[i]
-        } else {
-          this.params.tag += ',' + this.tagList[i]
+    async getRequests(params: Params = defaultParams) {
+      const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
+      if (
+        (params.since === '' && rule.test(params.until)) ||
+        (params.until === '' && rule.test(params.since)) ||
+        (rule.test(params.since) && rule.test(params.until)) ||
+        (params.since === '' && params.until === '')
+      ) {
+        for (let i = 0; i < this.tagList.length; i++) {
+          if (i === 0) {
+            params.tag = this.tagList[i]
+          } else {
+            params.tag += ',' + this.tagList[i]
+          }
         }
+        const response: RequestResponse[] = await axios.get('/api/requests', {
+          params: params
+        })
+        this.requests = response
+      } else {
+        alert('日付が不正です')
       }
-      const response: Request[] = await axios.get('/api/requests', {
-        params: this.params
-      })
-      this.requests = response
     },
-    async postRequest(request: RequestRequest) {
-      const response: Request = await axios.post('/api/requests', request)
-      this.requests.unshift(response)
-    },
-    resetParams() {
-      this.params = {
-        sort: 'created_at',
-        current_state: null,
-        target: null,
-        since: '',
-        until: '',
-        tag: null,
-        group: null
-      }
+    async postRequest(request: Request) {
+      const response: RequestResponse = await axios.post(
+        '/api/requests',
+        request
+      )
+      this.getRequests()
+      return response.id
     }
   }
 })

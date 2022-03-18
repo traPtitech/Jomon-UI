@@ -1,19 +1,7 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-type User = {
-  name: string
-  display_name: string
-  admin: boolean
-  created_at: string
-  updated_at: string
-  deleted_at: string
-}
-type UserRequest = {
-  name: string
-  display_name: string
-  admin: boolean
-}
+import { User, UserResponse } from '../types/userTypes'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -24,7 +12,7 @@ export const useUserStore = defineStore('user', {
       created_at: '2022-01-27T13:45:37.048Z',
       updated_at: '2022-01-27T13:45:37.048Z',
       deleted_at: '2022-01-27T13:45:37.048Z'
-    }, //{} as User
+    }, //{} as UserResponse
     users: [
       {
         name: 'nagatech',
@@ -42,18 +30,18 @@ export const useUserStore = defineStore('user', {
         updated_at: '2022-01-27T13:45:37.048Z',
         deleted_at: '2022-01-27T13:45:37.048Z'
       }
-    ] //new Array<User>()
+    ] //new Array<UserResponse>()
   }),
   actions: {
     async getMe() {
-      const response: User = await axios.get('/api/users/me')
+      const response: UserResponse = await axios.get('/api/users/me')
       this.me = response
     },
     async getUsers() {
-      const response: User[] = await axios.get('/api/users')
+      const response: UserResponse[] = await axios.get('/api/users')
       this.users = response
     },
-    async putUser(user: UserRequest) {
+    async putUser(user: User) {
       await axios.put('/api/users', user)
     }
   }

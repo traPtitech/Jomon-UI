@@ -1,37 +1,13 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-type Group = {
-  id: string
-  name: string
-  description: string
-  budget: number
-  created_at: string
-  updated_at: string
-}
-type Groups = {
-  groups: Group[]
-}
-type GroupRequest = {
-  name: string
-  description: string
-  budget: number
-  owners: string[]
-  members: string[]
-}
-type Members = {
-  members: string[]
-}
-type Member = {
-  id: string
-}
-type Owners = {
-  oweners: string[]
-}
+import {
+    Group, Group2, GroupResponse, GroupsResponse, Member, MembersResponse, OwnersResponse
+} from '../types/groupTypes'
 
 export const useGroupStore = defineStore('group', {
   state: () => ({
-    groups: Array(100).fill({
+    groups: Array(95).fill({
       id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       name: 'SysAd',
       description:
@@ -39,8 +15,8 @@ export const useGroupStore = defineStore('group', {
       budget: 250000,
       created_at: '2022-01-25T14:06:32.381Z',
       updated_at: '2022-01-25T14:06:32.381Z'
-    }), //new Array<Group>()
-    group: {} as Group,
+    }), //new Array<GroupResponse>()
+    group: {} as GroupResponse,
     groupMembers: [
       '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       '3fa85f64-5717-4562-b3fc-2c963f66afa7',
@@ -63,11 +39,11 @@ export const useGroupStore = defineStore('group', {
       }
     },
     omitGroupDescription() {
-      let returnGroups: Group[] = this.groups
+      let returnGroups: GroupResponse[] = this.groups
       for (let i = 0; i < this.groups.length; i++) {
-        if (returnGroups[i].description.length > 60) {
+        if (returnGroups[i].description.length > 100) {
           returnGroups[i].description =
-            returnGroups[i].description.slice(0, 60) + '...'
+            returnGroups[i].description.slice(0, 100) + '...'
         }
       }
       return returnGroups
@@ -75,16 +51,16 @@ export const useGroupStore = defineStore('group', {
   },
   actions: {
     async getGroups() {
-      const response: Groups = await axios.get('/api/groups')
+      const response: GroupsResponse = await axios.get('/api/groups')
       this.groups = response.groups
     },
-    async postGroup(group: GroupRequest) {
+    async postGroup(group: Group2) {
       const willPostGroup = {
         name: group.name,
         description: group.description,
         budget: group.budget
       }
-      const res: Group = await axios.post('/api/groups', willPostGroup)
+      const res: GroupResponse = await axios.post('/api/groups', willPostGroup)
       for (let i = 0; i < group.owners.length; i++) {
         this.postGroupOwner(res.id, { id: group.owners[i] })
       }
@@ -93,7 +69,7 @@ export const useGroupStore = defineStore('group', {
       }
       this.getGroups()
     },
-    async putGroup(group: GroupRequest, id: string) {
+    async putGroup(group: Group, id: string) {
       await axios.put('/api/groups' + id, group)
       this.getGroups()
     },
@@ -102,27 +78,31 @@ export const useGroupStore = defineStore('group', {
       this.getGroups()
     },
     async getGroupMembers(id: string) {
-      const response: Members = await axios.get('/api/groups' + id + '/members')
+      const response: MembersResponse = await axios.get(
+        '/api/groups' + id + '/members'
+      )
       this.groupMembers = response.members
     },
     async postGroupMember(id: string, member: Member) {
       await axios.post('/api/groups' + id + '/members', member)
       this.getGroupMembers(id)
     },
-    async deleteGroupMember(id: string, member: Member) {
-      await axios.delete('/api/groups' + id + '/members', { data: member })
+    async deleteGroupMember(id: string, memberId: string) {
+      await axios.delete('/api/groups' + id + '/members' + memberId)
       this.getGroupMembers(id)
     },
     async getGroupOwners(id: string) {
-      const response: Owners = await axios.get('/api/groups' + id + '/owners')
+      const response: OwnersResponse = await axios.get(
+        '/api/groups' + id + '/owners'
+      )
       this.groupOwners = response.oweners
     },
     async postGroupOwner(id: string, owner: Member) {
       await axios.post('/api/groups' + id + '/owners', owner)
       this.getGroupOwners(id)
     },
-    async deleteGroupOwner(id: string, owner: Member) {
-      await axios.delete('/api/groups' + id + '/owners', { data: owner })
+    async deleteGroupOwner(id: string, ownerId: string) {
+      await axios.delete('/api/groups' + id + '/owners' + ownerId)
       this.getGroupOwners(id)
     }
   }

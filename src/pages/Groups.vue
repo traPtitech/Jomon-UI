@@ -6,14 +6,14 @@ import { useRoute } from 'vue-router'
 import Group from '../components/Group.vue'
 import NewGroupModal from '../components/NewGroupModal.vue'
 import PaginationBar from '../components/PaginationBar.vue'
+import { useGeneralStore } from '../stores/general'
 import { useGroupStore } from '../stores/group'
-import { useRequestStore } from '../stores/request'
 
 const route = useRoute()
 const pageIndex = Number(route.query.pageIndex)
-const requestStore = useRequestStore()
+const generalStore = useGeneralStore()
 const groupStore = useGroupStore()
-const { isModalOpen } = storeToRefs(requestStore)
+const { isModalOpen } = storeToRefs(generalStore)
 const { groupsFilter, groupsLength } = storeToRefs(groupStore)
 
 onMounted(() => {

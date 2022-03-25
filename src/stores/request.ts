@@ -55,9 +55,7 @@ export const useRequestStore = defineStore('request', {
         updated_at: '2022-01-25T13:29:19.918Z'
       }
     }), //new Array<RequestResponse>()
-    tagList: new Array<string>(),
-    isModalOpen: false,
-    isModalOpen2: false
+    tagList: new Array<string>()
   }),
   getters: {
     requestsLength() {

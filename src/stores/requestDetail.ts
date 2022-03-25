@@ -153,6 +153,20 @@ export const useRequestDetailStore = defineStore('requestDetail', {
         group: this.request.group.id
       }
       return requestRequest
+    },
+    targetIds() {
+      let targetIds = new Array<string>()
+      for (let i = 0; i < this.request.targets.length; i++) {
+        targetIds = targetIds.concat([this.request.targets[i].target])
+      }
+      return targetIds
+    },
+    tagIds() {
+      let tagIds = new Array<string>()
+      for (let i = 0; i < this.request.tags.length; i++) {
+        tagIds = tagIds.concat([this.request.tags[i].id])
+      }
+      return tagIds
     }
   },
   actions: {

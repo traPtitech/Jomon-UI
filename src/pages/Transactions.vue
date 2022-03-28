@@ -1,22 +1,25 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
-import { onMounted } from 'vue'
 import { BookOpenIcon, PlusCircleIcon } from '@heroicons/vue/solid'
+import { storeToRefs } from 'pinia'
+import { onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 
+import FilteringTransactionMenu from '../components/FilteringTransactionMenu.vue'
+import NewTransactionModal from '../components/NewTransactionModal.vue'
 import PaginationBar from '../components/PaginationBar.vue'
 import Transaction from '../components/Transaction.vue'
-import FilteringTransactionMenu from '../components/FilteringTransactionMenu.vue'
-import { useTransactionStore } from '../stores/transaction'
+import { useGeneralStore } from '../stores/general'
 import { useGroupStore } from '../stores/group'
 import { useTagStore } from '../stores/tag'
+import { useTransactionStore } from '../stores/transaction'
 
 const route = useRoute()
 const pageIndex = Number(route.query.pageIndex)
 const transactionStore = useTransactionStore()
 const groupStore = useGroupStore()
 const tagStore = useTagStore()
-const { isModalOpen } = storeToRefs(transactionStore)
+const generalStore = useGeneralStore()
+const { isModalOpen } = storeToRefs(generalStore)
 
 onMounted(() => {
   transactionStore.getTransactions()
@@ -29,6 +32,7 @@ function changeIsModalOpen() {
 </script>
 
 <template>
+  <NewTransactionModal v-if="isModalOpen" request_id="" />
   <div v-if="isModalOpen">aaaaaaaa</div>
   <div class="h-20 relative">
     <BookOpenIcon class="w-12 ml-40 mt-4" />

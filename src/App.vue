@@ -3,13 +3,13 @@ import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 
 import Icon from './components/Icon.vue'
-import { useRequestStore } from './stores/request'
+import { useGeneralStore } from './stores/general'
 import { useUserStore } from './stores/user'
 import Logo from '/@/components/Logo.vue'
 
-const requestStore = useRequestStore()
+const generalStore = useGeneralStore()
 const userStore = useUserStore()
-const { isModalOpen, isModalOpen2 } = storeToRefs(requestStore)
+const { isModalOpen, isModalOpen2 } = storeToRefs(generalStore)
 const route = useRoute()
 </script>
 <template>
@@ -38,7 +38,7 @@ const route = useRoute()
           <router-link to="/requests?pageIndex=1"
             ><span>申請一覧</span></router-link
           >
-          <router-link to="/transactions?pageIndex=1"
+          <router-link to="/transactions"
             ><span>入出金記録一覧</span></router-link
           >
           <router-link to="/groups"><span>グループ一覧</span></router-link>

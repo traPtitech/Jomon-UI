@@ -27,7 +27,10 @@ const transaction = ref({
 } as TransactionRequest)
 
 function postTransaction() {
-  if (/^[1-9][0-9]*$|^0$/.test(transaction.value.amount.toString())) {
+  if (
+    /^[1-9][0-9]*$|^0$/.test(transaction.value.amount.toString()) &&
+    transaction.value.targets.length > 0
+  ) {
     transactionStore.postTransaction(transaction.value)
   } else {
     alert('金額が不正です')

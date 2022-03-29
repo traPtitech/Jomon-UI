@@ -45,7 +45,12 @@ const request = ref({
 const images = ref([] as File[])
 
 async function postRequest() {
-  if (/^[1-9][0-9]*$|^0$/.test(request.value.amount.toString())) {
+  if (
+    /^[1-9][0-9]*$|^0$/.test(request.value.amount.toString()) &&
+    request.value.title !== '' &&
+    request.value.content !== '' &&
+    request.value.targets.length > 0
+  ) {
     const id = await requestStore.postRequest(request.value)
     for (let i = 0; i < images.value.length; i++) {
       fileStore.postFile(id, images.value[i].name, images.value[i].src)

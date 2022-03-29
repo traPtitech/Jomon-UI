@@ -22,7 +22,9 @@ const group = ref({
 
 function postRequest() {
   alert('ここでgroupの送信。ownersとmembersは別にしてPOSTする')
-  groupStore.postGroup(group.value)
+  if (/^[1-9][0-9]*$|^0$/.test(group.value.budget.toString())) {
+    groupStore.postGroup(group.value)
+  }
 }
 </script>
 

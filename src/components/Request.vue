@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia'
 
 import { useRequestStore } from '../stores/request'
 import StatusChip from './StatusChip.vue'
+import Tags from './Tags.vue'
 
 const requestStore = useRequestStore()
 const { requests, dateFormatter } = storeToRefs(requestStore)
@@ -19,12 +20,7 @@ const props = defineProps<Props>()
       <div class="flex-grow">
         <div class="text-xl">{{ requests[props.index].title }}</div>
         <div class="mt-2">
-          <span
-            v-for="tag in requests[props.index].tags"
-            :key="tag.id"
-            class="border border-solid border-black rounded mr-2"
-            >{{ tag.name }}</span
-          >
+          <Tags :tags="requests[props.index].tags" />
         </div>
       </div>
       <div class="text-center flex flex-col justify-between mr-4">

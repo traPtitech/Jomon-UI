@@ -11,6 +11,7 @@ import { useUserStore } from '../stores/user'
 import MarkdownIt from './MarkdownIt.vue'
 import NewTagModal from './NewTagModal.vue'
 import StatusChip from './StatusChip.vue'
+import Tags from './Tags.vue'
 import VueSelect from './VueSelect.vue'
 
 const tagStore = useTagStore()
@@ -247,13 +248,7 @@ function handleModalIsOpen() {
       <div class="mt-4">
         <div v-if="!(isFixMode === 'tags')" class="ml-12 inline">
           <span>タグ：</span>
-          <span
-            v-for="(tag, index) in requestDetailStore.request.tags"
-            :key="tag.id"
-            :class="index !== 0 ? 'ml-2' : ''"
-            class="border border-solid border-black rounded"
-            >{{ tag.name }}</span
-          ><button
+          <Tags :tags="requestDetailStore.request.tags" /><button
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             @click="changeIsFixMode('tags')"
           >

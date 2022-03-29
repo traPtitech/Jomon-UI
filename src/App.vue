@@ -38,7 +38,7 @@ const route = useRoute()
           <router-link to="/requests?pageIndex=1"
             ><span>申請一覧</span></router-link
           >
-          <router-link to="/transactions"
+          <router-link to="/transactions?pageIndex=1"
             ><span>入出金記録一覧</span></router-link
           >
           <router-link to="/groups"><span>グループ一覧</span></router-link>

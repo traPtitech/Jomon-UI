@@ -33,7 +33,7 @@ export type Params = {
 }
 
 export type TransactionRequest = {
-  amount: string
+  amount: number
   targets: string[]
   request_id: string
   tags: string[]

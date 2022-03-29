@@ -24,9 +24,6 @@ onMounted(() => {
 function createTransaction() {
   isModalOpen.value = true
 }
-function goToTransactions() {
-  alert('/transaction?requestID=へ移動')
-}
 </script>
 
 <template>
@@ -44,10 +41,11 @@ function goToTransactions() {
             この申請から入出金記録を作成する
           </button>
           <button
-            @click="goToTransactions"
             class="w-2/3 border border-solid border-black mr-auto ml-auto"
           >
-            この申請の入出金記録へ移動
+            <router-link :to="'/transactions?pageIndex=1&requestID=' + id">
+              この申請の入出金記録へ移動
+            </router-link>
           </button>
         </div>
         <NewComment />

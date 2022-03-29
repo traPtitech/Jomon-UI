@@ -202,7 +202,7 @@ function deleteImage(index: number) {
         >
           <span>画像プレビュー</span>
         </div>
-        <div v-if="images.length !== 0" class="flex">
+        <div v-if="images.length !== 0" class="flex flex-wrap">
           <div v-for="(image, index) in images" class="relative">
             <img :src="image.src" :alt="image.name" class="h-32" />
             <button

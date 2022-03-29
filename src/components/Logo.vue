@@ -1,6 +1,4 @@
-<script lang="ts" setup>
-const a = ''
-</script>
+<script lang="ts" setup></script>
 <template>
-  <img alt="logo" class="h-8 m-2 w-10" src="/logo2.svg" />
+  <img alt="logo" class="h-8 m-2" src="/logo2.svg" />
 </template>

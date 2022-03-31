@@ -2,7 +2,9 @@ import axios from 'axios'
 import { defineStore } from 'pinia'
 
 import { Request } from '../types/requestsTypes'
-import { Comment, Log, Request2, RequestDetailResponse, Status } from '../types/requestTypes'
+import {
+    Comment, Log, Request2, RequestDetailResponse, Status, TargetResponse
+} from '../types/requestTypes'
 
 export const useRequestDetailStore = defineStore('requestDetail', {
   state: () => ({
@@ -137,12 +139,16 @@ export const useRequestDetailStore = defineStore('requestDetail', {
       //その後この配列のkindで配列を選び、indexでindexを選ぶことで2つの配列をいい感じに並べ替えられる
     },
     putRequestRequest() {
+      let targets = new Array<string>()
+      for (let i = 0; i < this.request.targets.length; i++) {
+        targets = targets.concat([this.request.targets[i].target])
+      }
       const requestRequest: Request2 = {
         created_by: this.request.created_by,
         amount: this.request.amount,
         title: this.request.title,
         content: this.request.content,
-        targets: this.request.targets,
+        targets: targets,
         tags: this.request.tags,
         group: this.request.group.id
       }
@@ -170,19 +176,14 @@ export const useRequestDetailStore = defineStore('requestDetail', {
       )
       this.request = response
     },
-    async putRequest(id: string) {
+    async putRequest(id: string, request: Request2) {
       let tags = new Array<string>()
-      let targets = new Array<string>()
-      for (let i = 0; i < this.request.tags.length; i++) {
-        tags = tags.concat([this.request.tags[i].id])
-      }
-      for (let i = 0; i < this.request.targets.length; i++) {
-        targets = targets.concat([this.request.targets[i].target])
+      for (let i = 0; i < request.tags.length; i++) {
+        tags = tags.concat([request.tags[i].id])
       }
       const requestRequest: Request = {
         ...this.putRequestRequest,
-        tags: tags,
-        targets: targets
+        tags: tags
       }
       await axios.put('/api/requests/' + id, requestRequest)
       this.getRequestDetail(id)

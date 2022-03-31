@@ -39,7 +39,7 @@ export type Request2 = {
   amount: number
   title: string
   content: string
-  targets: string[]
+  targets: TargetResponse[]
   tags: TagResponse[]
   group: string | null
 }

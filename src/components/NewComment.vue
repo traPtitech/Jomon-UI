@@ -1,14 +1,21 @@
 <script lang="ts" setup>
+import axios from 'axios'
 import { ref } from 'vue'
 
 import { useRequestDetailStore } from '../stores/requestDetail'
+import { Comment } from '../types/requestTypes'
 import MarkdownIt from './MarkdownIt.vue'
 
 const requestDetailStore = useRequestDetailStore()
 const comment = ref('')
+
+async function postComment(id: string, commentRequest: Comment) {
+  await axios.post('/api/requests/' + id + '/comments', commentRequest)
+  requestDetailStore.getRequestDetail(id)
+}
 function submit() {
   const commentRequest = { comment: comment.value }
-  requestDetailStore.postComment(requestDetailStore.request.id, commentRequest)
+  postComment(requestDetailStore.request.id, commentRequest)
   comment.value = ''
 }
 </script>

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { PencilIcon } from '@heroicons/vue/solid'
+import axios from 'axios'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
@@ -8,6 +9,7 @@ import { useGroupStore } from '../stores/group'
 import { useRequestDetailStore } from '../stores/requestDetail'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
+import { Status } from '../types/requestTypes'
 import MarkdownIt from './MarkdownIt.vue'
 import NewTagModal from './NewTagModal.vue'
 import StatusChip from './StatusChip.vue'
@@ -24,11 +26,15 @@ const isFixMode = ref('')
 
 const fixedValue = ref(requestDetailStore.putRequestRequest)
 
+async function putStatus(id: string, statusRequest: Status) {
+  await axios.put('/api/requests/' + id + '/status', statusRequest)
+  requestDetailStore.getRequestDetail(id)
+}
 function changeStatus(status: string) {
   const statusRequest = {
     status: status
   }
-  requestDetailStore.putStatus(requestDetailStore.request.id, statusRequest)
+  putStatus(requestDetailStore.request.id, statusRequest)
   requestDetailStore.getRequestDetail(requestDetailStore.request.id)
   alert('ステータスを' + status + 'に変更しました')
 } //確認ダイアログほしい

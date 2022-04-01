@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { XCircleIcon } from '@heroicons/vue/solid'
+import axios from 'axios'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
@@ -12,7 +13,7 @@ import { useRequestStore } from '../stores/request'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
 import { File } from '../types/fileTypes'
-import { Request } from '../types/requestsTypes'
+import { Request, RequestResponse } from '../types/requestsTypes'
 import MarkdownIt from './MarkdownIt.vue'
 import NewTagModal from './NewTagModal.vue'
 import VueSelect from './VueSelect.vue'
@@ -44,6 +45,12 @@ const request = ref({
 } as Request)
 const images = ref([] as File[])
 
+async function postRequestAPI(request: Request) {
+  const response: RequestResponse = await axios.post('/api/requests', request)
+  requestStore.getRequests()
+  return response.id
+}
+
 async function postRequest() {
   if (
     /^[1-9][0-9]*$|^0$/.test(request.value.amount.toString()) &&
@@ -51,7 +58,7 @@ async function postRequest() {
     request.value.content !== '' &&
     request.value.targets.length > 0
   ) {
-    const id = await requestStore.postRequest(request.value)
+    const id = await postRequestAPI(request.value)
     for (let i = 0; i < images.value.length; i++) {
       fileStore.postFile(id, images.value[i].name, images.value[i].src)
     }

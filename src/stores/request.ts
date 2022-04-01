@@ -102,14 +102,6 @@ export const useRequestStore = defineStore('request', {
       } else {
         alert('日付が不正です')
       }
-    },
-    async postRequest(request: Request) {
-      const response: RequestResponse = await axios.post(
-        '/api/requests',
-        request
-      )
-      this.getRequests()
-      return response.id
     }
   }
 })

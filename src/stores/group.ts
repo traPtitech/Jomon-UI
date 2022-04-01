@@ -2,7 +2,7 @@ import axios from 'axios'
 import { defineStore } from 'pinia'
 
 import {
-    Group, Group2, GroupResponse, GroupsResponse, Member, MembersResponse, OwnersResponse
+    Group, GroupResponse, GroupsResponse, Member, MembersResponse, OwnersResponse
 } from '../types/groupTypes'
 
 export const useGroupStore = defineStore('group', {
@@ -54,21 +54,6 @@ export const useGroupStore = defineStore('group', {
       const response: GroupsResponse = await axios.get('/api/groups')
       this.groups = response.groups
     },
-    async postGroup(group: Group2) {
-      const willPostGroup = {
-        name: group.name,
-        description: group.description,
-        budget: group.budget
-      }
-      const res: GroupResponse = await axios.post('/api/groups', willPostGroup)
-      for (let i = 0; i < group.owners.length; i++) {
-        this.postGroupOwner(res.id, { id: group.owners[i] })
-      }
-      for (let i = 0; i < group.members.length; i++) {
-        this.postGroupMember(res.id, { id: group.members[i] })
-      }
-      this.getGroups()
-    },
     async putGroup(group: Group, id: string) {
       await axios.put('/api/groups' + id, group)
       this.getGroups()
@@ -83,10 +68,6 @@ export const useGroupStore = defineStore('group', {
       )
       this.groupMembers = response.members
     },
-    async postGroupMember(id: string, member: Member) {
-      await axios.post('/api/groups' + id + '/members', member)
-      this.getGroupMembers(id)
-    },
     async deleteGroupMember(id: string, memberId: string) {
       await axios.delete('/api/groups' + id + '/members' + memberId)
       this.getGroupMembers(id)
@@ -96,10 +77,6 @@ export const useGroupStore = defineStore('group', {
         '/api/groups' + id + '/owners'
       )
       this.groupOwners = response.oweners
-    },
-    async postGroupOwner(id: string, owner: Member) {
-      await axios.post('/api/groups' + id + '/owners', owner)
-      this.getGroupOwners(id)
     },
     async deleteGroupOwner(id: string, ownerId: string) {
       await axios.delete('/api/groups' + id + '/owners' + ownerId)

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import axios from 'axios'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import vSelect from 'vue-select'
@@ -6,7 +7,7 @@ import 'vue-select/dist/vue-select.css'
 
 import { useGroupStore } from '../stores/group'
 import { useUserStore } from '../stores/user'
-import { Group2 } from '../types/groupTypes'
+import { Group2, GroupResponse, Member } from '../types/groupTypes'
 
 const userStore = useUserStore()
 const groupStore = useGroupStore()
@@ -19,11 +20,33 @@ const group = ref({
   owners: [] as string[],
   members: [] as string[]
 } as Group2)
-
+async function postGroupMember(id: string, member: Member) {
+  await axios.post('/api/groups' + id + '/members', member)
+  groupStore.getGroupMembers(id)
+}
+async function postGroupOwner(id: string, owner: Member) {
+  await axios.post('/api/groups' + id + '/owners', owner)
+  groupStore.getGroupOwners(id)
+}
+async function postGroupAPI(group: Group2) {
+  const willPostGroup = {
+    name: group.name,
+    description: group.description,
+    budget: group.budget
+  }
+  const res: GroupResponse = await axios.post('/api/groups', willPostGroup)
+  for (let i = 0; i < group.owners.length; i++) {
+    postGroupOwner(res.id, { id: group.owners[i] })
+  }
+  for (let i = 0; i < group.members.length; i++) {
+    postGroupMember(res.id, { id: group.members[i] })
+  }
+  groupStore.getGroups()
+}
 function postRequest() {
   alert('ここでgroupの送信。ownersとmembersは別にしてPOSTする')
   if (/^[1-9][0-9]*$|^0$/.test(group.value.budget.toString())) {
-    groupStore.postGroup(group.value)
+    postGroupAPI(group.value)
   }
 }
 </script>

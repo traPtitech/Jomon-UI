@@ -187,14 +187,6 @@ export const useRequestDetailStore = defineStore('requestDetail', {
       }
       await axios.put('/api/requests/' + id, requestRequest)
       this.getRequestDetail(id)
-    },
-    async postComment(id: string, commentRequest: Comment) {
-      await axios.post('/api/requests/' + id + '/comments', commentRequest)
-      this.getRequestDetail(id)
-    },
-    async putStatus(id: string, statusRequest: Status) {
-      await axios.put('/api/requests/' + id + '/status', statusRequest)
-      this.getRequestDetail(id)
     }
   }
 })

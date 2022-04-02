@@ -11,14 +11,18 @@ const props = defineProps<Props>()
   <div v-if="itemLength !== 0" class="text-center w-full">
     <div class="flex justify-center">
       <router-link
-        class="w-24 h-8 block border border-solid border-black"
-        :class="pageIndex === 1 ? 'bg-gray-200 cursor-default' : ''"
+        class="w-24 h-8 block hover:border flex justify-center items-center rounded-lg"
+        :class="
+          pageIndex === 1
+            ? 'hover:border-zinc-300 bg-zinc-300 cursor-default'
+            : 'hover:border-zinc-400'
+        "
         :to="
           pageIndex === 1
             ? `/${kind}/?pageIndex=1`
             : `/${kind}/?pageIndex=` + (pageIndex - 1).toString()
         "
-        ><span class="">前のページへ</span></router-link
+        ><span>前のページへ</span></router-link
       >
       <router-link
         v-for="index in Math.ceil(itemLength / unit) <= 8
@@ -27,7 +31,7 @@ const props = defineProps<Props>()
           ? [...Array(2).keys()]
           : [...Array(6).keys()]"
         :key="index"
-        class="mr-2 ml-2 w-8 h-8 block border border-solid border-black"
+        class="mr-2 ml-2 w-8 h-8 block hover:border hover:border-zinc-400 flex justify-center items-center rounded-lg"
         :class="index + 1 === pageIndex ? 'bg-blue-300 cursor-default' : ''"
         :to="`/${kind}/?pageIndex=` + (index + 1).toString()"
       >
@@ -42,7 +46,7 @@ const props = defineProps<Props>()
           6 <= pageIndex &&
           pageIndex <= Math.ceil(itemLength / unit) - 5
         "
-        class="mr-2 ml-2 w-8 h-8 block border border-solid border-black"
+        class="mr-2 ml-2 w-8 h-8 block hover:border hover:border-zinc-400 flex justify-center items-center rounded-lg"
         :class="index === 2 ? 'bg-blue-300 cursor-default' : ''"
         :to="`/${kind}/?pageIndex=` + (index + pageIndex - 2).toString()"
       >
@@ -57,7 +61,7 @@ const props = defineProps<Props>()
           ? [...Array(6).keys()].reverse()
           : [...Array(2).keys()].reverse()"
         :key="index"
-        class="mr-2 ml-2 w-8 h-8 block border border-solid border-black"
+        class="mr-2 ml-2 w-8 h-8 block hover:border hover:border-zinc-400 flex justify-center items-center rounded-lg"
         :class="
           pageIndex === Math.ceil(itemLength / unit) - index
             ? 'bg-blue-300 cursor-default'
@@ -71,14 +75,18 @@ const props = defineProps<Props>()
         <span>{{ Math.ceil(itemLength / unit) - index }}</span></router-link
       >
       <router-link
-        class="w-24 h-8 block border border-solid border-black"
-        :class="pageIndex === Math.ceil(itemLength / unit) ? 'bg-gray-200' : ''"
+        class="w-24 h-8 block hover:border hover:border-zinc-400 flex justify-center items-center rounded-lg"
+        :class="
+          pageIndex === Math.ceil(itemLength / unit)
+            ? 'hover:border-zinc-300 bg-zinc-300 cursor-default'
+            : 'hover:border-zinc-400'
+        "
         :to="
           pageIndex !== Math.ceil(itemLength / unit)
             ? `/${kind}/?pageIndex=` + (pageIndex + 1).toString()
             : `/${kind}/?pageIndex=` + Math.ceil(itemLength / unit).toString()
         "
-        ><span class="">次のページへ</span></router-link
+        ><span>次のページへ</span></router-link
       >
     </div>
   </div>

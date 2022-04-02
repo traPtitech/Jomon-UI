@@ -11,7 +11,7 @@ const props = defineProps<Props>()
 
 <template>
   <div class="m-2">
-    <div v-if="kind === 'comment'" class="border border-solid border-gray-400">
+    <div v-if="kind === 'comment'" class="border border-solid border-zinc-300">
       <div class="flex justify-between">
         <span class="flex">
           <Icon
@@ -24,7 +24,7 @@ const props = defineProps<Props>()
             }}がコメントしました。</span
           >
         </span>
-        <span class="mr-2 mt-2">{{
+        <span class="mr-2 mt-2 text-zinc-400">{{
           requestDetailStore.dateFormatter(
             requestDetailStore.request.comments[props.index].created_at
           )
@@ -53,7 +53,7 @@ const props = defineProps<Props>()
         :text="true"
       /><!--todo:文字の高さずれるのどうにかする-->
       <span>にしました。</span>
-      <span class="ml-4">{{
+      <span class="ml-4 text-zinc-400">{{
         requestDetailStore.dateFormatter(
           requestDetailStore.request.statuses[props.index].created_at
         )

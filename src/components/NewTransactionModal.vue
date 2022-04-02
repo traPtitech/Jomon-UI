@@ -7,6 +7,7 @@ import { useTagStore } from '../stores/tag'
 import { useTransactionStore } from '../stores/transaction'
 import { useUserStore } from '../stores/user'
 import { TransactionRequest } from '../types/transactionTypes'
+import Button from './Button.vue'
 import VueSelect from './VueSelect.vue'
 
 type Props = { request_id: string } //request_idには申請の詳細画面からモーダルを表示するときだけpropsにIDを渡す。transaction一覧では空文字列を渡す
@@ -52,10 +53,7 @@ function postTransaction() {
       </div>
       <div class="mb-2">
         <span class="text-xl">金額：</span>
-        <input
-          v-model="transaction.amount"
-          class="border border-solid border-black"
-        />円
+        <input v-model="transaction.amount" class="border border-gray-300" />円
       </div>
       <div class="mb-2">
         <span class="text-xl">払い戻し対象者：</span>
@@ -95,9 +93,14 @@ function postTransaction() {
         ></VueSelect>
       </div>
       <div class="text-center">
-        <button @click="postTransaction" class="w-64 text-xl mb-4">
-          入出金記録を作成する
-        </button>
+        <Button
+          @onClick="postTransaction"
+          class="w-64 mb-4"
+          text="text-xl"
+          padding="sm"
+        >
+          入出金記録を作成する</Button
+        >
       </div>
     </div>
   </div>

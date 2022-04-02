@@ -8,6 +8,7 @@ import 'vue-select/dist/vue-select.css'
 import { useGroupStore } from '../stores/group'
 import { useUserStore } from '../stores/user'
 import { Group2, GroupResponse, Member } from '../types/groupTypes'
+import Button from './Button.vue'
 
 const userStore = useUserStore()
 const groupStore = useGroupStore()
@@ -52,31 +53,23 @@ function postRequest() {
 </script>
 
 <template>
-  <div
-    class="bg-white w-240 h-120 absolute z-3 inset-0 m-auto border border-solid border-black"
-  >
+  <div class="bg-white w-240 h-120 absolute z-3 inset-0 m-auto">
     <h1 class="text-3xl text-center mt-4 mb-4">グループの新規作成</h1>
     <div class="flex flex-col justify-between ml-12 text-xl h-4/5">
       <div>
         <span>グループ名</span>
-        <input
-          v-model="group.name"
-          class="border border-solid border-black w-4/5"
-        />
+        <input v-model="group.name" class="border border-gray-300 w-4/5" />
       </div>
       <div>
         <span>詳細：</span>
         <textarea
           v-model="group.description"
-          class="border border-solid border-black resize-none w-4/5"
+          class="border border-gray-300 resize-none w-4/5"
         />
       </div>
       <div>
         <span>予算：</span>
-        <input
-          v-model="group.budget"
-          class="border border-solid border-black"
-        /><!-- //ToDo:バリデーション -->
+        <input v-model="group.budget" class="border border-gray-300" />
       </div>
       <div>
         <span>管理者：</span>
@@ -106,7 +99,14 @@ function postRequest() {
         ></v-select>
       </div>
       <div class="text-center">
-        <button @click="postRequest" class="w-52">グループを作成する</button>
+        <Button
+          @onClick="postRequest"
+          text="text-xl"
+          padding="sm"
+          class="w-48 mb-4"
+        >
+          グループを作成する</Button
+        >
       </div>
     </div>
   </div>

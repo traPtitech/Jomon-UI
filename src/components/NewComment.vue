@@ -31,7 +31,7 @@ function submit() {
     <div class="text-right">
       <Button
         :onClick="submit"
-        text="text-md"
+        fontSize="md"
         padding="sm"
         class="w-24 mr-4 mt-2"
       >

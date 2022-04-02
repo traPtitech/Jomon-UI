@@ -28,7 +28,7 @@ const route = useRoute()
     @click="isModalOpen2 = false"
   ></div>
   <!--作成をやめますかみたいな確認画面出した方がいいかも-->
-  <main class="h-screen">
+  <main class="h-screen text-dark-700 bg-zinc-50">
     <header class="flex shadow min-h-12 w-full items-center">
       <router-link to="/">
         <Logo />

@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<Props>(), { limit: 20 })
     )"
     :key="tag.id"
     :class="index !== 0 ? 'ml-2' : ''"
-    class="border border-solid border-black rounded"
+    class="border border-solid border-dark-600 rounded p-0.5"
     >{{ tag.name }}</span
   >
   <span v-if="limit !== 0 && tags.length > limit"> ...</span>

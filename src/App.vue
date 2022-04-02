@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import NewRequestButton from './components/NewRequestButton.vue'
 import Logo from '/@/components/Logo.vue'
 </script>
 <template>
@@ -15,7 +14,6 @@ import Logo from '/@/components/Logo.vue'
           <router-link to="/groups"><div>グループ一覧</div></router-link>
           <router-link to="/admins"><div>管理ページ</div></router-link>
         </div>
-        <NewRequestButton />
       </div>
     </header>
 

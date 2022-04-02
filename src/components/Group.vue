@@ -13,7 +13,6 @@ const props = defineProps<Props>()
   <router-link :to="'/groups/' + groups[props.index].id">
     <div class="flex justify-around items-center hover:bg-gray-100 h-12">
       <div class="w-1/5 text-center">{{ groups[props.index].name }}</div>
-
       <div class="w-3/5 text-center">
         {{ groups[props.index].description }}
       </div>

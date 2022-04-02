@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
+import Button from '../components/Button.vue'
 import Group from '../components/Group.vue'
 import NewGroupModal from '../components/NewGroupModal.vue'
 import PaginationBar from '../components/PaginationBar.vue'
@@ -31,37 +32,30 @@ function changeIsModalOpen() {
       <div class="text-3xl mt-2 text-center absolute right-1 left-1">
         グループ一覧
       </div>
-      <div class="ml-auto mr-70 mt-4 z-1">
-        <button
-          class="text-xl border border-solid border-black"
-          @click="changeIsModalOpen"
+      <div class="ml-auto mr-40 mt-4 z-1">
+        <Button @onClick="changeIsModalOpen" text="text-lg" padding="md"
+          >グループの新規作成</Button
         >
-          グループの新規作成
-        </button>
       </div>
     </div>
     <!--フィルタリングメニューあってもいい気がする-->
     <div :class="pageIndex === Math.ceil(groupsLength() / 10) ? 'h-136' : ''">
-      <div class="w-2/3 mr-auto ml-auto border-solid border-black border-2">
+      <div class="w-2/3 mr-auto ml-auto border border-zinc-400">
         <div class="flex justify-around items-center bg-gray-200 pt-2 pb-2">
           <div class="w-1/5 text-center">グループ名</div>
           <div class="w-3/5 text-center">詳細</div>
           <div class="w-1/5 text-center">予算</div>
         </div>
         <div
-          class="w-full bg-gray-400 border border-solid border-gray-400 mr-auto ml-auto"
+          class="w-full bg-zinc-400 border border-solid border-zinc-400 mr-auto ml-auto"
         />
         <ul class="w-full mr-auto ml-auto">
-          <li v-for="(group, index) in groupsFilter(pageIndex)" :key="group.id">
+          <li
+            v-for="(group, index) in groupsFilter(pageIndex)"
+            :key="group.id"
+            :class="index === groupsFilter(pageIndex).length - 1 ? '' : 'pb-2'"
+          >
             <Group :index="index" />
-            <div
-              class="w-29/30 bg-gray-400 border border-solid border-gray-400 mr-auto ml-auto"
-              :class="
-                index === groupsFilter(pageIndex).length - 1
-                  ? 'bg-white border-none'
-                  : ''
-              "
-            />
           </li>
         </ul>
       </div>

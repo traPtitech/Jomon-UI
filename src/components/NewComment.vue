@@ -4,6 +4,7 @@ import { ref } from 'vue'
 
 import { useRequestDetailStore } from '../stores/requestDetail'
 import { Comment } from '../types/requestTypes'
+import Button from './Button.vue'
 import MarkdownIt from './MarkdownIt.vue'
 
 const requestDetailStore = useRequestDetailStore()
@@ -24,16 +25,18 @@ function submit() {
   <div class="mt-12 mr-4 ml-4">
     <textarea
       v-model="comment"
-      class="resize-none h-32 w-full"
+      class="resize-none h-32 w-full p-0.5"
       placeholder="コメント"
     ></textarea>
     <div class="text-right">
-      <button
-        class="w-20 border border-solid border-black rounded-md mr-4 mt-2"
-        @click="submit"
+      <Button
+        :onClick="submit"
+        text="text-md"
+        padding="sm"
+        class="w-24 mr-4 mt-2"
       >
         コメントする
-      </button>
+      </Button>
     </div>
     <details>
       <summary>MDプレビュー</summary>

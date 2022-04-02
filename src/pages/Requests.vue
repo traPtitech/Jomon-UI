@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
+import Button from '../components/Button.vue'
 import NewRequestModal from '../components/NewRequestModal.vue'
 import PaginationBar from '../components/PaginationBar.vue'
 import Request from '../components/Request.vue'
@@ -43,12 +44,9 @@ function changeIsModalOpen() {
           申請一覧
         </div>
         <div class="ml-auto mr-40 mt-4 z-1">
-          <button
-            @click="changeIsModalOpen"
-            class="text-xl border border-solid border-black"
+          <Button :onClick="changeIsModalOpen" text="text-lg" padding="md"
+            >申請の新規作成</Button
           >
-            申請の新規作成
-          </button>
         </div>
       </div>
       <RequestFilteringMenu class="mt-4 mb-2" />
@@ -67,7 +65,7 @@ function changeIsModalOpen() {
       >
         <div
           v-if="requestStore.requestsLength() !== 0"
-          class="w-3/4 mt-4 mr-auto ml-auto border-solid border-black border-2"
+          class="w-3/4 mt-4 mr-auto ml-auto shadow"
         >
           <ul class="w-full mr-auto ml-auto">
             <li
@@ -75,14 +73,6 @@ function changeIsModalOpen() {
               :key="request.id"
             >
               <Request :index="index" />
-              <div
-                class="w-29/30 bg-gray-400 border border-solid border-gray-400 mr-auto ml-auto"
-                :class="
-                  index === requestStore.requestsFilter(pageIndex).length - 1
-                    ? 'bg-white border-none'
-                    : ''
-                "
-              />
             </li>
           </ul>
         </div>

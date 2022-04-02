@@ -10,6 +10,7 @@ import { useRequestDetailStore } from '../stores/requestDetail'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
 import { Status } from '../types/requestTypes'
+import Button from './Button.vue'
 import MarkdownIt from './MarkdownIt.vue'
 import NewTagModal from './NewTagModal.vue'
 import StatusChip from './StatusChip.vue'
@@ -135,12 +136,14 @@ function handleModalIsOpen() {
             type="text"
             class="w-100 p-1"
             placeholder="タイトル"
-          /><button
-            class="border border-solid border-black ml-2 mr-2"
-            @click="changeIsFixMode('title')"
+          />
+          <Button
+            @onClick="changeIsFixMode('title')"
+            class="ml-2"
+            text="text-sm"
+            padding="sm"
+            >完了</Button
           >
-            完了
-          </button>
         </div>
         <StatusChip :status="requestDetailStore.request.status" :text="true" />
         <div class="ml-2">
@@ -207,12 +210,13 @@ function handleModalIsOpen() {
             placeholder="グループ"
             class="w-60 inline-block"
           ></VueSelect>
-          <button
-            class="border border-solid border-black ml-2 mr-2"
-            @click="changeIsFixMode('group')"
+          <Button
+            @onClick="changeIsFixMode('group')"
+            class="ml-2 mr-2"
+            text="text-sm"
+            padding="sm"
+            >完了</Button
           >
-            完了
-          </button>
         </div>
         <span class="mr-4"
           >申請者：{{ requestDetailStore.request.created_by }}</span
@@ -241,17 +245,19 @@ function handleModalIsOpen() {
             type="text"
             class="w-30 p-1"
             placeholder="金額"
-          />円<button
-            class="border border-solid border-black ml-2 mr-2"
-            @click="changeIsFixMode('amount')"
+          />円
+          <Button
+            @onClick="changeIsFixMode('amount')"
+            class="ml-2 mr-2"
+            text="text-sm"
+            padding="sm"
+            >完了</Button
           >
-            完了
-          </button>
         </div>
       </div>
     </div>
     <div>
-      <div class="mt-4">
+      <div class="mt-2">
         <div v-if="!(isFixMode === 'tags')" class="ml-12 inline">
           <span>タグ：</span>
           <Tags :tags="requestDetailStore.request.tags" /><button
@@ -272,18 +278,21 @@ function handleModalIsOpen() {
             :closeOnSelect="false"
             class="w-200 inline-block"
           ></VueSelect>
-          <button
-            @click="handleModalIsOpen"
-            class="border border-solid border-black ml-4"
+          <Button
+            @onClick="handleModalIsOpen"
+            class="ml-2 mr-2"
+            text="text-sm"
+            padding="md"
           >
-            タグを新規作成
-          </button>
-          <button
-            class="border border-solid border-black ml-2 mr-2"
-            @click="changeIsFixMode('tags')"
+            タグを新規作成</Button
           >
-            完了
-          </button>
+          <Button
+            @onClick="changeIsFixMode('tags')"
+            class="ml-2"
+            text="text-sm"
+            padding="sm"
+            >完了</Button
+          >
         </div>
       </div>
     </div>
@@ -310,12 +319,14 @@ function handleModalIsOpen() {
           type="text"
           class="resize-none w-200 h-30 p-0"
           placeholder="詳細"
-        /><button
-          class="border border-solid border-black ml-2 mr-2"
-          @click="changeIsFixMode('content')"
+        />
+        <Button
+          @onClick="changeIsFixMode('content')"
+          class="ml-2"
+          text="text-sm"
+          padding="sm"
+          >完了</Button
         >
-          完了
-        </button>
       </div>
       <div class="ml-30">
         <span>払い戻し対象者：</span>
@@ -343,12 +354,13 @@ function handleModalIsOpen() {
             :closeOnSelect="false"
             class="w-100 inline-block"
           ></VueSelect>
-          <button
-            class="border border-solid border-black ml-2 mr-2"
-            @click="changeIsFixMode('targets')"
+          <Button
+            @onClick="changeIsFixMode('targets')"
+            class="ml-2"
+            text="text-sm"
+            padding="sm"
+            >完了</Button
           >
-            完了
-          </button>
         </div>
       </div>
     </div>

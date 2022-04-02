@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
+import Button from '../components/Button.vue'
 import NewComment from '../components/NewComment.vue'
 import NewTransactionModal from '../components/NewTransactionModal.vue'
 import RequestDetail from '../components/RequestDetail.vue'
@@ -34,19 +35,23 @@ function createTransaction() {
       <RequestLogs />
       <div class="w-1/3">
         <div class="flex flex-col mt-8">
-          <button
-            @click="createTransaction"
-            class="w-2/3 border border-solid border-black mb-4 mr-auto ml-auto"
+          <Button
+            :onClick="createTransaction"
+            class="w-2/3 mb-4 mr-auto ml-auto"
+            text="text-md"
+            padding="sm"
           >
             この申請から入出金記録を作成する
-          </button>
-          <button
-            class="w-2/3 border border-solid border-black mr-auto ml-auto"
+          </Button>
+          <Button
+            class="w-2/3 mb-4 mr-auto ml-auto"
+            text="text-md"
+            padding="sm"
           >
             <router-link :to="'/transactions?pageIndex=1&requestID=' + id">
               この申請の入出金記録へ移動
             </router-link>
-          </button>
+          </Button>
         </div>
         <NewComment />
       </div>

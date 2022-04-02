@@ -46,15 +46,14 @@ function createTransaction() {
           >
             この申請から入出金記録を作成する
           </Button>
-          <Button
-            class="w-2/3 mb-4 mr-auto ml-auto"
-            text="text-md"
-            padding="sm"
+          <router-link
+            :to="'/transactions?pageIndex=1&requestID=' + id"
+            class="w-2/3 mr-auto ml-auto"
           >
-            <router-link :to="'/transactions?pageIndex=1&requestID=' + id">
+            <Button class="w-full mb-4" text="text-md" padding="sm">
               この申請の入出金記録へ移動
-            </router-link>
-          </Button>
+            </Button>
+          </router-link>
         </div>
         <NewComment />
       </div>

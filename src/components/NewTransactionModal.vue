@@ -96,7 +96,7 @@ function postTransaction() {
         <Button
           @onClick="postTransaction"
           class="w-64 mb-4"
-          text="text-xl"
+          fontSize="xl"
           padding="sm"
         >
           入出金記録を作成する</Button

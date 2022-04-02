@@ -140,7 +140,7 @@ function handleModalIsOpen() {
           <Button
             @onClick="changeIsFixMode('title')"
             class="ml-2"
-            text="text-sm"
+            fontSize="sm"
             padding="sm"
             >完了</Button
           >
@@ -213,7 +213,7 @@ function handleModalIsOpen() {
           <Button
             @onClick="changeIsFixMode('group')"
             class="ml-2 mr-2"
-            text="text-sm"
+            fontSize="sm"
             padding="sm"
             >完了</Button
           >
@@ -249,7 +249,7 @@ function handleModalIsOpen() {
           <Button
             @onClick="changeIsFixMode('amount')"
             class="ml-2 mr-2"
-            text="text-sm"
+            fontSize="sm"
             padding="sm"
             >完了</Button
           >
@@ -281,7 +281,7 @@ function handleModalIsOpen() {
           <Button
             @onClick="handleModalIsOpen"
             class="ml-2 mr-2"
-            text="text-sm"
+            fontSize="sm"
             padding="md"
           >
             タグを新規作成</Button
@@ -289,7 +289,7 @@ function handleModalIsOpen() {
           <Button
             @onClick="changeIsFixMode('tags')"
             class="ml-2"
-            text="text-sm"
+            fontSize="sm"
             padding="sm"
             >完了</Button
           >
@@ -323,7 +323,7 @@ function handleModalIsOpen() {
         <Button
           @onClick="changeIsFixMode('content')"
           class="ml-2"
-          text="text-sm"
+          fontSize="sm"
           padding="sm"
           >完了</Button
         >
@@ -357,7 +357,7 @@ function handleModalIsOpen() {
           <Button
             @onClick="changeIsFixMode('targets')"
             class="ml-2"
-            text="text-sm"
+            fontSize="sm"
             padding="sm"
             >完了</Button
           >

@@ -189,7 +189,7 @@ function deleteImage(index: number) {
           @onClick="handleTagModalIsOpen"
           class="ml-8"
           padding="sm"
-          text="text-xl"
+          fontSize="xl"
         >
           タグを新規作成</Button
         >
@@ -226,7 +226,7 @@ function deleteImage(index: number) {
       <div class="text-center">
         <Button
           @onClick="postRequest"
-          text="text-xl"
+          fontSize="xl"
           padding="sm"
           class="w-48 mb-4"
         >

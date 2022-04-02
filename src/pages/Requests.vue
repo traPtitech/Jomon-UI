@@ -44,7 +44,7 @@ function changeIsModalOpen() {
           申請一覧
         </div>
         <div class="ml-auto mr-40 mt-4 z-1">
-          <Button :onClick="changeIsModalOpen" text="text-lg" padding="md"
+          <Button :onClick="changeIsModalOpen" fontSize="lg" padding="md"
             >申請の新規作成</Button
           >
         </div>

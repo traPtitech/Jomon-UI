@@ -55,7 +55,7 @@ function addAdmins() {
         multiple
         class="w-1/2 mb-2"
       ></v-select>
-      <Button @onClick="addAdmins" text="text-lg" padding="sm">
+      <Button @onClick="addAdmins" fontSize="lg" padding="sm">
         管理者を削除</Button
       >
     </div>
@@ -67,7 +67,7 @@ function addAdmins() {
         multiple
         class="w-1/2 mb-2"
       ></v-select>
-      <Button @onClick="deleteAdmins" text="text-lg" padding="sm">
+      <Button @onClick="deleteAdmins" fontSize="lg" padding="sm">
         管理者を全て削除</Button
       >
     </div>

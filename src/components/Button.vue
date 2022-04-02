@@ -1,14 +1,7 @@
 <script lang="ts" setup>
 type Props = {
   class?: string
-  text:
-    | 'text-xs'
-    | 'text-sm'
-    | 'text-md'
-    | 'text-lg'
-    | 'text-xl'
-    | 'text-2xl'
-    | 'text-3xl'
+  fontSize: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
   padding: 'sm' | 'md' | 'lg' | 'xl'
 }
 interface Emits {
@@ -16,6 +9,9 @@ interface Emits {
 }
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
+const fontSize = () => {
+  return 'text-' + props.fontSize
+}
 const padding = () => {
   switch (props.padding) {
     case 'sm':
@@ -36,7 +32,7 @@ const padding = () => {
       'hover:bg-zinc-200 rounded-lg border border-zinc-300 border-2 ' +
       props.class +
       ' ' +
-      props.text +
+      fontSize() +
       ' ' +
       padding()
     "

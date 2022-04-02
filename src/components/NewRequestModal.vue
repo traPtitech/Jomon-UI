@@ -14,6 +14,7 @@ import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
 import { File } from '../types/fileTypes'
 import { Request, RequestResponse } from '../types/requestsTypes'
+import Button from './Button.vue'
 import MarkdownIt from './MarkdownIt.vue'
 import NewTagModal from './NewTagModal.vue'
 import VueSelect from './VueSelect.vue'
@@ -113,17 +114,11 @@ function deleteImage(index: number) {
       <span class="text-xl mb-2">申請者：{{ userStore.me.name }}</span>
       <div class="mb-2">
         <span class="text-xl">タイトル：</span>
-        <input
-          v-model="request.title"
-          class="border border-solid border-black w-4/5"
-        />
+        <input v-model="request.title" class="border border-gray-300 w-4/5" />
       </div>
       <div class="mb-2">
         <span class="text-xl">金額：</span>
-        <input
-          v-model="request.amount"
-          class="border border-solid border-black"
-        />円
+        <input v-model="request.amount" class="border border-gray-300" />円
       </div>
       <div class="text-right mr-20 mb-2">
         <VueSelect
@@ -141,7 +136,7 @@ function deleteImage(index: number) {
         <span class="text-xl align-top">詳細：</span>
         <textarea
           v-model="request.content"
-          class="h-60 leading-tight border border-solid border-black resize-none w-4/5 p-1"
+          class="h-60 leading-tight border border-gray-300 resize-none w-4/5 p-1"
         />
       </div>
       <details class="mb-2">
@@ -190,12 +185,14 @@ function deleteImage(index: number) {
           :closeOnSelect="false"
           class="w-2/3 inline-block"
         ></VueSelect>
-        <button
-          @click="handleTagModalIsOpen"
-          class="border border-solid border-black ml-8 text-xl"
+        <Button
+          @onClick="handleTagModalIsOpen"
+          class="ml-8"
+          padding="sm"
+          text="text-xl"
         >
-          タグを新規作成
-        </button>
+          タグを新規作成</Button
+        >
       </div>
       <div class="mb-4">
         <span class="text-xl">画像：</span>
@@ -227,9 +224,14 @@ function deleteImage(index: number) {
         </div>
       </div>
       <div class="text-center">
-        <button @click="postRequest" class="w-32 text-xl mb-4">
-          申請を作成する
-        </button>
+        <Button
+          @onClick="postRequest"
+          text="text-xl"
+          padding="sm"
+          class="w-48 mb-4"
+        >
+          申請を作成する</Button
+        >
       </div>
     </div>
   </div>

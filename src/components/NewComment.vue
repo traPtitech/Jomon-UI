@@ -43,7 +43,7 @@ function submit() {
       <div>
         <MarkdownIt
           :text="comment"
-          :class="comment ? 'border border-solid border-gray-200' : ''"
+          :class="comment ? 'borderd border-gray-200' : ''"
         />
       </div>
     </details>

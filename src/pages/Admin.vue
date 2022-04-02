@@ -4,6 +4,8 @@ import { onMounted, ref } from 'vue'
 import VSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 
+import Button from '../components/Button.vue'
+import Button1 from '../components/Button.vue'
 import { useAdminStore } from '../stores/admin'
 import { useUserStore } from '../stores/user'
 
@@ -53,12 +55,9 @@ function addAdmins() {
         multiple
         class="w-1/2 mb-2"
       ></v-select>
-      <button
-        @click="addAdmins"
-        class="border border-solid border-black rounded-md"
+      <Button @onClick="addAdmins" text="text-lg" padding="sm">
+        管理者を削除</Button
       >
-        管理者に追加
-      </button>
     </div>
     <div class="mt-4">
       <v-select
@@ -68,12 +67,9 @@ function addAdmins() {
         multiple
         class="w-1/2 mb-2"
       ></v-select>
-      <button
-        @click="deleteAdmins"
-        class="border border-solid border-black rounded-md"
+      <Button @onClick="deleteAdmins" text="text-lg" padding="sm">
+        管理者を全て削除</Button
       >
-        管理者から削除
-      </button>
     </div>
   </div>
 </template>

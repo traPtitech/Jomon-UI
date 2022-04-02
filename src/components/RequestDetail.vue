@@ -364,8 +364,5 @@ function handleModalIsOpen() {
         </div>
       </div>
     </div>
-    <div
-      class="w-19/20 border border-solid border-gray-200 bg-gray-200 mr-auto ml-auto mt-4"
-    ></div>
   </div>
 </template>

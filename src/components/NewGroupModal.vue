@@ -101,7 +101,7 @@ function postRequest() {
       <div class="text-center">
         <Button
           @onClick="postRequest"
-          text="text-xl"
+          fontSize="xl"
           padding="sm"
           class="w-48 mb-4"
         >

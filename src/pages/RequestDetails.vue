@@ -11,15 +11,18 @@ import RequestLogs from '../components/RequestLogs.vue'
 import { useFileStore } from '../stores/file'
 import { useGeneralStore } from '../stores/general'
 import { useRequestDetailStore } from '../stores/requestDetail'
+import { useTransactionStore } from '../stores/transaction'
 
 const generalStore = useGeneralStore()
 const requestDetailStore = useRequestDetailStore()
+const transactionStore = useTransactionStore()
 const fileStore = useFileStore()
 const { isModalOpen } = storeToRefs(generalStore)
 const route = useRoute()
 const id = route.params.request_id.toString()
 onMounted(() => {
   requestDetailStore.getRequestDetail(id)
+  transactionStore.getTransactions() //idをparamsに渡して取得
   fileStore.getFile(requestDetailStore.request.files)
 })
 function createTransaction() {

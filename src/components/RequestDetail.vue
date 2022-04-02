@@ -8,6 +8,7 @@ import { useGeneralStore } from '../stores/general'
 import { useGroupStore } from '../stores/group'
 import { useRequestDetailStore } from '../stores/requestDetail'
 import { useTagStore } from '../stores/tag'
+import { useTransactionStore } from '../stores/transaction'
 import { useUserStore } from '../stores/user'
 import { Status } from '../types/requestTypes'
 import Button from './Button.vue'
@@ -21,8 +22,10 @@ const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
+const transactionStore = useTransactionStore()
 const generalStore = useGeneralStore()
 const { isModalOpen2 } = storeToRefs(generalStore)
+const { transactions } = storeToRefs(transactionStore)
 const isFixMode = ref('')
 
 const fixedValue = ref(requestDetailStore.putRequestRequest)
@@ -40,6 +43,12 @@ function changeStatus(status: string) {
   alert('ステータスを' + status + 'に変更しました')
 } //確認ダイアログほしい
 function changeIsFixMode(kind: string) {
+  if (kind !== 'tags' && isFixMode.value === '') {
+    const result = confirm(
+      '入出金記録に紐づいている申請の、タグ以外の情報を変更すると入出金記録の情報にも変更が反映されます。よろしいですか？'
+    )
+    if (!result) return
+  }
   switch (kind) {
     case 'title':
       if (isFixMode.value === 'title') {

@@ -11,7 +11,7 @@ const props = defineProps<Props>()
 
 <template>
   <div class="m-2">
-    <div v-if="kind === 'comment'" class="border border-solid border-zinc-300">
+    <div v-if="kind === 'comment'" class="border border-zinc-300">
       <div class="flex justify-between">
         <span class="flex">
           <Icon

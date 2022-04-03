@@ -3,10 +3,10 @@ import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
-import Button from '../components/Button.vue'
 import Group from '../components/Group.vue'
 import NewGroupModal from '../components/NewGroupModal.vue'
-import PaginationBar from '../components/PaginationBar.vue'
+import Button from '../components/shared/Button.vue'
+import PaginationBar from '../components/shared/PaginationBar.vue'
 import { useGeneralStore } from '../stores/general'
 import { useGroupStore } from '../stores/group'
 

@@ -8,7 +8,8 @@ import 'vue-select/dist/vue-select.css'
 import { useGroupStore } from '../stores/group'
 import { useUserStore } from '../stores/user'
 import { Group2, GroupResponse, Member } from '../types/groupTypes'
-import Button from './Button.vue'
+import Button from './shared/Button.vue'
+import Modal from './shared/Modal.vue'
 
 const userStore = useUserStore()
 const groupStore = useGroupStore()
@@ -53,9 +54,9 @@ function postRequest() {
 </script>
 
 <template>
-  <div class="bg-white w-240 h-120 absolute z-3 inset-0 m-auto">
+  <Modal :width="240" :height="120" :layer="1">
     <h1 class="text-3xl text-center mt-4 mb-4">グループの新規作成</h1>
-    <div class="flex flex-col justify-between ml-12 text-xl h-4/5">
+    <div class="flex flex-col justify-between ml-12 mr-12 text-xl h-4/5">
       <div>
         <span>グループ名</span>
         <input v-model="group.name" class="border border-gray-300 w-4/5" />
@@ -109,5 +110,5 @@ function postRequest() {
         >
       </div>
     </div>
-  </div>
+  </Modal>
 </template>

@@ -26,7 +26,7 @@ const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const fileStore = useFileStore()
 const { isModalOpen2 } = storeToRefs(generalStore)
-const imageExtensions = /.(jpg|png|jpeg|tiff|jfif|tif|webp|vif)$/
+const imageExtensions = /.(jpg|png|jpeg|tiff|jfif|tif|webp|avif)$/
 const inputImageRef = ref()
 
 const selectedTemplate = ref(null)

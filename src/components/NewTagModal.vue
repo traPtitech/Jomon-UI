@@ -27,7 +27,7 @@ function postTag() {
       </div>
       <div class="text-center">
         <Button @onClick="postTag" fontSize="xl" padding="sm" class="w-48 mb-4">
-          申請を作成する</Button
+          タグを作成する</Button
         >
       </div>
     </div>

@@ -28,7 +28,7 @@ const { isModalOpen, isModalOpen2 } = storeToRefs(generalStore)
     :class="isModalOpen2 ? 'fixed h-screen w-screen z-4 bg-gray-500/50' : ''"
   >
     <div
-      :class="`bg-white absolute z-3 inset-0 m-auto overflow-y-scroll w-${props.width} h-${props.height} z-5
+      :class="`bg-white absolute z-3 inset-0 m-auto w-${props.width} h-${props.height} z-5
       }`"
     >
       <slot></slot>

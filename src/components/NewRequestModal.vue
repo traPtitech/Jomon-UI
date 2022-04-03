@@ -26,7 +26,7 @@ const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const fileStore = useFileStore()
-const { isModalOpen2 } = storeToRefs(generalStore)
+const { isModalOpen, isModalOpen2 } = storeToRefs(generalStore)
 const imageExtensions = /.(jpg|png|jpeg|tiff|jfif|tif|webp|avif)$/
 const inputImageRef = ref()
 
@@ -64,8 +64,9 @@ async function postRequest() {
     for (let i = 0; i < images.value.length; i++) {
       fileStore.postFile(id, images.value[i].name, images.value[i].src)
     }
+    isModalOpen.value = false
   } else {
-    alert('金額が不正です')
+    alert('形式が不正です')
   }
 }
 function handleImageChange(e: Event) {

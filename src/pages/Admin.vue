@@ -57,7 +57,7 @@ function addAdmins() {
         class="w-1/2 mb-2"
       ></VueSelect>
       <Button @onClick="addAdmins" fontSize="lg" padding="sm">
-        管理者を削除</Button
+        管理者を追加</Button
       >
     </div>
     <div class="mt-4">
@@ -69,7 +69,7 @@ function addAdmins() {
         class="w-1/2 mb-2"
       ></VueSelect>
       <Button @onClick="deleteAdmins" fontSize="lg" padding="sm">
-        管理者を全て削除</Button
+        管理者を削除</Button
       >
     </div>
   </div>

@@ -6,7 +6,7 @@ import { useRequestStore } from '../stores/request'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
 import { Params } from '../types/requestsTypes'
-import VueSelect from './VueSelect.vue'
+import VueSelect from './shared/VueSelect.vue'
 
 const requestStore = useRequestStore()
 const userStore = useUserStore()

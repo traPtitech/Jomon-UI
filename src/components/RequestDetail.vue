@@ -11,12 +11,12 @@ import { useTagStore } from '../stores/tag'
 import { useTransactionStore } from '../stores/transaction'
 import { useUserStore } from '../stores/user'
 import { Status } from '../types/requestTypes'
-import Button from './Button.vue'
-import MarkdownIt from './MarkdownIt.vue'
 import NewTagModal from './NewTagModal.vue'
-import StatusChip from './StatusChip.vue'
-import Tags from './Tags.vue'
-import VueSelect from './VueSelect.vue'
+import Button from './shared/Button.vue'
+import MarkdownIt from './shared/MarkdownIt.vue'
+import StatusChip from './shared/StatusChip.vue'
+import Tags from './shared/Tags.vue'
+import VueSelect from './shared/VueSelect.vue'
 
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
@@ -127,7 +127,7 @@ function handleModalIsOpen() {
 <template>
   <NewTagModal v-if="isModalOpen2" />
   <div class="w-full">
-    <div class="flex justify-between text-center mt-6 ml-12">
+    <div class="flex justify-between text-center pt-6 ml-12">
       <div class="flex">
         <div v-if="!(isFixMode === 'title')">
           <span class="text-3xl">{{ requestDetailStore.request.title }}</span

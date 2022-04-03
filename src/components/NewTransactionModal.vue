@@ -7,7 +7,7 @@ import { useTagStore } from '../stores/tag'
 import { useTransactionStore } from '../stores/transaction'
 import { useUserStore } from '../stores/user'
 import { TransactionRequest } from '../types/transactionTypes'
-import VueSelect from './VueSelect.vue'
+import VueSelect from './shared/VueSelect.vue'
 
 type Props = { request_id: string } //request_idには申請の詳細画面からモーダルを表示するときだけpropsにIDを渡す。transaction一覧では空文字列を渡す
 const props = defineProps<Props>()

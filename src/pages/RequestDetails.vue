@@ -3,11 +3,11 @@ import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
-import Button from '../components/Button.vue'
 import NewComment from '../components/NewComment.vue'
 import NewTransactionModal from '../components/NewTransactionModal.vue'
 import RequestDetail from '../components/RequestDetail.vue'
 import RequestLogs from '../components/RequestLogs.vue'
+import Button from '../components/shared/Button.vue'
 import { useFileStore } from '../stores/file'
 import { useGeneralStore } from '../stores/general'
 import { useRequestDetailStore } from '../stores/requestDetail'
@@ -32,7 +32,7 @@ function createTransaction() {
 
 <template>
   <NewTransactionModal v-if="isModalOpen" :request_id="id" />
-  <div class="mt-4">
+  <div>
     <RequestDetail />
     <div
       class="w-19/20 border border-gray-200 bg-gray-200 mr-auto ml-auto mt-4"

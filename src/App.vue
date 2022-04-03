@@ -1,32 +1,14 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 
-import Icon from './components/Icon.vue'
-import { useGeneralStore } from './stores/general'
+import Icon from './components/shared/Icon.vue'
+import Logo from './components/shared/Logo.vue'
 import { useUserStore } from './stores/user'
-import Logo from '/@/components/Logo.vue'
 
-const generalStore = useGeneralStore()
 const userStore = useUserStore()
-const { isModalOpen, isModalOpen2 } = storeToRefs(generalStore)
 const route = useRoute()
 </script>
 <template>
-  <div
-    :class="
-      isModalOpen ? 'absolute h-screen w-screen z-2 bg-gray-500 opacity-50' : ''
-    "
-    @click="isModalOpen = false"
-  ></div>
-  <div
-    :class="
-      isModalOpen2
-        ? 'absolute h-screen w-screen z-4 bg-gray-500 opacity-50'
-        : ''
-    "
-    @click="isModalOpen2 = false"
-  ></div>
   <!--作成をやめますかみたいな確認画面出した方がいいかも-->
   <main class="h-screen text-dark-700 bg-zinc-50">
     <header class="flex shadow min-h-12 w-full items-center">

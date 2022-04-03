@@ -2,8 +2,8 @@
 import { storeToRefs } from 'pinia'
 
 import { useRequestStore } from '../stores/request'
-import StatusChip from './StatusChip.vue'
-import Tags from './Tags.vue'
+import StatusChip from './shared/StatusChip.vue'
+import Tags from './shared/Tags.vue'
 
 const requestStore = useRequestStore()
 const { requests, dateFormatter } = storeToRefs(requestStore)

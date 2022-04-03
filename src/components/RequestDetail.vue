@@ -45,7 +45,7 @@ function changeStatus(status: string) {
 function changeIsFixMode(kind: string) {
   if (kind !== 'tags' && isFixMode.value === '') {
     const result = confirm(
-      '入出金記録に紐づいている申請の、タグ以外の情報を変更すると入出金記録の情報にも変更が反映されます。よろしいですか？'
+      '入出金記録に紐づいている申請のこの情報を変更すると、入出金記録の情報にも変更が反映されます。よろしいですか？'
     )
     if (!result) return
   }

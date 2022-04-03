@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-import { Tag, TagResponse, TagsResponse } from '../types/tagTypes'
+import { TagResponse, TagsResponse } from '../types/tagTypes'
 
 export const useTagStore = defineStore('tag', {
   state: () => ({
@@ -9,21 +9,18 @@ export const useTagStore = defineStore('tag', {
       {
         id: '3fa85f64-5717-4562-b3fc-2c963f66afa5',
         name: '2020講習会',
-        description: '2020年度講習会',
         created_at: '2020-02-12T08:01:37.838Z',
         updated_at: '2020-02-12T08:01:37.838Z'
       },
       {
         id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         name: '2021講習会',
-        description: '2021年度講習会',
         created_at: '2021-02-12T08:01:37.838Z',
         updated_at: '2021-02-12T08:01:37.838Z'
       },
       {
         id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
         name: '2022講習会',
-        description: '2022年度講習会',
         created_at: '2022-02-12T08:01:37.838Z',
         updated_at: '2022-02-12T08:01:37.838Z'
       }
@@ -39,14 +36,7 @@ export const useTagStore = defineStore('tag', {
       const response: TagResponse = await axios.get('/api/tags/' + id)
       this.tag = response
     },
-    async postTag(tag: Tag) {
-      await axios.post('/api/tags', tag)
-      this.getTags()
-    },
-    async putTag(id: string, tag: Tag) {
-      await axios.put('/api/tags/' + id, tag)
-      this.getTags()
-    },
+
     async deleteTag(id: string) {
       await axios.delete('/api/tags' + id)
       this.getTags()

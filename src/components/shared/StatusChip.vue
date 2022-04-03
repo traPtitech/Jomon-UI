@@ -64,7 +64,7 @@ function handleMouseLeave() {
     <div
       @mouseover="handleMouseOver"
       @mouseleave="handleMouseLeave"
-      class="ml-4 mr-4"
+      class="px-4 flex items-center"
     >
       <CheckCircleIcon
         v-if="status === 'accepted'"

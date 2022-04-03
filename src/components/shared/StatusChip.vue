@@ -61,7 +61,7 @@ function handleMouseLeave() {
       {{ statusToJpn(status) }}
     </div>
     <div
-      class="ml-4 mr-4"
+      class="px-4 flex items-center"
       @mouseleave="handleMouseLeave"
       @mouseover="handleMouseOver">
       <CheckCircleIcon

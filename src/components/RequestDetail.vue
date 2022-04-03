@@ -128,7 +128,7 @@ function handleModalIsOpen() {
   <NewTagModal v-if="isModalOpen2" />
   <div class="w-full">
     <div class="flex justify-between text-center pt-6 ml-12">
-      <div class="flex">
+      <div class="flex items-center">
         <div v-if="!(isFixMode === 'title')">
           <span class="text-3xl">{{ requestDetailStore.request.title }}</span
           ><button
@@ -155,48 +155,53 @@ function handleModalIsOpen() {
           >
         </div>
         <StatusChip :status="requestDetailStore.request.status" :text="true" />
-        <div class="ml-2">
-          <button
+        <div>
+          <Button
             v-if="
               requestDetailStore.request.status === 'fix_required' ||
               (userStore.me.admin &&
                 requestDetailStore.request.status === 'accepted')
             "
-            @click="changeStatus('submitted')"
-            class="border border-solid border-black rounded-md mr-4 mt-2"
+            class="mr-4 mt-2"
+            fontSize="sm"
+            padding="sm"
+            @onClick="changeStatus('submitted')"
           >
-            承認待ちにする
-          </button>
-          <button
+            承認待ちにする</Button
+          >
+          <Button
             v-if="
               userStore.me.admin &&
               requestDetailStore.request.status === 'submitted'
             "
-            @click="changeStatus('fix_required')"
-            class="border border-solid border-black rounded-md mr-4"
+            class="mr-4 mt-2"
+            fontSize="sm"
+            padding="sm"
+            @onClick="changeStatus('fix_required')"
+            >要修正にする</Button
           >
-            要修正にする
-          </button>
-          <button
+          <Button
             v-if="
               userStore.me.admin &&
               requestDetailStore.request.status === 'submitted'
             "
-            @click="changeStatus('accepted')"
-            class="border border-solid border-black rounded-md mr-4"
+            class="mr-4 mt-2"
+            fontSize="sm"
+            padding="sm"
+            @onClick="changeStatus('accepted')"
+            >承認済みにする</Button
           >
-            承認済みにする
-          </button>
-          <button
+          <Button
             v-if="
               userStore.me.admin &&
               requestDetailStore.request.status === 'submitted'
             "
-            @click="changeStatus('rejected')"
-            class="border border-solid border-black rounded-md mr-4"
+            class="mr-4 mt-2"
+            fontSize="sm"
+            padding="sm"
+            @onClick="changeStatus('rejected')"
+            >却下する</Button
           >
-            却下する
-          </button>
         </div>
       </div>
       <div>

@@ -33,7 +33,6 @@ function changeIsModalOpen() {
 
 <template>
   <NewTransactionModal v-if="isModalOpen" request_id="" />
-  <div v-if="isModalOpen">aaaaaaaa</div>
   <div class="h-20 relative">
     <BookOpenIcon class="w-12 ml-40 mt-4" />
     <span class="font-bold text-2xl absolute top-6">入出金記録</span>

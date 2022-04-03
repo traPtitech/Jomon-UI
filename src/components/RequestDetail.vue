@@ -43,7 +43,7 @@ function changeStatus(status: string) {
   alert('ステータスを' + status + 'に変更しました')
 } //確認ダイアログほしい
 function changeIsFixMode(kind: string) {
-  if (kind !== 'tags' && isFixMode.value === '') {
+  if (kind !== 'tags' && isFixMode.value !== kind) {
     const result = confirm(
       '入出金記録に紐づいている申請のこの情報を変更すると、入出金記録の情報にも変更が反映されます。よろしいですか？'
     )

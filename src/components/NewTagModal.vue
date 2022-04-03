@@ -1,11 +1,15 @@
 <script lang="ts" setup>
 import axios from 'axios'
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
+import { useGeneralStore } from '../stores/general'
 import { useTagStore } from '../stores/tag'
 import Button from './shared/Button.vue'
 import Modal from './shared/Modal.vue'
 
+const generalStore = useGeneralStore()
+const { isModalOpen2 } = storeToRefs(generalStore)
 const tagStore = useTagStore()
 const tagName = ref('')
 
@@ -14,7 +18,10 @@ async function postTagAPI(tag: string) {
   tagStore.getTags()
 }
 function postTag() {
-  postTagAPI(tagName.value)
+  if (tagName.value !== '') {
+    postTagAPI(tagName.value)
+    isModalOpen2.value = false
+  }
 }
 </script>
 

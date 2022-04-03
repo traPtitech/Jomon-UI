@@ -3,7 +3,8 @@ import axios from 'axios'
 import { ref } from 'vue'
 
 import { useTagStore } from '../stores/tag'
-import Button from './Button.vue'
+import Button from './shared/Button.vue'
+import Modal from './shared/Modal.vue'
 
 const tagStore = useTagStore()
 const tagName = ref('')
@@ -18,7 +19,7 @@ function postTag() {
 </script>
 
 <template>
-  <div class="bg-white w-160 h-80 absolute z-5 inset-0 m-auto">
+  <Modal :width="160" :height="80" :layer="2">
     <h1 class="text-3xl text-center mt-4 mb-4">タグの新規作成</h1>
     <div class="flex flex-col justify-around ml-12 mr-12 text-xl h-4/5">
       <div>
@@ -31,5 +32,5 @@ function postTag() {
         >
       </div>
     </div>
-  </div>
+  </Modal>
 </template>

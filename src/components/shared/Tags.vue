@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { TagResponse } from '../types/tagTypes'
+import { TagResponse } from '../../types/tagTypes'
 
 type Props = { tags: TagResponse[]; limit: number } //1-indexedでlimitを指定
 const props = withDefaults(defineProps<Props>(), { limit: 20 })

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { useRequestDetailStore } from '../stores/requestDetail'
-import Icon from './Icon.vue'
-import MarkdownIt from './MarkdownIt.vue'
-import StatusChip from './StatusChip.vue'
+import Icon from './shared/Icon.vue'
+import MarkdownIt from './shared/MarkdownIt.vue'
+import StatusChip from './shared/StatusChip.vue'
 
 const requestDetailStore = useRequestDetailStore()
 type Props = { kind: string; index: number }

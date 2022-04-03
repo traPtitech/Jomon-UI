@@ -4,8 +4,8 @@ import { ref } from 'vue'
 
 import { useRequestDetailStore } from '../stores/requestDetail'
 import { Comment } from '../types/requestTypes'
-import Button from './Button.vue'
-import MarkdownIt from './MarkdownIt.vue'
+import Button from './shared/Button.vue'
+import MarkdownIt from './shared/MarkdownIt.vue'
 
 const requestDetailStore = useRequestDetailStore()
 const comment = ref('')

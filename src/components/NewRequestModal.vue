@@ -14,10 +14,11 @@ import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
 import { File } from '../types/fileTypes'
 import { Request, RequestResponse } from '../types/requestsTypes'
-import Button from './Button.vue'
-import MarkdownIt from './MarkdownIt.vue'
 import NewTagModal from './NewTagModal.vue'
-import VueSelect from './VueSelect.vue'
+import Button from './shared/Button.vue'
+import MarkdownIt from './shared/MarkdownIt.vue'
+import Modal from './shared/Modal.vue'
+import VueSelect from './shared/VueSelect.vue'
 
 const generalStore = useGeneralStore()
 const requestStore = useRequestStore()
@@ -106,9 +107,7 @@ function deleteImage(index: number) {
 
 <template>
   <NewTagModal v-if="isModalOpen2" />
-  <div
-    class="bg-white w-300 h-180 absolute z-3 inset-0 m-auto overflow-y-scroll"
-  >
+  <Modal :width="300" :height="170" :layer="1">
     <h1 class="text-3xl text-center mt-4 mb-4">申請の新規作成</h1>
     <div class="flex flex-col justify-between ml-12 h-4/5">
       <span class="text-xl mb-2">申請者：{{ userStore.me.name }}</span>
@@ -234,5 +233,5 @@ function deleteImage(index: number) {
         >
       </div>
     </div>
-  </div>
+  </Modal>
 </template>

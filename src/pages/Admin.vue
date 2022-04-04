@@ -3,10 +3,10 @@ import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 import 'vue-select/dist/vue-select.css'
 
-import Button from '../components/shared/Button.vue'
-import VueSelect from '../components/shared/VueSelect.vue'
 import { useAdminStore } from '../stores/admin'
 import { useUserStore } from '../stores/user'
+import Button from '/@/components/shared/Button.vue'
+import VueSelect from '/@/components/shared/VueSelect.vue'
 
 const adminStore = useAdminStore()
 const userStore = useUserStore()
@@ -22,25 +22,24 @@ onMounted(() => {
   }
 })
 function deleteAdmins() {
-  for (let i = 0; i < deleteList.value.length; i++) {
-    adminStore.deleteAdmin(deleteList.value[i])
-  }
+  deleteList.value.forEach(id => {
+    adminStore.deleteAdmin(id)
+  })
 }
 function addAdmins() {
-  for (let i = 0; i < addList.value.length; i++) {
-    adminStore.postAdmin({ id: addList.value[i] })
-  }
+  addList.value.forEach(id => {
+    adminStore.postAdmin({ id: id })
+  })
 }
 </script>
+
 <template>
   <div class="ml-4" v-if="me.admin">
-    <h1 class="text-3xl text-center mt-4 mb-4">管理ページ</h1>
+    <h1 class="text-3xl text-center my-4">管理ページ</h1>
     <div>
-      <ul class="flex">
-        <li v-for="admin in admins" :key="admin" class="mr-4">
-          <div
-            class="border border-solid border-black pr-2 pl-2 rounded-md inline-block text-center"
-          >
+      <ul class="flex gap-2">
+        <li v-for="admin in admins" :key="admin">
+          <div class="border border-black px-2 rounded text-center">
             {{ admin }}
           </div>
         </li>
@@ -56,8 +55,8 @@ function addAdmins() {
         multiple
         class="w-1/2 mb-2"
       ></VueSelect>
-      <Button @onClick="addAdmins" fontSize="lg" padding="sm">
-        管理者を追加</Button
+      <Button @click.stop="addAdmins" fontSize="lg" padding="sm">
+        追加する管理者を選択</Button
       >
     </div>
     <div class="mt-4">
@@ -68,8 +67,8 @@ function addAdmins() {
         multiple
         class="w-1/2 mb-2"
       ></VueSelect>
-      <Button @onClick="deleteAdmins" fontSize="lg" padding="sm">
-        管理者を削除</Button
+      <Button @Click.stop="deleteAdmins" fontSize="lg" padding="sm">
+        削除する管理者を選択</Button
       >
     </div>
   </div>

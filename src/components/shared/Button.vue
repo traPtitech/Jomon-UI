@@ -1,18 +1,13 @@
 <script lang="ts" setup>
 type Props = {
-  class?: string
   fontSize: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
   padding: 'sm' | 'md' | 'lg' | 'xl'
 }
-interface Emits {
-  (e: 'onClick'): void
-}
 const props = defineProps<Props>()
-const emit = defineEmits<Emits>()
-const fontSize = () => {
+const fontSize = (() => {
   return 'text-' + props.fontSize
-}
-const padding = () => {
+})()
+const padding = (() => {
   switch (props.padding) {
     case 'sm':
       return 'p-1'
@@ -23,19 +18,12 @@ const padding = () => {
     case 'xl':
       return 'p-8'
   }
-}
+})()
 </script>
+
 <template>
   <button
-    @click="emit('onClick')"
-    :class="
-      'hover:bg-zinc-200 rounded-lg border border-zinc-300 border-2 ' +
-      props.class +
-      ' ' +
-      fontSize() +
-      ' ' +
-      padding()
-    "
+    :class="`hover:bg-zinc-200 rounded-md border border-zinc-300' ${fontSize} ${padding}`"
   >
     <slot></slot>
   </button>

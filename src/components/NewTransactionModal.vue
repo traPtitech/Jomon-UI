@@ -1,23 +1,27 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
+import { useGeneralStore } from '../stores/general'
 import { useGroupStore } from '../stores/group'
 import { useRequestDetailStore } from '../stores/requestDetail'
 import { useTagStore } from '../stores/tag'
 import { useTransactionStore } from '../stores/transaction'
 import { useUserStore } from '../stores/user'
 import { TransactionRequest } from '../types/transactionTypes'
+import Button from './shared/Button.vue'
+import Modal from './shared/Modal.vue'
 import VueSelect from './shared/VueSelect.vue'
 
 type Props = { request_id: string } //request_idには申請の詳細画面からモーダルを表示するときだけpropsにIDを渡す。transaction一覧では空文字列を渡す
 const props = defineProps<Props>()
-
+const generalStore = useGeneralStore()
 const requestDetailStore = useRequestDetailStore()
 const transactionStore = useTransactionStore()
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
-
+const { isModalOpen } = storeToRefs(generalStore)
 const transaction = ref({
   amount: props.request_id ? requestDetailStore.request.amount : '',
   targets: props.request_id ? requestDetailStore.targetIds : ([] as string[]),
@@ -25,26 +29,23 @@ const transaction = ref({
   tags: props.request_id ? requestDetailStore.tagIds : ([] as string[]),
   group: props.request_id ? requestDetailStore.request.group.id : null
 } as TransactionRequest)
-
 function postTransaction() {
   if (
     /^[1-9][0-9]*$|^0$/.test(transaction.value.amount.toString()) &&
     transaction.value.targets.length > 0
   ) {
     transactionStore.postTransaction(transaction.value)
+    isModalOpen.value = false
   } else {
-    alert('金額が不正です')
+    alert('不正です')
   }
 }
 </script>
 
 <template>
-  <div
-    class="bg-white w-280 h-140 absolute z-3 inset-0 m-auto overflow-y-scroll"
-  >
+  <Modal :width="280" :height="140" :layer="1">
     <h1 class="text-3xl text-center mt-4 mb-4">入出金記録の新規作成</h1>
-
-    <div class="flex flex-col justify-between ml-12 h-4/5">
+    <div class="flex flex-col justify-between ml-12 mr-12 h-4/5">
       <div class="text-xl">
         <span>紐づけられている申請：</span>
         <span v-if="request_id">{{ requestDetailStore.request.title }}</span>
@@ -52,10 +53,7 @@ function postTransaction() {
       </div>
       <div class="mb-2">
         <span class="text-xl">金額：</span>
-        <input
-          v-model="transaction.amount"
-          class="border border-solid border-black"
-        />円
+        <input v-model="transaction.amount" class="border border-gray-300" />円
       </div>
       <div class="mb-2">
         <span class="text-xl">払い戻し対象者：</span>
@@ -95,10 +93,15 @@ function postTransaction() {
         ></VueSelect>
       </div>
       <div class="text-center">
-        <button @click="postTransaction" class="w-64 text-xl mb-4">
-          入出金記録を作成する
-        </button>
+        <Button
+          @onClick="postTransaction"
+          fontSize="xl"
+          padding="sm"
+          class="w-64 mb-4"
+        >
+          入出金記録を作成する</Button
+        >
       </div>
     </div>
-  </div>
+  </Modal>
 </template>

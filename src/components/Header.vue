@@ -13,15 +13,15 @@ type User = {
 interface Props {
   me: User
 }
-const props = defineProps<Props>()
+defineProps<Props>()
 </script>
 
 <template>
-  <header class="flex shadow h-12 w-full items-center">
+  <header class="flex h-12 shadow w-full items-center">
     <router-link to="/">
       <Logo />
     </router-link>
-    <div class="flex flex-1 px-2 justify-between h-full">
+    <div class="flex h-full flex-1 px-2 justify-between">
       <div class="flex gap-2 items-center">
         <router-link to="/requests?pageIndex=1">
           <span>申請一覧</span>
@@ -32,7 +32,7 @@ const props = defineProps<Props>()
         <router-link to="/groups?pageIndex=1">
           <span>グループ一覧</span>
         </router-link>
-        <router-link to="/admins" v-if="me.admin">
+        <router-link v-if="me.admin" to="/admins">
           <span>管理ページ</span>
         </router-link>
       </div>

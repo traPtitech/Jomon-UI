@@ -20,12 +20,17 @@ const paddingClass = computed(() => {
       return 'p-4'
     case 'xl':
       return 'p-8'
+    default: {
+      const n: never = props.padding
+      throw new Error(`unexpected padding: ${n}`)
+    }
   }
 })
 </script>
 
 <template>
-  <button :class="`hover:bg-zinc-200 rounded-md border border-zinc-300 ${fontSizeClass} ${paddingClass}`">
+  <button
+    :class="`hover:bg-zinc-200 rounded-md border border-zinc-300 ${fontSizeClass} ${paddingClass}`">
     <slot></slot>
   </button>
 </template>

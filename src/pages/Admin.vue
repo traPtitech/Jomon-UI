@@ -37,7 +37,7 @@ const addAdmins = () => {
 </script>
 
 <template>
-  <div class="ml-4" v-if="me.admin">
+  <div v-if="me.admin" class="ml-4">
     <h1 class="my-4 text-center text-3xl">管理ページ</h1>
     <div>
       <ul class="flex gap-2">
@@ -51,26 +51,24 @@ const addAdmins = () => {
     <div class="mt-4">
       <VueSelect
         v-model="addList"
+        class="mb-2 w-1/2"
         label="name"
+        multiple
         :options="users"
         placeholder="追加する管理者を選択"
-        :reduce="(user:any) => user.name"
-        multiple
-        class="mb-2 w-1/2"
-      ></VueSelect>
-      <Button @click.stop="addAdmins" fontSize="lg" padding="sm">
+        :reduce="(user:any) => user.name"></VueSelect>
+      <Button font-size="lg" padding="sm" @click.stop="addAdmins">
         追加する管理者を選択</Button
       >
     </div>
     <div class="mt-4">
       <VueSelect
         v-model="deleteList"
-        :options="admins"
-        placeholder="削除する管理者を選択"
-        multiple
         class="mb-2 w-1/2"
-      ></VueSelect>
-      <Button @click.stop="deleteAdmins" fontSize="lg" padding="sm">
+        multiple
+        :options="admins"
+        placeholder="削除する管理者を選択"></VueSelect>
+      <Button font-size="lg" padding="sm" @click.stop="deleteAdmins">
         削除する管理者を選択</Button
       >
     </div>

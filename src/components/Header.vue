@@ -10,7 +10,7 @@ type User = {
   updated_at: string
   deleted_at: string
 }
-type Props = {
+interface Props {
   me: User
 }
 const props = defineProps<Props>()

@@ -1,13 +1,16 @@
 <script lang="ts" setup>
-type Props = {
+import { computed } from 'vue'
+
+interface Props {
   fontSize: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
   padding: 'sm' | 'md' | 'lg' | 'xl'
 }
 const props = defineProps<Props>()
-const fontSize = (() => {
+
+const fontSizeClass = computed(() => {
   return 'text-' + props.fontSize
-})()
-const padding = (() => {
+})
+const paddingClass = computed(() => {
   switch (props.padding) {
     case 'sm':
       return 'p-1'
@@ -18,13 +21,11 @@ const padding = (() => {
     case 'xl':
       return 'p-8'
   }
-})()
+})
 </script>
 
 <template>
-  <button
-    :class="`hover:bg-zinc-200 rounded-md border border-zinc-300' ${fontSize} ${padding}`"
-  >
+  <button :class="`hover:bg-zinc-200 rounded-md border border-zinc-300 ${fontSizeClass} ${paddingClass}`">
     <slot></slot>
   </button>
 </template>

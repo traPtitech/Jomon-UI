@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-type Props = {
+interface Props {
   name: string
 }
 const props = defineProps<Props>()
@@ -9,6 +9,6 @@ const props = defineProps<Props>()
   <img
     :src="'https://q.trap.jp/api/v3/public/icon/' + name"
     alt="icon"
-    class="rounded-1/2 h-full p-1"
-  /><!--heightをなんとかする-->
+    class="h-full rounded-1/2 p-1"
+  />
 </template>

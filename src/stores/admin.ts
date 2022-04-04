@@ -1,24 +1,28 @@
-import axios from 'axios'
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-type AdminRequest = {
-  id: string
-}
+// SwaggerでSchemaに書けば型名を指定できる
+import apis,{ InlineObject2, User } from '/@/lib/apis'
 
-export const useAdminStore = defineStore('admin', {
-  state: () => ({
-    admins: ['mehm8128', 'mehm81', 'mehm'] //new Array<string>()
-  }),
-  actions: {
-    async getAdmins() {
-      const response: string[] = await axios.get('/api/admins')
-      this.admins = response
-    },
-    async postAdmin(admin: AdminRequest) {
-      await axios.post('/api/admins', admin)
-    },
-    async deleteAdmin(admin: string) {
-      await axios.delete('/api/admins/' + admin)
+export const useAdminStore = defineStore('admin', () => {
+  // admins: ['mehm8128', 'mehm81', 'mehm']
+  const admins = ref<User[]>([]);
+  const isAdminFetched = ref(false)
+
+  const fetchAdmins = async () => {
+    admins.value = (await apis.adminsGet()).data // Swaggerをちゃんと書けば型付きで情報が取れる
+  }
+  const postAdmin = async (admin: InlineObject2) => {
+      await apis.adminsPost(admin)
     }
+  const deleteAdmin = async (admin: string) => {
+      await apis.adminsUserIDDelete(admin)
+    }
+  return {
+    admins,
+    isAdminFetched,
+    fetchAdmins,
+    postAdmin,
+    deleteAdmin
   }
 })

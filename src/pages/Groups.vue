@@ -3,22 +3,24 @@ import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
-import Group from '../components/Group.vue'
-import NewGroupModal from '../components/NewGroupModal.vue'
-import Button from '../components/shared/Button.vue'
-import PaginationBar from '../components/shared/PaginationBar.vue'
-import { useGeneralStore } from '../stores/general'
-import { useGroupStore } from '../stores/group'
+import Group from '/@/components/Group.vue'
+import NewGroupModal from '/@/components/NewGroupModal.vue'
+import Button from '/@/components/shared/Button.vue'
+import PaginationBar from '/@/components/shared/PaginationBar.vue'
+import { useGeneralStore } from '/@/stores/general'
+import { useGroupStore } from '/@/stores/group'
 
 const route = useRoute()
 const pageIndex = Number(route.query.pageIndex)
 const generalStore = useGeneralStore()
 const groupStore = useGroupStore()
 const { isModalOpen } = storeToRefs(generalStore)
-const { groupsFilter, groupsLength } = storeToRefs(groupStore)
+const { groupsLength, isGroupFetched } = storeToRefs(groupStore)
 
 onMounted(() => {
-  groupStore.getGroups()
+  if (isGroupFetched.value) {
+    groupStore.fetchGroups()
+  }
 })
 function changeIsModalOpen() {
   isModalOpen.value = !isModalOpen.value
@@ -33,13 +35,13 @@ function changeIsModalOpen() {
         グループ一覧
       </div>
       <div class="ml-auto mr-40 mt-4 z-1">
-        <Button @onClick="changeIsModalOpen" fontSize="lg" padding="md"
+        <Button font-size="lg" padding="md" @click.stop="changeIsModalOpen"
           >グループの新規作成</Button
         >
       </div>
     </div>
     <!--フィルタリングメニューあってもいい気がする-->
-    <div :class="pageIndex === Math.ceil(groupsLength() / 10) ? 'h-136' : ''">
+    <div :class="pageIndex === Math.ceil(groupsLength / 10) ? 'h-136' : ''">
       <div class="w-2/3 mr-auto ml-auto border border-zinc-400">
         <div class="flex justify-around items-center bg-gray-200 pt-2 pb-2">
           <div class="w-1/5 text-center">グループ名</div>
@@ -47,14 +49,16 @@ function changeIsModalOpen() {
           <div class="w-1/5 text-center">予算</div>
         </div>
         <div
-          class="w-full bg-zinc-400 border border-solid border-zinc-400 mr-auto ml-auto"
-        />
+          class="w-full bg-zinc-400 border border-solid border-zinc-400 mr-auto ml-auto" />
         <ul class="w-full mr-auto ml-auto">
           <li
-            v-for="(group, index) in groupsFilter(pageIndex)"
+            v-for="(group, index) in groupStore.groupsFilter(pageIndex)"
             :key="group.id"
-            :class="index === groupsFilter(pageIndex).length - 1 ? '' : 'pb-2'"
-          >
+            :class="
+              index === groupStore.groupsFilter(pageIndex).length - 1
+                ? ''
+                : 'pb-2'
+            ">
             <Group :index="index" />
           </li>
         </ul>
@@ -62,11 +66,10 @@ function changeIsModalOpen() {
     </div>
     <div class="mt-4">
       <PaginationBar
-        :pageIndex="pageIndex"
-        :itemLength="groupsLength()"
-        :unit="10"
+        :item-length="groupsLength"
         kind="groups"
-      />
+        :page-index="pageIndex"
+        :unit="10" />
     </div>
   </div>
 </template>

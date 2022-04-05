@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 
-import { useGroupStore } from '../stores/group'
+import { useGroupStore } from '/@/stores/group'
 
 const groupStore = useGroupStore()
 const { groups } = storeToRefs(groupStore)

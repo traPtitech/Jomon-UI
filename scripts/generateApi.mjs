@@ -8,7 +8,7 @@ import addApis from './addApis.mjs'
 const execPromise = promisify(exec)
 
 const SWAGGER_PATH =
-  'https://raw.githubusercontent.com/traPtitech/Jomon/v2/docs/swagger.yaml'
+  'https://raw.githubusercontent.com/traPtitech/Jomon/swagger-latest/docs/swagger.yaml'
 const GENERATED_DIR = 'src/lib/apis/generated'
 
 // eslint-disable-next-line no-undef

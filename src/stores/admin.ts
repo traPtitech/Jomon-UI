@@ -2,12 +2,12 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 // SwaggerでSchemaに書けば型名を指定できる
-import type { InlineObject2, User } from '/@/lib/apis'
+import type { InlineObject2 } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export const useAdminStore = defineStore('admin', () => {
   // admins: ['mehm8128', 'mehm81', 'mehm']
-  const admins = ref<User[]>([])
+  const admins = ref<string[]>([])
   const isAdminFetched = ref(false)
 
   const fetchAdmins = async () => {

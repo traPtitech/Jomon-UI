@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import Logo from './shared/Logo.vue'
+import Logo from './shared/JomonLogo.vue'
 import UserIcon from './shared/UserIcon.vue'
 
 type User = {

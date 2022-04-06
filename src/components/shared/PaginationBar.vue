@@ -33,25 +33,26 @@ const props = defineProps<Props>()
         :key="index"
         class="mr-2 ml-2 w-8 h-8 block hover:border hover:border-zinc-400 flex justify-center items-center rounded-lg"
         :class="index + 1 === pageIndex ? 'bg-blue-300 cursor-default' : ''"
-        :to="`/${kind}/?pageIndex=` + (index + 1).toString()"
-      >
+        :to="`/${kind}/?pageIndex=` + (index + 1).toString()">
         <span>{{ index + 1 }}</span></router-link
       >
       <span v-if="Math.ceil(itemLength / unit) >= 9">...</span>
 
-      <router-link
-        v-for="index in pageIndex <= 5 ? null : [...Array(5).keys()]"
+      <div
         v-if="
           Math.ceil(itemLength / unit) >= 10 &&
           6 <= pageIndex &&
           pageIndex <= Math.ceil(itemLength / unit) - 5
-        "
-        class="mr-2 ml-2 w-8 h-8 block hover:border hover:border-zinc-400 flex justify-center items-center rounded-lg"
-        :class="index === 2 ? 'bg-blue-300 cursor-default' : ''"
-        :to="`/${kind}/?pageIndex=` + (index + pageIndex - 2).toString()"
-      >
-        <span>{{ index + pageIndex - 2 }}</span>
-      </router-link>
+        ">
+        <router-link
+          v-for="index in pageIndex <= 5 ? null : [...Array(5).keys()]"
+          :key="index"
+          class="mr-2 ml-2 w-8 h-8 block hover:border hover:border-zinc-400 flex justify-center items-center rounded-lg"
+          :class="index === 2 ? 'bg-blue-300 cursor-default' : ''"
+          :to="`/${kind}/?pageIndex=` + (index + pageIndex - 2).toString()">
+          <span>{{ index + pageIndex - 2 }}</span>
+        </router-link>
+      </div>
 
       <span v-if="Math.ceil(itemLength / unit) >= 9">...</span>
       <router-link
@@ -70,8 +71,7 @@ const props = defineProps<Props>()
         :to="
           `/${kind}/?pageIndex=` +
           (Math.ceil(itemLength / unit) - index).toString()
-        "
-      >
+        ">
         <span>{{ Math.ceil(itemLength / unit) - index }}</span></router-link
       >
       <router-link

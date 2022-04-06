@@ -57,35 +57,28 @@ function handleMouseLeave() {
   <div class="relative inline">
     <div
       v-if="flag && !text"
-      class="absolute top-6 left-6 w-16 h-6 bg-zinc-300 rounded-md z-1 shadow-md text-center"
-    >
+      class="absolute top-6 left-6 w-16 h-6 bg-zinc-300 rounded-md z-1 shadow-md text-center">
       {{ statusToJpn(status) }}
     </div>
     <div
       @mouseover="handleMouseOver"
       @mouseleave="handleMouseLeave"
-      class="px-4 flex items-center"
-    >
+      class="px-4 flex items-center">
       <CheckCircleIcon
         v-if="status === 'accepted'"
-        class="text-green-500 w-8 inline-block"
-      />
+        class="text-green-500 w-8 inline-block" />
       <ExclamationIcon
         v-else-if="status === 'submitted'"
-        class="text-yellow-500 w-8 inline-block"
-      />
+        class="text-yellow-500 w-8 inline-block" />
       <XCircleIcon
         v-else-if="status === 'fix_required'"
-        class="text-red-500 w-8 inline-block"
-      />
+        class="text-red-500 w-8 inline-block" />
       <CloudUploadIcon
-        v-else-if="status === 'submitted'"
-        class="text-gray-500 w-8 inline-block"
-      />
+        v-else-if="status === 'rejected'"
+        class="text-gray-500 w-8 inline-block" />
       <ThumbUpIcon
         v-else-if="status === 'completed'"
-        class="text-gray-500 w-8 inline-block"
-      />
+        class="text-gray-500 w-8 inline-block" />
       <span v-if="text === true" class="align-top">{{
         statusToJpn(status)
       }}</span>

@@ -1,3 +1,4 @@
+import { createPinia } from 'pinia'
 import 'virtual:windi-devtools'
 import 'virtual:windi.css'
 

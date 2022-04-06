@@ -1,33 +1,19 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 
-import Icon from './components/shared/Icon.vue'
-import Logo from './components/shared/Logo.vue'
+import Header from './components/Header.vue'
 import { useUserStore } from './stores/user'
 
 const userStore = useUserStore()
+const { me } = storeToRefs(userStore)
 const route = useRoute()
 </script>
+
 <template>
   <!--作成をやめますかみたいな確認画面出した方がいいかも-->
-  <main class="h-screen text-dark-700 bg-zinc-50">
-    <header class="flex shadow min-h-12 w-full items-center relative">
-      <router-link to="/">
-        <Logo />
-      </router-link>
-      <div class="flex flex-1 px-2 justify-between">
-        <div class="flex gap-2 items-center">
-          <router-link to="/requests?pageIndex=1"
-            ><span>申請一覧</span></router-link
-          >
-          <router-link to="/transactions"
-            ><span>入出金記録一覧</span></router-link
-          >
-          <router-link to="/groups"><span>グループ一覧</span></router-link>
-        </div>
-        <Icon :name="userStore.me.name" />
-      </div>
-    </header>
+  <main class="h-screen">
+    <Header :me="me" />
 
     <router-view :key="route.fullPath" /><!--ページング処理時の再描画を促す -->
   </main>

@@ -1,78 +1,90 @@
-import axios from 'axios'
 import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
 
-import {
-    Group, GroupResponse, GroupsResponse, Member, MembersResponse, OwnersResponse
-} from '../types/groupTypes'
+import type { Group, PostGroup } from '/@/lib/apis'
+import apis from '/@/lib/apis'
 
-export const useGroupStore = defineStore('group', {
-  state: () => ({
-    groups: [
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: 'SysAd',
-        description: 'SysAd班',
-        budget: 250000,
-        created_at: '2022-01-25T14:06:32.381Z',
-        updated_at: '2022-01-25T14:06:32.381Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: 'Game',
-        description: 'Game班',
-        budget: 50000,
-        created_at: '2022-01-27T14:06:32.381Z',
-        updated_at: '2022-01-27T14:06:32.381Z'
-      }
-    ], //new Array<GroupResponse>()
-    group: {} as GroupResponse,
-    groupMembers: new Array<Member>(),
-    groupOwners: new Array<Member>()
-  }),
-  actions: {
-    async getGroups() {
-      const response: GroupsResponse = await axios.get('/api/groups')
-      this.groups = response.groups
-    },
-    async postGroup(group: Group) {
-      await axios.post('/api/groups', group)
-      this.getGroups()
-    },
-    async putGroup(group: Group, id: string) {
-      await axios.put('/api/groups' + id, group)
-      this.getGroups()
-    },
-    async deleteGroup(id: string) {
-      await axios.delete('/api/groups' + id)
-      this.getGroups()
-    },
-    async getGroupMembers(id: string) {
-      const response: MembersResponse = await axios.get(
-        '/api/groups' + id + '/members'
-      )
-      this.groupMembers = response.members
-    },
-    async postGroupMember(id: string, member: Member) {
-      await axios.post('/api/groups' + id + '/members', member)
-      this.getGroupMembers(id)
-    },
-    async deleteGroupMember(id: string, memberId: string) {
-      await axios.delete('/api/groups' + id + '/members' + memberId)
-      this.getGroupMembers(id)
-    },
-    async getGroupOwners(id: string) {
-      const response: OwnersResponse = await axios.get(
-        '/api/groups' + id + '/owners'
-      )
-      this.groupOwners = response.oweners
-    },
-    async postGroupOwner(id: string, owner: Member) {
-      await axios.post('/api/groups' + id + '/owners', owner)
-      this.getGroupOwners(id)
-    },
-    async deleteGroupOwner(id: string, ownerId: string) {
-      await axios.delete('/api/groups' + id + '/owners' + ownerId)
-      this.getGroupOwners(id)
+export const useGroupStore = defineStore('group', () => {
+  const groups = ref<Group[]>([
+    {
+      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+      name: 'SysAd',
+      description: 'SysAd班',
+      budget: 250000,
+      created_at: '2022-04-05T14:02:15.431Z',
+      updated_at: '2022-04-05T14:02:15.431Z'
     }
+  ])
+  const group = ref<Group>({})
+  const groupMembers = ref<string[]>([])
+  const groupOwners = ref<string[]>([])
+  const isGroupFetched = ref<boolean>(false)
+  const groupsLength = computed(() => {
+    return groups.value.length
+  })
+
+  const groupsFilter = (index: number) => {
+    return omitGroupDescription.value.slice((index - 1) * 10, index * 10)
+  }
+  const omitGroupDescription = computed(() => {
+    const returnGroups: Group[] = groups.value
+    for (let i = 0; i < groups.value.length; i++) {
+      if (returnGroups[i].description!.length > 100) {
+        returnGroups[i].description =
+          returnGroups[i].description!.slice(0, 100) + '...'
+      }
+    }
+    return returnGroups
+  })
+
+  const fetchGroups = async () => {
+    groups.value = (await apis.groupsGet()).data.groups!
+  }
+  const postGroup = async (group: PostGroup) => {
+    return (await apis.groupsPost(group)).data
+  }
+  const putGroup = async (group: PostGroup, id: string) => {
+    await apis.groupsGroupIDPut(id, group)
+  }
+  const deleteGroup = async (id: string) => {
+    await apis.groupsGroupIDDelete(id)
+  }
+  const fetchGroupMembers = async (id: string) => {
+    groupMembers.value = (await apis.groupsGroupIDMembersGet(id)).data.members!
+  }
+  const fetchGroupOwners = async (id: string) => {
+    groupOwners.value = (await apis.groupsGroupIDOwnersGet(id)).data.owners!
+  }
+  const postGroupOwner = async (id: string, owner: string) => {
+    await apis.groupsGroupIDOwnersPost(id, { id: owner })
+  }
+  const postGroupMember = async (id: string, member: string) => {
+    await apis.groupsGroupIDMembersPost(id, { id: member })
+  }
+  const deleteGroupMember = async (id: string, member: string) => {
+    await apis.groupsGroupIDMembersMemberIDDelete(id, member)
+  }
+  const deleteGroupOwner = async (id: string, owner: string) => {
+    await apis.groupsGroupIDOwnersOwnerIDDelete(id, owner)
+  }
+
+  return {
+    groups,
+    group,
+    groupMembers,
+    groupOwners,
+    groupsLength,
+    isGroupFetched,
+    groupsFilter,
+    fetchGroups,
+    postGroup,
+    putGroup,
+    deleteGroup,
+    fetchGroupMembers,
+    fetchGroupOwners,
+    postGroupOwner,
+    postGroupMember,
+    deleteGroupMember,
+    deleteGroupOwner
   }
 })

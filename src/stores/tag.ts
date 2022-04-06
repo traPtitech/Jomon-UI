@@ -36,7 +36,6 @@ export const useTagStore = defineStore('tag', {
       const response: TagResponse = await axios.get('/api/tags/' + id)
       this.tag = response
     },
-
     async deleteTag(id: string) {
       await axios.delete('/api/tags' + id)
       this.getTags()

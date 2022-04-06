@@ -1,0 +1,77 @@
+<script lang="ts" setup>
+import { storeToRefs } from 'pinia'
+import { onMounted, ref } from 'vue'
+import 'vue-select/dist/vue-select.css'
+
+import { useAdminStore } from '../stores/admin'
+import { useUserStore } from '../stores/user'
+import Button from '/@/components/shared/Button.vue'
+import VueSelect from '/@/components/shared/VueSelect.vue'
+
+const adminStore = useAdminStore()
+const userStore = useUserStore()
+const { admins, isAdminFetched } = storeToRefs(adminStore)
+const { users, me } = storeToRefs(userStore)
+const addList = ref([] as string[])
+const deleteList = ref([] as string[])
+
+onMounted(() => {
+  if (me.value.admin) {
+    if (isAdminFetched.value) {
+      adminStore.fetchAdmins()
+    }
+    userStore.getUsers()
+  }
+})
+
+const deleteAdmins = () => {
+  deleteList.value.forEach(id => {
+    adminStore.deleteAdmin(id)
+  })
+}
+const addAdmins = () => {
+  addList.value.forEach(id => {
+    adminStore.postAdmin({ id: id })
+  })
+}
+</script>
+
+<template>
+  <div v-if="me.admin" class="ml-4">
+    <h1 class="my-4 text-center text-3xl">管理ページ</h1>
+    <div>
+      <ul class="flex gap-2">
+        <li v-for="admin in admins" :key="admin">
+          <div class="border border-black rounded text-center px-2">
+            {{ admin }}
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="mt-4">
+      <VueSelect
+        v-model="addList"
+        class="mb-2 w-1/2"
+        label="name"
+        multiple
+        :options="users"
+        placeholder="追加する管理者を選択"
+        :reduce="(user:any) => user.name"></VueSelect>
+      <Button font-size="lg" padding="sm" @click.stop="addAdmins">
+        追加する管理者を選択</Button
+      >
+    </div>
+    <div class="mt-4">
+      <VueSelect
+        v-model="deleteList"
+        class="mb-2 w-1/2"
+        multiple
+        :options="admins"
+        placeholder="削除する管理者を選択"></VueSelect>
+      <Button font-size="lg" padding="sm" @click.stop="deleteAdmins">
+        削除する管理者を選択</Button
+      >
+    </div>
+  </div>
+  <div v-else>権限がありません。</div>
+</template>

@@ -1,45 +1,23 @@
-import axios from 'axios'
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-import { TagResponse, TagsResponse } from '../types/tagTypes'
+import type { Tag } from '/@/lib/apis'
+import apis from '/@/lib/apis'
 
-export const useTagStore = defineStore('tag', {
-  state: () => ({
-    tags: [
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa5',
-        name: '2020講習会',
-        created_at: '2020-02-12T08:01:37.838Z',
-        updated_at: '2020-02-12T08:01:37.838Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        name: '2021講習会',
-        created_at: '2021-02-12T08:01:37.838Z',
-        updated_at: '2021-02-12T08:01:37.838Z'
-      },
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-        name: '2022講習会',
-        created_at: '2022-02-12T08:01:37.838Z',
-        updated_at: '2022-02-12T08:01:37.838Z'
-      }
-    ], //new Array<TagResponse>()
-    tag: {} as TagResponse
-  }),
-  actions: {
-    async getTags() {
-      const response: TagsResponse = await axios.get('/api/tags')
-      this.tags = response.tags
-    },
-    async getTag(id: string) {
-      const response: TagResponse = await axios.get('/api/tags/' + id)
-      this.tag = response
-    },
+export const useTagStore = defineStore('tag', () => {
+  const tags = ref<Tag[]>([])
+  const tag = ref<Tag>({})
 
-    async deleteTag(id: string) {
-      await axios.delete('/api/tags' + id)
-      this.getTags()
-    }
+  const fetchTags = async () => {
+    tags.value = (await apis.tagsGet()).data.tags!
+  }
+  const fetchTag = async (id: string) => {
+    tag.value = (await apis.tagsTagIDGet(id)).data
+  }
+  const postTag = async (tag: Tag) => {
+    await apis.tagsPost(tag)
+  }
+  const deleteTag = async (id: string) => {
+    await apis.tagsTagIDDelete(id)
   }
 })

@@ -8,7 +8,6 @@ import { useGeneralStore } from '../stores/general'
 import { useGroupStore } from '../stores/group'
 import { useRequestDetailStore } from '../stores/requestDetail'
 import { useTagStore } from '../stores/tag'
-import { useTransactionStore } from '../stores/transaction'
 import { useUserStore } from '../stores/user'
 import { Status } from '../types/requestTypes'
 import { dateFormatter } from '../utiles/dateFormatter'
@@ -23,10 +22,8 @@ const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
-const transactionStore = useTransactionStore()
 const generalStore = useGeneralStore()
 const { isModalOpen2 } = storeToRefs(generalStore)
-const { transactions } = storeToRefs(transactionStore)
 const isFixMode = ref('')
 
 const fixedValue = ref(requestDetailStore.putRequestRequest)

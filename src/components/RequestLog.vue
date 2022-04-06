@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { useRequestDetailStore } from '../stores/requestDetail'
 import { dateFormatter } from '../utiles/dateFormatter'
-import Icon from './shared/Icon.vue'
 import MarkdownIt from './shared/MarkdownIt.vue'
 import StatusChip from './shared/StatusChip.vue'
+import UserIcon from './shared/UserIcon.vue'
 
 const requestDetailStore = useRequestDetailStore()
 type Props = { kind: string; index: number }
@@ -14,32 +14,13 @@ const props = defineProps<Props>()
   <div class="m-2">
     <div v-if="kind === 'comment'" class="border border-zinc-300">
       <div class="flex justify-between">
-        <span class="flex">
-          <Icon
+        <span class="flex h-12 items-center">
+          <UserIcon
             class="ml-2 mt-2"
             :name="requestDetailStore.request.comments![props.index].user!" />
           <span class="ml-2 mt-2">
             {{
               requestDetailStore.request.comments![props.index].user!
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -73,25 +54,6 @@ const props = defineProps<Props>()
         :name="requestDetailStore.request.statuses![props.index].created_by!" />
       <span
         >{{requestDetailStore.request.statuses![props.index].created_by!
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

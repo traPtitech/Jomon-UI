@@ -24,7 +24,7 @@ const userStore = useUserStore()
 const { isModalOpen } = storeToRefs(generalStore)
 onMounted(() => {
   requestStore.fetchRequests()
-  tagStore.getTags()
+  tagStore.fetchTags()
   groupStore.fetchGroups()
   userStore.fetchUsers()
   userStore.fetchMe()

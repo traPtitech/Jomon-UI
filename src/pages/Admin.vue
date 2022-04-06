@@ -25,14 +25,10 @@ onMounted(() => {
 })
 
 const deleteAdmins = () => {
-  deleteList.value.forEach(id => {
-    adminStore.deleteAdmin(id)
-  })
+  adminStore.deleteAdmins(deleteList.value)
 }
 const addAdmins = () => {
-  addList.value.forEach(id => {
-    adminStore.postAdmin({ id: id })
-  })
+  adminStore.postAdmins(addList.value)
 }
 </script>
 
@@ -41,7 +37,7 @@ const addAdmins = () => {
     <h1 class="my-4 text-center text-3xl">管理ページ</h1>
     <div>
       <ul class="flex gap-2">
-        <li v-for="admin in admins" :key="admin.name">
+        <li v-for="admin in admins" :key="admin">
           <div class="border border-black rounded text-center px-2">
             {{ admin }}
           </div>

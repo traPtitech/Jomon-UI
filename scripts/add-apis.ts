@@ -1,6 +1,7 @@
+import type { SourceFile } from 'ts-morph'
 import { Project } from 'ts-morph'
 
-const generateBaseAPI = async sourceFile => {
+const generateBaseAPI = async (sourceFile: SourceFile) => {
   const classes = sourceFile.getClasses()
   const apiClasses = classes.filter(c => {
     const baseClass = c.getBaseClass()
@@ -27,7 +28,7 @@ const generateBaseAPI = async sourceFile => {
   await sourceFile.save()
 }
 
-const addApis = async dir => {
+export const addApis = async (dir: string) => {
   const project = new Project()
   project.addSourceFilesAtPaths(`${dir}/**/*.ts`)
 
@@ -35,5 +36,3 @@ const addApis = async dir => {
 
   await generateBaseAPI(sourceFile)
 }
-
-export default addApis

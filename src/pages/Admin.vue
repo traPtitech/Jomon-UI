@@ -20,7 +20,7 @@ onMounted(() => {
     if (isAdminFetched.value) {
       adminStore.fetchAdmins()
     }
-    userStore.getUsers()
+    userStore.fetchUsers()
   }
 })
 

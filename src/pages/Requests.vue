@@ -26,8 +26,8 @@ onMounted(() => {
   requestStore.fetchRequests()
   tagStore.getTags()
   groupStore.fetchGroups()
-  userStore.getUsers()
-  userStore.getMe()
+  userStore.fetchUsers()
+  userStore.fetchMe()
 })
 function changeIsModalOpen() {
   isModalOpen.value = !isModalOpen.value

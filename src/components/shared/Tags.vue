@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { TagResponse } from '../../types/tagTypes'
+import { Tag } from '/@/lib/apis'
 
-type Props = { tags: TagResponse[]; limit: number } //1-indexedでlimitを指定
+type Props = { tags: Tag[]; limit: number } //1-indexedでlimitを指定
 const props = withDefaults(defineProps<Props>(), { limit: 20 })
 </script>
 <template>

@@ -4,7 +4,6 @@ import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 import Group from '/@/components/Group.vue'
-import NewGroupModal from '/@/components/NewGroupModal.vue'
 import Button from '/@/components/shared/Button.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import { useGeneralStore } from '/@/stores/general'
@@ -28,16 +27,17 @@ function changeIsModalOpen() {
 </script>
 
 <template>
-  <NewGroupModal v-if="isModalOpen" />
   <div>
     <div class="flex relative mt-2 mb-2">
       <div class="text-3xl mt-2 text-center absolute right-1 left-1">
         グループ一覧
       </div>
       <div class="ml-auto mr-40 mt-4 z-1">
-        <Button font-size="lg" padding="md" @click.stop="changeIsModalOpen"
-          >グループの新規作成</Button
-        >
+        <router-link to="/new">
+          <Button font-size="lg" padding="md" @click.stop="changeIsModalOpen">
+            グループの新規作成
+          </Button>
+        </router-link>
       </div>
     </div>
     <!--フィルタリングメニューあってもいい気がする-->

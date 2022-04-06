@@ -1,10 +1,15 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-import { Request } from '../types/requestsTypes'
 import {
-    Comment, Log, Request2, RequestDetailResponse, Status, TargetResponse
+  Comment,
+  Log,
+  Request2,
+  RequestDetailResponse,
+  Status,
+  TargetResponse
 } from '../types/requestTypes'
+import { Request } from '../types/requestsTypes'
 
 export const useRequestDetailStore = defineStore('requestDetail', {
   state: () => ({

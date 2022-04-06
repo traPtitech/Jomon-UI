@@ -27,7 +27,7 @@ const transaction = ref({
   targets: props.request_id ? requestDetailStore.targetIds : ([] as string[]),
   request_id: props.request_id,
   tags: props.request_id ? requestDetailStore.tagIds : ([] as string[]),
-  group: props.request_id ? requestDetailStore.request.group.id : null
+  group: props.request_id ? requestDetailStore.request.group!.id : null
 } as TransactionRequest)
 function postTransaction() {
   if (
@@ -65,8 +65,7 @@ function postTransaction() {
           placeholder="払い戻し対象者"
           multiple
           :closeOnSelect="false"
-          class="w-2/3 inline-block"
-        ></VueSelect>
+          class="w-2/3 inline-block"></VueSelect>
       </div>
       <div class="mb-2">
         <span class="text-xl">グループ：</span>
@@ -76,8 +75,7 @@ function postTransaction() {
           :reduce="(group:any) => group.id"
           label="name"
           placeholder="グループ"
-          class="w-1/3 inline-block"
-        ></VueSelect>
+          class="w-1/3 inline-block"></VueSelect>
       </div>
       <div class="mb-2">
         <span class="text-xl">タグ：</span>
@@ -89,16 +87,14 @@ function postTransaction() {
           placeholder="タグ"
           multiple
           :closeOnSelect="false"
-          class="w-2/3 inline-block"
-        ></VueSelect>
+          class="w-2/3 inline-block"></VueSelect>
       </div>
       <div class="text-center">
         <Button
-          @onClick="postTransaction"
+          @click.stop="postTransaction"
           fontSize="xl"
           padding="sm"
-          class="w-64 mb-4"
-        >
+          class="w-64 mb-4">
           入出金記録を作成する</Button
         >
       </div>

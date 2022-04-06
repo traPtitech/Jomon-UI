@@ -1,3 +1,4 @@
+import type { Tag } from '../lib/apis'
 import { GroupResponse } from './groupTypes'
 import { TagResponse } from './tagTypes'
 
@@ -40,7 +41,7 @@ export type Request2 = {
   title: string
   content: string
   targets: string[]
-  tags: TagResponse[]
+  tags: Tag[]
   group: string | null
 }
 

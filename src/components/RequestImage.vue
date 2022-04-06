@@ -13,8 +13,7 @@ const fileStore = useFileStore()
           :key="file.file"
           alt="file.name"
           class="w-2/3"
-          :src="file.file"
-        />
+          :src="file.file" />
       </details>
     </div>
     <div v-else class="text-center mr-auto ml-auto">画像はありません</div>

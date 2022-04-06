@@ -21,9 +21,9 @@ const { isModalOpen } = storeToRefs(generalStore)
 const route = useRoute()
 const id = route.params.request_id.toString()
 onMounted(() => {
-  requestDetailStore.getRequestDetail(id)
+  requestDetailStore.fetchRequestDetail(id)
   transactionStore.getTransactions() //idをparamsに渡して取得
-  fileStore.getFile(requestDetailStore.request.files)
+  fileStore.getFile(requestDetailStore.request.files!)
 })
 function createTransaction() {
   isModalOpen.value = true
@@ -35,8 +35,7 @@ function createTransaction() {
   <div>
     <RequestDetail />
     <div
-      class="w-19/20 border border-gray-200 bg-gray-200 mr-auto ml-auto mt-4"
-    ></div>
+      class="w-19/20 border border-gray-200 bg-gray-200 mr-auto ml-auto mt-4" />
     <div class="flex">
       <RequestLogs />
       <div class="w-1/3">
@@ -45,14 +44,12 @@ function createTransaction() {
             :onClick="createTransaction"
             class="w-2/3 mb-4 mr-auto ml-auto"
             fontSize="md"
-            padding="sm"
-          >
+            padding="sm">
             この申請から入出金記録を作成する
           </Button>
           <router-link
             :to="'/transactions?pageIndex=1&requestID=' + id"
-            class="w-2/3 mr-auto ml-auto"
-          >
+            class="w-2/3 mr-auto ml-auto">
             <Button class="w-full mb-4" fontSize="md" padding="sm">
               この申請の入出金記録へ移動
             </Button>

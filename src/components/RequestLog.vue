@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useRequestDetailStore } from '../stores/requestDetail'
+import { dateFormatter } from '../utiles/dateFormatter'
 import Icon from './shared/Icon.vue'
 import MarkdownIt from './shared/MarkdownIt.vue'
 import StatusChip from './shared/StatusChip.vue'
@@ -15,47 +16,42 @@ const props = defineProps<Props>()
       <div class="flex justify-between">
         <span class="flex">
           <Icon
-            :name="requestDetailStore.request.comments[props.index].user"
-            class="ml-2 mt-2"
-          />
+            :name="requestDetailStore.request.comments![props.index].user!"
+            class="ml-2 mt-2" />
           <span class="ml-2 mt-2">
             {{
-              requestDetailStore.request.comments[props.index].user
+              requestDetailStore.request.comments![props.index].user!
             }}がコメントしました。</span
           >
         </span>
         <span class="mr-2 mt-2 text-zinc-400">{{
-          requestDetailStore.dateFormatter(
-            requestDetailStore.request.comments[props.index].created_at
+          dateFormatter(
+            requestDetailStore.request.comments![props.index].created_at!
           )
         }}</span>
       </div>
       <div class="ml-12 mb-2">
         <span class="align-top">コメント：</span
         ><MarkdownIt
-          :text="requestDetailStore.request.comments[props.index].comment"
-          class="inline-block"
-        />
+          :text="requestDetailStore.request.comments![props.index].comment!"
+          class="inline-block" />
       </div>
     </div>
     <div v-if="kind === 'statusChange'" class="w-9/10 ml-8 flex">
       <Icon
-        :name="requestDetailStore.request.statuses[props.index].created_by"
-        class="mr-2"
-      />
+        :name="requestDetailStore.request.statuses![props.index].created_by!"
+        class="mr-2" />
       <span
-        >{{
-          requestDetailStore.request.statuses[props.index].created_by
+        >{{requestDetailStore.request.statuses![props.index].created_by!
         }}が申請の状態を</span
       >
       <StatusChip
-        :status="requestDetailStore.request.statuses[props.index].status"
-        :text="true"
-      /><!--todo:文字の高さずれるのどうにかする-->
+        :status="requestDetailStore.request.statuses![props.index].status!"
+        :text="true!" /><!--todo:文字の高さずれるのどうにかする-->
       <span>にしました。</span>
       <span class="ml-4 text-zinc-400">{{
-        requestDetailStore.dateFormatter(
-          requestDetailStore.request.statuses[props.index].created_at
+        dateFormatter(
+          requestDetailStore.request.statuses![props.index].created_at!
         )
       }}</span>
     </div>

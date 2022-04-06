@@ -49,7 +49,7 @@ const images = ref([] as File[])
 
 async function postRequestAPI(request: Request) {
   const response: RequestResponse = await axios.post('/api/requests', request)
-  requestStore.getRequests()
+  requestStore.fetchRequests()
   return response.id
 }
 
@@ -128,24 +128,21 @@ function deleteImage(index: number) {
           :reduce="(template:any) => template.value"
           label="name"
           placeholder="テンプレートを選択"
-          class="w-1/3 inline-block"
-        >
+          class="w-1/3 inline-block">
         </VueSelect>
       </div>
       <div>
         <span class="text-xl align-top">詳細：</span>
         <textarea
           v-model="request.content"
-          class="h-60 leading-tight border border-gray-300 resize-none w-4/5 p-1"
-        />
+          class="h-60 leading-tight border border-gray-300 resize-none w-4/5 p-1" />
       </div>
       <details class="mb-2">
         <summary>MDプレビュー</summary>
         <!--幅を広くしたいけどなぜかできない-->
         <div
           :class="request.content ? 'border border-solid border-gray-200' : ''"
-          class="pl-2 pr-2 w-4/5"
-        >
+          class="pl-2 pr-2 w-4/5">
           <MarkdownIt :text="request.content" class="w-full" />
         </div>
       </details>
@@ -159,8 +156,7 @@ function deleteImage(index: number) {
           placeholder="払い戻し対象者"
           multiple
           :closeOnSelect="false"
-          class="w-2/3 inline-block"
-        ></VueSelect>
+          class="w-2/3 inline-block"></VueSelect>
       </div>
       <div class="mb-2">
         <span class="text-xl">グループ：</span>
@@ -170,8 +166,7 @@ function deleteImage(index: number) {
           :reduce="(group:any) => group.id"
           label="name"
           placeholder="グループ"
-          class="w-1/3 inline-block"
-        ></VueSelect>
+          class="w-1/3 inline-block"></VueSelect>
       </div>
       <div class="mb-2">
         <span class="text-xl">タグ：</span>
@@ -183,14 +178,12 @@ function deleteImage(index: number) {
           placeholder="タグ"
           multiple
           :closeOnSelect="false"
-          class="w-2/3 inline-block"
-        ></VueSelect>
+          class="w-2/3 inline-block"></VueSelect>
         <Button
-          @onClick="handleTagModalIsOpen"
+          @click.stop="handleTagModalIsOpen"
           class="ml-8"
           padding="sm"
-          fontSize="xl"
-        >
+          fontSize="xl">
           タグを新規作成</Button
         >
       </div>
@@ -201,23 +194,20 @@ function deleteImage(index: number) {
           @change="e => handleImageChange(e)"
           multiple
           accept="image/*"
-          ref="inputImageRef"
-        />
+          ref="inputImageRef" />
       </div>
       <div>
         <div
           v-if="images.length === 0"
-          :class="images.length === 0 ? 'h-32' : ''"
-        >
+          :class="images.length === 0 ? 'h-32' : ''">
           <span>画像プレビュー</span>
         </div>
         <div v-if="images.length !== 0" class="flex flex-wrap">
-          <div v-for="(image, index) in images" class="relative">
+          <div v-for="(image, index) in images" class="relative" :key="index">
             <img :src="image.src" :alt="image.name" class="h-32" />
             <button
               @click="deleteImage(index)"
-              class="absolute top-0 right-0 w-6 h-6"
-            >
+              class="absolute top-0 right-0 w-6 h-6">
               <XCircleIcon />
             </button>
           </div>
@@ -225,11 +215,10 @@ function deleteImage(index: number) {
       </div>
       <div class="text-center">
         <Button
-          @onClick="postRequest"
+          @click.stop="postRequest"
           fontSize="xl"
           padding="sm"
-          class="w-48 mb-4"
-        >
+          class="w-48 mb-4">
           申請を作成する</Button
         >
       </div>

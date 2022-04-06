@@ -12,11 +12,11 @@ const comment = ref('')
 
 async function postComment(id: string, commentRequest: Comment) {
   await axios.post('/api/requests/' + id + '/comments', commentRequest)
-  requestDetailStore.getRequestDetail(id)
+  requestDetailStore.fetchRequestDetail(id)
 }
 function submit() {
   const commentRequest = { comment: comment.value }
-  postComment(requestDetailStore.request.id, commentRequest)
+  postComment(requestDetailStore.request.id!, commentRequest)
   comment.value = ''
 }
 </script>
@@ -26,15 +26,13 @@ function submit() {
     <textarea
       v-model="comment"
       class="resize-none h-32 w-full p-0.5"
-      placeholder="コメント"
-    ></textarea>
+      placeholder="コメント"></textarea>
     <div class="text-right">
       <Button
         :onClick="submit"
         fontSize="md"
         padding="sm"
-        class="w-24 mr-4 mt-2"
-      >
+        class="w-24 mr-4 mt-2">
         コメントする
       </Button>
     </div>
@@ -43,8 +41,7 @@ function submit() {
       <div>
         <MarkdownIt
           :text="comment"
-          :class="comment ? 'borderd border-gray-200' : ''"
-        />
+          :class="comment ? 'borderd border-gray-200' : ''" />
       </div>
     </details>
   </div>

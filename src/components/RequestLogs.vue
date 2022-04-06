@@ -13,8 +13,7 @@ const requestDetailStore = useRequestDetailStore()
       <ul>
         <li
           v-for="log in requestDetailStore.logs"
-          :key="log.created_at.toDateString"
-        >
+          :key="log.created_at.toDateString">
           <RequestLog :index="log.index" :kind="log.kind" />
           <div class="h-8 w-1 bg-zinc-300 ml-13.5"></div>
         </li>

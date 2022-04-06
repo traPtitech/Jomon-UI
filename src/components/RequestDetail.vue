@@ -142,14 +142,14 @@ function handleModalIsOpen() {
         <div v-if="isFixMode === 'title'">
           <input
             v-model="fixedValue.title"
-            type="text"
             class="w-100 p-1"
-            placeholder="タイトル" />
+            placeholder="タイトル"
+            type="text" />
           <Button
-            @click.stop="changeIsFixMode('title')"
             class="ml-2"
-            fontSize="sm"
+            font-size="sm"
             padding="sm"
+            @click.stop="changeIsFixMode('title')"
             >完了</Button
           >
         </div>
@@ -164,7 +164,7 @@ function handleModalIsOpen() {
                 requestDetailStore.request.status === 'accepted')
             "
             class="mr-4 mt-2"
-            fontSize="sm"
+            font-size="sm"
             padding="sm"
             @click.stop="changeStatus('submitted')">
             承認待ちにする</Button
@@ -175,7 +175,7 @@ function handleModalIsOpen() {
               requestDetailStore.request.status === 'submitted'
             "
             class="mr-4 mt-2"
-            fontSize="sm"
+            font-size="sm"
             padding="sm"
             @click.stop="changeStatus('fix_required')"
             >要修正にする</Button
@@ -186,7 +186,7 @@ function handleModalIsOpen() {
               requestDetailStore.request.status === 'submitted'
             "
             class="mr-4 mt-2"
-            fontSize="sm"
+            font-size="sm"
             padding="sm"
             @click.stop="changeStatus('accepted')"
             >承認済みにする</Button
@@ -197,7 +197,7 @@ function handleModalIsOpen() {
               requestDetailStore.request.status === 'submitted'
             "
             class="mr-4 mt-2"
-            fontSize="sm"
+            font-size="sm"
             padding="sm"
             @click.stop="changeStatus('rejected')"
             >却下する</Button
@@ -217,16 +217,16 @@ function handleModalIsOpen() {
         <div v-if="isFixMode === 'group'" class="ml-12 inline">
           <VueSelect
             v-model="fixedValue.group"
-            :options="groupStore.groups"
-            :reduce="(group:any) => group.id"
+            class="w-60 inline-block"
             label="name"
+            :options="groupStore.groups"
             placeholder="グループ"
-            class="w-60 inline-block"></VueSelect>
+            :reduce="(group:any) => group.id"></VueSelect>
           <Button
-            @click.stop="changeIsFixMode('group')"
             class="ml-2 mr-2"
-            fontSize="sm"
+            font-size="sm"
             padding="sm"
+            @click.stop="changeIsFixMode('group')"
             >完了</Button
           >
         </div>
@@ -249,14 +249,14 @@ function handleModalIsOpen() {
         <div v-if="isFixMode === 'amount'" class="inline">
           金額：<input
             v-model="fixedValue.amount"
-            type="text"
             class="w-30 p-1"
-            placeholder="金額" />円
+            placeholder="金額"
+            type="text" />円
           <Button
-            @click.stop="changeIsFixMode('amount')"
             class="ml-2 mr-2"
-            fontSize="sm"
+            font-size="sm"
             padding="sm"
+            @click.stop="changeIsFixMode('amount')"
             >完了</Button
           >
         </div>
@@ -276,24 +276,24 @@ function handleModalIsOpen() {
           <span>タグ：</span>
           <VueSelect
             v-model="fixedValue.tags"
-            :options="tagStore.tags"
+            class="w-200 inline-block"
+            :close-on-select="false"
             label="name"
-            placeholder="タグ"
             multiple
-            :closeOnSelect="false"
-            class="w-200 inline-block"></VueSelect>
+            :options="tagStore.tags"
+            placeholder="タグ"></VueSelect>
           <Button
-            @click.stop="handleModalIsOpen"
             class="ml-2 mr-2"
-            fontSize="sm"
-            padding="md">
+            font-size="sm"
+            padding="md"
+            @click.stop="handleModalIsOpen">
             タグを新規作成</Button
           >
           <Button
-            @click.stop="changeIsFixMode('tags')"
             class="ml-2"
-            fontSize="sm"
+            font-size="sm"
             padding="sm"
+            @click.stop="changeIsFixMode('tags')"
             >完了</Button
           >
         </div>
@@ -317,14 +317,14 @@ function handleModalIsOpen() {
       <div v-if="isFixMode === 'content'">
         <textarea
           v-model="fixedValue.content"
-          type="text"
           class="resize-none w-200 h-30 p-0"
-          placeholder="詳細" />
+          placeholder="詳細"
+          type="text" />
         <Button
-          @click.stop="changeIsFixMode('content')"
           class="ml-2"
-          fontSize="sm"
+          font-size="sm"
           padding="sm"
+          @click.stop="changeIsFixMode('content')"
           >完了</Button
         >
       </div>
@@ -345,18 +345,18 @@ function handleModalIsOpen() {
         <div v-if="isFixMode === 'targets'" class="inline-block">
           <VueSelect
             v-model="fixedValue.targets"
-            :options="userStore.users"
-            :reduce="(user:any) => user.name"
+            class="w-100 inline-block"
+            :close-on-select="false"
             label="name"
-            placeholder="払い戻し対象者"
             multiple
-            :closeOnSelect="false"
-            class="w-100 inline-block"></VueSelect>
+            :options="userStore.users"
+            placeholder="払い戻し対象者"
+            :reduce="(user:any) => user.name"></VueSelect>
           <Button
-            @click.stop="changeIsFixMode('targets')"
             class="ml-2"
-            fontSize="sm"
+            font-size="sm"
             padding="sm"
+            @click.stop="changeIsFixMode('targets')"
             >完了</Button
           >
         </div>

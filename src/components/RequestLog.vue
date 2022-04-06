@@ -16,11 +16,41 @@ const props = defineProps<Props>()
       <div class="flex justify-between">
         <span class="flex">
           <Icon
-            :name="requestDetailStore.request.comments![props.index].user!"
-            class="ml-2 mt-2" />
+            class="ml-2 mt-2"
+            :name="requestDetailStore.request.comments![props.index].user!" />
           <span class="ml-2 mt-2">
             {{
               requestDetailStore.request.comments![props.index].user!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             }}がコメントしました。</span
           >
         </span>
@@ -33,16 +63,46 @@ const props = defineProps<Props>()
       <div class="ml-12 mb-2">
         <span class="align-top">コメント：</span
         ><MarkdownIt
-          :text="requestDetailStore.request.comments![props.index].comment!"
-          class="inline-block" />
+          class="inline-block"
+          :text="requestDetailStore.request.comments![props.index].comment!" />
       </div>
     </div>
     <div v-if="kind === 'statusChange'" class="w-9/10 ml-8 flex">
       <Icon
-        :name="requestDetailStore.request.statuses![props.index].created_by!"
-        class="mr-2" />
+        class="mr-2"
+        :name="requestDetailStore.request.statuses![props.index].created_by!" />
       <span
         >{{requestDetailStore.request.statuses![props.index].created_by!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         }}が申請の状態を</span
       >
       <StatusChip

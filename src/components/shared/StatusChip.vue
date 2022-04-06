@@ -61,9 +61,9 @@ function handleMouseLeave() {
       {{ statusToJpn(status) }}
     </div>
     <div
-      @mouseover="handleMouseOver"
+      class="px-4 flex items-center"
       @mouseleave="handleMouseLeave"
-      class="px-4 flex items-center">
+      @mouseover="handleMouseOver">
       <CheckCircleIcon
         v-if="status === 'accepted'"
         class="text-green-500 w-8 inline-block" />

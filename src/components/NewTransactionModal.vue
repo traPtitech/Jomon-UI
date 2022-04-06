@@ -43,7 +43,7 @@ function postTransaction() {
 </script>
 
 <template>
-  <Modal :width="280" :height="140" :layer="1">
+  <Modal :height="140" :layer="1" :width="280">
     <h1 class="text-3xl text-center mt-4 mb-4">入出金記録の新規作成</h1>
     <div class="flex flex-col justify-between ml-12 mr-12 h-4/5">
       <div class="text-xl">
@@ -59,42 +59,42 @@ function postTransaction() {
         <span class="text-xl">払い戻し対象者：</span>
         <VueSelect
           v-model="transaction.targets"
-          :options="userStore.users"
-          :reduce="(user:any) => user.name"
+          class="w-2/3 inline-block"
+          :close-on-select="false"
           label="name"
-          placeholder="払い戻し対象者"
           multiple
-          :closeOnSelect="false"
-          class="w-2/3 inline-block"></VueSelect>
+          :options="userStore.users"
+          placeholder="払い戻し対象者"
+          :reduce="(user:any) => user.name"></VueSelect>
       </div>
       <div class="mb-2">
         <span class="text-xl">グループ：</span>
         <VueSelect
           v-model="transaction.group"
-          :options="groupStore.groups"
-          :reduce="(group:any) => group.id"
+          class="w-1/3 inline-block"
           label="name"
+          :options="groupStore.groups"
           placeholder="グループ"
-          class="w-1/3 inline-block"></VueSelect>
+          :reduce="(group:any) => group.id"></VueSelect>
       </div>
       <div class="mb-2">
         <span class="text-xl">タグ：</span>
         <VueSelect
           v-model="transaction.tags"
-          :options="tagStore.tags"
-          :reduce="(tag:any) => tag.id"
+          class="w-2/3 inline-block"
+          :close-on-select="false"
           label="name"
-          placeholder="タグ"
           multiple
-          :closeOnSelect="false"
-          class="w-2/3 inline-block"></VueSelect>
+          :options="tagStore.tags"
+          placeholder="タグ"
+          :reduce="(tag:any) => tag.id"></VueSelect>
       </div>
       <div class="text-center">
         <Button
-          @click.stop="postTransaction"
-          fontSize="xl"
+          class="w-64 mb-4"
+          font-size="xl"
           padding="sm"
-          class="w-64 mb-4">
+          @click.stop="postTransaction">
           入出金記録を作成する</Button
         >
       </div>

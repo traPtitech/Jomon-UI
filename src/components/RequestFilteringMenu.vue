@@ -62,51 +62,53 @@ function filterByDate() {
     </button>
     <div class="mt-1">
       <input
-        @input="filterByDate"
         v-model="params.since"
+        class="border border-solid border-gray-300 w-28 h-8"
         placeholder="YYYY-MM-DD"
-        class="border border-solid border-gray-300 w-28 h-8" /><!--@changeによってフォームにフォーカスがあって何かキーが押されたときに日付の形式が正しければGETが送信される-->
+        @input="
+          filterByDate
+        " /><!--@changeによってフォームにフォーカスがあって何かキーが押されたときに日付の形式が正しければGETが送信される-->
       <span>～</span>
       <input
-        @input="filterByDate"
         v-model="params.until"
+        class="border border-solid border-gray-300 w-28 h-8"
         placeholder="YYYY-MM-DD"
-        class="border border-solid border-gray-300 w-28 h-8" />
+        @input="filterByDate" />
     </div>
     <VueSelect
       v-model="params.target"
-      @close="requestStore.fetchRequests(params)"
-      :options="userStore.users"
-      :reduce="(user:any) => user.name"
+      class="w-64"
       label="name"
+      :options="userStore.users"
       placeholder="申請者"
-      class="w-64"></VueSelect>
+      :reduce="(user:any) => user.name"
+      @close="requestStore.fetchRequests(params)"></VueSelect>
     <VueSelect
       v-model="params.currentStatus"
-      @close="requestStore.fetchRequests(params)"
-      :options="states"
-      :reduce="(state:any) => state.state"
+      class="w-64"
       label="jpn"
+      :options="states"
       placeholder="申請の状態"
+      :reduce="(state:any) => state.state"
       :searchable="false"
-      class="w-64"></VueSelect>
+      @close="requestStore.fetchRequests(params)"></VueSelect>
     <VueSelect
       v-model="params.group"
-      @close="requestStore.fetchRequests(params)"
-      :options="groupStore.groups"
-      :reduce="(group:any) => group.id"
+      class="w-64"
       label="name"
+      :options="groupStore.groups"
       placeholder="グループ"
-      class="w-64"></VueSelect>
+      :reduce="(group:any) => group.id"
+      @close="requestStore.fetchRequests(params)"></VueSelect>
     <VueSelect
       v-model="requestStore.tagList"
-      @close="requestStore.fetchRequests(params)"
-      :options="tagStore.tags"
-      :reduce="(tag:any) => tag.id"
+      class="w-100"
+      :close-on-select="false"
       label="name"
-      placeholder="タグ"
       multiple
-      :closeOnSelect="false"
-      class="w-100"></VueSelect>
+      :options="tagStore.tags"
+      placeholder="タグ"
+      :reduce="(tag:any) => tag.id"
+      @close="requestStore.fetchRequests(params)"></VueSelect>
   </div>
 </template>

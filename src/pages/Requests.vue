@@ -43,7 +43,7 @@ function changeIsModalOpen() {
           申請一覧
         </div>
         <div class="ml-auto mr-40 mt-4 z-1">
-          <Button :onClick="changeIsModalOpen" fontSize="lg" padding="md"
+          <Button font-size="lg" :on-click="changeIsModalOpen" padding="md"
             >申請の新規作成</Button
           >
         </div>
@@ -75,10 +75,10 @@ function changeIsModalOpen() {
       </div>
       <div class="mt-4">
         <PaginationBar
-          :pageIndex="pageIndex"
-          :itemLength="requestStore.requestsLength"
-          :unit="7"
-          kind="requests" />
+          :item-length="requestStore.requestsLength"
+          kind="requests"
+          :page-index="pageIndex"
+          :unit="7" />
       </div>
     </div>
   </div>

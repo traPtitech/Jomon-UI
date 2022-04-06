@@ -43,18 +43,18 @@ function changeIsModalOpen() {
           申請一覧
         </div>
         <div class="ml-auto mr-40 mt-4 z-1">
-          <Button font-size="lg" :on-click="changeIsModalOpen" padding="md"
-            >申請の新規作成</Button
-          >
+          <Button font-size="lg" :on-click="changeIsModalOpen" padding="md">
+            申請の新規作成
+          </Button>
         </div>
       </div>
       <RequestFilteringMenu class="mt-4 mb-2" />
       <span v-if="requestStore.requestsLength !== 0" class="ml-50">
-        {{ requestStore.requestsLength }}件取得しました</span
-      >
+        {{ requestStore.requestsLength }}件取得しました
+      </span>
       <span v-if="requestStore.requestsLength === 0" class="ml-50">
-        条件に一致する申請は見つかりませんでした</span
-      >
+        条件に一致する申請は見つかりませんでした
+      </span>
       <div
         :class="
           pageIndex === Math.ceil(requestStore.requestsLength / 7)

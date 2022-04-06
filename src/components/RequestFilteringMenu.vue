@@ -57,8 +57,8 @@ function filterByDate() {
       class="p-1 border border-solid border-gray-300"
       :class="params.sort === 'created_at' ? '' : 'bg-gray-200'"
       @click="sortByCreatedAt">
-      日付順 <span v-if="params.sort === 'created_at'" class="text-xs">▼</span
-      ><span v-if="params.sort === '-created_at'" class="text-xs">▲</span>
+      日付順 <span v-if="params.sort === 'created_at'" class="text-xs">▼</span>
+      <span v-if="params.sort === '-created_at'" class="text-xs">▲</span>
     </button>
     <div class="mt-1">
       <input

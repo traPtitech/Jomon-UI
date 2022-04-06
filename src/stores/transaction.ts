@@ -1,7 +1,11 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-import { Params, Transaction, TransactionRequest } from '../types/transactionTypes'
+import {
+  Params,
+  Transaction,
+  TransactionRequest
+} from '../types/transactionTypes'
 
 export const useTransactionStore = defineStore('transaction', {
   state: () => ({

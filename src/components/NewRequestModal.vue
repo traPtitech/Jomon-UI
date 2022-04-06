@@ -108,7 +108,7 @@ function deleteImage(index: number) {
 
 <template>
   <NewTagModal v-if="isModalOpen2" />
-  <Modal :width="300" :height="170" :layer="1">
+  <Modal :height="170" :layer="1" :width="300">
     <h1 class="text-3xl text-center mt-4 mb-4">申請の新規作成</h1>
     <div class="flex flex-col justify-between ml-12 h-4/5">
       <span class="text-xl mb-2">申請者：{{ userStore.me.name }}</span>
@@ -123,12 +123,12 @@ function deleteImage(index: number) {
       <div class="text-right mr-20 mb-2">
         <VueSelect
           v-model="selectedTemplate"
-          @close="setTemplate(selectedTemplate)"
-          :options="templates"
-          :reduce="(template:any) => template.value"
+          class="w-1/3 inline-block"
           label="name"
+          :options="templates"
           placeholder="テンプレートを選択"
-          class="w-1/3 inline-block">
+          :reduce="(template:any) => template.value"
+          @close="setTemplate(selectedTemplate)">
         </VueSelect>
       </div>
       <div>
@@ -141,60 +141,60 @@ function deleteImage(index: number) {
         <summary>MDプレビュー</summary>
         <!--幅を広くしたいけどなぜかできない-->
         <div
-          :class="request.content ? 'border border-solid border-gray-200' : ''"
-          class="pl-2 pr-2 w-4/5">
-          <MarkdownIt :text="request.content" class="w-full" />
+          class="pl-2 pr-2 w-4/5"
+          :class="request.content ? 'border border-solid border-gray-200' : ''">
+          <MarkdownIt class="w-full" :text="request.content" />
         </div>
       </details>
       <div class="mb-2">
         <span class="text-xl">払い戻し対象者：</span>
         <VueSelect
           v-model="request.targets"
-          :options="userStore.users"
-          :reduce="(user:any) => user.name"
+          class="w-2/3 inline-block"
+          :close-on-select="false"
           label="name"
-          placeholder="払い戻し対象者"
           multiple
-          :closeOnSelect="false"
-          class="w-2/3 inline-block"></VueSelect>
+          :options="userStore.users"
+          placeholder="払い戻し対象者"
+          :reduce="(user:any) => user.name"></VueSelect>
       </div>
       <div class="mb-2">
         <span class="text-xl">グループ：</span>
         <VueSelect
           v-model="request.group"
-          :options="groupStore.groups"
-          :reduce="(group:any) => group.id"
+          class="w-1/3 inline-block"
           label="name"
+          :options="groupStore.groups"
           placeholder="グループ"
-          class="w-1/3 inline-block"></VueSelect>
+          :reduce="(group:any) => group.id"></VueSelect>
       </div>
       <div class="mb-2">
         <span class="text-xl">タグ：</span>
         <VueSelect
           v-model="request.tags"
-          :options="tagStore.tags"
-          :reduce="(tag:any) => tag.id"
+          class="w-2/3 inline-block"
+          :close-on-select="false"
           label="name"
-          placeholder="タグ"
           multiple
-          :closeOnSelect="false"
-          class="w-2/3 inline-block"></VueSelect>
+          :options="tagStore.tags"
+          placeholder="タグ"
+          :reduce="(tag:any) => tag.id"></VueSelect>
         <Button
-          @click.stop="handleTagModalIsOpen"
           class="ml-8"
+          font-size="xl"
           padding="sm"
-          fontSize="xl">
+          @click.stop="handleTagModalIsOpen">
           タグを新規作成</Button
         >
       </div>
       <div class="mb-4">
         <span class="text-xl">画像：</span>
         <input
-          type="file"
-          @change="e => handleImageChange(e)"
-          multiple
+          ref="inputImageRef"
           accept="image/*"
-          ref="inputImageRef" />
+          multiple
+          type="file"
+          @change="e => handleImageChange(e)" />
       </div>
       <div>
         <div
@@ -203,11 +203,11 @@ function deleteImage(index: number) {
           <span>画像プレビュー</span>
         </div>
         <div v-if="images.length !== 0" class="flex flex-wrap">
-          <div v-for="(image, index) in images" class="relative" :key="index">
-            <img :src="image.src" :alt="image.name" class="h-32" />
+          <div v-for="(image, index) in images" :key="index" class="relative">
+            <img :alt="image.name" class="h-32" :src="image.src" />
             <button
-              @click="deleteImage(index)"
-              class="absolute top-0 right-0 w-6 h-6">
+              class="absolute top-0 right-0 w-6 h-6"
+              @click="deleteImage(index)">
               <XCircleIcon />
             </button>
           </div>
@@ -215,10 +215,10 @@ function deleteImage(index: number) {
       </div>
       <div class="text-center">
         <Button
-          @click.stop="postRequest"
-          fontSize="xl"
+          class="w-48 mb-4"
+          font-size="xl"
           padding="sm"
-          class="w-48 mb-4">
+          @click.stop="postRequest">
           申請を作成する</Button
         >
       </div>

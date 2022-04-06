@@ -29,10 +29,10 @@ function submit() {
       placeholder="コメント"></textarea>
     <div class="text-right">
       <Button
-        :onClick="submit"
-        fontSize="md"
-        padding="sm"
-        class="w-24 mr-4 mt-2">
+        class="w-24 mr-4 mt-2"
+        font-size="md"
+        :on-click="submit"
+        padding="sm">
         コメントする
       </Button>
     </div>
@@ -40,8 +40,8 @@ function submit() {
       <summary>MDプレビュー</summary>
       <div>
         <MarkdownIt
-          :text="comment"
-          :class="comment ? 'borderd border-gray-200' : ''" />
+          :class="comment ? 'borderd border-gray-200' : ''"
+          :text="comment" />
       </div>
     </details>
   </div>

@@ -32,8 +32,8 @@ const props = defineProps<Props>()
 
 
 
-            }}がコメントしました。</span
-          >
+            }}がコメントしました。
+          </span>
         </span>
         <span class="mr-2 mt-2 text-zinc-400">{{
           dateFormatter(
@@ -52,8 +52,8 @@ const props = defineProps<Props>()
       <Icon
         class="mr-2"
         :name="requestDetailStore.request.statuses![props.index].created_by!" />
-      <span
-        >{{requestDetailStore.request.statuses![props.index].created_by!
+      <span>
+        {{requestDetailStore.request.statuses![props.index].created_by!
 
 
 
@@ -65,8 +65,8 @@ const props = defineProps<Props>()
 
 
 
-        }}が申請の状態を</span
-      >
+        }}が申請の状態を
+      </span>
       <StatusChip
         :status="requestDetailStore.request.statuses![props.index].status!"
         :text="true!" /><!--todo:文字の高さずれるのどうにかする-->

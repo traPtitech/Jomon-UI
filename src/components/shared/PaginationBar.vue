@@ -7,6 +7,7 @@ type Props = {
 } //pageIndexはページ番号(routeから取ってくる)、itemLengthは全体の要素数(storeのgettersで計算)、unitは1ページに表示している個数(自分で決められるが、v-forで回す数と一致させる)、kindは"requests"や"transactions"や"groups"などパスで使う名前
 const props = defineProps<Props>()
 </script>
+
 <template>
   <div v-if="itemLength !== 0" class="text-center w-full">
     <div class="flex justify-center">
@@ -21,9 +22,9 @@ const props = defineProps<Props>()
           pageIndex === 1
             ? `/${kind}/?pageIndex=1`
             : `/${kind}/?pageIndex=` + (pageIndex - 1).toString()
-        "
-        ><span>前のページへ</span></router-link
-      >
+        ">
+        <span>前のページへ</span>
+      </router-link>
       <router-link
         v-for="index in Math.ceil(itemLength / unit) <= 8
           ? [...Array(Math.ceil(itemLength / unit)).keys()]
@@ -34,8 +35,8 @@ const props = defineProps<Props>()
         class="mr-2 ml-2 w-8 h-8 block hover:border hover:border-zinc-400 flex justify-center items-center rounded-lg"
         :class="index + 1 === pageIndex ? 'bg-blue-300 cursor-default' : ''"
         :to="`/${kind}/?pageIndex=` + (index + 1).toString()">
-        <span>{{ index + 1 }}</span></router-link
-      >
+        <span>{{ index + 1 }}</span>
+      </router-link>
       <span v-if="Math.ceil(itemLength / unit) >= 9">...</span>
 
       <div
@@ -72,8 +73,8 @@ const props = defineProps<Props>()
           `/${kind}/?pageIndex=` +
           (Math.ceil(itemLength / unit) - index).toString()
         ">
-        <span>{{ Math.ceil(itemLength / unit) - index }}</span></router-link
-      >
+        <span>{{ Math.ceil(itemLength / unit) - index }}</span>
+      </router-link>
       <router-link
         class="w-24 h-8 block hover:border hover:border-zinc-400 flex justify-center items-center rounded-lg"
         :class="
@@ -85,9 +86,9 @@ const props = defineProps<Props>()
           pageIndex !== Math.ceil(itemLength / unit)
             ? `/${kind}/?pageIndex=` + (pageIndex + 1).toString()
             : `/${kind}/?pageIndex=` + Math.ceil(itemLength / unit).toString()
-        "
-        ><span>次のページへ</span></router-link
-      >
+        ">
+        <span>次のページへ</span>
+      </router-link>
     </div>
   </div>
 </template>

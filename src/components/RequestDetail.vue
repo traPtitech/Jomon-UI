@@ -128,8 +128,10 @@ function handleModalIsOpen() {
     <div class="flex justify-between text-center pt-6 ml-12">
       <div class="flex items-center">
         <div v-if="!(isFixMode === 'title')">
-          <span class="text-3xl">{{ requestDetailStore.request.title }}</span
-          ><button
+          <span class="text-3xl">
+            {{ requestDetailStore.request.title }}
+          </span>
+          <button
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             class="mr-2"
             @click="changeIsFixMode('title')">
@@ -164,8 +166,8 @@ function handleModalIsOpen() {
             font-size="sm"
             padding="sm"
             @click.stop="changeStatus('submitted')">
-            承認待ちにする</Button
-          >
+            承認待ちにする
+          </Button>
           <Button
             v-if="
               userStore.me.admin &&
@@ -174,9 +176,9 @@ function handleModalIsOpen() {
             class="mr-4 mt-2"
             font-size="sm"
             padding="sm"
-            @click.stop="changeStatus('fix_required')"
-            >要修正にする</Button
-          >
+            @click.stop="changeStatus('fix_required')">
+            要修正にする
+          </Button>
           <Button
             v-if="
               userStore.me.admin &&
@@ -185,9 +187,9 @@ function handleModalIsOpen() {
             class="mr-4 mt-2"
             font-size="sm"
             padding="sm"
-            @click.stop="changeStatus('accepted')"
-            >承認済みにする</Button
-          >
+            @click.stop="changeStatus('accepted')">
+            承認済みにする
+          </Button>
           <Button
             v-if="
               userStore.me.admin &&
@@ -196,15 +198,15 @@ function handleModalIsOpen() {
             class="mr-4 mt-2"
             font-size="sm"
             padding="sm"
-            @click.stop="changeStatus('rejected')"
-            >却下する</Button
-          >
+            @click.stop="changeStatus('rejected')">
+            却下する
+          </Button>
         </div>
       </div>
       <div>
         <div v-if="!(isFixMode === 'group')" class="ml-12 inline">
-          <span>グループ：{{ requestDetailStore.request.group!.name }}</span
-          ><button
+          <span>グループ：{{ requestDetailStore.request.group!.name }}</span>
+          <button
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             class="mr-2"
             @click="changeIsFixMode('group')">
@@ -223,20 +225,21 @@ function handleModalIsOpen() {
             class="ml-2 mr-2"
             font-size="sm"
             padding="sm"
-            @click.stop="changeIsFixMode('group')"
-            >完了</Button
-          >
+            @click.stop="changeIsFixMode('group')">
+            完了
+          </Button>
         </div>
-        <span class="mr-4"
-          >申請者：{{ requestDetailStore.request.created_by }}</span
-        >
-        <span class="mr-4"
-          >申請日：{{ dateFormatter(requestDetailStore.request.created_at!) }}
+        <span class="mr-4">
+          申請者：{{ requestDetailStore.request.created_by }}
+        </span>
+        <span class="mr-4">
+          申請日：{{ dateFormatter(requestDetailStore.request.created_at!) }}
         </span>
         <div v-if="!(isFixMode === 'amount')" class="inline">
-          <span class="text-2xl"
-            >金額：{{ requestDetailStore.request.amount }}円</span
-          ><button
+          <span class="text-2xl">
+            金額：{{ requestDetailStore.request.amount }}円
+          </span>
+          <button
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             class="mr-2"
             @click="changeIsFixMode('amount')">
@@ -253,9 +256,9 @@ function handleModalIsOpen() {
             class="ml-2 mr-2"
             font-size="sm"
             padding="sm"
-            @click.stop="changeIsFixMode('amount')"
-            >完了</Button
-          >
+            @click.stop="changeIsFixMode('amount')">
+            完了
+          </Button>
         </div>
       </div>
     </div>
@@ -263,7 +266,8 @@ function handleModalIsOpen() {
       <div class="mt-2">
         <div v-if="!(isFixMode === 'tags')" class="ml-12 inline">
           <span>タグ：</span>
-          <Tags :tags="requestDetailStore.request.tags!" /><button
+          <Tags :tags="requestDetailStore.request.tags!" />
+          <button
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             @click="changeIsFixMode('tags')">
             <PencilIcon class="h-5 w-5 text-gray-500 opacity-50" />
@@ -284,15 +288,15 @@ function handleModalIsOpen() {
             font-size="sm"
             padding="md"
             @click.stop="handleModalIsOpen">
-            タグを新規作成</Button
-          >
+            タグを新規作成
+          </Button>
           <Button
             class="ml-2"
             font-size="sm"
             padding="sm"
-            @click.stop="changeIsFixMode('tags')"
-            >完了</Button
-          >
+            @click.stop="changeIsFixMode('tags')">
+            完了
+          </Button>
         </div>
       </div>
     </div>
@@ -321,9 +325,9 @@ function handleModalIsOpen() {
           class="ml-2"
           font-size="sm"
           padding="sm"
-          @click.stop="changeIsFixMode('content')"
-          >完了</Button
-        >
+          @click.stop="changeIsFixMode('content')">
+          完了
+        </Button>
       </div>
       <div class="ml-30">
         <span>払い戻し対象者：</span>
@@ -331,9 +335,10 @@ function handleModalIsOpen() {
           <span
             v-for="target in requestDetailStore.request.targets"
             :key="target.id"
-            class=""
-            >{{ target.target }}</span
-          ><button
+            class="">
+            {{ target.target }}
+          </span>
+          <button
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             @click="changeIsFixMode('targets')">
             <PencilIcon class="h-5 w-5 text-gray-500 opacity-50" />
@@ -353,9 +358,9 @@ function handleModalIsOpen() {
             class="ml-2"
             font-size="sm"
             padding="sm"
-            @click.stop="changeIsFixMode('targets')"
-            >完了</Button
-          >
+            @click.stop="changeIsFixMode('targets')">
+            完了
+          </Button>
         </div>
       </div>
     </div>

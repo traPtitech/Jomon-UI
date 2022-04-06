@@ -15,7 +15,7 @@ const tagName = ref('')
 
 async function postTagAPI(tag: string) {
   await axios.post('/api/tags', tag)
-  tagStore.getTags()
+  tagStore.fetchTags()
 }
 function postTag() {
   if (tagName.value !== '') {

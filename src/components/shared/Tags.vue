@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { TagResponse } from '../../types/tagTypes'
 import { Tag } from '/@/lib/apis'
 
 type Props = { tags: Tag[]; limit: number } //1-indexedでlimitを指定

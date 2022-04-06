@@ -20,4 +20,5 @@ export const useTagStore = defineStore('tag', () => {
   const deleteTag = async (id: string) => {
     await apis.tagsTagIDDelete(id)
   }
+  return { tags, tag, fetchTags, fetchTag, postTag, deleteTag }
 })

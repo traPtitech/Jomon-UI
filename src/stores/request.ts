@@ -1,11 +1,13 @@
-import axios from 'axios'
 import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
 
-import { Params, Request, RequestResponse } from '../types/requestsTypes'
+import { Params } from '../types/requestsTypes'
+import type { Request } from '/@/lib/apis'
+import apis from '/@/lib/apis'
 
 const defaultParams = {
   sort: 'created_at',
-  current_state: null,
+  currentStatus: null,
   target: null,
   since: '',
   until: '',
@@ -13,9 +15,9 @@ const defaultParams = {
   group: null
 }
 
-export const useRequestStore = defineStore('request', {
-  state: () => ({
-    requests: Array(100).fill({
+export const useRequestStore = defineStore('request', () => {
+  const requests = ref<Request[]>([
+    {
       id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       status: 'submitted',
       created_at: '2022-01-25T13:29:19.918Z',
@@ -51,54 +53,45 @@ export const useRequestStore = defineStore('request', {
         created_at: '2022-01-25T13:29:19.918Z',
         updated_at: '2022-01-25T13:29:19.918Z'
       }
-    }), //new Array<RequestResponse>()
-    tagList: new Array<string>()
-  }),
-  getters: {
-    requestsLength() {
-      return () => this.requests.length
-    },
-    requestsFilter() {
-      return (index: number) => {
-        return this.requests.slice((index - 1) * 7, index * 7)
-      }
-    },
-    dateFormatter() {
-      return (date: string) => {
-        return (
-          date.split('-')[0] +
-          '年' +
-          date.split('-')[1] +
-          '月' +
-          date.split('-')[2].split('T')[0] +
-          '日'
-        )
-      }
     }
-  },
-  actions: {
-    async getRequests(params: Params = defaultParams) {
-      const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
-      if (
-        (params.since === '' && rule.test(params.until)) ||
-        (params.until === '' && rule.test(params.since)) ||
-        (rule.test(params.since) && rule.test(params.until)) ||
-        (params.since === '' && params.until === '')
-      ) {
-        for (let i = 0; i < this.tagList.length; i++) {
-          if (i === 0) {
-            params.tag = this.tagList[i]
-          } else {
-            params.tag += ',' + this.tagList[i]
-          }
+  ])
+  const tagList = ref<string[]>([])
+
+  const requestsLength = computed(() => {
+    return requests.value.length
+  })
+  const requestsFilter = (index: number) => {
+    return requests.value.slice((index - 1) * 10, index * 10)
+  }
+  const fetchRequests = async (params: Params = defaultParams) => {
+    const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
+    if (
+      (params.since === '' && rule.test(params.until)) ||
+      (params.until === '' && rule.test(params.since)) ||
+      (rule.test(params.since) && rule.test(params.until)) ||
+      (params.since === '' && params.until === '')
+    ) {
+      for (let i = 0; i < tagList.value.length; i++) {
+        if (i === 0) {
+          params.tag = tagList.value[i]
+        } else {
+          params.tag += ',' + tagList.value[i]
         }
-        const response: RequestResponse[] = await axios.get('/api/requests', {
-          params: params
-        })
-        this.requests = response
-      } else {
-        alert('日付が不正です')
       }
+      requests.value = (
+        await apis.requestsGet(
+          params.sort,
+          params.currentStatus!,
+          params.target!,
+          params.since,
+          params.until,
+          params.tag!,
+          params.group!
+        )
+      ).data //nullの場合どうにかする
+    } else {
+      alert('日付が不正です')
     }
   }
+  return { requests, requestsLength, requestsFilter, fetchRequests, tagList }
 })

@@ -19,10 +19,10 @@ export const useGroupStore = defineStore('group', () => {
   const groupMembers = ref<string[]>([])
   const groupOwners = ref<string[]>([])
   const isGroupFetched = ref<boolean>(false)
+
   const groupsLength = computed(() => {
     return groups.value.length
   })
-
   const groupsFilter = (index: number) => {
     return omitGroupDescription.value.slice((index - 1) * 10, index * 10)
   }

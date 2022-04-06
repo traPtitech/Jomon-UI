@@ -15,7 +15,7 @@ const groupStore = useGroupStore()
 
 const params = ref({
   sort: 'created_at',
-  current_state: null,
+  currentStatus: null,
   target: null,
   since: '',
   until: '',
@@ -35,7 +35,7 @@ function sortByCreatedAt() {
   } else {
     params.value.sort = 'created_at'
   }
-  requestStore.getRequests(params.value)
+  requestStore.fetchRequests(params.value)
 }
 function filterByDate() {
   const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
@@ -46,7 +46,7 @@ function filterByDate() {
     (rule.test(params.value.since) && rule.test(params.value.until)) ||
     (params.value.since === '' && params.value.until === '')
   ) {
-    requestStore.getRequests(params.value)
+    requestStore.fetchRequests(params.value)
   }
 }
 </script>
@@ -56,8 +56,7 @@ function filterByDate() {
     <button
       class="p-1 border border-solid border-gray-300"
       :class="params.sort === 'created_at' ? '' : 'bg-gray-200'"
-      @click="sortByCreatedAt"
-    >
+      @click="sortByCreatedAt">
       日付順 <span v-if="params.sort === 'created_at'" class="text-xs">▼</span
       ><span v-if="params.sort === '-created_at'" class="text-xs">▲</span>
     </button>
@@ -66,54 +65,48 @@ function filterByDate() {
         @input="filterByDate"
         v-model="params.since"
         placeholder="YYYY-MM-DD"
-        class="border border-solid border-gray-300 w-28 h-8"
-      /><!--@changeによってフォームにフォーカスがあって何かキーが押されたときに日付の形式が正しければGETが送信される-->
+        class="border border-solid border-gray-300 w-28 h-8" /><!--@changeによってフォームにフォーカスがあって何かキーが押されたときに日付の形式が正しければGETが送信される-->
       <span>～</span>
       <input
         @input="filterByDate"
         v-model="params.until"
         placeholder="YYYY-MM-DD"
-        class="border border-solid border-gray-300 w-28 h-8"
-      />
+        class="border border-solid border-gray-300 w-28 h-8" />
     </div>
     <VueSelect
       v-model="params.target"
-      @close="requestStore.getRequests(params)"
+      @close="requestStore.fetchRequests(params)"
       :options="userStore.users"
       :reduce="(user:any) => user.name"
       label="name"
       placeholder="申請者"
-      class="w-64"
-    ></VueSelect>
+      class="w-64"></VueSelect>
     <VueSelect
-      v-model="params.current_state"
-      @close="requestStore.getRequests(params)"
+      v-model="params.currentStatus"
+      @close="requestStore.fetchRequests(params)"
       :options="states"
       :reduce="(state:any) => state.state"
       label="jpn"
       placeholder="申請の状態"
       :searchable="false"
-      class="w-64"
-    ></VueSelect>
+      class="w-64"></VueSelect>
     <VueSelect
       v-model="params.group"
-      @close="requestStore.getRequests(params)"
+      @close="requestStore.fetchRequests(params)"
       :options="groupStore.groups"
       :reduce="(group:any) => group.id"
       label="name"
       placeholder="グループ"
-      class="w-64"
-    ></VueSelect>
+      class="w-64"></VueSelect>
     <VueSelect
       v-model="requestStore.tagList"
-      @close="requestStore.getRequests(params)"
+      @close="requestStore.fetchRequests(params)"
       :options="tagStore.tags"
       :reduce="(tag:any) => tag.id"
       label="name"
       placeholder="タグ"
       multiple
       :closeOnSelect="false"
-      class="w-100"
-    ></VueSelect>
+      class="w-100"></VueSelect>
   </div>
 </template>

@@ -22,11 +22,10 @@ const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const userStore = useUserStore()
 const { isModalOpen } = storeToRefs(generalStore)
-
 onMounted(() => {
-  requestStore.getRequests()
+  requestStore.fetchRequests()
   tagStore.getTags()
-  groupStore.getGroups()
+  groupStore.fetchGroups()
   userStore.getUsers()
   userStore.getMe()
 })
@@ -50,29 +49,26 @@ function changeIsModalOpen() {
         </div>
       </div>
       <RequestFilteringMenu class="mt-4 mb-2" />
-      <span v-if="requestStore.requestsLength() !== 0" class="ml-50">
-        {{ requestStore.requestsLength() }}件取得しました</span
+      <span v-if="requestStore.requestsLength !== 0" class="ml-50">
+        {{ requestStore.requestsLength }}件取得しました</span
       >
-      <span v-if="requestStore.requestsLength() === 0" class="ml-50">
+      <span v-if="requestStore.requestsLength === 0" class="ml-50">
         条件に一致する申請は見つかりませんでした</span
       >
       <div
         :class="
-          pageIndex === Math.ceil(requestStore.requestsLength() / 7)
+          pageIndex === Math.ceil(requestStore.requestsLength / 7)
             ? 'h-123'
             : ''
-        "
-      >
+        ">
         <div
-          v-if="requestStore.requestsLength() !== 0"
-          class="w-3/4 mt-4 mr-auto ml-auto shadow"
-        >
+          v-if="requestStore.requestsLength !== 0"
+          class="w-3/4 mt-4 mr-auto ml-auto shadow">
           <ul class="w-full mr-auto ml-auto">
             <li
-              v-for="(request, index) in requestStore.requestsFilter(pageIndex)"
-              :key="request.id"
-            >
-              <Request :index="index" />
+              v-for="request in requestStore.requestsFilter(pageIndex)"
+              :key="request.id">
+              <Request :request="request" />
             </li>
           </ul>
         </div>
@@ -80,10 +76,9 @@ function changeIsModalOpen() {
       <div class="mt-4">
         <PaginationBar
           :pageIndex="pageIndex"
-          :itemLength="requestStore.requestsLength()"
+          :itemLength="requestStore.requestsLength"
           :unit="7"
-          kind="requests"
-        />
+          kind="requests" />
       </div>
     </div>
   </div>

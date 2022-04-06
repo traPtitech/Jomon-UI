@@ -35,7 +35,7 @@ const addAdmins = () => {
 
 <template>
   <div v-if="me.admin" class="ml-4">
-    <h1 class="py-8 text-center text-3xl">管理ページ</h1>
+    <h1 class="text-center py-8 text-3xl">管理ページ</h1>
     <div>
       <ul class="flex gap-2">
         <li v-for="admin in admins" :key="admin">

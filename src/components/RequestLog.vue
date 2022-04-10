@@ -37,10 +37,12 @@ const props = defineProps<Props>()
           :text="requestDetailStore.request.comments[props.index].comment!" />
       </div>
     </div>
-    <div v-if="kind === 'statusChange'" class="w-9/10 ml-8 flex">
-      <Icon
+    <div
+      v-if="kind === 'statusChange'"
+      class="w-9/10 ml-8 h-12 flex items-center">
+      <UserIcon
         class="mr-2"
-        :name="requestDetailStore.request.statuses[props.index].created_by" />
+        :name="requestDetailStore.request.statuses[props.index].created_by!" />
       <span
         >{{
           requestDetailStore.request.statuses[props.index].created_by

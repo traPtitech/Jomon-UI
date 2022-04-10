@@ -124,13 +124,13 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
 
   const putRequestRequest = computed(() => {
     let targets = new Array<string>()
-    for (let i = 0; i < request.value.targets!.length; i++) {
-      targets = targets.concat([request.value.targets![i].target!])
-    }
+    request.value.targets!.forEach(target => {
+      targets = targets.concat([target!.target!])
+    })
     let tags = new Array<string>()
-    for (let i = 0; i < request.value.tags!.length; i++) {
-      tags = tags.concat([request.value.tags![i].name!])
-    }
+    request.value.tags!.forEach(tag => {
+      tags = tags.concat([tag!.name!])
+    })
     const requestRequest: Request2 = {
       created_by: request.value.created_by!,
       amount: request.value.amount!,
@@ -144,6 +144,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   })
   const targetIds = computed(() => {
     let targetIds = new Array<string>()
+
     for (let i = 0; i < request.value.targets!.length; i++) {
       targetIds = targetIds.concat([request.value.targets![i].target!])
     }

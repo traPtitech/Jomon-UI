@@ -7,9 +7,9 @@ export const useFileStore = defineStore('file', () => {
   const files = ref<any[]>([])
 
   const fetchFiles = async (ids: string[]) => {
-    for (let i = 0; i < ids.length; i++) {
-      files.value.concat((await apis.filesFileIDGet(ids[i])).data)
-    }
+    ids.forEach(async id => {
+      files.value.concat((await apis.getFile(id)).data)
+    })
   }
   const postFile = async (request_id: string, name: string, file: string) => {
     // const formData = new FormData()
@@ -21,10 +21,10 @@ export const useFileStore = defineStore('file', () => {
     //     'Content-Type': 'mutipart/form-data'
     //   }
     // }
-    await apis.filesPost(file, name, request_id)
+    await apis.postFile(file, name, request_id)
   }
   const deleteFile = async (id: string) => {
-    await apis.filesFileIDDelete(id)
+    await apis.deleteFile(id)
   }
   return { files, fetchFiles, postFile, deleteFile }
 })

@@ -38,7 +38,7 @@ export const useGroupStore = defineStore('group', () => {
   })
 
   const fetchGroups = async () => {
-    groups.value = (await apis.getGroups()).data.groups!
+    groups.value = (await apis.getGroups()).data
   }
   const postGroup = async (group: PostGroup) => {
     return (await apis.postGroup(group)).data
@@ -50,10 +50,10 @@ export const useGroupStore = defineStore('group', () => {
     await apis.deleteGroup(id)
   }
   const fetchGroupMembers = async (id: string) => {
-    groupMembers.value = (await apis.getGroupMembers(id)).data.members!
+    groupMembers.value = (await apis.getGroupMembers(id)).data
   }
   const fetchGroupOwners = async (id: string) => {
-    groupOwners.value = (await apis.getGroupOwners(id)).data.owners!
+    groupOwners.value = (await apis.getGroupOwners(id)).data
   }
   const postGroupMember = async (id: string, members: string[]) => {
     await apis.postGroupMembers(id, members)

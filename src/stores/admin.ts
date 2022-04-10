@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-// SwaggerでSchemaに書けば型名を指定できる
-import type { InlineObject2 } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export const useAdminStore = defineStore('admin', () => {
@@ -11,19 +9,19 @@ export const useAdminStore = defineStore('admin', () => {
   const isAdminFetched = ref(false)
 
   const fetchAdmins = async () => {
-    admins.value = (await apis.adminsGet()).data // Swaggerをちゃんと書けば型付きで情報が取れる
+    admins.value = (await apis.getAdmins()).data
   }
-  const postAdmin = async (admin: InlineObject2) => {
-    await apis.adminsPost(admin)
+  const postAdmins = async (ids: string[]) => {
+    await apis.postAdmins(ids)
   }
-  const deleteAdmin = async (admin: string) => {
-    await apis.adminsUserIDDelete(admin)
+  const deleteAdmins = async (ids: string[]) => {
+    await apis.deleteAdmins(ids)
   }
   return {
     admins,
     isAdminFetched,
     fetchAdmins,
-    postAdmin,
-    deleteAdmin
+    postAdmins,
+    deleteAdmins
   }
 })

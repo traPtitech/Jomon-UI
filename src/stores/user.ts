@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-import type { User, PostUser } from '/@/lib/apis'
+import type { User } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export const useUserStore = defineStore('user', () => {
@@ -13,17 +13,36 @@ export const useUserStore = defineStore('user', () => {
     updated_at: '2022-01-27T13:45:37.048Z',
     deleted_at: '2022-01-27T13:45:37.048Z'
   })
-  const users = ref<User[]>([])
+  const users = ref<User[]>([
+    {
+      name: 'nagatech',
+      display_name: 'ながてち',
+      admin: true,
+      created_at: '2022-01-25T13:45:37.048Z',
+      updated_at: '2022-01-25T13:45:37.048Z',
+      deleted_at: '2022-01-25T13:45:37.048Z'
+    },
+    {
+      name: 'mehm8128',
+      display_name: 'mehm8128',
+      admin: false,
+      created_at: '2022-01-27T13:45:37.048Z',
+      updated_at: '2022-01-27T13:45:37.048Z',
+      deleted_at: '2022-01-27T13:45:37.048Z'
+    }
+  ])
 
-  const fetchMe = async () => {
-    me.value = (await apis.usersMeGet()).data
+  const getMe = async () => {
+    me.value = (await apis.getMe()).data
   }
-  const fetchUsers = async () => {
-    users.value = (await apis.usersGet()).data
-  }
-  const putUser = async (user: PostUser) => {
-    await apis.usersPut(user)
+  const getUsers = async () => {
+    users.value = (await apis.getUsers()).data
   }
 
-  return { me, users, fetchMe, fetchUsers, putUser }
+  return {
+    me,
+    users,
+    getMe,
+    getUsers
+  }
 })

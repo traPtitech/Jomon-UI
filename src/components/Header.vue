@@ -29,7 +29,7 @@ defineProps<Props>()
           <span>管理ページ</span>
         </router-link>
       </div>
-      <UserIcon :name="me.name!" />
+      <UserIcon v-if="me.name" :name="me.name" />
     </div>
   </header>
 </template>

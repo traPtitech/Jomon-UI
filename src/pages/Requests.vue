@@ -15,7 +15,7 @@ import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
 
 const route = useRoute()
-const pageIndex = Number(route.query.pageIndex)
+const pageIndex = route.query.pageIndex ? Number(route.query.pageIndex) : 1
 const generalStore = useGeneralStore()
 const requestStore = useRequestStore()
 const tagStore = useTagStore()

@@ -10,7 +10,7 @@ import { useRequestDetailStore } from '../stores/requestDetail'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
 import type { Status } from '../types/requestTypes'
-import { dateFormatter } from '../utiles/dateFormatter'
+import { formatDate } from '../utiles/date'
 import NewTagModal from './NewTagModal.vue'
 import Button from './shared/Button.vue'
 import MarkdownIt from './shared/MarkdownIt.vue'
@@ -233,7 +233,7 @@ function handleModalIsOpen() {
           申請者：{{ requestDetailStore.request.created_by }}
         </span>
         <span class="mr-4">
-          申請日：{{ dateFormatter(requestDetailStore.request.created_at!) }}
+          申請日：{{ formatDate(requestDetailStore.request.created_at!) }}
         </span>
         <div v-if="!(isFixMode === 'amount')" class="inline">
           <span class="text-2xl">

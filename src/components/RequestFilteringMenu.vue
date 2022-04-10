@@ -54,7 +54,7 @@ function filterByDate() {
 <template>
   <div class="flex justify-around">
     <button
-      class="p-1 border border-solid border-gray-300"
+      class="p-1 border border-gray-300"
       :class="params.sort === 'created_at' ? '' : 'bg-gray-200'"
       @click="sortByCreatedAt">
       日付順 <span v-if="params.sort === 'created_at'" class="text-xs">▼</span>
@@ -63,7 +63,7 @@ function filterByDate() {
     <div class="mt-1">
       <input
         v-model="params.since"
-        class="border border-solid border-gray-300 w-28 h-8"
+        class="border border-gray-300 w-28 h-8"
         placeholder="YYYY-MM-DD"
         @input="
           filterByDate
@@ -71,7 +71,7 @@ function filterByDate() {
       <span>～</span>
       <input
         v-model="params.until"
-        class="border border-solid border-gray-300 w-28 h-8"
+        class="border border-gray-300 w-28 h-8"
         placeholder="YYYY-MM-DD"
         @input="filterByDate" />
     </div>

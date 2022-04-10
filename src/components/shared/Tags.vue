@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<Props>(), { limit: 20 })
       !(tags.length > limit) ? tags.length : limit
     )"
     :key="tag.id"
-    class="border border-solid border-dark-600 rounded p-0.5"
+    class="border border-dark-600 rounded p-0.5"
     :class="index !== 0 ? 'ml-2' : ''"
     >{{ tag.name }}</span
   >

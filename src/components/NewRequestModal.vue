@@ -142,7 +142,7 @@ function deleteImage(index: number) {
         <!--幅を広くしたいけどなぜかできない-->
         <div
           class="pl-2 pr-2 w-4/5"
-          :class="request.content ? 'border border-solid border-gray-200' : ''">
+          :class="request.content ? 'border border-gray-200' : ''">
           <MarkdownIt class="w-full" :text="request.content" />
         </div>
       </details>

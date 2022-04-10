@@ -303,8 +303,7 @@ function handleModalIsOpen() {
     <div class="ml-12 mt-4 flex">
       <span>詳細：</span>
       <div v-if="!(isFixMode === 'content')" class="flex items-start">
-        <div
-          class="h-32 w-200 border border-solid border-gray-300 overflow-y-scroll">
+        <div class="h-32 w-200 border border-gray-300 overflow-y-scroll">
           <div class="ml-2">
             <MarkdownIt :text="requestDetailStore.request.content!" />
           </div>

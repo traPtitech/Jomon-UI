@@ -6,7 +6,6 @@ export type Transaction = {
   tags: {
     id: string
     name: string
-    description: string
     created_at: string
     updated_at: string
   }[]
@@ -37,5 +36,5 @@ export type TransactionRequest = {
   targets: string[]
   request_id: string
   tags: string[]
-  group: string
+  group: string | null
 }

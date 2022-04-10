@@ -1,7 +1,11 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-import { Params, Transaction, TransactionRequest } from '../types/transactionTypes'
+import {
+  Params,
+  Transaction,
+  TransactionRequest
+} from '../types/transactionTypes'
 
 export const useTransactionStore = defineStore('transaction', {
   state: () => ({
@@ -14,49 +18,42 @@ export const useTransactionStore = defineStore('transaction', {
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           name: '2020講習会',
-          description: '2020年度講',
           created_at: '2022-02-09T14:03:53.278Z',
           updated_at: '2022-02-09T14:03:53.278Z'
         },
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           name: '2020講習会',
-          description: '2020年度講習会ああああああ',
           created_at: '2022-02-09T14:03:53.278Z',
           updated_at: '2022-02-09T14:03:53.278Z'
         },
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           name: '2020講習会',
-          description: '2020年度講習会',
           created_at: '2022-02-09T14:03:53.278Z',
           updated_at: '2022-02-09T14:03:53.278Z'
         },
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           name: '2020講習会',
-          description: '2020年度講習会sssssssssssss',
           created_at: '2022-02-09T14:03:53.278Z',
           updated_at: '2022-02-09T14:03:53.278Z'
         },
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           name: '2021講習会',
-          description: '2020年度講',
           created_at: '2022-02-09T14:03:53.278Z',
           updated_at: '2022-02-09T14:03:53.278Z'
         },
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           name: '2021講習会',
-          description: '2020年度講',
           created_at: '2022-02-09T14:03:53.278Z',
           updated_at: '2022-02-09T14:03:53.278Z'
         },
         {
           id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           name: '2021講習会',
-          description: '2020年度講',
           created_at: '2022-02-09T14:03:53.278Z',
           updated_at: '2022-02-09T14:03:53.278Z'
         }
@@ -82,7 +79,6 @@ export const useTransactionStore = defineStore('transaction', {
       group: null
     } as Params,
     // tagList: new Array<string>(),
-    isModalOpen: false,
     isTargetSearchOpen: false
   }),
   getters: {

@@ -31,16 +31,16 @@ function statusToJpn(status: string) {
 }
 function statusColor(status: string) {
   switch (status) {
-    case 'submitted':
-      return 'bg-yellow-500 text-white-500'
-    case 'rejected':
-      return 'bg-gray-500 text-black-500'
-    case 'fix_required':
-      return 'bg-red-500 text-white-500'
     case 'accepted':
-      return 'bg-blue-500 text-white-500'
-    case 'fully_repaid':
-      return 'bg-green-500 text-black-500'
+      return 'bg-green-500 text-black'
+    case 'submitted':
+      return 'bg-yellow-500 text-black'
+    case 'fix_required':
+      return 'bg-red-500 text-white'
+    case 'rejected':
+      return 'bg-gray-500 text-black'
+    case 'completed':
+      return 'bg-gray-500 text-black'
     default:
       return 'ERROR'
   }
@@ -57,33 +57,28 @@ function handleMouseLeave() {
   <div class="relative inline">
     <div
       v-if="flag && !text"
-      class="absolute top-6 left-6 w-16 h-6 bg-gray-100 z-1 shadow-md text-center"
-    >
+      class="absolute top-6 left-6 w-16 h-6 bg-zinc-300 rounded-md z-1 shadow-md text-center">
       {{ statusToJpn(status) }}
     </div>
     <div
-      @mouseover="handleMouseOver"
+      class="px-4 flex items-center"
       @mouseleave="handleMouseLeave"
-      class="ml-4 mr-4"
-    >
-      <!--ToDo:色変える-->
-      <CloudUploadIcon
-        v-if="status === 'submitted'"
-        class="text-blue-500 w-8 inline-block"
-      />
-      <XCircleIcon v-else-if="status === 'rejected'" class="text-red-500 w-8" />
-      <ExclamationIcon
-        v-else-if="status === 'fix_required'"
-        class="text-yellow-500 w-8"
-      />
-      <ThumbUpIcon
-        v-else-if="status === 'accepted'"
-        class="text-blue-200 w-8"
-      />
+      @mouseover="handleMouseOver">
       <CheckCircleIcon
-        v-else-if="status === 'fully_repaid'"
-        class="text-green-500 w-8"
-      />
+        v-if="status === 'accepted'"
+        class="text-green-500 w-8 inline-block" />
+      <ExclamationIcon
+        v-else-if="status === 'submitted'"
+        class="text-yellow-500 w-8 inline-block" />
+      <XCircleIcon
+        v-else-if="status === 'fix_required'"
+        class="text-red-500 w-8 inline-block" />
+      <CloudUploadIcon
+        v-else-if="status === 'rejected'"
+        class="text-gray-500 w-8 inline-block" />
+      <ThumbUpIcon
+        v-else-if="status === 'completed'"
+        class="text-gray-500 w-8 inline-block" />
       <span v-if="text === true" class="align-top">{{
         statusToJpn(status)
       }}</span>

@@ -18,7 +18,6 @@ export type RequestResponse = {
   tags: {
     id: string
     name: string
-    description: string
     created_at: string
     updated_at: string
   }[]
@@ -34,7 +33,7 @@ export type RequestResponse = {
 
 export type Params = {
   sort: string
-  current_state: string | null
+  currentStatus: string | null
   target: string | null
   since: string
   until: string

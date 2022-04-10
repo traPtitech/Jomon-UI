@@ -1,0 +1,227 @@
+<script lang="ts" setup>
+import { XCircleIcon } from '@heroicons/vue/solid'
+import axios from 'axios'
+import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
+
+import clubBudgetRequestTemplate from '../md/clubBudgetRequest.md?raw'
+import travelingExpenseRequestTemplate from '../md/travelingExpenseRequest.md?raw'
+import { useFileStore } from '../stores/file'
+import { useGeneralStore } from '../stores/general'
+import { useGroupStore } from '../stores/group'
+import { useRequestStore } from '../stores/request'
+import { useTagStore } from '../stores/tag'
+import { useUserStore } from '../stores/user'
+import type { File } from '../types/fileTypes'
+import type { Request, RequestResponse } from '../types/requestsTypes'
+import NewTagModal from './NewTagModal.vue'
+import Button from './shared/Button.vue'
+import MarkdownIt from './shared/MarkdownIt.vue'
+import Modal from './shared/Modal.vue'
+import VueSelect from './shared/VueSelect.vue'
+
+const generalStore = useGeneralStore()
+const requestStore = useRequestStore()
+const userStore = useUserStore()
+const tagStore = useTagStore()
+const groupStore = useGroupStore()
+const fileStore = useFileStore()
+const { isModalOpen, isModalOpen2 } = storeToRefs(generalStore)
+const imageExtensions = /.(jpg|png|jpeg|tiff|jfif|tif|webp|avif)$/
+const inputImageRef = ref()
+
+const selectedTemplate = ref(null)
+const templates = [
+  { name: '部費利用申請', value: 'clubBudgetRequest' },
+  { name: '交通費申請', value: 'travelingExpenseRequest' }
+]
+
+const request = ref({
+  created_by: userStore.me.name,
+  amount: 0,
+  title: '',
+  targets: [] as string[],
+  content: '',
+  tags: [] as string[],
+  group: null
+} as Request)
+const images = ref([] as File[])
+
+async function postRequestAPI(request: Request) {
+  const response: RequestResponse = await axios.post('/api/requests', request)
+  requestStore.fetchRequests()
+  return response.id
+}
+
+async function postRequest() {
+  if (
+    /^[1-9][0-9]*$|^0$/.test(request.value.amount.toString()) &&
+    request.value.title !== '' &&
+    request.value.content !== '' &&
+    request.value.targets.length > 0
+  ) {
+    const id = await postRequestAPI(request.value)
+    for (let i = 0; i < images.value.length; i++) {
+      fileStore.postFile(id, images.value[i].name, images.value[i].src)
+    }
+    isModalOpen.value = false
+  } else {
+    alert('形式が不正です')
+  }
+}
+function handleImageChange(e: Event) {
+  if ((e.target as HTMLInputElement).files) {
+    for (let i = 0; i < (e.target as HTMLInputElement).files!.length; i++) {
+      const file = (e.target as HTMLInputElement).files![i]
+      if (file.name.match(imageExtensions)) {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => {
+          images.value = images.value.concat([
+            { name: file.name, src: reader.result!.toString() }
+          ])
+        }
+      } else {
+        alert('画像ファイル以外はアップロードできません')
+      }
+    }
+    inputImageRef.value.value = null
+  }
+}
+function handleTagModalIsOpen() {
+  isModalOpen2.value = !isModalOpen2.value
+}
+function setTemplate(selectedTemplate: string | null) {
+  if (selectedTemplate) {
+    request.value.content =
+      selectedTemplate === 'clubBudgetRequest'
+        ? clubBudgetRequestTemplate
+        : selectedTemplate === 'travelingExpenseRequest'
+        ? travelingExpenseRequestTemplate
+        : ''
+  }
+}
+function deleteImage(index: number) {
+  images.value.splice(index, 1)
+}
+</script>
+
+<template>
+  <NewTagModal v-if="isModalOpen2" />
+  <Modal :height="170" :layer="1" :width="300">
+    <h1 class="text-3xl text-center mt-4 mb-4">申請の新規作成</h1>
+    <div class="flex flex-col justify-between ml-12 h-4/5">
+      <span class="text-xl mb-2">申請者：{{ userStore.me.name }}</span>
+      <div class="mb-2">
+        <span class="text-xl">タイトル：</span>
+        <input v-model="request.title" class="border border-gray-300 w-4/5" />
+      </div>
+      <div class="mb-2">
+        <span class="text-xl">金額：</span>
+        <input v-model="request.amount" class="border border-gray-300" />円
+      </div>
+      <div class="text-right mr-20 mb-2">
+        <VueSelect
+          v-model="selectedTemplate"
+          class="w-1/3 inline-block"
+          label="name"
+          :options="templates"
+          placeholder="テンプレートを選択"
+          :reduce="(template:any) => template.value"
+          @close="setTemplate(selectedTemplate)">
+        </VueSelect>
+      </div>
+      <div>
+        <span class="text-xl align-top">詳細：</span>
+        <textarea
+          v-model="request.content"
+          class="h-60 leading-tight border border-gray-300 resize-none w-4/5 p-1" />
+      </div>
+      <details class="mb-2">
+        <summary>MDプレビュー</summary>
+        <!--幅を広くしたいけどなぜかできない-->
+        <div
+          class="pl-2 pr-2 w-4/5"
+          :class="request.content ? 'border border-solid border-gray-200' : ''">
+          <MarkdownIt class="w-full" :text="request.content" />
+        </div>
+      </details>
+      <div class="mb-2">
+        <span class="text-xl">払い戻し対象者：</span>
+        <VueSelect
+          v-model="request.targets"
+          class="w-2/3 inline-block"
+          :close-on-select="false"
+          label="name"
+          multiple
+          :options="userStore.users"
+          placeholder="払い戻し対象者"
+          :reduce="(user:any) => user.name"></VueSelect>
+      </div>
+      <div class="mb-2">
+        <span class="text-xl">グループ：</span>
+        <VueSelect
+          v-model="request.group"
+          class="w-1/3 inline-block"
+          label="name"
+          :options="groupStore.groups"
+          placeholder="グループ"
+          :reduce="(group:any) => group.id"></VueSelect>
+      </div>
+      <div class="mb-2">
+        <span class="text-xl">タグ：</span>
+        <VueSelect
+          v-model="request.tags"
+          class="w-2/3 inline-block"
+          :close-on-select="false"
+          label="name"
+          multiple
+          :options="tagStore.tags"
+          placeholder="タグ"
+          :reduce="(tag:any) => tag.id"></VueSelect>
+        <Button
+          class="ml-8"
+          font-size="xl"
+          padding="sm"
+          @click.stop="handleTagModalIsOpen">
+          タグを新規作成</Button
+        >
+      </div>
+      <div class="mb-4">
+        <span class="text-xl">画像：</span>
+        <input
+          ref="inputImageRef"
+          accept="image/*"
+          multiple
+          type="file"
+          @change="e => handleImageChange(e)" />
+      </div>
+      <div>
+        <div
+          v-if="images.length === 0"
+          :class="images.length === 0 ? 'h-32' : ''">
+          <span>画像プレビュー</span>
+        </div>
+        <div v-if="images.length !== 0" class="flex flex-wrap">
+          <div v-for="(image, index) in images" :key="index" class="relative">
+            <img :alt="image.name" class="h-32" :src="image.src" />
+            <button
+              class="absolute top-0 right-0 w-6 h-6"
+              @click="deleteImage(index)">
+              <XCircleIcon />
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <Button
+          class="w-48 mb-4"
+          font-size="xl"
+          padding="sm"
+          @click.stop="postRequest">
+          申請を作成する</Button
+        >
+      </div>
+    </div>
+  </Modal>
+</template>

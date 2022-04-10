@@ -8,30 +8,27 @@ import { useRequestDetailStore } from '../stores/requestDetail'
 import { useTagStore } from '../stores/tag'
 import { useTransactionStore } from '../stores/transaction'
 import { useUserStore } from '../stores/user'
-import { TransactionRequest } from '../types/transactionTypes'
-import Button from './Button.vue'
-import Modal from './Modal.vue'
-import VueSelect from './VueSelect.vue'
+import type { TransactionRequest } from '../types/transactionTypes'
+import Button from './shared/Button.vue'
+import Modal from './shared/Modal.vue'
+import VueSelect from './shared/VueSelect.vue'
 
 type Props = { request_id: string } //request_idには申請の詳細画面からモーダルを表示するときだけpropsにIDを渡す。transaction一覧では空文字列を渡す
 const props = defineProps<Props>()
-
 const generalStore = useGeneralStore()
 const requestDetailStore = useRequestDetailStore()
 const transactionStore = useTransactionStore()
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
-
 const { isModalOpen } = storeToRefs(generalStore)
 const transaction = ref({
   amount: props.request_id ? requestDetailStore.request.amount : '',
   targets: props.request_id ? requestDetailStore.targetIds : ([] as string[]),
   request_id: props.request_id,
   tags: props.request_id ? requestDetailStore.tagIds : ([] as string[]),
-  group: props.request_id ? requestDetailStore.request.group.id : null
+  group: props.request_id ? requestDetailStore.request.group!.id : null
 } as TransactionRequest)
-
 function postTransaction() {
   if (
     /^[1-9][0-9]*$|^0$/.test(transaction.value.amount.toString()) &&
@@ -46,7 +43,7 @@ function postTransaction() {
 </script>
 
 <template>
-  <Modal :width="280" :height="140" :layer="1">
+  <Modal :height="140" :layer="1" :width="280">
     <h1 class="text-3xl text-center mt-4 mb-4">入出金記録の新規作成</h1>
     <div class="flex flex-col justify-between ml-12 mr-12 h-4/5">
       <div class="text-xl">
@@ -62,46 +59,42 @@ function postTransaction() {
         <span class="text-xl">払い戻し対象者：</span>
         <VueSelect
           v-model="transaction.targets"
-          :options="userStore.users"
-          :reduce="(user:any) => user.name"
-          label="name"
-          placeholder="払い戻し対象者"
-          multiple
-          :closeOnSelect="false"
           class="w-2/3 inline-block"
-        ></VueSelect>
+          :close-on-select="false"
+          label="name"
+          multiple
+          :options="userStore.users"
+          placeholder="払い戻し対象者"
+          :reduce="(user:any) => user.name"></VueSelect>
       </div>
       <div class="mb-2">
         <span class="text-xl">グループ：</span>
         <VueSelect
           v-model="transaction.group"
-          :options="groupStore.groups"
-          :reduce="(group:any) => group.id"
-          label="name"
-          placeholder="グループ"
           class="w-1/3 inline-block"
-        ></VueSelect>
+          label="name"
+          :options="groupStore.groups"
+          placeholder="グループ"
+          :reduce="(group:any) => group.id"></VueSelect>
       </div>
       <div class="mb-2">
         <span class="text-xl">タグ：</span>
         <VueSelect
           v-model="transaction.tags"
-          :options="tagStore.tags"
-          :reduce="(tag:any) => tag.id"
-          label="name"
-          placeholder="タグ"
-          multiple
-          :closeOnSelect="false"
           class="w-2/3 inline-block"
-        ></VueSelect>
+          :close-on-select="false"
+          label="name"
+          multiple
+          :options="tagStore.tags"
+          placeholder="タグ"
+          :reduce="(tag:any) => tag.id"></VueSelect>
       </div>
       <div class="text-center">
         <Button
-          @onClick="postTransaction"
-          fontSize="xl"
-          padding="sm"
           class="w-64 mb-4"
-        >
+          font-size="xl"
+          padding="sm"
+          @click.stop="postTransaction">
           入出金記録を作成する</Button
         >
       </div>

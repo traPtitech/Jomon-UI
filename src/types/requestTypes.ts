@@ -1,5 +1,6 @@
-import { GroupResponse } from './groupTypes'
-import { TagResponse } from './tagTypes'
+import type { Tag } from '../lib/apis'
+import type { GroupResponse } from './groupTypes'
+import type { TagResponse } from './tagTypes'
 
 export type RequestDetailResponse = {
   id: string
@@ -40,7 +41,7 @@ export type Request2 = {
   title: string
   content: string
   targets: string[]
-  tags: TagResponse[]
+  tags: string[]
   group: string | null
 }
 

@@ -1,7 +1,6 @@
+import { createPinia } from 'pinia'
 import 'virtual:windi-devtools'
 import 'virtual:windi.css'
-
-import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 
 import App from './App.vue'

@@ -1,9 +1,8 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
-import vSelect from 'vue-select'
-import 'vue-select/dist/vue-select.css'
 
+import VueSelect from '../components/shared/VueSelect.vue'
 import Button from '/@/components/shared/Button.vue'
 import type { Group } from '/@/lib/apis'
 import { useGroupStore } from '/@/stores/group'
@@ -55,7 +54,7 @@ async function handlePostGroup() {
     </div>
     <div>
       <span>管理者：</span>
-      <v-select
+      <VueSelect
         v-model="group.owners"
         class="w-2/3"
         :close-on-select="false"
@@ -63,12 +62,12 @@ async function handlePostGroup() {
         multiple
         :options="users"
         placeholder="管理者"
-        :reduce="(user:any) => user.name"></v-select>
+        :reduce="(user:any) => user.name"></VueSelect>
       注意：管理者は自動でメンバーには入りません。
     </div>
     <div>
       <span>メンバー：</span>
-      <v-select
+      <VueSelect
         v-model="group.members"
         class="w-2/3"
         :close-on-select="false"
@@ -76,7 +75,7 @@ async function handlePostGroup() {
         multiple
         :options="users"
         placeholder="メンバー"
-        :reduce="(user:any) => user.name"></v-select>
+        :reduce="(user:any) => user.name"></VueSelect>
     </div>
     <div class="text-center">
       <Button

@@ -1,4 +1,4 @@
-name: main
+name: common
 
 on:
   push:
@@ -7,40 +7,47 @@ on:
   pull_request:
 
 jobs:
-  packages:
-    name: Packages
+  dependencies:
+    name: Prepare packages and Generate apis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: 16.x
+          cache: npm
       - run: npm ci
-      - uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: node_modules-${{ hashFiles('**/package-lock.json') }}
       - uses: actions/upload-artifact@v2
         with:
           name: apis
           path: ./src/lib/apis/generated
-  lint:
-    name: Lint
+  type-check: 
+    name: Type Check
     runs-on: ubuntu-latest
-    needs: [packages]
-    env:
-      NODE_ENV: production
+    needs: [dependencies]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: 16.x
-      - uses: actions/cache@v2
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v2
         with:
-          path: node_modules
-          key: node_modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            node_modules-
+          name: apis
+          path: ./src/lib/apis/generated
+      - run: npm run type-check
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    needs: [dependencies]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+          cache: npm
+      - run: npm ci
       - uses: actions/download-artifact@v2
         with:
           name: apis
@@ -49,20 +56,14 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [packages]
-    env:
-      NODE_ENV: production
+    needs: [dependencies]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: 16.x
-      - uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: node_modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            node_modules-
+          cache: npm
+      - run: npm ci
       - uses: actions/download-artifact@v2
         with:
           name: apis

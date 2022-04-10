@@ -1,15 +1,8 @@
 <script lang="ts" setup>
 import Logo from './shared/JomonLogo.vue'
 import UserIcon from './shared/UserIcon.vue'
+import type { User } from '/@/lib/apis'
 
-type User = {
-  name: string
-  display_name: string
-  admin: boolean
-  created_at: string
-  updated_at: string
-  deleted_at: string
-}
 interface Props {
   me: User
 }
@@ -36,7 +29,7 @@ defineProps<Props>()
           <span>管理ページ</span>
         </router-link>
       </div>
-      <UserIcon :name="me.name" />
+      <UserIcon v-if="me.name" :name="me.name" />
     </div>
   </header>
 </template>

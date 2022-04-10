@@ -38,34 +38,34 @@ export const useGroupStore = defineStore('group', () => {
   })
 
   const fetchGroups = async () => {
-    groups.value = (await apis.groupsGet()).data.groups!
+    groups.value = (await apis.getGroups()).data.groups!
   }
   const postGroup = async (group: PostGroup) => {
-    return (await apis.groupsPost(group)).data
+    return (await apis.postGroup(group)).data
   }
   const putGroup = async (group: PostGroup, id: string) => {
-    await apis.groupsGroupIDPut(id, group)
+    await apis.putGroupDetail(id, group)
   }
   const deleteGroup = async (id: string) => {
-    await apis.groupsGroupIDDelete(id)
+    await apis.deleteGroup(id)
   }
   const fetchGroupMembers = async (id: string) => {
-    groupMembers.value = (await apis.groupsGroupIDMembersGet(id)).data.members!
+    groupMembers.value = (await apis.getGroupMembers(id)).data.members!
   }
   const fetchGroupOwners = async (id: string) => {
-    groupOwners.value = (await apis.groupsGroupIDOwnersGet(id)).data.owners!
+    groupOwners.value = (await apis.getGroupOwners(id)).data.owners!
   }
-  const postGroupOwner = async (id: string, owner: string) => {
-    await apis.groupsGroupIDOwnersPost(id, { id: owner })
+  const postGroupMember = async (id: string, members: string[]) => {
+    await apis.postGroupMembers(id, members)
   }
-  const postGroupMember = async (id: string, member: string) => {
-    await apis.groupsGroupIDMembersPost(id, { id: member })
+  const postGroupOwner = async (id: string, owners: string[]) => {
+    await apis.postGroupOwners(id, owners)
   }
-  const deleteGroupMember = async (id: string, member: string) => {
-    await apis.groupsGroupIDMembersMemberIDDelete(id, member)
+  const deleteGroupMember = async (id: string, members: string[]) => {
+    await apis.deleteGroupMembers(id, members)
   }
-  const deleteGroupOwner = async (id: string, owner: string) => {
-    await apis.groupsGroupIDOwnersOwnerIDDelete(id, owner)
+  const deleteGroupOwner = async (id: string, owners: string[]) => {
+    await apis.deleteGroupOwners(id, owners)
   }
 
   return {

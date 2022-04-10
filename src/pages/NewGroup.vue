@@ -21,25 +21,17 @@ const group = ref({
   members: [] as string[]
 })
 
-async function postGroupAPI() {
-  const willPostGroup = {
-    name: group.value.name,
-    description: group.value.description,
-    budget: group.value.budget
-  }
-  const res: Group = await groupStore.postGroup(willPostGroup)
-  group.value.owners.forEach(id => {
-    groupStore.postGroupOwner(res.id!, id)
-  })
-  group.value.members.forEach(id => {
-    groupStore.postGroupMember(res.id!, id)
-  })
-  groupStore.fetchGroups()
-}
-function postRequest() {
-  alert('ここでgroupの送信。ownersとmembersは別にしてPOSTする')
+async function handlePostGroup() {
   if (/^[1-9][0-9]*$|^0$/.test(group.value.budget.toString())) {
-    postGroupAPI()
+    const willPostGroup = {
+      name: group.value.name,
+      description: group.value.description,
+      budget: group.value.budget
+    }
+    const res: Group = await groupStore.postGroup(willPostGroup)
+    await groupStore.postGroupMember(res.id!, group.value.members)
+    await groupStore.postGroupOwner(res.id!, group.value.owners)
+    groupStore.fetchGroups()
   }
 }
 </script>
@@ -91,7 +83,7 @@ function postRequest() {
         class="w-48 mb-4"
         font-size="xl"
         padding="sm"
-        @clock.stop="postRequest">
+        @clock.stop="handlePostGroup">
         グループを作成する
       </Button>
     </div>

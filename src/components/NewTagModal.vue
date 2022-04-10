@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import axios from 'axios'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
+import apis from '../lib/apis'
 import { useGeneralStore } from '../stores/general'
 import { useTagStore } from '../stores/tag'
 import Button from './shared/Button.vue'
@@ -14,7 +14,7 @@ const tagStore = useTagStore()
 const tagName = ref('')
 
 async function postTagAPI(tag: string) {
-  await axios.post('/api/tags', tag)
+  await apis.postTag({ name: tag })
   tagStore.fetchTags()
 }
 function postTag() {
@@ -34,11 +34,7 @@ function postTag() {
         <input v-model="tagName" class="border border-gray-300 w-2/3" />
       </div>
       <div class="text-center">
-        <Button
-          class="w-48 mb-4"
-          font-size="xl"
-          padding="sm"
-          @on-click="postTag">
+        <Button class="w-48 mb-4" font-size="xl" padding="sm" @click="postTag">
           タグを作成する</Button
         >
       </div>

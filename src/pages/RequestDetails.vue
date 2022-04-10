@@ -43,8 +43,8 @@ function createTransaction() {
           <Button
             class="w-2/3 mb-4 mr-auto ml-auto"
             font-size="md"
-            :on-click="createTransaction"
-            padding="sm">
+            padding="sm"
+            @click="createTransaction">
             この申請から入出金記録を作成する
           </Button>
           <router-link

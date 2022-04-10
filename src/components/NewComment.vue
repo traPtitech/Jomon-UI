@@ -1,22 +1,20 @@
 <script lang="ts" setup>
-import axios from 'axios'
 import { ref } from 'vue'
 
+import apis from '../lib/apis'
 import { useRequestDetailStore } from '../stores/requestDetail'
-import type { Comment } from '../types/requestTypes'
 import Button from './shared/Button.vue'
 import MarkdownIt from './shared/MarkdownIt.vue'
 
 const requestDetailStore = useRequestDetailStore()
 const comment = ref('')
 
-async function postComment(id: string, commentRequest: Comment) {
-  await axios.post('/api/requests/' + id + '/comments', commentRequest)
+async function postComment(id: string, comment: string) {
+  await apis.postComment(id, { comment: comment })
   requestDetailStore.fetchRequestDetail(id)
 }
 function submit() {
-  const commentRequest = { comment: comment.value }
-  postComment(requestDetailStore.request.id!, commentRequest)
+  postComment(requestDetailStore.request.id!, comment.value)
   comment.value = ''
 }
 </script>
@@ -31,8 +29,8 @@ function submit() {
       <Button
         class="w-24 mr-4 mt-2"
         font-size="md"
-        :on-click="submit"
-        padding="sm">
+        padding="sm"
+        @click="submit">
         コメントする
       </Button>
     </div>

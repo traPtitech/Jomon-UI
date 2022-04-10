@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { PencilIcon } from '@heroicons/vue/solid'
-import axios from 'axios'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
+import type { StatusEnum } from '../lib/apis'
+import apis from '../lib/apis'
 import { useGeneralStore } from '../stores/general'
 import { useGroupStore } from '../stores/group'
 import { useRequestDetailStore } from '../stores/requestDetail'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
-import type { Status } from '../types/requestTypes'
 import { formatDate } from '../utiles/date'
 import NewTagModal from './NewTagModal.vue'
 import Button from './shared/Button.vue'
@@ -28,15 +28,16 @@ const isFixMode = ref('')
 
 const fixedValue = ref(requestDetailStore.putRequestRequest)
 
-async function putStatus(id: string, statusRequest: Status) {
-  await axios.put('/api/requests/' + id + '/status', statusRequest)
+async function putStatus(id: string, status: StatusEnum) {
+  const statusRequest = {
+    status: status,
+    comment: ''
+  }
+  await apis.putStatus(id, statusRequest)
   requestDetailStore.fetchRequestDetail(id)
 }
 function changeStatus(status: string) {
-  const statusRequest = {
-    status: status
-  }
-  putStatus(requestDetailStore.request.id!, statusRequest)
+  putStatus(requestDetailStore.request.id!, status)
   requestDetailStore.fetchRequestDetail(requestDetailStore.request.id!)
   alert('ステータスを' + status + 'に変更しました')
 } //確認ダイアログほしい

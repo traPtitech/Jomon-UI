@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { XCircleIcon } from '@heroicons/vue/solid'
-import axios from 'axios'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
+import apis from '../lib/apis'
+import type { Request } from '../lib/apis'
 import clubBudgetRequestTemplate from '../md/clubBudgetRequest.md?raw'
 import travelingExpenseRequestTemplate from '../md/travelingExpenseRequest.md?raw'
 import { useFileStore } from '../stores/file'
@@ -12,13 +13,25 @@ import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
-import type { File } from '../types/fileTypes'
-import type { Request, RequestResponse } from '../types/requestsTypes'
 import NewTagModal from './NewTagModal.vue'
 import Button from './shared/Button.vue'
 import MarkdownIt from './shared/MarkdownIt.vue'
 import Modal from './shared/Modal.vue'
 import VueSelect from './shared/VueSelect.vue'
+
+interface File {
+  name: string
+  src: string
+}
+interface RequestRequest {
+  created_by: string
+  amount: number
+  title: string
+  content: string
+  targets: string[]
+  tags: string[]
+  group: string
+}
 
 const generalStore = useGeneralStore()
 const requestStore = useRequestStore()
@@ -43,12 +56,12 @@ const request = ref({
   targets: [] as string[],
   content: '',
   tags: [] as string[],
-  group: null
-} as Request)
+  group: ''
+} as RequestRequest)
 const images = ref([] as File[])
 
-async function postRequestAPI(request: Request) {
-  const response: RequestResponse = await axios.post('/api/requests', request)
+async function postRequestAPI(request: RequestRequest) {
+  const response: Request = (await apis.postRequest(request)).data
   requestStore.fetchRequests()
   return response.id
 }
@@ -62,7 +75,7 @@ async function postRequest() {
   ) {
     const id = await postRequestAPI(request.value)
     for (let i = 0; i < images.value.length; i++) {
-      fileStore.postFile(id, images.value[i].name, images.value[i].src)
+      fileStore.postFile(id!, images.value[i].name, images.value[i].src)
     }
     isModalOpen.value = false
   } else {

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useRequestDetailStore } from '../stores/requestDetail'
-import { dateFormatter } from '../utiles/dateFormatter'
+import { formatDate } from '../utiles/date'
 import MarkdownIt from './shared/MarkdownIt.vue'
 import StatusChip from './shared/StatusChip.vue'
 import UserIcon from './shared/UserIcon.vue'
@@ -36,7 +36,7 @@ const props = defineProps<Props>()
           </span>
         </span>
         <span class="mr-2 mt-2 text-zinc-400">{{
-          dateFormatter(
+          formatDate(
             requestDetailStore.request.comments![props.index].created_at!
           )
         }}</span>
@@ -72,7 +72,7 @@ const props = defineProps<Props>()
         :text="true!" /><!--todo:文字の高さずれるのどうにかする-->
       <span>にしました。</span>
       <span class="ml-4 text-zinc-400">{{
-        dateFormatter(
+        formatDate(
           requestDetailStore.request.statuses![props.index].created_at!
         )
       }}</span>

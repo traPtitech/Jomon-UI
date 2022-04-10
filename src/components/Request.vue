@@ -1,11 +1,9 @@
 <script lang="ts" setup>
 import type { Request } from '../lib/apis'
-import { useRequestStore } from '../stores/request'
-import { dateFormatter } from '../utiles/dateFormatter'
+import { formatDate } from '../utiles/date'
 import StatusChip from './shared/StatusChip.vue'
 import Tags from './shared/Tags.vue'
 
-const requestStore = useRequestStore()
 type Props = { request: Request }
 const props = defineProps<Props>()
 </script>
@@ -26,7 +24,7 @@ const props = defineProps<Props>()
         <div class="">
           <span class="mr-4">グループ：{{ request.group!.name }}</span>
           <span class="mr-4">申請者：{{ request.created_by }}</span>
-          <span>申請日：{{ dateFormatter(request.created_at!) }}</span>
+          <span>申請日：{{ formatDate(request.created_at!) }}</span>
         </div>
         <div class="text-right text-4xl">
           <span class="">{{ request.amount }}円</span>

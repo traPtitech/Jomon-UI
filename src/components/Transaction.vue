@@ -4,10 +4,11 @@ import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import { useTransactionStore } from '../stores/transaction'
+import { formatDate } from '../utiles/date'
 import Tags from './shared/Tags.vue'
 
 const transactionStore = useTransactionStore()
-const { transactions, dateFormatter } = storeToRefs(transactionStore)
+const { transactions } = storeToRefs(transactionStore)
 type Props = { index: number }
 const props = defineProps<Props>()
 const flag = ref(false)
@@ -26,7 +27,7 @@ function handleMouseLeave() {
       class="flex w-3/5"
       :to="'requests/' + transactions[props.index].request">
       <div class="w-1/4 text-center text-sky-500">
-        {{ dateFormatter(transactions[props.index].created_at) }}
+        {{ formatDate(transactions[props.index].created_at!) }}
       </div>
       <div class="w-1/4 text-center text-sky-500">
         {{ transactions[props.index].amount }}
@@ -35,12 +36,12 @@ function handleMouseLeave() {
         {{ transactions[props.index].target }}
       </div>
       <div class="w-1/4 text-center text-sky-500">
-        {{ transactions[props.index].group.description }}
+        {{ transactions[props.index].group!.description }}
       </div>
     </router-link>
     <div v-else class="flex w-3/5">
       <div class="w-1/4 text-center">
-        {{ dateFormatter(transactions[props.index].created_at) }}
+        {{ formatDate(transactions[props.index].created_at!) }}
       </div>
       <div class="w-1/4 text-center">
         {{ transactions[props.index].amount }}
@@ -49,7 +50,7 @@ function handleMouseLeave() {
         {{ transactions[props.index].target }}
       </div>
       <div class="w-1/4 text-center">
-        {{ transactions[props.index].group.description }}
+        {{ transactions[props.index].group!.description }}
       </div>
     </div>
     <div
@@ -65,7 +66,7 @@ function handleMouseLeave() {
         </span>
       </div>
       <span>
-        <Tags :limit="3" :tags="transactions[props.index].tags" />
+        <Tags :limit="3" :tags="transactions[props.index].tags!" />
       </span>
       <router-link
         class="ml-2 w-5 h-5 inline-block"

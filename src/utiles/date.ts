@@ -1,4 +1,4 @@
-export const dateFormatter = (date: string) => {
+export const formatDate = (date: string) => {
   return (
     date.split('-')[0] +
     '年' +

@@ -42,12 +42,12 @@ function changeIsModalOpen() {
   </div>
   <div
     :class="
-      pageIndex === Math.ceil(transactionStore.transactionsLength() / 13)
+      pageIndex === Math.ceil(transactionStore.transactionsLength / 13)
         ? 'h-123'
         : ''
     ">
     <div
-      v-if="transactionStore.transactionsLength() !== 0"
+      v-if="transactionStore.transactionsLength !== 0"
       class="min-w-150 w-5/6 m-auto">
       <FilteringTransactionMenu />
       <div class="border border-gray-400 border-1"></div>
@@ -61,13 +61,13 @@ function changeIsModalOpen() {
         </li>
       </ul>
     </div>
-    <div v-if="transactionStore.transactionsLength() !== 0" class="ml-30">
-      {{ transactionStore.transactionsLength() }}件取得しました
+    <div v-if="transactionStore.transactionsLength !== 0" class="ml-30">
+      {{ transactionStore.transactionsLength }}件取得しました
     </div>
     <div v-else class="ml-30">条件に一致する申請は見つかりませんでした</div>
     <div class="mt-4">
       <PaginationBar
-        :item-length="transactionStore.transactionsLength()"
+        :item-length="transactionStore.transactionsLength"
         kind="transactions"
         :page-index="pageIndex"
         :unit="13" />

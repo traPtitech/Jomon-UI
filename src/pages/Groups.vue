@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import Group from '/@/components/Group.vue'
@@ -10,7 +11,9 @@ import { useGeneralStore } from '/@/stores/general'
 import { useGroupStore } from '/@/stores/group'
 
 const route = useRoute()
-const pageIndex = route.query.pageIndex ? Number(route.query.pageIndex) : 1
+const pageIndex = ref<number>(
+  route.query.pageIndex ? Number(route.query.pageIndex) : 1
+)
 const generalStore = useGeneralStore()
 const groupStore = useGroupStore()
 const { isModalOpen } = storeToRefs(generalStore)
@@ -21,6 +24,14 @@ onMounted(() => {
     groupStore.fetchGroups()
   }
 })
+watch(
+  () => route.query.pageIndex,
+  newId => {
+    if (typeof newId === 'string') {
+      pageIndex.value = Number(newId)
+    }
+  }
+)
 function changeIsModalOpen() {
   isModalOpen.value = !isModalOpen.value
 }

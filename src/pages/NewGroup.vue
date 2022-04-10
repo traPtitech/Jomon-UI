@@ -44,7 +44,7 @@ async function handlePostGroup() {
       <input v-model="group.name" class="border border-gray-300 w-4/5" />
     </div>
     <div>
-      <span>詳細：</span>
+      <span class="align-top">詳細：</span>
       <textarea
         v-model="group.description"
         class="border border-gray-300 resize-none w-4/5" />

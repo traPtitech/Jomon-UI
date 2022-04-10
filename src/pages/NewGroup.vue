@@ -62,7 +62,7 @@ async function handlePostGroup() {
         multiple
         :options="users"
         placeholder="管理者"
-        :reduce="(user:any) => user.name"></VueSelect>
+        :reduce="(user:any) => user.name" />
       注意：管理者は自動でメンバーには入りません。
     </div>
     <div>
@@ -75,7 +75,7 @@ async function handlePostGroup() {
         multiple
         :options="users"
         placeholder="メンバー"
-        :reduce="(user:any) => user.name"></VueSelect>
+        :reduce="(user:any) => user.name" />
     </div>
     <div class="text-center">
       <Button

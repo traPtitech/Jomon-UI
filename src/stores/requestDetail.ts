@@ -11,7 +11,7 @@ interface Request2 {
   content: string
   targets: string[]
   tags: string[]
-  group: string | null
+  group: string
 }
 
 interface Log {

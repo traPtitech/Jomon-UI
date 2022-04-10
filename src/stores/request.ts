@@ -7,12 +7,12 @@ import apis from '/@/lib/apis'
 
 const defaultParams = {
   sort: 'created_at',
-  currentStatus: null,
-  target: null,
+  currentStatus: undefined,
+  target: undefined,
   since: '',
   until: '',
-  tag: null,
-  group: null
+  tag: undefined,
+  group: undefined
 }
 
 export const useRequestStore = defineStore('request', () => {

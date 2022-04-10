@@ -36,7 +36,7 @@ async function putStatus(id: string, status: StatusEnum) {
   await apis.putStatus(id, statusRequest)
   requestDetailStore.fetchRequestDetail(id)
 }
-function changeStatus(status: string) {
+function changeStatus(status: StatusEnum) {
   putStatus(requestDetailStore.request.id!, status)
   requestDetailStore.fetchRequestDetail(requestDetailStore.request.id!)
   alert('ステータスを' + status + 'に変更しました')

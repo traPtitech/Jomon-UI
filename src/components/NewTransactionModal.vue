@@ -13,7 +13,7 @@ import Button from './shared/Button.vue'
 import Modal from './shared/Modal.vue'
 import VueSelect from './shared/VueSelect.vue'
 
-type Props = { request_id: string } //request_idには申請の詳細画面からモーダルを表示するときだけpropsにIDを渡す。transaction一覧では空文字列を渡す
+type Props = { requestId: string } //request_idには申請の詳細画面からモーダルを表示するときだけpropsにIDを渡す。transaction一覧では空文字列を渡す
 const props = defineProps<Props>()
 const generalStore = useGeneralStore()
 const requestDetailStore = useRequestDetailStore()
@@ -23,11 +23,11 @@ const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const { isModalOpen } = storeToRefs(generalStore)
 const transaction = ref({
-  amount: props.request_id ? requestDetailStore.request.amount : '',
-  targets: props.request_id ? requestDetailStore.targetIds : ([] as string[]),
-  request_id: props.request_id,
-  tags: props.request_id ? requestDetailStore.tagIds : ([] as string[]),
-  group: props.request_id ? requestDetailStore.request.group!.id : null
+  amount: props.requestId ? requestDetailStore.request.amount : '',
+  targets: props.requestId ? requestDetailStore.targetIds : ([] as string[]),
+  request_id: props.requestId,
+  tags: props.requestId ? requestDetailStore.tagIds : ([] as string[]),
+  group: props.requestId ? requestDetailStore.request.group!.id : null
 } as TransactionRequest)
 function postTransaction() {
   if (
@@ -48,8 +48,8 @@ function postTransaction() {
     <div class="flex flex-col justify-between ml-12 mr-12 h-4/5">
       <div class="text-xl">
         <span>紐づけられている申請：</span>
-        <span v-if="request_id">{{ requestDetailStore.request.title }}</span>
-        <span v-if="!request_id">なし</span>
+        <span v-if="requestId">{{ requestDetailStore.request.title }}</span>
+        <span v-if="!requestId">なし</span>
       </div>
       <div class="mb-2">
         <span class="text-xl">金額：</span>

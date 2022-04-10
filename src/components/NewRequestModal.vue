@@ -30,7 +30,7 @@ interface RequestRequest {
   content: string
   targets: string[]
   tags: string[]
-  group: string
+  group: string | undefined
 }
 
 const generalStore = useGeneralStore()
@@ -56,11 +56,14 @@ const request = ref({
   targets: [] as string[],
   content: '',
   tags: [] as string[],
-  group: ''
+  group: undefined
 } as RequestRequest)
 const images = ref([] as File[])
 
 async function postRequestAPI(request: RequestRequest) {
+  if (request.group === undefined) {
+    request.group = ''
+  }
   const response: Request = (await apis.postRequest(request)).data
   requestStore.fetchRequests()
   return response.id
@@ -74,9 +77,9 @@ async function postRequest() {
     request.value.targets.length > 0
   ) {
     const id = await postRequestAPI(request.value)
-    for (let i = 0; i < images.value.length; i++) {
-      fileStore.postFile(id!, images.value[i].name, images.value[i].src)
-    }
+    images.value.forEach(image => {
+      fileStore.postFile(id!, image.name, image.src)
+    })
     isModalOpen.value = false
   } else {
     alert('形式が不正です')

@@ -29,22 +29,6 @@ function statusToJpn(status: string) {
       return 'ERROR'
   }
 }
-function statusColor(status: string) {
-  switch (status) {
-    case 'accepted':
-      return 'bg-green-500 text-black'
-    case 'submitted':
-      return 'bg-yellow-500 text-black'
-    case 'fix_required':
-      return 'bg-red-500 text-white'
-    case 'rejected':
-      return 'bg-gray-500 text-black'
-    case 'completed':
-      return 'bg-gray-500 text-black'
-    default:
-      return 'ERROR'
-  }
-}
 function handleMouseOver() {
   flag.value = true
 }

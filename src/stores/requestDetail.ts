@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-import { Log, Request2 } from '../types/requestTypes'
+import type { Log, Request2 } from '../types/requestTypes'
 import type { RequestDetail, PostRequest } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
@@ -127,13 +127,17 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     for (let i = 0; i < request.value.targets!.length; i++) {
       targets = targets.concat([request.value.targets![i].target!])
     }
+    let tags = new Array<string>()
+    for (let i = 0; i < request.value.tags!.length; i++) {
+      tags = tags.concat([request.value.tags![i].name!])
+    }
     const requestRequest: Request2 = {
       created_by: request.value.created_by!,
       amount: request.value.amount!,
       title: request.value.title!,
       content: request.value.content!,
       targets: targets,
-      tags: request.value.tags!,
+      tags: tags,
       group: request.value.group!.id!
     }
     return requestRequest
@@ -153,10 +157,10 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     return tagIds
   })
   const fetchRequestDetail = async (id: string) => {
-    request.value = (await apis.requestsRequestIDGet(id)).data
+    request.value = (await apis.getRequestDetail(id)).data
   }
   const putRequest = async (id: string, request: PostRequest) => {
-    await apis.requestsRequestIDPut(id, request)
+    await apis.putRequestDetail(id, request)
     fetchRequestDetail(id)
   }
 

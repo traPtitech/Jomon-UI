@@ -5,7 +5,7 @@ import { useGroupStore } from '../stores/group'
 import { useRequestStore } from '../stores/request'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
-import { Params } from '../types/requestsTypes'
+import type { Params } from '../types/requestsTypes'
 import VueSelect from './shared/VueSelect.vue'
 
 const requestStore = useRequestStore()

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 import NewRequestModal from '../components/NewRequestModal.vue'
@@ -26,8 +26,8 @@ onMounted(() => {
   requestStore.fetchRequests()
   tagStore.fetchTags()
   groupStore.fetchGroups()
-  userStore.fetchUsers()
-  userStore.fetchMe()
+  userStore.getUsers()
+  userStore.getMe()
 })
 function changeIsModalOpen() {
   isModalOpen.value = !isModalOpen.value

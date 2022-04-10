@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Tag } from '/@/lib/apis'
+import type { Tag } from '/@/lib/apis'
 
 type Props = { tags: Tag[]; limit: number } //1-indexedでlimitを指定
 const props = withDefaults(defineProps<Props>(), { limit: 20 })

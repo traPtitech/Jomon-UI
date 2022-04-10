@@ -22,7 +22,7 @@ defineProps<Props>()
         <router-link to="/transactions?pageIndex=1">
           <span>入出金記録一覧</span>
         </router-link>
-        <router-link to="/groups?pageIndex=1">
+        <router-link to="/groups">
           <span>グループ一覧</span>
         </router-link>
         <router-link v-if="me.admin" to="/admins">

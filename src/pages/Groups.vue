@@ -10,7 +10,7 @@ import { useGeneralStore } from '/@/stores/general'
 import { useGroupStore } from '/@/stores/group'
 
 const route = useRoute()
-const pageIndex = Number(route.query.pageIndex)
+const pageIndex = route.query.pageIndex ? Number(route.query.pageIndex) : 1
 const generalStore = useGeneralStore()
 const groupStore = useGroupStore()
 const { isModalOpen } = storeToRefs(generalStore)

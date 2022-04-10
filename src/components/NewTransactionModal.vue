@@ -65,7 +65,7 @@ function postTransaction() {
           multiple
           :options="userStore.users"
           placeholder="払い戻し対象者"
-          :reduce="(user:any) => user.name"></VueSelect>
+          :reduce="(user:any) => user.name" />
       </div>
       <div class="mb-2">
         <span class="text-xl">グループ：</span>
@@ -75,7 +75,7 @@ function postTransaction() {
           label="name"
           :options="groupStore.groups"
           placeholder="グループ"
-          :reduce="(group:any) => group.id"></VueSelect>
+          :reduce="(group:any) => group.id" />
       </div>
       <div class="mb-2">
         <span class="text-xl">タグ：</span>
@@ -87,7 +87,7 @@ function postTransaction() {
           multiple
           :options="tagStore.tags"
           placeholder="タグ"
-          :reduce="(tag:any) => tag.id"></VueSelect>
+          :reduce="(tag:any) => tag.id" />
       </div>
       <div class="text-center">
         <Button
@@ -95,8 +95,8 @@ function postTransaction() {
           font-size="xl"
           padding="sm"
           @click.stop="postTransaction">
-          入出金記録を作成する</Button
-        >
+          入出金記録を作成する
+        </Button>
       </div>
     </div>
   </Modal>

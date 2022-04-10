@@ -55,8 +55,8 @@ const addAdmins = () => {
         placeholder="追加する管理者を選択"
         :reduce="(user:any) => user.name" />
       <Button font-size="lg" padding="sm" @click.stop="addAdmins">
-        選択した管理者を追加</Button
-      >
+        選択した管理者を追加
+      </Button>
     </div>
     <div class="mt-12">
       <VueSelect
@@ -66,8 +66,8 @@ const addAdmins = () => {
         :options="admins"
         placeholder="削除する管理者を選択" />
       <Button font-size="lg" padding="sm" @click.stop="deleteAdmins">
-        選択した管理者を削除</Button
-      >
+        選択した管理者を削除
+      </Button>
     </div>
   </div>
   <div v-else>権限がありません。</div>

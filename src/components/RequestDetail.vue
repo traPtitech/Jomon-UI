@@ -149,9 +149,9 @@ function handleModalIsOpen() {
             class="ml-2"
             font-size="sm"
             padding="sm"
-            @click.stop="changeIsFixMode('title')"
-            >完了</Button
-          >
+            @click.stop="changeIsFixMode('title')">
+            完了
+          </Button>
         </div>
         <StatusChip
           :status="requestDetailStore.request.status!"

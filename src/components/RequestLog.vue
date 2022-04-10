@@ -18,21 +18,23 @@ const props = defineProps<Props>()
           <UserIcon
             class="ml-2 mt-2"
             :name="requestDetailStore.request.comments[props.index].user!" />
-          <span class="ml-2 mt-2"
-            >{{
+          <span class="ml-2 mt-2">
+            {{
               requestDetailStore.request.comments[props.index].user
-            }}がコメントしました。</span
-          >
+            }}がコメントしました。
+          </span>
         </span>
-        <span class="mr-2 mt-2 text-zinc-400">{{
-          formatDate(
-            requestDetailStore.request.comments[props.index].created_at
-          )
-        }}</span>
+        <span class="mr-2 mt-2 text-zinc-400">
+          {{
+            formatDate(
+              requestDetailStore.request.comments[props.index].created_at
+            )
+          }}
+        </span>
       </div>
       <div class="ml-12 mb-2">
-        <span class="align-top">コメント：</span
-        ><MarkdownIt
+        <span class="align-top">コメント：</span>
+        <MarkdownIt
           class="inline-block"
           :text="requestDetailStore.request.comments[props.index].comment!" />
       </div>
@@ -43,8 +45,8 @@ const props = defineProps<Props>()
       <UserIcon
         class="mr-2"
         :name="requestDetailStore.request.statuses[props.index].created_by!" />
-      <span
-        >{{
+      <span>
+        {{
           requestDetailStore.request.statuses[props.index].created_by
         }}が申請の状態を
       </span>
@@ -52,9 +54,13 @@ const props = defineProps<Props>()
         :status="requestDetailStore.request.statuses[props.index].status!"
         :text="true!" /><!--todo:文字の高さずれるのどうにかする-->
       <span>にしました。</span>
-      <span class="ml-4 text-zinc-400">{{
-        formatDate(requestDetailStore.request.statuses[props.index].created_at)
-      }}</span>
+      <span class="ml-4 text-zinc-400">
+        {{
+          formatDate(
+            requestDetailStore.request.statuses[props.index].created_at
+          )
+        }}
+      </span>
     </div>
   </div>
 </template>

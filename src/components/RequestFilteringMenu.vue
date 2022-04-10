@@ -82,7 +82,7 @@ function filterByDate() {
       :options="userStore.users"
       placeholder="申請者"
       :reduce="(user:any) => user.name"
-      @close="requestStore.fetchRequests(params)"></VueSelect>
+      @close="requestStore.fetchRequests(params)" />
     <VueSelect
       v-model="params.currentStatus"
       class="w-64"
@@ -91,7 +91,7 @@ function filterByDate() {
       placeholder="申請の状態"
       :reduce="(state:any) => state.state"
       :searchable="false"
-      @close="requestStore.fetchRequests(params)"></VueSelect>
+      @close="requestStore.fetchRequests(params)" />
     <VueSelect
       v-model="params.group"
       class="w-64"
@@ -99,7 +99,7 @@ function filterByDate() {
       :options="groupStore.groups"
       placeholder="グループ"
       :reduce="(group:any) => group.id"
-      @close="requestStore.fetchRequests(params)"></VueSelect>
+      @close="requestStore.fetchRequests(params)" />
     <VueSelect
       v-model="requestStore.tagList"
       class="w-100"
@@ -109,6 +109,6 @@ function filterByDate() {
       :options="tagStore.tags"
       placeholder="タグ"
       :reduce="(tag:any) => tag.id"
-      @close="requestStore.fetchRequests(params)"></VueSelect>
+      @close="requestStore.fetchRequests(params)" />
   </div>
 </template>

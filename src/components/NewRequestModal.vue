@@ -173,7 +173,7 @@ function deleteImage(index: number) {
           multiple
           :options="userStore.users"
           placeholder="払い戻し対象者"
-          :reduce="(user:any) => user.name"></VueSelect>
+          :reduce="(user:any) => user.name" />
       </div>
       <div class="mb-2">
         <span class="text-xl">グループ：</span>
@@ -183,7 +183,7 @@ function deleteImage(index: number) {
           label="name"
           :options="groupStore.groups"
           placeholder="グループ"
-          :reduce="(group:any) => group.id"></VueSelect>
+          :reduce="(group:any) => group.id" />
       </div>
       <div class="mb-2">
         <span class="text-xl">タグ：</span>
@@ -195,7 +195,7 @@ function deleteImage(index: number) {
           multiple
           :options="tagStore.tags"
           placeholder="タグ"
-          :reduce="(tag:any) => tag.id"></VueSelect>
+          :reduce="(tag:any) => tag.id" />
         <Button
           class="ml-8"
           font-size="xl"

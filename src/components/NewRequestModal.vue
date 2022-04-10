@@ -30,7 +30,7 @@ interface RequestRequest {
   content: string
   targets: string[]
   tags: string[]
-  group: string | undefined
+  group: string | null
 }
 
 const generalStore = useGeneralStore()
@@ -56,15 +56,16 @@ const request = ref({
   targets: [] as string[],
   content: '',
   tags: [] as string[],
-  group: undefined
+  group: null
 } as RequestRequest)
 const images = ref([] as File[])
 
 async function postRequestAPI(request: RequestRequest) {
-  if (request.group === undefined) {
-    request.group = ''
+  const requestRequest = {
+    ...request,
+    group: request.group !== null ? request.group : ''
   }
-  const response: Request = (await apis.postRequest(request)).data
+  const response: Request = (await apis.postRequest(requestRequest)).data
   requestStore.fetchRequests()
   return response.id
 }

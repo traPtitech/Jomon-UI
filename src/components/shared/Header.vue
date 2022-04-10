@@ -19,7 +19,7 @@ defineProps<Props>()
         <router-link to="/requests?pageIndex=1">
           <span>申請一覧</span>
         </router-link>
-        <router-link to="/transactions?pageIndex=1">
+        <router-link to="/transactions">
           <span>入出金記録一覧</span>
         </router-link>
         <router-link to="/groups?pageIndex=1">

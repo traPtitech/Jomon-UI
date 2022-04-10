@@ -6,8 +6,8 @@ import type { Transaction, PostTransaction } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export const useTransactionStore = defineStore('transaction', () => {
-  const transactions = ref<Transaction[]>([
-    {
+  const transactions = ref<Transaction[]>(
+    Array(100).fill({
       id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       amount: 1200,
       target: 'hoge株式会社',
@@ -66,8 +66,8 @@ export const useTransactionStore = defineStore('transaction', () => {
       },
       created_at: '2022-02-09T14:03:53.278Z',
       updated_at: '2022-02-09T14:03:53.278Z'
-    }
-  ])
+    })
+  )
   const params = ref({
     sort: 'created_at',
     request: '',

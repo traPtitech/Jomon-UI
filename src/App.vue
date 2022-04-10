@@ -15,6 +15,6 @@ const route = useRoute()
   <main class="h-screen">
     <Header :me="me" />
 
-    <router-view :key="route.fullPath" /><!--ページング処理時の再描画を促す -->
+    <router-view />
   </main>
 </template>

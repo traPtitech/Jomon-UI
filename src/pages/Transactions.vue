@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { BookOpenIcon, PlusCircleIcon } from '@heroicons/vue/solid'
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import FilteringTransactionMenu from '../components/FilteringTransactionMenu.vue'
@@ -14,7 +14,9 @@ import { useTagStore } from '../stores/tag'
 import { useTransactionStore } from '../stores/transaction'
 
 const route = useRoute()
-const pageIndex = Number(route.query.pageIndex)
+const pageIndex = ref<number>(
+  route.query.pageIndex ? Number(route.query.pageIndex) : 1
+)
 const transactionStore = useTransactionStore()
 const groupStore = useGroupStore()
 const tagStore = useTagStore()
@@ -26,6 +28,14 @@ onMounted(() => {
   groupStore.fetchGroups()
   tagStore.fetchTags()
 })
+watch(
+  () => route.query.pageIndex,
+  newId => {
+    if (typeof newId === 'string') {
+      pageIndex.value = Number(newId)
+    }
+  }
+)
 function changeIsModalOpen() {
   isModalOpen.value = !isModalOpen.value
 }

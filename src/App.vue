@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 
-import Header from './components/Header.vue'
+import Header from './components/shared/Header.vue'
 import { useUserStore } from './stores/user'
 
 const userStore = useUserStore()

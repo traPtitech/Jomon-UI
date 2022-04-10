@@ -16,8 +16,8 @@ const defaultParams = {
 }
 
 export const useRequestStore = defineStore('request', () => {
-  const requests = ref<Request[]>([
-    {
+  const requests = ref<Request[]>(
+    Array(100).fill({
       id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       status: 'submitted',
       created_at: '2022-01-25T13:29:19.918Z',
@@ -53,15 +53,15 @@ export const useRequestStore = defineStore('request', () => {
         created_at: '2022-01-25T13:29:19.918Z',
         updated_at: '2022-01-25T13:29:19.918Z'
       }
-    }
-  ])
+    })
+  )
   const tagList = ref<string[]>([])
 
   const requestsLength = computed(() => {
     return requests.value.length
   })
   const requestsFilter = (index: number) => {
-    return requests.value.slice((index - 1) * 10, index * 10)
+    return requests.value.slice((index - 1) * 7, index * 7)
   }
   const fetchRequests = async (params: Params = defaultParams) => {
     const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/

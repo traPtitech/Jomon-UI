@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import NewRequestModal from '../components/NewRequestModal.vue'
@@ -15,7 +15,9 @@ import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
 
 const route = useRoute()
-const pageIndex = route.query.pageIndex ? Number(route.query.pageIndex) : 1
+const pageIndex = ref<number>(
+  route.query.pageIndex ? Number(route.query.pageIndex) : 1
+)
 const generalStore = useGeneralStore()
 const requestStore = useRequestStore()
 const tagStore = useTagStore()
@@ -29,6 +31,14 @@ onMounted(() => {
   userStore.getUsers()
   userStore.getMe()
 })
+watch(
+  () => route.query.pageIndex,
+  newId => {
+    if (typeof newId === 'string') {
+      pageIndex.value = Number(newId)
+    }
+  }
+)
 function changeIsModalOpen() {
   isModalOpen.value = !isModalOpen.value
 }

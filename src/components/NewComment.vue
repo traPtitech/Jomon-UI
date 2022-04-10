@@ -3,7 +3,7 @@ import axios from 'axios'
 import { ref } from 'vue'
 
 import { useRequestDetailStore } from '../stores/requestDetail'
-import { Comment } from '../types/requestTypes'
+import type { Comment } from '../types/requestTypes'
 import Button from './shared/Button.vue'
 import MarkdownIt from './shared/MarkdownIt.vue'
 

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-import { Params } from '../types/requestsTypes'
+import type { Params } from '../types/requestsTypes'
 import type { Request } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
@@ -79,7 +79,7 @@ export const useRequestStore = defineStore('request', () => {
         }
       }
       requests.value = (
-        await apis.requestsGet(
+        await apis.getRequests(
           params.sort,
           params.currentStatus!,
           params.target!,

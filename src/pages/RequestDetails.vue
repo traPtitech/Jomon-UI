@@ -19,7 +19,7 @@ const transactionStore = useTransactionStore()
 const fileStore = useFileStore()
 const { isModalOpen } = storeToRefs(generalStore)
 const route = useRoute()
-const id = route.params.request_id.toString()
+const id = route.params.requestId.toString()
 onMounted(() => {
   requestDetailStore.fetchRequestDetail(id)
   transactionStore.getTransactions() //idをparamsに渡して取得
@@ -31,7 +31,7 @@ function createTransaction() {
 </script>
 
 <template>
-  <NewTransactionModal v-if="isModalOpen" :request_id="id" />
+  <NewTransactionModal v-if="isModalOpen" :request-id="id" />
   <div>
     <RequestDetail />
     <div

@@ -13,7 +13,7 @@ import Button from './shared/Button.vue'
 import Modal from './shared/Modal.vue'
 import VueSelect from './shared/VueSelect.vue'
 
-type Props = { requestId: string } //request_idには申請の詳細画面からモーダルを表示するときだけpropsにIDを渡す。transaction一覧では空文字列を渡す
+type Props = { requestId: string } //requestIdには申請の詳細画面からモーダルを表示するときだけpropsにIDを渡す。transaction一覧では空文字列を渡す
 const props = defineProps<Props>()
 const generalStore = useGeneralStore()
 const requestDetailStore = useRequestDetailStore()
@@ -25,7 +25,7 @@ const { isModalOpen } = storeToRefs(generalStore)
 const transaction = ref({
   amount: props.requestId ? requestDetailStore.request.amount : '',
   targets: props.requestId ? requestDetailStore.targetIds : ([] as string[]),
-  request_id: props.requestId,
+  requestId: props.requestId,
   tags: props.requestId ? requestDetailStore.tagIds : ([] as string[]),
   group: props.requestId ? requestDetailStore.request.group!.id : null
 } as TransactionRequest)

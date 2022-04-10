@@ -2,7 +2,7 @@ export type Transaction = {
   id: string
   amount: number
   target: string
-  request_id: string
+  requestId: string
   tags: {
     id: string
     name: string
@@ -34,7 +34,7 @@ export type Params = {
 export type TransactionRequest = {
   amount: number
   targets: string[]
-  request_id: string
+  requestId: string
   tags: string[]
   group: string | null
 }

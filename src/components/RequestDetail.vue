@@ -206,7 +206,7 @@ function handleModalIsOpen() {
       </div>
       <div>
         <div v-if="!(isFixMode === 'group')" class="ml-12 inline">
-          <span>グループ：{{ requestDetailStore.request.group!.name }}</span>
+          <span>グループ：{{ requestDetailStore.request.group.name }}</span>
           <button
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             class="mr-2"
@@ -234,7 +234,7 @@ function handleModalIsOpen() {
           申請者：{{ requestDetailStore.request.created_by }}
         </span>
         <span class="mr-4">
-          申請日：{{ formatDate(requestDetailStore.request.created_at!) }}
+          申請日：{{ formatDate(requestDetailStore.request.created_at) }}
         </span>
         <div v-if="!(isFixMode === 'amount')" class="inline">
           <span class="text-2xl">

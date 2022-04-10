@@ -140,11 +140,11 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   const putRequestRequest = computed(() => {
     let targets = new Array<string>()
     request.value.targets!.forEach(target => {
-      targets = targets.concat([target!.target!])
+      targets = targets.concat([target.target!])
     })
     let tags = new Array<string>()
     request.value.tags!.forEach(tag => {
-      tags = tags.concat([tag!.name!])
+      tags = tags.concat([tag.name!])
     })
     const requestRequest: Request2 = {
       created_by: request.value.created_by!,

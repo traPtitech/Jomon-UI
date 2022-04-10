@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import apis from '/@/lib/apis'
 
 export const useFileStore = defineStore('file', () => {
-  const files = ref<any[]>([])
+  const files = ref<string[]>([''])
 
   const fetchFiles = async (ids: string[]) => {
     ids.forEach(async id => {

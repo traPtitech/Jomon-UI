@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-import {
+import type {
   Params,
   Transaction,
   TransactionRequest

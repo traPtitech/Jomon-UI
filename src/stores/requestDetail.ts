@@ -1,9 +1,24 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-import type { Log, Request2 } from '../types/requestTypes'
 import type { RequestDetail, PostRequest } from '/@/lib/apis'
 import apis from '/@/lib/apis'
+
+interface Request2 {
+  created_by: string
+  amount: number
+  title: string
+  content: string
+  targets: string[]
+  tags: string[]
+  group: string | null
+}
+
+interface Log {
+  created_at: Date
+  kind: string
+  index: number
+}
 
 export const useRequestDetailStore = defineStore('requestDetail', () => {
   const request = ref<RequestDetail>({

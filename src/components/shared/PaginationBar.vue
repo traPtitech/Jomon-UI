@@ -5,7 +5,7 @@ type Props = {
   unit: number
   kind: string
 } //pageIndexはページ番号(routeから取ってくる)、itemLengthは全体の要素数(storeのgettersで計算)、unitは1ページに表示している個数(自分で決められるが、v-forで回す数と一致させる)、kindは"requests"や"transactions"や"groups"などパスで使う名前
-const props = defineProps<Props>()
+defineProps<Props>()
 </script>
 <template>
   <div v-if="itemLength !== 0" class="text-center w-full">

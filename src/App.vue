@@ -9,7 +9,6 @@ const { me } = storeToRefs(userStore)
 </script>
 
 <template>
-  <!--作成をやめますかみたいな確認画面出した方がいいかも-->
   <main class="h-screen">
     <Header :me="me" />
 

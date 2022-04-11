@@ -28,8 +28,8 @@ async function handlePostGroup() {
       budget: group.value.budget
     }
     const res: Group = await groupStore.postGroup(willPostGroup)
-    await groupStore.postGroupMember(res.id!, group.value.members)
-    await groupStore.postGroupOwner(res.id!, group.value.owners)
+    await groupStore.postGroupMember(res.id, group.value.members)
+    await groupStore.postGroupOwner(res.id, group.value.owners)
     groupStore.fetchGroups()
   }
 }

@@ -15,7 +15,7 @@ export const useGroupStore = defineStore('group', () => {
       updated_at: '2022-04-05T14:02:15.431Z'
     })
   )
-  const group = ref<Group>({})
+  const group = ref<Group>()
   const groupMembers = ref<string[]>([])
   const groupOwners = ref<string[]>([])
   const isGroupFetched = ref<boolean>(false)
@@ -29,9 +29,9 @@ export const useGroupStore = defineStore('group', () => {
   const omitGroupDescription = computed(() => {
     const returnGroups: Group[] = groups.value
     for (let i = 0; i < groups.value.length; i++) {
-      if (returnGroups[i].description!.length > 100) {
+      if (returnGroups[i].description.length > 100) {
         returnGroups[i].description =
-          returnGroups[i].description!.slice(0, 100) + '...'
+          returnGroups[i].description.slice(0, 100) + '...'
       }
     }
     return returnGroups

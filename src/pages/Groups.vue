@@ -14,7 +14,7 @@ const pageIndex = ref<number>(
   route.query.pageIndex ? Number(route.query.pageIndex) : 1
 )
 const groupStore = useGroupStore()
-const { groupsLength, isGroupFetched } = storeToRefs(groupStore)
+const { isGroupFetched } = storeToRefs(groupStore)
 
 onMounted(() => {
   if (isGroupFetched.value) {
@@ -44,12 +44,16 @@ watch(
       </div>
     </div>
     <!--フィルタリングメニューあってもいい気がする-->
-    <div :class="pageIndex === Math.ceil(groupsLength / 10) ? 'h-149' : ''">
+    <div
+      :class="
+        pageIndex === Math.ceil(groupStore.groups.length / 10) ? 'h-149' : ''
+      ">
       <div class="w-2/3 mr-auto ml-auto border border-zinc-400">
-        <div class="flex justify-around items-center bg-gray-200 pt-2 pb-2">
-          <div class="w-1/5 text-center">グループ名</div>
-          <div class="w-3/5 text-center">詳細</div>
-          <div class="w-1/5 text-center">予算</div>
+        <div
+          class="flex justify-around items-center bg-gray-200 pt-2 pb-2 px-4">
+          <div class="w-1/5">グループ名</div>
+          <div class="w-3/5">詳細</div>
+          <div class="w-1/5">予算</div>
         </div>
         <div
           class="w-full bg-zinc-400 border border-solid border-zinc-400 mr-auto ml-auto" />
@@ -62,14 +66,14 @@ watch(
                 ? ''
                 : 'pb-2'
             ">
-            <Group :index="index" />
+            <Group :group="group" />
           </li>
         </ul>
       </div>
     </div>
     <div class="mt-4">
       <PaginationBar
-        :item-length="groupsLength"
+        :item-length="groupStore.groups.length"
         kind="groups"
         :page-index="pageIndex"
         :unit="10" />

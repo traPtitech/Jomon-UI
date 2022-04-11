@@ -9,7 +9,7 @@ const { me } = storeToRefs(userStore)
 </script>
 
 <template>
-  <main class="h-screen">
+  <main class="h-screen text-dark-500">
     <Header :me="me" />
 
     <router-view />

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 
 import type { Group, PostGroup } from '/@/lib/apis'
 import apis from '/@/lib/apis'
@@ -16,26 +16,11 @@ export const useGroupStore = defineStore('group', () => {
     })
   )
   const group = ref<Group>()
-  const groupMembers = ref<string[]>([])
-  const groupOwners = ref<string[]>([])
-  const isGroupFetched = ref<boolean>(false)
-  const groupsLength = computed(() => {
-    return groups.value.length
-  })
+  const isGroupFetched = ref(false)
 
   const groupsFilter = (index: number) => {
-    return omitGroupDescription.value.slice((index - 1) * 10, index * 10)
+    return groups.value.slice((index - 1) * 10, index * 10)
   }
-  const omitGroupDescription = computed(() => {
-    const returnGroups: Group[] = groups.value
-    for (let i = 0; i < groups.value.length; i++) {
-      if (returnGroups[i].description.length > 100) {
-        returnGroups[i].description =
-          returnGroups[i].description.slice(0, 100) + '...'
-      }
-    }
-    return returnGroups
-  })
 
   const fetchGroups = async () => {
     groups.value = (await apis.getGroups()).data
@@ -53,12 +38,6 @@ export const useGroupStore = defineStore('group', () => {
     await apis.deleteGroup(id)
     groups.value = groups.value.filter(group => group.id !== id)
   }
-  const fetchGroupMembers = async (id: string) => {
-    groupMembers.value = (await apis.getGroupMembers(id)).data
-  }
-  const fetchGroupOwners = async (id: string) => {
-    groupOwners.value = (await apis.getGroupOwners(id)).data
-  }
   const postGroupMember = async (id: string, members: string[]) => {
     await apis.postGroupMembers(id, members)
   }
@@ -75,17 +54,12 @@ export const useGroupStore = defineStore('group', () => {
   return {
     groups,
     group,
-    groupMembers,
-    groupOwners,
-    groupsLength,
     isGroupFetched,
     groupsFilter,
     fetchGroups,
     postGroup,
     putGroup,
     deleteGroup,
-    fetchGroupMembers,
-    fetchGroupOwners,
     postGroupOwner,
     postGroupMember,
     deleteGroupMember,

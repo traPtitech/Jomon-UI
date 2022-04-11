@@ -2,10 +2,10 @@
 import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 
-import { useAdminStore } from '../stores/admin'
-import { useUserStore } from '../stores/user'
 import Button from '/@/components/shared/Button.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
+import { useAdminStore } from '/@/stores/admin'
+import { useUserStore } from '/@/stores/user'
 
 const adminStore = useAdminStore()
 const userStore = useUserStore()
@@ -51,7 +51,7 @@ const addAdmins = () => {
         multiple
         :options="users"
         placeholder="追加する管理者を選択"
-        :reduce="(user:any) => user.name"></VueSelect>
+        :reduce="(user:any) => user.name" />
       <Button font-size="lg" padding="sm" @click.stop="addAdmins">
         選択した管理者を追加</Button
       >
@@ -62,7 +62,7 @@ const addAdmins = () => {
         class="mb-2 w-1/2"
         multiple
         :options="admins"
-        placeholder="削除する管理者を選択"></VueSelect>
+        placeholder="削除する管理者を選択" />
       <Button font-size="lg" padding="sm" @click.stop="deleteAdmins">
         選択した管理者を削除</Button
       >

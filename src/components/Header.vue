@@ -16,13 +16,13 @@ defineProps<Props>()
     </router-link>
     <div class="flex h-full flex-1 px-2 justify-between">
       <div class="flex gap-2 items-center">
-        <router-link to="/requests?pageIndex=1">
+        <router-link to="/requests">
           <span>申請一覧</span>
         </router-link>
-        <router-link to="/transactions?pageIndex=1">
+        <router-link to="/transactions">
           <span>入出金記録一覧</span>
         </router-link>
-        <router-link to="/groups?pageIndex=1">
+        <router-link to="/groups">
           <span>グループ一覧</span>
         </router-link>
         <router-link v-if="me.admin" to="/admins">

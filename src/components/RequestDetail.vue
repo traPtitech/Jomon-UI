@@ -37,8 +37,8 @@ async function putStatus(id: string, status: StatusEnum) {
   requestDetailStore.fetchRequestDetail(id)
 }
 function changeStatus(status: StatusEnum) {
-  putStatus(requestDetailStore.request.id!, status)
-  requestDetailStore.fetchRequestDetail(requestDetailStore.request.id!)
+  putStatus(requestDetailStore.request.id, status)
+  requestDetailStore.fetchRequestDetail(requestDetailStore.request.id)
   alert('ステータスを' + status + 'に変更しました')
 } //確認ダイアログほしい
 function changeIsFixMode(kind: string) {
@@ -51,7 +51,7 @@ function changeIsFixMode(kind: string) {
   switch (kind) {
     case 'title':
       if (isFixMode.value === 'title') {
-        requestDetailStore.putRequest(requestDetailStore.request.id!, {
+        requestDetailStore.putRequest(requestDetailStore.request.id, {
           ...requestDetailStore.putRequestRequest,
           title: fixedValue.value.title
         })
@@ -63,7 +63,7 @@ function changeIsFixMode(kind: string) {
     case 'amount':
       if (isFixMode.value === 'amount') {
         //todo:バリデーション
-        requestDetailStore.putRequest(requestDetailStore.request.id!, {
+        requestDetailStore.putRequest(requestDetailStore.request.id, {
           ...requestDetailStore.putRequestRequest,
           amount: fixedValue.value.amount
         })
@@ -74,7 +74,7 @@ function changeIsFixMode(kind: string) {
       break
     case 'content':
       if (isFixMode.value === 'content') {
-        requestDetailStore.putRequest(requestDetailStore.request.id!, {
+        requestDetailStore.putRequest(requestDetailStore.request.id, {
           ...requestDetailStore.putRequestRequest,
           content: fixedValue.value.content
         })
@@ -85,7 +85,7 @@ function changeIsFixMode(kind: string) {
       break
     case 'targets':
       if (isFixMode.value === 'targets') {
-        requestDetailStore.putRequest(requestDetailStore.request.id!, {
+        requestDetailStore.putRequest(requestDetailStore.request.id, {
           ...requestDetailStore.putRequestRequest,
           targets: fixedValue.value.targets
         })
@@ -96,7 +96,7 @@ function changeIsFixMode(kind: string) {
       break
     case 'group':
       if (isFixMode.value === 'group') {
-        requestDetailStore.putRequest(requestDetailStore.request.id!, {
+        requestDetailStore.putRequest(requestDetailStore.request.id, {
           ...requestDetailStore.putRequestRequest,
           group: fixedValue.value.group
         })
@@ -107,7 +107,7 @@ function changeIsFixMode(kind: string) {
       break
     case 'tags':
       if (isFixMode.value === 'tags') {
-        requestDetailStore.putRequest(requestDetailStore.request.id!, {
+        requestDetailStore.putRequest(requestDetailStore.request.id, {
           ...requestDetailStore.putRequestRequest,
           tags: fixedValue.value.tags
         })
@@ -153,9 +153,7 @@ function handleModalIsOpen() {
             完了
           </Button>
         </div>
-        <StatusChip
-          :status="requestDetailStore.request.status!"
-          :text="true!" />
+        <StatusChip :status="requestDetailStore.request.status" :text="true!" />
         <div>
           <Button
             v-if="
@@ -267,7 +265,7 @@ function handleModalIsOpen() {
       <div class="mt-2">
         <div v-if="!(isFixMode === 'tags')" class="ml-12 inline">
           <span>タグ：</span>
-          <Tags :tags="requestDetailStore.request.tags!" />
+          <Tags :tags="requestDetailStore.request.tags" />
           <button
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             @click="changeIsFixMode('tags')">
@@ -306,7 +304,7 @@ function handleModalIsOpen() {
       <div v-if="!(isFixMode === 'content')" class="flex items-start">
         <div class="h-32 w-200 border border-gray-300 overflow-y-scroll">
           <div class="ml-2">
-            <MarkdownIt :text="requestDetailStore.request.content!" />
+            <MarkdownIt :text="requestDetailStore.request.content" />
           </div>
         </div>
         <button

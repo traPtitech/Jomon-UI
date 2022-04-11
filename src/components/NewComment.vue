@@ -14,7 +14,7 @@ async function postComment(id: string, comment: string) {
   requestDetailStore.fetchRequestDetail(id)
 }
 function submit() {
-  postComment(requestDetailStore.request.id!, comment.value)
+  postComment(requestDetailStore.request.id, comment.value)
   comment.value = ''
 }
 </script>

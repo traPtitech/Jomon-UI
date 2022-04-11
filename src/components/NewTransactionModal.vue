@@ -27,7 +27,7 @@ const transaction = ref({
   targets: props.requestId ? requestDetailStore.targetIds : ([] as string[]),
   requestId: props.requestId,
   tags: props.requestId ? requestDetailStore.tagIds : ([] as string[]),
-  group: props.requestId ? requestDetailStore.request.group!.id : null
+  group: props.requestId ? requestDetailStore.request.group.id : null
 } as TransactionRequest)
 function postTransaction() {
   if (

@@ -12,12 +12,12 @@ const props = defineProps<Props>()
   <router-link :to="'/requests/' + request.id">
     <div class="flex hover:bg-gray-100 pb-1">
       <div class="mt-auto mb-auto mr-2 ml-1">
-        <StatusChip :status="request.status!" />
+        <StatusChip :status="request.status" />
       </div>
       <div class="flex-grow">
         <div class="text-xl">{{ request.title }}</div>
         <div class="mt-2">
-          <Tags :tags="request.tags!" />
+          <Tags :tags="request.tags" />
         </div>
       </div>
       <div class="text-center flex flex-col justify-between mr-4">

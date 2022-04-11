@@ -109,19 +109,19 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     //2つの配列(commentsとstatuses)の中身の型が違うので1つにまとめ、ソートして表示ができない
     let array = new Array<Log>()
     //2つの配列からcreated_at、種類、インデックスだけ取り出して1つの配列にまとめる
-    for (let i = 0; i < request.value.comments!.length; i++) {
+    for (let i = 0; i < request.value.comments.length; i++) {
       array = array.concat([
         {
-          created_at: new Date(request.value.comments![i].created_at!),
+          created_at: new Date(request.value.comments[i].created_at),
           kind: 'comment',
           index: i
         }
       ])
     }
-    for (let i = 0; i < request.value.statuses!.length; i++) {
+    for (let i = 0; i < request.value.statuses.length; i++) {
       array = array.concat([
         {
-          created_at: new Date(request.value.statuses![i].created_at!),
+          created_at: new Date(request.value.statuses[i].created_at),
           kind: 'statusChange',
           index: i
         }
@@ -139,36 +139,36 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
 
   const putRequestRequest = computed(() => {
     let targets = new Array<string>()
-    request.value.targets!.forEach(target => {
-      targets = targets.concat([target.target!])
+    request.value.targets.forEach(target => {
+      targets = targets.concat([target.target])
     })
     let tags = new Array<string>()
-    request.value.tags!.forEach(tag => {
-      tags = tags.concat([tag.name!])
+    request.value.tags.forEach(tag => {
+      tags = tags.concat([tag.name])
     })
     const requestRequest: Request2 = {
-      created_by: request.value.created_by!,
-      amount: request.value.amount!,
-      title: request.value.title!,
-      content: request.value.content!,
+      created_by: request.value.created_by,
+      amount: request.value.amount,
+      title: request.value.title,
+      content: request.value.content,
       targets: targets,
       tags: tags,
-      group: request.value.group!.id!
+      group: request.value.group.id
     }
     return requestRequest
   })
   const targetIds = computed(() => {
     let targetIds = new Array<string>()
 
-    for (let i = 0; i < request.value.targets!.length; i++) {
-      targetIds = targetIds.concat([request.value.targets![i].target!])
+    for (let i = 0; i < request.value.targets.length; i++) {
+      targetIds = targetIds.concat([request.value.targets[i].target])
     }
     return targetIds
   })
   const tagIds = computed(() => {
     let tagIds = new Array<string>()
-    for (let i = 0; i < request.value.tags!.length; i++) {
-      tagIds = tagIds.concat([request.value.tags![i].id!])
+    for (let i = 0; i < request.value.tags.length; i++) {
+      tagIds = tagIds.concat([request.value.tags[i].id])
     }
     return tagIds
   })

@@ -1,4 +1,5 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/requests' },
@@ -8,6 +9,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('./pages/Transactions.vue')
   },
   { path: '/groups', component: () => import('./pages/Groups.vue') },
+  { path: '/admins', component: () => import('./pages/Admin.vue') },
   { path: '/:path(.*)', component: () => import('./pages/NotFound.vue') }
 ]
 

@@ -36,55 +36,57 @@ async function handlePostGroup() {
 </script>
 
 <template>
-  <h1 class="text-3xl text-center mt-4 mb-4">グループの新規作成</h1>
-  <div class="flex flex-col justify-between ml-12 mr-12 text-xl h-4/5">
-    <div>
-      <span>グループ名：</span>
-      <input v-model="group.name" class="border border-gray-300 w-4/5" />
-    </div>
-    <div>
-      <span class="align-top">詳細：</span>
-      <textarea
-        v-model="group.description"
-        class="border border-gray-300 resize-none w-4/5" />
-    </div>
-    <div>
-      <span>予算：</span>
-      <input v-model="group.budget" class="border border-gray-300" />
-    </div>
-    <div>
-      <span>管理者：</span>
-      <VueSelect
-        v-model="group.owners"
-        class="w-2/3"
-        :close-on-select="false"
-        label="name"
-        multiple
-        :options="users"
-        placeholder="管理者"
-        :reduce="(user:any) => user.name" />
-      注意：管理者は自動でメンバーには入りません。
-    </div>
-    <div>
-      <span>メンバー：</span>
-      <VueSelect
-        v-model="group.members"
-        class="w-2/3"
-        :close-on-select="false"
-        label="name"
-        multiple
-        :options="users"
-        placeholder="メンバー"
-        :reduce="(user:any) => user.name" />
-    </div>
-    <div class="text-center">
-      <Button
-        class="w-48 mb-4"
-        font-size="xl"
-        padding="sm"
-        @clock.stop="handlePostGroup">
-        グループを作成する
-      </Button>
+  <div class="p-12 h-full">
+    <h1 class="text-3xl text-center mt-4 mb-12">グループの新規作成</h1>
+    <div class="flex flex-col justify-between ml-12 mr-12 text-xl h-4/5">
+      <div>
+        <span>グループ名：</span>
+        <input v-model="group.name" class="border border-gray-300 w-4/5" />
+      </div>
+      <div>
+        <span class="align-top">詳細：</span>
+        <textarea
+          v-model="group.description"
+          class="border border-gray-300 resize-none w-4/5" />
+      </div>
+      <div>
+        <span>予算：</span>
+        <input v-model="group.budget" class="border border-gray-300" />
+      </div>
+      <div>
+        <span>管理者：</span>
+        <VueSelect
+          v-model="group.owners"
+          class="w-2/3"
+          :close-on-select="false"
+          label="name"
+          multiple
+          :options="users"
+          placeholder="管理者"
+          :reduce="(user:any) => user.name" />
+        注意：管理者は自動でメンバーには入りません。
+      </div>
+      <div>
+        <span>メンバー：</span>
+        <VueSelect
+          v-model="group.members"
+          class="w-2/3"
+          :close-on-select="false"
+          label="name"
+          multiple
+          :options="users"
+          placeholder="メンバー"
+          :reduce="(user:any) => user.name" />
+      </div>
+      <div class="text-center">
+        <Button
+          class="w-48 mb-4"
+          font-size="xl"
+          padding="sm"
+          @clock.stop="handlePostGroup">
+          グループを作成する
+        </Button>
+      </div>
     </div>
   </div>
 </template>

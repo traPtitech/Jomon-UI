@@ -6,7 +6,7 @@ import apis from '/@/lib/apis'
 
 export const useTagStore = defineStore('tag', () => {
   const tags = ref<Tag[]>([])
-  const tag = ref<Tag>({})
+  const tag = ref<Tag>()
 
   const fetchTags = async () => {
     tags.value = (await apis.getTags()).data

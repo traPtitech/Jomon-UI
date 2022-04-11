@@ -79,7 +79,7 @@ async function postRequest() {
   ) {
     const id = await postRequestAPI(request.value)
     images.value.forEach(image => {
-      fileStore.postFile(id!, image.name, image.src)
+      fileStore.postFile(id, image.name, image.src)
     })
     isModalOpen.value = false
   } else {

@@ -23,7 +23,7 @@ const id = String(route.params.requestId)
 onMounted(() => {
   requestDetailStore.fetchRequestDetail(id)
   transactionStore.getTransactions() //idをparamsに渡して取得
-  fileStore.fetchFiles(requestDetailStore.request.files!)
+  fileStore.fetchFiles(requestDetailStore.request.files)
 })
 function createTransaction() {
   isModalOpen.value = true

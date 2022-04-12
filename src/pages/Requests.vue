@@ -15,20 +15,26 @@ import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
 
 const route = useRoute()
-const pageIndex = ref<number>(
-  route.query.pageIndex ? Number(route.query.pageIndex) : 1
-)
+const pageIndex = ref(route.query.pageIndex ? Number(route.query.pageIndex) : 1)
 const generalStore = useGeneralStore()
 const requestStore = useRequestStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const userStore = useUserStore()
 const { isModalOpen } = storeToRefs(generalStore)
-const { requests } = storeToRefs(requestStore)
+const { requests, isRequestFetched } = storeToRefs(requestStore)
+const { isTagFetched } = storeToRefs(tagStore)
+const { isGroupFetched } = storeToRefs(groupStore)
 onMounted(() => {
-  requestStore.fetchRequests()
-  tagStore.fetchTags()
-  groupStore.fetchGroups()
+  if (isRequestFetched) {
+    requestStore.fetchRequests()
+  }
+  if (isTagFetched) {
+    tagStore.fetchTags()
+  }
+  if (isGroupFetched) {
+    groupStore.fetchGroups()
+  }
   userStore.getUsers()
   userStore.getMe()
 })

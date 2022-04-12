@@ -6,9 +6,11 @@ import apis from '/@/lib/apis'
 
 export const useTagStore = defineStore('tag', () => {
   const tags = ref<Tag[]>([])
+  const isTagFetched = ref(false)
 
   const fetchTags = async () => {
     tags.value = (await apis.getTags()).data
+    isTagFetched.value = true
   }
   const postTag = async (tag: Tag) => {
     await apis.postTag(tag)
@@ -16,5 +18,5 @@ export const useTagStore = defineStore('tag', () => {
   const deleteTag = async (id: string) => {
     await apis.tagsTagIDDelete(id)
   }
-  return { tags, fetchTags, postTag, deleteTag }
+  return { tags, isTagFetched, fetchTags, postTag, deleteTag }
 })

@@ -56,6 +56,7 @@ export const useRequestStore = defineStore('request', () => {
     })
   )
   const tagList = ref<string[]>([])
+  const isRequestFetched = ref(false)
 
   const requestsFilter = (index: number) => {
     return requests.value.slice((index - 1) * 7, index * 7)
@@ -86,9 +87,10 @@ export const useRequestStore = defineStore('request', () => {
           params.group!
         )
       ).data //nullの場合どうにかする
+      isRequestFetched.value = true
     } else {
       alert('日付が不正です')
     }
   }
-  return { requests, requestsFilter, fetchRequests, tagList }
+  return { requests, isRequestFetched, requestsFilter, fetchRequests, tagList }
 })

@@ -24,6 +24,7 @@ const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const userStore = useUserStore()
 const { isModalOpen } = storeToRefs(generalStore)
+const { requests } = storeToRefs(requestStore)
 onMounted(() => {
   requestStore.fetchRequests()
   tagStore.fetchTags()
@@ -59,20 +60,15 @@ function changeIsModalOpen() {
         </div>
       </div>
       <RequestFilteringMenu class="mt-4 mb-2" />
-      <span v-if="requestStore.requestsLength !== 0" class="ml-50">
-        {{ requestStore.requestsLength }}件取得しました
+      <span v-if="requests.length !== 0" class="ml-50">
+        {{ requests.length }}件取得しました
       </span>
-      <span v-if="requestStore.requestsLength === 0" class="ml-50">
+      <span v-if="requests.length === 0" class="ml-50">
         条件に一致する申請は見つかりませんでした
       </span>
-      <div
-        :class="
-          pageIndex === Math.ceil(requestStore.requestsLength / 7)
-            ? 'h-123'
-            : ''
-        ">
+      <div :class="pageIndex === Math.ceil(requests.length / 7) ? 'h-123' : ''">
         <div
-          v-if="requestStore.requestsLength !== 0"
+          v-if="requests.length !== 0"
           class="w-3/4 mt-4 mr-auto ml-auto shadow">
           <ul class="w-full mr-auto ml-auto">
             <li
@@ -85,7 +81,7 @@ function changeIsModalOpen() {
       </div>
       <div class="mt-4">
         <PaginationBar
-          :item-length="requestStore.requestsLength"
+          :item-length="requests.length"
           kind="requests"
           :page-index="pageIndex"
           :unit="7" />

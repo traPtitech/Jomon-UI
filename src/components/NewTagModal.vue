@@ -2,11 +2,11 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
-import apis from '../lib/apis'
-import { useGeneralStore } from '../stores/general'
-import { useTagStore } from '../stores/tag'
 import Button from './shared/Button.vue'
 import Modal from './shared/Modal.vue'
+import apis from '/@/lib/apis'
+import { useGeneralStore } from '/@/stores/general'
+import { useTagStore } from '/@/stores/tag'
 
 const generalStore = useGeneralStore()
 const { isModalOpen2 } = storeToRefs(generalStore)

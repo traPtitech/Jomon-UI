@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 
-import { useGeneralStore } from '../../stores/general'
+import { useGeneralStore } from '/@/stores/general'
 
 type Props = { width: number; height: number; layer: number }
 const props = defineProps<Props>()

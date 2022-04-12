@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import apis from '../lib/apis'
-import { useRequestDetailStore } from '../stores/requestDetail'
 import Button from './shared/Button.vue'
 import MarkdownIt from './shared/MarkdownIt.vue'
+import apis from '/@/lib/apis'
+import { useRequestDetailStore } from '/@/stores/requestDetail'
 
 const requestDetailStore = useRequestDetailStore()
 const comment = ref('')

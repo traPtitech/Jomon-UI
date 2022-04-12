@@ -57,9 +57,6 @@ export const useRequestStore = defineStore('request', () => {
   )
   const tagList = ref<string[]>([])
 
-  const requestsLength = computed(() => {
-    return requests.value.length
-  })
   const requestsFilter = (index: number) => {
     return requests.value.slice((index - 1) * 7, index * 7)
   }
@@ -93,5 +90,5 @@ export const useRequestStore = defineStore('request', () => {
       alert('日付が不正です')
     }
   }
-  return { requests, requestsLength, requestsFilter, fetchRequests, tagList }
+  return { requests, requestsFilter, fetchRequests, tagList }
 })

@@ -2,16 +2,16 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
-import { useGeneralStore } from '../stores/general'
-import { useGroupStore } from '../stores/group'
-import { useRequestDetailStore } from '../stores/requestDetail'
-import { useTagStore } from '../stores/tag'
-import { useTransactionStore } from '../stores/transaction'
-import { useUserStore } from '../stores/user'
-import type { TransactionRequest } from '../types/transactionTypes'
 import Button from './shared/Button.vue'
 import Modal from './shared/Modal.vue'
 import VueSelect from './shared/VueSelect.vue'
+import { useGeneralStore } from '/@/stores/general'
+import { useGroupStore } from '/@/stores/group'
+import { useRequestDetailStore } from '/@/stores/requestDetail'
+import { useTagStore } from '/@/stores/tag'
+import { useTransactionStore } from '/@/stores/transaction'
+import { useUserStore } from '/@/stores/user'
+import type { TransactionRequest } from '/@/types/transactionTypes'
 
 type Props = { requestId: string } //requestIdには申請の詳細画面からモーダルを表示するときだけpropsにIDを渡す。transaction一覧では空文字列を渡す
 const props = defineProps<Props>()

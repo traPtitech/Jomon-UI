@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useFileStore } from '../stores/file'
+import { useFileStore } from '/@/stores/file'
 
 const fileStore = useFileStore()
 </script>

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import type { Request } from '../lib/apis'
-import { formatDate } from '../utiles/date'
 import StatusChip from './shared/StatusChip.vue'
 import Tags from './shared/Tags.vue'
+import type { Request } from '/@/lib/apis'
+import { formatDate } from '/@/utiles/date'
 
 type Props = { request: Request }
 const props = defineProps<Props>()

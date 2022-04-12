@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { useRequestDetailStore } from '../stores/requestDetail'
 import RequestImage from './RequestImage.vue'
 import RequestLog from './RequestLog.vue'
+import { useRequestDetailStore } from '/@/stores/requestDetail'
 
 const requestDetailStore = useRequestDetailStore()
 </script>

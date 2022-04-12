@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { useRequestDetailStore } from '../stores/requestDetail'
-import { formatDate } from '../utiles/date'
 import MarkdownIt from './shared/MarkdownIt.vue'
 import StatusChip from './shared/StatusChip.vue'
 import UserIcon from './shared/UserIcon.vue'
+import { useRequestDetailStore } from '/@/stores/requestDetail'
+import { formatDate } from '/@/utiles/date'
 
 const requestDetailStore = useRequestDetailStore()
 type Props = { kind: string; index: number }

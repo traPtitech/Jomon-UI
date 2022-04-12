@@ -62,7 +62,7 @@ async function handlePostGroup() {
           label="name"
           multiple
           :options="users"
-          placeholder="管理者"
+          placeholder="追加する管理者を選択"
           :reduce="(user:any) => user.name" />
         注意：管理者は自動でメンバーには入りません。
       </div>
@@ -75,7 +75,7 @@ async function handlePostGroup() {
           label="name"
           multiple
           :options="users"
-          placeholder="メンバー"
+          placeholder="追加するメンバーを選択"
           :reduce="(user:any) => user.name" />
       </div>
       <div class="text-center">

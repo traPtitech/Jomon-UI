@@ -10,9 +10,7 @@ import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import { useGroupStore } from '/@/stores/group'
 
 const route = useRoute()
-const pageIndex = ref<number>(
-  route.query.pageIndex ? Number(route.query.pageIndex) : 1
-)
+const pageIndex = ref(route.query.pageIndex ? Number(route.query.pageIndex) : 1)
 const groupStore = useGroupStore()
 const { isGroupFetched } = storeToRefs(groupStore)
 

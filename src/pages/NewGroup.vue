@@ -30,7 +30,6 @@ async function handlePostGroup() {
     const res: Group = await groupStore.postGroup(willPostGroup)
     await groupStore.postGroupMember(res.id, group.value.members)
     await groupStore.postGroupOwner(res.id, group.value.owners)
-    groupStore.fetchGroups()
   }
 }
 </script>

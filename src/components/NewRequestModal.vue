@@ -99,7 +99,7 @@ function handleImageChange(e: Event) {
           ])
         }
       } else {
-        alert('画像ファイル以外はアップロードできません')
+        alert('画像ファイル以外はアップロードできません') //todo:画像以外もどうにかする
       }
     }
     inputImageRef.value.value = null
@@ -128,14 +128,21 @@ function deleteImage(index: number) {
   <Modal :height="170" :layer="1" :width="300">
     <h1 class="text-3xl text-center mt-4 mb-4">申請の新規作成</h1>
     <div class="flex flex-col justify-between ml-12 h-4/5">
-      <span class="text-xl mb-2">申請者：{{ userStore.me.name }}</span>
-      <div class="mb-2">
-        <span class="text-xl">タイトル：</span>
-        <input v-model="request.title" class="border border-gray-300 w-4/5" />
+      <div class="text-xl mb-2 flex flex-col">
+        <span>申請者</span>
+        <span>{{ userStore.me.name }}</span>
       </div>
-      <div class="mb-2">
-        <span class="text-xl">金額：</span>
-        <input v-model="request.amount" class="border border-gray-300" />円
+      <div class="mb-2 flex flex-col">
+        <span class="text-xl">タイトル</span>
+        <input v-model="request.title" class="border border-gray-300 w-3/5" />
+      </div>
+      <div class="mb-2 flex flex-col">
+        <span class="text-xl">金額</span>
+        <div>
+          <input
+            v-model="request.amount"
+            class="border border-gray-300 w-3/5" />円
+        </div>
       </div>
       <div class="text-right mr-20 mb-2">
         <VueSelect
@@ -149,7 +156,7 @@ function deleteImage(index: number) {
         </VueSelect>
       </div>
       <div>
-        <span class="text-xl align-top">詳細：</span>
+        <span class="text-xl flex flex-col">詳細</span>
         <textarea
           v-model="request.content"
           class="h-60 leading-tight border border-gray-300 resize-none w-4/5 p-1" />
@@ -163,8 +170,8 @@ function deleteImage(index: number) {
           <MarkdownIt class="w-full" :text="request.content" />
         </div>
       </details>
-      <div class="mb-2">
-        <span class="text-xl">払い戻し対象者：</span>
+      <div class="mb-2 flex flex-col">
+        <span class="text-xl">払い戻し対象者</span>
         <VueSelect
           v-model="request.targets"
           class="w-2/3 inline-block"
@@ -172,40 +179,42 @@ function deleteImage(index: number) {
           label="name"
           multiple
           :options="userStore.users"
-          placeholder="払い戻し対象者"
+          placeholder="払い戻し対象者を選択"
           :reduce="(user:any) => user.name" />
       </div>
-      <div class="mb-2">
-        <span class="text-xl">グループ：</span>
+      <div class="mb-2 flex flex-col">
+        <span class="text-xl">グループ</span>
         <VueSelect
           v-model="request.group"
           class="w-1/3 inline-block"
           label="name"
           :options="groupStore.groups"
-          placeholder="グループ"
+          placeholder="グループを選択"
           :reduce="(group:any) => group.id" />
       </div>
-      <div class="mb-2">
-        <span class="text-xl">タグ：</span>
-        <VueSelect
-          v-model="request.tags"
-          class="w-2/3 inline-block"
-          :close-on-select="false"
-          label="name"
-          multiple
-          :options="tagStore.tags"
-          placeholder="タグ"
-          :reduce="(tag:any) => tag.id" />
-        <Button
-          class="ml-8"
-          font-size="xl"
-          padding="sm"
-          @click.stop="handleTagModalIsOpen">
-          タグを新規作成</Button
-        >
+      <div class="mb-2 flex flex-col">
+        <span class="text-xl">タグ</span>
+        <div>
+          <VueSelect
+            v-model="request.tags"
+            class="w-2/3 inline-block"
+            :close-on-select="false"
+            label="name"
+            multiple
+            :options="tagStore.tags"
+            placeholder="タグを選択"
+            :reduce="(tag:any) => tag.id" />
+          <Button
+            class="ml-8"
+            font-size="xl"
+            padding="sm"
+            @click.stop="handleTagModalIsOpen">
+            タグを新規作成</Button
+          >
+        </div>
       </div>
-      <div class="mb-4">
-        <span class="text-xl">画像：</span>
+      <div class="mb-4 flex flex-col">
+        <span class="text-xl">画像</span>
         <input
           ref="inputImageRef"
           accept="image/*"

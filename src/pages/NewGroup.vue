@@ -53,7 +53,7 @@ async function handlePostGroup() {
         <input v-model="group.budget" class="border border-gray-300 w-4/5" />
       </div>
       <div class="flex flex-col">
-        <span>管理者</span>
+        <span>オーナー</span>
         <VueSelect
           v-model="group.owners"
           class="w-2/3"
@@ -61,9 +61,9 @@ async function handlePostGroup() {
           label="name"
           multiple
           :options="users"
-          placeholder="追加する管理者を選択"
+          placeholder="追加するオーナーを選択"
           :reduce="(user:any) => user.name" />
-        注意：管理者は自動でメンバーには入りません。
+        注意：オーナーは自動でメンバーには入りません。
       </div>
       <div class="flex flex-col">
         <span>メンバー</span>

@@ -2,6 +2,7 @@
 import type { Group } from '/@/lib/apis'
 
 type Props = { group: Group }
+
 defineProps<Props>()
 </script>
 

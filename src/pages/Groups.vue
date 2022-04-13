@@ -32,7 +32,7 @@ watch(
 <template>
   <div>
     <div class="flex my-4 justify-center items-center relative">
-      <div class="text-center text-3xl">グループ一覧</div>
+      <h1 class="text-center text-3xl">グループ一覧</h1>
       <div class="right-20 absolute">
         <router-link to="/groups/new">
           <Button font-size="lg" padding="md"> グループの新規作成 </Button>

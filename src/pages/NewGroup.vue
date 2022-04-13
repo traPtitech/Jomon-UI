@@ -35,28 +35,32 @@ async function handlePostGroup() {
 </script>
 
 <template>
-  <div class="p-12 h-full">
-    <h1 class="text-3xl text-center mt-4 mb-12">グループの新規作成</h1>
-    <div class="flex flex-col justify-between ml-12 mr-12 text-xl h-4/5">
+  <div class="pt-4 px-12 h-full">
+    <h1 class="text-3xl text-center">グループの新規作成</h1>
+    <div class="flex flex-col justify-between mt-12 ml-12 mr-12 text-xl h-4/5">
       <div class="flex flex-col">
-        <span>グループ名</span>
-        <input v-model="group.name" class="border border-gray-300 w-4/5" />
+        <label>グループ名</label>
+        <input v-model="group.name" class="border border-gray-300 w-2/5" />
       </div>
       <div class="flex flex-col">
-        <span class="align-top">詳細</span>
+        <label>詳細</label>
         <textarea
           v-model="group.description"
-          class="border border-gray-300 resize-none w-4/5" />
+          class="border border-gray-300 resize-none w-2/5" />
       </div>
       <div class="flex flex-col">
-        <span>予算</span>
-        <input v-model="group.budget" class="border border-gray-300 w-4/5" />
+        <label>予算</label>
+        <div>
+          <input
+            v-model="group.budget"
+            class="border border-gray-300 w-2/5" />円
+        </div>
       </div>
       <div class="flex flex-col">
-        <span>オーナー</span>
+        <label>オーナー</label>
         <VueSelect
           v-model="group.owners"
-          class="w-2/3"
+          class="w-1/2"
           :close-on-select="false"
           label="name"
           multiple
@@ -66,10 +70,10 @@ async function handlePostGroup() {
         注意：オーナーは自動でメンバーには入りません。
       </div>
       <div class="flex flex-col">
-        <span>メンバー</span>
+        <label>メンバー</label>
         <VueSelect
           v-model="group.members"
-          class="w-2/3"
+          class="w-1/2"
           :close-on-select="false"
           label="name"
           multiple

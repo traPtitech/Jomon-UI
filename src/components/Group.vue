@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import type { Group } from '../lib/apis'
+import type { Group } from '/@/lib/apis'
 
 type Props = { group: Group }
-const props = defineProps<Props>()
+defineProps<Props>()
 </script>
 
 <template>

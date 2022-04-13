@@ -77,7 +77,7 @@ async function handlePostGroup() {
           placeholder="追加するメンバーを選択"
           :reduce="(user:any) => user.name" />
       </div>
-      <div class="text-center">
+      <div class="text-right">
         <Button
           class="w-48 mb-4"
           font-size="xl"

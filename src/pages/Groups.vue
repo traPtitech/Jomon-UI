@@ -15,7 +15,7 @@ const groupStore = useGroupStore()
 const { isGroupFetched } = storeToRefs(groupStore)
 
 onMounted(() => {
-  if (isGroupFetched.value) {
+  if (!isGroupFetched.value) {
     groupStore.fetchGroups()
   }
 })
@@ -31,21 +31,16 @@ watch(
 
 <template>
   <div>
-    <div class="flex relative mt-2 mb-2">
-      <div class="text-3xl mt-2 text-center absolute right-1 left-1">
-        グループ一覧
-      </div>
-      <div class="ml-auto mr-40 mt-4 z-1">
+    <div class="flex my-4 justify-center items-center relative">
+      <div class="text-center text-3xl">グループ一覧</div>
+      <div class="right-20 absolute">
         <router-link to="/groups/new">
           <Button font-size="lg" padding="md"> グループの新規作成 </Button>
         </router-link>
       </div>
     </div>
     <!--フィルタリングメニューあってもいい気がする-->
-    <div
-      :class="
-        pageIndex === Math.ceil(groupStore.groups.length / 10) ? 'h-149' : ''
-      ">
+    <div class="h-150">
       <div class="w-2/3 mr-auto ml-auto border border-zinc-400">
         <div
           class="flex justify-around items-center bg-gray-200 pt-2 pb-2 px-4">
@@ -55,21 +50,16 @@ watch(
         </div>
         <div
           class="w-full bg-zinc-400 border border-solid border-zinc-400 mr-auto ml-auto" />
-        <ul class="w-full mr-auto ml-auto">
+        <ul class="divide-y">
           <li
-            v-for="(group, index) in groupStore.groupsFilter(pageIndex)"
-            :key="group.id"
-            :class="
-              index === groupStore.groupsFilter(pageIndex).length - 1
-                ? ''
-                : 'pb-2'
-            ">
+            v-for="group in groupStore.groupsFilter(pageIndex)"
+            :key="group.id">
             <Group :group="group" />
           </li>
         </ul>
       </div>
     </div>
-    <div class="mt-4">
+    <div>
       <PaginationBar
         :item-length="groupStore.groups.length"
         kind="groups"

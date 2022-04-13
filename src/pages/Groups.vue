@@ -30,7 +30,7 @@ watch(
 </script>
 
 <template>
-  <div class="flex my-4 justify-center items-center relative">
+  <div class="flex py-8 justify-center items-center relative">
     <h1 class="text-center text-3xl">グループ一覧</h1>
     <div class="right-20 absolute">
       <router-link to="/groups/new">

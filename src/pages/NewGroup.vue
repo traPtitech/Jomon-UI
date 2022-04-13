@@ -35,9 +35,9 @@ async function handlePostGroup() {
 </script>
 
 <template>
-  <div class="pt-4 px-12 h-full">
+  <div class="pt-8 px-12 h-full">
     <h1 class="text-3xl text-center">グループの新規作成</h1>
-    <div class="flex flex-col justify-between mt-12 ml-12 mr-12 text-xl h-4/5">
+    <div class="flex flex-col justify-between mt-8 ml-12 mr-12 text-xl h-4/5">
       <div class="flex flex-col">
         <label>グループ名</label>
         <input v-model="group.name" class="border border-gray-300 w-2/5" />

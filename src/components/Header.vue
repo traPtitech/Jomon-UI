@@ -10,7 +10,7 @@ defineProps<Props>()
 </script>
 
 <template>
-  <header class="flex h-12 shadow w-full items-center">
+  <header class="flex h-12 shadow w-full items-center fixed">
     <router-link to="/">
       <Logo />
     </router-link>

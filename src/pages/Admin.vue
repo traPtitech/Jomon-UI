@@ -10,16 +10,18 @@ import { useUserStore } from '/@/stores/user'
 const adminStore = useAdminStore()
 const userStore = useUserStore()
 const { admins, isAdminFetched } = storeToRefs(adminStore)
-const { users, me } = storeToRefs(userStore)
+const { users, me, isUserFetched } = storeToRefs(userStore)
 const addList = ref([] as string[])
 const deleteList = ref([] as string[])
 
 onMounted(() => {
   if (me.value.admin) {
-    if (isAdminFetched.value) {
+    if (!isAdminFetched.value) {
       adminStore.fetchAdmins()
     }
-    userStore.getUsers()
+    if (!isUserFetched.value) {
+      userStore.fetchUsers()
+    }
   }
 })
 

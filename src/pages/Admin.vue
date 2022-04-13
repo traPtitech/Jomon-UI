@@ -35,7 +35,7 @@ const addAdmins = () => {
 
 <template>
   <div v-if="me.admin" class="ml-4">
-    <h1 class="my-4 text-center text-3xl">管理ページ</h1>
+    <h1 class="py-8 text-center text-3xl">管理ページ</h1>
     <div>
       <ul class="flex gap-2">
         <li v-for="admin in admins" :key="admin">
@@ -48,7 +48,7 @@ const addAdmins = () => {
     <div class="mt-4">
       <VueSelect
         v-model="addList"
-        class="mb-2 w-1/2"
+        class="mb-4 w-1/2"
         label="name"
         multiple
         :options="users"
@@ -58,10 +58,10 @@ const addAdmins = () => {
         選択した管理者を追加</Button
       >
     </div>
-    <div class="mt-4">
+    <div class="mt-12">
       <VueSelect
         v-model="deleteList"
-        class="mb-2 w-1/2"
+        class="mb-4 w-1/2"
         multiple
         :options="admins"
         placeholder="削除する管理者を選択" />

@@ -3,7 +3,7 @@ import MarkdownIt from './shared/MarkdownIt.vue'
 import StatusChip from './shared/StatusChip.vue'
 import UserIcon from './shared/UserIcon.vue'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
-import { formatDate } from '/@/utiles/date'
+import { formatDate } from '/@/utils/date'
 
 const requestDetailStore = useRequestDetailStore()
 type Props = { kind: string; index: number }
@@ -33,7 +33,6 @@ const props = defineProps<Props>()
         </span>
       </div>
       <div class="ml-12 mb-2">
-        <span class="align-top">コメント：</span>
         <MarkdownIt
           class="inline-block"
           :text="requestDetailStore.request.comments[props.index].comment" />

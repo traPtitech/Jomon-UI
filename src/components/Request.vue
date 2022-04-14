@@ -2,7 +2,7 @@
 import StatusChip from './shared/StatusChip.vue'
 import Tags from './shared/Tags.vue'
 import type { Request } from '/@/lib/apis'
-import { formatDate } from '/@/utiles/date'
+import { formatDate } from '/@/utils/date'
 
 type Props = { request: Request }
 

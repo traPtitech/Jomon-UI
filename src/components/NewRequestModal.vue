@@ -126,127 +126,127 @@ function deleteImage(index: number) {
 <template>
   <NewTagModal v-if="isModalOpen2" />
   <Modal :height="170" :layer="1" :width="300">
-    <h1 class="text-3xl text-center mt-4 mb-4">申請の新規作成</h1>
-    <div class="flex flex-col justify-between ml-12 h-4/5">
-      <div class="text-xl mb-2 flex flex-col">
-        <span>申請者</span>
-        <span>{{ userStore.me.name }}</span>
-      </div>
-      <div class="mb-2 flex flex-col">
-        <span class="text-xl">タイトル</span>
-        <input v-model="request.title" class="border border-gray-300 w-3/5" />
-      </div>
-      <div class="mb-2 flex flex-col">
-        <span class="text-xl">金額</span>
-        <div>
-          <input
-            v-model="request.amount"
-            class="border border-gray-300 w-3/5" />円
+    <div class="pt-8">
+      <h1 class="text-3xl text-center">申請の新規作成</h1>
+      <div class="flex flex-col justify-between ml-12 h-4/5">
+        <div class="text-xl mb-2 flex flex-col">
+          <span>申請者</span>
+          <span>{{ userStore.me.name }}</span>
         </div>
-      </div>
-      <div class="text-right mr-20 mb-2">
-        <VueSelect
-          v-model="selectedTemplate"
-          class="w-1/3 inline-block"
-          label="name"
-          :options="templates"
-          placeholder="テンプレートを選択"
-          :reduce="(template:any) => template.value"
-          @close="setTemplate(selectedTemplate)">
-        </VueSelect>
-      </div>
-      <div>
-        <span class="text-xl flex flex-col">詳細</span>
-        <textarea
-          v-model="request.content"
-          class="h-60 leading-tight border border-gray-300 resize-none w-4/5 p-1" />
-      </div>
-      <details class="mb-2">
-        <summary>MDプレビュー</summary>
-        <!--幅を広くしたいけどなぜかできない-->
-        <div
-          class="pl-2 pr-2 w-4/5"
-          :class="request.content ? 'border border-gray-200' : ''">
-          <MarkdownIt class="w-full" :text="request.content" />
+        <div class="flex flex-col">
+          <label class="text-xl">タイトル</label>
+          <input v-model="request.title" class="border border-gray-300 w-3/5" />
         </div>
-      </details>
-      <div class="mb-2 flex flex-col">
-        <span class="text-xl">払い戻し対象者</span>
-        <VueSelect
-          v-model="request.targets"
-          class="w-2/3 inline-block"
-          :close-on-select="false"
-          label="name"
-          multiple
-          :options="userStore.users"
-          placeholder="払い戻し対象者を選択"
-          :reduce="(user:any) => user.name" />
-      </div>
-      <div class="mb-2 flex flex-col">
-        <span class="text-xl">グループ</span>
-        <VueSelect
-          v-model="request.group"
-          class="w-1/3 inline-block"
-          label="name"
-          :options="groupStore.groups"
-          placeholder="グループを選択"
-          :reduce="(group:any) => group.id" />
-      </div>
-      <div class="mb-2 flex flex-col">
-        <span class="text-xl">タグ</span>
-        <div>
+        <div class="flex flex-col">
+          <label class="text-xl">金額</label>
+          <div>
+            <input
+              v-model="request.amount"
+              class="border border-gray-300 w-3/5" />円
+          </div>
+        </div>
+        <div class="text-right mr-20">
           <VueSelect
-            v-model="request.tags"
+            v-model="selectedTemplate"
+            class="w-1/3 inline-block"
+            label="name"
+            :options="templates"
+            placeholder="テンプレートを選択"
+            :reduce="(template:any) => template.value"
+            @close="setTemplate(selectedTemplate)">
+          </VueSelect>
+        </div>
+        <div class="flex flex-col">
+          <label class="text-xl">詳細</label>
+          <textarea
+            v-model="request.content"
+            class="h-60 leading-tight border border-gray-300 resize-none w-4/5 p-1" />
+        </div>
+        <details class="mb-2">
+          <summary>MDプレビュー</summary>
+          <!--幅を広くしたいけどなぜかできない-->
+          <div
+            class="pl-2 pr-2 w-4/5"
+            :class="request.content ? 'border border-gray-200' : ''">
+            <MarkdownIt class="w-full" :text="request.content" />
+          </div>
+        </details>
+        <div class="flex flex-col">
+          <label class="text-xl">払い戻し対象者</label>
+          <VueSelect
+            v-model="request.targets"
             class="w-2/3 inline-block"
             :close-on-select="false"
             label="name"
             multiple
-            :options="tagStore.tags"
-            placeholder="タグを選択"
-            :reduce="(tag:any) => tag.id" />
-          <Button
-            class="ml-8"
-            font-size="xl"
-            padding="sm"
-            @click.stop="handleTagModalIsOpen">
-            タグを新規作成</Button
-          >
+            :options="userStore.users"
+            placeholder="払い戻し対象者を選択"
+            :reduce="(user:any) => user.name" />
         </div>
-      </div>
-      <div class="mb-4 flex flex-col">
-        <span class="text-xl">画像</span>
-        <input
-          ref="inputImageRef"
-          accept="image/*"
-          multiple
-          type="file"
-          @change="e => handleImageChange(e)" />
-      </div>
-      <div>
-        <div
-          v-if="images.length === 0"
-          :class="images.length === 0 ? 'h-32' : ''">
-          <span>画像プレビュー</span>
+        <div class="flex flex-col">
+          <label class="text-xl">グループ</label>
+          <VueSelect
+            v-model="request.group"
+            class="w-1/3 inline-block"
+            label="name"
+            :options="groupStore.groups"
+            placeholder="グループを選択"
+            :reduce="(group:any) => group.id" />
         </div>
-        <div v-if="images.length !== 0" class="flex flex-wrap">
-          <div v-for="(image, index) in images" :key="index" class="relative">
-            <img :alt="image.name" class="h-32" :src="image.src" />
-            <button
-              class="absolute top-0 right-0 w-6 h-6"
-              @click="deleteImage(index)">
-              <XCircleIcon />
-            </button>
+        <div class="mb-2 flex flex-col">
+          <label class="text-xl">タグ</label>
+          <div>
+            <VueSelect
+              v-model="request.tags"
+              class="w-2/3 inline-block"
+              :close-on-select="false"
+              label="name"
+              multiple
+              :options="tagStore.tags"
+              placeholder="タグを選択"
+              :reduce="(tag:any) => tag.id" />
+            <Button
+              class="ml-8"
+              font-size="xl"
+              padding="sm"
+              @click.stop="handleTagModalIsOpen">
+              タグを新規作成</Button
+            >
           </div>
         </div>
-      </div>
-      <div class="text-center">
-        <Button
-          class="w-48 mb-4"
-          font-size="xl"
-          padding="sm"
-          @click.stop="postRequest">
-          申請を作成する</Button
-        >
+        <div class="mb-4 flex flex-col">
+          <label class="text-xl">画像</label>
+          <input
+            ref="inputImageRef"
+            accept="image/*"
+            multiple
+            type="file"
+            @change="e => handleImageChange(e)" />
+        </div>
+        <div>
+          <div v-if="images.length === 0">
+            <span>画像プレビュー</span>
+          </div>
+          <div v-if="images.length !== 0" class="flex flex-wrap">
+            <div v-for="(image, index) in images" :key="index" class="relative">
+              <img :alt="image.name" class="h-32" :src="image.src" />
+              <button
+                class="absolute top-0 right-0 w-6 h-6"
+                @click="deleteImage(index)">
+                <XCircleIcon />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="text-center">
+          <Button
+            class="w-48 mb-4"
+            font-size="xl"
+            padding="sm"
+            @click.stop="postRequest">
+            申請を作成する</Button
+          >
+        </div>
       </div>
     </div>
   </Modal>

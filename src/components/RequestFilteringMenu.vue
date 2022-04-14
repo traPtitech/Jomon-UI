@@ -60,7 +60,7 @@ function filterByDate() {
       日付順 <span v-if="params.sort === 'created_at'" class="text-xs">▼</span>
       <span v-if="params.sort === '-created_at'" class="text-xs">▲</span>
     </button>
-    <div class="mt-1">
+    <div>
       <input
         v-model="params.since"
         class="border border-gray-300 w-28 h-8"

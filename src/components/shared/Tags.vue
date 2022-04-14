@@ -2,7 +2,8 @@
 import type { Tag } from '/@/lib/apis'
 
 type Props = { tags: Tag[]; limit: number } //1-indexedでlimitを指定
-const props = withDefaults(defineProps<Props>(), { limit: 20 })
+
+withDefaults(defineProps<Props>(), { limit: 20 })
 </script>
 
 <template>

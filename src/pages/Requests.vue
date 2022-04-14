@@ -53,45 +53,37 @@ function changeIsModalOpen() {
 
 <template>
   <NewRequestModal v-if="isModalOpen" />
-  <div class="flex justify-between">
-    <div class="flex-grow">
-      <div class="flex relative">
-        <div class="text-3xl mt-2 text-center absolute right-1 left-1">
-          申請一覧
-        </div>
-        <div class="ml-auto mr-40 mt-4 z-1">
-          <Button font-size="lg" padding="md" @click="changeIsModalOpen">
-            申請の新規作成
-          </Button>
-        </div>
-      </div>
-      <RequestFilteringMenu class="mt-4 mb-2" />
-      <span v-if="requests.length !== 0" class="ml-50">
-        {{ requests.length }}件取得しました
-      </span>
-      <span v-if="requests.length === 0" class="ml-50">
-        条件に一致する申請は見つかりませんでした
-      </span>
-      <div :class="pageIndex === Math.ceil(requests.length / 7) ? 'h-123' : ''">
-        <div
-          v-if="requests.length !== 0"
-          class="w-3/4 mt-4 mr-auto ml-auto shadow">
-          <ul class="w-full mr-auto ml-auto">
-            <li
-              v-for="request in requestStore.requestsFilter(pageIndex)"
-              :key="request.id">
-              <Request :request="request" />
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="mt-4">
-        <PaginationBar
-          :item-length="requests.length"
-          kind="requests"
-          :page-index="pageIndex"
-          :unit="7" />
-      </div>
+  <div class="flex relative py-8 justify-center items-center">
+    <h1 class="text-3xl text-center">申請一覧</h1>
+    <div class="right-20 absolute">
+      <Button font-size="lg" padding="md" @click="changeIsModalOpen">
+        申請の新規作成
+      </Button>
     </div>
+  </div>
+  <RequestFilteringMenu />
+  <span v-if="requests.length !== 0" class="ml-50">
+    {{ requests.length }}件取得しました
+  </span>
+  <span v-if="requests.length === 0" class="ml-50">
+    条件に一致する申請は見つかりませんでした
+  </span>
+  <div class="h-120">
+    <div v-if="requests.length !== 0" class="w-3/4 mt-4 mr-auto ml-auto shadow">
+      <ul>
+        <li
+          v-for="request in requestStore.requestsFilter(pageIndex)"
+          :key="request.id">
+          <Request :request="request" />
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="mt-4">
+    <PaginationBar
+      :item-length="requests.length"
+      kind="requests"
+      :page-index="pageIndex"
+      :unit="7" />
   </div>
 </template>

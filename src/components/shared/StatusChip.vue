@@ -9,7 +9,7 @@ import {
 import { ref } from 'vue'
 
 type Props = { status: string; text: boolean }
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   text: false
 })
 const flag = ref(false)

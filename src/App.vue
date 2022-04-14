@@ -10,7 +10,7 @@ const { me } = storeToRefs(userStore)
 
 <template>
   <Header :me="me" />
-  <main class="h-screen text-dark-500">
+  <main class="h-screen text-dark-500 pt-12">
     <router-view />
   </main>
 </template>

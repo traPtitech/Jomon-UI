@@ -21,7 +21,13 @@ const group = ref({
 })
 
 async function handlePostGroup() {
-  if (/^[1-9][0-9]*$|^0$/.test(group.value.budget.toString())) {
+  if (
+    /^[1-9][0-9]*$|^0$/.test(group.value.budget.toString()) &&
+    group.value.name !== '' &&
+    group.value.description !== '' &&
+    group.value.owners.length > 0 &&
+    group.value.members.length > 0
+  ) {
     const willPostGroup = {
       name: group.value.name,
       description: group.value.description,
@@ -30,6 +36,8 @@ async function handlePostGroup() {
     const res: Group = await groupStore.postGroup(willPostGroup)
     await groupStore.postGroupMember(res.id, group.value.members)
     await groupStore.postGroupOwner(res.id, group.value.owners)
+  } else {
+    alert('全ての項目を入力してください')
   }
 }
 </script>

@@ -30,7 +30,7 @@ const paddingClass = computed(() => {
 
 <template>
   <button
-    :class="`hover:bg-zinc-200 rounded-md border border-zinc-300 ${fontSizeClass} ${paddingClass}`">
+    :class="`hover:bg-gray-200 rounded-md border border-zinc-300 ${fontSizeClass} ${paddingClass}`">
     <slot></slot>
   </button>
 </template>

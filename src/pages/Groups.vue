@@ -10,7 +10,7 @@ import Button from '/@/components/shared/Button.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import { useGroupStore } from '/@/stores/group'
 
-const toPageIndex = (v: LocationQueryValue | LocationQueryValue[]) => {
+const toPage = (v: LocationQueryValue | LocationQueryValue[]) => {
   if (Array.isArray(v)) {
     v = v[0]
   }
@@ -20,7 +20,7 @@ const toPageIndex = (v: LocationQueryValue | LocationQueryValue[]) => {
 }
 
 const route = useRoute()
-const pageIndex = ref(toPageIndex(route.query.pageIndex))
+const page = ref(toPage(route.query.page))
 const groupStore = useGroupStore()
 const { isGroupFetched } = storeToRefs(groupStore)
 
@@ -36,9 +36,9 @@ onMounted(() => {
   }
 })
 watch(
-  () => route.query.pageIndex,
-  newId => {
-    pageIndex.value = toPageIndex(newId)
+  () => route.query.page,
+  newPage => {
+    page.value = toPage(newPage)
   }
 )
 </script>
@@ -63,14 +63,14 @@ watch(
           <div class="w-1/5">予算</div>
         </div>
         <ul class="divide-y">
-          <li v-for="group in sliceGroupsAt(pageIndex, 10)" :key="group.id">
+          <li v-for="group in sliceGroupsAt(page, 10)" :key="group.id">
             <Group :group="group" />
           </li>
         </ul>
       </div>
       <PaginationBar
         class="mt-4"
-        :current-page="pageIndex"
+        :current-page="page"
         path="/groups"
         :total-pages="Math.ceil(groupStore.groups.length / 10)" />
     </div>

@@ -1,94 +1,119 @@
 <script lang="ts" setup>
-type Props = {
-  pageIndex: number
-  itemLength: number
-  unit: number
-  kind: string
-} //pageIndexはページ番号(routeから取ってくる)、itemLengthは全体の要素数(storeのgettersで計算)、unitは1ページに表示している個数(自分で決められるが、v-forで回す数と一致させる)、kindは"requests"や"transactions"や"groups"などパスで使う名前
+import { computed } from 'vue'
 
-defineProps<Props>()
+type Props = {
+  path: string
+  currentPage: number
+  totalPages: number
+}
+
+// sequence(3, 7) => [3, 4, 5, 6, 7]
+const sequence = (start: number, end: number) => {
+  return [...Array(end - start + 1).keys()].map(i => i + start)
+}
+
+const props = defineProps<Props>()
+
+// P1: 001 002 003 004 005 006 007 008 009   -   left
+// P2: 001 002 003 004 005 006 ... 099 100   -   left ... center
+// P3: 001 002 ... 049 050 051 ... 099 100   -   left ... center ... right
+// P4: 001 002 ... 095 096 097 098 099 100   -   left ... center
+
+// 常に表示される
+const left = computed(
+  () =>
+    props.totalPages <= 9
+      ? sequence(1, props.totalPages) // P1
+      : props.currentPage <= 6
+      ? sequence(1, 6) // P2
+      : sequence(1, 2) // P3, P4
+)
+// totalPages > 9 のとき、表示される
+const center = computed(
+  () =>
+    props.currentPage <= 6
+      ? sequence(props.totalPages - 1, props.totalPages) // P2
+      : props.currentPage <= props.totalPages - 6
+      ? sequence(props.currentPage - 1, props.currentPage + 1) // P3
+      : sequence(props.totalPages - 5, props.totalPages) // P4
+)
+// totalPages > 9 && 6 < currentPage <= totalPages - 6 のとき、表示される
+const right = computed(
+  () => sequence(props.totalPages - 1, props.totalPages) // P3
+)
 </script>
 
 <template>
-  <div v-if="itemLength !== 0" class="text-center w-full">
-    <div class="flex justify-center">
+  <div class="h-9 text-center text-sm w-full">
+    <div class="flex h-full mx-auto w-min ring-0 justify-center">
+      <!-- Prev -->
       <router-link
-        class="w-24 h-8 block hover:border flex justify-center items-center rounded-lg"
-        :class="
-          pageIndex === 1
-            ? 'hover:border-zinc-300 bg-zinc-300 cursor-default'
-            : 'hover:border-zinc-400'
-        "
-        :to="
-          pageIndex === 1
-            ? `/${kind}/?pageIndex=1`
-            : `/${kind}/?pageIndex=` + (pageIndex - 1).toString()
-        ">
-        <span>前のページへ</span>
+        class="flex w-18 justify-center items-center hover:text-blue-800"
+        :class="currentPage === 1 ? 'invisible' : ''"
+        :to="`${path}?pageIndex=${currentPage - 1}`">
+        <span>Prev</span>
       </router-link>
-      <router-link
-        v-for="index in Math.ceil(itemLength / unit) <= 8
-          ? [...Array(Math.ceil(itemLength / unit)).keys()]
-          : pageIndex >= 6
-          ? [...Array(2).keys()]
-          : [...Array(6).keys()]"
-        :key="index"
-        class="mr-2 ml-2 w-8 h-8 block hover:border hover:border-zinc-400 flex justify-center items-center rounded-lg"
-        :class="index + 1 === pageIndex ? 'bg-blue-300 cursor-default' : ''"
-        :to="`/${kind}/?pageIndex=` + (index + 1).toString()">
-        <span>{{ index + 1 }}</span>
-      </router-link>
-      <span v-if="Math.ceil(itemLength / unit) >= 9">...</span>
 
-      <div
-        v-if="
-          Math.ceil(itemLength / unit) >= 10 &&
-          6 <= pageIndex &&
-          pageIndex <= Math.ceil(itemLength / unit) - 5
-        ">
+      <!-- Left -->
+      <div class="flex">
         <router-link
-          v-for="index in pageIndex <= 5 ? null : [...Array(5).keys()]"
-          :key="index"
-          class="mr-2 ml-2 w-8 h-8 block hover:border hover:border-zinc-400 flex justify-center items-center rounded-lg"
-          :class="index === 2 ? 'bg-blue-300 cursor-default' : ''"
-          :to="`/${kind}/?pageIndex=` + (index + pageIndex - 2).toString()">
-          <span>{{ index + pageIndex - 2 }}</span>
+          v-for="page in left"
+          :key="page"
+          class="rounded flex w-10 block justify-center items-center"
+          :class="
+            page === currentPage
+              ? 'bg-blue-300 cursor-default'
+              : 'hover:text-blue-800'
+          "
+          :to="`${path}?pageIndex=${page}`">
+          <span>{{ page }}</span>
         </router-link>
       </div>
 
-      <span v-if="Math.ceil(itemLength / unit) >= 9">...</span>
-      <router-link
-        v-for="index in Math.ceil(itemLength / unit) <= 8
-          ? null
-          : pageIndex >= Math.ceil(itemLength / unit) - 4
-          ? [...Array(6).keys()].reverse()
-          : [...Array(2).keys()].reverse()"
-        :key="index"
-        class="mr-2 ml-2 w-8 h-8 block hover:border hover:border-zinc-400 flex justify-center items-center rounded-lg"
-        :class="
-          pageIndex === Math.ceil(itemLength / unit) - index
-            ? 'bg-blue-300 cursor-default'
-            : ''
+      <!-- Center -->
+      <div v-if="totalPages > 9" class="flex">
+        <span class="pb-2 w-10 self-end">...</span>
+        <router-link
+          v-for="page in center"
+          :key="page"
+          class="rounded flex w-10 block justify-center items-center"
+          :class="
+            page === currentPage
+              ? 'bg-blue-300 cursor-default'
+              : 'hover:text-blue-800'
+          "
+          :to="`${path}?pageIndex=${page}`">
+          <span>{{ page }}</span>
+        </router-link>
+      </div>
+
+      <!-- Right -->
+      <div
+        v-if="
+          totalPages > 9 && 6 < currentPage && currentPage <= totalPages - 6
         "
-        :to="
-          `/${kind}/?pageIndex=` +
-          (Math.ceil(itemLength / unit) - index).toString()
-        ">
-        <span>{{ Math.ceil(itemLength / unit) - index }}</span>
-      </router-link>
+        class="flex">
+        <span class="pb-2 w-10 self-end">...</span>
+        <router-link
+          v-for="page in right"
+          :key="page"
+          class="rounded flex w-10 block justify-center items-center"
+          :class="
+            page === currentPage
+              ? 'bg-blue-300 cursor-default'
+              : 'hover:text-blue-800'
+          "
+          :to="`${path}?pageIndex=${page}`">
+          <span>{{ page }}</span>
+        </router-link>
+      </div>
+
+      <!-- Next -->
       <router-link
-        class="w-24 h-8 block hover:border flex justify-center items-center rounded-lg"
-        :class="
-          pageIndex === Math.ceil(itemLength / unit) || itemLength <= 7
-            ? 'hover:border-zinc-300 bg-zinc-300 cursor-default'
-            : 'hover:border-zinc-400'
-        "
-        :to="
-          pageIndex !== Math.ceil(itemLength / unit)
-            ? `/${kind}/?pageIndex=` + (pageIndex + 1).toString()
-            : `/${kind}/?pageIndex=` + Math.ceil(itemLength / unit).toString()
-        ">
-        <span>次のページへ</span>
+        class="flex w-18 justify-center items-center hover:text-blue-800"
+        :class="currentPage === totalPages ? 'invisible' : ''"
+        :to="`${path}?pageIndex=${currentPage + 1}`">
+        <span>Next</span>
       </router-link>
     </div>
   </div>

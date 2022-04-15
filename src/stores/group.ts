@@ -6,7 +6,7 @@ import apis from '/@/lib/apis'
 
 export const useGroupStore = defineStore('group', () => {
   const groups = ref<Group[]>(
-    Array(100).fill({
+    Array(1000).fill({
       id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       name: 'SysAd',
       description: 'SysAd班',
@@ -17,10 +17,6 @@ export const useGroupStore = defineStore('group', () => {
   )
   const group = ref<Group>()
   const isGroupFetched = ref(false)
-
-  const groupsFilter = (index: number) => {
-    return groups.value.slice((index - 1) * 10, index * 10)
-  }
 
   const fetchGroups = async () => {
     groups.value = (await apis.getGroups()).data
@@ -55,7 +51,6 @@ export const useGroupStore = defineStore('group', () => {
     groups,
     group,
     isGroupFetched,
-    groupsFilter,
     fetchGroups,
     postGroup,
     putGroup,

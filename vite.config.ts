@@ -16,7 +16,6 @@ export default defineConfig({
     }
   },
   server: {
-    open: true,
     proxy: {
       '/api/*': {
         target: DEV_SERVER_PROXY_HOST,

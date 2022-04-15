@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 
+import PageLink from './PageLink.vue'
+
 type Props = {
   path: string
   currentPage: number
@@ -24,20 +26,20 @@ const left = computed(
   () =>
     props.totalPages <= 9
       ? sequence(1, props.totalPages) // P1
-      : props.currentPage <= 6
+      : props.currentPage <= 5
       ? sequence(1, 6) // P2
       : sequence(1, 2) // P3, P4
 )
 // totalPages > 9 のとき、表示される
 const center = computed(
   () =>
-    props.currentPage <= 6
+    props.currentPage <= 5
       ? sequence(props.totalPages - 1, props.totalPages) // P2
-      : props.currentPage <= props.totalPages - 6
+      : props.currentPage <= props.totalPages - 5
       ? sequence(props.currentPage - 1, props.currentPage + 1) // P3
       : sequence(props.totalPages - 5, props.totalPages) // P4
 )
-// totalPages > 9 && 6 < currentPage <= totalPages - 6 のとき、表示される
+// totalPages > 9 && 5 < currentPage <= totalPages - 5 のとき、表示される
 const right = computed(
   () => sequence(props.totalPages - 1, props.totalPages) // P3
 )
@@ -56,56 +58,38 @@ const right = computed(
 
       <!-- Left -->
       <div class="flex">
-        <router-link
+        <PageLink
           v-for="page in left"
           :key="page"
-          class="rounded flex w-10 block justify-center items-center"
-          :class="
-            page === currentPage
-              ? 'bg-blue-300 cursor-default'
-              : 'hover:text-blue-800'
-          "
-          :to="`${path}?pageIndex=${page}`">
-          <span>{{ page }}</span>
-        </router-link>
+          :page="page"
+          :path="path"
+          :selected="page === currentPage" />
       </div>
 
       <!-- Center -->
       <div v-if="totalPages > 9" class="flex">
         <span class="pb-2 w-10 self-end">...</span>
-        <router-link
+        <PageLink
           v-for="page in center"
           :key="page"
-          class="rounded flex w-10 block justify-center items-center"
-          :class="
-            page === currentPage
-              ? 'bg-blue-300 cursor-default'
-              : 'hover:text-blue-800'
-          "
-          :to="`${path}?pageIndex=${page}`">
-          <span>{{ page }}</span>
-        </router-link>
+          :page="page"
+          :path="path"
+          :selected="page === currentPage" />
       </div>
 
       <!-- Right -->
       <div
         v-if="
-          totalPages > 9 && 6 < currentPage && currentPage <= totalPages - 6
+          totalPages > 9 && 5 < currentPage && currentPage <= totalPages - 5
         "
         class="flex">
         <span class="pb-2 w-10 self-end">...</span>
-        <router-link
+        <PageLink
           v-for="page in right"
           :key="page"
-          class="rounded flex w-10 block justify-center items-center"
-          :class="
-            page === currentPage
-              ? 'bg-blue-300 cursor-default'
-              : 'hover:text-blue-800'
-          "
-          :to="`${path}?pageIndex=${page}`">
-          <span>{{ page }}</span>
-        </router-link>
+          :page="page"
+          :path="path"
+          :selected="page === currentPage" />
       </div>
 
       <!-- Next -->

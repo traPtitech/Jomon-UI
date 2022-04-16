@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@heroicons/vue": "^1.0.6",
+    "@types/markdown-it": "^12.2.3",
     "axios": "^0.26.1",
     "pinia": "^2.0.13",
     "vue": "^3.2.31",

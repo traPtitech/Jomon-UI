@@ -4,7 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Transactions from './pages/Transactions.vue'
 
 const routes: RouteRecordRaw[] = [
-  { path: '/', redirect: '/requests?pageIndex=1' },
+  { path: '/', redirect: '/requests' },
   { path: '/requests', component: () => import('./pages/Requests.vue') },
   { path: '/transactions', component: Transactions },
   {

@@ -1,8 +1,6 @@
 import { createPinia } from 'pinia'
 import 'virtual:windi-devtools'
 import 'virtual:windi.css'
-
-import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import type { PluginOptions } from 'vue-toastification'
 import Toast, { POSITION } from 'vue-toastification'

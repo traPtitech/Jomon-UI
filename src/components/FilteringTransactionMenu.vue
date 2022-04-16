@@ -1,106 +1,105 @@
 <script lang="ts" setup>
+import {
+  ArrowCircleUpIcon,
+  ArrowCircleDownIcon,
+  SearchIcon,
+  XIcon
+} from '@heroicons/vue/outline'
+import {
+  ArrowCircleUpIcon as ArrowCircleUpIconSolid,
+  ArrowCircleDownIcon as ArrowCircleDownIconSolid
+} from '@heroicons/vue/solid'
 import { ref } from 'vue'
 
-import { useTransactionStore } from '../stores/transaction'
-import { useGroupStore } from '../stores/group'
-import { useTagStore } from '../stores/tag'
-import { storeToRefs } from 'pinia'
-import { ArrowCircleUpIcon as ArrowCircleUpIconSolid, ArrowCircleDownIcon as ArrowCircleDownIconSolid } from '@heroicons/vue/solid'
-import { ArrowCircleUpIcon, ArrowCircleDownIcon, SearchIcon, XIcon } from '@heroicons/vue/outline'
 import VueSelect from './VueSelect.vue'
+import { useTagStore } from '/@/stores/tag'
+import { useTransactionStore } from '/@/stores/transaction'
 
 const transactionStore = useTransactionStore()
-const groupStore = useGroupStore()
 const tagStore = useTagStore()
-const { params, isTargetSearchOpen } = storeToRefs(transactionStore)
-function sortTransactions(sort: string) {
-  params.value.sort = sort
-  transactionStore.getTransactions()
+
+const target = ref('')
+const group = ref('')
+const tag = ref('')
+
+const sortBy = ref('created_at')
+const sortTransactions = () => {
+  transactionStore.fetchTransactions(sortBy.value)
 }
 </script>
 <template>
-  <div class="h-9 flex">
+  <div class="flex h-9">
     <div
-      class="w-3/20 flex border"
+      class="border flex w-3/20"
       :class="
-        params.sort === 'created_at' || params.sort === '-created_at'
-          ? 'bg-gray-200'
-          : ''
-      "
-    >
-      <span class="ml-1/5 mt-2">年 月 日</span>
+        sortBy === 'created_at' || sortBy === '-created_at' ? 'bg-gray-200' : ''
+      ">
+      <span class="mt-2 ml-1/5">年 月 日</span>
       <ArrowCircleDownIconSolid
-        v-if="params.sort === 'created_at'"
-        class="w-5 mt-1 cursor-pointer"
-      />
+        v-if="sortBy === 'created_at'"
+        class="cursor-pointer mt-1 w-5" />
       <ArrowCircleDownIcon
         v-else
-        class="w-5 mt-1 cursor-pointer"
-        @click="sortTransactions('created_at')"
-      />
+        class="cursor-pointer mt-1 w-5"
+        @click="sortTransactions" />
       <ArrowCircleUpIconSolid
-        v-if="params.sort === '-created_at'"
-        class="w-5 mt-1 cursor-pointer"
-      />
+        v-if="sortBy === '-created_at'"
+        class="cursor-pointer mt-1 w-5" />
       <ArrowCircleUpIcon
         v-else
-        class="w-5 mt-1 cursor-pointer"
-        @click="sortTransactions('-created_at')"
-      />
+        class="cursor-pointer mt-1 w-5"
+        @click="sortTransactions" />
     </div>
     <div
-      class="w-3/20 flex border"
-      :class="
-        params.sort === 'amount' || params.sort === '-amount'
-          ? 'bg-gray-200'
-          : ''
-      "
-    >
-      <span class="ml-1/4 mt-2">取引額</span>
-      <ArrowCircleDownIconSolid v-if="params.sort === 'amount'" class="w-5 mt-1 cursor-pointer" />
+      class="border flex w-3/20"
+      :class="sortBy === 'amount' || sortBy === '-amount' ? 'bg-gray-200' : ''">
+      <span class="mt-2 ml-1/4">取引額</span>
+      <ArrowCircleDownIconSolid
+        v-if="sortBy === 'amount'"
+        class="cursor-pointer mt-1 w-5" />
       <ArrowCircleDownIcon
         v-else
-        class="w-5 mt-1 cursor-pointer"
-        @click="sortTransactions('amount')"
-      />
-      <ArrowCircleUpIconSolid v-if="params.sort === '-amount'" class="w-5 mt-1 cursor-pointer" />
+        class="cursor-pointer mt-1 w-5"
+        @click="sortTransactions" />
+      <ArrowCircleUpIconSolid
+        v-if="sortBy === '-amount'"
+        class="cursor-pointer mt-1 w-5" />
       <ArrowCircleUpIcon
         v-else
-        class="w-5 mt-1 cursor-pointer"
-        @click="sortTransactions('-amount')"
-      />
+        class="cursor-pointer mt-1 w-5"
+        @click="sortTransactions" />
     </div>
-    <div class="w-3/20 border">
-      <div v-if="isTargetSearchOpen === false" class="text-center mt-2">
-        取引相手<SearchIcon class="w-5 ml-1 h-4 cursor-pointer" @click="isTargetSearchOpen = true" />
+    <div class="border w-3/20">
+      <div v-if="true" class="mt-2 text-center">
+        取引相手<SearchIcon
+          class="cursor-pointer h-4 ml-1 w-5"
+          @click="() => {}" />
       </div>
       <div v-else>
-        <input v-model="params.target" type="text" class="w-7/8 h-9 border-none">
-        <XIcon @click="isTargetSearchOpen = false; params.target = ''" class="w-5 cursor-pointer" />
+        <input v-model="target" class="border-none h-9 w-7/8" type="text" />
+        <XIcon
+          class="cursor-pointer w-5"
+          @click="
+            // CLOSE
+            target = ''
+          " />
       </div>
     </div>
     <VueSelect
-      v-model="params.group"
-      @close="transactionStore.getTransactions"
-      :options="groupStore.groups"
-      :reduce="(group:any) => group.id"
-      label="name"
-      placeholder="取引グループ"
+      v-model="group"
       class="w-3/20"
-    ></VueSelect>
-    <VueSelect
-      v-model="params.tag"
-      @close="transactionStore.getTransactions"
-      :options="tagStore.tags"
-      :reduce="(tag:any) => tag.id"
       label="name"
-      placeholder="タグ"
+      :options="['Sysad', 'Sysad2']"
+      placeholder="取引グループ"
+      :reduce="(group:any) => group.id"
+      @close="transactionStore.fetchTransactions"></VueSelect>
+    <VueSelect
+      v-model="tag"
       class="w-2/5"
-    ></VueSelect>
+      label="name"
+      :options="tagStore.tags"
+      placeholder="タグ"
+      :reduce="(tag:any) => tag.id"
+      @close="transactionStore.fetchTransactions"></VueSelect>
   </div>
 </template>
-<style scoped>
-.v-select__selections {
-  border: none;
-}
-</style>

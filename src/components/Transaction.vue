@@ -3,7 +3,7 @@ import { LinkIcon } from '@heroicons/vue/outline'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
-import { useTransactionStore } from '../stores/transaction'
+import { useTransactionStore } from '/@/stores/transaction'
 
 const formatDate = (date: string) => {
   return (

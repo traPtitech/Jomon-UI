@@ -4,8 +4,8 @@ import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 import FilteringTransactionMenu from '/@/components/FilteringTransactionMenu.vue'
-import PaginationBar from '/@/components/PaginationBar.vue'
 import Transaction from '/@/components/Transaction.vue'
+import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import { useTagStore } from '/@/stores/tag'
 import { useTransactionStore } from '/@/stores/transaction'
 

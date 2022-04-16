@@ -10,7 +10,7 @@ defineProps<Props>()
 <template>
   <router-link
     class="rounded flex w-10 block justify-center items-center"
-    :class="selected ? 'bg-gray-200 cursor-default' : 'hover:text-cyan-800'"
+    :class="selected ? 'bg-blue-200 cursor-default' : 'hover:bg-gray-200'"
     :to="`${path}?page=${page}`">
     <span>{{ page }}</span>
   </router-link>

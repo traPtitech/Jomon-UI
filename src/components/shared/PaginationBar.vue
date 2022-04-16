@@ -47,10 +47,10 @@ const right = computed(
 
 <template>
   <div class="h-9 text-center text-sm w-full">
-    <div class="flex h-full mx-auto w-min ring-0 justify-center">
+    <div class="rounded flex h-full mx-auto w-min ring-0 justify-center">
       <!-- Prev -->
       <router-link
-        class="flex w-18 justify-center items-center hover:text-cyan-800"
+        class="flex w-18 justify-center items-center hover:bg-gray-200"
         :class="currentPage === 1 ? 'invisible' : ''"
         :to="`${path}?page=${currentPage - 1}`">
         <span>Prev</span>
@@ -94,7 +94,7 @@ const right = computed(
 
       <!-- Next -->
       <router-link
-        class="flex w-18 justify-center items-center hover:text-cyan-800"
+        class="rounded flex w-18 justify-center items-center hover:bg-gray-200"
         :class="currentPage === totalPages ? 'invisible' : ''"
         :to="`${path}?page=${currentPage + 1}`">
         <span>Next</span>

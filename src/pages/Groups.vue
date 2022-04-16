@@ -5,7 +5,7 @@ import { ref, watch } from 'vue'
 import type { LocationQueryValue } from 'vue-router'
 import { useRoute } from 'vue-router'
 
-import Group from '/@/components/Group.vue'
+import GroupItem from '/@/components/GroupItem.vue'
 import Button from '/@/components/shared/Button.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import { useGroupStore } from '/@/stores/group'
@@ -64,7 +64,7 @@ watch(
         </div>
         <ul class="divide-y">
           <li v-for="group in sliceGroupsAt(page, 10)" :key="group.id">
-            <Group :group="group" />
+            <GroupItem :group="group" />
           </li>
         </ul>
       </div>

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/outline'
 import { computed } from 'vue'
 
 import PageLink from './PageLink.vue'
@@ -47,13 +48,13 @@ const right = computed(
 
 <template>
   <div class="h-9 text-center text-sm w-full">
-    <div class="rounded flex h-full mx-auto w-min ring-0 justify-center">
+    <div class="flex h-full mx-auto w-min ring-0 justify-center">
       <!-- Prev -->
       <router-link
-        class="flex w-18 justify-center items-center hover:bg-gray-200"
+        class="rounded flex w-18 justify-center items-center hover:bg-gray-200 mr-4"
         :class="currentPage === 1 ? 'invisible' : ''"
         :to="`${path}?page=${currentPage - 1}`">
-        <span>Prev</span>
+        <ChevronLeftIcon class="w-4" />Prev
       </router-link>
 
       <!-- Left -->
@@ -61,6 +62,7 @@ const right = computed(
         <PageLink
           v-for="page in left"
           :key="page"
+          class="not-last:mr-1"
           :page="page"
           :path="path"
           :selected="page === currentPage" />
@@ -72,6 +74,7 @@ const right = computed(
         <PageLink
           v-for="page in center"
           :key="page"
+          class="not-last:mr-1"
           :page="page"
           :path="path"
           :selected="page === currentPage" />
@@ -87,6 +90,7 @@ const right = computed(
         <PageLink
           v-for="page in right"
           :key="page"
+          class="not-last:mr-1"
           :page="page"
           :path="path"
           :selected="page === currentPage" />
@@ -94,10 +98,10 @@ const right = computed(
 
       <!-- Next -->
       <router-link
-        class="rounded flex w-18 justify-center items-center hover:bg-gray-200"
+        class="rounded flex w-18 justify-center items-center hover:bg-gray-200 ml-4"
         :class="currentPage === totalPages ? 'invisible' : ''"
         :to="`${path}?page=${currentPage + 1}`">
-        <span>Next</span>
+        Next<ChevronRightIcon class="w-4" />
       </router-link>
     </div>
   </div>

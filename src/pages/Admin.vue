@@ -10,16 +10,18 @@ import { useUserStore } from '/@/stores/user'
 const adminStore = useAdminStore()
 const userStore = useUserStore()
 const { admins, isAdminFetched } = storeToRefs(adminStore)
-const { users, me } = storeToRefs(userStore)
+const { users, me, isUserFetched } = storeToRefs(userStore)
 const addList = ref([] as string[])
 const deleteList = ref([] as string[])
 
 onMounted(() => {
   if (me.value.admin) {
-    if (isAdminFetched.value) {
+    if (!isAdminFetched.value) {
       adminStore.fetchAdmins()
     }
-    userStore.getUsers()
+    if (!isUserFetched.value) {
+      userStore.fetchUsers()
+    }
   }
 })
 
@@ -32,8 +34,8 @@ const addAdmins = () => {
 </script>
 
 <template>
-  <div v-if="me.admin" class="ml-4 my-4">
-    <h1 class="text-center text-3xl">管理ページ</h1>
+  <div v-if="me.admin" class="ml-4">
+    <h1 class="py-8 text-center text-3xl">管理ページ</h1>
     <div>
       <ul class="flex gap-2">
         <li v-for="admin in admins" :key="admin">
@@ -46,7 +48,7 @@ const addAdmins = () => {
     <div class="mt-4">
       <VueSelect
         v-model="addList"
-        class="mb-2 w-1/2"
+        class="mb-4 w-1/2"
         label="name"
         multiple
         :options="users"
@@ -56,10 +58,10 @@ const addAdmins = () => {
         選択した管理者を追加</Button
       >
     </div>
-    <div class="mt-4">
+    <div class="mt-12">
       <VueSelect
         v-model="deleteList"
-        class="mb-2 w-1/2"
+        class="mb-4 w-1/2"
         multiple
         :options="admins"
         placeholder="削除する管理者を選択" />

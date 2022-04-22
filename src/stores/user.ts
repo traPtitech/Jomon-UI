@@ -31,18 +31,20 @@ export const useUserStore = defineStore('user', () => {
       deleted_at: '2022-01-27T13:45:37.048Z'
     }
   ])
+  const isUserFetched = ref(false)
 
-  const getMe = async () => {
+  const fetchMe = async () => {
     me.value = (await apis.getMe()).data
   }
-  const getUsers = async () => {
+  const fetchUsers = async () => {
     users.value = (await apis.getUsers()).data
   }
 
   return {
     me,
     users,
-    getMe,
-    getUsers
+    isUserFetched,
+    fetchMe,
+    fetchUsers
   }
 })

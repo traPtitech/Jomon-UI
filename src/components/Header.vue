@@ -22,19 +22,19 @@ defineProps<Props>()
     <div class="flex h-full flex-1 px-2 justify-between">
       <div class="flex gap-2 items-center">
         <HeaderButton
-          :fullpath="route.fullPath"
+          :is-here="route.fullPath === '/requests'"
           path="/requests"
           text="申請一覧" />
         <HeaderButton
-          :fullpath="route.fullPath"
+          :is-here="route.fullPath === '/transactions'"
           path="/transactions"
           text="入出金記録一覧" />
         <HeaderButton
-          :fullpath="route.fullPath"
+          :is-here="route.fullPath === '/groups'"
           path="/groups"
           text="グループ一覧" />
         <HeaderButton
-          :fullpath="route.fullPath"
+          :is-here="route.fullPath === '/admins'"
           path="/admins"
           text="管理ページ" />
       </div>

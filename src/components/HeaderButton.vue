@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 interface Props {
-  fullpath: string
+  isHere: boolean
   path: string
   text: string
 }
 defineProps<Props>()
 </script>
 <template>
-  <router-link :class="fullpath === path ? 'cursor-default' : ''" :to="path">
+  <router-link :class="isHere ? 'cursor-default' : ''" :to="path">
     <div
       class="p-2 rounded-3xl"
-      :class="fullpath === path ? 'bg-zinc-200' : 'hover:bg-zinc-200'">
+      :class="isHere ? 'bg-zinc-200' : 'hover:bg-zinc-200'">
       <span>{{ text }}</span>
     </div>
   </router-link>

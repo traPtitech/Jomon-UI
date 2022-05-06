@@ -2,22 +2,13 @@
 import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 import { ref, watch } from 'vue'
-import type { LocationQueryValue } from 'vue-router'
 import { useRoute } from 'vue-router'
 
 import GroupItem from '/@/components/GroupItem.vue'
 import Button from '/@/components/shared/Button.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
+import { toPage } from '/@/lib/parseQueryParams'
 import { useGroupStore } from '/@/stores/group'
-
-const toPage = (v: LocationQueryValue | LocationQueryValue[]) => {
-  if (Array.isArray(v)) {
-    v = v[0]
-  }
-  if (!v) return 1
-  const parsed = parseInt(v)
-  return isNaN(parsed) ? 1 : parsed
-}
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))
@@ -56,8 +47,7 @@ watch(
       </div>
       <!--フィルタリングメニューあってもいい気がする-->
       <div class="min-h-128">
-        <div
-          class="flex bg-gray-200 px-4 pt-2 pb-2 justify-around items-center">
+        <div class="flex bg-gray-200 py-2 px-4 justify-around items-center">
           <div class="w-1/5">グループ名</div>
           <div class="w-3/5">詳細</div>
           <div class="w-1/5">予算</div>
@@ -69,7 +59,7 @@ watch(
         </ul>
       </div>
       <PaginationBar
-        class="mt-4"
+        class="my-4"
         :current-page="page"
         path="/groups"
         :total-pages="Math.ceil(groupStore.groups.length / 10)" />

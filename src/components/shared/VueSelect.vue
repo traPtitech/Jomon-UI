@@ -7,11 +7,9 @@ import 'vue-select/dist/vue-select.css'
   <VueSelect v-bind="$attrs">
     <template #no-options="{ search, searching, loading }">
       <div v-if="searching">
-        <span
-          >"{{ search }}"に一致する{{
-            $attrs.placeholder
-          }}は見つかりませんでした</span
-        >
+        <span>
+          "{{ search }}"に一致する{{ $attrs.placeholder }}は見つかりませんでした
+        </span>
       </div>
       <div v-else-if="loading">
         <span>読み込み中...</span>

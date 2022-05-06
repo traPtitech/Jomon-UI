@@ -13,6 +13,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "lib": ["esnext", "dom"],
+    "noUnusedLocals": true,
     "baseUrl": ".",
     "paths": {
       "/@/*": [

@@ -38,7 +38,7 @@ defineProps<Props>()
           path="/admins"
           text="管理ページ" />
       </div>
-      <UserIcon :name="me.name!" />
+      <UserIcon :name="me.name" />
     </div>
   </header>
 </template>

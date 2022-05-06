@@ -23,8 +23,8 @@ function submit() {
   <div class="mt-12 mr-4 ml-4">
     <textarea
       v-model="comment"
-      class="resize-none h-32 w-full p-0.5"
-      placeholder="コメント"></textarea>
+      class="resize-none h-32 w-full p-1 rounded"
+      placeholder="コメント" />
     <div class="text-right">
       <Button
         class="w-24 mr-4 mt-2"
@@ -38,7 +38,7 @@ function submit() {
       <summary>MDプレビュー</summary>
       <div>
         <MarkdownIt
-          :class="comment ? 'borderd border-gray-200' : ''"
+          :class="comment ? 'border border-gray-200' : ''"
           :text="comment" />
       </div>
     </details>

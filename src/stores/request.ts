@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
 import type { Params } from '../types/requestsTypes'
 import type { Request } from '/@/lib/apis'
@@ -58,9 +58,6 @@ export const useRequestStore = defineStore('request', () => {
   const tagList = ref<string[]>([])
   const isRequestFetched = ref(false)
 
-  const requestsFilter = (index: number) => {
-    return requests.value.slice((index - 1) * 7, index * 7)
-  }
   const fetchRequests = async (params: Params = defaultParams) => {
     const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
     if (
@@ -92,5 +89,5 @@ export const useRequestStore = defineStore('request', () => {
       alert('日付が不正です')
     }
   }
-  return { requests, isRequestFetched, requestsFilter, fetchRequests, tagList }
+  return { requests, isRequestFetched, fetchRequests, tagList }
 })

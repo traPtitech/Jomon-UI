@@ -2,10 +2,11 @@
 import { storeToRefs } from 'pinia'
 import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import type { LocationQueryValue } from 'vue-router'
 
 import NewRequestModal from '../components/NewRequestModal.vue'
-import Request from '../components/Request.vue'
 import RequestFilteringMenu from '../components/RequestFilteringMenu.vue'
+import RequestItem from '../components/RequestItem.vue'
 import Button from '../components/shared/Button.vue'
 import PaginationBar from '../components/shared/PaginationBar.vue'
 import { useGeneralStore } from '../stores/general'
@@ -14,8 +15,16 @@ import { useRequestStore } from '../stores/request'
 import { useTagStore } from '../stores/tag'
 import { useUserStore } from '../stores/user'
 
+const toPage = (v: LocationQueryValue | LocationQueryValue[]) => {
+  if (Array.isArray(v)) {
+    v = v[0]
+  }
+  if (!v) return 1
+  const parsed = parseInt(v)
+  return isNaN(parsed) ? 1 : parsed
+}
 const route = useRoute()
-const pageIndex = ref(route.query.pageIndex ? Number(route.query.pageIndex) : 1)
+const page = ref(toPage(route.query.page))
 const generalStore = useGeneralStore()
 const requestStore = useRequestStore()
 const tagStore = useTagStore()
@@ -25,6 +34,13 @@ const { isModalOpen } = storeToRefs(generalStore)
 const { requests, isRequestFetched } = storeToRefs(requestStore)
 const { isTagFetched } = storeToRefs(tagStore)
 const { isGroupFetched } = storeToRefs(groupStore)
+
+const sliceRequestsAt = (index: number, n: number) => {
+  const start = (index - 1) * n
+  const end = index * n
+  return requestStore.requests.slice(start, end)
+}
+
 onMounted(() => {
   if (isRequestFetched) {
     requestStore.fetchRequests()
@@ -35,15 +51,13 @@ onMounted(() => {
   if (isGroupFetched) {
     groupStore.fetchGroups()
   }
-  userStore.getUsers()
-  userStore.getMe()
+  userStore.fetchUsers()
+  userStore.fetchMe()
 })
 watch(
-  () => route.query.pageIndex,
-  newId => {
-    if (typeof newId === 'string') {
-      pageIndex.value = Number(newId)
-    }
+  () => route.query.page,
+  newPage => {
+    page.value = toPage(newPage)
   }
 )
 function changeIsModalOpen() {
@@ -53,12 +67,14 @@ function changeIsModalOpen() {
 
 <template>
   <NewRequestModal v-if="isModalOpen" />
-  <div class="flex relative py-8 justify-center items-center">
-    <h1 class="text-3xl text-center">申請一覧</h1>
-    <div class="right-20 absolute">
-      <Button font-size="lg" padding="md" @click="changeIsModalOpen">
-        申請の新規作成
-      </Button>
+  <div class="flex flex-col mx-auto min-w-160 w-2/3">
+    <div class="flex w-full py-8 justify-center items-center relative">
+      <h1 class="text-3xl text-center">申請一覧</h1>
+      <div class="right-0 absolute">
+        <Button font-size="lg" padding="md" @click="changeIsModalOpen">
+          申請の新規作成
+        </Button>
+      </div>
     </div>
   </div>
   <RequestFilteringMenu />
@@ -68,22 +84,18 @@ function changeIsModalOpen() {
   <span v-if="requests.length === 0" class="ml-50">
     条件に一致する申請は見つかりませんでした
   </span>
-  <div class="h-120">
+  <div class="min-h-120">
     <div v-if="requests.length !== 0" class="w-3/4 mt-4 mr-auto ml-auto shadow">
       <ul>
-        <li
-          v-for="request in requestStore.requestsFilter(pageIndex)"
-          :key="request.id">
-          <Request :request="request" />
+        <li v-for="request in sliceRequestsAt(page, 7)" :key="request.id">
+          <RequestItem :request="request" />
         </li>
       </ul>
     </div>
   </div>
-  <div class="mt-4">
-    <PaginationBar
-      :item-length="requests.length"
-      kind="requests"
-      :page-index="pageIndex"
-      :unit="7" />
-  </div>
+  <PaginationBar
+    class="mt-4"
+    :current-page="page"
+    path="/requests"
+    :total-pages="Math.ceil(requestStore.requests.length / 7)" />
 </template>

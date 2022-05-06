@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/outline'
 import { ref } from 'vue'
 
 import VueSelect from './shared/VueSelect.vue'
@@ -54,16 +55,17 @@ function filterByDate() {
 <template>
   <div class="flex justify-around">
     <button
-      class="p-1 border border-gray-300"
+      class="p-1 border border-gray-300 flex justify-center items-center rounded"
       :class="params.sort === 'created_at' ? '' : 'bg-gray-200'"
       @click="sortByCreatedAt">
-      日付順 <span v-if="params.sort === 'created_at'" class="text-xs">▼</span>
-      <span v-if="params.sort === '-created_at'" class="text-xs">▲</span>
+      日付順
+      <ChevronDownIcon v-if="params.sort === 'created_at'" class="w-4" />
+      <ChevronUpIcon v-if="params.sort === '-created_at'" class="w-4" />
     </button>
     <div>
       <input
         v-model="params.since"
-        class="border border-gray-300 w-28 h-8"
+        class="border border-gray-300 w-28 h-8 rounded"
         placeholder="YYYY-MM-DD"
         @input="
           filterByDate
@@ -71,7 +73,7 @@ function filterByDate() {
       <span>～</span>
       <input
         v-model="params.until"
-        class="border border-gray-300 w-28 h-8"
+        class="border border-gray-300 w-28 h-8 rounded"
         placeholder="YYYY-MM-DD"
         @input="filterByDate" />
     </div>

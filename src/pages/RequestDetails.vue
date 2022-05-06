@@ -19,7 +19,7 @@ const transactionStore = useTransactionStore()
 const fileStore = useFileStore()
 const { isModalOpen } = storeToRefs(generalStore)
 const route = useRoute()
-const id = String(route.params.requestId)
+const id = String(route.params.id)
 onMounted(() => {
   requestDetailStore.fetchRequestDetail(id)
   transactionStore.getTransactions() //idをparamsに渡して取得
@@ -35,7 +35,7 @@ function createTransaction() {
   <div>
     <RequestDetail />
     <div
-      class="w-19/20 border border-gray-200 bg-gray-200 mr-auto ml-auto mt-4" />
+      class="w-19/20 border border-gray-200 bg-gray-200 mr-auto ml-auto my-4" />
     <div class="flex">
       <RequestLogs />
       <div class="w-1/3">

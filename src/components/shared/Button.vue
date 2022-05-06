@@ -28,7 +28,7 @@ const padding = () => {
 <template>
   <button
     :class="
-      'hover:bg-zinc-200 rounded-lg border border-zinc-300 border-2 ' +
+      'hover:bg-zinc-200 rounded-lg border border-zinc-300 border-2 bg-zinc-100 ' +
       props.class +
       ' ' +
       fontSize() +

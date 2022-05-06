@@ -126,23 +126,27 @@ function deleteImage(index: number) {
 <template>
   <NewTagModal v-if="isModalOpen2" />
   <Modal :height="170" :layer="1" :width="300">
-    <div class="pt-8">
-      <h1 class="text-3xl text-center">申請の新規作成</h1>
-      <div class="flex flex-col justify-between ml-12 h-4/5">
-        <div class="text-xl mb-2 flex flex-col">
+    <div class="flex flex-col mx-auto min-w-160 w-2/3">
+      <div class="py-8">
+        <h1 class="text-center text-3xl">申請の新規作成</h1>
+      </div>
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-col">
           <span>申請者</span>
-          <span>{{ userStore.me.name }}</span>
+          <span class="text-xl">{{ userStore.me.name }}</span>
         </div>
         <div class="flex flex-col">
-          <label class="text-xl">タイトル</label>
-          <input v-model="request.title" class="border border-gray-300 w-3/5" />
+          <label>タイトル</label>
+          <input
+            v-model="request.title"
+            class="border border-gray-300 rounded" />
         </div>
         <div class="flex flex-col">
-          <label class="text-xl">金額</label>
+          <label>金額</label>
           <div>
             <input
               v-model="request.amount"
-              class="border border-gray-300 w-3/5" />円
+              class="border border-gray-300 rounded" />円
           </div>
         </div>
         <div class="text-right mr-20">
@@ -157,10 +161,10 @@ function deleteImage(index: number) {
           </VueSelect>
         </div>
         <div class="flex flex-col">
-          <label class="text-xl">詳細</label>
+          <label>詳細</label>
           <textarea
             v-model="request.content"
-            class="h-60 leading-tight border border-gray-300 resize-none w-4/5 p-1" />
+            class="h-60 leading-tight border border-gray-300 resize-none p-1 rounded" />
         </div>
         <details class="mb-2">
           <summary>MDプレビュー</summary>
@@ -175,7 +179,7 @@ function deleteImage(index: number) {
           <label class="text-xl">払い戻し対象者</label>
           <VueSelect
             v-model="request.targets"
-            class="w-2/3 inline-block"
+            class="inline-block"
             :close-on-select="false"
             label="name"
             multiple
@@ -187,7 +191,7 @@ function deleteImage(index: number) {
           <label class="text-xl">グループ</label>
           <VueSelect
             v-model="request.group"
-            class="w-1/3 inline-block"
+            class="inline-block"
             label="name"
             :options="groupStore.groups"
             placeholder="グループを選択"

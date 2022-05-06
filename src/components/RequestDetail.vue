@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { PencilIcon } from '@heroicons/vue/solid'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import NewTagModal from './NewTagModal.vue'
 import Button from './shared/Button.vue'
+import FixButton from './shared/FixButton.vue'
 import MarkdownIt from './shared/MarkdownIt.vue'
 import StatusChip from './shared/StatusChip.vue'
 import Tags from './shared/Tags.vue'
@@ -125,24 +125,23 @@ function handleModalIsOpen() {
 
 <template>
   <NewTagModal v-if="isModalOpen2" />
-  <div class="ml-12">
-    <div class="flex justify-between text-center pt-6">
+  <div class="ml-12 pt-6">
+    <div class="flex justify-between">
       <div class="flex items-center">
         <div v-if="!(isFixMode === 'title')" class="flex">
           <h1 class="text-3xl">
             {{ requestDetailStore.request.title }}
           </h1>
-          <button
+          <FixButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             class="mr-2"
             @click="changeIsFixMode('title')">
-            <PencilIcon class="h-5 w-5 text-gray-400 opacity-50" />
-          </button>
+          </FixButton>
         </div>
         <div v-if="isFixMode === 'title'">
           <input
             v-model="fixedValue.title"
-            class="w-100 p-1"
+            class="w-100 p-1 rounded"
             placeholder="タイトル"
             type="text" />
           <Button
@@ -153,7 +152,7 @@ function handleModalIsOpen() {
             完了
           </Button>
         </div>
-        <StatusChip :status="requestDetailStore.request.status" :text="true!" />
+        <StatusChip has-text :status="requestDetailStore.request.status" />
         <div>
           <Button
             v-if="
@@ -202,17 +201,17 @@ function handleModalIsOpen() {
           </Button>
         </div>
       </div>
-      <div>
-        <div v-if="!(isFixMode === 'group')" class="ml-12 inline">
+      <div class="flex items-center">
+        <span v-if="!requestDetailStore.request.group">グループ：なし</span>
+        <div v-else-if="!(isFixMode === 'group')" class="ml-12 inline-block">
           <span>グループ：{{ requestDetailStore.request.group.name }}</span>
-          <button
+          <FixButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             class="mr-2"
             @click="changeIsFixMode('group')">
-            <PencilIcon class="h-5 w-5 text-gray-400 opacity-50" />
-          </button>
+          </FixButton>
         </div>
-        <div v-if="isFixMode === 'group'" class="ml-12 inline">
+        <div v-else-if="isFixMode === 'group'" class="ml-12 inline-block">
           <VueSelect
             v-model="fixedValue.group"
             class="w-60 inline-block"
@@ -232,20 +231,21 @@ function handleModalIsOpen() {
           申請者：{{ requestDetailStore.request.created_by }}
         </span>
         <span class="mr-4">
-          申請日：{{ formatDate(requestDetailStore.request.created_at) }}
+          申請日：{{
+            formatDate(new Date(requestDetailStore.request.created_at))
+          }}
         </span>
-        <div v-if="!(isFixMode === 'amount')" class="inline">
+        <div v-if="!(isFixMode === 'amount')" class="inline-block">
           <span class="text-2xl">
             金額：{{ requestDetailStore.request.amount }}円
           </span>
-          <button
+          <FixButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             class="mr-2"
             @click="changeIsFixMode('amount')">
-            <PencilIcon class="h-5 w-5 text-gray-400 opacity-50" />
-          </button>
+          </FixButton>
         </div>
-        <div v-if="isFixMode === 'amount'" class="inline">
+        <div v-if="isFixMode === 'amount'" class="inline-block">
           金額：<input
             v-model="fixedValue.amount"
             class="w-30 p-1"
@@ -261,17 +261,17 @@ function handleModalIsOpen() {
         </div>
       </div>
     </div>
-    <div class="mt-2">
-      <div v-if="!(isFixMode === 'tags')" class="inline">
+    <div class="mt-4">
+      <span v-if="!requestDetailStore.request.tags">タグ：なし</span>
+      <div v-else-if="!(isFixMode === 'tags')">
         <span>タグ：</span>
         <Tags :tags="requestDetailStore.request.tags" />
-        <button
+        <FixButton
           v-if="requestDetailStore.request.created_by === userStore.me.name"
           @click="changeIsFixMode('tags')">
-          <PencilIcon class="h-5 w-5 text-gray-400 opacity-50" />
-        </button>
+        </FixButton>
       </div>
-      <div v-if="isFixMode === 'tags'" class="ml-12 inline">
+      <div v-else-if="isFixMode === 'tags'" class="inline-block">
         <span>タグ：</span>
         <VueSelect
           v-model="fixedValue.tags"
@@ -301,20 +301,19 @@ function handleModalIsOpen() {
       <span>詳細：</span>
       <div v-if="!(isFixMode === 'content')" class="flex items-start">
         <div class="h-32 w-200 border border-gray-300 overflow-y-scroll">
-          <div class="ml-2">
+          <div class="pl-2">
             <MarkdownIt :text="requestDetailStore.request.content" />
           </div>
         </div>
-        <button
+        <FixButton
           v-if="requestDetailStore.request.created_by === userStore.me.name"
           @click="changeIsFixMode('content')">
-          <PencilIcon class="h-5 w-5 text-gray-400 opacity-50" />
-        </button>
+        </FixButton>
       </div>
       <div v-if="isFixMode === 'content'">
         <textarea
           v-model="fixedValue.content"
-          class="resize-none w-200 h-30 p-0"
+          class="resize-none w-200 h-30 p-1"
           placeholder="詳細"
           type="text" />
         <Button
@@ -327,18 +326,17 @@ function handleModalIsOpen() {
       </div>
       <div class="ml-30">
         <span>払い戻し対象者：</span>
-        <div v-if="!(isFixMode === 'targets')" class="inline">
+        <div v-if="!(isFixMode === 'targets')" class="inline-block">
           <span
             v-for="target in requestDetailStore.request.targets"
             :key="target.id"
             class="">
             {{ target.target }}
           </span>
-          <button
+          <FixButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             @click="changeIsFixMode('targets')">
-            <PencilIcon class="h-5 w-5 text-gray-400 opacity-50" />
-          </button>
+          </FixButton>
         </div>
         <div v-if="isFixMode === 'targets'" class="inline-block">
           <VueSelect

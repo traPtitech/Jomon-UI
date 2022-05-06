@@ -6,13 +6,11 @@ import {
   XCircleIcon,
   CheckCircleIcon
 } from '@heroicons/vue/solid'
-import { ref } from 'vue'
 
-type Props = { status: string; text: boolean }
+type Props = { status: string; hasText: boolean }
 withDefaults(defineProps<Props>(), {
-  text: false
+  hasText: false
 })
-const flag = ref(false)
 function statusToJpn(status: string) {
   switch (status) {
     case 'submitted':
@@ -29,25 +27,11 @@ function statusToJpn(status: string) {
       return 'ERROR'
   }
 }
-function handleMouseOver() {
-  flag.value = true
-}
-function handleMouseLeave() {
-  flag.value = false
-}
 </script>
 
 <template>
   <div class="relative inline">
-    <div
-      v-if="flag && !text"
-      class="absolute top-6 left-6 w-16 h-6 bg-zinc-300 rounded-md z-1 shadow-md text-center">
-      {{ statusToJpn(status) }}
-    </div>
-    <div
-      class="px-4 flex items-center"
-      @mouseleave="handleMouseLeave"
-      @mouseover="handleMouseOver">
+    <div class="px-4 flex items-center" :title="statusToJpn(status)">
       <CheckCircleIcon
         v-if="status === 'accepted'"
         class="text-green-500 w-8 inline-block" />
@@ -63,7 +47,7 @@ function handleMouseLeave() {
       <ThumbUpIcon
         v-else-if="status === 'completed'"
         class="text-gray-500 w-8 inline-block" />
-      <span v-if="text === true" class="align-top">{{
+      <span v-if="hasText === true" class="align-top">{{
         statusToJpn(status)
       }}</span>
     </div>

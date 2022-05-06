@@ -42,7 +42,7 @@ function statusToJpn(status: string) {
         v-else-if="status === 'fix_required'"
         class="text-red-500 w-8 inline-block" />
       <CloudUploadIcon
-        v-else-if="status === 'submitted'"
+        v-else-if="status === 'rejected'"
         class="text-gray-500 w-8 inline-block" />
       <ThumbUpIcon
         v-else-if="status === 'completed'"

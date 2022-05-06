@@ -16,21 +16,15 @@ const formatDate = (date: string) => {
   )
 }
 
-const transactionStore = useTransactionStore()
-const { transactions } = storeToRefs(transactionStore)
 type Props = { index: number }
 const props = defineProps<Props>()
-const flag = ref(false)
-function handleMouseOver() {
-  flag.value = true
-}
-function handleMouseLeave() {
-  flag.value = false
-}
+
+const transactionStore = useTransactionStore()
+const { transactions } = storeToRefs(transactionStore)
 </script>
 
 <template>
-  <div class="flex">
+  <div class="flex gap-2">
     <router-link
       v-if="transactions[props.index].request !== ''"
       class="flex w-3/5"

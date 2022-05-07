@@ -194,7 +194,7 @@ function deleteImage(index: number) {
             placeholder="グループを選択"
             :reduce="(group:any) => group.id" />
         </div>
-        <div class="mb-2 flex flex-col">
+        <div class="flex flex-col">
           <label class="text-xl">タグ</label>
           <div>
             <VueSelect
@@ -215,7 +215,7 @@ function deleteImage(index: number) {
             >
           </div>
         </div>
-        <div class="mb-4 flex flex-col">
+        <div class="flex flex-col">
           <label class="text-xl">画像</label>
           <input
             ref="inputImageRef"
@@ -237,7 +237,7 @@ function deleteImage(index: number) {
             </div>
           </div>
         </div>
-        <div class="text-center">
+        <div class="text-right">
           <Button
             class="w-48 mb-4"
             font-size="xl"

@@ -49,58 +49,24 @@ function changeStatus(status: StatusEnum) {
   requestDetailStore.fetchRequestDetail(requestDetailStore.request.id)
   alert('ステータスを' + status + 'に変更しました')
 } //確認ダイアログほしい
-function changeFixMode(kind: string) {
-  if (kind !== 'tags' && fixMode.value !== kind) {
+function changeFixMode(
+  kind: 'title' | 'content' | 'amount' | 'group' | 'tags' | 'targets' | ''
+) {
+  if (kind !== 'tags' && fixMode.value !== '' && kind === '') {
     const result = confirm(
       '入出金記録に紐づいている申請のこの情報を変更すると、入出金記録の情報にも変更が反映されます。よろしいですか？'
     )
     if (!result) return
   }
   //todo:金額のバリデーション
-  requestDetailStore.putRequest(requestDetailStore.request.id, fixedValue.value)
-  switch (kind) {
-    case 'title':
-      if (fixMode.value === 'title') {
-        fixMode.value = ''
-      } else {
-        fixMode.value = 'title'
-      }
-      break
-    case 'amount':
-      if (fixMode.value === 'amount') {
-        fixMode.value = ''
-      } else {
-        fixMode.value = 'amount'
-      }
-      break
-    case 'content':
-      if (fixMode.value === 'content') {
-        fixMode.value = ''
-      } else {
-        fixMode.value = 'content'
-      }
-      break
-    case 'targets':
-      if (fixMode.value === 'targets') {
-        fixMode.value = ''
-      } else {
-        fixMode.value = 'targets'
-      }
-      break
-    case 'group':
-      if (fixMode.value === 'group') {
-        fixMode.value = ''
-      } else {
-        fixMode.value = 'group'
-      }
-      break
-    case 'tags':
-      if (fixMode.value === 'tags') {
-        fixMode.value = ''
-      } else {
-        fixMode.value = 'tags'
-      }
-      break
+  if (kind !== '') {
+    fixMode.value = kind
+  } else {
+    requestDetailStore.putRequest(
+      requestDetailStore.request.id,
+      fixedValue.value
+    )
+    fixMode.value = ''
   }
 }
 function handleModalIsOpen() {
@@ -132,7 +98,7 @@ function handleModalIsOpen() {
             class="ml-2"
             font-size="sm"
             padding="sm"
-            @click.stop="changeFixMode('title')">
+            @click.stop="changeFixMode('')">
             完了
           </Button>
         </div>
@@ -202,7 +168,7 @@ function handleModalIsOpen() {
             class="mx-2"
             font-size="sm"
             padding="sm"
-            @click.stop="changeFixMode('group')">
+            @click.stop="changeFixMode('')">
             完了
           </Button>
         </div>
@@ -232,7 +198,7 @@ function handleModalIsOpen() {
             class="ml-2 mr-2"
             font-size="sm"
             padding="sm"
-            @click.stop="changeFixMode('amount')">
+            @click.stop="changeFixMode('')">
             完了
           </Button>
         </div>
@@ -268,7 +234,7 @@ function handleModalIsOpen() {
           class="ml-2"
           font-size="sm"
           padding="sm"
-          @click.stop="changeFixMode('tags')">
+          @click.stop="changeFixMode('')">
           完了
         </Button>
       </div>
@@ -292,7 +258,7 @@ function handleModalIsOpen() {
           class="ml-2"
           font-size="sm"
           padding="sm"
-          @click.stop="changeFixMode('content')">
+          @click.stop="changeFixMode('')">
           完了
         </Button>
       </div>
@@ -322,7 +288,7 @@ function handleModalIsOpen() {
             class="ml-2"
             font-size="sm"
             padding="sm"
-            @click.stop="changeFixMode('targets')">
+            @click.stop="changeFixMode('')">
             完了
           </Button>
         </div>

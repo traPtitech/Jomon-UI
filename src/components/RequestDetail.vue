@@ -153,14 +153,13 @@ function handleModalIsOpen() {
           </Button>
         </div>
         <StatusChip has-text :status="requestDetailStore.request.status" />
-        <div>
+        <div class="flex gap-4">
           <Button
             v-if="
               requestDetailStore.request.status === 'fix_required' ||
               (userStore.me.admin &&
                 requestDetailStore.request.status === 'accepted')
             "
-            class="mr-4"
             font-size="sm"
             padding="sm"
             @click.stop="changeStatus('submitted')">
@@ -171,7 +170,6 @@ function handleModalIsOpen() {
               userStore.me.admin &&
               requestDetailStore.request.status === 'submitted'
             "
-            class="mr-4"
             font-size="sm"
             padding="sm"
             @click.stop="changeStatus('fix_required')">
@@ -182,7 +180,6 @@ function handleModalIsOpen() {
               userStore.me.admin &&
               requestDetailStore.request.status === 'submitted'
             "
-            class="mr-4"
             font-size="sm"
             padding="sm"
             @click.stop="changeStatus('accepted')">
@@ -193,7 +190,6 @@ function handleModalIsOpen() {
               userStore.me.admin &&
               requestDetailStore.request.status === 'submitted'
             "
-            class="mr-4"
             font-size="sm"
             padding="sm"
             @click.stop="changeStatus('rejected')">
@@ -220,7 +216,7 @@ function handleModalIsOpen() {
             placeholder="グループ"
             :reduce="(group:any) => group.id" />
           <Button
-            class="ml-2 mr-2"
+            class="mx-2"
             font-size="sm"
             padding="sm"
             @click.stop="changeIsFixMode('group')">
@@ -311,8 +307,7 @@ function handleModalIsOpen() {
         <textarea
           v-model="fixedValue.content"
           class="resize-none w-200 h-30 p-1"
-          placeholder="詳細"
-          type="text" />
+          placeholder="詳細" />
         <Button
           class="ml-2"
           font-size="sm"
@@ -326,9 +321,8 @@ function handleModalIsOpen() {
         <div v-if="!(isFixMode === 'targets')" class="inline-block">
           <span
             v-for="target in requestDetailStore.request.targets"
-            :key="target.id"
-            class="">
-            {{ target.target }}
+            :key="target.id">
+            {{ target.target }},
           </span>
           <FixButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"

@@ -164,12 +164,12 @@ function deleteImage(index: number) {
           <label>詳細</label>
           <textarea
             v-model="request.content"
-            class="h-60 leading-tight border border-gray-300 resize-none p-1 rounded" />
+            class="h-60 border border-gray-300 resize-none p-1 rounded" />
         </div>
         <details class="mb-2">
           <summary>MDプレビュー</summary>
           <div
-            class="pl-2 pr-2 w-full"
+            class="px-2 w-full"
             :class="request.content ? 'border border-gray-200' : ''">
             <MarkdownIt class="w-full" :text="request.content" />
           </div>
@@ -178,7 +178,6 @@ function deleteImage(index: number) {
           <label class="text-xl">払い戻し対象者</label>
           <VueSelect
             v-model="request.targets"
-            class="inline-block"
             :close-on-select="false"
             label="name"
             multiple
@@ -190,7 +189,6 @@ function deleteImage(index: number) {
           <label class="text-xl">グループ</label>
           <VueSelect
             v-model="request.group"
-            class="inline-block"
             label="name"
             :options="groupStore.groups"
             placeholder="グループを選択"

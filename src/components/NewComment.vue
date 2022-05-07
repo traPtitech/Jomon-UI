@@ -20,7 +20,7 @@ function submit() {
 </script>
 
 <template>
-  <div class="mt-12 mr-4 ml-4">
+  <div class="mt-12 mx-4">
     <textarea
       v-model="comment"
       class="resize-none h-32 w-full p-1 rounded"

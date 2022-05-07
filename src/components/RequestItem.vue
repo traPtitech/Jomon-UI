@@ -25,11 +25,9 @@ defineProps<Props>()
         <div class="flex gap-4">
           <span>グループ：{{ request.group.name }}</span>
           <span>申請者：{{ request.created_by }}</span>
-          申請日：{{ formatDate(new Date(request.created_at)) }}
+          <span>申請日：{{ formatDate(new Date(request.created_at)) }}</span>
         </div>
-        <div class="text-right text-3xl">
-          <span>{{ request.amount }}円</span>
-        </div>
+        <div class="text-right text-3xl">{{ request.amount }}円</div>
       </div>
     </div>
   </router-link>

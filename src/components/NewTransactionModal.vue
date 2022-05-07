@@ -11,7 +11,6 @@ import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useTransactionStore } from '/@/stores/transaction'
 import { useUserStore } from '/@/stores/user'
-import type { TransactionRequest } from '/@/types/transactionTypes'
 
 type Props = { requestId: string } //requestIdには申請の詳細画面からモーダルを表示するときだけpropsにIDを渡す。transaction一覧では空文字列を渡す
 const props = defineProps<Props>()
@@ -28,13 +27,13 @@ const transaction = ref({
   requestId: props.requestId,
   tags: props.requestId ? requestDetailStore.tagIds : ([] as string[]),
   group: props.requestId ? requestDetailStore.request.group.id : null
-} as TransactionRequest)
+})
 function postTransaction() {
   if (
     /^[1-9][0-9]*$|^0$/.test(transaction.value.amount.toString()) &&
     transaction.value.targets.length > 0
   ) {
-    transactionStore.postTransaction(transaction.value)
+    //transactionStore.postTransaction(transaction.value)
     isModalOpen.value = false
   } else {
     alert('不正です')
@@ -43,7 +42,7 @@ function postTransaction() {
 </script>
 
 <template>
-  <Modal :height="140" :layer="1" :width="280">
+  <Modal :layer="1" size="md">
     <h1 class="text-3xl text-center mt-4 mb-4">入出金記録の新規作成</h1>
     <div class="flex flex-col justify-between ml-12 mr-12 h-4/5">
       <div class="text-xl">

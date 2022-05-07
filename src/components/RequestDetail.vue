@@ -201,7 +201,7 @@ function handleModalIsOpen() {
           </Button>
         </div>
       </div>
-      <div class="flex items-center">
+      <div class="flex items-center gap-4">
         <span v-if="!requestDetailStore.request.group">グループ：なし</span>
         <div v-else-if="!(isFixMode === 'group')" class="ml-12 inline-block">
           グループ：{{ requestDetailStore.request.group.name }}
@@ -227,10 +227,8 @@ function handleModalIsOpen() {
             完了
           </Button>
         </div>
-        <span class="mr-4">
-          申請者：{{ requestDetailStore.request.created_by }}
-        </span>
-        <span class="mr-4">
+        <span>申請者：{{ requestDetailStore.request.created_by }}</span>
+        <span>
           申請日：{{
             formatDate(new Date(requestDetailStore.request.created_at))
           }}

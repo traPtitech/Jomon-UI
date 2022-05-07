@@ -3,11 +3,19 @@ import { storeToRefs } from 'pinia'
 
 import { useGeneralStore } from '/@/stores/general'
 
-type Props = { width: number; height: number; layer: number }
+type Props = { size: 'sm' | 'md'; layer: number }
 const props = defineProps<Props>()
 
 const generalStore = useGeneralStore()
 const { isModalOpen, isModalOpen2 } = storeToRefs(generalStore)
+const size = () => {
+  switch (props.size) {
+    case 'sm':
+      return 'h-80 w-160'
+    case 'md':
+      return 'h-150 w-300'
+  }
+}
 </script>
 
 <template>
@@ -18,8 +26,8 @@ const { isModalOpen, isModalOpen2 } = storeToRefs(generalStore)
     "
     @click.self="isModalOpen = false">
     <div
-      :class="`bg-white absolute z-3 inset-0 m-auto overflow-y-scroll w-${props.width} h-${props.height} z-3`">
-      <slot></slot>
+      :class="`bg-white absolute z-3 inset-0 m-auto overflow-y-scroll ${size()}`">
+      <slot />
     </div>
   </div>
   <div
@@ -28,10 +36,8 @@ const { isModalOpen, isModalOpen2 } = storeToRefs(generalStore)
       isModalOpen2 ? 'fixed top-0 h-screen w-screen z-4 bg-gray-500/50' : ''
     "
     @click.self="isModalOpen2 = false">
-    <div
-      :class="`bg-white absolute z-3 inset-0 m-auto w-${props.width} h-${props.height} z-5
-      }`">
-      <slot></slot>
+    <div :class="`bg-white absolute inset-0 m-auto z-5 ${size()}}`">
+      <slot />
     </div>
   </div>
 </template>

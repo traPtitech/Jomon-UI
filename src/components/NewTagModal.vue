@@ -26,7 +26,7 @@ function postTag() {
 </script>
 
 <template>
-  <Modal :height="80" :layer="2" :width="160">
+  <Modal :layer="2" size="sm">
     <div class="pt-8">
       <h1 class="text-3xl text-center">タグの新規作成</h1>
       <div class="flex flex-col justify-around mx-12 mt-8 h-4/5">

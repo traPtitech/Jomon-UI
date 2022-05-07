@@ -38,18 +38,6 @@ function sortByCreatedAt() {
   }
   requestStore.fetchRequests(params.value)
 }
-function filterByDate() {
-  const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
-  //todo:余裕があればもっとしっかりバリデーション
-  if (
-    (params.value.since === '' && rule.test(params.value.until)) ||
-    (params.value.until === '' && rule.test(params.value.since)) ||
-    (rule.test(params.value.since) && rule.test(params.value.until)) ||
-    (params.value.since === '' && params.value.until === '')
-  ) {
-    requestStore.fetchRequests(params.value)
-  }
-}
 </script>
 
 <template>
@@ -67,15 +55,13 @@ function filterByDate() {
         v-model="params.since"
         class="border border-gray-300 w-28 h-8 rounded"
         placeholder="YYYY-MM-DD"
-        @input="
-          filterByDate
-        " /><!--@changeによってフォームにフォーカスがあって何かキーが押されたときに日付の形式が正しければGETが送信される-->
+        @blur="requestStore.fetchRequests(params)" />
       <span>～</span>
       <input
         v-model="params.until"
         class="border border-gray-300 w-28 h-8 rounded"
         placeholder="YYYY-MM-DD"
-        @input="filterByDate" />
+        @blur="requestStore.fetchRequests(params)" />
     </div>
     <VueSelect
       v-model="params.target"

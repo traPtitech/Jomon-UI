@@ -125,7 +125,7 @@ function deleteImage(index: number) {
 
 <template>
   <NewTagModal v-if="isModalOpen2" />
-  <Modal :height="170" :layer="1" :width="300">
+  <Modal :layer="1" size="md">
     <div class="flex flex-col mx-auto min-w-160 w-2/3">
       <div class="py-8">
         <h1 class="text-center text-3xl">申請の新規作成</h1>
@@ -168,7 +168,6 @@ function deleteImage(index: number) {
         </div>
         <details class="mb-2">
           <summary>MDプレビュー</summary>
-          <!--幅を広くしたいけどなぜかできない-->
           <div
             class="pl-2 pr-2 w-full"
             :class="request.content ? 'border border-gray-200' : ''">

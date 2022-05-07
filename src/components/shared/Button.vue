@@ -36,6 +36,6 @@ const padding = () => {
       padding()
     "
     @click="emit('onClick')">
-    <slot></slot>
+    <slot />
   </button>
 </template>

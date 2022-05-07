@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import Button from './shared/Button.vue'
@@ -9,10 +8,30 @@ import { useUserStore } from '/@/stores/user'
 
 const groupStore = useGroupStore()
 const fixMode = ref('')
-const putGroupRequest = {
+const fixedValue = ref({
   name: groupStore.group.name,
   description: groupStore.group.description,
   budget: groupStore.group.budget
+})
+function changeFixMode(kind: string) {
+  //todo:金額のバリデーション
+  groupStore.putGroup(groupStore.group.id, fixedValue.value)
+  switch (kind) {
+    case 'name':
+      if (fixMode.value === 'name') {
+        fixMode.value = ''
+      } else {
+        fixMode.value = 'name'
+      }
+      break
+    case 'description':
+      if (fixMode.value === 'description') {
+        fixMode.value = ''
+      } else {
+        fixMode.value = 'description'
+      }
+      break
+  }
 }
 </script>
 
@@ -24,20 +43,19 @@ const putGroupRequest = {
           <h1 class="text-3xl">
             {{ groupStore.group.name }}
           </h1>
-          <FixButton class="mr-2" @click="() => (fixMode = 'name')">
-            <!--todo:権限-->
-          </FixButton>
+          <FixButton class="mr-2" @click="changeFixMode('name')" />
+          <!--todo:権限-->
         </div>
         <div v-if="fixMode === 'name'">
           <input
-            v-model="putGroupRequest.name"
+            v-model="fixedValue.name"
             class="border boder- w-100 p-1 rounded"
             placeholder="グループ名" />
           <Button
             class="ml-2"
             font-size="sm"
             padding="sm"
-            @click.stop="() => (fixMode = '')">
+            @click.stop="changeFixMode('name')">
             完了
           </Button>
         </div>
@@ -48,18 +66,18 @@ const putGroupRequest = {
           <div class="h-32 w-200 border border-gray-300 overflow-y-scroll">
             {{ groupStore.group?.description }}
           </div>
-          <FixButton @click="() => (fixMode = 'description')"> </FixButton>
+          <FixButton @click="changeFixMode('description')" />
         </div>
         <div v-if="fixMode === 'description'">
           <textarea
-            v-model="putGroupRequest.description"
+            v-model="fixedValue.description"
             class="resize-none w-200 h-20 p-1"
             placeholder="詳細" />
           <Button
             class="ml-2"
             font-size="sm"
             padding="sm"
-            @click.stop="() => (fixMode = '')">
+            @click.stop="changeFixMode('description')">
             完了
           </Button>
         </div>

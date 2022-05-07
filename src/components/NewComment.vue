@@ -36,11 +36,9 @@ function submit() {
     </div>
     <details>
       <summary>MDプレビュー</summary>
-      <div>
-        <MarkdownIt
-          :class="comment ? 'border border-gray-200' : ''"
-          :text="comment" />
-      </div>
+      <MarkdownIt
+        :class="comment ? 'border border-gray-200' : ''"
+        :text="comment" />
     </details>
   </div>
 </template>

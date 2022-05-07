@@ -16,7 +16,7 @@ defineProps<Props>()
         <StatusChip :status="request.status" />
       </div>
       <div class="flex-grow">
-        <div class="text-xl">{{ request.title }}</div>
+        <span class="text-xl">{{ request.title }}</span>
         <div class="mt-2">
           <Tags :tags="request.tags" />
         </div>

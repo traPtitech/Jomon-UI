@@ -15,11 +15,11 @@ const props = defineProps<Props>()
       <div class="flex h-12 items-center">
         <UserIcon
           :name="requestDetailStore.request.comments[props.index].user" />
-        <div class="ml-2">
+        <p class="ml-2">
           {{
             requestDetailStore.request.comments[props.index].user
           }}がコメントしました。
-        </div>
+        </p>
       </div>
       <span class="text-zinc-400">
         {{
@@ -31,9 +31,8 @@ const props = defineProps<Props>()
         }}
       </span>
     </div>
-    <div class="ml-12">
-      <MarkdownIt
-        :text="requestDetailStore.request.comments[props.index].comment" />
-    </div>
+    <MarkdownIt
+      class="ml-12"
+      :text="requestDetailStore.request.comments[props.index].comment" />
   </div>
 </template>

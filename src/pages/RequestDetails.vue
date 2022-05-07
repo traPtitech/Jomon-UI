@@ -22,7 +22,7 @@ const route = useRoute()
 const id = String(route.params.id)
 onMounted(() => {
   requestDetailStore.fetchRequestDetail(id)
-  transactionStore.getTransactions() //idをparamsに渡して取得
+  transactionStore.fetchTransactions('') //idをparamsに渡して取得
   fileStore.fetchFiles(requestDetailStore.request.files)
 })
 function createTransaction() {

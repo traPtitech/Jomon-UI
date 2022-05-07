@@ -246,7 +246,8 @@ function handleModalIsOpen() {
           </FixButton>
         </div>
         <div v-if="isFixMode === 'amount'" class="inline-block">
-          金額：<input
+          金額：
+          <input
             v-model="fixedValue.amount"
             class="w-30 p-1"
             placeholder="金額"
@@ -301,9 +302,7 @@ function handleModalIsOpen() {
       <span>詳細：</span>
       <div v-if="!(isFixMode === 'content')" class="flex items-start">
         <div class="h-32 w-200 border border-gray-300 overflow-y-scroll">
-          <div class="pl-2">
-            <MarkdownIt :text="requestDetailStore.request.content" />
-          </div>
+          <MarkdownIt class="pl-2" :text="requestDetailStore.request.content" />
         </div>
         <FixButton
           v-if="requestDetailStore.request.created_by === userStore.me.name"

@@ -15,11 +15,22 @@ export const useGroupStore = defineStore('group', () => {
       updated_at: '2022-04-05T14:02:15.431Z'
     })
   )
-  const group = ref<Group>()
+  const group = ref<Group>({
+    id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+    name: 'SysAd',
+    description: 'SysAd班',
+    budget: 250000,
+    created_at: '2022-04-05T14:02:15.431Z',
+    updated_at: '2022-04-05T14:02:15.431Z'
+  })
   const isGroupFetched = ref(false)
 
   const fetchGroups = async () => {
     groups.value = (await apis.getGroups()).data
+    isGroupFetched.value = true
+  }
+  const fetchGroup = async () => {
+    group.value = (await apis.getGroupDetail()).data
     isGroupFetched.value = true
   }
   const postGroup = async (group: PostGroup) => {
@@ -27,7 +38,7 @@ export const useGroupStore = defineStore('group', () => {
     groups.value = [...groups.value, res]
     return res
   }
-  const putGroup = async (group: PostGroup, id: string) => {
+  const putGroup = async (id: string, group: PostGroup) => {
     await apis.putGroupDetail(id, group)
   }
   const deleteGroup = async (id: string) => {
@@ -52,6 +63,7 @@ export const useGroupStore = defineStore('group', () => {
     group,
     isGroupFetched,
     fetchGroups,
+    fetchGroup,
     postGroup,
     putGroup,
     deleteGroup,

@@ -34,10 +34,10 @@ function submit() {
         コメントする
       </Button>
     </div>
-    <details>
+    <details class="w-full">
       <summary>MDプレビュー</summary>
       <MarkdownIt
-        :class="comment ? 'border border-gray-200' : ''"
+        :class="comment ? 'p-1 border border-gray-200' : ''"
         :text="comment" />
     </details>
   </div>

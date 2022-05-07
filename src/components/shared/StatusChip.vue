@@ -30,7 +30,7 @@ function statusToJpn(status: string) {
 </script>
 
 <template>
-  <div class="relative inline">
+  <div class="inline">
     <div class="px-4 flex items-center" :title="statusToJpn(status)">
       <CheckCircleIcon
         v-if="status === 'accepted'"
@@ -47,9 +47,7 @@ function statusToJpn(status: string) {
       <ThumbUpIcon
         v-else-if="status === 'completed'"
         class="text-gray-500 w-8 inline-block" />
-      <span v-if="hasText === true" class="align-top">{{
-        statusToJpn(status)
-      }}</span>
+      <span v-if="hasText === true">{{ statusToJpn(status) }}</span>
     </div>
   </div>
 </template>

@@ -14,15 +14,12 @@ const props = defineProps<Props>()
     <UserIcon
       class="mr-2"
       :name="requestDetailStore.request.statuses[props.index].created_by" />
-    <span>
-      {{
-        requestDetailStore.request.statuses[props.index].created_by
-      }}が申請の状態を
-    </span>
+    {{ requestDetailStore.request.statuses[props.index].created_by }}
+    が申請の状態を
     <StatusChip
       has-text
       :status="requestDetailStore.request.statuses[props.index].status" />
-    <span>にしました。</span>
+    にしました。
     <div class="ml-auto text-zinc-400">
       {{
         formatDateAndTime(

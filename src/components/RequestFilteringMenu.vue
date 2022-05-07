@@ -53,13 +53,13 @@ function sortByCreatedAt() {
     <div>
       <input
         v-model="params.since"
-        class="border border-gray-300 w-28 h-8 rounded"
+        class="border border-gray-300 w-28 h-8 p-1 rounded"
         placeholder="YYYY-MM-DD"
         @blur="requestStore.fetchRequests(params)" />
       <span>～</span>
       <input
         v-model="params.until"
-        class="border border-gray-300 w-28 h-8 rounded"
+        class="border border-gray-300 w-28 h-8 p-1 rounded"
         placeholder="YYYY-MM-DD"
         @blur="requestStore.fetchRequests(params)" />
     </div>

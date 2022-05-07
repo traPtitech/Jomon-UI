@@ -22,10 +22,10 @@ defineProps<Props>()
         </div>
       </div>
       <div class="flex flex-col">
-        <div>
-          <span class="mr-4">グループ：{{ request.group.name }}</span>
-          <span class="mr-4">申請者：{{ request.created_by }}</span>
-          <span>申請日：{{ formatDate(new Date(request.created_at)) }}</span>
+        <div class="flex gap-4">
+          <span>グループ：{{ request.group.name }}</span>
+          <span>申請者：{{ request.created_by }}</span>
+          申請日：{{ formatDate(new Date(request.created_at)) }}
         </div>
         <div class="text-right text-3xl">
           <span>{{ request.amount }}円</span>

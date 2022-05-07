@@ -40,8 +40,8 @@ function postTag() {
             font-size="xl"
             padding="sm"
             @click="postTag">
-            タグを作成する</Button
-          >
+            タグを作成する
+          </Button>
         </div>
       </div>
     </div>

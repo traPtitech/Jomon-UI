@@ -204,7 +204,7 @@ function handleModalIsOpen() {
       <div class="flex items-center">
         <span v-if="!requestDetailStore.request.group">グループ：なし</span>
         <div v-else-if="!(isFixMode === 'group')" class="ml-12 inline-block">
-          <span>グループ：{{ requestDetailStore.request.group.name }}</span>
+          グループ：{{ requestDetailStore.request.group.name }}
           <FixButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             class="mr-2"
@@ -263,9 +263,9 @@ function handleModalIsOpen() {
       </div>
     </div>
     <div class="mt-4">
-      <span v-if="!requestDetailStore.request.tags">タグ：なし</span>
+      <div v-if="!requestDetailStore.request.tags">タグ：なし</div>
       <div v-else-if="!(isFixMode === 'tags')">
-        <span>タグ：</span>
+        タグ：
         <Tags :tags="requestDetailStore.request.tags" />
         <FixButton
           v-if="requestDetailStore.request.created_by === userStore.me.name"
@@ -273,7 +273,7 @@ function handleModalIsOpen() {
         </FixButton>
       </div>
       <div v-else-if="isFixMode === 'tags'" class="inline-block">
-        <span>タグ：</span>
+        タグ：
         <VueSelect
           v-model="fixedValue.tags"
           class="w-200 inline-block"
@@ -299,7 +299,7 @@ function handleModalIsOpen() {
       </div>
     </div>
     <div class="mt-4 flex">
-      <span>詳細：</span>
+      詳細：
       <div v-if="!(isFixMode === 'content')" class="flex items-start">
         <div class="h-32 w-200 border border-gray-300 overflow-y-scroll">
           <MarkdownIt class="pl-2" :text="requestDetailStore.request.content" />
@@ -324,7 +324,7 @@ function handleModalIsOpen() {
         </Button>
       </div>
       <div class="ml-30">
-        <span>払い戻し対象者：</span>
+        払い戻し対象者：
         <div v-if="!(isFixMode === 'targets')" class="inline-block">
           <span
             v-for="target in requestDetailStore.request.targets"

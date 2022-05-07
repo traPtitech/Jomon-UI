@@ -132,7 +132,7 @@ function deleteImage(index: number) {
       </div>
       <div class="flex flex-col gap-2">
         <div class="flex flex-col">
-          <span>申請者</span>
+          申請者
           <span class="text-xl">{{ userStore.me.name }}</span>
         </div>
         <div class="flex flex-col">
@@ -227,9 +227,7 @@ function deleteImage(index: number) {
             @change="e => handleImageChange(e)" />
         </div>
         <div>
-          <div v-if="images.length === 0">
-            <span>画像プレビュー</span>
-          </div>
+          <div v-if="images.length === 0">画像プレビュー</div>
           <div v-if="images.length !== 0" class="flex flex-wrap">
             <div v-for="(image, index) in images" :key="index" class="relative">
               <img :alt="image.name" class="h-32" :src="image.src" />
@@ -247,8 +245,8 @@ function deleteImage(index: number) {
             font-size="xl"
             padding="sm"
             @click.stop="postRequest">
-            申請を作成する</Button
-          >
+            申請を作成する
+          </Button>
         </div>
       </div>
     </div>

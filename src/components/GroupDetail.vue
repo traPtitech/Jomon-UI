@@ -13,24 +13,13 @@ const fixedValue = ref({
   description: groupStore.group.description,
   budget: groupStore.group.budget
 })
-function changeFixMode(kind: string) {
+function changeFixMode(kind: 'name' | 'description' | '') {
   //todo:金額のバリデーション
-  groupStore.putGroup(groupStore.group.id, fixedValue.value)
-  switch (kind) {
-    case 'name':
-      if (fixMode.value === 'name') {
-        fixMode.value = ''
-      } else {
-        fixMode.value = 'name'
-      }
-      break
-    case 'description':
-      if (fixMode.value === 'description') {
-        fixMode.value = ''
-      } else {
-        fixMode.value = 'description'
-      }
-      break
+  if (kind !== '') {
+    fixMode.value = kind
+  } else {
+    groupStore.putGroup(groupStore.group.id, fixedValue.value)
+    fixMode.value = ''
   }
 }
 </script>
@@ -55,7 +44,7 @@ function changeFixMode(kind: string) {
             class="ml-2"
             font-size="sm"
             padding="sm"
-            @click.stop="changeFixMode('name')">
+            @click.stop="changeFixMode('')">
             完了
           </Button>
         </div>
@@ -77,7 +66,7 @@ function changeFixMode(kind: string) {
             class="ml-2"
             font-size="sm"
             padding="sm"
-            @click.stop="changeFixMode('description')">
+            @click.stop="changeFixMode('')">
             完了
           </Button>
         </div>

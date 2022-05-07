@@ -4,10 +4,10 @@ import { ref } from 'vue'
 
 import VueSelect from './shared/VueSelect.vue'
 import { useGroupStore } from '/@/stores/group'
+import type { Params } from '/@/stores/request'
 import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
-import type { Params } from '/@/types/requestsTypes'
 
 const requestStore = useRequestStore()
 const userStore = useUserStore()

@@ -1,9 +1,18 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-import type { Params } from '../types/requestsTypes'
 import type { Request } from '/@/lib/apis'
 import apis from '/@/lib/apis'
+
+export interface Params {
+  sort: string
+  currentStatus: string | null
+  target: string | null
+  since: string
+  until: string
+  tag: string | null
+  group: string | null
+}
 
 const defaultParams = {
   sort: 'created_at',
@@ -76,14 +85,14 @@ export const useRequestStore = defineStore('request', () => {
       requests.value = (
         await apis.getRequests(
           params.sort,
-          params.currentStatus!,
-          params.target!,
+          params.currentStatus || '',
+          params.target || '',
           params.since,
           params.until,
-          params.tag!,
-          params.group!
+          params.tag || '',
+          params.group || ''
         )
-      ).data //nullの場合どうにかする
+      ).data
       isRequestFetched.value = true
     } else {
       alert('日付が不正です')

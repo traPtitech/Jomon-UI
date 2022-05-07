@@ -26,7 +26,15 @@ const generalStore = useGeneralStore()
 const { isModalOpen2 } = storeToRefs(generalStore)
 const isFixMode = ref('')
 
-const fixedValue = ref(requestDetailStore.putRequestRequest)
+const fixedValue = ref({
+  created_by: requestDetailStore.request.created_by,
+  amount: requestDetailStore.request.amount,
+  title: requestDetailStore.request.title,
+  content: requestDetailStore.request.content,
+  targets: requestDetailStore.targetIds,
+  tags: requestDetailStore.tagIds,
+  group: requestDetailStore.request.group.id
+})
 
 async function putStatus(id: string, status: StatusEnum) {
   const statusRequest = {
@@ -48,13 +56,11 @@ function changeIsFixMode(kind: string) {
     )
     if (!result) return
   }
+  //todo:金額のバリデーション
+  requestDetailStore.putRequest(requestDetailStore.request.id, fixedValue.value)
   switch (kind) {
     case 'title':
       if (isFixMode.value === 'title') {
-        requestDetailStore.putRequest(requestDetailStore.request.id, {
-          ...requestDetailStore.putRequestRequest,
-          title: fixedValue.value.title
-        })
         isFixMode.value = ''
       } else {
         isFixMode.value = 'title'
@@ -62,11 +68,6 @@ function changeIsFixMode(kind: string) {
       break
     case 'amount':
       if (isFixMode.value === 'amount') {
-        //todo:バリデーション
-        requestDetailStore.putRequest(requestDetailStore.request.id, {
-          ...requestDetailStore.putRequestRequest,
-          amount: fixedValue.value.amount
-        })
         isFixMode.value = ''
       } else {
         isFixMode.value = 'amount'
@@ -74,10 +75,6 @@ function changeIsFixMode(kind: string) {
       break
     case 'content':
       if (isFixMode.value === 'content') {
-        requestDetailStore.putRequest(requestDetailStore.request.id, {
-          ...requestDetailStore.putRequestRequest,
-          content: fixedValue.value.content
-        })
         isFixMode.value = ''
       } else {
         isFixMode.value = 'content'
@@ -85,10 +82,6 @@ function changeIsFixMode(kind: string) {
       break
     case 'targets':
       if (isFixMode.value === 'targets') {
-        requestDetailStore.putRequest(requestDetailStore.request.id, {
-          ...requestDetailStore.putRequestRequest,
-          targets: fixedValue.value.targets
-        })
         isFixMode.value = ''
       } else {
         isFixMode.value = 'targets'
@@ -96,10 +89,6 @@ function changeIsFixMode(kind: string) {
       break
     case 'group':
       if (isFixMode.value === 'group') {
-        requestDetailStore.putRequest(requestDetailStore.request.id, {
-          ...requestDetailStore.putRequestRequest,
-          group: fixedValue.value.group
-        })
         isFixMode.value = ''
       } else {
         isFixMode.value = 'group'
@@ -107,10 +96,6 @@ function changeIsFixMode(kind: string) {
       break
     case 'tags':
       if (isFixMode.value === 'tags') {
-        requestDetailStore.putRequest(requestDetailStore.request.id, {
-          ...requestDetailStore.putRequestRequest,
-          tags: fixedValue.value.tags
-        })
         isFixMode.value = ''
       } else {
         isFixMode.value = 'tags'
@@ -135,8 +120,7 @@ function handleModalIsOpen() {
           <FixButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             class="mr-2"
-            @click="changeIsFixMode('title')">
-          </FixButton>
+            @click="changeIsFixMode('title')" />
         </div>
         <div v-if="isFixMode === 'title'">
           <input
@@ -204,8 +188,7 @@ function handleModalIsOpen() {
           <FixButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             class="mr-2"
-            @click="changeIsFixMode('group')">
-          </FixButton>
+            @click="changeIsFixMode('group')" />
         </div>
         <div v-else-if="isFixMode === 'group'" class="ml-12 inline-block">
           <VueSelect
@@ -236,8 +219,7 @@ function handleModalIsOpen() {
           <FixButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             class="mr-2"
-            @click="changeIsFixMode('amount')">
-          </FixButton>
+            @click="changeIsFixMode('amount')" />
         </div>
         <div v-if="isFixMode === 'amount'" class="inline-block">
           金額：
@@ -263,8 +245,7 @@ function handleModalIsOpen() {
         <Tags :tags="requestDetailStore.request.tags" />
         <FixButton
           v-if="requestDetailStore.request.created_by === userStore.me.name"
-          @click="changeIsFixMode('tags')">
-        </FixButton>
+          @click="changeIsFixMode('tags')" />
       </div>
       <div v-else-if="isFixMode === 'tags'" class="inline-block">
         タグ：
@@ -300,8 +281,7 @@ function handleModalIsOpen() {
         </div>
         <FixButton
           v-if="requestDetailStore.request.created_by === userStore.me.name"
-          @click="changeIsFixMode('content')">
-        </FixButton>
+          @click="changeIsFixMode('content')" />
       </div>
       <div v-if="isFixMode === 'content'">
         <textarea
@@ -326,8 +306,7 @@ function handleModalIsOpen() {
           </span>
           <FixButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
-            @click="changeIsFixMode('targets')">
-          </FixButton>
+            @click="changeIsFixMode('targets')" />
         </div>
         <div v-if="isFixMode === 'targets'" class="inline-block">
           <VueSelect

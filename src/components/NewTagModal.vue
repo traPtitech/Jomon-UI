@@ -13,13 +13,10 @@ const { isModalOpen2 } = storeToRefs(generalStore)
 const tagStore = useTagStore()
 const tagName = ref('')
 
-async function postTagAPI(tag: string) {
-  await apis.postTag({ name: tag })
-  tagStore.fetchTags()
-}
-function postTag() {
+async function postTag() {
   if (tagName.value !== '') {
-    postTagAPI(tagName.value)
+    await apis.postTag({ name: tagName.value })
+    tagStore.fetchTags()
     isModalOpen2.value = false
   }
 }

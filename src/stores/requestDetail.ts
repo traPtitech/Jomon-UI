@@ -4,16 +4,6 @@ import { computed, ref } from 'vue'
 import type { RequestDetail, PostRequest } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
-interface Request2 {
-  created_by: string
-  amount: number
-  title: string
-  content: string
-  targets: string[]
-  tags: string[]
-  group: string
-}
-
 export const useRequestDetailStore = defineStore('requestDetail', () => {
   const request = ref<RequestDetail>({
     id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -105,32 +95,11 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     created_at: '2022-02-12T08:01:37.838Z',
     updated_at: '2022-02-12T08:01:37.838Z'
   })
-
-  const putRequestRequest = computed(() => {
-    let targets = new Array<string>()
-    request.value.targets.forEach(target => {
-      targets = targets.concat([target.target])
-    })
-    let tags = new Array<string>()
-    request.value.tags.forEach(tag => {
-      tags = tags.concat([tag.name])
-    })
-    const requestRequest: Request2 = {
-      created_by: request.value.created_by,
-      amount: request.value.amount,
-      title: request.value.title,
-      content: request.value.content,
-      targets: targets,
-      tags: tags,
-      group: request.value.group.id
-    }
-    return requestRequest
-  })
   const targetIds = computed(() => {
     let targetIds = new Array<string>()
 
     for (let i = 0; i < request.value.targets.length; i++) {
-      targetIds = targetIds.concat([request.value.targets[i].target])
+      targetIds = targetIds.concat([request.value.targets[i].id])
     }
     return targetIds
   })
@@ -141,6 +110,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     }
     return tagIds
   })
+
   const fetchRequestDetail = async (id: string) => {
     request.value = (await apis.getRequestDetail(id)).data
   }
@@ -151,7 +121,6 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
 
   return {
     request,
-    putRequestRequest,
     targetIds,
     tagIds,
     fetchRequestDetail,

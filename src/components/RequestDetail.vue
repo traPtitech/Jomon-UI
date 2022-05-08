@@ -62,7 +62,7 @@ function changeFixMode(
 </script>
 
 <template>
-  <div class="ml-12 pt-4">
+  <div>
     <div class="flex justify-between">
       <div class="flex items-center">
         <div v-if="!(fixMode === 'title')" class="flex">

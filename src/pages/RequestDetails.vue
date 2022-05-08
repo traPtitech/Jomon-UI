@@ -26,7 +26,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div class="pt-4 px-12">
     <RequestDetail />
     <div class="w-19/20 border border-gray-200 bg-gray-200 mx-auto my-4" />
     <div class="flex">

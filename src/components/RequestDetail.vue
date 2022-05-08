@@ -45,13 +45,20 @@ function changeStatus(status: StatusEnum) {
 function changeFixMode(
   kind: 'title' | 'content' | 'amount' | 'group' | 'tags' | 'targets' | ''
 ) {
+  if (
+    fixMode.value === 'amount' &&
+    kind === '' &&
+    !/^[1-9][0-9]*$|^0$/.test(fixedValue.value.amount.toString())
+  ) {
+    alert('金額の形式が不正です')
+    return
+  }
   if (kind !== 'tags' && fixMode.value !== '' && kind === '') {
     const result = confirm(
       '入出金記録に紐づいている申請のこの情報を変更すると、入出金記録の情報にも変更が反映されます。よろしいですか？'
     )
     if (!result) return
   }
-  //todo:金額のバリデーション
   if (kind !== '') {
     fixMode.value = kind
   } else {
@@ -235,9 +242,7 @@ function handleModalIsOpen() {
       詳細：
       <div v-if="!(fixMode === 'content')" class="flex items-start">
         <div class="h-32 w-200 border border-gray-300 overflow-y-scroll">
-          <MarkdownIt
-            class="pl-2 pt-2"
-            :text="requestDetailStore.request.content" />
+          <MarkdownIt class="pl-2" :text="requestDetailStore.request.content" />
         </div>
         <FixButton
           v-if="requestDetailStore.request.created_by === userStore.me.name"

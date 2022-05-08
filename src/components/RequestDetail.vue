@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
+import { openModal } from 'jenesius-vue-modal'
 import { ref } from 'vue'
 
 import type { StatusEnum } from '../lib/apis'
@@ -11,7 +11,6 @@ import MarkdownIt from './shared/MarkdownIt.vue'
 import StatusChip from './shared/StatusChip.vue'
 import Tags from './shared/Tags.vue'
 import VueSelect from './shared/VueSelect.vue'
-import { useGeneralStore } from '/@/stores/general'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
@@ -22,8 +21,6 @@ const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
-const generalStore = useGeneralStore()
-const { isModalOpen2 } = storeToRefs(generalStore)
 const nextStatus = ref<StatusEnum | ''>('')
 const fixMode = ref('')
 
@@ -39,7 +36,7 @@ const fixedValue = ref({
 
 function changeStatus(status: StatusEnum) {
   nextStatus.value = status
-  isModalOpen2.value = true
+  openModal(StatusChangeModal, { nextStatus: nextStatus })
 }
 
 function changeFixMode(
@@ -69,16 +66,10 @@ function changeFixMode(
     fixMode.value = ''
   }
 }
-
-function handleModalIsOpen() {
-  isModalOpen2.value = !isModalOpen2.value
-}
 </script>
 
 <template>
-  <NewTagModal v-if="isModalOpen2" />
-  <StatusChangeModal v-if="isModalOpen2" :next-status="nextStatus" />
-  <div>
+  <div class="ml-12 pt-4">
     <div class="flex justify-between">
       <div class="flex items-center">
         <div v-if="!(fixMode === 'title')" class="flex">
@@ -226,7 +217,7 @@ function handleModalIsOpen() {
           class="ml-2"
           font-size="sm"
           padding="md"
-          @click.stop="handleModalIsOpen">
+          @click.stop="openModal(NewTagModal)">
           タグを新規作成
         </Button>
         <Button

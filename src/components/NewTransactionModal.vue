@@ -3,7 +3,6 @@ import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import Button from './shared/Button.vue'
-import Modal from './shared/Modal.vue'
 import VueSelect from './shared/VueSelect.vue'
 import { useGeneralStore } from '/@/stores/general'
 import { useGroupStore } from '/@/stores/group'
@@ -42,66 +41,64 @@ function postTransaction() {
 </script>
 
 <template>
-  <Modal :layer="1" size="md">
-    <div class="flex flex-col mx-auto min-w-160 w-2/3">
-      <div class="py-8">
-        <h1 class="text-center text-3xl">入出金記録の新規作成</h1>
+  <div class="flex flex-col mx-auto min-w-160 w-2/3 px-4 bg-white">
+    <div class="py-8">
+      <h1 class="text-center text-3xl">入出金記録の新規作成</h1>
+    </div>
+    <div class="flex flex-col gap-2">
+      <div>
+        紐づけられている申請：
+        <span v-if="requestId">{{ requestDetailStore.request.title }}</span>
+        <span v-if="!requestId">なし</span>
       </div>
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col">
+        <label>金額</label>
         <div>
-          紐づけられている申請：
-          <span v-if="requestId">{{ requestDetailStore.request.title }}</span>
-          <span v-if="!requestId">なし</span>
+          <input
+            v-model="transaction.amount"
+            class="border border-gray-300 rounded" />円
         </div>
-        <div class="flex flex-col">
-          <label>金額</label>
-          <div>
-            <input
-              v-model="transaction.amount"
-              class="border border-gray-300 rounded" />円
-          </div>
-        </div>
-        <div class="flex flex-col">
-          <label>払い戻し対象者：</label>
-          <VueSelect
-            v-model="transaction.targets"
-            :close-on-select="false"
-            label="name"
-            multiple
-            :options="userStore.users"
-            placeholder="払い戻し対象者"
-            :reduce="(user:any) => user.name" />
-        </div>
-        <div class="flex flex-col">
-          <label>グループ：</label>
-          <VueSelect
-            v-model="transaction.group"
-            label="name"
-            :options="groupStore.groups"
-            placeholder="グループ"
-            :reduce="(group:any) => group.id" />
-        </div>
-        <div class="flex flex-col">
-          <label>タグ：</label>
-          <VueSelect
-            v-model="transaction.tags"
-            :close-on-select="false"
-            label="name"
-            multiple
-            :options="tagStore.tags"
-            placeholder="タグ"
-            :reduce="(tag:any) => tag.id" />
-        </div>
-        <div class="text-right">
-          <Button
-            class="w-64 mb-4"
-            font-size="xl"
-            padding="sm"
-            @click.stop="postTransaction">
-            入出金記録を作成する
-          </Button>
-        </div>
+      </div>
+      <div class="flex flex-col">
+        <label>払い戻し対象者：</label>
+        <VueSelect
+          v-model="transaction.targets"
+          :close-on-select="false"
+          label="name"
+          multiple
+          :options="userStore.users"
+          placeholder="払い戻し対象者"
+          :reduce="(user:any) => user.name" />
+      </div>
+      <div class="flex flex-col">
+        <label>グループ：</label>
+        <VueSelect
+          v-model="transaction.group"
+          label="name"
+          :options="groupStore.groups"
+          placeholder="グループ"
+          :reduce="(group:any) => group.id" />
+      </div>
+      <div class="flex flex-col">
+        <label>タグ：</label>
+        <VueSelect
+          v-model="transaction.tags"
+          :close-on-select="false"
+          label="name"
+          multiple
+          :options="tagStore.tags"
+          placeholder="タグ"
+          :reduce="(tag:any) => tag.id" />
+      </div>
+      <div class="text-right">
+        <Button
+          class="w-64 mb-4"
+          font-size="xl"
+          padding="sm"
+          @click.stop="postTransaction">
+          入出金記録を作成する
+        </Button>
       </div>
     </div>
-  </Modal>
+  </div>
 </template>

@@ -144,13 +144,13 @@ function handleModalIsOpen() {
       </div>
       <div class="flex items-center gap-4">
         <span v-if="!requestDetailStore.request.group">グループ：なし</span>
-        <div v-else-if="!(fixMode === 'group')" class="ml-12 inline-block">
+        <div v-else-if="!(fixMode === 'group')">
           グループ：{{ requestDetailStore.request.group.name }}
           <FixButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             @click="changeFixMode('group')" />
         </div>
-        <div v-else-if="fixMode === 'group'" class="ml-12 flex">
+        <div v-else-if="fixMode === 'group'" class="flex">
           <VueSelect
             v-model="fixedValue.group"
             class="w-52"

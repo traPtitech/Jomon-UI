@@ -196,10 +196,10 @@ function deleteImage(index: number) {
         </div>
         <div class="flex flex-col">
           <label class="text-xl">タグ</label>
-          <div>
+          <div class="flex">
             <VueSelect
               v-model="request.tags"
-              class="w-2/3 inline-block"
+              class="w-2/3"
               :close-on-select="false"
               label="name"
               multiple
@@ -208,7 +208,7 @@ function deleteImage(index: number) {
               :reduce="(tag:any) => tag.id" />
             <Button
               class="ml-8"
-              font-size="xl"
+              font-size="lg"
               padding="sm"
               @click.stop="handleTagModalIsOpen">
               タグを新規作成</Button

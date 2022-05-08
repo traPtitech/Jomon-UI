@@ -11,6 +11,7 @@ const groupStore = useGroupStore()
 const userStore = useUserStore()
 const route = useRoute()
 const id = String(route.params.id)
+
 onMounted(() => {
   groupStore.fetchGroups()
   userStore.fetchUsers()
@@ -20,7 +21,6 @@ onMounted(() => {
 <template>
   <div class="flex">
     <GroupDetail />
-    <GroupOwners />
-    <GroupMembers /><!--あとで一緒にするかも-->
+    <GroupMembers />
   </div>
 </template>

@@ -14,12 +14,12 @@ const props = defineProps<Props>()
     <div class="flex justify-between">
       <div class="flex h-12 items-center">
         <UserIcon
+          class="mr-2"
           :name="requestDetailStore.request.comments[props.index].user" />
-        <p class="ml-2">
-          {{
-            requestDetailStore.request.comments[props.index].user
-          }}がコメントしました。
-        </p>
+
+        {{
+          requestDetailStore.request.comments[props.index].user
+        }}がコメントしました。
       </div>
       <span class="text-zinc-400">
         {{

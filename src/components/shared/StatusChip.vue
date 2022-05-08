@@ -30,7 +30,7 @@ function statusToJpn(status: string) {
 </script>
 
 <template>
-  <div class="inline px-4 flex items-center" :title="statusToJpn(status)">
+  <div class="inline px-2 flex items-center" :title="statusToJpn(status)">
     <CheckCircleIcon v-if="status === 'accepted'" class="text-green-500 w-8" />
     <ExclamationIcon
       v-else-if="status === 'submitted'"

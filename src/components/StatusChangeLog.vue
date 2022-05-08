@@ -12,7 +12,7 @@ const props = defineProps<Props>()
 <template>
   <div class="m-2 w-4/7 ml-10 h-12 flex items-center">
     <UserIcon
-      class="mr-2"
+      class="mr-2 w-12"
       :name="requestDetailStore.request.statuses[props.index].created_by" />
     {{ requestDetailStore.request.statuses[props.index].created_by }}
     が申請の状態を

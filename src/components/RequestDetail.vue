@@ -80,7 +80,6 @@ function handleModalIsOpen() {
           </h1>
           <FixButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
-            class="mr-2"
             @click="changeFixMode('title')" />
         </div>
         <div v-if="fixMode === 'title'">
@@ -159,7 +158,7 @@ function handleModalIsOpen() {
             placeholder="グループ"
             :reduce="(group:any) => group.id" />
           <Button
-            class="mx-2"
+            class="ml-2"
             font-size="sm"
             padding="sm"
             @click.stop="changeFixMode('')">
@@ -188,7 +187,7 @@ function handleModalIsOpen() {
             placeholder="金額"
             type="text" />円
           <Button
-            class="mx-2"
+            class="ml-2"
             font-size="sm"
             padding="sm"
             @click.stop="changeFixMode('')">
@@ -217,7 +216,7 @@ function handleModalIsOpen() {
           :options="tagStore.tags"
           placeholder="タグ" />
         <Button
-          class="mx-2"
+          class="ml-2"
           font-size="sm"
           padding="md"
           @click.stop="handleModalIsOpen">
@@ -236,7 +235,9 @@ function handleModalIsOpen() {
       詳細：
       <div v-if="!(fixMode === 'content')" class="flex items-start">
         <div class="h-32 w-200 border border-gray-300 overflow-y-scroll">
-          <MarkdownIt class="pl-2" :text="requestDetailStore.request.content" />
+          <MarkdownIt
+            class="pl-2 pt-2"
+            :text="requestDetailStore.request.content" />
         </div>
         <FixButton
           v-if="requestDetailStore.request.created_by === userStore.me.name"

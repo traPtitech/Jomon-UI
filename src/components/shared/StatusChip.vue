@@ -30,24 +30,22 @@ function statusToJpn(status: string) {
 </script>
 
 <template>
-  <div class="inline">
-    <div class="px-4 flex items-center" :title="statusToJpn(status)">
-      <CheckCircleIcon
-        v-if="status === 'accepted'"
-        class="text-green-500 w-8 inline-block" />
-      <ExclamationIcon
-        v-else-if="status === 'submitted'"
-        class="text-yellow-500 w-8 inline-block" />
-      <XCircleIcon
-        v-else-if="status === 'fix_required'"
-        class="text-red-500 w-8 inline-block" />
-      <CloudUploadIcon
-        v-else-if="status === 'rejected'"
-        class="text-gray-500 w-8 inline-block" />
-      <ThumbUpIcon
-        v-else-if="status === 'completed'"
-        class="text-gray-500 w-8 inline-block" />
-      <span v-if="hasText === true">{{ statusToJpn(status) }}</span>
-    </div>
+  <div class="inline px-4 flex items-center" :title="statusToJpn(status)">
+    <CheckCircleIcon
+      v-if="status === 'accepted'"
+      class="text-green-500 w-8 inline-block" />
+    <ExclamationIcon
+      v-else-if="status === 'submitted'"
+      class="text-yellow-500 w-8 inline-block" />
+    <XCircleIcon
+      v-else-if="status === 'fix_required'"
+      class="text-red-500 w-8 inline-block" />
+    <CloudUploadIcon
+      v-else-if="status === 'rejected'"
+      class="text-gray-500 w-8 inline-block" />
+    <ThumbUpIcon
+      v-else-if="status === 'completed'"
+      class="text-gray-500 w-8 inline-block" />
+    <span v-if="hasText === true">{{ statusToJpn(status) }}</span>
   </div>
 </template>

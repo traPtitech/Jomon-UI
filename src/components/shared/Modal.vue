@@ -11,7 +11,7 @@ const { isModalOpen, isModalOpen2 } = storeToRefs(generalStore)
 const size = () => {
   switch (props.size) {
     case 'sm':
-      return 'h-80 w-160'
+      return 'h-100 w-200'
     case 'md':
       return 'h-150 w-300'
   }
@@ -36,7 +36,8 @@ const size = () => {
       isModalOpen2 ? 'fixed top-0 h-screen w-screen z-4 bg-gray-500/50' : ''
     "
     @click.self="isModalOpen2 = false">
-    <div :class="`bg-white absolute inset-0 m-auto z-5 ${size()}}`">
+    <div
+      :class="`bg-white absolute z-5 inset-0 m-auto overflow-y-scroll ${size()}`">
       <slot />
     </div>
   </div>

@@ -2,15 +2,15 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
+import type { StatusEnum } from '../lib/apis'
 import NewTagModal from './NewTagModal.vue'
+import StatusChangeModal from './StatusChangeModal.vue'
 import Button from './shared/Button.vue'
 import FixButton from './shared/FixButton.vue'
 import MarkdownIt from './shared/MarkdownIt.vue'
 import StatusChip from './shared/StatusChip.vue'
 import Tags from './shared/Tags.vue'
 import VueSelect from './shared/VueSelect.vue'
-import type { StatusEnum } from '/@/lib/apis'
-import apis from '/@/lib/apis'
 import { useGeneralStore } from '/@/stores/general'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
@@ -24,6 +24,7 @@ const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
 const generalStore = useGeneralStore()
 const { isModalOpen2 } = storeToRefs(generalStore)
+const nextStatus = ref<StatusEnum | ''>('')
 const fixMode = ref('')
 
 const fixedValue = ref({
@@ -36,19 +37,11 @@ const fixedValue = ref({
   group: requestDetailStore.request.group.id
 })
 
-async function putStatus(id: string, status: StatusEnum) {
-  const statusRequest = {
-    status: status,
-    comment: ''
-  }
-  await apis.putStatus(id, statusRequest)
-  requestDetailStore.fetchRequestDetail(id)
-}
 function changeStatus(status: StatusEnum) {
-  putStatus(requestDetailStore.request.id, status)
-  requestDetailStore.fetchRequestDetail(requestDetailStore.request.id)
-  alert('ステータスを' + status + 'に変更しました')
-} //確認ダイアログほしい
+  nextStatus.value = status
+  isModalOpen2.value = true
+}
+
 function changeFixMode(
   kind: 'title' | 'content' | 'amount' | 'group' | 'tags' | 'targets' | ''
 ) {
@@ -69,6 +62,7 @@ function changeFixMode(
     fixMode.value = ''
   }
 }
+
 function handleModalIsOpen() {
   isModalOpen2.value = !isModalOpen2.value
 }
@@ -76,7 +70,8 @@ function handleModalIsOpen() {
 
 <template>
   <NewTagModal v-if="isModalOpen2" />
-  <div class="ml-12 pt-6">
+  <StatusChangeModal v-if="isModalOpen2" :next-status="nextStatus" />
+  <div class="ml-12 pt-4">
     <div class="flex justify-between">
       <div class="flex items-center">
         <div v-if="!(fixMode === 'title')" class="flex">

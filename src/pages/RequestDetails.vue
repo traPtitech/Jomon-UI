@@ -20,6 +20,7 @@ const fileStore = useFileStore()
 const { isModalOpen } = storeToRefs(generalStore)
 const route = useRoute()
 const id = String(route.params.id)
+
 onMounted(() => {
   requestDetailStore.fetchRequestDetail(id)
   transactionStore.fetchTransactions('') //idをparamsに渡して取得

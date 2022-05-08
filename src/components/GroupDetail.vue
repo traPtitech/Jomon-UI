@@ -4,7 +4,6 @@ import { ref } from 'vue'
 import Button from './shared/Button.vue'
 import FixButton from './shared/FixButton.vue'
 import { useGroupStore } from '/@/stores/group'
-import { useUserStore } from '/@/stores/user'
 
 const groupStore = useGroupStore()
 const fixMode = ref('')

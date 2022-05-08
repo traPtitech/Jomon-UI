@@ -38,7 +38,8 @@ function changeFixMode(kind: 'name' | 'description' | '') {
           <input
             v-model="fixedValue.name"
             class="w-100 p-1 rounded"
-            placeholder="グループ名" />
+            placeholder="グループ名"
+            type="text" />
           <Button
             class="ml-2"
             font-size="sm"
@@ -59,7 +60,7 @@ function changeFixMode(kind: 'name' | 'description' | '') {
         <div v-if="fixMode === 'description'">
           <textarea
             v-model="fixedValue.description"
-            class="resize-none w-200 h-20 p-1"
+            class="resize-none w-200 h-32 p-1"
             placeholder="詳細" />
           <Button
             class="ml-2"

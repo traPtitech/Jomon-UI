@@ -78,14 +78,8 @@ function changeIsModalOpen() {
     </div>
   </div>
   <RequestFilteringMenu />
-  <span v-if="requests.length !== 0" class="ml-50">
-    {{ requests.length }}件取得しました
-  </span>
-  <span v-if="requests.length === 0" class="ml-50">
-    条件に一致する申請は見つかりませんでした
-  </span>
   <div class="min-h-120">
-    <div v-if="requests.length !== 0" class="w-3/4 mt-4 mr-auto ml-auto shadow">
+    <div v-if="requests.length !== 0" class="w-3/4 mt-4 mx-auto shadow">
       <ul>
         <li v-for="request in sliceRequestsAt(page, 7)" :key="request.id">
           <RequestItem :request="request" />

@@ -35,14 +35,13 @@ function createTransaction() {
   <NewTransactionModal v-if="isModalOpen" :request-id="id" />
   <div class="pt-4 px-12">
     <RequestDetail />
-    <div
-      class="w-19/20 border border-gray-200 bg-gray-200 mr-auto ml-auto my-4" />
+    <div class="w-19/20 border border-gray-200 bg-gray-200 mx-auto my-4" />
     <div class="flex">
       <RequestLogs />
       <div class="w-1/3">
-        <div class="flex flex-col mt-8 items-center">
+        <div class="flex flex-col mt-8 gap-4 items-center">
           <Button
-            class="w-2/3 mb-4"
+            class="w-2/3"
             font-size="md"
             padding="sm"
             @click="createTransaction">
@@ -51,7 +50,7 @@ function createTransaction() {
           <router-link
             class="w-2/3"
             :to="'/transactions?pageIndex=1&requestID=' + id">
-            <Button class="w-full mb-4" font-size="md" padding="sm">
+            <Button class="w-full" font-size="md" padding="sm">
               この申請の入出金記録へ移動
             </Button>
           </router-link>

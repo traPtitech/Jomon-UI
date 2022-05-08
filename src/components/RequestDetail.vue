@@ -148,7 +148,6 @@ function handleModalIsOpen() {
           グループ：{{ requestDetailStore.request.group.name }}
           <FixButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
-            class="mr-2"
             @click="changeFixMode('group')" />
         </div>
         <div v-else-if="fixMode === 'group'" class="ml-12 inline-block">
@@ -190,7 +189,7 @@ function handleModalIsOpen() {
             placeholder="金額"
             type="text" />円
           <Button
-            class="ml-2 mr-2"
+            class="mx-2"
             font-size="sm"
             padding="sm"
             @click.stop="changeFixMode('')">
@@ -219,7 +218,7 @@ function handleModalIsOpen() {
           :options="tagStore.tags"
           placeholder="タグ" />
         <Button
-          class="ml-2 mr-2"
+          class="mx-2"
           font-size="sm"
           padding="md"
           @click.stop="handleModalIsOpen">

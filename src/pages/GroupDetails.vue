@@ -19,7 +19,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex">
+  <div class="flex justify-between pt-4 px-12">
     <GroupDetail />
     <GroupMembers />
   </div>

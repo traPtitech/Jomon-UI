@@ -25,7 +25,7 @@ function changeFixMode(kind: 'name' | 'description' | '') {
 </script>
 
 <template>
-  <div class="ml-12 pt-6">
+  <div>
     <div>
       <div class="flex items-center">
         <div v-if="!(fixMode === 'name')" class="flex">
@@ -38,7 +38,7 @@ function changeFixMode(kind: 'name' | 'description' | '') {
         <div v-if="fixMode === 'name'">
           <input
             v-model="fixedValue.name"
-            class="border boder- w-100 p-1 rounded"
+            class="w-100 p-1 rounded"
             placeholder="グループ名" />
           <Button
             class="ml-2"

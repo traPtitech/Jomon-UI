@@ -2,9 +2,8 @@
 import { openModal } from 'jenesius-vue-modal'
 import { ref } from 'vue'
 
-import type { StatusEnum } from '../lib/apis'
-import NewTagModal from './NewTagModal.vue'
-import StatusChangeModal from './StatusChangeModal.vue'
+import NewTagModal from './modal/NewTagModal.vue'
+import StatusChangeModal from './modal/StatusChangeModal.vue'
 import Button from './shared/Button.vue'
 import FixButton from './shared/FixButton.vue'
 import MarkdownIt from './shared/MarkdownIt.vue'
@@ -21,7 +20,6 @@ const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
-const nextStatus = ref<StatusEnum | ''>('')
 const fixMode = ref('')
 
 const fixedValue = ref({
@@ -33,11 +31,6 @@ const fixedValue = ref({
   tags: requestDetailStore.tagIds,
   group: requestDetailStore.request.group.id
 })
-
-function changeStatus(status: StatusEnum) {
-  nextStatus.value = status
-  openModal(StatusChangeModal, { nextStatus: nextStatus })
-}
 
 function changeFixMode(
   kind: 'title' | 'content' | 'amount' | 'group' | 'tags' | 'targets' | ''
@@ -104,7 +97,9 @@ function changeFixMode(
             "
             font-size="sm"
             padding="sm"
-            @click.stop="changeStatus('submitted')">
+            @click.stop="
+              openModal(StatusChangeModal, { nextStatus: 'submitted' })
+            ">
             承認待ちにする
           </Button>
           <Button
@@ -114,7 +109,9 @@ function changeFixMode(
             "
             font-size="sm"
             padding="sm"
-            @click.stop="changeStatus('fix_required')">
+            @click.stop="
+              openModal(StatusChangeModal, { nextStatus: 'fix_required' })
+            ">
             要修正にする
           </Button>
           <Button
@@ -124,7 +121,9 @@ function changeFixMode(
             "
             font-size="sm"
             padding="sm"
-            @click.stop="changeStatus('accepted')">
+            @click.stop="
+              openModal(StatusChangeModal, { nextStatus: 'accepted' })
+            ">
             承認済みにする
           </Button>
           <Button
@@ -134,7 +133,9 @@ function changeFixMode(
             "
             font-size="sm"
             padding="sm"
-            @click.stop="changeStatus('rejected')">
+            @click.stop="
+              openModal(StatusChangeModal, { nextStatus: 'rejected' })
+            ">
             却下する
           </Button>
         </div>

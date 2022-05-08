@@ -2,8 +2,8 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
-import Button from './shared/Button.vue'
-import VueSelect from './shared/VueSelect.vue'
+import Button from '/@/components/shared/Button.vue'
+import VueSelect from '/@/components/shared/VueSelect.vue'
 import { useGeneralStore } from '/@/stores/general'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'

@@ -2,7 +2,7 @@
 import { closeModal } from 'jenesius-vue-modal'
 import { ref } from 'vue'
 
-import Button from './shared/Button.vue'
+import Button from '/@/components/shared/Button.vue'
 import apis from '/@/lib/apis'
 import { useTagStore } from '/@/stores/tag'
 

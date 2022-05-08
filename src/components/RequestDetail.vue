@@ -150,10 +150,10 @@ function handleModalIsOpen() {
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             @click="changeFixMode('group')" />
         </div>
-        <div v-else-if="fixMode === 'group'" class="ml-12 inline-block">
+        <div v-else-if="fixMode === 'group'" class="ml-12 flex">
           <VueSelect
             v-model="fixedValue.group"
-            class="w-60 inline-block"
+            class="w-52"
             label="name"
             :options="groupStore.groups"
             placeholder="グループ"
@@ -172,20 +172,19 @@ function handleModalIsOpen() {
             formatDate(new Date(requestDetailStore.request.created_at))
           }}
         </span>
-        <div v-if="!(fixMode === 'amount')" class="inline-block">
+        <div v-if="!(fixMode === 'amount')" class="flex items-center">
           <span class="text-2xl">
             金額：{{ requestDetailStore.request.amount }}円
           </span>
           <FixButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
-            class="mr-2"
             @click="changeFixMode('amount')" />
         </div>
-        <div v-if="fixMode === 'amount'" class="inline-block">
+        <div v-if="fixMode === 'amount'" class="flex items-center">
           金額：
           <input
             v-model="fixedValue.amount"
-            class="w-30 p-1"
+            class="w-24 p-1"
             placeholder="金額"
             type="text" />円
           <Button
@@ -198,7 +197,7 @@ function handleModalIsOpen() {
         </div>
       </div>
     </div>
-    <div class="mt-4">
+    <div class="pt-4">
       <div v-if="!requestDetailStore.request.tags">タグ：なし</div>
       <div v-else-if="!(fixMode === 'tags')">
         タグ：
@@ -207,11 +206,11 @@ function handleModalIsOpen() {
           v-if="requestDetailStore.request.created_by === userStore.me.name"
           @click="changeFixMode('tags')" />
       </div>
-      <div v-else-if="fixMode === 'tags'" class="inline-block">
+      <div v-else-if="fixMode === 'tags'" class="flex items-center">
         タグ：
         <VueSelect
           v-model="fixedValue.tags"
-          class="w-200 inline-block"
+          class="w-200"
           :close-on-select="false"
           label="name"
           multiple
@@ -233,7 +232,7 @@ function handleModalIsOpen() {
         </Button>
       </div>
     </div>
-    <div class="mt-4 flex">
+    <div class="pt-4 flex">
       詳細：
       <div v-if="!(fixMode === 'content')" class="flex items-start">
         <div class="h-32 w-200 border border-gray-300 overflow-y-scroll">
@@ -256,9 +255,9 @@ function handleModalIsOpen() {
           完了
         </Button>
       </div>
-      <div class="ml-30">
+      <div class="ml-30 flex">
         払い戻し対象者：
-        <div v-if="!(fixMode === 'targets')" class="inline-block">
+        <div v-if="!(fixMode === 'targets')">
           <span
             v-for="target in requestDetailStore.request.targets"
             :key="target.id">
@@ -268,10 +267,10 @@ function handleModalIsOpen() {
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             @click="changeFixMode('targets')" />
         </div>
-        <div v-if="fixMode === 'targets'" class="inline-block">
+        <div v-if="fixMode === 'targets'">
           <VueSelect
             v-model="fixedValue.targets"
-            class="w-100 inline-block"
+            class="w-100"
             :close-on-select="false"
             label="name"
             multiple

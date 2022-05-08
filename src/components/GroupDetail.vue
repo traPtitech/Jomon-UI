@@ -51,9 +51,9 @@ function changeFixMode(kind: 'name' | 'description' | '') {
       <div class="mt-4 flex">
         詳細：
         <div v-if="!(fixMode === 'description')" class="flex items-start">
-          <div class="h-32 w-200 border border-gray-300 overflow-y-scroll">
+          <p class="pl-2 h-32 w-200 border border-gray-300 overflow-y-scroll">
             {{ groupStore.group?.description }}
-          </div>
+          </p>
           <FixButton @click="changeFixMode('description')" />
         </div>
         <div v-if="fixMode === 'description'">

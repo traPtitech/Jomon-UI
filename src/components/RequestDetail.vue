@@ -71,7 +71,7 @@ function handleModalIsOpen() {
 <template>
   <NewTagModal v-if="isModalOpen2" />
   <StatusChangeModal v-if="isModalOpen2" :next-status="nextStatus" />
-  <div class="ml-12 pt-4">
+  <div>
     <div class="flex justify-between">
       <div class="flex items-center">
         <div v-if="!(fixMode === 'title')" class="flex">

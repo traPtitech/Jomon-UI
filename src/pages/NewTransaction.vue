@@ -4,7 +4,6 @@ import { ref } from 'vue'
 
 import Button from '/@/components/shared/Button.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
-import { useGeneralStore } from '/@/stores/general'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
@@ -13,13 +12,11 @@ import { useUserStore } from '/@/stores/user'
 
 type Props = { requestId: string } //requestIdには申請の詳細画面からモーダルを表示するときだけpropsにIDを渡す。transaction一覧では空文字列を渡す
 const props = defineProps<Props>()
-const generalStore = useGeneralStore()
 const requestDetailStore = useRequestDetailStore()
 const transactionStore = useTransactionStore()
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
-const { isModalOpen } = storeToRefs(generalStore)
 const transaction = ref({
   amount: props.requestId ? requestDetailStore.request.amount : '',
   targets: props.requestId ? requestDetailStore.targetIds : ([] as string[]),
@@ -33,7 +30,6 @@ function postTransaction() {
     transaction.value.targets.length > 0
   ) {
     //transactionStore.postTransaction(transaction.value)
-    isModalOpen.value = false
   } else {
     alert('不正です')
   }

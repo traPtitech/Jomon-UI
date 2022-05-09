@@ -6,6 +6,7 @@ interface Props {
 }
 defineProps<Props>()
 </script>
+
 <template>
   <router-link :class="isHere ? 'cursor-default' : ''" :to="path">
     <div

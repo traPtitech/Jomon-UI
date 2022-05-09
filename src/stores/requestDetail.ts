@@ -4,6 +4,11 @@ import { computed, ref } from 'vue'
 import type { RequestDetail, PostRequest } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
+interface File {
+  file: string
+  name: string
+}
+
 export const useRequestDetailStore = defineStore('requestDetail', () => {
   const request = ref<RequestDetail>({
     id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -95,6 +100,8 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     created_at: '2022-02-12T08:01:37.838Z',
     updated_at: '2022-02-12T08:01:37.838Z'
   })
+  const files = ref<File[]>([])
+
   const targetIds = computed(() => {
     const targetIds = new Array<string>()
 
@@ -118,12 +125,19 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     await apis.putRequestDetail(id, request)
     fetchRequestDetail(id)
   }
+  const fetchFiles = async (ids: string[]) => {
+    ids.forEach(async id => {
+      files.value.concat((await apis.getFile(id)).data)
+    })
+  }
 
   return {
     request,
+    files,
     targetIds,
     tagIds,
     fetchRequestDetail,
-    putRequest
+    putRequest,
+    fetchFiles
   }
 })

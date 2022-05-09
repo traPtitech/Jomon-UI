@@ -1,27 +1,37 @@
 <script lang="ts" setup>
-import { openModal } from 'jenesius-vue-modal'
 import { onMounted } from 'vue'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import NewComment from '/@/components/NewComment.vue'
 import RequestDetail from '/@/components/RequestDetail.vue'
 import RequestLogs from '/@/components/RequestLogs.vue'
-import NewTransactionModal from '/@/components/modal/NewTransactionModal.vue'
 import Button from '/@/components/shared/Button.vue'
-import { useFileStore } from '/@/stores/file'
+import apis from '/@/lib/apis'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTransactionStore } from '/@/stores/transaction'
 
+interface File {
+  file: string
+  name: string
+}
+
 const requestDetailStore = useRequestDetailStore()
 const transactionStore = useTransactionStore()
-const fileStore = useFileStore()
 const route = useRoute()
 const id = String(route.params.id)
+const files = ref<File[]>([])
+
+const fetchFiles = async (ids: string[]) => {
+  ids.forEach(async id => {
+    files.value.push((await apis.getFile(id)).data)
+  })
+}
 
 onMounted(() => {
   requestDetailStore.fetchRequestDetail(id)
   transactionStore.fetchTransactions('') //idをparamsに渡して取得
-  fileStore.fetchFiles(requestDetailStore.request.files)
+  fetchFiles(requestDetailStore.request.files)
 })
 </script>
 
@@ -33,11 +43,7 @@ onMounted(() => {
       <RequestLogs />
       <div class="w-1/3">
         <div class="flex flex-col mt-8 gap-4 items-center">
-          <Button
-            class="w-2/3"
-            font-size="md"
-            padding="sm"
-            @click="openModal(NewTransactionModal, { requestId: id })">
+          <Button class="w-2/3" font-size="md" padding="sm">
             この申請から入出金記録を作成する
           </Button>
           <router-link class="w-2/3" :to="'/transactions?requestID=' + id">

@@ -7,7 +7,7 @@ import {
   CheckCircleIcon
 } from '@heroicons/vue/solid'
 
-type RequestStatus =
+export type RequestStatus =
   | 'submitted'
   | 'fix_required'
   | 'accepted'

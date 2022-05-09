@@ -3,7 +3,7 @@ import { XCircleIcon } from '@heroicons/vue/solid'
 import { openModal, closeModal } from 'jenesius-vue-modal'
 import { ref } from 'vue'
 
-import NewTagModal from './NewTagModal.vue'
+import NewTagModal from '/@/components/modal/NewTagModal.vue'
 import Button from '/@/components/shared/Button.vue'
 import MarkdownIt from '/@/components/shared/MarkdownIt.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
@@ -11,7 +11,6 @@ import type { Request } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import clubBudgetRequestTemplate from '/@/md/clubBudgetRequest.md?raw'
 import travelingExpenseRequestTemplate from '/@/md/travelingExpenseRequest.md?raw'
-import { useFileStore } from '/@/stores/file'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
@@ -35,7 +34,6 @@ const requestStore = useRequestStore()
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
-const fileStore = useFileStore()
 const imageExtensions = /.(jpg|png|jpeg|tiff|jfif|tif|webp|avif)$/
 const inputImageRef = ref()
 
@@ -56,6 +54,10 @@ const request = ref({
 } as RequestRequest)
 const images = ref([] as File[])
 
+async function postFile(requestId: string, name: string, file: string) {
+  await apis.postFile(file, name, requestId)
+}
+
 async function postRequestAPI(request: RequestRequest) {
   const requestRequest = {
     ...request,
@@ -75,12 +77,12 @@ async function postRequest() {
   ) {
     const id = await postRequestAPI(request.value)
     images.value.forEach(image => {
-      fileStore.postFile(id, image.name, image.src)
+      postFile(id, image.name, image.src)
     })
     closeModal()
   } else {
     alert('形式が不正です')
-  }
+  } //todo:直す
 }
 
 function handleImageChange(e: Event) {
@@ -111,7 +113,7 @@ function setTemplate(selectedTemplate: string | null) {
         : selectedTemplate === 'travelingExpenseRequest'
         ? travelingExpenseRequestTemplate
         : ''
-  }
+  } //todo:switchで書いた方がよさそう
 }
 
 function deleteImage(index: number) {
@@ -120,8 +122,7 @@ function deleteImage(index: number) {
 </script>
 
 <template>
-  <div
-    class="flex flex-col mx-auto min-w-160 w-2/3 h-4/5 px-4 bg-white overflow-y-scroll">
+  <div class="flex flex-col mx-auto min-w-160 w-2/3">
     <div class="py-8">
       <h1 class="text-center text-3xl">申請の新規作成</h1>
     </div>

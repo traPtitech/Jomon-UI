@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { openModal } from 'jenesius-vue-modal'
 import { storeToRefs } from 'pinia'
 import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -7,7 +6,6 @@ import { useRoute } from 'vue-router'
 import { toPage } from '../lib/parseQueryParams'
 import RequestFilteringMenu from '/@/components/RequestFilteringMenu.vue'
 import RequestItem from '/@/components/RequestItem.vue'
-import NewRequestModal from '/@/components/modal/NewRequestModal.vue'
 import Button from '/@/components/shared/Button.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import { useGroupStore } from '/@/stores/group'
@@ -33,19 +31,19 @@ const sliceRequestsAt = (index: number, n: number) => {
 }
 
 onMounted(() => {
-  if (isRequestFetched) {
+  if (!isRequestFetched) {
     requestStore.fetchRequests()
   }
-  if (isTagFetched) {
+  if (!isTagFetched) {
     tagStore.fetchTags()
   }
-  if (isGroupFetched) {
+  if (!isGroupFetched) {
     groupStore.fetchGroups()
   }
-  if (isUserFetched) {
+  if (!isUserFetched) {
     userStore.fetchUsers()
   }
-  if (isMeFetched) {
+  if (!isMeFetched) {
     userStore.fetchMe()
   }
 })
@@ -62,9 +60,9 @@ watch(
     <div class="flex w-full py-8 justify-center items-center relative">
       <h1 class="text-3xl text-center">申請一覧</h1>
       <div class="right-0 absolute">
-        <Button font-size="lg" padding="md" @click="openModal(NewRequestModal)">
-          申請の新規作成
-        </Button>
+        <router-link to="/requests/new">
+          <Button font-size="lg" padding="md">申請の新規作成</Button>
+        </router-link>
       </div>
     </div>
   </div>

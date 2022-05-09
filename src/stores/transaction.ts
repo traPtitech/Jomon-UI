@@ -76,9 +76,10 @@ export const useTransactionStore = defineStore('transaction', () => {
   )
   const isTransactionFetched = ref(false)
 
-  const fetchTransactions = async (sort: string) =>
-    (transactions.value = (await apis.getTransactions(sort)).data)
-
+  const fetchTransactions = async (sort: string) => {
+    transactions.value = (await apis.getTransactions(sort)).data
+    isTransactionFetched.value = true
+  }
   return {
     transactions,
     isTransactionFetched,

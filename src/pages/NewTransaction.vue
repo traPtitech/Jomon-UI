@@ -41,7 +41,7 @@ function postTransaction() {
 </script>
 
 <template>
-  <div class="flex flex-col mx-auto min-w-160 w-2/3 px-4 bg-white">
+  <div class="flex flex-col mx-auto min-w-160 w-2/3 px-4">
     <div class="py-8">
       <h1 class="text-center text-3xl">入出金記録の新規作成</h1>
     </div>

@@ -10,6 +10,7 @@ import MarkdownIt from './shared/MarkdownIt.vue'
 import StatusChip from './shared/StatusChip.vue'
 import Tags from './shared/Tags.vue'
 import VueSelect from './shared/VueSelect.vue'
+import apis from '/@/lib/apis'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
@@ -58,6 +59,9 @@ function changeFixMode(
     )
     fixMode.value = ''
   }
+}
+async function deleteFile(id: string) {
+  await apis.deleteFile(id)
 }
 </script>
 
@@ -234,7 +238,7 @@ function changeFixMode(
       詳細：
       <div v-if="!(fixMode === 'content')" class="flex items-start">
         <div class="h-32 w-200 border border-gray-300 overflow-y-scroll">
-          <MarkdownIt class="pl-2" :text="requestDetailStore.request.content" />
+          <MarkdownIt class="pl-1" :text="requestDetailStore.request.content" />
         </div>
         <EditButton
           v-if="requestDetailStore.request.created_by === userStore.me.name"

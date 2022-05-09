@@ -36,9 +36,11 @@ export const useUserStore = defineStore('user', () => {
 
   const fetchMe = async () => {
     me.value = (await apis.getMe()).data
+    isMeFetched.value = true
   }
   const fetchUsers = async () => {
     users.value = (await apis.getUsers()).data
+    isUserFetched.value = true
   }
 
   return {

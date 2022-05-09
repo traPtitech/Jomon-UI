@@ -5,11 +5,12 @@ import { ref } from 'vue'
 import Button from '/@/components/shared/Button.vue'
 import MarkdownIt from '/@/components/shared/MarkdownIt.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
+import type { RequestStatus } from '/@/components/shared/StatusChip.vue'
 import apis from '/@/lib/apis'
 import type { StatusEnum } from '/@/lib/apis'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
-type Props = { nextStatus: StatusEnum | '' }
+type Props = { nextStatus: RequestStatus }
 
 defineProps<Props>()
 

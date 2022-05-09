@@ -37,7 +37,7 @@ function handleAddMember(members: string[]) {
 </script>
 
 <template>
-  <div class="flex flex-col gap-8 w-1/4 pt-4">
+  <div class="flex flex-col gap-8 w-1/4 py-4">
     <div
       class="relative border border-gray-400 h-1/2 flex flex-col justify-between">
       <h2 class="absolute -top-3 left-2 px-2 bg-white">グループオーナー</h2>

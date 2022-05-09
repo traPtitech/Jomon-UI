@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { container } from 'jenesius-vue-modal'
 import { storeToRefs } from 'pinia'
 
 import Header from './components/Header.vue'
@@ -13,4 +14,12 @@ const { me } = storeToRefs(userStore)
   <main class="h-screen bg-zinc-50 pt-12 text-dark-500 overflow-scroll">
     <router-view />
   </main>
+  <container />
 </template>
+
+<style>
+.modal-container {
+  cursor: default;
+  z-index: 10;
+}
+</style>

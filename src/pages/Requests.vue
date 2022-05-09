@@ -1,15 +1,15 @@
 <script lang="ts" setup>
+import { openModal } from 'jenesius-vue-modal'
 import { storeToRefs } from 'pinia'
 import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import type { LocationQueryValue } from 'vue-router'
 
-import NewRequestModal from '/@/components/NewRequestModal.vue'
 import RequestFilteringMenu from '/@/components/RequestFilteringMenu.vue'
 import RequestItem from '/@/components/RequestItem.vue'
+import NewRequestModal from '/@/components/modal/NewRequestModal.vue'
 import Button from '/@/components/shared/Button.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
-import { useGeneralStore } from '/@/stores/general'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
@@ -25,12 +25,10 @@ const toPage = (v: LocationQueryValue | LocationQueryValue[]) => {
 }
 const route = useRoute()
 const page = ref(toPage(route.query.page))
-const generalStore = useGeneralStore()
 const requestStore = useRequestStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const userStore = useUserStore()
-const { isModalOpen } = storeToRefs(generalStore)
 const { requests, isRequestFetched } = storeToRefs(requestStore)
 const { isTagFetched } = storeToRefs(tagStore)
 const { isGroupFetched } = storeToRefs(groupStore)
@@ -60,18 +58,14 @@ watch(
     page.value = toPage(newPage)
   }
 )
-function changeIsModalOpen() {
-  isModalOpen.value = !isModalOpen.value
-}
 </script>
 
 <template>
-  <NewRequestModal v-if="isModalOpen" />
   <div class="flex flex-col mx-auto min-w-160 w-2/3">
     <div class="flex w-full py-8 justify-center items-center relative">
       <h1 class="text-3xl text-center">申請一覧</h1>
       <div class="right-0 absolute">
-        <Button font-size="lg" padding="md" @click="changeIsModalOpen">
+        <Button font-size="lg" padding="md" @click="openModal(NewRequestModal)">
           申請の新規作成
         </Button>
       </div>

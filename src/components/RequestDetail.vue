@@ -1,17 +1,15 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
+import { openModal } from 'jenesius-vue-modal'
 import { ref } from 'vue'
 
-import type { StatusEnum } from '../lib/apis'
-import NewTagModal from './NewTagModal.vue'
-import StatusChangeModal from './StatusChangeModal.vue'
+import NewTagModal from './modal/NewTagModal.vue'
+import StatusChangeModal from './modal/StatusChangeModal.vue'
 import Button from './shared/Button.vue'
 import FixButton from './shared/FixButton.vue'
 import MarkdownIt from './shared/MarkdownIt.vue'
 import StatusChip from './shared/StatusChip.vue'
 import Tags from './shared/Tags.vue'
 import VueSelect from './shared/VueSelect.vue'
-import { useGeneralStore } from '/@/stores/general'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
@@ -22,9 +20,6 @@ const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
-const generalStore = useGeneralStore()
-const { isModalOpen2 } = storeToRefs(generalStore)
-const nextStatus = ref<StatusEnum | ''>('')
 const fixMode = ref('')
 
 const fixedValue = ref({
@@ -36,11 +31,6 @@ const fixedValue = ref({
   tags: requestDetailStore.tagIds,
   group: requestDetailStore.request.group.id
 })
-
-function changeStatus(status: StatusEnum) {
-  nextStatus.value = status
-  isModalOpen2.value = true
-}
 
 function changeFixMode(
   kind: 'title' | 'content' | 'amount' | 'group' | 'tags' | 'targets' | ''
@@ -69,15 +59,9 @@ function changeFixMode(
     fixMode.value = ''
   }
 }
-
-function handleModalIsOpen() {
-  isModalOpen2.value = !isModalOpen2.value
-}
 </script>
 
 <template>
-  <NewTagModal v-if="isModalOpen2" />
-  <StatusChangeModal v-if="isModalOpen2" :next-status="nextStatus" />
   <div>
     <div class="flex justify-between">
       <div class="flex items-center">
@@ -113,7 +97,9 @@ function handleModalIsOpen() {
             "
             font-size="sm"
             padding="sm"
-            @click.stop="changeStatus('submitted')">
+            @click.stop="
+              openModal(StatusChangeModal, { nextStatus: 'submitted' })
+            ">
             承認待ちにする
           </Button>
           <Button
@@ -123,7 +109,9 @@ function handleModalIsOpen() {
             "
             font-size="sm"
             padding="sm"
-            @click.stop="changeStatus('fix_required')">
+            @click.stop="
+              openModal(StatusChangeModal, { nextStatus: 'fix_required' })
+            ">
             要修正にする
           </Button>
           <Button
@@ -133,7 +121,9 @@ function handleModalIsOpen() {
             "
             font-size="sm"
             padding="sm"
-            @click.stop="changeStatus('accepted')">
+            @click.stop="
+              openModal(StatusChangeModal, { nextStatus: 'accepted' })
+            ">
             承認済みにする
           </Button>
           <Button
@@ -143,7 +133,9 @@ function handleModalIsOpen() {
             "
             font-size="sm"
             padding="sm"
-            @click.stop="changeStatus('rejected')">
+            @click.stop="
+              openModal(StatusChangeModal, { nextStatus: 'rejected' })
+            ">
             却下する
           </Button>
         </div>
@@ -226,7 +218,7 @@ function handleModalIsOpen() {
           class="ml-2"
           font-size="sm"
           padding="md"
-          @click.stop="handleModalIsOpen">
+          @click.stop="openModal(NewTagModal)">
           タグを新規作成
         </Button>
         <Button

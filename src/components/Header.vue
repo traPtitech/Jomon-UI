@@ -15,7 +15,7 @@ defineProps<Props>()
 </script>
 
 <template>
-  <header class="bg-white flex h-12 shadow w-full z-9999 items-center fixed">
+  <header class="bg-white flex h-12 shadow w-full z-10 items-center fixed">
     <router-link to="/">
       <Logo />
     </router-link>

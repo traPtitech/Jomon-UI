@@ -6,7 +6,7 @@ import type { StatusEnum } from '../lib/apis'
 import NewTagModal from './NewTagModal.vue'
 import StatusChangeModal from './StatusChangeModal.vue'
 import Button from './shared/Button.vue'
-import FixButton from './shared/FixButton.vue'
+import EditButton from './shared/EditButton.vue'
 import MarkdownIt from './shared/MarkdownIt.vue'
 import StatusChip from './shared/StatusChip.vue'
 import Tags from './shared/Tags.vue'
@@ -85,7 +85,7 @@ function handleModalIsOpen() {
           <h1 class="text-3xl">
             {{ requestDetailStore.request.title }}
           </h1>
-          <FixButton
+          <EditButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             @click="changeFixMode('title')" />
         </div>
@@ -152,7 +152,7 @@ function handleModalIsOpen() {
         <span v-if="!requestDetailStore.request.group">グループ：なし</span>
         <div v-else-if="!(fixMode === 'group')">
           グループ：{{ requestDetailStore.request.group.name }}
-          <FixButton
+          <EditButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             @click="changeFixMode('group')" />
         </div>
@@ -182,7 +182,7 @@ function handleModalIsOpen() {
           <span class="text-2xl">
             金額：{{ requestDetailStore.request.amount }}円
           </span>
-          <FixButton
+          <EditButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             @click="changeFixMode('amount')" />
         </div>
@@ -208,7 +208,7 @@ function handleModalIsOpen() {
       <div v-else-if="!(fixMode === 'tags')">
         タグ：
         <Tags :tags="requestDetailStore.request.tags" />
-        <FixButton
+        <EditButton
           v-if="requestDetailStore.request.created_by === userStore.me.name"
           @click="changeFixMode('tags')" />
       </div>
@@ -244,7 +244,7 @@ function handleModalIsOpen() {
         <div class="h-32 w-200 border border-gray-300 overflow-y-scroll">
           <MarkdownIt class="pl-2" :text="requestDetailStore.request.content" />
         </div>
-        <FixButton
+        <EditButton
           v-if="requestDetailStore.request.created_by === userStore.me.name"
           @click="changeFixMode('content')" />
       </div>
@@ -269,7 +269,7 @@ function handleModalIsOpen() {
             :key="target.id">
             {{ target.target }},
           </span>
-          <FixButton
+          <EditButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
             @click="changeFixMode('targets')" />
         </div>

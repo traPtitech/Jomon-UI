@@ -7,11 +7,20 @@ import {
   CheckCircleIcon
 } from '@heroicons/vue/solid'
 
-type Props = { status: string; hasText: boolean }
+type RequestStatus =
+  | 'submitted'
+  | 'fix_required'
+  | 'accepted'
+  | 'completed'
+  | 'rejected'
+
+type Props = { status: RequestStatus; hasText: boolean }
+
 withDefaults(defineProps<Props>(), {
   hasText: false
 })
-function statusToJpn(status: string) {
+
+function statusToJpn(status: RequestStatus) {
   switch (status) {
     case 'submitted':
       return '承認待ち'
@@ -19,7 +28,7 @@ function statusToJpn(status: string) {
       return '要修正'
     case 'accepted':
       return '承認済み'
-    case 'fully_repaid':
+    case 'completed':
       return '返済完了'
     case 'rejected':
       return '却下'

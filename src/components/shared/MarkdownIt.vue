@@ -4,7 +4,8 @@ import MarkdownIt from 'markdown-it'
 type Props = { text: string }
 defineProps<Props>()
 const md = MarkdownIt({
-  breaks: true
+  breaks: true,
+  linkify: true
 })
 </script>
 

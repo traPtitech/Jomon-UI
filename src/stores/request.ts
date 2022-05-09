@@ -70,33 +70,31 @@ export const useRequestStore = defineStore('request', () => {
   const fetchRequests = async (params: Params = defaultParams) => {
     const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
     if (
-      (params.since === '' && rule.test(params.until)) ||
-      (params.until === '' && rule.test(params.since)) ||
-      (rule.test(params.since) && rule.test(params.until)) ||
-      (params.since === '' && params.until === '')
+      (params.since && !rule.test(params.since)) ||
+      (params.until && !rule.test(params.until))
     ) {
-      for (let i = 0; i < tagList.value.length; i++) {
-        if (i === 0) {
-          params.tag = tagList.value[i]
-        } else {
-          params.tag += ',' + tagList.value[i]
-        }
-      }
-      requests.value = (
-        await apis.getRequests(
-          params.sort,
-          params.currentStatus || '',
-          params.target || '',
-          params.since,
-          params.until,
-          params.tag || '',
-          params.group || ''
-        )
-      ).data
-      isRequestFetched.value = true
-    } else {
       alert('日付が不正です')
+      return
     }
+    for (let i = 0; i < tagList.value.length; i++) {
+      if (i === 0) {
+        params.tag = tagList.value[i]
+      } else {
+        params.tag += ',' + tagList.value[i]
+      }
+    }
+    requests.value = (
+      await apis.getRequests(
+        params.sort,
+        params.currentStatus || '',
+        params.target || '',
+        params.since,
+        params.until,
+        params.tag || '',
+        params.group || ''
+      )
+    ).data
+    isRequestFetched.value = true
   }
   return { requests, isRequestFetched, fetchRequests, tagList }
 })

@@ -2,22 +2,13 @@
 import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 import { ref, watch } from 'vue'
-import type { LocationQueryValue } from 'vue-router'
 import { useRoute } from 'vue-router'
 
+import { toPage } from '../lib/parseQueryParams'
 import GroupItem from '/@/components/GroupItem.vue'
 import Button from '/@/components/shared/Button.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import { useGroupStore } from '/@/stores/group'
-
-const toPage = (v: LocationQueryValue | LocationQueryValue[]) => {
-  if (Array.isArray(v)) {
-    v = v[0]
-  }
-  if (!v) return 1
-  const parsed = parseInt(v)
-  return isNaN(parsed) ? 1 : parsed
-}
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))

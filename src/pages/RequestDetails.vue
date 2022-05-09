@@ -47,9 +47,7 @@ function createTransaction() {
             @click="createTransaction">
             この申請から入出金記録を作成する
           </Button>
-          <router-link
-            class="w-2/3"
-            :to="'/transactions?pageIndex=1&requestID=' + id">
+          <router-link class="w-2/3" :to="'/transactions?requestID=' + id">
             <Button class="w-full" font-size="md" padding="sm">
               この申請の入出金記録へ移動
             </Button>

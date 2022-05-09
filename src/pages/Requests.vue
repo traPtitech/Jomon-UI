@@ -2,8 +2,8 @@
 import { storeToRefs } from 'pinia'
 import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import type { LocationQueryValue } from 'vue-router'
 
+import { toPage } from '../lib/parseQueryParams'
 import NewRequestModal from '/@/components/NewRequestModal.vue'
 import RequestFilteringMenu from '/@/components/RequestFilteringMenu.vue'
 import RequestItem from '/@/components/RequestItem.vue'
@@ -15,14 +15,6 @@ import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-const toPage = (v: LocationQueryValue | LocationQueryValue[]) => {
-  if (Array.isArray(v)) {
-    v = v[0]
-  }
-  if (!v) return 1
-  const parsed = parseInt(v)
-  return isNaN(parsed) ? 1 : parsed
-}
 const route = useRoute()
 const page = ref(toPage(route.query.page))
 const generalStore = useGeneralStore()
@@ -34,6 +26,7 @@ const { isModalOpen } = storeToRefs(generalStore)
 const { requests, isRequestFetched } = storeToRefs(requestStore)
 const { isTagFetched } = storeToRefs(tagStore)
 const { isGroupFetched } = storeToRefs(groupStore)
+const { isUserFetched, isMeFetched } = storeToRefs(userStore)
 
 const sliceRequestsAt = (index: number, n: number) => {
   const start = (index - 1) * n
@@ -51,8 +44,12 @@ onMounted(() => {
   if (isGroupFetched) {
     groupStore.fetchGroups()
   }
-  userStore.fetchUsers()
-  userStore.fetchMe()
+  if (isUserFetched) {
+    userStore.fetchUsers()
+  }
+  if (isMeFetched) {
+    userStore.fetchMe()
+  }
 })
 watch(
   () => route.query.page,

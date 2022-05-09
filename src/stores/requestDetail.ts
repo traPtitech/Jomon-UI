@@ -96,17 +96,17 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     updated_at: '2022-02-12T08:01:37.838Z'
   })
   const targetIds = computed(() => {
-    let targetIds = new Array<string>()
+    const targetIds = new Array<string>()
 
     for (let i = 0; i < request.value.targets.length; i++) {
-      targetIds = targetIds.concat([request.value.targets[i].id])
+      targetIds.push(request.value.targets[i].id)
     }
     return targetIds
   })
   const tagIds = computed(() => {
-    let tagIds = new Array<string>()
+    const tagIds = new Array<string>()
     for (let i = 0; i < request.value.tags.length; i++) {
-      tagIds = tagIds.concat([request.value.tags[i].id])
+      tagIds.push(request.value.tags[i].id)
     }
     return tagIds
   })

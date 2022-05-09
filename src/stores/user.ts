@@ -32,6 +32,7 @@ export const useUserStore = defineStore('user', () => {
     }
   ])
   const isUserFetched = ref(false)
+  const isMeFetched = ref(false)
 
   const fetchMe = async () => {
     me.value = (await apis.getMe()).data
@@ -44,6 +45,7 @@ export const useUserStore = defineStore('user', () => {
     me,
     users,
     isUserFetched,
+    isMeFetched,
     fetchMe,
     fetchUsers
   }

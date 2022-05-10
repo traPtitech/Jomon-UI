@@ -3,6 +3,7 @@ import { onMounted } from 'vue'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
+import { toId } from '../lib/parsePathParams'
 import NewComment from '/@/components/NewComment.vue'
 import RequestDetail from '/@/components/RequestDetail.vue'
 import RequestLogs from '/@/components/RequestLogs.vue'
@@ -19,7 +20,7 @@ interface File {
 const requestDetailStore = useRequestDetailStore()
 const transactionStore = useTransactionStore()
 const route = useRoute()
-const id = String(route.params.id)
+const id = toId(route.params.id)
 const files = ref<File[]>([])
 
 const fetchFiles = async (ids: string[]) => {

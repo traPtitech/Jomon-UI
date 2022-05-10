@@ -45,7 +45,7 @@ function changeFixMode(
     alert('金額の形式が不正です')
     return
   }
-  if (kind !== 'tags' && fixMode.value !== '' && kind === '') {
+  if (fixMode.value !== 'tags' && kind === '') {
     const result = confirm(
       '入出金記録に紐づいている申請のこの情報を変更すると、入出金記録の情報にも変更が反映されます。よろしいですか？'
     )

@@ -22,9 +22,9 @@ const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
-const fixMode = ref('')
+const editMode = ref('')
 
-const fixedValue = ref({
+const editedValue = ref({
   created_by: requestDetailStore.request.created_by,
   amount: requestDetailStore.request.amount,
   title: requestDetailStore.request.title,
@@ -34,31 +34,31 @@ const fixedValue = ref({
   group: requestDetailStore.request.group.id
 })
 
-function changeFixMode(
+function changeEditMode(
   kind: 'title' | 'content' | 'amount' | 'group' | 'tags' | 'targets' | ''
 ) {
   if (
-    fixMode.value === 'amount' &&
+    editMode.value === 'amount' &&
     kind === '' &&
-    !/^[1-9][0-9]*$|^0$/.test(fixedValue.value.amount.toString())
+    !/^[1-9][0-9]*$|^0$/.test(editedValue.value.amount.toString())
   ) {
     alert('金額の形式が不正です')
     return
   }
-  if (fixMode.value !== 'tags' && kind === '') {
+  if (editMode.value !== 'tags' && kind === '') {
     const result = confirm(
       '入出金記録に紐づいている申請のこの情報を変更すると、入出金記録の情報にも変更が反映されます。よろしいですか？'
     )
     if (!result) return
   }
   if (kind !== '') {
-    fixMode.value = kind
+    editMode.value = kind
   } else {
     requestDetailStore.putRequest(
       requestDetailStore.request.id,
-      fixedValue.value
+      editedValue.value
     )
-    fixMode.value = ''
+    editMode.value = ''
   }
 }
 async function deleteFile(id: string) {
@@ -70,17 +70,17 @@ async function deleteFile(id: string) {
   <div>
     <div class="flex justify-between">
       <div class="flex items-center">
-        <div v-if="!(fixMode === 'title')" class="flex">
+        <div v-if="!(editMode === 'title')" class="flex">
           <h1 class="text-3xl">
             {{ requestDetailStore.request.title }}
           </h1>
           <EditButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
-            @click="changeFixMode('title')" />
+            @click="changeEditMode('title')" />
         </div>
-        <div v-if="fixMode === 'title'">
+        <div v-if="editMode === 'title'">
           <input
-            v-model="fixedValue.title"
+            v-model="editedValue.title"
             class="w-100 p-1 rounded"
             placeholder="タイトル"
             type="text" />
@@ -88,7 +88,7 @@ async function deleteFile(id: string) {
             class="ml-2"
             font-size="sm"
             padding="sm"
-            @click.stop="changeFixMode('')">
+            @click.stop="changeEditMode('')">
             完了
           </Button>
         </div>
@@ -96,7 +96,7 @@ async function deleteFile(id: string) {
         <div class="flex gap-4">
           <Button
             v-if="
-              requestDetailStore.request.status === 'fix_required' ||
+              requestDetailStore.request.status === 'edit_required' ||
               (userStore.me.admin &&
                 requestDetailStore.request.status === 'accepted')
             "
@@ -115,7 +115,7 @@ async function deleteFile(id: string) {
             font-size="sm"
             padding="sm"
             @click.stop="
-              openModal(StatusChangeModal, { nextStatus: 'fix_required' })
+              openModal(StatusChangeModal, { nextStatus: 'edit_required' })
             ">
             要修正にする
           </Button>
@@ -147,15 +147,15 @@ async function deleteFile(id: string) {
       </div>
       <div class="flex items-center gap-4">
         <span v-if="!requestDetailStore.request.group">グループ：なし</span>
-        <div v-else-if="!(fixMode === 'group')">
+        <div v-else-if="!(editMode === 'group')">
           グループ：{{ requestDetailStore.request.group.name }}
           <EditButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
-            @click="changeFixMode('group')" />
+            @click="changeEditMode('group')" />
         </div>
-        <div v-else-if="fixMode === 'group'" class="flex">
+        <div v-else-if="editMode === 'group'" class="flex">
           <VueSelect
-            v-model="fixedValue.group"
+            v-model="editedValue.group"
             class="w-52"
             label="name"
             :options="groupStore.groups"
@@ -165,7 +165,7 @@ async function deleteFile(id: string) {
             class="ml-2"
             font-size="sm"
             padding="sm"
-            @click.stop="changeFixMode('')">
+            @click.stop="changeEditMode('')">
             完了
           </Button>
         </div>
@@ -175,18 +175,18 @@ async function deleteFile(id: string) {
             formatDate(DateTime.fromISO(requestDetailStore.request.created_at))
           }}
         </span>
-        <div v-if="!(fixMode === 'amount')" class="flex items-center">
+        <div v-if="!(editMode === 'amount')" class="flex items-center">
           <span class="text-2xl">
             金額：{{ requestDetailStore.request.amount }}円
           </span>
           <EditButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
-            @click="changeFixMode('amount')" />
+            @click="changeEditMode('amount')" />
         </div>
-        <div v-if="fixMode === 'amount'" class="flex items-center">
+        <div v-if="editMode === 'amount'" class="flex items-center">
           金額：
           <input
-            v-model="fixedValue.amount"
+            v-model="editedValue.amount"
             class="w-24 p-1"
             placeholder="金額"
             type="text" />円
@@ -194,7 +194,7 @@ async function deleteFile(id: string) {
             class="ml-2"
             font-size="sm"
             padding="sm"
-            @click.stop="changeFixMode('')">
+            @click.stop="changeEditMode('')">
             完了
           </Button>
         </div>
@@ -202,17 +202,17 @@ async function deleteFile(id: string) {
     </div>
     <div class="pt-4">
       <div v-if="!requestDetailStore.request.tags">タグ：なし</div>
-      <div v-else-if="!(fixMode === 'tags')">
+      <div v-else-if="!(editMode === 'tags')">
         タグ：
         <Tags :tags="requestDetailStore.request.tags" />
         <EditButton
           v-if="requestDetailStore.request.created_by === userStore.me.name"
-          @click="changeFixMode('tags')" />
+          @click="changeEditMode('tags')" />
       </div>
-      <div v-else-if="fixMode === 'tags'" class="flex items-center">
+      <div v-else-if="editMode === 'tags'" class="flex items-center">
         タグ：
         <VueSelect
-          v-model="fixedValue.tags"
+          v-model="editedValue.tags"
           class="w-200"
           :close-on-select="false"
           label="name"
@@ -230,37 +230,37 @@ async function deleteFile(id: string) {
           class="ml-2"
           font-size="sm"
           padding="sm"
-          @click.stop="changeFixMode('')">
+          @click.stop="changeEditMode('')">
           完了
         </Button>
       </div>
     </div>
     <div class="pt-4 flex">
       詳細：
-      <div v-if="!(fixMode === 'content')" class="flex items-start">
+      <div v-if="!(editMode === 'content')" class="flex items-start">
         <div class="h-32 w-200 border border-gray-300 overflow-y-scroll">
           <MarkdownIt class="pl-1" :text="requestDetailStore.request.content" />
         </div>
         <EditButton
           v-if="requestDetailStore.request.created_by === userStore.me.name"
-          @click="changeFixMode('content')" />
+          @click="changeEditMode('content')" />
       </div>
-      <div v-if="fixMode === 'content'">
+      <div v-if="editMode === 'content'">
         <textarea
-          v-model="fixedValue.content"
+          v-model="editedValue.content"
           class="resize-none w-200 h-30 p-1"
           placeholder="詳細" />
         <Button
           class="ml-2"
           font-size="sm"
           padding="sm"
-          @click.stop="changeFixMode('')">
+          @click.stop="changeEditMode('')">
           完了
         </Button>
       </div>
       <div class="ml-30 flex">
         払い戻し対象者：
-        <div v-if="!(fixMode === 'targets')">
+        <div v-if="!(editMode === 'targets')">
           <span
             v-for="target in requestDetailStore.request.targets"
             :key="target.id">
@@ -268,11 +268,11 @@ async function deleteFile(id: string) {
           </span>
           <EditButton
             v-if="requestDetailStore.request.created_by === userStore.me.name"
-            @click="changeFixMode('targets')" />
+            @click="changeEditMode('targets')" />
         </div>
-        <div v-if="fixMode === 'targets'">
+        <div v-if="editMode === 'targets'">
           <VueSelect
-            v-model="fixedValue.targets"
+            v-model="editedValue.targets"
             class="w-100"
             :close-on-select="false"
             label="name"
@@ -284,7 +284,7 @@ async function deleteFile(id: string) {
             class="ml-2"
             font-size="sm"
             padding="sm"
-            @click.stop="changeFixMode('')">
+            @click.stop="changeEditMode('')">
             完了
           </Button>
         </div>

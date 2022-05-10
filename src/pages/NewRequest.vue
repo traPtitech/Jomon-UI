@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { XCircleIcon } from '@heroicons/vue/solid'
-import { openModal, closeModal } from 'jenesius-vue-modal'
+import { openModal } from 'jenesius-vue-modal'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 import NewTagModal from '/@/components/modal/NewTagModal.vue'
 import Button from '/@/components/shared/Button.vue'
@@ -30,6 +31,7 @@ interface RequestRequest {
   group: string | null
 }
 
+const router = useRouter()
 const requestStore = useRequestStore()
 const userStore = useUserStore()
 const tagStore = useTagStore()
@@ -70,19 +72,20 @@ async function postRequestAPI(request: RequestRequest) {
 
 async function postRequest() {
   if (
-    /^[1-9][0-9]*$|^0$/.test(request.value.amount.toString()) &&
-    request.value.title !== '' &&
-    request.value.content !== '' &&
-    request.value.targets.length > 0
+    !/^[1-9][0-9]*$|^0$/.test(request.value.amount.toString()) ||
+    !request.value.title ||
+    !request.value.content ||
+    request.value.targets.length === 0
   ) {
-    const id = await postRequestAPI(request.value)
-    images.value.forEach(image => {
-      postFile(id, image.name, image.src)
-    })
-    closeModal()
-  } else {
     alert('形式が不正です')
-  } //todo:直す
+    return
+  }
+  const id = await postRequestAPI(request.value)
+  images.value.forEach(image => {
+    postFile(id, image.name, image.src)
+  })
+  alert('申請を作成しました')
+  router.push('/')
 }
 
 function handleImageChange(e: Event) {

@@ -1,7 +1,12 @@
 <script lang="ts" setup>
+import apis from '/@/lib/apis'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
 const requestDetailStore = useRequestDetailStore()
+
+async function deleteFile(id: string) {
+  await apis.deleteFile(id)
+}
 </script>
 
 <template>

@@ -11,7 +11,6 @@ import MarkdownIt from './shared/MarkdownIt.vue'
 import StatusChip from './shared/StatusChip.vue'
 import Tags from './shared/Tags.vue'
 import VueSelect from './shared/VueSelect.vue'
-import apis from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
@@ -60,9 +59,6 @@ function changeEditMode(
     )
     editMode.value = ''
   }
-}
-async function deleteFile(id: string) {
-  await apis.deleteFile(id)
 }
 </script>
 

@@ -44,9 +44,11 @@ onMounted(() => {
       <RequestLogs />
       <div class="w-1/3">
         <div class="flex flex-col mt-8 gap-4 items-center">
-          <Button class="w-2/3" font-size="md" padding="sm">
-            この申請から入出金記録を作成する
-          </Button>
+          <router-link class="w-2/3" :to="'/transactions/new?requestID=' + id">
+            <Button class="w-full" font-size="md" padding="sm">
+              この申請から入出金記録を作成する
+            </Button>
+          </router-link>
           <router-link class="w-2/3" :to="'/transactions?requestID=' + id">
             <Button class="w-full" font-size="md" padding="sm">
               この申請の入出金記録へ移動

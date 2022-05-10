@@ -1,38 +1,38 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+import { useRoute } from 'vue-router'
 
+import { toId } from '../lib/parseQueryParams'
 import Button from '/@/components/shared/Button.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
+import apis from '/@/lib/apis'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
-import { useTransactionStore } from '/@/stores/transaction'
 import { useUserStore } from '/@/stores/user'
 
-type Props = { requestId: string } //requestIdには申請の詳細画面からモーダルを表示するときだけpropsにIDを渡す。transaction一覧では空文字列を渡す
-const props = defineProps<Props>()
+const route = useRoute()
+const requestId = toId(route.query.requestID) //requestIDには申請の詳細画面から新規作成ページに移動するときだけIDを渡す
 const requestDetailStore = useRequestDetailStore()
-const transactionStore = useTransactionStore()
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const transaction = ref({
-  amount: props.requestId ? requestDetailStore.request.amount : '',
-  targets: props.requestId ? requestDetailStore.targetIds : ([] as string[]),
-  requestId: props.requestId,
-  tags: props.requestId ? requestDetailStore.tagIds : ([] as string[]),
-  group: props.requestId ? requestDetailStore.request.group.id : null
+  amount: requestId ? requestDetailStore.request.amount : 0,
+  targets: requestId ? requestDetailStore.targetIds : ([] as string[]),
+  request: requestId,
+  tags: requestId ? requestDetailStore.tagIds : ([] as string[]),
+  group: requestId ? requestDetailStore.request.group.id : ''
 })
-function postTransaction() {
+async function postTransaction() {
   if (
-    /^[1-9][0-9]*$|^0$/.test(transaction.value.amount.toString()) &&
-    transaction.value.targets.length > 0
+    !/^[1-9][0-9]*$/.test(transaction.value.amount.toString()) ||
+    transaction.value.targets.length === 0
   ) {
-    //transactionStore.postTransaction(transaction.value)
-  } else {
     alert('不正です')
+    return
   }
+  await apis.postTransaction(transaction.value)
 }
 </script>
 

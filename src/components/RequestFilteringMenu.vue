@@ -3,13 +3,18 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/outline'
 import { ref } from 'vue'
 
 import VueSelect from './shared/VueSelect.vue'
+import type { Request } from '/@/lib/apis'
+import type { Params } from '/@/pages/Requests.vue'
 import { useGroupStore } from '/@/stores/group'
-import type { Params } from '/@/stores/request'
-import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-const requestStore = useRequestStore()
+interface Props {
+  fetchRequests: (params: Params) => void
+  requests: Request[]
+}
+
+const props = defineProps<Props>()
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
@@ -22,7 +27,7 @@ const params = ref({
   until: '',
   tag: null,
   group: null
-} as Params)
+})
 const states = [
   { state: 'submitted', jpn: '承認待ち' },
   { state: 'rejected', jpn: '却下' },
@@ -30,13 +35,14 @@ const states = [
   { state: 'accepted', jpn: '承認済み' },
   { state: 'fully_repaid', jpn: '返済完了' }
 ]
+
 function sortByCreatedAt() {
   if (params.value.sort === 'created_at') {
     params.value.sort = '-created_at'
   } else {
     params.value.sort = 'created_at'
   }
-  requestStore.fetchRequests(params.value)
+  props.fetchRequests(params.value)
 }
 </script>
 
@@ -55,13 +61,13 @@ function sortByCreatedAt() {
         v-model="params.since"
         class="border border-gray-300 w-28 h-8 p-1 rounded"
         placeholder="YYYY-MM-DD"
-        @blur="requestStore.fetchRequests(params)" />
+        @blur="fetchRequests(params)" />
       ～
       <input
         v-model="params.until"
         class="border border-gray-300 w-28 h-8 p-1 rounded"
         placeholder="YYYY-MM-DD"
-        @blur="requestStore.fetchRequests(params)" />
+        @blur="fetchRequests(params)" />
     </div>
     <VueSelect
       v-model="params.target"
@@ -70,7 +76,7 @@ function sortByCreatedAt() {
       :options="userStore.users"
       placeholder="申請者"
       :reduce="(user:any) => user.name"
-      @close="requestStore.fetchRequests(params)" />
+      @close="fetchRequests(params)" />
     <VueSelect
       v-model="params.currentStatus"
       class="w-64"
@@ -79,7 +85,7 @@ function sortByCreatedAt() {
       placeholder="申請の状態"
       :reduce="(state:any) => state.state"
       :searchable="false"
-      @close="requestStore.fetchRequests(params)" />
+      @close="fetchRequests(params)" />
     <VueSelect
       v-model="params.group"
       class="w-64"
@@ -87,9 +93,9 @@ function sortByCreatedAt() {
       :options="groupStore.groups"
       placeholder="グループ"
       :reduce="(group:any) => group.id"
-      @close="requestStore.fetchRequests(params)" />
+      @close="fetchRequests(params)" />
     <VueSelect
-      v-model="requestStore.tagList"
+      v-model="params.tag"
       class="w-100"
       :close-on-select="false"
       label="name"
@@ -97,12 +103,12 @@ function sortByCreatedAt() {
       :options="tagStore.tags"
       placeholder="タグ"
       :reduce="(tag:any) => tag.id"
-      @close="requestStore.fetchRequests(params)" />
+      @close="fetchRequests(params)" />
   </div>
-  <span v-if="requestStore.requests.length !== 0" class="ml-1/8">
-    {{ requestStore.requests.length }}件取得しました
+  <span v-if="requests.length !== 0" class="ml-1/8">
+    {{ requests.length }}件取得しました
   </span>
-  <span v-if="requestStore.requests.length === 0" class="ml-1/8">
+  <span v-if="requests.length === 0" class="ml-1/8">
     条件に一致する申請は見つかりませんでした
   </span>
 </template>

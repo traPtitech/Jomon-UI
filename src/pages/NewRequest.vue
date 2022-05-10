@@ -13,7 +13,6 @@ import apis from '/@/lib/apis'
 import clubBudgetRequestTemplate from '/@/md/clubBudgetRequest.md?raw'
 import travelingExpenseRequestTemplate from '/@/md/travelingExpenseRequest.md?raw'
 import { useGroupStore } from '/@/stores/group'
-import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
@@ -32,7 +31,6 @@ interface RequestRequest {
 }
 
 const router = useRouter()
-const requestStore = useRequestStore()
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
@@ -66,7 +64,6 @@ async function postRequestAPI(request: RequestRequest) {
     group: request.group !== null ? request.group : ''
   }
   const response: Request = (await apis.postRequest(requestRequest)).data
-  requestStore.fetchRequests()
   return response.id
 }
 

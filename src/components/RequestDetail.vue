@@ -92,7 +92,7 @@ function changeEditMode(
         <div class="flex gap-4">
           <Button
             v-if="
-              requestDetailStore.request.status === 'edit_required' ||
+              requestDetailStore.request.status === 'fix_required' ||
               (userStore.me.admin &&
                 requestDetailStore.request.status === 'accepted')
             "
@@ -111,7 +111,7 @@ function changeEditMode(
             font-size="sm"
             padding="sm"
             @click.stop="
-              openModal(StatusChangeModal, { nextStatus: 'edit_required' })
+              openModal(StatusChangeModal, { nextStatus: 'fix_required' })
             ">
             要修正にする
           </Button>

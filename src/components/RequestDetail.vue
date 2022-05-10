@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { openModal } from 'jenesius-vue-modal'
+import { DateTime } from 'luxon'
 import { ref } from 'vue'
 
 import NewTagModal from './modal/NewTagModal.vue'
@@ -11,11 +12,11 @@ import StatusChip from './shared/StatusChip.vue'
 import Tags from './shared/Tags.vue'
 import VueSelect from './shared/VueSelect.vue'
 import apis from '/@/lib/apis'
+import { formatDate } from '/@/lib/date'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
-import { formatDate } from '/@/utils/date'
 
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
@@ -171,7 +172,7 @@ async function deleteFile(id: string) {
         <span>申請者：{{ requestDetailStore.request.created_by }}</span>
         <span>
           申請日：{{
-            formatDate(new Date(requestDetailStore.request.created_at))
+            formatDate(DateTime.fromISO(requestDetailStore.request.created_at))
           }}
         </span>
         <div v-if="!(fixMode === 'amount')" class="flex items-center">

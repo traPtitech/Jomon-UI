@@ -1,8 +1,10 @@
 <script lang="ts" setup>
+import { DateTime } from 'luxon'
+
 import StatusChip from './shared/StatusChip.vue'
 import UserIcon from './shared/UserIcon.vue'
+import { formatDateAndTime } from '/@/lib/date'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
-import { formatDateAndTime } from '/@/utils/date'
 
 const requestDetailStore = useRequestDetailStore()
 type Props = { index: number }
@@ -23,7 +25,9 @@ const props = defineProps<Props>()
     <div class="ml-auto text-zinc-400">
       {{
         formatDateAndTime(
-          new Date(requestDetailStore.request.statuses[props.index].created_at)
+          DateTime.fromISO(
+            requestDetailStore.request.statuses[props.index].created_at
+          )
         )
       }}
     </div>

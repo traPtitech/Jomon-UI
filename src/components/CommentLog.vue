@@ -1,8 +1,10 @@
 <script lang="ts" setup>
+import { DateTime } from 'luxon'
+
 import MarkdownIt from './shared/MarkdownIt.vue'
 import UserIcon from './shared/UserIcon.vue'
+import { formatDateAndTime } from '/@/lib/date'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
-import { formatDateAndTime } from '/@/utils/date'
 
 const requestDetailStore = useRequestDetailStore()
 type Props = { index: number }
@@ -16,7 +18,6 @@ const props = defineProps<Props>()
         <UserIcon
           class="mr-2"
           :name="requestDetailStore.request.comments[props.index].user" />
-
         {{
           requestDetailStore.request.comments[props.index].user
         }}がコメントしました。
@@ -24,7 +25,7 @@ const props = defineProps<Props>()
       <span class="text-zinc-400">
         {{
           formatDateAndTime(
-            new Date(
+            DateTime.fromISO(
               requestDetailStore.request.comments[props.index].created_at
             )
           )

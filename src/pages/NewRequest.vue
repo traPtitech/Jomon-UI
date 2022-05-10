@@ -107,13 +107,15 @@ function handleImageChange(e: Event) {
 
 function setTemplate(selectedTemplate: string | null) {
   if (selectedTemplate) {
-    request.value.content =
-      selectedTemplate === 'clubBudgetRequest'
-        ? clubBudgetRequestTemplate
-        : selectedTemplate === 'travelingExpenseRequest'
-        ? travelingExpenseRequestTemplate
-        : ''
-  } //todo:switchで書いた方がよさそう
+    switch (selectedTemplate) {
+      case 'clubBudgetRequest':
+        request.value.content = clubBudgetRequestTemplate
+        selectedTemplate === 'clubBudgetRequest'
+        break
+      case 'travelingExpenseRequest':
+        request.value.content = travelingExpenseRequestTemplate
+    }
+  }
 }
 
 function deleteImage(index: number) {

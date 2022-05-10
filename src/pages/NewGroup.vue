@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 import Button from '/@/components/shared/Button.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
@@ -8,6 +9,7 @@ import type { Group } from '/@/lib/apis'
 import { useGroupStore } from '/@/stores/group'
 import { useUserStore } from '/@/stores/user'
 
+const router = useRouter()
 const userStore = useUserStore()
 const groupStore = useGroupStore()
 const { users } = storeToRefs(userStore)
@@ -22,23 +24,24 @@ const group = ref({
 
 async function handlePostGroup() {
   if (
-    /^[1-9][0-9]*$|^0$/.test(group.value.budget.toString()) &&
-    group.value.name !== '' &&
-    group.value.description !== '' &&
-    group.value.owners.length > 0 &&
-    group.value.members.length > 0
+    !/^[1-9][0-9]*$|^0$/.test(group.value.budget.toString()) ||
+    group.value.name ||
+    group.value.description ||
+    group.value.owners.length === 0 ||
+    group.value.members.length === 0
   ) {
-    const willPostGroup = {
-      name: group.value.name,
-      description: group.value.description,
-      budget: group.value.budget
-    }
-    const res: Group = await groupStore.postGroup(willPostGroup)
-    await groupStore.postGroupMember(res.id, group.value.members)
-    await groupStore.postGroupOwner(res.id, group.value.owners)
-  } else {
     alert('全ての項目を入力してください')
+    return
   }
+  const willPostGroup = {
+    name: group.value.name,
+    description: group.value.description,
+    budget: group.value.budget
+  }
+  const res: Group = await groupStore.postGroup(willPostGroup)
+  await groupStore.postGroupMember(res.id, group.value.members)
+  await groupStore.postGroupOwner(res.id, group.value.owners)
+  router.push('/group')
 }
 </script>
 

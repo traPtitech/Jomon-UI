@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -12,7 +11,6 @@ import { useUserStore } from '/@/stores/user'
 const router = useRouter()
 const userStore = useUserStore()
 const groupStore = useGroupStore()
-const { users } = storeToRefs(userStore)
 
 const group = ref({
   name: '',
@@ -80,7 +78,7 @@ async function handlePostGroup() {
             :close-on-select="false"
             label="name"
             multiple
-            :options="users"
+            :options="userStore.users"
             placeholder="追加するオーナーを選択"
             :reduce="(user:any) => user.name" />
           <span class="text-sm">
@@ -94,7 +92,7 @@ async function handlePostGroup() {
             :close-on-select="false"
             label="name"
             multiple
-            :options="users"
+            :options="userStore.users"
             placeholder="追加するメンバーを選択"
             :reduce="(user:any) => user.name" />
         </div>

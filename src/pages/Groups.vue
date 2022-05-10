@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -13,7 +12,6 @@ import { useGroupStore } from '/@/stores/group'
 const route = useRoute()
 const page = ref(toPage(route.query.page))
 const groupStore = useGroupStore()
-const { isGroupFetched } = storeToRefs(groupStore)
 
 const sliceGroupsAt = (index: number, n: number) => {
   const start = (index - 1) * n
@@ -22,7 +20,7 @@ const sliceGroupsAt = (index: number, n: number) => {
 }
 
 onMounted(() => {
-  if (!isGroupFetched.value) {
+  if (!groupStore.isGroupFetched) {
     groupStore.fetchGroups()
   }
 })

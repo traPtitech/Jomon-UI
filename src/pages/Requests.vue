@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -36,9 +35,6 @@ const page = ref(toPage(route.query.page))
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const userStore = useUserStore()
-const { isTagFetched } = storeToRefs(tagStore)
-const { isGroupFetched } = storeToRefs(groupStore)
-const { isUserFetched, isMeFetched } = storeToRefs(userStore)
 const requests = ref<Request[]>(
   Array(100).fill({
     id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -127,16 +123,16 @@ async function fetchRequests(tmpParams: Params = defaultParams) {
 
 onMounted(() => {
   fetchRequests()
-  if (!isTagFetched) {
+  if (!tagStore.isTagFetched) {
     tagStore.fetchTags()
   }
-  if (!isGroupFetched) {
+  if (!groupStore.isGroupFetched) {
     groupStore.fetchGroups()
   }
-  if (!isUserFetched) {
+  if (!userStore.isUserFetched) {
     userStore.fetchUsers()
   }
-  if (!isMeFetched) {
+  if (!userStore.isMeFetched) {
     userStore.fetchMe()
   }
 })

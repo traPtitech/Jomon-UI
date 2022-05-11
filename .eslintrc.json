@@ -59,6 +59,7 @@
     "vue/v-on-function-call": "error",
     "vue/no-template-target-blank": "error",
     "vue/prefer-true-attribute-shorthand": "error",
-    "vue/prefer-import-from-vue": "error"
+    "vue/prefer-import-from-vue": "error",
+    "vue/no-v-html": "off"
   }
 }

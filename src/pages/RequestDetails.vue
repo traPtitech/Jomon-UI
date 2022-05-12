@@ -3,9 +3,10 @@ import { onMounted } from 'vue'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
+import RequestDetailLower from '../components/RequestDetailLower.vue'
 import { toId } from '../lib/parsePathParams'
 import NewComment from '/@/components/NewComment.vue'
-import RequestDetail from '/@/components/RequestDetail.vue'
+import RequestDetailUpper from '/@/components/RequestDetailUpper.vue'
 import RequestLogs from '/@/components/RequestLogs.vue'
 import Button from '/@/components/shared/Button.vue'
 import apis from '/@/lib/apis'
@@ -38,7 +39,8 @@ onMounted(() => {
 
 <template>
   <div class="pt-4 px-12">
-    <RequestDetail />
+    <RequestDetailUpper />
+    <RequestDetailLower />
     <div class="w-19/20 border border-gray-200 bg-gray-200 mx-auto my-4" />
     <div class="flex">
       <RequestLogs />

@@ -29,9 +29,6 @@ function setTemplate(selectedTemplate: string | null) {
     }
   }
 }
-function handleInput(e: Event) {
-  emit('input', (e.target as HTMLInputElement).value)
-}
 </script>
 
 <template>
@@ -51,7 +48,7 @@ function handleInput(e: Event) {
     <textarea
       class="h-40 border border-gray-300 resize-none p-1 rounded"
       :value="value"
-      @input="e => handleInput(e)" />
+      @input="emit('input', ($event.target as HTMLInputElement).value)" />
   </div>
   <details class="mb-2">
     <summary>MDプレビュー</summary>

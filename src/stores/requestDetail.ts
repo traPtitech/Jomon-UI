@@ -117,6 +117,40 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     }
     return tagIds
   })
+  const editMode = ref('')
+  const editedValue = ref({
+    created_by: request.value.created_by,
+    amount: request.value.amount,
+    title: request.value.title,
+    content: request.value.content,
+    targets: targetIds,
+    tags: tagIds,
+    group: request.value.group.id
+  })
+  function changeEditMode(
+    kind: 'title' | 'content' | 'amount' | 'group' | 'tags' | 'targets' | ''
+  ) {
+    if (
+      editMode.value === 'amount' &&
+      kind === '' &&
+      !/^[1-9][0-9]*$|^0$/.test(editedValue.value.amount.toString())
+    ) {
+      alert('金額の形式が不正です')
+      return
+    }
+    if (editMode.value !== 'tags' && kind === '') {
+      const result = confirm(
+        '入出金記録に紐づいている申請のこの情報を変更すると、入出金記録の情報にも変更が反映されます。よろしいですか？'
+      )
+      if (!result) return
+    }
+    if (kind !== '') {
+      editMode.value = kind
+    } else {
+      putRequest(request.value.id, editedValue.value)
+      editMode.value = ''
+    }
+  }
 
   const fetchRequestDetail = async (id: string) => {
     request.value = (await apis.getRequestDetail(id)).data
@@ -136,6 +170,9 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     files,
     targetIds,
     tagIds,
+    editMode,
+    editedValue,
+    changeEditMode,
     fetchRequestDetail,
     putRequest,
     fetchFiles

@@ -7,7 +7,7 @@ interface File {
   src: string
 }
 interface Props {
-  value: File[]
+  images: File[]
 }
 const props = defineProps<Props>()
 const emit = defineEmits<{ (e: 'input', value: File[]): void }>()
@@ -23,7 +23,7 @@ function handleImageChange(e: Event) {
         reader.readAsDataURL(file)
         reader.onload = () => {
           emit('input', [
-            ...props.value,
+            ...props.images,
             { name: file.name, src: reader.result as string }
           ])
         }
@@ -38,7 +38,7 @@ function handleImageChange(e: Event) {
 function deleteImage(index: number) {
   emit(
     'input',
-    props.value.filter((_, i) => index !== i)
+    props.images.filter((_, i) => index !== i)
   )
 }
 </script>
@@ -54,9 +54,9 @@ function deleteImage(index: number) {
       @change="e => handleImageChange(e)" />
   </div>
   <div>
-    <div v-if="value.length === 0">画像プレビュー</div>
-    <div v-if="value.length !== 0" class="flex flex-wrap">
-      <div v-for="(image, index) in value" :key="index" class="relative">
+    <div v-if="images.length === 0">画像プレビュー</div>
+    <div v-if="images.length !== 0" class="flex flex-wrap">
+      <div v-for="(image, index) in images" :key="index" class="relative">
         <img :alt="image.name" class="h-32" :src="image.src" />
         <button
           class="absolute top-0 right-0 w-6 h-6"

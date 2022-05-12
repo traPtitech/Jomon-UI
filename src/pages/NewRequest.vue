@@ -97,7 +97,7 @@ async function postRequest() {
         </div>
       </div>
       <NewRequestContentForm
-        :value="request.content"
+        :content="request.content"
         @input="request.content = $event" />
       <div class="flex flex-col">
         <label>払い戻し対象者</label>
@@ -140,7 +140,7 @@ async function postRequest() {
           </Button>
         </div>
       </div>
-      <NewRequestImageForm :value="images" @input="images = $event" />
+      <NewRequestImageForm :images="images" @input="images = $event" />
       <div class="text-right">
         <Button
           class="w-48 mb-4"

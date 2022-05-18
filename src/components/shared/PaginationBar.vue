@@ -4,7 +4,7 @@ import { computed } from 'vue'
 
 import PageLink from './PageLink.vue'
 
-type Props = {
+interface Props {
   path: string
   currentPage: number
   totalPages: number

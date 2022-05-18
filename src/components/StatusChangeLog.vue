@@ -7,7 +7,9 @@ import { formatDateAndTime } from '/@/lib/date'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
 const requestDetailStore = useRequestDetailStore()
-type Props = { index: number }
+interface Props {
+  index: number
+}
 const props = defineProps<Props>()
 </script>
 

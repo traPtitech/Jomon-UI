@@ -14,7 +14,10 @@ export type RequestStatus =
   | 'completed'
   | 'rejected'
 
-type Props = { status: RequestStatus; hasText: boolean }
+interface Props {
+  status: RequestStatus
+  hasText: boolean
+}
 
 withDefaults(defineProps<Props>(), {
   hasText: false

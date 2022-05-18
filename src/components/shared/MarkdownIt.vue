@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import MarkdownIt from 'markdown-it'
 
-type Props = { text: string }
+interface Props {
+  text: string
+}
 defineProps<Props>()
 const md = MarkdownIt({
   breaks: true,
@@ -10,5 +12,6 @@ const md = MarkdownIt({
 </script>
 
 <template>
-  <div class="prose break-words" v-html="md.render(text)" />
+  <!--eslint-disable-next-line vue/no-v-html-->
+  <div class="prose break-words max-w-full" v-html="md.render(text)" />
 </template>

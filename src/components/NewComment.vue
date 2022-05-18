@@ -9,28 +9,26 @@ import { useRequestDetailStore } from '/@/stores/requestDetail'
 const requestDetailStore = useRequestDetailStore()
 const comment = ref('')
 
-async function postComment(id: string, comment: string) {
-  await apis.postComment(id, { comment: comment })
-  requestDetailStore.fetchRequestDetail(id)
-}
-function submit() {
-  postComment(requestDetailStore.request.id, comment.value)
+async function submit() {
+  await apis.postComment(requestDetailStore.request.id, {
+    comment: comment.value
+  })
   comment.value = ''
 }
 </script>
 
 <template>
-  <div class="mt-12 mx-4">
+  <form class="pt-12 px-4">
     <textarea
       v-model="comment"
-      class="resize-none h-32 w-full p-1 rounded"
+      class="min-h-32 w-full p-1 rounded"
       placeholder="コメント" />
     <div class="text-right">
       <Button
-        class="w-24 mr-4 mt-2"
+        class="ml-auto mt-2 block"
         font-size="md"
         padding="sm"
-        @click="submit">
+        @click.prevent="submit">
         コメントする
       </Button>
     </div>
@@ -40,5 +38,5 @@ function submit() {
         :class="comment ? 'p-1 border border-gray-200' : ''"
         :text="comment" />
     </details>
-  </div>
+  </form>
 </template>

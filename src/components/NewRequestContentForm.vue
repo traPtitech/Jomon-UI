@@ -52,8 +52,9 @@ function setTemplate(selectedTemplate: string | null) {
   </div>
   <details class="mb-2">
     <summary>MDプレビュー</summary>
-    <div class="px-2 w-full" :class="content ? 'border border-gray-200' : ''">
-      <MarkdownIt class="w-full" :text="content" />
-    </div>
+    <MarkdownIt
+      class="w-full px-1"
+      :class="content ? 'border border-gray-200' : ''"
+      :text="content" />
   </details>
 </template>

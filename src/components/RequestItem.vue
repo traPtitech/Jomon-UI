@@ -6,7 +6,9 @@ import Tags from './shared/Tags.vue'
 import type { Request } from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
 
-type Props = { request: Request }
+interface Props {
+  request: Request
+}
 
 defineProps<Props>()
 </script>

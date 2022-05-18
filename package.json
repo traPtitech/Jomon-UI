@@ -14,8 +14,6 @@
     "postinstall": "npm run gen-api"
   },
   "dependencies": {
-    "@heroicons/vue": "^1.0.5",
-    "@types/luxon": "^2.3.2",
     "axios": "^0.26.0",
     "jenesius-vue-modal": "^1.5.0",
     "luxon": "^2.4.0",
@@ -26,6 +24,8 @@
     "vue-select": "^4.0.0-beta.3"
   },
   "devDependencies": {
+    "@heroicons/vue": "^1.0.5",
+    "@types/luxon": "^2.3.2",
     "@openapitools/openapi-generator-cli": "^2.4.26",
     "@trivago/prettier-plugin-sort-imports": "^3.2.0",
     "@types/markdown-it": "^12.2.3",

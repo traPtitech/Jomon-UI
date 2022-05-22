@@ -10,9 +10,12 @@ const requestDetailStore = useRequestDetailStore()
 const comment = ref('')
 
 async function submit() {
-  await apis.postComment(requestDetailStore.request.id, {
-    comment: comment.value
-  })
+  const res = (
+    await apis.postComment(requestDetailStore.request.id, {
+      comment: comment.value
+    })
+  ).data
+  requestDetailStore.request.comments.push(res)
   comment.value = ''
 }
 </script>

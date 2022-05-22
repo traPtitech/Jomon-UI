@@ -11,8 +11,8 @@ const tagName = ref('')
 
 async function postTag() {
   if (tagName.value !== '') {
-    await apis.postTag({ name: tagName.value })
-    tagStore.fetchTags()
+    const res = (await apis.postTag({ name: tagName.value })).data
+    tagStore.tags.push(res)
     closeModal()
   }
 }

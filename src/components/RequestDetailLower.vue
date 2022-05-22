@@ -19,7 +19,7 @@ const requestDetailStore = useRequestDetailStore()
       v-if="!(requestDetailStore.editMode === 'content')"
       class="flex items-start">
       <MarkdownIt
-        class="pl-1 h-32 w-200 border border-gray-300 overflow-y-scroll"
+        class="pl-2 h-32 w-200 border border-gray-300 overflow-y-scroll"
         :text="requestDetailStore.request.content" />
       <EditButton
         v-if="requestDetailStore.request.created_by === userStore.me.name"

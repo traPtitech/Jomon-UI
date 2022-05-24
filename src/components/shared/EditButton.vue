@@ -4,6 +4,6 @@ import { PencilIcon } from '@heroicons/vue/solid'
 
 <template>
   <button class="inline-block">
-    <PencilIcon class="h-5 w-5 text-gray-400 opacity-50" />
+    <PencilIcon class="h-5 w-5" />
   </button>
 </template>

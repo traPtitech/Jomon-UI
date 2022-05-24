@@ -1,15 +1,14 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-import RequestDetailLower from '../components/RequestDetailLower.vue'
-import { toId } from '../lib/parsePathParams'
 import NewComment from '/@/components/NewComment.vue'
+import RequestDetailLower from '/@/components/RequestDetailLower.vue'
 import RequestDetailUpper from '/@/components/RequestDetailUpper.vue'
 import RequestLogs from '/@/components/RequestLogs.vue'
 import Button from '/@/components/shared/Button.vue'
 import apis from '/@/lib/apis'
+import { toId } from '/@/lib/parsePathParams'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTransactionStore } from '/@/stores/transaction'
 

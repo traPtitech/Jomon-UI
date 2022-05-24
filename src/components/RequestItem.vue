@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { DateTime } from 'luxon'
-
 import StatusChip from './shared/StatusChip.vue'
 import Tags from './shared/Tags.vue'
 import type { Request } from '/@/lib/apis'
@@ -10,7 +8,8 @@ interface Props {
   request: Request
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+const formattedDate = formatDate(props.request.created_at)
 </script>
 
 <template>
@@ -29,9 +28,7 @@ defineProps<Props>()
         <div class="flex gap-4">
           <span>グループ：{{ request.group.name }}</span>
           <span>申請者：{{ request.created_by }}</span>
-          <span>
-            申請日：{{ formatDate(DateTime.fromISO(request.created_at)) }}
-          </span>
+          <span> 申請日：{{ formattedDate }} </span>
         </div>
         <div class="text-right text-3xl">{{ request.amount }}円</div>
       </div>

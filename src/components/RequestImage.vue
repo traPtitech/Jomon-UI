@@ -11,7 +11,7 @@ async function deleteFile(id: string) {
 
 <template>
   <div>
-    <div v-if="requestDetailStore.files.length" class="mt-4 ml-4 mr-4">
+    <div v-if="requestDetailStore.files.length" class="mt-4 mx-4">
       <details>
         <summary>画像</summary>
         <div class="flex flex-wrap">

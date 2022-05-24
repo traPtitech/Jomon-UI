@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { DateTime } from 'luxon'
-
 import StatusChangeButtons from './StatusChangeButtons.vue'
 import Button from './shared/Button.vue'
 import EditButton from './shared/EditButton.vue'
@@ -14,6 +12,7 @@ import { useUserStore } from '/@/stores/user'
 const groupStore = useGroupStore()
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
+const formattedDate = formatDate(requestDetailStore.request.created_at)
 </script>
 
 <template>
@@ -69,11 +68,7 @@ const requestDetailStore = useRequestDetailStore()
         </Button>
       </div>
       <span>申請者：{{ requestDetailStore.request.created_by }}</span>
-      <span>
-        申請日：{{
-          formatDate(DateTime.fromISO(requestDetailStore.request.created_at))
-        }}
-      </span>
+      <span> 申請日：{{ formattedDate }} </span>
       <div
         v-if="!(requestDetailStore.editMode === 'amount')"
         class="flex items-center">

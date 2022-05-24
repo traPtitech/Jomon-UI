@@ -1,37 +1,29 @@
 <script lang="ts" setup>
-import { DateTime } from 'luxon'
-
+import type { RequestStatus } from './shared/StatusChip.vue'
 import StatusChip from './shared/StatusChip.vue'
 import UserIcon from './shared/UserIcon.vue'
 import { formatDateAndTime } from '/@/lib/date'
-import { useRequestDetailStore } from '/@/stores/requestDetail'
 
-const requestDetailStore = useRequestDetailStore()
 interface Props {
-  index: number
+  log: {
+    created_by: string
+    status: RequestStatus
+    created_at: string
+  }
 }
 const props = defineProps<Props>()
+const formattedDateAndTime = formatDateAndTime(props.log.created_at)
 </script>
 
 <template>
-  <div class="m-2 w-4/7 ml-10 h-12 flex items-center">
-    <UserIcon
-      class="mr-2 w-12"
-      :name="requestDetailStore.request.statuses[props.index].created_by" />
-    {{ requestDetailStore.request.statuses[props.index].created_by }}
+  <div class="w-5/7 pl-12 flex items-center">
+    <UserIcon class="mr-2 w-12" :name="log.created_by" />
+    {{ log.created_by }}
     が申請の状態を
-    <StatusChip
-      has-text
-      :status="requestDetailStore.request.statuses[props.index].status" />
+    <StatusChip has-text :status="log.status" />
     にしました。
-    <div class="ml-auto text-zinc-400">
-      {{
-        formatDateAndTime(
-          DateTime.fromISO(
-            requestDetailStore.request.statuses[props.index].created_at
-          )
-        )
-      }}
+    <div class="ml-auto">
+      {{ formattedDateAndTime }}
     </div>
   </div>
 </template>

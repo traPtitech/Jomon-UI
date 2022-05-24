@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue'
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { toPage } from '../lib/parseQueryParams'

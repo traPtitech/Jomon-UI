@@ -13,7 +13,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/requests/:id',
-    component: () => import('./pages/RequestDetails.vue')
+    component: () => import('./pages/RequestDetail.vue')
   },
   {
     path: '/transactions',

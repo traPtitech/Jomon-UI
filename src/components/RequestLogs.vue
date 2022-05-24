@@ -45,18 +45,31 @@ const logs = () => {
 </script>
 
 <template>
-  <div class="w-2/3 h-120 ml-12">
-    <div class="overflow-y-scroll h-full">
-      <RequestImage />
-      <ul>
-        <li v-for="log in logs()" :key="log.created_at.toDateString">
-          <CommentLog v-if="log.kind === 'comment'" :index="log.index" />
-          <StatusChangeLog
-            v-if="log.kind === 'statusChange'"
-            :index="log.index" />
-          <div class="h-6 w-1 bg-zinc-300 ml-15.5" />
-        </li>
-      </ul>
-    </div>
+  <div class="overflow-y-scroll h-full p-2 w-2/3 h-120">
+    <RequestImage />
+    <ul>
+      <li
+        v-for="log in logs()"
+        :key="log.created_at.toDateString"
+        class="vertical-bar">
+        <CommentLog
+          v-if="log.kind === 'comment'"
+          :log="requestDetailStore.request.comments[log.index]" />
+        <StatusChangeLog
+          v-if="log.kind === 'statusChange'"
+          :log="requestDetailStore.request.statuses[log.index]" />
+      </li>
+    </ul>
   </div>
 </template>
+
+<style scoped>
+.vertical-bar::after {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 36px;
+  background-color: #d4d4d8;
+  margin-left: 70px;
+}
+</style>

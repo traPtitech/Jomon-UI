@@ -33,14 +33,14 @@ function changeCurrentTab(tab: TabType) {
 <template>
   <div class="flex gap-2">
     <button
-      :class="`w-20 rounded-t ${
+      :class="`w-20 py-1 rounded-t ${
         currentTab === 'input' ? 'bg-gray-400' : 'bg-gray-200'
       }`"
       @click.prevent="() => changeCurrentTab('input')">
       入力
     </button>
     <button
-      :class="`w-20 rounded-t ${
+      :class="`w-20 py-1 rounded-t ${
         currentTab === 'preview' ? 'bg-gray-400' : 'bg-gray-200'
       }`"
       @click.prevent="() => changeCurrentTab('preview')">

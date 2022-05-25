@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 
 import Button from './shared/Button.vue'
-import MarkdownPreview from './shared/MarkdownPreview.vue'
+import MarkdownTextarea from './shared/MarkdownTextarea.vue'
 import apis from '/@/lib/apis'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
@@ -22,7 +22,7 @@ async function submit() {
 
 <template>
   <form class="pl-4">
-    <MarkdownPreview
+    <MarkdownTextarea
       placeholder="コメント"
       :value="comment"
       @input="comment = $event" />

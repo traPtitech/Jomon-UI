@@ -3,13 +3,15 @@ import { openModal } from 'jenesius-vue-modal'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import NewRequestContentForm from '../components/NewRequestContentForm.vue'
 import NewRequestImageForm from '../components/NewRequestImageForm.vue'
+import MarkdownTextarea from '../components/shared/MarkdownTextarea.vue'
 import NewTagModal from '/@/components/modal/NewTagModal.vue'
 import Button from '/@/components/shared/Button.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import type { Request } from '/@/lib/apis'
 import apis from '/@/lib/apis'
+import clubBudgetRequestTemplate from '/@/md/clubBudgetRequest.md?raw'
+import travelingExpenseRequestTemplate from '/@/md/travelingExpenseRequest.md?raw'
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
@@ -32,6 +34,11 @@ const router = useRouter()
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
+
+const templates = [
+  { name: '部費利用申請', value: clubBudgetRequestTemplate },
+  { name: '交通費申請', value: travelingExpenseRequestTemplate }
+]
 
 const request = ref({
   created_by: userStore.me.name,
@@ -96,9 +103,14 @@ async function postRequest() {
             class="h-8 p-1 border border-gray-300 rounded" />円
         </div>
       </div>
-      <NewRequestContentForm
-        :content="request.content"
-        @input="request.content = $event" />
+      <div class="flex flex-col">
+        <label>詳細</label>
+        <MarkdownTextarea
+          placeholder=""
+          :templates="templates"
+          :value="request.content"
+          @input="request.content = $event" />
+      </div>
       <div class="flex flex-col">
         <label>払い戻し対象者</label>
         <VueSelect

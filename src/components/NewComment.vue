@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 
 import Button from './shared/Button.vue'
-import MarkdownIt from './shared/MarkdownIt.vue'
+import MarkdownPreview from './shared/MarkdownPreview.vue'
 import apis from '/@/lib/apis'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
@@ -21,25 +21,15 @@ async function submit() {
 </script>
 
 <template>
-  <form class="pt-12 px-4">
-    <textarea
-      v-model="comment"
-      class="min-h-32 w-full p-1 rounded"
-      placeholder="コメント" />
-    <div class="text-right">
-      <Button
-        class="ml-auto mt-2 block"
-        font-size="md"
-        padding="sm"
-        @click.prevent="submit">
+  <form class="pl-4">
+    <MarkdownPreview
+      placeholder="コメント"
+      :value="comment"
+      @input="comment = $event" />
+    <div class="text-right mt-2">
+      <Button font-size="md" padding="sm" @click.prevent="submit">
         コメントする
       </Button>
     </div>
-    <details class="w-full">
-      <summary>MDプレビュー</summary>
-      <MarkdownIt
-        :class="comment ? 'p-1 border border-gray-200' : ''"
-        :text="comment" />
-    </details>
   </form>
 </template>

@@ -58,8 +58,8 @@ async function postFile(requestId: string, name: string, file: string) {
 async function postRequest() {
   if (
     !/^[1-9][0-9]*$|^0$/.test(request.value.amount.toString()) ||
-    !request.value.title ||
-    !request.value.content ||
+    request.value.title !== '' ||
+    request.value.content !== '' ||
     request.value.targets.length === 0
   ) {
     alert('形式が不正です')
@@ -69,13 +69,21 @@ async function postRequest() {
     ...request.value,
     group: request.value.group !== null ? request.value.group : ''
   }
-  const response: Request = (await apis.postRequest(requestRequest)).data
-  const id = response.id
-  images.value.forEach(image => {
-    postFile(id, image.name, image.src)
-  })
-  alert('申請を作成しました')
-  router.push('/')
+  try {
+    const response: Request = (await apis.postRequest(requestRequest)).data
+    const id = response.id
+    try {
+      images.value.forEach(image => {
+        postFile(id, image.name, image.src)
+      })
+      alert('申請を作成しました')
+      router.push('/')
+    } catch (err: any) {
+      alert(err.response.data)
+    }
+  } catch (err: any) {
+    alert(err.response.data)
+  }
 }
 </script>
 

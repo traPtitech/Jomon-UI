@@ -10,13 +10,22 @@ const requestDetailStore = useRequestDetailStore()
 const comment = ref('')
 
 async function submit() {
-  const res = (
-    await apis.postComment(requestDetailStore.request.id, {
-      comment: comment.value
-    })
-  ).data
-  requestDetailStore.request.comments.push(res)
-  comment.value = ''
+  if (comment.value === '') {
+    alert('1文字以上入力してください')
+    return
+  }
+  try {
+    const response = (
+      await apis.postComment(requestDetailStore.request.id, {
+        comment: comment.value
+      })
+    ).data
+    requestDetailStore.request.comments.push(response)
+    comment.value = ''
+  } catch (err: any) {
+    const errData = err.response.data
+    alert(errData)
+  }
 }
 </script>
 

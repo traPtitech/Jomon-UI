@@ -11,19 +11,9 @@ export const useAdminStore = defineStore('admin', () => {
     admins.value = (await apis.getAdmins()).data
     isAdminFetched.value = true
   }
-  const postAdmins = async (ids: string[]) => {
-    await apis.postAdmins(ids)
-    admins.value = admins.value.concat(ids)
-  }
-  const deleteAdmins = async (ids: string[]) => {
-    await apis.deleteAdmins(ids)
-    admins.value = admins.value.filter(id => !ids.includes(id))
-  }
   return {
     admins,
     isAdminFetched,
-    fetchAdmins,
-    postAdmins,
-    deleteAdmins
+    fetchAdmins
   }
 })

@@ -18,14 +18,24 @@ const comment = ref('')
 const requestDetailStore = useRequestDetailStore()
 
 async function putStatus(nextStatus: StatusEnum | '', comment: string) {
-  if (nextStatus === '') return
+  if (nextStatus === '') {
+    alert('エラーが発生しました')
+    return
+  }
   const statusRequest = {
     status: nextStatus,
     comment: comment
   }
-  await apis.putStatus(requestDetailStore.request.id, statusRequest)
-  requestDetailStore.fetchRequestDetail(requestDetailStore.request.id)
-  closeModal()
+  try {
+    const response = (
+      await apis.putStatus(requestDetailStore.request.id, statusRequest)
+    ).data
+    requestDetailStore.request.status = nextStatus
+    requestDetailStore.request.statuses.push(response)
+    closeModal()
+  } catch (err: any) {
+    alert(err.response.data)
+  }
 }
 </script>
 

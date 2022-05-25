@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 
+import apis from '../lib/apis'
 import Button from '/@/components/shared/Button.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import { useAdminStore } from '/@/stores/admin'
@@ -8,8 +9,8 @@ import { useUserStore } from '/@/stores/user'
 
 const adminStore = useAdminStore()
 const userStore = useUserStore()
-const addList = ref([] as string[])
-const deleteList = ref([] as string[])
+const addList = ref<string[]>([])
+const deleteList = ref<string[]>([])
 
 onMounted(() => {
   if (userStore.me.admin) {
@@ -22,11 +23,31 @@ onMounted(() => {
   }
 })
 
-const deleteAdmins = () => {
-  adminStore.deleteAdmins(deleteList.value)
+const deleteAdmins = async () => {
+  if (deleteList.value.length === 0) {
+    alert('1人以上選択して下さい')
+    return
+  }
+  try {
+    await apis.deleteAdmins(deleteList.value)
+    adminStore.admins = adminStore.admins.filter(
+      id => !deleteList.value.includes(id)
+    )
+  } catch (err: any) {
+    alert(err.response.data)
+  }
 }
-const addAdmins = () => {
-  adminStore.postAdmins(addList.value)
+const addAdmins = async () => {
+  if (addList.value.length === 0) {
+    alert('1人以上選択して下さい')
+    return
+  }
+  try {
+    await apis.postAdmins(addList.value)
+    adminStore.admins = adminStore.admins.concat(addList.value)
+  } catch (err: any) {
+    alert(err.response.data)
+  }
 }
 </script>
 

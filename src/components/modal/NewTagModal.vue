@@ -10,10 +10,16 @@ const tagStore = useTagStore()
 const tagName = ref('')
 
 async function postTag() {
-  if (tagName.value !== '') {
-    const res = (await apis.postTag({ name: tagName.value })).data
-    tagStore.tags.push(res)
+  if (tagName.value === '') {
+    alert('1文字以上入力してください')
+    return
+  }
+  try {
+    const response = (await apis.postTag({ name: tagName.value })).data
+    tagStore.tags.push(response)
     closeModal()
+  } catch (err: any) {
+    alert(err.response.data)
   }
 }
 </script>

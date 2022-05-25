@@ -31,8 +31,10 @@ const addAdmins = () => {
 </script>
 
 <template>
-  <div v-if="userStore.me.admin" class="ml-4">
-    <h1 class="text-center py-8 text-3xl">管理ページ</h1>
+  <div
+    v-if="userStore.me.admin"
+    class="flex flex-col mx-auto min-w-160 w-2/3 pt-8 px-12">
+    <h1 class="text-center pb-8 text-3xl">管理ページ</h1>
     <div>
       <ul class="flex gap-2">
         <li v-for="admin in adminStore.admins" :key="admin">
@@ -42,10 +44,10 @@ const addAdmins = () => {
         </li>
       </ul>
     </div>
-    <div class="mt-4">
+    <div class="mt-4 flex gap-4">
       <VueSelect
         v-model="addList"
-        class="mb-4 w-1/2"
+        class="w-1/2"
         label="name"
         multiple
         :options="userStore.users"
@@ -55,10 +57,10 @@ const addAdmins = () => {
         選択した管理者を追加
       </Button>
     </div>
-    <div class="mt-12">
+    <div class="mt-12 flex gap-4">
       <VueSelect
         v-model="deleteList"
-        class="mb-4 w-1/2"
+        class="w-1/2"
         multiple
         :options="adminStore.admins"
         placeholder="削除する管理者を選択" />

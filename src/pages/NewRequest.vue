@@ -73,8 +73,8 @@ async function postRequest() {
 </script>
 
 <template>
-  <div class="flex flex-col mx-auto min-w-160 w-2/3">
-    <div class="py-8">
+  <div class="flex flex-col mx-auto min-w-160 w-2/3 pt-8 px-12">
+    <div class="pb-8">
       <h1 class="text-center text-3xl">申請の新規作成</h1>
     </div>
     <div class="flex flex-col gap-2">

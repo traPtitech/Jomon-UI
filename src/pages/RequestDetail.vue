@@ -37,10 +37,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="pt-4 px-12">
-    <RequestDetailUpper />
-    <RequestDetailLower />
-    <div class="w-19/20 border border-gray-200 bg-gray-200 mx-auto my-4" />
+  <div class="flex flex-col mx-auto min-w-160 px-12 pt-4">
+    <div class="bar">
+      <RequestDetailUpper />
+      <RequestDetailLower />
+    </div>
     <div class="flex">
       <RequestLogs />
       <div class="w-1/3">
@@ -61,3 +62,13 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.bar::after {
+  content: '';
+  display: block;
+  border: 1px solid #e5e7eb;
+  margin: 12px auto;
+  background-color: #e5e7eb;
+}
+</style>

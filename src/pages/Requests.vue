@@ -51,8 +51,8 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col mx-auto min-w-160 w-2/3">
-    <div class="flex w-full py-8 justify-center items-center relative">
+  <div class="flex flex-col mx-auto min-w-160 w-2/3 pt-8 px-12">
+    <div class="flex w-full pb-8 justify-center items-center relative">
       <h1 class="text-3xl text-center">申請一覧</h1>
       <div class="right-0 absolute">
         <router-link to="/requests/new">

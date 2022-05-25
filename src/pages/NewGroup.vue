@@ -45,66 +45,64 @@ async function handlePostGroup() {
 
 <!-- TODO: inputのon-focus -->
 <template>
-  <div>
-    <div class="flex flex-col mx-auto min-w-160 w-2/3">
-      <div class="py-8">
-        <h1 class="text-center text-3xl">グループの新規作成</h1>
+  <div class="flex flex-col mx-auto min-w-160 w-2/3 pt-8 px-12">
+    <div class="pb-8">
+      <h1 class="text-center text-3xl">グループの新規作成</h1>
+    </div>
+    <div class="flex flex-col gap-2">
+      <div class="flex flex-col">
+        <label>グループ名</label>
+        <input
+          v-model="group.name"
+          class="border rounded border-gray-300 py-1 px-2" />
       </div>
-      <div class="flex flex-col gap-2">
-        <div class="flex flex-col">
-          <label>グループ名</label>
+      <div class="flex flex-col">
+        <label>詳細</label>
+        <textarea
+          v-model="group.description"
+          class="border rounded border-gray-300 min-h-36 py-1 px-2" />
+      </div>
+      <div class="flex flex-col">
+        <label>予算</label>
+        <div>
           <input
-            v-model="group.name"
-            class="border rounded border-gray-300 py-1 px-2" />
+            v-model="group.budget"
+            class="border rounded border-gray-300 py-1 px-2 w-2/5" />円
         </div>
-        <div class="flex flex-col">
-          <label>詳細</label>
-          <textarea
-            v-model="group.description"
-            class="border rounded border-gray-300 min-h-36 py-1 px-2" />
-        </div>
-        <div class="flex flex-col">
-          <label>予算</label>
-          <div>
-            <input
-              v-model="group.budget"
-              class="border rounded border-gray-300 py-1 px-2 w-2/5" />円
-          </div>
-        </div>
-        <div class="flex flex-col">
-          <label>オーナー</label>
-          <VueSelect
-            v-model="group.owners"
-            :close-on-select="false"
-            label="name"
-            multiple
-            :options="userStore.users"
-            placeholder="追加するオーナーを選択"
-            :reduce="(user:any) => user.name" />
-          <span class="text-sm">
-            注意：オーナーは自動でメンバーには入りません。
-          </span>
-        </div>
-        <div class="flex flex-col">
-          <label>メンバー</label>
-          <VueSelect
-            v-model="group.members"
-            :close-on-select="false"
-            label="name"
-            multiple
-            :options="userStore.users"
-            placeholder="追加するメンバーを選択"
-            :reduce="(user:any) => user.name" />
-        </div>
-        <div class="w-full relative">
-          <Button
-            class="mt-8 right-0 absolute"
-            font-size="xl"
-            padding="md"
-            @clock.stop="handlePostGroup">
-            グループを作成する
-          </Button>
-        </div>
+      </div>
+      <div class="flex flex-col">
+        <label>オーナー</label>
+        <VueSelect
+          v-model="group.owners"
+          :close-on-select="false"
+          label="name"
+          multiple
+          :options="userStore.users"
+          placeholder="追加するオーナーを選択"
+          :reduce="(user:any) => user.name" />
+        <span class="text-sm">
+          注意：オーナーは自動でメンバーには入りません。
+        </span>
+      </div>
+      <div class="flex flex-col">
+        <label>メンバー</label>
+        <VueSelect
+          v-model="group.members"
+          :close-on-select="false"
+          label="name"
+          multiple
+          :options="userStore.users"
+          placeholder="追加するメンバーを選択"
+          :reduce="(user:any) => user.name" />
+      </div>
+      <div class="w-full relative">
+        <Button
+          class="mt-8 right-0 absolute"
+          font-size="xl"
+          padding="md"
+          @clock.stop="handlePostGroup">
+          グループを作成する
+        </Button>
       </div>
     </div>
   </div>

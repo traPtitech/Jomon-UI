@@ -40,16 +40,16 @@ const templates = [
   { name: '交通費申請', value: travelingExpenseRequestTemplate }
 ]
 
-const request = ref({
+const request = ref<RequestRequest>({
   created_by: userStore.me.name,
   amount: 0,
   title: '',
-  targets: [] as string[],
+  targets: [],
   content: '',
-  tags: [] as string[],
+  tags: [],
   group: null
-} as RequestRequest)
-const images = ref([] as File[])
+})
+const images = ref<File[]>([])
 
 async function postFile(requestId: string, name: string, file: string) {
   await apis.postFile(file, name, requestId)

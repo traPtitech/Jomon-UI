@@ -5,12 +5,12 @@ import MarkdownIt from './MarkdownIt.vue'
 import VueSelect from './VueSelect.vue'
 
 interface Props {
-  placeholder: string
+  placeholder?: string
   value: string
   templates?: { name: string; value: string }[]
 }
 type TabType = 'input' | 'preview'
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), { placeholder: '' })
 
 const emit = defineEmits<{ (e: 'input', value: string): void }>()
 const currentTab = ref<TabType>('input')

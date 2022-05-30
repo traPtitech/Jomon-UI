@@ -19,9 +19,9 @@ const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const transaction = ref({
   amount: requestId ? requestDetailStore.request.amount : 0,
-  targets: requestId ? requestDetailStore.targetIds : ([] as string[]),
+  targets: requestId ? requestDetailStore.targetIds : [],
   request: requestId,
-  tags: requestId ? requestDetailStore.tagIds : ([] as string[]),
+  tags: requestId ? requestDetailStore.tagIds : [],
   group: requestId ? requestDetailStore.request.group.id : ''
 })
 async function postTransaction() {

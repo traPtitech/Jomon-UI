@@ -16,8 +16,8 @@ const group = ref({
   name: '',
   description: '',
   budget: 0,
-  owners: [] as string[],
-  members: [] as string[]
+  owners: [],
+  members: []
 })
 
 async function handlePostGroup() {

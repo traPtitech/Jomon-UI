@@ -77,7 +77,7 @@ function changeFixMode(kind: 'name' | 'description' | '') {
     <div class="flex items-center">
       このグループの入出金記録へ
       <router-link :to="`/transactions?group=${groupStore.group.id}`">
-        <ExternalLinkIcon class="w-8" />
+        <ExternalLinkIcon class="w-6" />
       </router-link>
     </div>
   </div>

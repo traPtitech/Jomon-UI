@@ -42,8 +42,8 @@ export const useGroupStore = defineStore('group', () => {
     groups.value = (await apis.getGroups()).data
     isGroupFetched.value = true
   }
-  const fetchGroup = async () => {
-    group.value = (await apis.getGroupDetail()).data
+  const fetchGroup = async (id: string) => {
+    group.value = (await apis.getGroupDetail(id)).data
     isGroupFetched.value = true
   }
   const postGroup = async (group: PostGroup) => {

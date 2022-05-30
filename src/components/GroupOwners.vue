@@ -12,48 +12,47 @@ const userStore = useUserStore()
 const { users } = storeToRefs(userStore)
 const groupStore = useGroupStore()
 const { group } = storeToRefs(groupStore)
-const willAddMembers = ref<string[]>([])
+const willAddOwners = ref<string[]>([])
 
-function handleDeleteMember(id: string) {
-  groupStore.deleteGroupMember(group.value.id, [id])
-}
-
-function handleAddMember(members: string[]) {
-  if (members.length !== 0) {
-    groupStore.postGroupOwner(group.value.id, members)
+function handleAddOwner(owners: string[]) {
+  if (owners.length !== 0) {
+    groupStore.postGroupMember(group.value.id, owners)
   }
+}
+function handleDeleteOwner(id: string) {
+  groupStore.deleteGroupOwner(group.value.id, [id])
 }
 </script>
 
 <template>
   <div
     class="relative border border-gray-400 h-1/2 flex flex-col justify-between">
-    <h2 class="absolute -top-3 left-2 px-2 bg-white">グループメンバー</h2>
+    <h2 class="absolute -top-3 left-2 px-2 bg-white">グループオーナー</h2>
     <ul class="p-4 overflow-y-scroll h-full">
       <li
-        v-for="member in group.members"
-        :key="member"
+        v-for="owner in group.owners"
+        :key="owner"
         class="flex items-center justify-between">
         <div>
-          <UserIcon class="w-12 inline" :name="member" />
-          {{ member }}
+          <UserIcon class="w-12 inline" :name="owner" />
+          {{ owner }}
         </div>
-        <button @click="handleDeleteMember(member)">
+        <button @click="handleDeleteOwner(owner)">
           <MinusSmIcon class="w-8" />
         </button>
       </li>
     </ul>
     <div class="flex p-2">
       <VueSelect
-        v-model="willAddMembers"
+        v-model="willAddOwners"
         class="flex-grow"
         :close-on-select="false"
         label="name"
         multiple
         :options="users"
-        placeholder="追加するメンバーを選択"
+        placeholder="追加するオーナーを選択"
         :reduce="(user:any) => user.name" />
-      <button @click="handleAddMember(willAddMembers)">
+      <button @click="handleAddOwner(willAddOwners)">
         <PlusSmIcon class="w-8" />
       </button>
     </div>

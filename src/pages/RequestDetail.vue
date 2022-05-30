@@ -2,12 +2,19 @@
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
+import RequestTags from '../components/requestDetail/RequestTags.vue'
 import NewComment from '/@/components/NewComment.vue'
-import RequestDetailLower from '/@/components/RequestDetailLower.vue'
-import RequestDetailUpper from '/@/components/RequestDetailUpper.vue'
 import RequestLogs from '/@/components/RequestLogs.vue'
+import StatusChangeButtons from '/@/components/StatusChangeButtons.vue'
+import RequestAmount from '/@/components/requestDetail/RequestAmount.vue'
+import RequestContent from '/@/components/requestDetail/RequestContent.vue'
+import RequestGroup from '/@/components/requestDetail/RequestGroup.vue'
+import RequestTargets from '/@/components/requestDetail/RequestTargets.vue'
+import RequestTitle from '/@/components/requestDetail/RequestTitle.vue'
 import Button from '/@/components/shared/Button.vue'
+import StatusChip from '/@/components/shared/StatusChip.vue'
 import apis from '/@/lib/apis'
+import { formatDate } from '/@/lib/date'
 import { toId } from '/@/lib/parsePathParams'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTransactionStore } from '/@/stores/transaction'
@@ -22,6 +29,7 @@ const transactionStore = useTransactionStore()
 const route = useRoute()
 const id = toId(route.params.id)
 const files = ref<File[]>([])
+const formattedDate = formatDate(requestDetailStore.request.created_at)
 
 const fetchFiles = async (ids: string[]) => {
   ids.forEach(async id => {
@@ -39,8 +47,24 @@ onMounted(() => {
 <template>
   <div class="flex flex-col mx-auto min-w-160 px-12 pt-4">
     <div class="bar">
-      <RequestDetailUpper />
-      <RequestDetailLower />
+      <div class="flex justify-between">
+        <div class="flex">
+          <RequestTitle />
+          <StatusChip has-text :status="requestDetailStore.request.status" />
+          <StatusChangeButtons />
+        </div>
+        <div class="flex items-center gap-4">
+          <RequestGroup />
+          <div>申請者：{{ requestDetailStore.request.created_by }}</div>
+          <div>申請日：{{ formattedDate }}</div>
+          <RequestAmount />
+        </div>
+      </div>
+      <RequestTags class="mt-4" />
+      <div class="mt-4 flex gap-20">
+        <RequestContent />
+        <RequestTargets />
+      </div>
     </div>
     <div class="flex">
       <RequestLogs />

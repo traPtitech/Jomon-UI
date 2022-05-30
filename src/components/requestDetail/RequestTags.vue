@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import { openModal } from 'jenesius-vue-modal'
 
-import { useRequestDetailStore } from '../stores/requestDetail'
-import { useTagStore } from '../stores/tag'
-import { useUserStore } from '../stores/user'
-import NewTagModal from './modal/NewTagModal.vue'
-import Button from './shared/Button.vue'
-import EditButton from './shared/EditButton.vue'
-import Tags from './shared/Tags.vue'
-import VueSelect from './shared/VueSelect.vue'
+import NewTagModal from '/@/components/modal/NewTagModal.vue'
+import Button from '/@/components/shared/Button.vue'
+import EditButton from '/@/components/shared/EditButton.vue'
+import Tags from '/@/components/shared/Tags.vue'
+import VueSelect from '/@/components/shared/VueSelect.vue'
+import { useRequestDetailStore } from '/@/stores/requestDetail'
+import { useTagStore } from '/@/stores/tag'
+import { useUserStore } from '/@/stores/user'
 
 const requestDetailStore = useRequestDetailStore()
 const tagStore = useTagStore()
@@ -16,10 +16,10 @@ const userStore = useUserStore()
 </script>
 
 <template>
-  <div class="pt-4">
-    <div v-if="!requestDetailStore.request.tags">タグ：なし</div>
+  <div class="flex">
+    タグ：
+    <div v-if="!requestDetailStore.request.tags">なし</div>
     <div v-else-if="!(requestDetailStore.editMode === 'tags')">
-      タグ：
       <Tags :tags="requestDetailStore.request.tags" />
       <EditButton
         v-if="requestDetailStore.request.created_by === userStore.me.name"
@@ -28,7 +28,6 @@ const userStore = useUserStore()
     <div
       v-else-if="requestDetailStore.editMode === 'tags'"
       class="flex items-center">
-      タグ：
       <VueSelect
         v-model="requestDetailStore.editedValue.tags"
         class="w-200"

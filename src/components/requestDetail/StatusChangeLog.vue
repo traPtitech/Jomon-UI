@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import type { RequestStatus } from './shared/StatusChip.vue'
-import StatusChip from './shared/StatusChip.vue'
-import UserIcon from './shared/UserIcon.vue'
+import type { RequestStatus } from '/@/components/shared/StatusChip.vue'
+import StatusChip from '/@/components/shared/StatusChip.vue'
+import UserIcon from '/@/components/shared/UserIcon.vue'
 import { formatDateAndTime } from '/@/lib/date'
 
 interface Props {

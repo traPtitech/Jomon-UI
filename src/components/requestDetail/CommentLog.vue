@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import MarkdownIt from './shared/MarkdownIt.vue'
-import UserIcon from './shared/UserIcon.vue'
+import MarkdownIt from '/@/components//shared/MarkdownIt.vue'
+import UserIcon from '/@/components/shared/UserIcon.vue'
 import { formatDateAndTime } from '/@/lib/date'
 
 interface Props {

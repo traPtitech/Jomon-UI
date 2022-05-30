@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { openModal } from 'jenesius-vue-modal'
 
-import StatusChangeModal from './modal/StatusChangeModal.vue'
-import Button from './shared/Button.vue'
+import StatusChangeModal from '/@/components/modal/StatusChangeModal.vue'
+import Button from '/@/components/shared/Button.vue'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 

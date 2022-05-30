@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import Button from './shared/Button.vue'
-import MarkdownTextarea from './shared/MarkdownTextarea.vue'
+import Button from '/@/components/shared/Button.vue'
+import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import apis from '/@/lib/apis'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 

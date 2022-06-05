@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import NewRequestImageForm from '/@/components/NewRequestImageForm.vue'
+import NewRequestImageForm from '/@/components/newRequest/NewRequestImageForm.vue'
 import NewRequestSubmitButton from '/@/components/newRequest/NewRequestSubmitButton.vue'
 import NewRequestTag from '/@/components/newRequest/NewRequestTag.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'

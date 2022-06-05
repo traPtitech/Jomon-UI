@@ -1,19 +1,14 @@
 <script lang="ts" setup>
-import { openModal } from 'jenesius-vue-modal'
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 
-import NewRequestImageForm from '../components/NewRequestImageForm.vue'
-import MarkdownTextarea from '../components/shared/MarkdownTextarea.vue'
-import NewTagModal from '/@/components/modal/NewTagModal.vue'
-import Button from '/@/components/shared/Button.vue'
+import NewRequestImageForm from '/@/components/NewRequestImageForm.vue'
+import NewRequestSubmitButton from '/@/components/newRequest/NewRequestSubmitButton.vue'
+import NewRequestTag from '/@/components/newRequest/NewRequestTag.vue'
+import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
-import type { Request } from '/@/lib/apis'
-import apis from '/@/lib/apis'
 import clubBudgetRequestTemplate from '/@/md/clubBudgetRequest.md?raw'
 import travelingExpenseRequestTemplate from '/@/md/travelingExpenseRequest.md?raw'
 import { useGroupStore } from '/@/stores/group'
-import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
 interface File {
@@ -30,9 +25,7 @@ interface RequestRequest {
   group: string | null
 }
 
-const router = useRouter()
 const userStore = useUserStore()
-const tagStore = useTagStore()
 const groupStore = useGroupStore()
 
 const templates = [
@@ -50,41 +43,6 @@ const request = ref<RequestRequest>({
   group: null
 })
 const images = ref<File[]>([])
-
-async function postFile(requestId: string, name: string, file: string) {
-  await apis.postFile(file, name, requestId)
-}
-
-async function postRequest() {
-  if (
-    !/^[1-9][0-9]*$|^0$/.test(request.value.amount.toString()) ||
-    request.value.title !== '' ||
-    request.value.content !== '' ||
-    request.value.targets.length === 0
-  ) {
-    alert('形式が不正です')
-    return
-  }
-  const requestRequest = {
-    ...request.value,
-    group: request.value.group !== null ? request.value.group : ''
-  }
-  try {
-    const response: Request = (await apis.postRequest(requestRequest)).data
-    const id = response.id
-    try {
-      images.value.forEach(image => {
-        postFile(id, image.name, image.src)
-      })
-      alert('申請を作成しました')
-      router.push('/')
-    } catch (err: any) {
-      alert(err.response.data)
-    }
-  } catch (err: any) {
-    alert(err.response.data)
-  }
-}
 </script>
 
 <template>
@@ -139,37 +97,9 @@ async function postRequest() {
           placeholder="グループを選択"
           :reduce="(group:any) => group.id" />
       </div>
-      <div class="flex flex-col">
-        <label>タグ</label>
-        <div class="flex">
-          <VueSelect
-            v-model="request.tags"
-            class="w-2/3"
-            :close-on-select="false"
-            label="name"
-            multiple
-            :options="tagStore.tags"
-            placeholder="タグを選択"
-            :reduce="(tag:any) => tag.id" />
-          <Button
-            class="ml-8"
-            font-size="lg"
-            padding="sm"
-            @click.stop="openModal(NewTagModal)">
-            タグを新規作成
-          </Button>
-        </div>
-      </div>
+      <NewRequestTag :request="request" @input="request.tags = $event" />
       <NewRequestImageForm :images="images" @input="images = $event" />
-      <div class="text-right">
-        <Button
-          class="w-48 mb-4"
-          font-size="xl"
-          padding="sm"
-          @click.stop="postRequest">
-          申請を作成する
-        </Button>
-      </div>
+      <NewRequestSubmitButton :images="images" :request="request" />
     </div>
   </div>
 </template>

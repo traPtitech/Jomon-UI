@@ -1,4 +1,26 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+import Button from './shared/Button.vue'
+import FixButton from './shared/FixButton.vue'
+import { useGroupStore } from '/@/stores/group'
+
+const groupStore = useGroupStore()
+const fixMode = ref('')
+const fixedValue = ref({
+  name: groupStore.group.name,
+  description: groupStore.group.description,
+  budget: groupStore.group.budget
+})
+function changeFixMode(kind: 'name' | 'description' | '') {
+  if (kind !== '') {
+    fixMode.value = kind
+  } else {
+    groupStore.putGroup(groupStore.group.id, fixedValue.value)
+    fixMode.value = ''
+  }
+}
+</script>
 
 <template>
   詳細：

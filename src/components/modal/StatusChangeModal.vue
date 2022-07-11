@@ -40,9 +40,9 @@ async function putStatus(nextStatus: StatusEnum | '', comment: string) {
 </script>
 
 <template>
-  <div class="bg-white pt-8 w-2/5">
+  <div class="w-2/5 bg-white pt-8">
     <h1 class="text-center text-3xl">申請の状態変更</h1>
-    <div class="flex flex-col h-4/5 mx-12 mt-8 gap-4 justify-around">
+    <div class="mx-12 mt-8 flex h-4/5 flex-col justify-around gap-4">
       <div class="flex items-center">
         申請の状態を
         <StatusChip has-text :status="requestDetailStore.request.status" />
@@ -55,7 +55,7 @@ async function putStatus(nextStatus: StatusEnum | '', comment: string) {
           <label>コメント</label>
           <textarea
             v-model="comment"
-            class="border rounded border-gray-300 h-20 p-1 resize-none" />
+            class="h-20 resize-none rounded border border-gray-300 p-1" />
         </div>
         <details class="mb-2">
           <summary>MDプレビュー</summary>

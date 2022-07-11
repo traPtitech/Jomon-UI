@@ -46,7 +46,7 @@ const images = ref<File[]>([])
 </script>
 
 <template>
-  <div class="flex flex-col mx-auto min-w-160 w-2/3 pt-8 px-12">
+  <div class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
     <div class="pb-8">
       <h1 class="text-center text-3xl">申請の新規作成</h1>
     </div>
@@ -59,14 +59,14 @@ const images = ref<File[]>([])
         <label>タイトル</label>
         <input
           v-model="request.title"
-          class="h-8 p-1 border border-gray-300 rounded" />
+          class="h-8 rounded border border-gray-300 p-1" />
       </div>
       <div class="flex flex-col">
         <label>金額</label>
         <div>
           <input
             v-model="request.amount"
-            class="h-8 p-1 border border-gray-300 rounded" />円
+            class="h-8 rounded border border-gray-300 p-1" />円
         </div>
       </div>
       <div class="flex flex-col">

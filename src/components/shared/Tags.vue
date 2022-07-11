@@ -18,7 +18,7 @@ const slicedTags = props.tags.slice(
   <span
     v-for="(tag, index) in slicedTags"
     :key="tag.id"
-    class="border border-dark-600 rounded p-0.5"
+    class="border-dark-600 rounded border p-0.5"
     :class="index !== 0 ? 'ml-2' : ''">
     {{ tag.name }}
   </span>

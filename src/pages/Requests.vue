@@ -51,10 +51,10 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col mx-auto min-w-160 w-2/3 pt-8 px-12">
-    <div class="flex w-full pb-8 justify-center items-center relative">
-      <h1 class="text-3xl text-center">申請一覧</h1>
-      <div class="right-0 absolute">
+  <div class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
+    <div class="relative flex w-full items-center justify-center pb-8">
+      <h1 class="text-center text-3xl">申請一覧</h1>
+      <div class="absolute right-0">
         <router-link to="/requests/new">
           <Button font-size="lg" padding="md">申請の新規作成</Button>
         </router-link>
@@ -65,7 +65,7 @@ watch(
   <div class="min-h-120">
     <div
       v-if="requestStore.requests.length !== 0"
-      class="w-3/4 mt-4 mx-auto shadow">
+      class="mx-auto mt-4 w-3/4 shadow">
       <ul>
         <li v-for="request in sliceRequestsAt(page, 7)" :key="request.id">
           <RequestItem :request="request" />

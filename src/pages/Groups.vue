@@ -33,10 +33,10 @@ watch(
 
 <template>
   <div>
-    <div class="flex flex-col mx-auto min-w-160 w-2/3 pt-8 px-12">
-      <div class="flex w-full pb-8 justify-center items-center relative">
+    <div class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
+      <div class="relative flex w-full items-center justify-center pb-8">
         <h1 class="text-center text-3xl">グループ一覧</h1>
-        <div class="right-0 absolute">
+        <div class="absolute right-0">
           <router-link to="/groups/new">
             <Button font-size="lg" padding="md"> グループの新規作成 </Button>
           </router-link>
@@ -45,7 +45,7 @@ watch(
       <!--フィルタリングメニューあってもいい気がする-->
       <div class="min-h-128">
         <div
-          class="flex bg-gray-200 px-4 pt-2 pb-2 justify-around items-center">
+          class="flex items-center justify-around bg-gray-200 px-4 pt-2 pb-2">
           <div class="w-1/5">グループ名</div>
           <div class="w-3/5">詳細</div>
           <div class="w-1/5">予算</div>

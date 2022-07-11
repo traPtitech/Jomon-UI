@@ -59,7 +59,7 @@ function deleteImage(index: number) {
       <div v-for="(image, index) in images" :key="index" class="relative">
         <img :alt="image.name" class="h-32" :src="image.src" />
         <button
-          class="absolute top-0 right-0 w-6 h-6"
+          class="absolute top-0 right-0 h-6 w-6"
           @click="deleteImage(index)">
           <XCircleIcon />
         </button>

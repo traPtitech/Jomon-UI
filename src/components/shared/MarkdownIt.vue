@@ -13,5 +13,5 @@ const md = MarkdownIt({
 
 <template>
   <!--eslint-disable-next-line vue/no-v-html-->
-  <div class="prose break-words max-w-full" v-html="md.render(text)" />
+  <div class="prose max-w-full break-words" v-html="md.render(text)" />
 </template>

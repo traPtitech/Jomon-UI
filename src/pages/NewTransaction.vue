@@ -37,7 +37,7 @@ async function postTransaction() {
 </script>
 
 <template>
-  <div class="flex flex-col mx-auto min-w-160 w-2/3 px-12 pt-8">
+  <div class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
     <div class="pb-8">
       <h1 class="text-center text-3xl">入出金記録の新規作成</h1>
     </div>
@@ -52,7 +52,7 @@ async function postTransaction() {
         <div>
           <input
             v-model="transaction.amount"
-            class="border border-gray-300 rounded" />円
+            class="rounded border border-gray-300" />円
         </div>
       </div>
       <div class="flex flex-col">
@@ -88,7 +88,7 @@ async function postTransaction() {
       </div>
       <div class="text-right">
         <Button
-          class="w-64 mb-4"
+          class="mb-4 w-64"
           font-size="xl"
           padding="sm"
           @click.stop="postTransaction">

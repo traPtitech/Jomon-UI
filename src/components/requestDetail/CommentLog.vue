@@ -17,16 +17,16 @@ const formattedDateAndTime = formatDateAndTime(props.log.created_at)
 </script>
 
 <template>
-  <div class="flex p-2 w-full">
+  <div class="flex w-full p-2">
     <UserIcon class="w-12" :name="log.user" />
     <div class="w-full pl-2">
-      <div class="flex justify-between items-center h-12">
+      <div class="flex h-12 items-center justify-between">
         {{ log.user }}がコメントしました。
         <div class="">
           {{ formattedDateAndTime }}
         </div>
       </div>
-      <MarkdownIt class="p-2 border border-zinc-300" :text="log.comment" />
+      <MarkdownIt class="border border-zinc-300 p-2" :text="log.comment" />
     </div>
   </div>
 </template>

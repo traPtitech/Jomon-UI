@@ -16,7 +16,7 @@ const userStore = useUserStore()
       v-if="!(requestDetailStore.editMode === 'content')"
       class="flex items-start">
       <MarkdownIt
-        class="pl-2 h-32 w-200 border border-gray-300 overflow-y-scroll"
+        class="w-200 h-32 overflow-y-scroll border border-gray-300 pl-2"
         :text="requestDetailStore.request.content" />
       <EditButton
         v-if="requestDetailStore.request.created_by === userStore.me.name"
@@ -25,7 +25,7 @@ const userStore = useUserStore()
     <div v-if="requestDetailStore.editMode === 'content'">
       <textarea
         v-model="requestDetailStore.editedValue.content"
-        class="resize-none w-200 h-30 p-1"
+        class="w-200 h-30 resize-none p-1"
         placeholder="詳細" />
       <Button
         class="ml-2"

@@ -27,10 +27,10 @@ async function postTag() {
 <template>
   <div class="bg-white pt-8">
     <h1 class="text-center text-3xl">タグの新規作成</h1>
-    <div class="flex flex-col h-4/5 mx-12 mt-8 justify-around">
+    <div class="mx-12 mt-8 flex h-4/5 flex-col justify-around">
       <div>
         <label>タグの名前：</label>
-        <input v-model="tagName" class="border border-gray-300 w-2/3" />
+        <input v-model="tagName" class="w-2/3 border border-gray-300" />
       </div>
       <div class="mt-8 text-center">
         <Button class="mb-4 w-48" font-size="xl" padding="sm" @click="postTag">

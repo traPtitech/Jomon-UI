@@ -43,7 +43,7 @@ function sortByCreatedAt() {
 <template>
   <div class="flex justify-around">
     <button
-      class="p-1 border border-gray-300 flex justify-center items-center rounded"
+      class="flex items-center justify-center rounded border border-gray-300 p-1"
       :class="params.sort === 'created_at' ? '' : 'bg-gray-200'"
       @click="sortByCreatedAt">
       日付順
@@ -53,13 +53,13 @@ function sortByCreatedAt() {
     <div>
       <input
         v-model="params.since"
-        class="border border-gray-300 w-28 h-8 p-1 rounded"
+        class="h-8 w-28 rounded border border-gray-300 p-1"
         placeholder="YYYY-MM-DD"
         @blur="requestStore.fetchRequests(params)" />
       ～
       <input
         v-model="params.until"
-        class="border border-gray-300 w-28 h-8 p-1 rounded"
+        class="h-8 w-28 rounded border border-gray-300 p-1"
         placeholder="YYYY-MM-DD"
         @blur="requestStore.fetchRequests(params)" />
     </div>

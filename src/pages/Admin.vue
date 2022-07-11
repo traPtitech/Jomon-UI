@@ -54,18 +54,18 @@ const addAdmins = async () => {
 <template>
   <div
     v-if="userStore.me.admin"
-    class="flex flex-col mx-auto min-w-160 px-12 pt-8 w-2/3">
-    <h1 class="text-center pb-8 text-3xl">管理ページ</h1>
+    class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
+    <h1 class="pb-8 text-center text-3xl">管理ページ</h1>
     <div>
       <ul class="flex gap-2">
         <li v-for="admin in adminStore.admins" :key="admin">
-          <div class="border border-black rounded text-center px-2">
+          <div class="rounded border border-black px-2 text-center">
             {{ admin }}
           </div>
         </li>
       </ul>
     </div>
-    <div class="flex mt-4 gap-4">
+    <div class="mt-4 flex gap-4">
       <VueSelect
         v-model="addList"
         class="w-1/2"
@@ -78,7 +78,7 @@ const addAdmins = async () => {
         選択した管理者を追加
       </Button>
     </div>
-    <div class="flex mt-12 gap-4">
+    <div class="mt-12 flex gap-4">
       <VueSelect
         v-model="deleteList"
         class="w-1/2"

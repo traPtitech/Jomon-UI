@@ -45,7 +45,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col mx-auto min-w-160 px-12 pt-4">
+  <div class="min-w-160 mx-auto flex flex-col px-12 pt-4">
     <div class="bar">
       <div class="flex justify-between">
         <div class="flex">
@@ -69,7 +69,7 @@ onMounted(() => {
     <div class="flex">
       <RequestLogs />
       <div class="w-1/3">
-        <div class="flex flex-col py-8 gap-4 items-center">
+        <div class="flex flex-col items-center gap-4 py-8">
           <router-link class="w-2/3" :to="'/transactions/new?requestID=' + id">
             <Button class="w-full" font-size="md" padding="sm">
               この申請から入出金記録を作成する

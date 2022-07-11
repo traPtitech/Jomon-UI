@@ -45,7 +45,7 @@ const logs = () => {
 </script>
 
 <template>
-  <div class="overflow-y-scroll h-full p-2 w-2/3 h-120">
+  <div class="h-120 h-full w-2/3 overflow-y-scroll p-2">
     <RequestImage />
     <ul>
       <li

@@ -9,7 +9,7 @@ const userStore = useUserStore()
 
 <template>
   <Header :me="userStore.me" />
-  <main class="h-screen bg-zinc-50 pt-12 text-dark-500 overflow-scroll">
+  <main class="text-dark-500 h-screen overflow-scroll bg-zinc-50 pt-12">
     <router-view />
   </main>
   <container />

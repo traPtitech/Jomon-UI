@@ -33,14 +33,14 @@ function changeCurrentTab(tab: TabType) {
 <template>
   <div class="flex gap-2">
     <button
-      :class="`w-20 py-1 rounded-t ${
+      :class="`w-20 rounded-t py-1 ${
         currentTab === 'input' ? 'bg-gray-400' : 'bg-gray-200'
       }`"
       @click.prevent="() => changeCurrentTab('input')">
       入力
     </button>
     <button
-      :class="`w-20 py-1 rounded-t ${
+      :class="`w-20 rounded-t py-1 ${
         currentTab === 'preview' ? 'bg-gray-400' : 'bg-gray-200'
       }`"
       @click.prevent="() => changeCurrentTab('preview')">
@@ -49,7 +49,7 @@ function changeCurrentTab(tab: TabType) {
     <VueSelect
       v-if="templates !== undefined"
       v-model="selectedTemplate"
-      class="w-1/3 inline-block ml-auto m-1"
+      class="m-1 ml-auto inline-block w-1/3"
       label="name"
       :options="templates"
       placeholder="テンプレートを選択"
@@ -60,13 +60,13 @@ function changeCurrentTab(tab: TabType) {
   <div>
     <textarea
       v-if="currentTab === 'input'"
-      class="min-h-40 w-full p-1 rounded-b"
+      class="min-h-40 w-full rounded-b p-1"
       :placeholder="placeholder"
       :value="value"
       @input="emit('input', ($event.target as HTMLInputElement).value)" />
     <div
       v-if="currentTab === 'preview'"
-      class="h-40 w-full border border-gray-500 p-1 overflow-y-scroll">
+      class="h-40 w-full overflow-y-scroll border border-gray-500 p-1">
       <MarkdownIt :text="value" />
     </div>
   </div>

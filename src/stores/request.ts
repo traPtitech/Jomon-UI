@@ -92,17 +92,21 @@ export const useRequestStore = defineStore('request', () => {
         params.tag += ',' + tmpTagList[i].id
       }
     }
-    requests.value = (
-      await apis.getRequests(
-        params.sort,
-        params.currentStatus || '',
-        params.target || '',
-        params.since,
-        params.until,
-        params.tag || '',
-        params.group || ''
-      )
-    ).data
+    try {
+      requests.value = (
+        await apis.getRequests(
+          params.sort,
+          params.currentStatus || '',
+          params.target || '',
+          params.since,
+          params.until,
+          params.tag || '',
+          params.group || ''
+        )
+      ).data
+    } catch (err: any) {
+      alert(err.message)
+    }
   }
   return { requests, isRequestFetched, fetchRequests, tagList }
 })

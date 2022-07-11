@@ -153,20 +153,28 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   }
 
   const fetchRequestDetail = async (id: string) => {
-    request.value = (await apis.getRequestDetail(id)).data
+    try {
+      request.value = (await apis.getRequestDetail(id)).data
+    } catch (err: any) {
+      alert(err.message)
+    }
   }
   const putRequest = async (id: string, willPutRequest: PostRequest) => {
     try {
       const res = (await apis.putRequestDetail(id, willPutRequest)).data
       request.value = res
     } catch (err: any) {
-      alert(err.response.data)
+      alert(err.message)
     }
   }
   const fetchFiles = async (ids: string[]) => {
-    ids.forEach(async id => {
-      files.value.concat((await apis.getFile(id)).data)
-    })
+    try {
+      ids.forEach(async id => {
+        files.value.concat((await apis.getFile(id)).data)
+      })
+    } catch (err: any) {
+      alert(err.message)
+    }
   }
 
   return {

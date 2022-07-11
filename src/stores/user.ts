@@ -35,12 +35,20 @@ export const useUserStore = defineStore('user', () => {
   const isMeFetched = ref(false)
 
   const fetchMe = async () => {
-    me.value = (await apis.getMe()).data
-    isMeFetched.value = true
+    try {
+      me.value = (await apis.getMe()).data
+      isMeFetched.value = true
+    } catch (err: any) {
+      alert(err.message)
+    }
   }
   const fetchUsers = async () => {
-    users.value = (await apis.getUsers()).data
-    isUserFetched.value = true
+    try {
+      users.value = (await apis.getUsers()).data
+      isUserFetched.value = true
+    } catch (err: any) {
+      alert(err.message)
+    }
   }
 
   return {

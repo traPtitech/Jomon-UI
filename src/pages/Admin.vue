@@ -34,7 +34,7 @@ const deleteAdmins = async () => {
       id => !deleteList.value.includes(id)
     )
   } catch (err: any) {
-    alert(err.response.data)
+    alert(err.message)
   }
 }
 const addAdmins = async () => {
@@ -46,7 +46,7 @@ const addAdmins = async () => {
     await apis.postAdmins(addList.value)
     adminStore.admins = adminStore.admins.concat(addList.value)
   } catch (err: any) {
-    alert(err.response.data)
+    alert(err.message)
   }
 }
 </script>
@@ -54,7 +54,7 @@ const addAdmins = async () => {
 <template>
   <div
     v-if="userStore.me.admin"
-    class="flex flex-col mx-auto min-w-160 w-2/3 pt-8 px-12">
+    class="flex flex-col mx-auto min-w-160 px-12 pt-8 w-2/3">
     <h1 class="text-center pb-8 text-3xl">管理ページ</h1>
     <div>
       <ul class="flex gap-2">
@@ -65,7 +65,7 @@ const addAdmins = async () => {
         </li>
       </ul>
     </div>
-    <div class="mt-4 flex gap-4">
+    <div class="flex mt-4 gap-4">
       <VueSelect
         v-model="addList"
         class="w-1/2"
@@ -78,7 +78,7 @@ const addAdmins = async () => {
         選択した管理者を追加
       </Button>
     </div>
-    <div class="mt-12 flex gap-4">
+    <div class="flex mt-12 gap-4">
       <VueSelect
         v-model="deleteList"
         class="w-1/2"

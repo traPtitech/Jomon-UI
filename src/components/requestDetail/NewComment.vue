@@ -23,8 +23,7 @@ async function submit() {
     requestDetailStore.request.comments.push(response)
     comment.value = ''
   } catch (err: any) {
-    const errData = err.response.data
-    alert(errData)
+    alert(err.message)
   }
 }
 </script>
@@ -35,7 +34,7 @@ async function submit() {
       placeholder="コメント"
       :value="comment"
       @input="comment = $event" />
-    <div class="text-right mt-2">
+    <div class="mt-2 text-right">
       <Button font-size="md" padding="sm" @click.prevent="submit">
         コメントする
       </Button>

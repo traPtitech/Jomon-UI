@@ -34,15 +34,15 @@ async function putStatus(nextStatus: StatusEnum | '', comment: string) {
     requestDetailStore.request.statuses.push(response)
     closeModal()
   } catch (err: any) {
-    alert(err.response.data)
+    alert(err.message)
   }
 }
 </script>
 
 <template>
-  <div class="pt-8 bg-white w-2/5">
-    <h1 class="text-3xl text-center">申請の状態変更</h1>
-    <div class="flex flex-col gap-4 justify-around mx-12 mt-8 h-4/5">
+  <div class="bg-white pt-8 w-2/5">
+    <h1 class="text-center text-3xl">申請の状態変更</h1>
+    <div class="flex flex-col h-4/5 mx-12 mt-8 gap-4 justify-around">
       <div class="flex items-center">
         申請の状態を
         <StatusChip has-text :status="requestDetailStore.request.status" />
@@ -55,20 +55,20 @@ async function putStatus(nextStatus: StatusEnum | '', comment: string) {
           <label>コメント</label>
           <textarea
             v-model="comment"
-            class="h-20 border border-gray-300 resize-none p-1 rounded" />
+            class="border rounded border-gray-300 h-20 p-1 resize-none" />
         </div>
         <details class="mb-2">
           <summary>MDプレビュー</summary>
           <div
-            class="px-2 w-full"
+            class="w-full px-2"
             :class="comment ? 'border border-gray-200' : ''">
             <MarkdownIt class="w-full" :text="comment" />
           </div>
         </details>
       </div>
-      <div class="text-center mt-8">
+      <div class="mt-8 text-center">
         <Button
-          class="w-60 mb-4"
+          class="mb-4 w-60"
           font-size="xl"
           padding="sm"
           @click="putStatus(nextStatus, comment)">

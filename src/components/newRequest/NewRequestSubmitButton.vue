@@ -52,10 +52,10 @@ async function postRequest() {
       alert('申請を作成しました')
       router.push('/')
     } catch (err: any) {
-      alert(err.response.data)
+      alert(err.message)
     }
   } catch (err: any) {
-    alert(err.response.data)
+    alert(err.message)
   }
 }
 </script>
@@ -63,7 +63,7 @@ async function postRequest() {
 <template>
   <div class="text-right">
     <Button
-      class="w-48 mb-4"
+      class="mb-4 w-48"
       font-size="xl"
       padding="sm"
       @click.stop="postRequest">

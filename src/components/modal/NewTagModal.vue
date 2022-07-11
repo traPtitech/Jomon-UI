@@ -19,21 +19,21 @@ async function postTag() {
     tagStore.tags.push(response)
     closeModal()
   } catch (err: any) {
-    alert(err.response.data)
+    alert(err.message)
   }
 }
 </script>
 
 <template>
-  <div class="pt-8 bg-white">
-    <h1 class="text-3xl text-center">タグの新規作成</h1>
-    <div class="flex flex-col justify-around mx-12 mt-8 h-4/5">
+  <div class="bg-white pt-8">
+    <h1 class="text-center text-3xl">タグの新規作成</h1>
+    <div class="flex flex-col h-4/5 mx-12 mt-8 justify-around">
       <div>
         <label>タグの名前：</label>
         <input v-model="tagName" class="border border-gray-300 w-2/3" />
       </div>
-      <div class="text-center mt-8">
-        <Button class="w-48 mb-4" font-size="xl" padding="sm" @click="postTag">
+      <div class="mt-8 text-center">
+        <Button class="mb-4 w-48" font-size="xl" padding="sm" @click="postTag">
           タグを作成する
         </Button>
       </div>

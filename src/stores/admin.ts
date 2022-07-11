@@ -8,8 +8,12 @@ export const useAdminStore = defineStore('admin', () => {
   const isAdminFetched = ref(false)
 
   const fetchAdmins = async () => {
-    admins.value = (await apis.getAdmins()).data
-    isAdminFetched.value = true
+    try {
+      admins.value = (await apis.getAdmins()).data
+      isAdminFetched.value = true
+    } catch (err: any) {
+      alert(err.message)
+    }
   }
   return {
     admins,

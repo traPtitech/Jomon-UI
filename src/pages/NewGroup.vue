@@ -4,7 +4,8 @@ import { ref } from 'vue'
 
 import Button from '/@/components/shared/Button.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
-import type { Group } from '/@/lib/apis'
+import type { Group, PostGroup } from '/@/lib/apis'
+import apis from '/@/lib/apis'
 import { useGroupStore } from '/@/stores/group'
 import { useUserStore } from '/@/stores/user'
 
@@ -20,6 +21,16 @@ const group = ref({
   members: [] as string[]
 })
 
+const postGroup = async (group: PostGroup) => {
+  try {
+    const res = (await apis.postGroup(group)).data
+    groupStore.groups = [...groupStore.groups, res]
+    return res
+  } catch (err: any) {
+    alert(err.message)
+  }
+}
+
 async function handlePostGroup() {
   if (
     /^[1-9][0-9]*$|^0$/.test(group.value.budget.toString()) &&
@@ -33,7 +44,7 @@ async function handlePostGroup() {
       description: group.value.description,
       budget: group.value.budget
     }
-    const res: Group = await groupStore.postGroup(willPostGroup)
+    const res: Group = await postGroup(willPostGroup)
     await groupStore.postGroupMember(res.id, group.value.members)
     await groupStore.postGroupOwner(res.id, group.value.owners)
   } else {

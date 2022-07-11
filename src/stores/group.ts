@@ -1,19 +1,9 @@
+import { group } from 'console'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-import type { Group, PostGroup } from '/@/lib/apis'
+import type { Group } from '/@/lib/apis'
 import apis from '/@/lib/apis'
-
-interface GroupDetail {
-  id: string
-  name: string
-  description: string
-  budget: number
-  owners: string[]
-  members: string[]
-  created_at: string
-  updated_at: string
-}
 
 export const useGroupStore = defineStore('group', () => {
   const groups = ref<Group[]>(
@@ -26,49 +16,43 @@ export const useGroupStore = defineStore('group', () => {
       updated_at: '2022-04-05T14:02:15.431Z'
     })
   )
-  const group = ref<GroupDetail>({
-    id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    name: 'SysAd',
-    description: 'SysAd班',
-    budget: 250000,
-    owners: ['mehm8128', 'mehm8128'],
-    members: ['mehm8128', 'mehm8128'],
-    created_at: '2022-04-05T14:02:15.431Z',
-    updated_at: '2022-04-05T14:02:15.431Z'
-  })
   const isGroupFetched = ref(false)
 
   const fetchGroups = async () => {
-    groups.value = (await apis.getGroups()).data
-    isGroupFetched.value = true
-  }
-  const fetchGroup = async (id: string) => {
-    group.value = (await apis.getGroupDetail(id)).data
-    isGroupFetched.value = true
-  }
-  const postGroup = async (group: PostGroup) => {
-    const res = (await apis.postGroup(group)).data
-    groups.value = [...groups.value, res]
-    return res
-  }
-  const putGroup = async (id: string, group: PostGroup) => {
-    await apis.putGroupDetail(id, group)
-  }
-  const deleteGroup = async (id: string) => {
-    await apis.deleteGroup(id)
-    groups.value = groups.value.filter(group => group.id !== id)
+    try {
+      groups.value = (await apis.getGroups()).data
+      isGroupFetched.value = true
+    } catch (err: any) {
+      alert(err.message)
+    }
   }
   const postGroupMember = async (id: string, members: string[]) => {
-    await apis.postGroupMembers(id, members)
+    try {
+      await apis.postGroupMembers(id, members)
+    } catch (err: any) {
+      alert(err.message)
+    }
   }
   const postGroupOwner = async (id: string, owners: string[]) => {
-    await apis.postGroupOwners(id, owners)
+    try {
+      await apis.postGroupOwners(id, owners)
+    } catch (err: any) {
+      alert(err.message)
+    }
   }
   const deleteGroupMember = async (id: string, members: string[]) => {
-    await apis.deleteGroupMembers(id, members)
+    try {
+      await apis.deleteGroupMembers(id, members)
+    } catch (err: any) {
+      alert(err.message)
+    }
   }
   const deleteGroupOwner = async (id: string, owners: string[]) => {
-    await apis.deleteGroupOwners(id, owners)
+    try {
+      await apis.deleteGroupOwners(id, owners)
+    } catch (err: any) {
+      alert(err.message)
+    }
   }
 
   return {
@@ -76,10 +60,6 @@ export const useGroupStore = defineStore('group', () => {
     group,
     isGroupFetched,
     fetchGroups,
-    fetchGroup,
-    postGroup,
-    putGroup,
-    deleteGroup,
     postGroupOwner,
     postGroupMember,
     deleteGroupMember,

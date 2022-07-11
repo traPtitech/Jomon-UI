@@ -5,30 +5,33 @@ import { ref } from 'vue'
 
 import UserIcon from './shared/UserIcon.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
+import type { Group } from '/@/lib/apis'
 import { useGroupStore } from '/@/stores/group'
 import { useUserStore } from '/@/stores/user'
 
+type Props = { group: Group }
+
+const props = defineProps<Props>()
 const userStore = useUserStore()
 const { users } = storeToRefs(userStore)
 const groupStore = useGroupStore()
-const { group } = storeToRefs(groupStore)
-const willAddOwners = ref<string[]>([])
+const OwnersToBeAdded = ref<string[]>([])
 
 function handleAddOwner(owners: string[]) {
   if (owners.length !== 0) {
-    groupStore.postGroupMember(group.value.id, owners)
+    groupStore.postGroupMember(props.group.id, owners)
   }
 }
 function handleDeleteOwner(id: string) {
-  groupStore.deleteGroupOwner(group.value.id, [id])
+  groupStore.deleteGroupOwner(props.group.id, [id])
 }
 </script>
 
 <template>
   <div
-    class="relative border border-gray-400 h-1/2 flex flex-col justify-between">
-    <h2 class="absolute -top-3 left-2 px-2 bg-white">グループオーナー</h2>
-    <ul class="p-4 overflow-y-scroll h-full">
+    class="border flex flex-col border-gray-400 h-1/2 relative justify-between">
+    <h2 class="bg-white px-2 -top-3 left-2 absolute">グループオーナー</h2>
+    <ul class="h-full p-4 overflow-y-scroll">
       <li
         v-for="owner in group.owners"
         :key="owner"
@@ -44,7 +47,7 @@ function handleDeleteOwner(id: string) {
     </ul>
     <div class="flex p-2">
       <VueSelect
-        v-model="willAddOwners"
+        v-model="OwnersToBeAdded"
         class="flex-grow"
         :close-on-select="false"
         label="name"
@@ -52,7 +55,7 @@ function handleDeleteOwner(id: string) {
         :options="users"
         placeholder="追加するオーナーを選択"
         :reduce="(user:any) => user.name" />
-      <button @click="handleAddOwner(willAddOwners)">
+      <button @click="handleAddOwner(OwnersToBeAdded)">
         <PlusSmIcon class="w-8" />
       </button>
     </div>

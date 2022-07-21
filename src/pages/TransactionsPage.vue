@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useTagStore } from '/@/stores/tag'
@@ -27,6 +27,12 @@ onMounted(() => {
   transactionStore.fetchTransactions('created_at')
   tagStore.fetchTags()
 })
+watch(
+  () => route.query.page,
+  newPage => {
+    page.value = toPage(newPage)
+  }
+)
 </script>
 
 <template>
@@ -35,7 +41,9 @@ onMounted(() => {
       <div class="relative flex w-full items-center justify-center py-8">
         <h1 class="text-center text-3xl">入出金記録</h1>
         <div class="absolute right-0">
-          <Button font-size="lg" padding="md">新規レコード作成</Button>
+          <router-link to="/transactions/new">
+            <Button font-size="lg" padding="md">新規レコード作成</Button>
+          </router-link>
         </div>
       </div>
       <div class="min-h-128">

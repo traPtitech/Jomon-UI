@@ -2,11 +2,13 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
-import Button from '/@/components/shared/Button.vue'
-import VueSelect from '/@/components/shared/VueSelect.vue'
-import type { Group } from '/@/lib/apis'
 import { useGroupStore } from '/@/stores/group'
 import { useUserStore } from '/@/stores/user'
+
+import type { Group } from '/@/lib/apis'
+
+import Button from '/@/components/shared/Button.vue'
+import VueSelect from '/@/components/shared/VueSelect.vue'
 
 const userStore = useUserStore()
 const groupStore = useGroupStore()
@@ -45,7 +47,7 @@ async function handlePostGroup() {
 <!-- TODO: inputのon-focus -->
 <template>
   <div>
-    <div class="flex flex-col mx-auto min-w-160 w-2/3">
+    <div class="min-w-160 mx-auto flex w-2/3 flex-col">
       <div class="py-8">
         <h1 class="text-center text-3xl">グループの新規作成</h1>
       </div>
@@ -54,20 +56,20 @@ async function handlePostGroup() {
           <label>グループ名</label>
           <input
             v-model="group.name"
-            class="border rounded border-gray-300 py-1 px-2" />
+            class="rounded border border-gray-300 py-1 px-2" />
         </div>
         <div class="flex flex-col">
           <label>詳細</label>
           <textarea
             v-model="group.description"
-            class="border rounded border-gray-300 min-h-36 py-1 px-2" />
+            class="min-h-36 rounded border border-gray-300 py-1 px-2" />
         </div>
         <div class="flex flex-col">
           <label>予算</label>
           <div>
             <input
               v-model="group.budget"
-              class="border rounded border-gray-300 py-1 px-2 w-2/5" />円
+              class="w-2/5 rounded border border-gray-300 py-1 px-2" />円
           </div>
         </div>
         <div class="flex flex-col">
@@ -95,9 +97,9 @@ async function handlePostGroup() {
             placeholder="追加するメンバーを選択"
             :reduce="(user:any) => user.name" />
         </div>
-        <div class="w-full relative">
+        <div class="relative w-full">
           <Button
-            class="mt-8 right-0 absolute"
+            class="absolute right-0 mt-8"
             font-size="xl"
             padding="md"
             @clock.stop="handlePostGroup">

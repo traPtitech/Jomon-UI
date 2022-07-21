@@ -9,7 +9,7 @@ defineProps<Props>()
 <template>
   <router-link :class="isHere ? 'cursor-default' : ''" :to="path">
     <div
-      class="p-2 rounded-3xl"
+      class="rounded-3xl p-2"
       :class="isHere ? 'bg-zinc-200' : 'hover:bg-zinc-200'">
       <span>{{ text }}</span>
     </div>

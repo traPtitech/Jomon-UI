@@ -7,8 +7,8 @@ import {
 </script>
 
 <template>
-  <ArrowCircleDownIconSolid v-if="true" class="cursor-pointer h-5" />
-  <ArrowCircleDownIcon v-else class="cursor-pointer h-5" />
-  <ArrowCircleUpIconSolid v-if="true" class="cursor-pointer h-5" />
-  <ArrowCircleUpIcon v-else class="cursor-pointer h-5" />
+  <ArrowCircleDownIconSolid v-if="true" class="h-5 cursor-pointer" />
+  <ArrowCircleDownIcon v-else class="h-5 cursor-pointer" />
+  <ArrowCircleUpIconSolid v-if="true" class="h-5 cursor-pointer" />
+  <ArrowCircleUpIcon v-else class="h-5 cursor-pointer" />
 </template>

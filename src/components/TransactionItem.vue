@@ -1,6 +1,9 @@
 <script lang="ts" setup>
+import { ExternalLinkIcon } from '@heroicons/vue/outline'
+
 import type { Transaction } from '/@/lib/apis'
 
+import EditButton from './shared/EditButton.vue'
 import Tags from './shared/Tags.vue'
 
 const formatDate = (date: string) => {
@@ -35,5 +38,9 @@ const props = defineProps<Props>()
     <div class="w-3/10">
       <Tags :limit="3" :tags="props.transaction.tags" />
     </div>
+    <router-link :to="`/requests/${transaction.request}`">
+      <ExternalLinkIcon class="h-5" />
+    </router-link>
+    <EditButton />
   </div>
 </template>

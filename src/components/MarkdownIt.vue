@@ -10,5 +10,5 @@ const md = MarkdownIt({
 </script>
 
 <template>
-  <div class="text-sm prose break-words" v-html="md.render(text)"></div>
+  <div class="prose break-words text-sm" v-html="md.render(text)"></div>
 </template>

@@ -24,7 +24,7 @@ const sliceTransactionAt = (index: number, n: number) => {
 }
 
 onMounted(() => {
-  transactionStore.fetchTransactions('created_at')
+  transactionStore.fetchTransactions()
   tagStore.fetchTags()
 })
 watch(

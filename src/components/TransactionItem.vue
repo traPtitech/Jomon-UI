@@ -1,9 +1,7 @@
 <script lang="ts" setup>
-import { LinkIcon } from '@heroicons/vue/outline'
-import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import type { Transaction } from '/@/lib/apis'
 
-import { useTransactionStore } from '/@/stores/transaction'
+import Tags from './shared/Tags.vue'
 
 const formatDate = (date: string) => {
   return (
@@ -16,80 +14,26 @@ const formatDate = (date: string) => {
   )
 }
 
-type Props = { index: number }
+type Props = { transaction: Transaction }
 const props = defineProps<Props>()
-
-const transactionStore = useTransactionStore()
-const { transactions } = storeToRefs(transactionStore)
 </script>
 
 <template>
-  <div class="flex gap-2">
-    <router-link
-      v-if="transactions[props.index].request !== ''"
-      class="flex w-3/5"
-      :to="'requests/' + transactions[props.index].request">
-      <div class="text-center text-sky-500 w-1/4">
-        {{ formatDate(transactions[props.index].created_at) }}
-      </div>
-      <div class="text-center text-sky-500 w-1/4">
-        {{ transactions[props.index].amount }}
-      </div>
-      <div class="text-center text-sky-500 w-1/4">
-        {{ transactions[props.index].target }}
-      </div>
-      <div class="text-center text-sky-500 w-1/4">
-        {{ transactions[props.index].group.description }}
-      </div>
-    </router-link>
-    <div v-else class="flex w-3/5">
-      <div class="text-center w-1/4">
-        {{ formatDate(transactions[props.index].created_at) }}
-      </div>
-      <div class="text-center w-1/4">
-        {{ transactions[props.index].amount }}
-      </div>
-      <div class="text-center w-1/4">
-        {{ transactions[props.index].target }}
-      </div>
-      <div class="text-center w-1/4">
-        {{ transactions[props.index].group.description }}
-      </div>
+  <div class="hover:bg-bg-gray-100 flex h-12 items-center gap-2">
+    <div class="w-2/10">
+      {{ formatDate(props.transaction.created_at) }}
     </div>
-    <div
-      class="pl-8 w-2/5 relative"
-      @mouseleave="handleMouseLeave"
-      @mouseover="handleMouseOver">
-      <div v-if="flag" class="bg-gray-200 top-6 w-3/4 z-1 absolute">
-        <span
-          v-for="tag in transactions[props.index].tags"
-          :key="tag.id"
-          class="border border-solid border-black rounded mr-3 inline-block">
-          {{ 'desc' }}&nbsp;&nbsp;
-        </span>
-      </div>
-      <span v-if="transactions[props.index].tags.length <= 3">
-        <span
-          v-for="tag in transactions[props.index].tags"
-          :key="tag.id"
-          class="border border-solid border-black rounded mr-3 max-w-2/7 truncate inline-block">
-          {{ 'desc' }}&nbsp;&nbsp;
-        </span>
-      </span>
-      <span v-else>
-        <span
-          v-for="n in 3"
-          :key="n"
-          class="border border-solid border-black rounded mr-3 max-w-2/7 truncate inline-block">
-          {{ 'desc' }}
-        </span>
-        <span>...</span>
-      </span>
-      <router-link
-        class="h-5 ml-2 w-5 inline-block"
-        :to="'/transactions/' + transactions[props.index].id">
-        <LinkIcon />
-      </router-link>
+    <div class="w-1/10">
+      {{ props.transaction.amount }}
+    </div>
+    <div class="w-2/10">
+      {{ props.transaction.target }}
+    </div>
+    <div class="w-2/10 truncate">
+      {{ props.transaction.group.description }}
+    </div>
+    <div class="w-3/10">
+      <Tags :limit="3" :tags="props.transaction.tags" />
     </div>
   </div>
 </template>

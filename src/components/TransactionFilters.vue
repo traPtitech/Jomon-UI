@@ -59,7 +59,7 @@ function sortByCreatedAt() {
     <!-- 取引相手 -->
     <div class="w-2/10">
       <div
-        v-if="isTargetSearchMode"
+        v-if="!isTargetSearchMode"
         class="flex h-full items-center justify-center border">
         <button class="h-full w-full" @click="changeIsTargetSearchMode">
           <span>取引相手</span>

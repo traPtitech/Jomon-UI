@@ -22,7 +22,7 @@ const props = defineProps<Props>()
 </script>
 
 <template>
-  <div class="hover:bg-bg-gray-100 flex h-12 items-center gap-2">
+  <div class="relative flex h-12 items-center gap-2">
     <div class="w-2/10">
       {{ formatDate(props.transaction.created_at) }}
     </div>
@@ -38,9 +38,11 @@ const props = defineProps<Props>()
     <div class="w-3/10">
       <Tags :limit="3" :tags="props.transaction.tags" />
     </div>
-    <router-link :to="`/requests/${transaction.request}`">
-      <ExternalLinkIcon class="h-5" />
-    </router-link>
-    <EditButton />
+    <div class="absolute -right-16">
+      <router-link class="mr-2" :to="`/requests/${transaction.request}`">
+        <ExternalLinkIcon class="h-5" />
+      </router-link>
+      <EditButton />
+    </div>
   </div>
 </template>

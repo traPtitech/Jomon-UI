@@ -4,11 +4,13 @@ import { storeToRefs } from 'pinia'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
-// import { useTransactionStore } from '/@/stores/transaction'
+import { useTransactionStore } from '/@/stores/transaction'
 
+// import { useTransactionStore } from '/@/stores/transaction'
 import SortOrderButtons from './SortOrderButtons.vue'
 import VueSelect from './VueSelect.vue'
 
+const transactionStore = useTransactionStore()
 const groupStore = useGroupStore()
 const { groups } = storeToRefs(groupStore)
 const tagStore = useTagStore()
@@ -16,26 +18,26 @@ const { tags } = storeToRefs(tagStore)
 </script>
 
 <template>
-  <div class="flex h-9 gap-2 items-center">
+  <div class="flex h-8 gap-2">
     <!-- 年月日 -->
-    <div class="border flex h-full w-2/10 items-center justify-center">
+    <div class="w-2/10 flex items-center justify-center border">
       <span>年 月 日</span>
       <SortOrderButtons />
     </div>
     <!-- 取引額 -->
-    <div class="border flex h-full w-1/10 items-center justify-center">
+    <div class="w-1/10 flex items-center justify-center border">
       <span>取引額</span>
       <SortOrderButtons />
     </div>
     <!-- 取引相手 -->
-    <div class="border h-full w-2/10">
+    <div class="w-2/10 border">
       <div v-if="true" class="flex h-full items-center justify-center">
         <span>取引相手</span>
-        <SearchIcon class="cursor-pointer h-4" />
+        <SearchIcon class="h-4 cursor-pointer" />
       </div>
-      <div class="w-2/10" v-else>
-        <input v-model="target" class="border-none h-9" type="text" />
-        <XIcon class="cursor-pointer h-4" />
+      <div v-else>
+        <input v-model="target" class="border-none" type="text" />
+        <XIcon class="h-4 cursor-pointer" />
       </div>
     </div>
     <!-- グループ -->
@@ -57,4 +59,8 @@ const { tags } = storeToRefs(tagStore)
       :reduce="(tag:any) => tag.id"
       @close="'updateTransactions'" />
   </div>
+  <span v-if="transactionStore.transactions.length !== 0">
+    {{ transactionStore.transactions.length }}件取得しました
+  </span>
+  <span v-else>条件に一致する申請は見つかりませんでした</span>
 </template>

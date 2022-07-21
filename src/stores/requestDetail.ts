@@ -1,10 +1,16 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
-import type { Comment, Status } from '/@/lib/apis'
+import type { RequestDetail, PostRequest } from '/@/lib/apis'
+import apis from '/@/lib/apis'
+
+interface File {
+  file: string
+  name: string
+}
 
 export const useRequestDetailStore = defineStore('requestDetail', () => {
-  const request = ref({
+  const request = ref<RequestDetail>({
     id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
     amount: 1200,
     title: 'SysAd講習会の開催費用',
@@ -16,7 +22,15 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     targets: [
       {
         id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        amount: 1200,
         target: 'mehm8128',
+        paid_at: '2020-01-01',
+        created_at: '2020-01-01'
+      },
+      {
+        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
+        amount: 1500,
+        target: 'mehm',
         paid_at: '2020-01-01',
         created_at: '2020-01-01'
       }
@@ -59,21 +73,18 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
       {
         id: '3fa85f64-5717-4562-b3fc-2c963f66afa5',
         name: '2020講習会',
-        description: '2020年度講習会',
         created_at: '2020-02-12T08:01:37.838Z',
         updated_at: '2020-02-12T08:01:37.838Z'
       },
       {
         id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         name: '2021講習会',
-        description: '2021年度講習会',
         created_at: '2021-02-12T08:01:37.838Z',
         updated_at: '2021-02-12T08:01:37.838Z'
       },
       {
         id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
         name: '2022講習会',
-        description: '2022年度講習会',
         created_at: '2022-02-12T08:01:37.838Z',
         updated_at: '2022-02-12T08:01:37.838Z'
       }
@@ -89,38 +100,93 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     created_at: '2022-02-12T08:01:37.838Z',
     updated_at: '2022-02-12T08:01:37.838Z'
   })
+  const files = ref<File[]>([])
 
-  const logs = () => {
-    //2つの配列(commentsとstatuses)の中身の型が違うので1つにまとめ、ソートして表示ができない
-    const array = new Array<(Comment | Status)[]>()
-    //2つの配列からcreated_at、種類、インデックスだけ取り出して1つの配列にまとめる
-    // for (let i = 0; i < this.request.comments.length; i++) {
-    //   array = array.concat([
-    //     {
-    //       created_at: new Date(this.request.comments[i].created_at),
-    //       kind: 'comment',
-    //       index: i
-    //     }
-    //   ])
-    // }
-    // for (let i = 0; i < this.request.statuses.length; i++) {
-    //   array = array.concat([
-    //     {
-    //       created_at: new Date(this.request.statuses[i].created_at),
-    //       kind: 'statusChange',
-    //       index: i
-    //     }
-    //   ])
-    // }
-    //created_atでソート
-    // array = array.sort(function (a, b) {
-    //   if (a.created_at > b.created_at) return 1
-    //   if (b.created_at > a.created_at) return -1
-    //   return 0
-    // })
-    return array
-    //その後この配列のkindで配列を選び、indexでindexを選ぶことで2つの配列をいい感じに並べ替えられる
+  const targetIds = computed(() => {
+    const targetIds = new Array<string>()
+
+    for (let i = 0; i < request.value.targets.length; i++) {
+      targetIds.push(request.value.targets[i].id)
+    }
+    return targetIds
+  })
+  const tagIds = computed(() => {
+    const tagIds = new Array<string>()
+    for (let i = 0; i < request.value.tags.length; i++) {
+      tagIds.push(request.value.tags[i].id)
+    }
+    return tagIds
+  })
+  const editMode = ref('')
+  const editedValue = ref({
+    created_by: request.value.created_by,
+    amount: request.value.amount,
+    title: request.value.title,
+    content: request.value.content,
+    targets: targetIds,
+    tags: tagIds,
+    group: request.value.group.id
+  })
+  function changeEditMode(
+    kind: 'title' | 'content' | 'amount' | 'group' | 'tags' | 'targets' | ''
+  ) {
+    if (
+      editMode.value === 'amount' &&
+      kind === '' &&
+      !/^[1-9][0-9]*$|^0$/.test(editedValue.value.amount.toString())
+    ) {
+      alert('金額の形式が不正です')
+      return
+    }
+    if (editMode.value !== 'tags' && kind === '') {
+      const result = confirm(
+        '入出金記録に紐づいている申請のこの情報を変更すると、入出金記録の情報にも変更が反映されます。よろしいですか？'
+      )
+      if (!result) return
+    }
+    if (kind !== '') {
+      editMode.value = kind
+    } else {
+      putRequest(request.value.id, editedValue.value)
+      editMode.value = ''
+    }
   }
 
-  return {}
+  const fetchRequestDetail = async (id: string) => {
+    try {
+      request.value = (await apis.getRequestDetail(id)).data
+    } catch (err: any) {
+      alert(err.message)
+    }
+  }
+  const putRequest = async (id: string, willPutRequest: PostRequest) => {
+    try {
+      const res = (await apis.putRequestDetail(id, willPutRequest)).data
+      request.value = res
+    } catch (err: any) {
+      alert(err.message)
+    }
+  }
+  const fetchFiles = async (ids: string[]) => {
+    try {
+      ids.forEach(async id => {
+        files.value.concat((await apis.getFile(id)).data)
+      })
+    } catch (err: any) {
+      alert(err.message)
+    }
+  }
+
+  return {
+    request,
+    files,
+    targetIds,
+    tagIds,
+    editMode,
+    editedValue,
+    changeEditMode,
+    fetchRequestDetail,
+    putRequest,
+    fetchFiles
+  }
 })

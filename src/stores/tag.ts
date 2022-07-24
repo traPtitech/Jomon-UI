@@ -21,16 +21,17 @@ export const useTagStore = defineStore('tag', () => {
   ])
   const tag = ref<Tag>()
 
-  const isTagsFetched = ref(false)
+  const isTagFetched = ref(false)
 
   const fetchTags = async () => {
     tags.value = (await apis.getTags()).data
+    isTagFetched.value = true
   }
 
   return {
     tags,
     tag,
-    isTagsFetched,
+    isTagFetched,
     fetchTags
   }
 })

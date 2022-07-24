@@ -24,8 +24,12 @@ const sliceTransactionAt = (index: number, n: number) => {
 }
 
 onMounted(() => {
-  transactionStore.fetchTransactions()
-  tagStore.fetchTags()
+  if (!transactionStore.isTransactionFetched) {
+    transactionStore.fetchTransactions()
+  }
+  if (!tagStore.isTagFetched) {
+    tagStore.fetchTags()
+  }
 })
 watch(
   () => route.query.page,
@@ -38,7 +42,7 @@ watch(
 <template>
   <div>
     <div class="min-w-160 mx-auto flex w-2/3 flex-col">
-      <div class="relative flex w-full items-center justify-center py-8">
+      <div class="relative flex w-full items-center justify-center pt-8 pb-4">
         <h1 class="text-center text-3xl">入出金記録</h1>
         <div class="absolute right-0">
           <router-link to="/transactions/new">
@@ -47,8 +51,14 @@ watch(
         </div>
       </div>
       <div class="min-h-128">
-        <TransactionFilters class="mb-2" />
-        <ul class="divide-y">
+        <div class="mb-2">
+          <span v-if="transactionStore.transactions.length !== 0">
+            {{ transactionStore.transactions.length }}件取得しました
+          </span>
+          <span v-else>条件に一致する申請は見つかりませんでした</span>
+        </div>
+        <TransactionFilters />
+        <ul class="mt-2 divide-y">
           <li
             v-for="transaction in sliceTransactionAt(page, 10)"
             :key="transaction.id">

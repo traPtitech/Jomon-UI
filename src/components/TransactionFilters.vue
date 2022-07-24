@@ -32,11 +32,19 @@ function changeIsTargetSearchMode() {
     isTargetSearchMode.value = true
   }
 }
-function sortByCreatedAt() {
-  if (params.value.sort === 'created_at') {
-    params.value.sort = '-created_at'
+function sort(sortKind: 'created_at' | 'amount') {
+  if (sortKind === 'created_at') {
+    if (params.value.sort === 'created_at') {
+      params.value.sort = '-created_at'
+    } else {
+      params.value.sort = 'created_at'
+    }
   } else {
-    params.value.sort = 'created_at'
+    if (params.value.sort === 'amount') {
+      params.value.sort = '-amount'
+    } else {
+      params.value.sort = 'amount'
+    }
   }
   transactionStore.fetchTransactions(params.value)
 }
@@ -47,15 +55,17 @@ function sortByCreatedAt() {
     <!-- 年月日 -->
     <button
       class="w-2/10 flex items-center justify-center border"
-      @click="sortByCreatedAt">
+      @click="sort('created_at')">
       <span>年 月 日</span>
       <SortOrderButtons />
     </button>
     <!-- 取引額 -->
-    <div class="w-1/10 flex items-center justify-center border">
+    <button
+      class="w-1/10 flex items-center justify-center border"
+      @click="sort('amount')">
       <span>取引額</span>
       <SortOrderButtons />
-    </div>
+    </button>
     <!-- 取引相手 -->
     <div class="w-2/10">
       <div
@@ -92,8 +102,4 @@ function sortByCreatedAt() {
       :reduce="(tag:any) => tag.id"
       @close="'updateTransactions'" />
   </div>
-  <span v-if="transactionStore.transactions.length !== 0">
-    {{ transactionStore.transactions.length }}件取得しました
-  </span>
-  <span v-else>条件に一致する申請は見つかりませんでした</span>
 </template>

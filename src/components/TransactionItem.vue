@@ -17,7 +17,9 @@ const formatDate = (date: string) => {
   )
 }
 
-type Props = { transaction: Transaction }
+interface Props {
+  transaction: Transaction
+}
 const props = defineProps<Props>()
 </script>
 

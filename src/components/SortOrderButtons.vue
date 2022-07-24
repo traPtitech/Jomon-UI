@@ -4,6 +4,8 @@ import {
   ArrowCircleUpIcon as ArrowCircleUpIconSolid,
   ArrowCircleDownIcon as ArrowCircleDownIconSolid
 } from '@heroicons/vue/solid'
+
+// todo:クエリパラメータの仕様決まってから作る(created_atとamountを同時にorder指定できるのかどうかなど)
 </script>
 
 <template>

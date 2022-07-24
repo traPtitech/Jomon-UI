@@ -16,19 +16,17 @@ const emit = defineEmits<{ (e: 'input', value: string): void }>()
 </script>
 
 <template>
-  詳細：
-  <div v-if="!(fixMode === 'description')" class="flex items-start">
-    <p class="pl-1 h-32 w-200 border border-gray-300 overflow-y-scroll">
-      {{ props.group.description }}
-    </p>
-    <FixButton @click="changeFixMode('description')" />
+  <div v-if="!(fixMode === 'budget')" class="flex items-start">
+    予算：{{ props.group.budget }}円
+    <FixButton @click="changeFixMode('budget')" />
   </div>
-  <div v-if="fixMode === 'description'">
-    <textarea
-      class="resize-none w-200 h-32 p-1"
-      placeholder="詳細"
+  <div v-if="fixMode === 'budget'">
+    予算：<input
+      class="w-24 p-1"
+      placeholder="金額"
+      type="text"
       :value="props.value"
-      @input="emit('input', ($event.target as HTMLTextAreaElement).value)" />
+      @input="emit('input', ($event.target as HTMLInputElement).value)" />円
     <Button
       class="ml-2"
       font-size="sm"

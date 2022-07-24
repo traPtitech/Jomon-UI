@@ -3,6 +3,7 @@ import { ExternalLinkIcon } from '@heroicons/vue/outline'
 import { ref } from 'vue'
 
 import apis from '../lib/apis'
+import GroupBudget from './GroupBudget.vue'
 import GroupDescription from './GroupDescription.vue'
 import Button from './shared/Button.vue'
 import FixButton from './shared/FixButton.vue'
@@ -10,21 +11,29 @@ import type { Group } from '/@/lib/apis'
 import type { PostGroup } from '/@/lib/apis'
 import { useGroupStore } from '/@/stores/group'
 
-type Props = { group: Group }
+interface Props {
+  group: Group
+}
+type FixMode = 'name' | 'description' | 'budget' | ''
 
 const props = defineProps<Props>()
 const groupStore = useGroupStore()
-const fixMode = ref('')
+const fixMode = ref<FixMode>('')
 const fixedValue = ref({
   name: props.group.name,
   description: props.group.description,
-  budget: props.group.budget
+  budget: props.group.budget.toString()
 })
-function changeFixMode(kind: 'name' | 'description' | '') {
+function changeFixMode(kind: 'name' | 'description' | 'budget' | '') {
   if (kind !== '') {
     fixMode.value = kind
   } else {
-    putGroup(props.group.id, fixedValue.value)
+    const value = {
+      name: fixedValue.value.name,
+      description: fixedValue.value.description,
+      budget: Number(fixedValue.value.budget)
+    }
+    putGroup(props.group.id, value)
     fixMode.value = ''
   }
 }
@@ -71,11 +80,22 @@ const deleteGroup = async (id: string) => {
       </div>
     </div>
     <div class="flex mt-4">
-      <GroupDescription />
+      <GroupDescription
+        :change-fix-mode="changeFixMode"
+        :fix-mode="fixMode"
+        :group="group"
+        :put-group="putGroup"
+        :value="fixedValue.description"
+        @input="fixedValue.description = $event" />
     </div>
-    <div class="mt-4">
-      予算：
-      {{ props.group.budget }}円
+    <div class="mt-4 h-10">
+      <GroupBudget
+        :change-fix-mode="changeFixMode"
+        :fix-mode="fixMode"
+        :group="group"
+        :put-group="putGroup"
+        :value="fixedValue.budget"
+        @input="fixedValue.budget = $event" />
     </div>
     <div class="flex items-center">
       このグループの入出金記録へ

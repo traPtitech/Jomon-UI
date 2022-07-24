@@ -1,4 +1,3 @@
-import { group } from 'console'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -57,7 +56,6 @@ export const useGroupStore = defineStore('group', () => {
 
   return {
     groups,
-    group,
     isGroupFetched,
     fetchGroups,
     postGroupOwner,

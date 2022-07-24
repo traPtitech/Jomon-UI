@@ -116,6 +116,7 @@ export const useTransactionStore = defineStore('transaction', () => {
           params.group || ''
         )
       ).data
+      isTransactionFetched.value = true
     } catch (err: any) {
       alert(err.message)
     }

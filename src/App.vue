@@ -18,6 +18,6 @@ const userStore = useUserStore()
 <style>
 .modal-container {
   cursor: default;
-  z-index: 10;
+  z-index: 20;
 }
 </style>

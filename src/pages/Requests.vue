@@ -26,6 +26,7 @@ const sliceRequestsAt = (index: number, n: number) => {
 }
 
 onMounted(() => {
+  return
   if (!requestStore.isRequestFetched) {
     requestStore.fetchRequests()
   }

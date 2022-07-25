@@ -1,6 +1,10 @@
 <script lang="ts" setup>
+import { MenuIcon } from '@heroicons/vue/outline'
+import { openModal } from 'jenesius-vue-modal'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
+import Drawer from './Drawer.vue'
 import HeaderButton from './HeaderButton.vue'
 import Logo from './shared/JomonLogo.vue'
 import UserIcon from './shared/UserIcon.vue'
@@ -10,17 +14,28 @@ interface Props {
   me: User
 }
 const route = useRoute()
+const drawer = ref()
 
+async function handleOpenDrawer() {
+  if (!drawer.value || drawer.value.closed) {
+    drawer.value = await openModal(Drawer)
+  } else {
+    drawer.value.close()
+  }
+}
 defineProps<Props>()
 </script>
 
 <template>
-  <header class="fixed z-10 flex h-12 w-full items-center bg-white shadow">
+  <header
+    class="fixed flex h-12 w-full items-center bg-white pl-2 shadow"
+    :class="drawer ? 'z-30' : 'z-10'">
+    <MenuIcon class="h-8 w-8 md:hidden" @click="handleOpenDrawer" />
     <router-link to="/">
       <Logo />
     </router-link>
     <div class="flex h-full flex-1 justify-between px-2">
-      <div class="flex items-center gap-2">
+      <div class="invisible flex items-center gap-2 md:visible">
         <HeaderButton
           :is-here="route.fullPath === '/requests'"
           path="/requests"

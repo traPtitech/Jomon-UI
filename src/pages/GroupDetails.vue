@@ -53,13 +53,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-w-160 mx-auto flex h-full flex-col px-12 pt-4">
-    <div class="flex h-full justify-between">
-      <GroupDetail :group="group" />
-      <div class="flex w-1/4 flex-col gap-8 py-4">
-        <GroupMembers :group="group" />
-        <GroupOwners :group="group" />
-      </div>
+  <div
+    class="min-w-80 mx-auto flex h-full flex-col justify-between px-12 pt-4 md:flex-row">
+    <GroupDetail class="md:w-3/4" :group="group" />
+    <div class="flex flex-col gap-8 py-4 md:w-1/4">
+      <GroupMembers :group="group" />
+      <GroupOwners :group="group" />
     </div>
   </div>
 </template>

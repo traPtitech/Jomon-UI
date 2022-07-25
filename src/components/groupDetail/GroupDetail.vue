@@ -45,6 +45,9 @@ const putGroup = async (id: string, group: PostGroup) => {
   }
 }
 const deleteGroup = async (id: string) => {
+  if (!confirm('本当にこのグループを削除しますか？')) {
+    return
+  }
   try {
     await apis.deleteGroup(id)
     groupStore.groups = groupStore.groups.filter(group => group.id !== id)
@@ -67,7 +70,7 @@ const deleteGroup = async (id: string) => {
       <div v-if="fixMode === 'name'">
         <input
           v-model="fixedValue.name"
-          class="w-100 rounded p-1"
+          class="rounded p-1"
           placeholder="グループ名"
           type="text" />
         <Button
@@ -79,7 +82,7 @@ const deleteGroup = async (id: string) => {
         </Button>
       </div>
     </div>
-    <div class="mt-4 flex">
+    <div class="mt-4">
       <GroupDescription
         :change-fix-mode="changeFixMode"
         :fix-mode="fixMode"

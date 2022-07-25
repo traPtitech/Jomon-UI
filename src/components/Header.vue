@@ -15,12 +15,12 @@ defineProps<Props>()
 </script>
 
 <template>
-  <header class="flex h-12 shadow w-full items-center fixed bg-white z-9999">
+  <header class="z-9999 fixed flex h-12 w-full items-center bg-white shadow">
     <router-link to="/">
       <Logo />
     </router-link>
-    <div class="flex h-full flex-1 px-2 justify-between">
-      <div class="flex gap-2 items-center">
+    <div class="flex h-full flex-1 justify-between px-2">
+      <div class="flex items-center gap-2">
         <HeaderButton
           :is-here="route.fullPath === '/requests'"
           path="/requests"

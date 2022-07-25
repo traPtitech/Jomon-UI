@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-import GroupDetail from '/@/components/GroupDetail.vue'
+import GroupDetail from '../components/GroupDetail/GroupDetail.vue'
 import GroupMembers from '/@/components/GroupMembers.vue'
 import GroupOwners from '/@/components/GroupOwners.vue'
 import apis from '/@/lib/apis'
@@ -54,10 +53,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col h-full mx-auto min-w-160 px-12 pt-4">
+  <div class="min-w-160 mx-auto flex h-full flex-col px-12 pt-4">
     <div class="flex h-full justify-between">
       <GroupDetail :group="group" />
-      <div class="flex flex-col py-4 w-1/4 gap-8">
+      <div class="flex w-1/4 flex-col gap-8 py-4">
         <GroupMembers :group="group" />
         <GroupOwners :group="group" />
       </div>

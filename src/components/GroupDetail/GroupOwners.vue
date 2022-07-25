@@ -29,15 +29,15 @@ function handleDeleteOwner(id: string) {
 
 <template>
   <div
-    class="border flex flex-col border-gray-400 h-1/2 relative justify-between">
-    <h2 class="bg-white px-2 -top-3 left-2 absolute">グループオーナー</h2>
-    <ul class="h-full p-4 overflow-y-scroll">
+    class="relative flex h-1/2 flex-col justify-between border border-gray-400">
+    <h2 class="absolute -top-3 left-2 bg-white px-2">グループオーナー</h2>
+    <ul class="h-full overflow-y-scroll p-4">
       <li
         v-for="owner in group.owners"
         :key="owner"
         class="flex items-center justify-between">
         <div>
-          <UserIcon class="w-12 inline" :name="owner" />
+          <UserIcon class="inline w-12" :name="owner" />
           {{ owner }}
         </div>
         <button @click="handleDeleteOwner(owner)">

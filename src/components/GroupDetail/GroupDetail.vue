@@ -2,19 +2,19 @@
 import { ExternalLinkIcon } from '@heroicons/vue/outline'
 import { ref } from 'vue'
 
-import apis from '../lib/apis'
+import apis from '../../lib/apis'
+import Button from '../shared/Button.vue'
+import FixButton from '../shared/FixButton.vue'
 import GroupBudget from './GroupBudget.vue'
 import GroupDescription from './GroupDescription.vue'
-import Button from './shared/Button.vue'
-import FixButton from './shared/FixButton.vue'
-import type { Group } from '/@/lib/apis'
-import type { PostGroup } from '/@/lib/apis'
+import type { Group, PostGroup } from '/@/lib/apis'
 import { useGroupStore } from '/@/stores/group'
+
+export type FixMode = 'name' | 'description' | 'budget' | ''
 
 interface Props {
   group: Group
 }
-type FixMode = 'name' | 'description' | 'budget' | ''
 
 const props = defineProps<Props>()
 const groupStore = useGroupStore()
@@ -24,7 +24,7 @@ const fixedValue = ref({
   description: props.group.description,
   budget: props.group.budget.toString()
 })
-function changeFixMode(kind: 'name' | 'description' | 'budget' | '') {
+function changeFixMode(kind: FixMode) {
   if (kind !== '') {
     fixMode.value = kind
   } else {
@@ -67,7 +67,7 @@ const deleteGroup = async (id: string) => {
       <div v-if="fixMode === 'name'">
         <input
           v-model="fixedValue.name"
-          class="rounded p-1 w-100"
+          class="w-100 rounded p-1"
           placeholder="グループ名"
           type="text" />
         <Button
@@ -79,7 +79,7 @@ const deleteGroup = async (id: string) => {
         </Button>
       </div>
     </div>
-    <div class="flex mt-4">
+    <div class="mt-4 flex">
       <GroupDescription
         :change-fix-mode="changeFixMode"
         :fix-mode="fixMode"

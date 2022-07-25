@@ -1,13 +1,14 @@
 <script lang="ts" setup>
 import type { Group, PostGroup } from '../lib/apis'
+import type { FixMode } from './GroupDetail.vue'
 import Button from './shared/Button.vue'
 import FixButton from './shared/FixButton.vue'
 
 interface Props {
   group: Group
   putGroup: (id: string, group: PostGroup) => void
-  changeFixMode: (kind: 'name' | 'description' | 'budget' | '') => void
-  fixMode: 'name' | 'description' | 'budget' | ''
+  changeFixMode: (kind: FixMode) => void
+  fixMode: FixMode
   value: string
 }
 
@@ -18,14 +19,14 @@ const emit = defineEmits<{ (e: 'input', value: string): void }>()
 <template>
   詳細：
   <div v-if="!(fixMode === 'description')" class="flex items-start">
-    <p class="pl-1 h-32 w-200 border border-gray-300 overflow-y-scroll">
+    <p class="w-200 h-32 overflow-y-scroll border border-gray-300 pl-1">
       {{ props.group.description }}
     </p>
     <FixButton @click="changeFixMode('description')" />
   </div>
   <div v-if="fixMode === 'description'">
     <textarea
-      class="resize-none w-200 h-32 p-1"
+      class="w-200 h-32 resize-none p-1"
       placeholder="詳細"
       :value="props.value"
       @input="emit('input', ($event.target as HTMLTextAreaElement).value)" />

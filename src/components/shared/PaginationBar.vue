@@ -47,11 +47,11 @@ const right = computed(
 </script>
 
 <template>
-  <div class="h-9 text-center text-sm w-full">
-    <div class="flex h-full mx-auto w-min ring-0 justify-center">
+  <div class="h-9 w-full text-center text-sm">
+    <div class="mx-auto flex h-full w-min justify-center ring-0">
       <!-- Prev -->
       <router-link
-        class="rounded flex w-18 justify-center items-center hover:bg-gray-200 mr-4"
+        class="w-18 mr-4 flex items-center justify-center rounded hover:bg-gray-200"
         :class="currentPage === 1 ? 'invisible' : ''"
         :to="`${path}?page=${currentPage - 1}`">
         <ChevronLeftIcon class="w-4" />Prev
@@ -70,7 +70,7 @@ const right = computed(
 
       <!-- Center -->
       <div v-if="totalPages > 9" class="flex">
-        <span class="pb-2 w-10 self-end">...</span>
+        <span class="w-10 self-end pb-2">...</span>
         <PageLink
           v-for="page in center"
           :key="page"
@@ -86,7 +86,7 @@ const right = computed(
           totalPages > 9 && 5 < currentPage && currentPage <= totalPages - 5
         "
         class="flex">
-        <span class="pb-2 w-10 self-end">...</span>
+        <span class="w-10 self-end pb-2">...</span>
         <PageLink
           v-for="page in right"
           :key="page"
@@ -98,7 +98,7 @@ const right = computed(
 
       <!-- Next -->
       <router-link
-        class="rounded flex w-18 justify-center items-center hover:bg-gray-200 ml-4"
+        class="w-18 ml-4 flex items-center justify-center rounded hover:bg-gray-200"
         :class="currentPage === totalPages ? 'invisible' : ''"
         :to="`${path}?page=${currentPage + 1}`">
         Next<ChevronRightIcon class="w-4" />

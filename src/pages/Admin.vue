@@ -39,7 +39,7 @@ const addAdmins = () => {
     <div>
       <ul class="flex gap-2">
         <li v-for="admin in admins" :key="admin">
-          <div class="border border-black rounded text-center px-2">
+          <div class="rounded border border-black px-2 text-center">
             {{ admin }}
           </div>
         </li>

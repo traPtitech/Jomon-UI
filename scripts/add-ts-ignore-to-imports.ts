@@ -1,6 +1,5 @@
 import type { SourceFile } from 'ts-morph'
-import { SyntaxKind } from 'ts-morph'
-import { Project } from 'ts-morph'
+import { SyntaxKind, Project } from 'ts-morph'
 
 const addTsIgnoreToImportsToFile = async (sourceFile: SourceFile) => {
   const imports = sourceFile.getImportDeclarations()

@@ -1,13 +1,14 @@
 <script lang="ts" setup>
-import type { Group, PostGroup } from '../lib/apis'
-import Button from './shared/Button.vue'
-import FixButton from './shared/FixButton.vue'
+import type { Group, PostGroup } from '../../lib/apis'
+import Button from '../shared/Button.vue'
+import FixButton from '../shared/FixButton.vue'
+import type { FixMode } from './GroupDetail.vue'
 
 interface Props {
   group: Group
   putGroup: (id: string, group: PostGroup) => void
-  changeFixMode: (kind: 'name' | 'description' | 'budget' | '') => void
-  fixMode: 'name' | 'description' | 'budget' | ''
+  changeFixMode: (kind: FixMode) => void
+  fixMode: FixMode
   value: string
 }
 

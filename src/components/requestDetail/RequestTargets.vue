@@ -11,8 +11,8 @@ const requestDetailStore = useRequestDetailStore()
 
 <template>
   <div class="flex">
-    払い戻し対象者：
     <div v-if="!(requestDetailStore.editMode === 'targets')">
+      払い戻し対象者：
       <span
         v-for="target in requestDetailStore.request.targets"
         :key="target.id">
@@ -23,9 +23,10 @@ const requestDetailStore = useRequestDetailStore()
         @click="requestDetailStore.changeEditMode('targets')" />
     </div>
     <div v-if="requestDetailStore.editMode === 'targets'">
+      払い戻し対象者：
       <VueSelect
         v-model="requestDetailStore.editedValue.targets"
-        class="w-100"
+        class="inline-block w-2/3"
         :close-on-select="false"
         label="name"
         multiple

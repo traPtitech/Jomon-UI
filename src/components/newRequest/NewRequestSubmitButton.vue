@@ -62,11 +62,7 @@ async function postRequest() {
 
 <template>
   <div class="text-right">
-    <Button
-      class="mb-4 w-48"
-      font-size="xl"
-      padding="sm"
-      @click.stop="postRequest">
+    <Button class="mb-4" font-size="xl" padding="md" @click.stop="postRequest">
       申請を作成する
     </Button>
   </div>

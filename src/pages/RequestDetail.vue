@@ -47,13 +47,13 @@ onMounted(() => {
 <template>
   <div class="min-w-160 mx-auto flex flex-col px-12 pt-4">
     <div class="bar">
-      <div class="flex justify-between">
-        <div class="flex">
+      <div class="flex flex-col justify-between md:flex-row">
+        <div class="flex flex-col md:flex-row">
           <RequestTitle />
           <StatusChip has-text :status="requestDetailStore.request.status" />
-          <StatusChangeButtons />
+          <StatusChangeButtons class="" />
         </div>
-        <div class="flex items-center gap-4">
+        <div class="flex flex-col-reverse md:flex-row md:items-center md:gap-4">
           <RequestGroup />
           <div>申請者：{{ requestDetailStore.request.created_by }}</div>
           <div>申請日：{{ formattedDate }}</div>
@@ -61,9 +61,9 @@ onMounted(() => {
         </div>
       </div>
       <RequestTags class="mt-4" />
-      <div class="mt-4 flex gap-20">
-        <RequestContent />
-        <RequestTargets />
+      <div class="mt-4 flex flex-col gap-4 md:flex-row">
+        <RequestContent class="w-3/5" />
+        <RequestTargets class="w-2/5" />
       </div>
     </div>
     <div class="flex">

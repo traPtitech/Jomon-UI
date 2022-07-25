@@ -18,9 +18,9 @@ export const useUserStore = defineStore('user', () => {
       name: 'nagatech',
       display_name: 'ながてち',
       admin: true,
-      created_at: '2022-01-25T13:45:37.048Z',
-      updated_at: '2022-01-25T13:45:37.048Z',
-      deleted_at: '2022-01-25T13:45:37.048Z'
+      created_at: '2022-01-25T13:45:36.048Z',
+      updated_at: '2022-01-25T13:45:36.048Z',
+      deleted_at: '2022-01-25T13:45:36.048Z'
     },
     {
       name: 'mehm8128',

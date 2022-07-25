@@ -28,14 +28,15 @@ const userStore = useUserStore()
     <div
       v-else-if="requestDetailStore.editMode === 'tags'"
       class="flex items-center">
+      <!--こことか他にもストアのrefをv-modelに設定してるところのVueSelectの要素を削除できない-->
       <VueSelect
         v-model="requestDetailStore.editedValue.tags"
-        class="w-200"
         :close-on-select="false"
         label="name"
         multiple
         :options="tagStore.tags"
-        placeholder="タグ" />
+        placeholder="タグ"
+        :reduce="(tag:any) => tag.id" />
       <Button
         class="ml-2"
         font-size="sm"

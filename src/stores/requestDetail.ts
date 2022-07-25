@@ -21,18 +21,18 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   - bbb`,
     targets: [
       {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        id: 'mehm8128',
         amount: 1200,
         target: 'mehm8128',
         paid_at: '2020-01-01',
         created_at: '2020-01-01'
       },
       {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
+        id: 'nagatech',
         amount: 1500,
-        target: 'mehm',
-        paid_at: '2020-01-01',
-        created_at: '2020-01-01'
+        target: 'nagatech',
+        paid_at: '2020-01-02',
+        created_at: '2020-01-02'
       }
     ],
     comments: [
@@ -79,14 +79,14 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
       {
         id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         name: '2021講習会',
-        created_at: '2021-02-12T08:01:37.838Z',
-        updated_at: '2021-02-12T08:01:37.838Z'
+        created_at: '2021-02-12T08:01:38.838Z',
+        updated_at: '2021-02-12T08:01:38.838Z'
       },
       {
         id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
         name: '2022講習会',
-        created_at: '2022-02-12T08:01:37.838Z',
-        updated_at: '2022-02-12T08:01:37.838Z'
+        created_at: '2022-02-12T08:01:39.838Z',
+        updated_at: '2022-02-12T08:01:39.838Z'
       }
     ],
     group: {
@@ -94,8 +94,8 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
       name: 'SysAd',
       description: 'SysAd班',
       budget: 250000,
-      created_at: '2022-02-12T08:01:37.838Z',
-      updated_at: '2022-02-12T08:01:37.838Z'
+      created_at: '2022-04-05T14:02:15.431Z',
+      updated_at: '2022-04-05T14:02:15.431Z'
     },
     created_at: '2022-02-12T08:01:37.838Z',
     updated_at: '2022-02-12T08:01:37.838Z'

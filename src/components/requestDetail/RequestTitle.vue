@@ -20,7 +20,7 @@ const userStore = useUserStore()
   <div v-if="requestDetailStore.editMode === 'title'">
     <input
       v-model="requestDetailStore.editedValue.title"
-      class="w-100 rounded p-1"
+      class="rounded p-1"
       placeholder="タイトル"
       type="text" />
     <Button

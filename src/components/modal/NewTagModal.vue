@@ -33,7 +33,7 @@ async function postTag() {
         <input v-model="tagName" class="w-2/3 border border-gray-300" />
       </div>
       <div class="mt-8 text-center">
-        <Button class="mb-4 w-48" font-size="xl" padding="sm" @click="postTag">
+        <Button class="mb-4" font-size="xl" padding="md" @click="postTag">
           タグを作成する
         </Button>
       </div>

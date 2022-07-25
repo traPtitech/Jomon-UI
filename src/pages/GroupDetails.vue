@@ -2,9 +2,9 @@
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-import GroupDetail from '../components/GroupDetail/GroupDetail.vue'
-import GroupMembers from '/@/components/GroupMembers.vue'
-import GroupOwners from '/@/components/GroupOwners.vue'
+import GroupDetail from '/@/components/groupDetail/GroupDetail.vue'
+import GroupMembers from '/@/components/groupDetail/GroupMembers.vue'
+import GroupOwners from '/@/components/groupDetail/GroupOwners.vue'
 import apis from '/@/lib/apis'
 import { toId } from '/@/lib/parsePathParams'
 import { useGroupStore } from '/@/stores/group'

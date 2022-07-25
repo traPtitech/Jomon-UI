@@ -2,11 +2,11 @@
 import { ExternalLinkIcon } from '@heroicons/vue/outline'
 import { ref } from 'vue'
 
-import apis from '../../lib/apis'
-import Button from '../shared/Button.vue'
-import FixButton from '../shared/FixButton.vue'
 import GroupBudget from './GroupBudget.vue'
 import GroupDescription from './GroupDescription.vue'
+import Button from '/@/components/shared/Button.vue'
+import FixButton from '/@/components/shared/FixButton.vue'
+import apis from '/@/lib/apis'
 import type { Group, PostGroup } from '/@/lib/apis'
 import { useGroupStore } from '/@/stores/group'
 

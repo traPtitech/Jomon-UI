@@ -3,7 +3,7 @@ import { MinusSmIcon, PlusSmIcon } from '@heroicons/vue/outline'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
-import UserIcon from './shared/UserIcon.vue'
+import UserIcon from '/@/components/shared/UserIcon.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import type { Group } from '/@/lib/apis'
 import { useGroupStore } from '/@/stores/group'

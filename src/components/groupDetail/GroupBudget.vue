@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import type { Group, PostGroup } from '../../lib/apis'
-import Button from '../shared/Button.vue'
-import FixButton from '../shared/FixButton.vue'
 import type { FixMode } from './GroupDetail.vue'
+import Button from '/@/components/shared/Button.vue'
+import FixButton from '/@/components/shared/FixButton.vue'
+import type { Group, PostGroup } from '/@/lib/apis'
 
 interface Props {
   group: Group

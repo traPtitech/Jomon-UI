@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import Button from '/@/components/shared/Button.vue'
+import SimpleButton from '../shared/SimpleButton.vue'
 import EditButton from '/@/components/shared/EditButton.vue'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
@@ -15,7 +15,7 @@ const userStore = useUserStore()
     <span class="text-2xl">
       金額：{{ requestDetailStore.request.amount }}円
     </span>
-    <EditButton
+    <edit-button
       v-if="requestDetailStore.request.created_by === userStore.me.name"
       @click="requestDetailStore.changeEditMode('amount')" />
   </div>
@@ -28,12 +28,12 @@ const userStore = useUserStore()
       class="w-24 p-1"
       placeholder="金額"
       type="text" />円
-    <Button
+    <simple-button
       class="ml-2"
       font-size="sm"
       padding="sm"
       @click.stop="requestDetailStore.changeEditMode('')">
       完了
-    </Button>
+    </simple-button>
   </div>
 </template>

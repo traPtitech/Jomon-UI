@@ -2,8 +2,8 @@
 import { openModal } from 'jenesius-vue-modal'
 import { ref } from 'vue'
 
+import SimpleButton from '../shared/SimpleButton.vue'
 import NewTagModal from '/@/components/modal/NewTagModal.vue'
-import Button from '/@/components/shared/Button.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import { useTagStore } from '/@/stores/tag'
 
@@ -30,7 +30,7 @@ const emit = defineEmits<{ (e: 'input', value: string[]): void }>()
   <div class="flex flex-col">
     <label>タグ</label>
     <div class="flex">
-      <VueSelect
+      <vue-select
         v-model="tags"
         class="w-2/3"
         :close-on-select="false"
@@ -40,13 +40,13 @@ const emit = defineEmits<{ (e: 'input', value: string[]): void }>()
         placeholder="タグを選択"
         :reduce="(tag:any) => tag.id"
         @close="emit('input', tags)" />
-      <Button
+      <simple-button
         class="ml-8"
         font-size="lg"
         padding="sm"
         @click.stop="openModal(NewTagModal)">
         タグを新規作成
-      </Button>
+      </simple-button>
     </div>
   </div>
 </template>

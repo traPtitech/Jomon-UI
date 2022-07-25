@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import Button from '/@/components/shared/Button.vue'
+import SimpleButton from '../shared/SimpleButton.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import apis from '/@/lib/apis'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
@@ -30,14 +30,14 @@ async function submit() {
 
 <template>
   <form class="pl-4">
-    <MarkdownTextarea
+    <markdown-textarea
       placeholder="コメント"
       :value="comment"
       @input="comment = $event" />
     <div class="mt-2 text-right">
-      <Button font-size="md" padding="sm" @click.prevent="submit">
+      <simple-button font-size="md" padding="sm" @click.prevent="submit">
         コメントする
-      </Button>
+      </simple-button>
     </div>
   </form>
 </template>

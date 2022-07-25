@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { openModal } from 'jenesius-vue-modal'
 
+import SimpleButton from '../shared/SimpleButton.vue'
 import StatusChangeModal from '/@/components/modal/StatusChangeModal.vue'
-import Button from '/@/components/shared/Button.vue'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
@@ -12,7 +12,7 @@ const requestDetailStore = useRequestDetailStore()
 
 <template>
   <div class="flex gap-4">
-    <Button
+    <simple-button
       v-if="
         requestDetailStore.request.status === 'fix_required' ||
         (userStore.me.admin && requestDetailStore.request.status === 'accepted')
@@ -21,8 +21,8 @@ const requestDetailStore = useRequestDetailStore()
       padding="sm"
       @click.stop="openModal(StatusChangeModal, { nextStatus: 'submitted' })">
       承認待ちにする
-    </Button>
-    <Button
+    </simple-button>
+    <simple-button
       v-if="
         userStore.me.admin && requestDetailStore.request.status === 'submitted'
       "
@@ -32,8 +32,8 @@ const requestDetailStore = useRequestDetailStore()
         openModal(StatusChangeModal, { nextStatus: 'fix_required' })
       ">
       要修正にする
-    </Button>
-    <Button
+    </simple-button>
+    <simple-button
       v-if="
         userStore.me.admin && requestDetailStore.request.status === 'submitted'
       "
@@ -41,8 +41,8 @@ const requestDetailStore = useRequestDetailStore()
       padding="sm"
       @click.stop="openModal(StatusChangeModal, { nextStatus: 'accepted' })">
       承認済みにする
-    </Button>
-    <Button
+    </simple-button>
+    <simple-button
       v-if="
         userStore.me.admin && requestDetailStore.request.status === 'submitted'
       "
@@ -50,6 +50,6 @@ const requestDetailStore = useRequestDetailStore()
       padding="sm"
       @click.stop="openModal(StatusChangeModal, { nextStatus: 'rejected' })">
       却下する
-    </Button>
+    </simple-button>
   </div>
 </template>

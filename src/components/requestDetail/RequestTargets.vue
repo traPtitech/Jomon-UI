@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import Button from '/@/components/shared/Button.vue'
+import SimpleButton from '../shared/SimpleButton.vue'
 import EditButton from '/@/components/shared/EditButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
@@ -18,13 +18,13 @@ const requestDetailStore = useRequestDetailStore()
         :key="target.id">
         {{ target.target }},
       </span>
-      <EditButton
+      <edit-button
         v-if="requestDetailStore.request.created_by === userStore.me.name"
         @click="requestDetailStore.changeEditMode('targets')" />
     </div>
     <div v-if="requestDetailStore.editMode === 'targets'">
       払い戻し対象者：
-      <VueSelect
+      <vue-select
         v-model="requestDetailStore.editedValue.targets"
         class="inline-block w-2/3"
         :close-on-select="false"
@@ -33,13 +33,13 @@ const requestDetailStore = useRequestDetailStore()
         :options="userStore.users"
         placeholder="払い戻し対象者"
         :reduce="(user:any) => user.name" />
-      <Button
+      <simple-button
         class="ml-2"
         font-size="sm"
         padding="sm"
         @click.stop="requestDetailStore.changeEditMode('')">
         完了
-      </Button>
+      </simple-button>
     </div>
   </div>
 </template>

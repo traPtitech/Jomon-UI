@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
 
-import Button from '/@/components/shared/Button.vue'
+import SimpleButton from '../shared/SimpleButton.vue'
 import type { Request } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
@@ -62,8 +62,12 @@ async function postRequest() {
 
 <template>
   <div class="text-right">
-    <Button class="mb-4" font-size="xl" padding="md" @click.stop="postRequest">
+    <simple-button
+      class="mb-4"
+      font-size="xl"
+      padding="md"
+      @click.stop="postRequest">
       申請を作成する
-    </Button>
+    </simple-button>
   </div>
 </template>

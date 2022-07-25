@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import Button from '/@/components/shared/Button.vue'
+import SimpleButton from '../shared/SimpleButton.vue'
 import EditButton from '/@/components/shared/EditButton.vue'
 import MarkdownIt from '/@/components/shared/MarkdownIt.vue'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
@@ -15,10 +15,10 @@ const userStore = useUserStore()
     <div
       v-if="!(requestDetailStore.editMode === 'content')"
       class="flex w-4/5 items-start">
-      <MarkdownIt
+      <markdown-it
         class="h-32 w-full overflow-y-scroll border border-gray-300 pl-2"
         :text="requestDetailStore.request.content" />
-      <EditButton
+      <edit-button
         v-if="requestDetailStore.request.created_by === userStore.me.name"
         @click="requestDetailStore.changeEditMode('content')" />
     </div>
@@ -27,13 +27,13 @@ const userStore = useUserStore()
         v-model="requestDetailStore.editedValue.content"
         class="h-30 w-4/5 resize-none p-1"
         placeholder="詳細" />
-      <Button
+      <simple-button
         class="ml-2"
         font-size="sm"
         padding="sm"
         @click.stop="requestDetailStore.changeEditMode('')">
         完了
-      </Button>
+      </simple-button>
     </div>
   </div>
 </template>

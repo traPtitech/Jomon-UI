@@ -16,12 +16,12 @@ const formattedDate = formatDate(props.request.created_at)
   <router-link :to="'/requests/' + request.id">
     <div class="flex p-1 hover:bg-zinc-100">
       <div class="flex items-center justify-center">
-        <StatusChip :status="request.status" />
+        <status-chip :status="request.status" />
       </div>
       <div class="flex-grow">
         <span class="text-xl">{{ request.title }}</span>
         <div class="mt-2">
-          <Tags :tags="request.tags" />
+          <tags :tags="request.tags" />
         </div>
       </div>
       <div class="flex flex-col">

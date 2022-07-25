@@ -71,7 +71,7 @@ const images = ref<File[]>([])
       </div>
       <div class="flex flex-col">
         <label>詳細</label>
-        <MarkdownTextarea
+        <markdown-textarea
           placeholder=""
           :templates="templates"
           :value="request.content"
@@ -79,7 +79,7 @@ const images = ref<File[]>([])
       </div>
       <div class="flex flex-col">
         <label>払い戻し対象者</label>
-        <VueSelect
+        <vue-select
           v-model="request.targets"
           :close-on-select="false"
           label="name"
@@ -90,16 +90,16 @@ const images = ref<File[]>([])
       </div>
       <div class="flex flex-col">
         <label>グループ</label>
-        <VueSelect
+        <vue-select
           v-model="request.group"
           label="name"
           :options="groupStore.groups"
           placeholder="グループを選択"
           :reduce="(group:any) => group.id" />
       </div>
-      <NewRequestTag :request="request" @input="request.tags = $event" />
-      <NewRequestImageForm :images="images" @input="images = $event" />
-      <NewRequestSubmitButton :images="images" :request="request" />
+      <new-request-tag :request="request" @input="request.tags = $event" />
+      <new-request-image-form :images="images" @input="images = $event" />
+      <new-request-submit-button :images="images" :request="request" />
     </div>
   </div>
 </template>

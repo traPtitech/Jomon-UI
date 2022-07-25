@@ -46,16 +46,16 @@ const logs = () => {
 
 <template>
   <div class="h-120 h-full w-2/3 overflow-y-scroll p-2">
-    <RequestImage />
+    <request-image />
     <ul>
       <li
         v-for="log in logs()"
         :key="log.created_at.toDateString"
         class="vertical-bar">
-        <CommentLog
+        <comment-log
           v-if="log.kind === 'comment'"
           :log="requestDetailStore.request.comments[log.index]" />
-        <StatusChangeLog
+        <status-change-log
           v-if="log.kind === 'statusChange'"
           :log="requestDetailStore.request.statuses[log.index]" />
       </li>

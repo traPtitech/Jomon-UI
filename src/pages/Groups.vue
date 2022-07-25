@@ -2,9 +2,9 @@
 import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
+import SimpleButton from '../components/shared/SimpleButton.vue'
 import { toPage } from '../lib/parseQueryParams'
 import GroupItem from '/@/components/GroupItem.vue'
-import Button from '/@/components/shared/Button.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import { useGroupStore } from '/@/stores/group'
 
@@ -38,7 +38,9 @@ watch(
         <h1 class="text-center text-3xl">グループ一覧</h1>
         <div class="absolute right-0">
           <router-link to="/groups/new">
-            <Button font-size="lg" padding="md"> グループの新規作成 </Button>
+            <simple-button font-size="lg" padding="md">
+              グループの新規作成
+            </simple-button>
           </router-link>
         </div>
       </div>
@@ -52,11 +54,11 @@ watch(
         </div>
         <ul class="divide-y">
           <li v-for="group in sliceGroupsAt(page, 10)" :key="group.id">
-            <GroupItem :group="group" />
+            <group-item :group="group" />
           </li>
         </ul>
       </div>
-      <PaginationBar
+      <pagination-bar
         class="mt-4"
         :current-page="page"
         path="/groups"

@@ -2,11 +2,11 @@
 import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
+import SimpleButton from '../components/shared/SimpleButton.vue'
 import { toPage } from '../lib/parseQueryParams'
 import { useRequestStore } from '../stores/request'
 import RequestFilteringMenu from '/@/components/RequestFilteringMenu.vue'
 import RequestItem from '/@/components/RequestItem.vue'
-import Button from '/@/components/shared/Button.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
@@ -57,24 +57,26 @@ watch(
       <h1 class="text-center text-3xl">申請一覧</h1>
       <div class="absolute right-0">
         <router-link to="/requests/new">
-          <Button font-size="lg" padding="md">申請の新規作成</Button>
+          <simple-button font-size="lg" padding="md"
+            >申請の新規作成</simple-button
+          >
         </router-link>
       </div>
     </div>
   </div>
-  <RequestFilteringMenu />
+  <request-filtering-menu />
   <div class="min-h-120">
     <div
       v-if="requestStore.requests.length !== 0"
       class="mx-auto mt-4 w-3/4 shadow">
       <ul>
         <li v-for="request in sliceRequestsAt(page, 7)" :key="request.id">
-          <RequestItem :request="request" />
+          <request-item :request="request" />
         </li>
       </ul>
     </div>
   </div>
-  <PaginationBar
+  <pagination-bar
     class="mt-4"
     :current-page="page"
     path="/requests"

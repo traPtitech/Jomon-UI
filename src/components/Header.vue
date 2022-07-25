@@ -30,30 +30,30 @@ defineProps<Props>()
   <header
     class="fixed flex h-12 w-full items-center bg-white pl-2 shadow"
     :class="drawer ? 'z-30' : 'z-10'">
-    <MenuIcon class="h-8 w-8 md:hidden" @click="handleOpenDrawer" />
+    <menu-icon class="h-8 w-8 md:hidden" @click="handleOpenDrawer" />
     <router-link to="/">
-      <Logo />
+      <logo />
     </router-link>
     <div class="flex h-full flex-1 justify-between px-2">
       <div class="invisible flex items-center gap-2 md:visible">
-        <HeaderButton
+        <header-button
           :is-here="route.fullPath === '/requests'"
           path="/requests"
           text="申請一覧" />
-        <HeaderButton
+        <header-button
           :is-here="route.fullPath === '/transactions'"
           path="/transactions"
           text="入出金記録一覧" />
-        <HeaderButton
+        <header-button
           :is-here="route.fullPath === '/groups'"
           path="/groups"
           text="グループ一覧" />
-        <HeaderButton
+        <header-button
           :is-here="route.fullPath === '/admins'"
           path="/admins"
           text="管理ページ" />
       </div>
-      <UserIcon :name="me.name" />
+      <user-icon :name="me.name" />
     </div>
   </header>
 </template>

@@ -18,7 +18,7 @@ const formattedDateAndTime = formatDateAndTime(props.log.created_at)
 
 <template>
   <div class="flex w-full p-2">
-    <UserIcon class="w-12" :name="log.user" />
+    <user-icon class="w-12" :name="log.user" />
     <div class="w-full pl-2">
       <div class="flex h-12 items-center justify-between">
         {{ log.user }}がコメントしました。
@@ -26,7 +26,7 @@ const formattedDateAndTime = formatDateAndTime(props.log.created_at)
           {{ formattedDateAndTime }}
         </div>
       </div>
-      <MarkdownIt class="border border-zinc-300 p-2" :text="log.comment" />
+      <markdown-it class="border border-zinc-300 p-2" :text="log.comment" />
     </div>
   </div>
 </template>

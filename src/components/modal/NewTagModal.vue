@@ -2,7 +2,7 @@
 import { closeModal } from 'jenesius-vue-modal'
 import { ref } from 'vue'
 
-import Button from '/@/components/shared/Button.vue'
+import SimpleButton from '../shared/SimpleButton.vue'
 import apis from '/@/lib/apis'
 import { useTagStore } from '/@/stores/tag'
 
@@ -33,9 +33,13 @@ async function postTag() {
         <input v-model="tagName" class="w-2/3 border border-gray-300" />
       </div>
       <div class="mt-8 text-center">
-        <Button class="mb-4" font-size="xl" padding="md" @click="postTag">
+        <simple-button
+          class="mb-4"
+          font-size="xl"
+          padding="md"
+          @click="postTag">
           タグを作成する
-        </Button>
+        </simple-button>
       </div>
     </div>
   </div>

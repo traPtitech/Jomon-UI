@@ -2,8 +2,8 @@
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
+import SimpleButton from '../components/shared/SimpleButton.vue'
 import { toId } from '../lib/parseQueryParams'
-import Button from '/@/components/shared/Button.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import apis from '/@/lib/apis'
 import { useGroupStore } from '/@/stores/group'
@@ -57,7 +57,7 @@ async function postTransaction() {
       </div>
       <div class="flex flex-col">
         <label>払い戻し対象者：</label>
-        <VueSelect
+        <vue-select
           v-model="transaction.targets"
           :close-on-select="false"
           label="name"
@@ -68,7 +68,7 @@ async function postTransaction() {
       </div>
       <div class="flex flex-col">
         <label>グループ：</label>
-        <VueSelect
+        <vue-select
           v-model="transaction.group"
           label="name"
           :options="groupStore.groups"
@@ -77,7 +77,7 @@ async function postTransaction() {
       </div>
       <div class="flex flex-col">
         <label>タグ：</label>
-        <VueSelect
+        <vue-select
           v-model="transaction.tags"
           :close-on-select="false"
           label="name"
@@ -87,13 +87,13 @@ async function postTransaction() {
           :reduce="(tag:any) => tag.id" />
       </div>
       <div class="text-right">
-        <Button
+        <simple-button
           class="mb-4 w-64"
           font-size="xl"
           padding="sm"
           @click.stop="postTransaction">
           入出金記録を作成する
-        </Button>
+        </simple-button>
       </div>
     </div>
   </div>

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 
+import SimpleButton from '../components/shared/SimpleButton.vue'
 import apis from '../lib/apis'
-import Button from '/@/components/shared/Button.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import { useAdminStore } from '/@/stores/admin'
 import { useUserStore } from '/@/stores/user'
@@ -66,7 +66,7 @@ const addAdmins = async () => {
       </ul>
     </div>
     <div class="mt-4 flex gap-4">
-      <VueSelect
+      <vue-select
         v-model="addList"
         class="w-1/2"
         label="name"
@@ -74,20 +74,20 @@ const addAdmins = async () => {
         :options="userStore.users"
         placeholder="追加する管理者を選択"
         :reduce="(user:any) => user.name" />
-      <Button font-size="lg" padding="sm" @click.stop="addAdmins">
+      <simple-button font-size="lg" padding="sm" @click.stop="addAdmins">
         選択した管理者を追加
-      </Button>
+      </simple-button>
     </div>
     <div class="mt-12 flex gap-4">
-      <VueSelect
+      <vue-select
         v-model="deleteList"
         class="w-1/2"
         multiple
         :options="adminStore.admins"
         placeholder="削除する管理者を選択" />
-      <Button font-size="lg" padding="sm" @click.stop="deleteAdmins">
+      <simple-button font-size="lg" padding="sm" @click.stop="deleteAdmins">
         選択した管理者を削除
-      </Button>
+      </simple-button>
     </div>
   </div>
   <div v-else>権限がありません。</div>

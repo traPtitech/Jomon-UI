@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import RequestTags from '../components/requestDetail/RequestTags.vue'
+import SimpleButton from '../components/shared/SimpleButton.vue'
 import NewComment from '/@/components/requestDetail/NewComment.vue'
 import RequestAmount from '/@/components/requestDetail/RequestAmount.vue'
 import RequestContent from '/@/components/requestDetail/RequestContent.vue'
@@ -11,7 +12,6 @@ import RequestLogs from '/@/components/requestDetail/RequestLogs.vue'
 import RequestTargets from '/@/components/requestDetail/RequestTargets.vue'
 import RequestTitle from '/@/components/requestDetail/RequestTitle.vue'
 import StatusChangeButtons from '/@/components/requestDetail/StatusChangeButtons.vue'
-import Button from '/@/components/shared/Button.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import apis from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
@@ -49,39 +49,39 @@ onMounted(() => {
     <div class="bar">
       <div class="flex flex-col justify-between md:flex-row">
         <div class="flex flex-col md:flex-row">
-          <RequestTitle />
-          <StatusChip has-text :status="requestDetailStore.request.status" />
-          <StatusChangeButtons class="" />
+          <request-title />
+          <status-chip has-text :status="requestDetailStore.request.status" />
+          <status-change-buttons class="" />
         </div>
         <div class="flex flex-col-reverse md:flex-row md:items-center md:gap-4">
-          <RequestGroup />
+          <request-group />
           <div>申請者：{{ requestDetailStore.request.created_by }}</div>
           <div>申請日：{{ formattedDate }}</div>
-          <RequestAmount />
+          <request-amount />
         </div>
       </div>
-      <RequestTags class="mt-4" />
+      <request-tags class="mt-4" />
       <div class="mt-4 flex flex-col gap-4 md:flex-row">
-        <RequestContent class="w-3/5" />
-        <RequestTargets class="w-2/5" />
+        <request-content class="w-3/5" />
+        <request-targets class="w-2/5" />
       </div>
     </div>
     <div class="flex">
-      <RequestLogs />
+      <request-logs />
       <div class="w-1/3">
         <div class="flex flex-col items-center gap-4 py-8">
           <router-link class="w-2/3" :to="'/transactions/new?requestID=' + id">
-            <Button class="w-full" font-size="md" padding="sm">
+            <simple-button class="w-full" font-size="md" padding="sm">
               この申請から入出金記録を作成する
-            </Button>
+            </simple-button>
           </router-link>
           <router-link class="w-2/3" :to="'/transactions?requestID=' + id">
-            <Button class="w-full" font-size="md" padding="sm">
+            <simple-button class="w-full" font-size="md" padding="sm">
               この申請の入出金記録へ移動
-            </Button>
+            </simple-button>
           </router-link>
         </div>
-        <NewComment />
+        <new-comment />
       </div>
     </div>
   </div>

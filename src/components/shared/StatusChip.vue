@@ -43,17 +43,21 @@ function statusToJpn(status: RequestStatus) {
 
 <template>
   <div class="inline flex items-center px-2" :title="statusToJpn(status)">
-    <CheckCircleIcon v-if="status === 'accepted'" class="w-8 text-green-500" />
-    <ExclamationIcon
+    <check-circle-icon
+      v-if="status === 'accepted'"
+      class="w-8 text-green-500" />
+    <exclamation-icon
       v-else-if="status === 'submitted'"
       class="w-8 text-yellow-500" />
-    <XCircleIcon
+    <x-circle-icon
       v-else-if="status === 'fix_required'"
       class="w-8 text-red-500" />
-    <CloudUploadIcon
+    <cloud-upload-icon
       v-else-if="status === 'rejected'"
       class="w-8 text-gray-500" />
-    <ThumbUpIcon v-else-if="status === 'completed'" class="w-8 text-gray-500" />
+    <thumb-up-icon
+      v-else-if="status === 'completed'"
+      class="w-8 text-gray-500" />
     <span v-if="hasText === true">{{ statusToJpn(status) }}</span>
   </div>
 </template>

@@ -2,7 +2,7 @@
 import { closeModal } from 'jenesius-vue-modal'
 import { ref } from 'vue'
 
-import Button from '/@/components/shared/Button.vue'
+import SimpleButton from '../shared/SimpleButton.vue'
 import MarkdownIt from '/@/components/shared/MarkdownIt.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import type { RequestStatus } from '/@/components/shared/StatusChip.vue'
@@ -45,9 +45,9 @@ async function putStatus(nextStatus: StatusEnum | '', comment: string) {
     <div class="mx-12 mt-8 flex h-4/5 flex-col justify-around gap-4">
       <div class="flex items-center">
         申請の状態を
-        <StatusChip has-text :status="requestDetailStore.request.status" />
+        <status-chip has-text :status="requestDetailStore.request.status" />
         から
-        <StatusChip has-text :status="nextStatus" />
+        <status-chip has-text :status="nextStatus" />
         へ変更します
       </div>
       <div>
@@ -62,18 +62,18 @@ async function putStatus(nextStatus: StatusEnum | '', comment: string) {
           <div
             class="w-full px-2"
             :class="comment ? 'border border-gray-200' : ''">
-            <MarkdownIt class="w-full" :text="comment" />
+            <markdown-it class="w-full" :text="comment" />
           </div>
         </details>
       </div>
       <div class="mt-8 text-center">
-        <Button
+        <simple-button
           class="mb-4 w-60"
           font-size="xl"
           padding="sm"
           @click="putStatus(nextStatus, comment)">
           申請の状態を変更する
-        </Button>
+        </simple-button>
       </div>
     </div>
   </div>

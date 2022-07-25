@@ -61,7 +61,7 @@ function deleteImage(index: number) {
         <button
           class="absolute top-0 right-0 h-6 w-6"
           @click="deleteImage(index)">
-          <XCircleIcon />
+          <x-circle-icon />
         </button>
       </div>
     </div>

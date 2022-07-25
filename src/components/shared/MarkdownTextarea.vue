@@ -31,43 +31,45 @@ function changeCurrentTab(tab: TabType) {
 </script>
 
 <template>
-  <div class="flex gap-2">
-    <button
-      :class="`w-20 rounded-t py-1 ${
-        currentTab === 'input' ? 'bg-gray-400' : 'bg-gray-200'
-      }`"
-      @click.prevent="() => changeCurrentTab('input')">
-      入力
-    </button>
-    <button
-      :class="`w-20 rounded-t py-1 ${
-        currentTab === 'preview' ? 'bg-gray-400' : 'bg-gray-200'
-      }`"
-      @click.prevent="() => changeCurrentTab('preview')">
-      プレビュー
-    </button>
-    <vue-select
-      v-if="templates !== undefined"
-      v-model="selectedTemplate"
-      class="m-1 ml-auto inline-block w-1/3"
-      label="name"
-      :options="templates"
-      placeholder="テンプレートを選択"
-      :reduce="(template:any) => template.name"
-      @close="setTemplate(selectedTemplate)">
-    </vue-select>
-  </div>
   <div>
-    <textarea
-      v-if="currentTab === 'input'"
-      class="min-h-40 w-full rounded-b p-1"
-      :placeholder="placeholder"
-      :value="value"
-      @input="emit('input', ($event.target as HTMLInputElement).value)" />
-    <div
-      v-if="currentTab === 'preview'"
-      class="h-40 w-full overflow-y-scroll border border-gray-500 p-1">
-      <markdown-it :text="value" />
+    <div class="flex gap-2">
+      <button
+        :class="`w-20 rounded-t py-1 ${
+          currentTab === 'input' ? 'bg-gray-400' : 'bg-gray-200'
+        }`"
+        @click.prevent="changeCurrentTab('input')">
+        入力
+      </button>
+      <button
+        :class="`w-20 rounded-t py-1 ${
+          currentTab === 'preview' ? 'bg-gray-400' : 'bg-gray-200'
+        }`"
+        @click.prevent="changeCurrentTab('preview')">
+        プレビュー
+      </button>
+      <vue-select
+        v-if="templates !== undefined"
+        v-model="selectedTemplate"
+        class="m-1 ml-auto inline-block w-1/3"
+        label="name"
+        :options="templates"
+        placeholder="テンプレートを選択"
+        :reduce="(template:any) => template.name"
+        @close="setTemplate(selectedTemplate)">
+      </vue-select>
+    </div>
+    <div>
+      <textarea
+        v-if="currentTab === 'input'"
+        class="min-h-40 w-full rounded-b p-1"
+        :placeholder="placeholder"
+        :value="value"
+        @input="emit('input', ($event.target as HTMLInputElement).value)" />
+      <div
+        v-if="currentTab === 'preview'"
+        class="h-40 w-full overflow-y-scroll border border-gray-500 p-1">
+        <markdown-it :text="value" />
+      </div>
     </div>
   </div>
 </template>

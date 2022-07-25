@@ -2,8 +2,8 @@
 import { closeModal } from 'jenesius-vue-modal'
 import { ref } from 'vue'
 
+import MarkdownTextarea from '../shared/MarkdownTextarea.vue'
 import SimpleButton from '../shared/SimpleButton.vue'
-import MarkdownIt from '/@/components/shared/MarkdownIt.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import type { RequestStatus } from '/@/components/shared/StatusChip.vue'
 import apis from '/@/lib/apis'
@@ -50,22 +50,10 @@ async function putStatus(nextStatus: StatusEnum | '', comment: string) {
         <status-chip has-text :status="nextStatus" />
         へ変更します
       </div>
-      <div>
-        <div class="flex flex-col">
-          <label>コメント</label>
-          <textarea
-            v-model="comment"
-            class="h-20 resize-none rounded border border-gray-300 p-1" />
-        </div>
-        <details class="mb-2">
-          <summary>MDプレビュー</summary>
-          <div
-            class="w-full px-2"
-            :class="comment ? 'border border-gray-200' : ''">
-            <markdown-it class="w-full" :text="comment" />
-          </div>
-        </details>
-      </div>
+      <markdown-textarea
+        placeholder="コメント"
+        :value="comment"
+        @input="comment = $event" />
       <div class="mt-8 text-center">
         <simple-button
           class="mb-4 w-60"

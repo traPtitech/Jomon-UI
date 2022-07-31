@@ -54,12 +54,12 @@ const right = computed(
         class="w-18 mr-4 flex items-center justify-center rounded hover:bg-gray-200"
         :class="currentPage === 1 ? 'invisible' : ''"
         :to="`${path}?page=${currentPage - 1}`">
-        <ChevronLeftIcon class="w-4" />Prev
+        <chevron-left-icon class="w-4" />Prev
       </router-link>
 
       <!-- Left -->
       <div class="flex">
-        <PageLink
+        <page-link
           v-for="page in left"
           :key="page"
           class="not-last:mr-1"
@@ -71,7 +71,7 @@ const right = computed(
       <!-- Center -->
       <div v-if="totalPages > 11" class="flex">
         <span class="w-10 self-end pb-2">...</span>
-        <PageLink
+        <page-link
           v-for="page in center"
           :key="page"
           class="not-last:mr-1"
@@ -87,7 +87,7 @@ const right = computed(
         "
         class="flex">
         <span class="w-10 self-end pb-2">...</span>
-        <PageLink
+        <page-link
           v-for="page in right"
           :key="page"
           class="not-last:mr-1"
@@ -101,7 +101,7 @@ const right = computed(
         class="w-18 ml-4 flex items-center justify-center rounded hover:bg-gray-200"
         :class="currentPage === totalPages ? 'invisible' : ''"
         :to="`${path}?page=${currentPage + 1}`">
-        Next<ChevronRightIcon class="w-4" />
+        Next<chevron-right-icon class="w-4" />
       </router-link>
     </div>
   </div>

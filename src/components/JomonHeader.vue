@@ -5,7 +5,7 @@ import { useRoute } from 'vue-router'
 import { useUserStore } from '/@/stores/user'
 
 import HeaderButton from './HeaderButton.vue'
-import Logo from './shared/JomonLogo.vue'
+import JomonLogo from './shared/JomonLogo.vue'
 import UserIcon from './shared/UserIcon.vue'
 
 const route = useRoute()
@@ -18,7 +18,7 @@ const hasAuthority = computed(() => userStore.isAdmin())
 <template>
   <header class="z-9999 fixed flex h-12 w-full items-center bg-white shadow">
     <router-link to="/">
-      <Logo />
+      <JomonLogo />
     </router-link>
     <div class="flex h-full flex-1 justify-between px-2">
       <div class="flex items-center gap-2">

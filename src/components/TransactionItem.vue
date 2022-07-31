@@ -4,7 +4,7 @@ import { ExternalLinkIcon } from '@heroicons/vue/outline'
 import type { Transaction } from '/@/lib/apis'
 
 import EditButton from './shared/EditButton.vue'
-import Tags from './shared/Tags.vue'
+import TagGroup from './shared/TagGroup.vue'
 
 const formatDate = (date: string) => {
   return (
@@ -38,13 +38,13 @@ const props = defineProps<Props>()
       {{ props.transaction.group.description }}
     </div>
     <div class="w-3/10">
-      <Tags :limit="3" :tags="props.transaction.tags" />
+      <tag-group :limit="3" :tags="props.transaction.tags" />
     </div>
     <div class="absolute -right-16">
       <router-link class="mr-2" :to="`/requests/${transaction.request}`">
-        <ExternalLinkIcon class="h-5" />
+        <external-link-icon class="h-5" />
       </router-link>
-      <EditButton />
+      <edit-button />
     </div>
   </div>
 </template>

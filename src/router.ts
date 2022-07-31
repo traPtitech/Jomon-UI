@@ -3,14 +3,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/requests' },
-  { path: '/requests', component: () => import('./pages/Requests.vue') },
+  { path: '/requests', component: () => import('./pages/RequestsPage.vue') },
   {
     path: '/transactions',
-    component: () => import('./pages/Transactions.vue')
+    component: () => import('./pages/TransactionsPage.vue')
   },
-  { path: '/groups', component: () => import('./pages/Groups.vue') },
+  { path: '/groups', component: () => import('./pages/GroupsPage.vue') },
   { path: '/groups/:id', component: () => import('./pages/GroupDetails.vue') },
-  { path: '/admins', component: () => import('./pages/Admin.vue') },
+  { path: '/admins', component: () => import('./pages/AdminPage.vue') },
   { path: '/groups/new', component: () => import('./pages/NewGroup.vue') },
   { path: '/:path(.*)', component: () => import('./pages/NotFound.vue') }
 ]

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
+import SimpleButton from '../shared/SimpleButton.vue'
 import type { FixMode } from './GroupDetail.vue'
-import Button from '/@/components/shared/Button.vue'
 import FixButton from '/@/components/shared/FixButton.vue'
 import type { Group, PostGroup } from '/@/lib/apis'
 
@@ -19,7 +19,7 @@ const emit = defineEmits<{ (e: 'input', value: string): void }>()
 <template>
   <div v-if="!(fixMode === 'budget')" class="flex items-start">
     予算：{{ props.group.budget }}円
-    <FixButton @click="changeFixMode('budget')" />
+    <fix-button @click="changeFixMode('budget')" />
   </div>
   <div v-if="fixMode === 'budget'">
     予算：<input
@@ -28,12 +28,12 @@ const emit = defineEmits<{ (e: 'input', value: string): void }>()
       type="text"
       :value="props.value"
       @input="emit('input', ($event.target as HTMLInputElement).value)" />円
-    <Button
+    <simple-button
       class="ml-2"
       font-size="sm"
       padding="sm"
       @click.stop="changeFixMode('')">
       完了
-    </Button>
+    </simple-button>
   </div>
 </template>

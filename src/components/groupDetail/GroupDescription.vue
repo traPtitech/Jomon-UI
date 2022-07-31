@@ -1,6 +1,6 @@
 <script lang="ts" setup>
+import SimpleButton from '../shared/SimpleButton.vue'
 import type { FixMode } from './GroupDetail.vue'
-import Button from '/@/components/shared/Button.vue'
 import FixButton from '/@/components/shared/FixButton.vue'
 import type { Group, PostGroup } from '/@/lib/apis'
 
@@ -24,7 +24,7 @@ const emit = defineEmits<{ (e: 'input', value: string): void }>()
     <p class="h-32 w-full overflow-y-scroll border border-gray-300 pl-1">
       {{ props.group.description }}
     </p>
-    <FixButton @click="changeFixMode('description')" />
+    <fix-button @click="changeFixMode('description')" />
   </div>
   <div v-if="fixMode === 'description'" class="w-full md:w-2/3">
     <textarea
@@ -32,12 +32,12 @@ const emit = defineEmits<{ (e: 'input', value: string): void }>()
       placeholder="詳細"
       :value="props.value"
       @input="emit('input', ($event.target as HTMLTextAreaElement).value)" />
-    <Button
+    <simple-button
       class="ml-2"
       font-size="sm"
       padding="sm"
       @click.stop="changeFixMode('')">
       完了
-    </Button>
+    </simple-button>
   </div>
 </template>

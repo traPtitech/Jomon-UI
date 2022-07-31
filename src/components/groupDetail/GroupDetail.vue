@@ -2,9 +2,9 @@
 import { ExternalLinkIcon } from '@heroicons/vue/outline'
 import { ref } from 'vue'
 
+import SimpleButton from '../shared/SimpleButton.vue'
 import GroupBudget from './GroupBudget.vue'
 import GroupDescription from './GroupDescription.vue'
-import Button from '/@/components/shared/Button.vue'
 import FixButton from '/@/components/shared/FixButton.vue'
 import apis from '/@/lib/apis'
 import type { Group, PostGroup } from '/@/lib/apis'
@@ -64,7 +64,7 @@ const deleteGroup = async (id: string) => {
         <h1 class="text-3xl">
           {{ props.group.name }}
         </h1>
-        <FixButton @click="changeFixMode('name')" />
+        <fix-button @click="changeFixMode('name')" />
         <!--todo:権限-->
       </div>
       <div v-if="fixMode === 'name'">
@@ -73,17 +73,17 @@ const deleteGroup = async (id: string) => {
           class="rounded p-1"
           placeholder="グループ名"
           type="text" />
-        <Button
+        <simple-button
           class="ml-2"
           font-size="sm"
           padding="sm"
           @click.stop="changeFixMode('')">
           完了
-        </Button>
+        </simple-button>
       </div>
     </div>
     <div class="mt-4">
-      <GroupDescription
+      <group-description
         :change-fix-mode="changeFixMode"
         :fix-mode="fixMode"
         :group="group"
@@ -92,7 +92,7 @@ const deleteGroup = async (id: string) => {
         @input="fixedValue.description = $event" />
     </div>
     <div class="mt-4 h-10">
-      <GroupBudget
+      <group-budget
         :change-fix-mode="changeFixMode"
         :fix-mode="fixMode"
         :group="group"
@@ -103,15 +103,15 @@ const deleteGroup = async (id: string) => {
     <div class="flex items-center">
       このグループの入出金記録へ
       <router-link :to="`/transactions?group=${props.group.id}`">
-        <ExternalLinkIcon class="w-6" />
+        <external-link-icon class="w-6" />
       </router-link>
     </div>
-    <Button
+    <simple-button
       class="mt-4"
       font-size="sm"
       padding="sm"
       @click.stop="deleteGroup(props.group.id)">
       グループを削除
-    </Button>
+    </simple-button>
   </div>
 </template>

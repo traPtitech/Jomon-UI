@@ -2,7 +2,7 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
-import Button from '/@/components/shared/Button.vue'
+import SimpleButton from '../components/shared/SimpleButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import type { Group, PostGroup } from '/@/lib/apis'
 import apis from '/@/lib/apis'
@@ -83,7 +83,7 @@ async function handlePostGroup() {
         </div>
         <div class="flex flex-col">
           <label>オーナー</label>
-          <VueSelect
+          <vue-select
             v-model="group.owners"
             :close-on-select="false"
             label="name"
@@ -97,7 +97,7 @@ async function handlePostGroup() {
         </div>
         <div class="flex flex-col">
           <label>メンバー</label>
-          <VueSelect
+          <vue-select
             v-model="group.members"
             :close-on-select="false"
             label="name"
@@ -107,13 +107,13 @@ async function handlePostGroup() {
             :reduce="(user:any) => user.name" />
         </div>
         <div class="relative w-full">
-          <Button
+          <simple-button
             class="absolute right-0 mt-8"
             font-size="xl"
             padding="md"
             @clock.stop="handlePostGroup">
             グループを作成する
-          </Button>
+          </simple-button>
         </div>
       </div>
     </div>

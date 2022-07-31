@@ -37,16 +37,16 @@ function handleDeleteOwner(id: string) {
         :key="owner"
         class="flex items-center justify-between">
         <div>
-          <UserIcon class="inline w-12" :name="owner" />
+          <user-icon class="inline w-12" :name="owner" />
           {{ owner }}
         </div>
         <button @click="handleDeleteOwner(owner)">
-          <MinusSmIcon class="w-8" />
+          <minus-sm-icon class="w-8" />
         </button>
       </li>
     </ul>
     <div class="flex p-2">
-      <VueSelect
+      <vue-select
         v-model="OwnersToBeAdded"
         class="flex-grow"
         :close-on-select="false"
@@ -56,7 +56,7 @@ function handleDeleteOwner(id: string) {
         placeholder="追加するオーナーを選択"
         :reduce="(user:any) => user.name" />
       <button @click="handleAddOwner(OwnersToBeAdded)">
-        <PlusSmIcon class="w-8" />
+        <plus-sm-icon class="w-8" />
       </button>
     </div>
   </div>

@@ -4,8 +4,8 @@ import { openModal } from 'jenesius-vue-modal'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-import Drawer from './Drawer.vue'
 import HeaderButton from './HeaderButton.vue'
+import SideDrawer from './SideDrawer.vue'
 import Logo from './shared/JomonLogo.vue'
 import UserIcon from './shared/UserIcon.vue'
 import type { User } from '/@/lib/apis'
@@ -18,7 +18,7 @@ const drawer = ref()
 
 async function handleOpenDrawer() {
   if (!drawer.value || drawer.value.closed) {
-    drawer.value = await openModal(Drawer)
+    drawer.value = await openModal(SideDrawer)
   } else {
     drawer.value.close()
   }

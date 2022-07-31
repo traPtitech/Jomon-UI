@@ -2,9 +2,9 @@
 import { openModal } from 'jenesius-vue-modal'
 
 import SimpleButton from '../shared/SimpleButton.vue'
+import TagGroup from '../shared/TagsGroup.vue'
 import NewTagModal from '/@/components/modal/NewTagModal.vue'
 import EditButton from '/@/components/shared/EditButton.vue'
-import Tags from '/@/components/shared/Tags.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
@@ -20,7 +20,7 @@ const userStore = useUserStore()
     タグ：
     <div v-if="!requestDetailStore.request.tags">なし</div>
     <div v-else-if="!(requestDetailStore.editMode === 'tags')">
-      <tags :tags="requestDetailStore.request.tags" />
+      <tag-group :tags="requestDetailStore.request.tags" />
       <edit-button
         v-if="requestDetailStore.request.created_by === userStore.me.name"
         @click="requestDetailStore.changeEditMode('tags')" />

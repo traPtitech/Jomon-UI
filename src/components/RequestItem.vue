@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import StatusChip from './shared/StatusChip.vue'
-import Tags from './shared/Tags.vue'
+import TagGroup from './shared/TagsGroup.vue'
 import type { Request } from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
 
@@ -21,7 +21,7 @@ const formattedDate = formatDate(props.request.created_at)
       <div class="flex-grow">
         <span class="text-xl">{{ request.title }}</span>
         <div class="mt-2">
-          <tags :tags="request.tags" />
+          <tag-group :tags="request.tags" />
         </div>
       </div>
       <div class="flex flex-col">

@@ -103,19 +103,10 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   const files = ref<File[]>([])
 
   const targetIds = computed(() => {
-    const targetIds = new Array<string>()
-
-    for (let i = 0; i < request.value.targets.length; i++) {
-      targetIds.push(request.value.targets[i].id)
-    }
-    return targetIds
+    return request.value.targets.map(target => target.id)
   })
   const tagIds = computed(() => {
-    const tagIds = new Array<string>()
-    for (let i = 0; i < request.value.tags.length; i++) {
-      tagIds.push(request.value.tags[i].id)
-    }
-    return tagIds
+    return request.value.tags.map(tag => tag.id)
   })
   const editMode = ref('')
   const editedValue = ref({

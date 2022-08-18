@@ -85,13 +85,7 @@ export const useRequestStore = defineStore('request', () => {
       return
     }
     const tmpTagList = tmpParams.tag?.slice() || []
-    for (let i = 0; i < tmpTagList.length; i++) {
-      if (i === 0) {
-        params.tag = tmpTagList[i].id
-      } else {
-        params.tag += ',' + tmpTagList[i].id
-      }
-    }
+    params.tag = tmpTagList.map(tag => tag.id).join(',')
     try {
       requests.value = (
         await apis.getRequests(

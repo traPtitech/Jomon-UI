@@ -4,27 +4,37 @@ import RequestImage from './RequestImage.vue'
 import StatusChangeLog from './StatusChangeLog.vue'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
+type LogKind = 'comment' | 'statusChange'
+
 interface Log {
   created_at: Date
-  kind: string
+  kind: LogKind
   index: number
 }
+
 const requestDetailStore = useRequestDetailStore()
 
 const logs = () => {
   //2つの配列(commentsとstatuses)の中身の型が違うので1つにまとめ、ソートして表示ができない
   let array = new Array<Log>()
   //2つの配列からcreated_at、種類、インデックスだけ取り出して1つの配列にまとめる
-  array = requestDetailStore.request.comments.map((comment, i) => ({
-    created_at: new Date(comment.created_at),
-    kind: 'comment',
-    index: i
-  }))
-  array = requestDetailStore.request.statuses.map((status, i) => ({
-    created_at: new Date(status.created_at),
-    kind: 'status',
-    index: i
-  }))
+  array = requestDetailStore.request.comments
+    .map(
+      (comment, i): Log => ({
+        created_at: new Date(comment.created_at),
+        kind: 'comment',
+        index: i
+      })
+    )
+    .concat(
+      requestDetailStore.request.statuses.map(
+        (status, i): Log => ({
+          created_at: new Date(status.created_at),
+          kind: 'statusChange',
+          index: i
+        })
+      )
+    )
   //created_atでソート
   array = array.sort(function (a, b) {
     if (a.created_at > b.created_at) return 1

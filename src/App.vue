@@ -9,7 +9,7 @@ const userStore = useUserStore()
 
 <template>
   <jomon-header :me="userStore.me" />
-  <main class="text-dark-500 h-screen overflow-scroll bg-zinc-50 pt-12">
+  <main class="text-primary h-screen overflow-scroll bg-zinc-50 pt-12">
     <router-view />
   </main>
   <container />

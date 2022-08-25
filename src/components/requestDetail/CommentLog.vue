@@ -22,9 +22,9 @@ const formattedDateAndTime = formatDateAndTime(props.log.created_at)
     <div class="w-full pl-2">
       <div class="flex h-12 items-center justify-between">
         {{ log.user }}がコメントしました。
-        <div class="">
+        <p>
           {{ formattedDateAndTime }}
-        </div>
+        </p>
       </div>
       <markdown-it class="border border-zinc-300 p-2" :text="log.comment" />
     </div>

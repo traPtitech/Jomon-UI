@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/outline'
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
 
 import { useRequestStore } from '../stores/request'

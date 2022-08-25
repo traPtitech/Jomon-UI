@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { MenuIcon } from '@heroicons/vue/outline'
+import { Bars3Icon } from '@heroicons/vue/24/outline'
 import { openModal } from 'jenesius-vue-modal'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -30,7 +30,7 @@ defineProps<Props>()
   <header
     class="fixed flex h-12 w-full items-center bg-white pl-2 shadow"
     :class="drawer ? 'z-30' : 'z-10'">
-    <menu-icon class="h-8 w-8 md:hidden" @click="handleOpenDrawer" />
+    <bars3-icon class="h-8 w-8 md:hidden" @click="handleOpenDrawer" />
     <router-link to="/">
       <logo />
     </router-link>

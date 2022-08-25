@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { XCircleIcon } from '@heroicons/vue/solid'
+import { XCircleIcon } from '@heroicons/vue/24/solid'
 import { ref } from 'vue'
 
 interface File {

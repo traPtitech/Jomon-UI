@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { MinusSmIcon, PlusSmIcon } from '@heroicons/vue/outline'
+import { MinusIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
@@ -9,7 +9,9 @@ import type { Group } from '/@/lib/apis'
 import { useGroupStore } from '/@/stores/group'
 import { useUserStore } from '/@/stores/user'
 
-type Props = { group: Group }
+interface Props {
+  group: Group
+}
 
 const props = defineProps<Props>()
 const userStore = useUserStore()
@@ -41,7 +43,7 @@ function handleDeleteOwner(id: string) {
           {{ owner }}
         </div>
         <button @click="handleDeleteOwner(owner)">
-          <minus-sm-icon class="w-8" />
+          <minus-icon class="w-8" />
         </button>
       </li>
     </ul>
@@ -56,7 +58,7 @@ function handleDeleteOwner(id: string) {
         placeholder="追加するオーナーを選択"
         :reduce="(user:any) => user.name" />
       <button @click="handleAddOwner(OwnersToBeAdded)">
-        <plus-sm-icon class="w-8" />
+        <plus-icon class="w-8" />
       </button>
     </div>
   </div>

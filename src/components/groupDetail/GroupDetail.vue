@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ExternalLinkIcon } from '@heroicons/vue/outline'
+import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
 
 import SimpleButton from '../shared/SimpleButton.vue'
@@ -103,7 +103,7 @@ const deleteGroup = async (id: string) => {
     <div class="flex items-center">
       このグループの入出金記録へ
       <router-link :to="`/transactions?group=${props.group.id}`">
-        <external-link-icon class="w-6" />
+        <arrow-top-right-on-square-icon class="w-6" />
       </router-link>
     </div>
     <simple-button

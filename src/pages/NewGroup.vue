@@ -17,8 +17,8 @@ const group = ref({
   name: '',
   description: '',
   budget: 0,
-  owners: [] as string[],
-  members: [] as string[]
+  owners: [],
+  members: []
 })
 
 const postGroup = async (group: PostGroup) => {
@@ -47,6 +47,7 @@ async function handlePostGroup() {
     const res: Group = await postGroup(willPostGroup)
     await groupStore.postGroupMember(res.id, group.value.members)
     await groupStore.postGroupOwner(res.id, group.value.owners)
+    groupStore.groups.unshift(res)
   } else {
     alert('全ての項目を入力してください')
   }

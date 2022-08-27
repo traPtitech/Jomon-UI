@@ -30,8 +30,8 @@ const group = ref<GroupDetailType>({
   name: 'SysAd',
   description: 'SysAd班',
   budget: 250000,
-  owners: ['mehm8128', 'mehm8128'],
-  members: ['mehm8128', 'mehm8128'],
+  owners: ['mehm8128', 'traP'],
+  members: ['mehm8128'],
   created_at: '2022-04-05T14:02:15.431Z',
   updated_at: '2022-04-05T14:02:15.431Z'
 })

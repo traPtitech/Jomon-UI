@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import SimpleButton from '../shared/SimpleButton.vue'
 import type { Request } from '/@/lib/apis'
 import apis from '/@/lib/apis'
+import { useRequestStore } from '/@/stores/request'
 
 interface RequestRequest {
   created_by: string
@@ -24,6 +25,7 @@ const props = defineProps<{
   images: File[]
 }>()
 const router = useRouter()
+const requestStore = useRequestStore()
 
 async function postFile(requestId: string, name: string, file: string) {
   await apis.postFile(file, name, requestId)
@@ -45,6 +47,7 @@ async function postRequest() {
   try {
     const response: Request = (await apis.postRequest(requestRequest)).data
     const id = response.id
+    requestStore.requests.unshift(response)
     try {
       props.images.forEach((image: File) => {
         postFile(id, image.name, image.src)

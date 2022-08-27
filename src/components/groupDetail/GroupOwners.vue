@@ -43,7 +43,7 @@ function handleDeleteOwner(id: string) {
           {{ owner }}
         </div>
         <button @click="handleDeleteOwner(owner)">
-          <minus-icon class="w-8" />
+          <minus-icon class="w-6" />
         </button>
       </li>
     </ul>
@@ -58,7 +58,7 @@ function handleDeleteOwner(id: string) {
         placeholder="追加するオーナーを選択"
         :reduce="(user:any) => user.name" />
       <button @click="handleAddOwner(OwnersToBeAdded)">
-        <plus-icon class="w-8" />
+        <plus-icon class="ml-2 w-6" />
       </button>
     </div>
   </div>

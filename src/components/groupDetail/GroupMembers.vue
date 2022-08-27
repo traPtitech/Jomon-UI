@@ -44,7 +44,7 @@ function handleAddMember(members: string[]) {
           {{ member }}
         </div>
         <button @click="handleDeleteMember(member)">
-          <minus-icon class="w-8" />
+          <minus-icon class="w-6" />
         </button>
       </li>
     </ul>
@@ -59,7 +59,7 @@ function handleAddMember(members: string[]) {
         placeholder="追加するメンバーを選択"
         :reduce="(user:any) => user.name" />
       <button @click="handleAddMember(MembersToBeAdded)">
-        <plus-icon class="w-8" />
+        <plus-icon class="ml-2 w-6" />
       </button>
     </div>
   </div>

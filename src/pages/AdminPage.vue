@@ -30,7 +30,7 @@ const deleteAdmins = async () => {
   }
   try {
     await apis.deleteAdmins(deleteList.value)
-    adminStore.admins = adminStore.admins.filter(
+    adminStore.admins = adminStore.admins?.filter(
       id => !deleteList.value.includes(id)
     )
   } catch (err: any) {
@@ -44,7 +44,7 @@ const addAdmins = async () => {
   }
   try {
     await apis.postAdmins(addList.value)
-    adminStore.admins = adminStore.admins.concat(addList.value)
+    adminStore.admins = adminStore.admins?.concat(addList.value)
   } catch (err: any) {
     alert(err.message)
   }
@@ -57,13 +57,14 @@ const addAdmins = async () => {
     class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
     <h1 class="pb-8 text-center text-3xl">管理ページ</h1>
     <div>
-      <ul class="flex gap-2">
+      <ul v-if="adminStore.admins" class="flex gap-2">
         <li v-for="admin in adminStore.admins" :key="admin">
           <div class="rounded border border-black px-2 text-center">
             {{ admin }}
           </div>
         </li>
       </ul>
+      <div v-else>loading...</div>
     </div>
     <div class="mt-4 flex gap-4">
       <vue-select

@@ -9,11 +9,11 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/requests/new',
-    component: () => import('./pages/NewRequest.vue')
+    component: () => import('./pages/NewRequestPage.vue')
   },
   {
     path: '/requests/:id',
-    component: () => import('./pages/RequestDetail.vue')
+    component: () => import('./pages/RequestDetailPage.vue')
   },
   {
     path: '/transactions',
@@ -21,12 +21,12 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/transactions/new',
-    component: () => import('./pages/NewTransaction.vue')
+    component: () => import('./pages/NewTransactionPage.vue')
   },
   { path: '/groups', component: () => import('./pages/GroupsPage.vue') },
-  { path: '/groups/new', component: () => import('./pages/NewGroup.vue') },
+  { path: '/groups/new', component: () => import('./pages/NewGroupPage.vue') },
   { path: '/admins', component: () => import('./pages/AdminPage.vue') },
-  { path: '/:path(.*)', component: () => import('./pages/NotFound.vue') }
+  { path: '/:path(.*)', component: () => import('./pages/NotFoundPage.vue') }
 ]
 
 const router = createRouter({

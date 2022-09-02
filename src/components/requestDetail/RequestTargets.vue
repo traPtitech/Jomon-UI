@@ -4,6 +4,13 @@ import EditButton from '/@/components/shared/EditButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
+import type{RequestDetail} from '/@/lib/apis'
+
+interface Props{
+  request: RequestDetail
+}
+
+const props=defineProps<Props>()
 
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
@@ -14,12 +21,12 @@ const requestDetailStore = useRequestDetailStore()
     <div v-if="!(requestDetailStore.editMode === 'targets')">
       払い戻し対象者：
       <span
-        v-for="target in requestDetailStore.request.targets"
+        v-for="target in props.request.targets"
         :key="target.id">
         {{ target.target }},
       </span>
       <edit-button
-        v-if="requestDetailStore.request.created_by === userStore.me.name"
+        v-if="props.request.created_by === userStore.me!.name"
         @click="requestDetailStore.changeEditMode('targets')" />
     </div>
     <div v-if="requestDetailStore.editMode === 'targets'">

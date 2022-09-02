@@ -3,6 +3,11 @@ import CommentLog from './CommentLog.vue'
 import RequestImage from './RequestImage.vue'
 import StatusChangeLog from './StatusChangeLog.vue'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
+import type{RequestDetail} from '/@/lib/apis'
+
+interface Props{
+  request: RequestDetail
+}
 
 type LogKind = 'comment' | 'statusChange'
 
@@ -12,13 +17,14 @@ interface Log {
   index: number
 }
 
+const props=defineProps<Props>()
 const requestDetailStore = useRequestDetailStore()
 
 const logs = () => {
   //2つの配列(commentsとstatuses)の中身の型が違うので1つにまとめ、ソートして表示ができない
   let array = new Array<Log>()
   //2つの配列からcreated_at、種類、インデックスだけ取り出して1つの配列にまとめる
-  array = requestDetailStore.request.comments
+  array = props.request.comments
     .map(
       (comment, i): Log => ({
         created_at: new Date(comment.created_at),
@@ -27,7 +33,7 @@ const logs = () => {
       })
     )
     .concat(
-      requestDetailStore.request.statuses.map(
+      props.request.statuses.map(
         (status, i): Log => ({
           created_at: new Date(status.created_at),
           kind: 'statusChange',
@@ -56,10 +62,10 @@ const logs = () => {
         class="vertical-bar">
         <comment-log
           v-if="log.kind === 'comment'"
-          :log="requestDetailStore.request.comments[log.index]" />
+          :log="props.request.comments[log.index]" />
         <status-change-log
           v-if="log.kind === 'statusChange'"
-          :log="requestDetailStore.request.statuses[log.index]" />
+          :log="props.request.statuses[log.index]" />
       </li>
     </ul>
   </div>

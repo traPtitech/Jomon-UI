@@ -5,6 +5,13 @@ import VueSelect from '/@/components/shared/VueSelect.vue'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
+import type{RequestDetail} from '/@/lib/apis'
+
+interface Props{
+  request: RequestDetail
+}
+
+const props=defineProps<Props>()
 
 const requestDetailStore = useRequestDetailStore()
 const userStore = useUserStore()
@@ -14,11 +21,11 @@ const groupStore = useGroupStore()
 <template>
   <div class="flex">
     グループ：
-    <div v-if="!requestDetailStore.request.group">なし</div>
+    <div v-if="!props.request.group">なし</div>
     <div v-else-if="!(requestDetailStore.editMode === 'group')">
-      {{ requestDetailStore.request.group.name }}
+      {{ props.request.group.name }}
       <edit-button
-        v-if="requestDetailStore.request.created_by === userStore.me.name"
+        v-if="props.request.created_by === userStore.me!.name"
         @click="requestDetailStore.changeEditMode('group')" />
     </div>
     <div v-else-if="requestDetailStore.editMode === 'group'" class="flex">

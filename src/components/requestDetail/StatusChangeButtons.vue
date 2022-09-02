@@ -5,6 +5,13 @@ import SimpleButton from '../shared/SimpleButton.vue'
 import StatusChangeModal from '/@/components/modal/StatusChangeModal.vue'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
+import type{RequestDetail} from '/@/lib/apis'
+
+interface Props{
+  request: RequestDetail
+}
+
+const props=defineProps<Props>()
 
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
@@ -14,8 +21,8 @@ const requestDetailStore = useRequestDetailStore()
   <div class="flex gap-4">
     <simple-button
       v-if="
-        requestDetailStore.request.status === 'fix_required' ||
-        (userStore.me.admin && requestDetailStore.request.status === 'accepted')
+        props.request.status === 'fix_required' ||
+        (userStore.me!.admin && props.request.status === 'accepted')
       "
       font-size="sm"
       padding="sm"
@@ -24,7 +31,7 @@ const requestDetailStore = useRequestDetailStore()
     </simple-button>
     <simple-button
       v-if="
-        userStore.me.admin && requestDetailStore.request.status === 'submitted'
+        userStore.me!.admin && props.request.status === 'submitted'
       "
       font-size="sm"
       padding="sm"
@@ -35,7 +42,7 @@ const requestDetailStore = useRequestDetailStore()
     </simple-button>
     <simple-button
       v-if="
-        userStore.me.admin && requestDetailStore.request.status === 'submitted'
+        userStore.me!.admin && props.request.status === 'submitted'
       "
       font-size="sm"
       padding="sm"
@@ -44,7 +51,7 @@ const requestDetailStore = useRequestDetailStore()
     </simple-button>
     <simple-button
       v-if="
-        userStore.me.admin && requestDetailStore.request.status === 'submitted'
+        userStore.me!.admin && props.request.status === 'submitted'
       "
       font-size="sm"
       padding="sm"

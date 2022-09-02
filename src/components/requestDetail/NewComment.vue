@@ -5,6 +5,13 @@ import SimpleButton from '../shared/SimpleButton.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import apis from '/@/lib/apis'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
+import type{RequestDetail} from '/@/lib/apis'
+
+interface Props{
+  request: RequestDetail
+}
+
+const props=defineProps<Props>()
 
 const requestDetailStore = useRequestDetailStore()
 const comment = ref('')
@@ -16,11 +23,11 @@ async function submit() {
   }
   try {
     const response = (
-      await apis.postComment(requestDetailStore.request.id, {
+      await apis.postComment(props.request.id, {
         comment: comment.value
       })
     ).data
-    requestDetailStore.request.comments.push(response)
+    props.request.comments.push(response)
     comment.value = ''
   } catch (err: any) {
     alert(err.message)

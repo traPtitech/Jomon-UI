@@ -4,6 +4,13 @@ import EditButton from '/@/components/shared/EditButton.vue'
 import MarkdownIt from '/@/components/shared/MarkdownIt.vue'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
+import type{RequestDetail} from '/@/lib/apis'
+
+interface Props{
+  request: RequestDetail
+}
+
+const props = defineProps<Props>()
 
 const requestDetailStore = useRequestDetailStore()
 const userStore = useUserStore()
@@ -17,9 +24,9 @@ const userStore = useUserStore()
       class="flex w-4/5 items-start">
       <markdown-it
         class="h-32 w-full overflow-y-scroll border border-gray-300 pl-2"
-        :text="requestDetailStore.request.content" />
+        :text="props.request.content" />
       <edit-button
-        v-if="requestDetailStore.request.created_by === userStore.me.name"
+        v-if="props.request.created_by === userStore.me!.name"
         @click="requestDetailStore.changeEditMode('content')" />
     </div>
     <div v-if="requestDetailStore.editMode === 'content'" class="w-9/10">

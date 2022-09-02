@@ -9,6 +9,13 @@ import VueSelect from '/@/components/shared/VueSelect.vue'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
+import type{RequestDetail} from '/@/lib/apis'
+
+interface Props{
+  request: RequestDetail
+}
+
+const props=defineProps<Props>()
 
 const requestDetailStore = useRequestDetailStore()
 const tagStore = useTagStore()
@@ -18,11 +25,11 @@ const userStore = useUserStore()
 <template>
   <div class="flex">
     タグ：
-    <div v-if="!requestDetailStore.request.tags">なし</div>
+    <div v-if="!props.request.tags">なし</div>
     <div v-else-if="!(requestDetailStore.editMode === 'tags')">
-      <tag-group :tags="requestDetailStore.request.tags" />
+      <tag-group :tags="props.request.tags" />
       <edit-button
-        v-if="requestDetailStore.request.created_by === userStore.me.name"
+        v-if="props.request.created_by === userStore.me!.name"
         @click="requestDetailStore.changeEditMode('tags')" />
     </div>
     <div

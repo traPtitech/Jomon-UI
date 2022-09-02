@@ -15,7 +15,7 @@ const groupStore = useGroupStore()
 const sliceGroupsAt = (index: number, n: number) => {
   const start = (index - 1) * n
   const end = index * n
-  return groupStore.groups.slice(start, end)
+  return groupStore.groups?.slice(start, end)
 }
 
 onMounted(() => {
@@ -59,6 +59,7 @@ watch(
         </ul>
       </div>
       <pagination-bar
+      v-if="groupStore.groups"
         class="mt-4"
         :current-page="page"
         path="/groups"

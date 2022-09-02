@@ -16,7 +16,7 @@ async function postTag() {
   }
   try {
     const response = (await apis.postTag({ name: tagName.value })).data
-    tagStore.tags.push(response)
+    tagStore.tags!.push(response)
     closeModal()
   } catch (err: any) {
     alert(err.message)

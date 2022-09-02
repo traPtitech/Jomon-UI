@@ -18,11 +18,11 @@ const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const transaction = ref({
-  amount: requestId ? requestDetailStore.request.amount : 0,
+  amount: requestId ? requestDetailStore.request!.amount : 0,
   targets: requestId ? requestDetailStore.targetIds : [],
   request: requestId,
   tags: requestId ? requestDetailStore.tagIds : [],
-  group: requestId ? requestDetailStore.request.group.id : ''
+  group: requestId ? requestDetailStore.request!.group.id : ''
 })
 async function postTransaction() {
   if (
@@ -44,7 +44,7 @@ async function postTransaction() {
     <div class="flex flex-col gap-2">
       <div>
         紐づけられている申請：
-        <span v-if="requestId">{{ requestDetailStore.request.title }}</span>
+        <span v-if="requestId">{{ requestDetailStore.request!.title }}</span>
         <span v-if="!requestId">なし</span>
       </div>
       <div class="flex flex-col">

@@ -26,7 +26,7 @@ const requestDetailStore = useRequestDetailStore()
       "
       font-size="sm"
       padding="sm"
-      @click.stop="openModal(StatusChangeModal, { nextStatus: 'submitted' })">
+      @click.stop="openModal(StatusChangeModal, { request:props.request,nextStatus: 'submitted' })">
       承認待ちにする
     </simple-button>
     <simple-button
@@ -36,7 +36,7 @@ const requestDetailStore = useRequestDetailStore()
       font-size="sm"
       padding="sm"
       @click.stop="
-        openModal(StatusChangeModal, { nextStatus: 'fix_required' })
+        openModal(StatusChangeModal, {request:props.request, nextStatus: 'fix_required' })
       ">
       要修正にする
     </simple-button>
@@ -46,7 +46,7 @@ const requestDetailStore = useRequestDetailStore()
       "
       font-size="sm"
       padding="sm"
-      @click.stop="openModal(StatusChangeModal, { nextStatus: 'accepted' })">
+      @click.stop="openModal(StatusChangeModal, { request:props.request,nextStatus: 'accepted' })">
       承認済みにする
     </simple-button>
     <simple-button
@@ -55,7 +55,7 @@ const requestDetailStore = useRequestDetailStore()
       "
       font-size="sm"
       padding="sm"
-      @click.stop="openModal(StatusChangeModal, { nextStatus: 'rejected' })">
+      @click.stop="openModal(StatusChangeModal, { request:props.request,nextStatus: 'rejected' })">
       却下する
     </simple-button>
   </div>

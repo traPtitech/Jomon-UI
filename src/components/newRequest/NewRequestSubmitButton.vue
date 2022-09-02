@@ -47,7 +47,7 @@ async function postRequest() {
   try {
     const response: Request = (await apis.postRequest(requestRequest)).data
     const id = response.id
-    requestStore.requests.unshift(response)
+    requestStore.requests!.unshift(response)
     try {
       props.images.forEach((image: File) => {
         postFile(id, image.name, image.src)

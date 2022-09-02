@@ -9,15 +9,21 @@ import type { RequestStatus } from '/@/components/shared/StatusChip.vue'
 import apis from '/@/lib/apis'
 import type { StatusEnum } from '/@/lib/apis'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
+import type{RequestDetail} from '/@/lib/apis'
 
-type Props = { nextStatus: RequestStatus }
+interface Props{
+  request: RequestDetail
+  nextStatus: RequestStatus
+}
+
+const props=defineProps<Props>()
 
 defineProps<Props>()
 
 const comment = ref('')
 const requestDetailStore = useRequestDetailStore()
 
-async function putStatus(nextStatus: StatusEnum | '', comment: string) {
+async function putStatus(nextStatus: RequestStatus | '', comment: string) {
   if (nextStatus === '') {
     alert('エラーが発生しました')
     return
@@ -28,10 +34,10 @@ async function putStatus(nextStatus: StatusEnum | '', comment: string) {
   }
   try {
     const response = (
-      await apis.putStatus(requestDetailStore.request.id, statusRequest)
+      await apis.putStatus(props.request.id, statusRequest)
     ).data
-    requestDetailStore.request.status = nextStatus
-    requestDetailStore.request.statuses.push(response)
+    props.request.status = nextStatus
+    props.request.statuses.push(response)
     closeModal()
   } catch (err: any) {
     alert(err.message)
@@ -45,7 +51,7 @@ async function putStatus(nextStatus: StatusEnum | '', comment: string) {
     <div class="mx-12 mt-8 flex h-4/5 flex-col justify-around gap-4">
       <div class="flex items-center">
         申請の状態を
-        <status-chip has-text :status="requestDetailStore.request.status" />
+        <status-chip has-text :status="props.request.status" />
         から
         <status-chip has-text :status="nextStatus" />
         へ変更します

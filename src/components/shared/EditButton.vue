@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { PencilIcon } from '@heroicons/vue/solid'
+import { PencilIcon } from '@heroicons/vue/24/solid'
 </script>
 
 <template>

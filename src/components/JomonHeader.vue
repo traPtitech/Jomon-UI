@@ -11,7 +11,7 @@ import UserIcon from './shared/UserIcon.vue'
 import type { User } from '/@/lib/apis'
 
 interface Props {
-  me: User
+  me: User|undefined
 }
 const route = useRoute()
 const drawer = ref()
@@ -53,7 +53,7 @@ defineProps<Props>()
           path="/admins"
           text="管理ページ" />
       </div>
-      <user-icon :name="me.name" />
+      <user-icon :name="me?.name??'traP'" />
     </div>
   </header>
 </template>

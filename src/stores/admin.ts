@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import apis from '/@/lib/apis'
 
 export const useAdminStore = defineStore('admin', () => {
-  const admins = ref<string[]>([])
+  const admins = ref<string[]>()
   const isAdminFetched = ref(false)
 
   const fetchAdmins = async () => {

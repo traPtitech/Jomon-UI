@@ -54,6 +54,7 @@ onMounted(() => {
 
 <template>
   <div
+    v-if="group"
     class="min-w-80 mx-auto flex h-full flex-col justify-between px-12 pt-4 md:flex-row">
     <group-detail class="md:w-3/4" :group="group" />
     <div class="flex flex-col gap-8 py-4 md:w-1/4">
@@ -61,4 +62,5 @@ onMounted(() => {
       <group-owners :group="group" />
     </div>
   </div>
+  <div v-else>loading...</div>
 </template>

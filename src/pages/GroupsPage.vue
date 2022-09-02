@@ -26,7 +26,7 @@ const { isGroupFetched } = storeToRefs(groupStore)
 const sliceGroupsAt = (index: number, n: number) => {
   const start = (index - 1) * n
   const end = index * n
-  return groupStore.groups.slice(start, end)
+  return groupStore.groups?.slice(start, end)
 }
 
 onMounted(() => {
@@ -63,13 +63,15 @@ watch(
           <div class="w-3/5">詳細</div>
           <div class="w-1/5">予算</div>
         </div>
-        <ul class="divide-y">
+        <ul v-if="groupStore.groups" class="divide-y">
           <li v-for="group in sliceGroupsAt(page, 10)" :key="group.id">
             <group-item :group="group" />
           </li>
         </ul>
+        <div v-else>loading...</div>
       </div>
       <pagination-bar
+        v-if="groupStore.groups"
         class="mt-4"
         :current-page="page"
         path="/groups"

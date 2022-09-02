@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import RequestTags from '../components/requestDetail/RequestTags.vue'
@@ -26,6 +26,12 @@ interface File {
 }
 
 const request = ref<RequestDetail>()
+const targetIds = computed(() => {
+  return request.value?.targets.map(target => target.id) ?? []
+})
+const tagIds = computed(() => {
+  return request.value?.tags.map(tag => tag.id) ?? []
+})
 
 const requestDetailStore = useRequestDetailStore()
 const transactionStore = useTransactionStore()
@@ -50,6 +56,15 @@ const fetchRequestDetail = async (id: string) => {
 
 onMounted(async () => {
   await fetchRequestDetail(id)
+  requestDetailStore.editedValue = {
+    title: request.value?.title ?? '',
+    content: request.value?.content ?? '',
+    amount: request.value?.amount ?? 0,
+    group: request.value?.group.id ?? '',
+    targets: targetIds.value ?? [],
+    tags: tagIds.value ?? [],
+    created_by: request.value?.created_by ?? ''
+  }
   transactionStore.fetchTransactions('') //idをparamsに渡して取得
   fetchFiles(requestDetailStore.request?.files ?? [])
 })

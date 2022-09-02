@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 
 import type { RequestDetail, PostRequest } from '/@/lib/apis'
 import apis from '/@/lib/apis'
@@ -8,26 +8,29 @@ interface File {
   file: string
   name: string
 }
+interface EditedValue {
+  title: string
+  amount: number
+  content: string
+  targets: string[]
+  tags: string[]
+  group: string
+  created_by: string
+}
 
 export const useRequestDetailStore = defineStore('requestDetail', () => {
   const request = ref<RequestDetail>()
   const files = ref<File[]>([])
 
-  const targetIds = computed(() => {
-    return request.value?.targets.map(target => target.id) ?? []
-  })
-  const tagIds = computed(() => {
-    return request.value?.tags.map(tag => tag.id) ?? []
-  })
   const editMode = ref('')
-  const editedValue = ref({
-    created_by: request.value?.created_by ?? '',
-    amount: request.value?.amount ?? 0,
-    title: request.value?.title ?? '',
-    content: request.value?.content ?? '',
-    targets: targetIds,
-    tags: tagIds,
-    group: request.value?.group.id ?? ''
+  const editedValue = ref<EditedValue>({
+    created_by: '',
+    amount: 0,
+    title: '',
+    content: '',
+    targets: [],
+    tags: [],
+    group: ''
   })
   function changeEditMode(
     kind: 'title' | 'content' | 'amount' | 'group' | 'tags' | 'targets' | ''
@@ -82,8 +85,6 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   return {
     request,
     files,
-    targetIds,
-    tagIds,
     editMode,
     editedValue,
     changeEditMode,

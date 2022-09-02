@@ -99,10 +99,14 @@ function sortByCreatedAt() {
       :reduce="(tag:any) => tag.id"
       @close="requestStore.fetchRequests(params)" />
   </div>
-  <span v-if="requestStore.requests.length !== 0" class="ml-1/8">
-    {{ requestStore.requests.length }}件取得しました
+  <span
+    v-if="requestStore.requests && requestStore.requests.length !== 0"
+    class="ml-1/8">
+    {{ requestStore.requests!.length }}件取得しました
   </span>
-  <span v-if="requestStore.requests.length === 0" class="ml-1/8">
+  <span
+    v-if="requestStore.requests && requestStore.requests.length === 0"
+    class="ml-1/8">
     条件に一致する申請は見つかりませんでした
   </span>
 </template>

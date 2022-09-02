@@ -22,11 +22,10 @@ const userStore = useUserStore()
 const sliceRequestsAt = (index: number, n: number) => {
   const start = (index - 1) * n
   const end = index * n
-  return requestStore.requests.slice(start, end)
+  return requestStore.requests?.slice(start, end)
 }
 
 onMounted(() => {
-  return
   if (!requestStore.isRequestFetched) {
     requestStore.fetchRequests()
   }
@@ -57,9 +56,9 @@ watch(
       <h1 class="text-center text-3xl">申請一覧</h1>
       <div class="absolute right-0">
         <router-link to="/requests/new">
-          <simple-button font-size="lg" padding="md"
-            >申請の新規作成</simple-button
-          >
+          <simple-button font-size="lg" padding="md">
+            申請の新規作成
+          </simple-button>
         </router-link>
       </div>
     </div>
@@ -67,7 +66,7 @@ watch(
   <request-filtering-menu />
   <div class="min-h-120">
     <div
-      v-if="requestStore.requests.length !== 0"
+      v-if="requestStore.requests && requestStore.requests.length !== 0"
       class="mx-auto mt-4 w-3/4 shadow">
       <ul>
         <li v-for="request in sliceRequestsAt(page, 7)" :key="request.id">
@@ -75,8 +74,10 @@ watch(
         </li>
       </ul>
     </div>
+    <div v-else class="mx-auto mt-4 w-3/4">loading...</div>
   </div>
   <pagination-bar
+    v-if="requestStore.requests"
     class="mt-4"
     :current-page="page"
     path="/requests"

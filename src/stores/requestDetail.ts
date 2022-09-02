@@ -103,20 +103,20 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   const files = ref<File[]>([])
 
   const targetIds = computed(() => {
-    return request.value.targets.map(target => target.id)
+    return request.value?.targets.map(target => target.id) ?? []
   })
   const tagIds = computed(() => {
-    return request.value.tags.map(tag => tag.id)
+    return request.value?.tags.map(tag => tag.id) ?? []
   })
   const editMode = ref('')
   const editedValue = ref({
-    created_by: request.value.created_by,
-    amount: request.value.amount,
-    title: request.value.title,
-    content: request.value.content,
+    created_by: request.value?.created_by ?? '',
+    amount: request.value?.amount ?? 0,
+    title: request.value?.title ?? '',
+    content: request.value?.content ?? '',
     targets: targetIds,
     tags: tagIds,
-    group: request.value.group.id
+    group: request.value?.group.id ?? ''
   })
   function changeEditMode(
     kind: 'title' | 'content' | 'amount' | 'group' | 'tags' | 'targets' | ''
@@ -138,7 +138,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     if (kind !== '') {
       editMode.value = kind
     } else {
-      putRequest(request.value.id, editedValue.value)
+      putRequest(request.value?.id ?? '', editedValue.value)
       editMode.value = ''
     }
   }

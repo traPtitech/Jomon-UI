@@ -29,7 +29,7 @@ const transactionStore = useTransactionStore()
 const route = useRoute()
 const id = toId(route.params.id)
 const files = ref<File[]>([])
-const formattedDate = formatDate(requestDetailStore.request.created_at)
+const formattedDate = formatDate(requestDetailStore.request?.created_at ?? '')
 
 const fetchFiles = async (ids: string[]) => {
   ids.forEach(async id => {
@@ -40,12 +40,14 @@ const fetchFiles = async (ids: string[]) => {
 onMounted(() => {
   requestDetailStore.fetchRequestDetail(id)
   transactionStore.fetchTransactions('') //idをparamsに渡して取得
-  fetchFiles(requestDetailStore.request.files)
+  fetchFiles(requestDetailStore.request?.files ?? [])
 })
 </script>
 
 <template>
-  <div class="min-w-160 mx-auto flex flex-col px-12 pt-4">
+  <div
+    v-if="requestDetailStore.request"
+    class="min-w-160 mx-auto flex flex-col px-12 pt-4">
     <div class="bottom-bar">
       <div class="flex flex-col justify-between md:flex-row">
         <div class="flex flex-col md:flex-row">
@@ -85,6 +87,7 @@ onMounted(() => {
       </div>
     </div>
   </div>
+  <div v-else>loading...</div>
 </template>
 
 <style scoped>

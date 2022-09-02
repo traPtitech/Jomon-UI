@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import SimpleButton from '../shared/SimpleButton.vue'
 import EditButton from '/@/components/shared/EditButton.vue'
+import type { RequestDetail } from '/@/lib/apis'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
-import type{RequestDetail} from '/@/lib/apis'
 
-interface Props{
+interface Props {
   request: RequestDetail
 }
 
-const props=defineProps<Props>()
+const props = defineProps<Props>()
 
 const requestDetailStore = useRequestDetailStore()
 const userStore = useUserStore()
@@ -19,9 +19,7 @@ const userStore = useUserStore()
   <div
     v-if="!(requestDetailStore.editMode === 'amount')"
     class="flex items-center">
-    <span class="text-2xl">
-      金額：{{ props.request.amount }}円
-    </span>
+    <span class="text-2xl"> 金額：{{ props.request.amount }}円 </span>
     <edit-button
       v-if="props.request.created_by === userStore.me!.name"
       @click="requestDetailStore.changeEditMode('amount')" />

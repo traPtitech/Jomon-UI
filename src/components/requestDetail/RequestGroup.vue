@@ -2,16 +2,16 @@
 import SimpleButton from '../shared/SimpleButton.vue'
 import EditButton from '/@/components/shared/EditButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
+import type { RequestDetail } from '/@/lib/apis'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
-import type{RequestDetail} from '/@/lib/apis'
 
-interface Props{
+interface Props {
   request: RequestDetail
 }
 
-const props=defineProps<Props>()
+const props = defineProps<Props>()
 
 const requestDetailStore = useRequestDetailStore()
 const userStore = useUserStore()

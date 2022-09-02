@@ -7,18 +7,15 @@ import SimpleButton from '../shared/SimpleButton.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import type { RequestStatus } from '/@/components/shared/StatusChip.vue'
 import apis from '/@/lib/apis'
-import type { StatusEnum } from '/@/lib/apis'
+import type { RequestDetail } from '/@/lib/apis'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
-import type{RequestDetail} from '/@/lib/apis'
 
-interface Props{
+interface Props {
   request: RequestDetail
   nextStatus: RequestStatus
 }
 
-const props=defineProps<Props>()
-
-defineProps<Props>()
+const props = defineProps<Props>()
 
 const comment = ref('')
 const requestDetailStore = useRequestDetailStore()
@@ -33,11 +30,10 @@ async function putStatus(nextStatus: RequestStatus | '', comment: string) {
     comment: comment
   }
   try {
-    const response = (
-      await apis.putStatus(props.request.id, statusRequest)
-    ).data
-    props.request.status = nextStatus
-    props.request.statuses.push(response)
+    const response = (await apis.putStatus(props.request.id, statusRequest))
+      .data
+    requestDetailStore.request!.status = nextStatus
+    requestDetailStore.request!.statuses.push(response)
     closeModal()
   } catch (err: any) {
     alert(err.message)

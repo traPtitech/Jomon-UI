@@ -2,11 +2,11 @@
 import SimpleButton from '../shared/SimpleButton.vue'
 import EditButton from '/@/components/shared/EditButton.vue'
 import MarkdownIt from '/@/components/shared/MarkdownIt.vue'
+import type { RequestDetail } from '/@/lib/apis'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
-import type{RequestDetail} from '/@/lib/apis'
 
-interface Props{
+interface Props {
   request: RequestDetail
 }
 

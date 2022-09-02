@@ -6,16 +6,16 @@ import TagGroup from '../shared/TagsGroup.vue'
 import NewTagModal from '/@/components/modal/NewTagModal.vue'
 import EditButton from '/@/components/shared/EditButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
+import type { RequestDetail } from '/@/lib/apis'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
-import type{RequestDetail} from '/@/lib/apis'
 
-interface Props{
+interface Props {
   request: RequestDetail
 }
 
-const props=defineProps<Props>()
+const props = defineProps<Props>()
 
 const requestDetailStore = useRequestDetailStore()
 const tagStore = useTagStore()

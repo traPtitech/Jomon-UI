@@ -46,8 +46,8 @@ const images = ref<File[]>([])
 </script>
 
 <template>
-  <div v-if="userStore.me===undefined">loading...</div>
-  <div class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8" v-else>
+  <div v-if="userStore.me === undefined">loading...</div>
+  <div v-else class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
     <div class="pb-8">
       <h1 class="text-center text-3xl">申請の新規作成</h1>
     </div>

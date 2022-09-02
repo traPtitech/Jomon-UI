@@ -2,10 +2,10 @@
 import CommentLog from './CommentLog.vue'
 import RequestImage from './RequestImage.vue'
 import StatusChangeLog from './StatusChangeLog.vue'
+import type { RequestDetail } from '/@/lib/apis'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
-import type{RequestDetail} from '/@/lib/apis'
 
-interface Props{
+interface Props {
   request: RequestDetail
 }
 
@@ -17,7 +17,7 @@ interface Log {
   index: number
 }
 
-const props=defineProps<Props>()
+const props = defineProps<Props>()
 const requestDetailStore = useRequestDetailStore()
 
 const logs = () => {

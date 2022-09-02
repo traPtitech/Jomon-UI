@@ -59,7 +59,7 @@ watch(
         </ul>
       </div>
       <pagination-bar
-      v-if="groupStore.groups"
+        v-if="groupStore.groups"
         class="mt-4"
         :current-page="page"
         path="/groups"

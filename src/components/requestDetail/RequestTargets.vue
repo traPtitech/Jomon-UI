@@ -2,15 +2,15 @@
 import SimpleButton from '../shared/SimpleButton.vue'
 import EditButton from '/@/components/shared/EditButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
+import type { RequestDetail } from '/@/lib/apis'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
-import type{RequestDetail} from '/@/lib/apis'
 
-interface Props{
+interface Props {
   request: RequestDetail
 }
 
-const props=defineProps<Props>()
+const props = defineProps<Props>()
 
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
@@ -20,9 +20,7 @@ const requestDetailStore = useRequestDetailStore()
   <div class="flex">
     <div v-if="!(requestDetailStore.editMode === 'targets')">
       払い戻し対象者：
-      <span
-        v-for="target in props.request.targets"
-        :key="target.id">
+      <span v-for="target in props.request.targets" :key="target.id">
         {{ target.target }},
       </span>
       <edit-button

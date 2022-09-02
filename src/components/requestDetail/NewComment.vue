@@ -4,14 +4,14 @@ import { ref } from 'vue'
 import SimpleButton from '../shared/SimpleButton.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import apis from '/@/lib/apis'
+import type { RequestDetail } from '/@/lib/apis'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
-import type{RequestDetail} from '/@/lib/apis'
 
-interface Props{
+interface Props {
   request: RequestDetail
 }
 
-const props=defineProps<Props>()
+const props = defineProps<Props>()
 
 const requestDetailStore = useRequestDetailStore()
 const comment = ref('')
@@ -27,7 +27,7 @@ async function submit() {
         comment: comment.value
       })
     ).data
-    props.request.comments.push(response)
+    requestDetailStore.request!.comments.push(response)
     comment.value = ''
   } catch (err: any) {
     alert(err.message)

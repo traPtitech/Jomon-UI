@@ -46,7 +46,7 @@ onMounted(() => {
 
 <template>
   <div class="min-w-160 mx-auto flex flex-col px-12 pt-4">
-    <div class="bar">
+    <div class="bottom-bar">
       <div class="flex flex-col justify-between md:flex-row">
         <div class="flex flex-col md:flex-row">
           <request-title />
@@ -88,7 +88,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.bar::after {
+.bottom-bar::after {
   content: '';
   display: block;
   border: 1px solid #e5e7eb;

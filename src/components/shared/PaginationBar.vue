@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/outline'
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
 import { computed } from 'vue'
 
 import PageLink from './PageLink.vue'

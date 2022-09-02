@@ -21,7 +21,7 @@ const tagStore = useTagStore()
 const sliceTransactionAt = (index: number, n: number) => {
   const start = (index - 1) * n
   const end = index * n
-  return transactionStore.transactions.slice(start, end)
+  return transactionStore.transactions?.slice(start, end)
 }
 
 onMounted(() => {
@@ -47,29 +47,37 @@ watch(
         <h1 class="text-center text-3xl">入出金記録</h1>
         <div class="absolute right-0">
           <router-link to="/transactions/new">
-            <simple-button font-size="lg" padding="md"
-              >新規レコード作成</simple-button
-            >
+            <simple-button font-size="lg" padding="md">
+              新規レコード作成
+            </simple-button>
           </router-link>
         </div>
       </div>
       <div class="min-h-128">
         <div class="mb-2">
-          <span v-if="transactionStore.transactions.length !== 0">
-            {{ transactionStore.transactions.length }}件取得しました
+          <span
+            v-if="
+              transactionStore.transactions &&
+              transactionStore.transactions.length !== 0
+            ">
+            {{ transactionStore.transactions?.length }}件取得しました
           </span>
           <span v-else>条件に一致する申請は見つかりませんでした</span>
         </div>
         <transaction-filters />
-        <ul class="mt-2 divide-y">
+        <ul v-if="transactionStore.transactions" class="mt-2 divide-y">
           <li
             v-for="transaction in sliceTransactionAt(page, 10)"
             :key="transaction.id">
             <transaction-item :transaction="transaction" />
           </li>
         </ul>
+        <div v-else>loading...</div>
         <pagination-bar
-          v-if="transactionStore.transactions.length > 0"
+          v-if="
+            transactionStore.transactions &&
+            transactionStore.transactions.length > 0
+          "
           class="my-4"
           :current-page="page"
           path="/transactions"

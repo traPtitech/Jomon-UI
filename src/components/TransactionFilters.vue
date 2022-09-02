@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { SearchIcon } from '@heroicons/vue/outline'
-import { XIcon } from '@heroicons/vue/solid'
+import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
+import { XMarkIcon } from '@heroicons/vue/24/solid'
 import { ref } from 'vue'
 
 import { useGroupStore } from '/@/stores/group'
@@ -73,12 +73,12 @@ function sort(sortKind: 'created_at' | 'amount') {
         class="flex h-full items-center justify-center border">
         <button class="h-full w-full" @click="changeIsTargetSearchMode">
           <span>取引相手</span>
-          <search-icon class="h-4" />
+          <magnifying-glass-icon class="h-4" />
         </button>
       </div>
       <div v-else class="relative">
         <input v-model="params.target" class="h-8 w-full" type="text" />
-        <x-icon
+        <x-mark-icon
           class="absolute right-2 top-2 h-4 cursor-pointer"
           @click="changeIsTargetSearchMode" />
       </div>

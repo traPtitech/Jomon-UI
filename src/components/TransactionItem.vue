@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ExternalLinkIcon } from '@heroicons/vue/outline'
+import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
 
 import type { Transaction } from '/@/lib/apis'
 
@@ -42,7 +42,7 @@ const props = defineProps<Props>()
     </div>
     <div class="absolute -right-16">
       <router-link class="mr-2" :to="`/requests/${transaction.request}`">
-        <external-link-icon class="h-5" />
+        <arrow-top-right-on-square-icon class="h-5" />
       </router-link>
       <edit-button />
     </div>

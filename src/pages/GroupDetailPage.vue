@@ -21,10 +21,12 @@ export interface GroupDetailType {
   updated_at: string
 }
 
-const groupStore = useGroupStore()
-const userStore = useUserStore()
 const route = useRoute()
 const id = toId(route.params.id)
+
+const groupStore = useGroupStore()
+const userStore = useUserStore()
+
 const group = ref<GroupDetailType>()
 
 const fetchGroup = async (id: string) => {
@@ -35,6 +37,7 @@ const fetchGroup = async (id: string) => {
     alert(err)
   }
 }
+
 onMounted(() => {
   fetchGroup(id)
   if (!userStore.isUserFetched) {

@@ -11,8 +11,8 @@ import { useUserStore } from '/@/stores/user'
 
 const userStore = useUserStore()
 const groupStore = useGroupStore()
-const { users } = storeToRefs(userStore)
 
+const { users } = storeToRefs(userStore)
 const group = ref({
   name: '',
   description: '',

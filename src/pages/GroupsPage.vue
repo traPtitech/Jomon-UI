@@ -20,6 +20,7 @@ const toPage = (v: LocationQueryValue | LocationQueryValue[]) => {
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))
+
 const groupStore = useGroupStore()
 const { isGroupFetched } = storeToRefs(groupStore)
 

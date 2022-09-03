@@ -15,7 +15,9 @@ interface Props {
 
 const props = defineProps<Props>()
 const emit = defineEmits<{ (e: 'fixGroup', group: GroupDetailType): void }>()
+
 const userStore = useUserStore()
+
 const { users } = storeToRefs(userStore)
 const MembersToBeAdded = ref<string[]>([])
 

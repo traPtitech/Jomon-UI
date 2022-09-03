@@ -18,18 +18,21 @@ interface Props {
   group: GroupDetailType
 }
 
-const router = useRouter()
 const props = defineProps<Props>()
 const emit = defineEmits<{
   (e: 'fixGroup', value: GroupDetailType): void
 }>()
+const router = useRouter()
+
 const groupStore = useGroupStore()
+
 const editMode = ref<editMode>('')
 const editedValue = ref({
   name: props.group.name,
   description: props.group.description,
   budget: props.group.budget.toString()
 })
+
 function changeEditMode(kind: editMode) {
   if (kind !== '') {
     editMode.value = kind

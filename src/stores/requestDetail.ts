@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import type { RequestDetail, PostRequest } from '/@/lib/apis'
 import apis from '/@/lib/apis'
@@ -21,6 +21,12 @@ interface EditedValue {
 export const useRequestDetailStore = defineStore('requestDetail', () => {
   const request = ref<RequestDetail>()
   const files = ref<File[]>([])
+  const targetIds = computed(() => {
+    return request.value?.targets.map(target => target.id) ?? []
+  })
+  const tagIds = computed(() => {
+    return request.value?.tags.map(tag => tag.id) ?? []
+  })
 
   const editMode = ref('')
   const editedValue = ref<EditedValue>({
@@ -28,10 +34,11 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     amount: 0,
     title: '',
     content: '',
-    targets: [],
-    tags: [],
+    targets: targetIds.value,
+    tags: tagIds.value,
     group: ''
   })
+
   function changeEditMode(
     kind: 'title' | 'content' | 'amount' | 'group' | 'tags' | 'targets' | ''
   ) {
@@ -85,6 +92,8 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   return {
     request,
     files,
+    targetIds,
+    tagIds,
     editMode,
     editedValue,
     changeEditMode,

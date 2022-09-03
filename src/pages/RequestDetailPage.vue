@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import RequestTags from '../components/requestDetail/RequestTags.vue'
@@ -14,7 +14,6 @@ import RequestTitle from '/@/components/requestDetail/RequestTitle.vue'
 import StatusChangeButtons from '/@/components/requestDetail/StatusChangeButtons.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import apis from '/@/lib/apis'
-import type { RequestDetail } from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
 import { toId } from '/@/lib/parsePathParams'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
@@ -25,20 +24,13 @@ interface File {
   name: string
 }
 
-const request = ref<RequestDetail>()
-const targetIds = computed(() => {
-  return request.value?.targets.map(target => target.id) ?? []
-})
-const tagIds = computed(() => {
-  return request.value?.tags.map(tag => tag.id) ?? []
-})
-
 const requestDetailStore = useRequestDetailStore()
 const transactionStore = useTransactionStore()
 const route = useRoute()
 const id = toId(route.params.id)
 const files = ref<File[]>([])
 const formattedDate = formatDate(requestDetailStore.request?.created_at ?? '')
+const request = requestDetailStore.request
 
 const fetchFiles = async (ids: string[]) => {
   ids.forEach(async id => {
@@ -46,27 +38,10 @@ const fetchFiles = async (ids: string[]) => {
   })
 }
 
-const fetchRequestDetail = async (id: string) => {
-  try {
-    request.value = (await apis.getRequestDetail(id)).data
-  } catch (err: any) {
-    alert(err.message)
-  }
-}
-
 onMounted(async () => {
-  await fetchRequestDetail(id)
-  requestDetailStore.editedValue = {
-    title: request.value?.title ?? '',
-    content: request.value?.content ?? '',
-    amount: request.value?.amount ?? 0,
-    group: request.value?.group.id ?? '',
-    targets: targetIds.value ?? [],
-    tags: tagIds.value ?? [],
-    created_by: request.value?.created_by ?? ''
-  }
+  await requestDetailStore.fetchRequestDetail(id)
   transactionStore.fetchTransactions('') //idをparamsに渡して取得
-  fetchFiles(request.value?.files ?? [])
+  fetchFiles(request?.files ?? [])
 })
 </script>
 
@@ -97,12 +72,12 @@ onMounted(async () => {
       <request-logs :request="request" />
       <div class="w-1/3">
         <div class="flex flex-col items-center gap-4 py-8">
-          <router-link class="w-2/3" :to="'/transactions/new?requestID=' + id">
+          <router-link class="w-2/3" :to="`/transactions/new?requestID=${id}`">
             <simple-button class="w-full" font-size="md" padding="sm">
               この申請から入出金記録を作成する
             </simple-button>
           </router-link>
-          <router-link class="w-2/3" :to="'/transactions?requestID=' + id">
+          <router-link class="w-2/3" :to="`/transactions?requestID=${id}`">
             <simple-button class="w-full" font-size="md" padding="sm">
               この申請の入出金記録へ移動
             </simple-button>

@@ -53,8 +53,8 @@ async function handlePostGroup() {
   }
   try {
     const res: Group = await postGroup(willPostGroup)
-    await groupStore.postGroupMember(res.id, group.value.members)
-    await groupStore.postGroupOwner(res.id, group.value.owners)
+    await apis.postGroupMembers(res.id, group.value.members)
+    await apis.postGroupOwners(res.id, group.value.owners)
   } catch (err) {
     alert(err)
   }

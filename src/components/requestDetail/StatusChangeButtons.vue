@@ -22,7 +22,7 @@ const requestDetailStore = useRequestDetailStore()
     <simple-button
       v-if="
         props.request.status === 'fix_required' ||
-        (userStore.me!.admin && props.request.status === 'accepted')
+        (userStore.me.admin && props.request.status === 'accepted')
       "
       font-size="sm"
       padding="sm"
@@ -35,9 +35,7 @@ const requestDetailStore = useRequestDetailStore()
       承認待ちにする
     </simple-button>
     <simple-button
-      v-if="
-        userStore.me!.admin && props.request.status === 'submitted'
-      "
+      v-if="userStore.me.admin && props.request.status === 'submitted'"
       font-size="sm"
       padding="sm"
       @click.stop="
@@ -49,9 +47,7 @@ const requestDetailStore = useRequestDetailStore()
       要修正にする
     </simple-button>
     <simple-button
-      v-if="
-        userStore.me!.admin && props.request.status === 'submitted'
-      "
+      v-if="userStore.me.admin && props.request.status === 'submitted'"
       font-size="sm"
       padding="sm"
       @click.stop="
@@ -63,9 +59,7 @@ const requestDetailStore = useRequestDetailStore()
       承認済みにする
     </simple-button>
     <simple-button
-      v-if="
-        userStore.me!.admin && props.request.status === 'submitted'
-      "
+      v-if="userStore.me.admin && props.request.status === 'submitted'"
       font-size="sm"
       padding="sm"
       @click.stop="

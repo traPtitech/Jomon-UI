@@ -21,7 +21,7 @@ const userStore = useUserStore()
     class="flex items-center">
     <span class="text-2xl"> 金額：{{ props.request.amount }}円 </span>
     <edit-button
-      v-if="props.request.created_by === userStore.me!.name"
+      v-if="props.request.created_by === userStore.me.name"
       @click="requestDetailStore.changeEditMode('amount')" />
   </div>
   <div

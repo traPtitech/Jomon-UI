@@ -25,7 +25,7 @@ const groupStore = useGroupStore()
     <div v-else-if="!(requestDetailStore.editMode === 'group')">
       {{ props.request.group.name }}
       <edit-button
-        v-if="props.request.created_by === userStore.me!.name"
+        v-if="props.request.created_by === userStore.me.name"
         @click="requestDetailStore.changeEditMode('group')" />
     </div>
     <div v-else-if="requestDetailStore.editMode === 'group'" class="flex">

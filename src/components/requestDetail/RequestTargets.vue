@@ -24,7 +24,7 @@ const requestDetailStore = useRequestDetailStore()
         {{ target.target }},
       </span>
       <edit-button
-        v-if="props.request.created_by === userStore.me!.name"
+        v-if="props.request.created_by === userStore.me.name"
         @click="requestDetailStore.changeEditMode('targets')" />
     </div>
     <div v-if="requestDetailStore.editMode === 'targets'">

@@ -29,7 +29,7 @@ const userStore = useUserStore()
     <div v-else-if="!(requestDetailStore.editMode === 'tags')">
       <tag-group :tags="props.request.tags" />
       <edit-button
-        v-if="props.request.created_by === userStore.me!.name"
+        v-if="props.request.created_by === userStore.me.name"
         @click="requestDetailStore.changeEditMode('tags')" />
     </div>
     <div

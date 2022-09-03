@@ -21,7 +21,7 @@ const userStore = useUserStore()
       {{ props.request.title }}
     </h1>
     <edit-button
-      v-if="props.request.created_by === userStore.me!.name"
+      v-if="props.request.created_by === userStore.me.name"
       @click="requestDetailStore.changeEditMode('title')" />
   </div>
   <div v-if="requestDetailStore.editMode === 'title'">

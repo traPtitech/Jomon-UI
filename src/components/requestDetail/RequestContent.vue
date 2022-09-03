@@ -26,7 +26,7 @@ const userStore = useUserStore()
         class="h-32 w-full overflow-y-scroll border border-gray-300 pl-2"
         :text="props.request.content" />
       <edit-button
-        v-if="props.request.created_by === userStore.me!.name"
+        v-if="props.request.created_by === userStore.me.name"
         @click="requestDetailStore.changeEditMode('content')" />
     </div>
     <div v-if="requestDetailStore.editMode === 'content'" class="w-9/10">

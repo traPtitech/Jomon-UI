@@ -5,7 +5,14 @@ import type { User } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export const useUserStore = defineStore('user', () => {
-  const me = ref<User>()
+  const me = ref<User>({
+    name: 'traP',
+    display_name: 'traP',
+    admin: false,
+    created_at: '',
+    updated_at: '',
+    deleted_at: ''
+  })
   const users = ref<User[]>()
   const isUserFetched = ref(false)
   const isMeFetched = ref(false)

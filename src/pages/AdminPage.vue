@@ -13,7 +13,7 @@ const addList = ref<string[]>([])
 const deleteList = ref<string[]>([])
 
 onMounted(() => {
-  if (userStore.me && userStore.me.admin) {
+  if (userStore.me.admin) {
     if (!adminStore.isAdminFetched) {
       adminStore.fetchAdmins()
     }
@@ -53,7 +53,7 @@ const addAdmins = async () => {
 
 <template>
   <div
-    v-if="userStore.me && userStore.me.admin"
+    v-if="userStore.me.admin"
     class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
     <h1 class="pb-8 text-center text-3xl">管理ページ</h1>
     <div>

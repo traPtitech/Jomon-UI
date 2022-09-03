@@ -66,7 +66,7 @@ onMounted(async () => {
     created_by: request.value?.created_by ?? ''
   }
   transactionStore.fetchTransactions('') //idをparamsに渡して取得
-  fetchFiles(requestDetailStore.request?.files ?? [])
+  fetchFiles(request.value?.files ?? [])
 })
 </script>
 

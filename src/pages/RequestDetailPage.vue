@@ -33,7 +33,7 @@ const fetchFiles = async (ids: string[]) => {
   ids.forEach(async id => {
     const file = (await apis.getFile(id)).data
     const fileMeta = (await apis.getFileMeta(id)).data
-    const fileValues = { file: file, name: fileMeta.name }
+    const fileValues = { file: file, name: fileMeta.name, id: fileMeta.id }
     if (files.value !== undefined) {
       files.value.push(fileValues)
     } else {

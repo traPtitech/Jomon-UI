@@ -15,27 +15,25 @@ const imageExtensions = /.(jpg|png|jpeg|tiff|jfif|tif|webp|avif)$/
 const inputImageRef = ref()
 
 function handleImageChange(e: Event) {
-  if (!(e.target instanceof HTMLInputElement)) {
+  if (!(e.target instanceof HTMLInputElement) || !e.target.files) {
     return
   }
-  if (e.target.files) {
-    for (let i = 0; i < e.target.files.length; i++) {
-      const file = e.target.files[i]
-      if (file.name.match(imageExtensions)) {
-        const reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = () => {
-          emit('input', [
-            ...props.images,
-            { name: file.name, src: reader.result as string }
-          ])
-        }
-      } else {
-        alert('画像ファイル以外はアップロードできません') //todo:画像以外もどうにかする
+  for (let i = 0; i < e.target.files.length; i++) {
+    const file = e.target.files[i]
+    if (file.name.match(imageExtensions)) {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => {
+        emit('input', [
+          ...props.images,
+          { name: file.name, src: reader.result as string }
+        ])
       }
+    } else {
+      alert('画像ファイル以外はアップロードできません') //todo:画像以外もどうにかする
     }
-    inputImageRef.value.value = null
   }
+  inputImageRef.value.value = null
 }
 
 function deleteImage(index: number) {

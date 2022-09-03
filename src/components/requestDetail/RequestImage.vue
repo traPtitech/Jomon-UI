@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { XCircleIcon } from '@heroicons/vue/24/solid'
+
 import apis from '/@/lib/apis'
 import type { File } from '/@/stores/requestDetail'
 
@@ -9,6 +11,10 @@ interface Props {
 const props = defineProps<Props>()
 
 async function deleteFile(id: string) {
+  const result = confirm('この画像を削除しますか？')
+  if (!result) {
+    return
+  }
   await apis.deleteFile(id)
 }
 </script>
@@ -19,11 +25,14 @@ async function deleteFile(id: string) {
       <details>
         <summary>画像</summary>
         <div class="flex flex-wrap">
-          <img
-            v-for="file in props.files"
-            :key="file.file"
-            :alt="file.name"
-            :src="file.file" />
+          <div v-for="file in props.files" :key="file.file" class="relative">
+            <img :alt="file.name" :src="file.file" />
+            <button
+              class="absolute top-0 right-0 h-6 w-6"
+              @click="deleteFile(file.id)">
+              <x-circle-icon />
+            </button>
+          </div>
         </div>
       </details>
     </div>

@@ -5,6 +5,7 @@ import type { RequestDetail, PostRequest } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export interface File {
+  id: string
   file: string
   name: string
 }

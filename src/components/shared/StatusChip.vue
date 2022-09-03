@@ -16,7 +16,7 @@ export type RequestStatus =
 
 interface Props {
   status: RequestStatus
-  hasText: boolean
+  hasText?: boolean
 }
 
 withDefaults(defineProps<Props>(), {

@@ -5,12 +5,12 @@ import StatusChangeLog from './StatusChangeLog.vue'
 import type { RequestDetail } from '/@/lib/apis'
 import type { File } from '/@/stores/requestDetail'
 
+type LogKind = 'comment' | 'statusChange'
+
 interface Props {
   files: File[] | undefined
   request: RequestDetail
 }
-
-type LogKind = 'comment' | 'statusChange'
 
 interface Log {
   created_at: Date

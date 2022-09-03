@@ -13,7 +13,10 @@ import type { User } from '/@/lib/apis'
 interface Props {
   me: User | undefined
 }
+
+const props = defineProps<Props>()
 const route = useRoute()
+
 const drawer = ref()
 
 async function handleOpenDrawer() {
@@ -23,7 +26,6 @@ async function handleOpenDrawer() {
     drawer.value.close()
   }
 }
-defineProps<Props>()
 </script>
 
 <template>
@@ -53,7 +55,7 @@ defineProps<Props>()
           path="/admins"
           text="管理ページ" />
       </div>
-      <user-icon :name="me?.name ?? 'traP'" />
+      <user-icon :name="props.me?.name ?? 'traP'" />
     </div>
   </header>
 </template>

@@ -13,10 +13,12 @@ import { useUserStore } from '/@/stores/user'
 
 const route = useRoute()
 const requestId = toId(route.query.requestID) //requestIDには申請の詳細画面から新規作成ページに移動するときだけIDを渡す
+
 const requestDetailStore = useRequestDetailStore()
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
+
 const transaction = ref({
   amount:
     requestId && requestDetailStore.request

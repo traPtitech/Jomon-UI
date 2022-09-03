@@ -17,8 +17,9 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const comment = ref('')
 const requestDetailStore = useRequestDetailStore()
+
+const comment = ref('')
 
 async function putStatus(nextStatus: RequestStatus | '', comment: string) {
   if (nextStatus === '') {

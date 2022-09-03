@@ -14,6 +14,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const requestDetailStore = useRequestDetailStore()
+
 const comment = ref('')
 
 async function submit() {

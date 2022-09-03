@@ -21,10 +21,12 @@ import { useRequestDetailStore } from '/@/stores/requestDetail'
 import type { File } from '/@/stores/requestDetail'
 import { useTransactionStore } from '/@/stores/transaction'
 
-const requestDetailStore = useRequestDetailStore()
-const transactionStore = useTransactionStore()
 const route = useRoute()
 const id = toId(route.params.id)
+
+const requestDetailStore = useRequestDetailStore()
+const transactionStore = useTransactionStore()
+
 const files = ref<File[]>()
 const formattedDate = formatDate(requestDetailStore.request?.created_at ?? '')
 const { request } = storeToRefs(requestDetailStore)

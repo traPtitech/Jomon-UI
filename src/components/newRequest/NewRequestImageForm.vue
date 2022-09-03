@@ -2,15 +2,17 @@
 import { XCircleIcon } from '@heroicons/vue/24/solid'
 import { ref } from 'vue'
 
+interface Props {
+  images: File[]
+}
 interface File {
   name: string
   src: string
 }
-interface Props {
-  images: File[]
-}
+
 const props = defineProps<Props>()
 const emit = defineEmits<{ (e: 'input', value: File[]): void }>()
+
 const imageExtensions = /.(jpg|png|jpeg|tiff|jfif|tif|webp|avif)$/
 const inputImageRef = ref()
 

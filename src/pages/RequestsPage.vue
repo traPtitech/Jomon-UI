@@ -14,6 +14,7 @@ import { useUserStore } from '/@/stores/user'
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))
+
 const requestStore = useRequestStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()

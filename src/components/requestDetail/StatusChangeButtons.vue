@@ -11,7 +11,6 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-
 const userStore = useUserStore()
 </script>
 

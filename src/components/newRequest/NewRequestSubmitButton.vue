@@ -25,6 +25,7 @@ const props = defineProps<{
   images: File[]
 }>()
 const router = useRouter()
+
 const requestStore = useRequestStore()
 
 async function postFile(requestId: string, name: string, file: string) {

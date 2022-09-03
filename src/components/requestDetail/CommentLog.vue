@@ -12,7 +12,9 @@ interface Props {
     updated_at: string
   }
 }
+
 const props = defineProps<Props>()
+
 const formattedDateAndTime = formatDateAndTime(props.log.created_at)
 </script>
 

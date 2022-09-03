@@ -7,6 +7,7 @@ import apis from '/@/lib/apis'
 import { useTagStore } from '/@/stores/tag'
 
 const tagStore = useTagStore()
+
 const tagName = ref('')
 
 async function postTag() {

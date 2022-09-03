@@ -7,6 +7,9 @@ import NewTagModal from '/@/components/modal/NewTagModal.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import { useTagStore } from '/@/stores/tag'
 
+interface Props {
+  request: RequestRequest
+}
 interface RequestRequest {
   created_by: string
   amount: number
@@ -16,14 +19,13 @@ interface RequestRequest {
   tags: string[]
   group: string | null
 }
-interface Props {
-  request: RequestRequest
-}
 
 const props = defineProps<Props>()
-const tags = ref(props.request.tags)
-const tagStore = useTagStore()
 const emit = defineEmits<{ (e: 'input', value: string[]): void }>()
+
+const tagStore = useTagStore()
+
+const tags = ref(props.request.tags)
 </script>
 
 <template>

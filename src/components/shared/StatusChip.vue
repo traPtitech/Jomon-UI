@@ -19,7 +19,7 @@ interface Props {
   hasText?: boolean
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   hasText: false
 })
 
@@ -58,6 +58,6 @@ function statusToJpn(status: RequestStatus) {
     <hand-thumb-up-icon
       v-else-if="status === 'completed'"
       class="w-8 text-gray-500" />
-    <span v-if="hasText === true">{{ statusToJpn(status) }}</span>
+    <span v-if="props.hasText === true">{{ statusToJpn(status) }}</span>
   </div>
 </template>

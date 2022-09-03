@@ -10,12 +10,12 @@ interface Props {
   totalPages: number
 }
 
+const props = defineProps<Props>()
+
 // sequence(3, 7) => [3, 4, 5, 6, 7]
 const sequence = (start: number, end: number) => {
   return [...Array(end - start + 1).keys()].map(i => i + start)
 }
-
-const props = defineProps<Props>()
 
 // P1: 001 002 003 004 005 006 007 008 009   -   left
 // P2: 001 002 003 004 005 006 ... 099 100   -   left ... center

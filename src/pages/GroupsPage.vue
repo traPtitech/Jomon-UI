@@ -10,6 +10,7 @@ import { useGroupStore } from '/@/stores/group'
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))
+
 const groupStore = useGroupStore()
 
 const sliceGroupsAt = (index: number, n: number) => {

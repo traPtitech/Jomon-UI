@@ -9,6 +9,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+
 const formattedDate = formatDate(props.request.created_at)
 </script>
 

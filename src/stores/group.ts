@@ -15,7 +15,11 @@ export const useGroupStore = defineStore('group', () => {
   }
   const postGroup = async (group: PostGroup) => {
     const res = (await apis.postGroup(group)).data
-    groups.value = [...groups.value!, res]
+    if (groups.value) {
+      groups.value = [...groups.value, res]
+    } else {
+      groups.value = [res]
+    }
     return res
   }
   const putGroup = async (group: PostGroup, id: string) => {

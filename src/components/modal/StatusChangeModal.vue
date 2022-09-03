@@ -32,8 +32,11 @@ async function putStatus(nextStatus: RequestStatus | '', comment: string) {
   try {
     const response = (await apis.putStatus(props.request.id, statusRequest))
       .data
-    requestDetailStore.request!.status = nextStatus
-    requestDetailStore.request!.statuses.push(response)
+    if (requestDetailStore.request === undefined) {
+      throw new Error('request is undefined')
+    }
+    requestDetailStore.request.status = nextStatus
+    requestDetailStore.request.statuses.push(response)
     closeModal()
   } catch (err: any) {
     alert(err.message)

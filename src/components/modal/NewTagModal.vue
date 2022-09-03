@@ -16,7 +16,11 @@ async function postTag() {
   }
   try {
     const response = (await apis.postTag({ name: tagName.value })).data
-    tagStore.tags!.push(response)
+    if (tagStore.tags) {
+      tagStore.tags.push(response)
+    } else {
+      tagStore.tags = [response]
+    }
     closeModal()
   } catch (err: any) {
     alert(err.message)

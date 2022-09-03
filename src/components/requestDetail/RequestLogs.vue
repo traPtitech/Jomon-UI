@@ -3,7 +3,6 @@ import CommentLog from './CommentLog.vue'
 import RequestImage from './RequestImage.vue'
 import StatusChangeLog from './StatusChangeLog.vue'
 import type { RequestDetail } from '/@/lib/apis'
-import { useRequestDetailStore } from '/@/stores/requestDetail'
 
 interface Props {
   request: RequestDetail
@@ -18,7 +17,6 @@ interface Log {
 }
 
 const props = defineProps<Props>()
-const requestDetailStore = useRequestDetailStore()
 
 const logs = () => {
   //2つの配列(commentsとstatuses)の中身の型が違うので1つにまとめ、ソートして表示ができない

@@ -4,7 +4,6 @@ import { openModal } from 'jenesius-vue-modal'
 import SimpleButton from '../shared/SimpleButton.vue'
 import StatusChangeModal from '/@/components/modal/StatusChangeModal.vue'
 import type { RequestDetail } from '/@/lib/apis'
-import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 interface Props {
@@ -14,7 +13,6 @@ interface Props {
 const props = defineProps<Props>()
 
 const userStore = useUserStore()
-const requestDetailStore = useRequestDetailStore()
 </script>
 
 <template>

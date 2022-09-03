@@ -27,7 +27,10 @@ async function submit() {
         comment: comment.value
       })
     ).data
-    requestDetailStore.request!.comments.push(response)
+    if (requestDetailStore.request === undefined) {
+      throw new Error('request is undefined')
+    }
+    requestDetailStore.request.comments.push(response)
     comment.value = ''
   } catch (err: any) {
     alert(err.message)

@@ -1,8 +1,12 @@
 <script lang="ts" setup>
 import apis from '/@/lib/apis'
-import { useRequestDetailStore } from '/@/stores/requestDetail'
+import type { File } from '/@/stores/requestDetail'
 
-const requestDetailStore = useRequestDetailStore()
+interface Props {
+  files: File[] | undefined
+}
+
+const props = defineProps<Props>()
 
 async function deleteFile(id: string) {
   await apis.deleteFile(id)
@@ -11,12 +15,12 @@ async function deleteFile(id: string) {
 
 <template>
   <div>
-    <div v-if="requestDetailStore.files.length" class="mx-4 mt-4">
+    <div v-if="props.files && props.files.length > 0" class="mx-4 mt-4">
       <details>
         <summary>画像</summary>
         <div class="flex flex-wrap">
           <img
-            v-for="file in requestDetailStore.files"
+            v-for="file in props.files"
             :key="file.file"
             :alt="file.name"
             :src="file.file" />

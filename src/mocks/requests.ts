@@ -49,7 +49,7 @@ export const requests = [
     return res(
       ctx.status(200),
       ctx.json({
-        id: req.id,
+        id: req.params.id,
         amount: 1200,
         title: 'SysAd講習会の開催費用',
         created_by: 'mehm8128',

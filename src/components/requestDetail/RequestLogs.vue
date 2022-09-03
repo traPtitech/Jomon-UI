@@ -3,8 +3,10 @@ import CommentLog from './CommentLog.vue'
 import RequestImage from './RequestImage.vue'
 import StatusChangeLog from './StatusChangeLog.vue'
 import type { RequestDetail } from '/@/lib/apis'
+import type { File } from '/@/stores/requestDetail'
 
 interface Props {
+  files: File[] | undefined
   request: RequestDetail
 }
 
@@ -52,7 +54,7 @@ const logs = () => {
 
 <template>
   <div class="h-120 h-full w-2/3 overflow-y-scroll p-2">
-    <request-image />
+    <request-image :files="files" />
     <ul>
       <li
         v-for="log in logs()"

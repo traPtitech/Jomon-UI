@@ -15,9 +15,12 @@ const imageExtensions = /.(jpg|png|jpeg|tiff|jfif|tif|webp|avif)$/
 const inputImageRef = ref()
 
 function handleImageChange(e: Event) {
-  if ((e.target as HTMLInputElement).files) {
-    for (let i = 0; i < (e.target as HTMLInputElement).files!.length; i++) {
-      const file = (e.target as HTMLInputElement).files![i]
+  if (!(e.target instanceof HTMLInputElement)) {
+    return
+  }
+  if (e.target.files) {
+    for (let i = 0; i < e.target.files.length; i++) {
+      const file = e.target.files[i]
       if (file.name.match(imageExtensions)) {
         const reader = new FileReader()
         reader.readAsDataURL(file)

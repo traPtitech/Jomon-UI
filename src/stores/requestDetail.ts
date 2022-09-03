@@ -4,7 +4,7 @@ import { computed, ref } from 'vue'
 import type { RequestDetail, PostRequest } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
-interface File {
+export interface File {
   file: string
   name: string
 }
@@ -79,15 +79,6 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
       alert(err)
     }
   }
-  const fetchFiles = async (ids: string[]) => {
-    try {
-      ids.forEach(async id => {
-        files.value.concat((await apis.getFile(id)).data)
-      })
-    } catch (err) {
-      alert(err)
-    }
-  }
 
   return {
     request,
@@ -98,7 +89,6 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     editedValue,
     changeEditMode,
     fetchRequestDetail,
-    putRequest,
-    fetchFiles
+    putRequest
   }
 })

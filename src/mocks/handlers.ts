@@ -1,4 +1,5 @@
 import { admins } from './admins'
+import { files } from './files'
 import { groups } from './groups'
 import { requests } from './requests'
 import { tags } from './tags'
@@ -11,5 +12,6 @@ export const handlers = [
   groups,
   admins,
   tags,
-  users
+  users,
+  files
 ].flat()

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -17,31 +18,34 @@ import apis from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
 import { toId } from '/@/lib/parsePathParams'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
+import type { File } from '/@/stores/requestDetail'
 import { useTransactionStore } from '/@/stores/transaction'
-
-interface File {
-  file: string
-  name: string
-}
 
 const requestDetailStore = useRequestDetailStore()
 const transactionStore = useTransactionStore()
 const route = useRoute()
 const id = toId(route.params.id)
-const files = ref<File[]>([])
+const files = ref<File[]>()
 const formattedDate = formatDate(requestDetailStore.request?.created_at ?? '')
-const request = requestDetailStore.request
+const { request } = storeToRefs(requestDetailStore)
 
 const fetchFiles = async (ids: string[]) => {
   ids.forEach(async id => {
-    files.value.push((await apis.getFile(id)).data)
+    const file = (await apis.getFile(id)).data
+    const fileMeta = (await apis.getFileMeta(id)).data
+    const fileValues = { file: file, name: fileMeta.name }
+    if (files.value !== undefined) {
+      files.value.push(fileValues)
+    } else {
+      files.value = [fileValues]
+    }
   })
 }
 
 onMounted(async () => {
   await requestDetailStore.fetchRequestDetail(id)
   transactionStore.fetchTransactions('') //idをparamsに渡して取得
-  fetchFiles(request?.files ?? [])
+  await fetchFiles(request.value?.files ?? [])
 })
 </script>
 
@@ -69,7 +73,7 @@ onMounted(async () => {
       </div>
     </div>
     <div class="flex">
-      <request-logs :request="request" />
+      <request-logs :files="files" :request="request" />
       <div class="w-1/3">
         <div class="flex flex-col items-center gap-4 py-8">
           <router-link class="w-2/3" :to="`/transactions/new?requestID=${id}`">

@@ -40,7 +40,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     group: ''
   })
 
-  function changeEditMode(
+  async function changeEditMode(
     kind: 'title' | 'content' | 'amount' | 'group' | 'tags' | 'targets' | ''
   ) {
     if (
@@ -60,7 +60,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     if (kind !== '') {
       editMode.value = kind
     } else {
-      putRequest(request.value?.id ?? '', editedValue.value)
+      await putRequest(request.value?.id ?? '', editedValue.value)
       editMode.value = ''
     }
   }
@@ -74,8 +74,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   }
   const putRequest = async (id: string, willPutRequest: PostRequest) => {
     try {
-      const res = (await apis.putRequestDetail(id, willPutRequest)).data
-      request.value = res
+      request.value = (await apis.putRequestDetail(id, willPutRequest)).data
     } catch (err) {
       alert(err)
     }

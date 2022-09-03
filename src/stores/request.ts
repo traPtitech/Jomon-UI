@@ -46,7 +46,7 @@ export const useRequestStore = defineStore('request', () => {
       alert('日付が不正です')
       return
     }
-    const tmpTagList = tmpParams.tag?.slice() || []
+    const tmpTagList = tmpParams.tag?.slice() ?? []
     params.tag = tmpTagList.map(tag => tag.id).join(',')
     try {
       requests.value = (

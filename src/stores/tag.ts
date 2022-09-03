@@ -18,7 +18,7 @@ export const useTagStore = defineStore('tag', () => {
   }
   const postTag = async (tag: Tag) => {
     try {
-      await apis.postTag(tag)
+      tags.value?.push((await apis.postTag(tag)).data)
     } catch (err) {
       alert(err)
     }
@@ -26,6 +26,7 @@ export const useTagStore = defineStore('tag', () => {
   const deleteTag = async (id: string) => {
     try {
       await apis.tagsTagIDDelete(id)
+      tags.value = tags.value?.filter(tag => tag.id !== id)
     } catch (err) {
       alert(err)
     }

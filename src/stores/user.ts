@@ -21,16 +21,16 @@ export const useUserStore = defineStore('user', () => {
     try {
       me.value = (await apis.getMe()).data
       isMeFetched.value = true
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err) {
+      alert(err)
     }
   }
   const fetchUsers = async () => {
     try {
       users.value = (await apis.getUsers()).data
       isUserFetched.value = true
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err) {
+      alert(err)
     }
   }
 

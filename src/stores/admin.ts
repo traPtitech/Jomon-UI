@@ -11,8 +11,8 @@ export const useAdminStore = defineStore('admin', () => {
     try {
       admins.value = (await apis.getAdmins()).data
       isAdminFetched.value = true
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err) {
+      alert(err)
     }
   }
   return {

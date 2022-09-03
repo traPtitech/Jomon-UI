@@ -58,11 +58,11 @@ async function postRequest() {
       })
       alert('申請を作成しました')
       router.push('/')
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err) {
+      alert(err)
     }
-  } catch (err: any) {
-    alert(err.message)
+  } catch (err) {
+    alert(err)
   }
 }
 </script>

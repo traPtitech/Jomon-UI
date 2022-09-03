@@ -32,8 +32,8 @@ async function submit() {
     }
     requestDetailStore.request.comments.push(response)
     comment.value = ''
-  } catch (err: any) {
-    alert(err.message)
+  } catch (err) {
+    alert(err)
   }
 }
 </script>

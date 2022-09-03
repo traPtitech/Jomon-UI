@@ -67,16 +67,16 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   const fetchRequestDetail = async (id: string) => {
     try {
       request.value = (await apis.getRequestDetail(id)).data
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err) {
+      alert(err)
     }
   }
   const putRequest = async (id: string, willPutRequest: PostRequest) => {
     try {
       const res = (await apis.putRequestDetail(id, willPutRequest)).data
       request.value = res
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err) {
+      alert(err)
     }
   }
   const fetchFiles = async (ids: string[]) => {
@@ -84,8 +84,8 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
       ids.forEach(async id => {
         files.value.concat((await apis.getFile(id)).data)
       })
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err) {
+      alert(err)
     }
   }
 

@@ -38,8 +38,8 @@ async function putStatus(nextStatus: RequestStatus | '', comment: string) {
     requestDetailStore.request.status = nextStatus
     requestDetailStore.request.statuses.push(response)
     closeModal()
-  } catch (err: any) {
-    alert(err.message)
+  } catch (err) {
+    alert(err)
   }
 }
 </script>

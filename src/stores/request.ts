@@ -60,8 +60,8 @@ export const useRequestStore = defineStore('request', () => {
           params.group || ''
         )
       ).data
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err) {
+      alert(err)
     }
   }
   return { requests, isRequestFetched, fetchRequests, tagList }

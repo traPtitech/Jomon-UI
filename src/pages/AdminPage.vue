@@ -33,8 +33,8 @@ const deleteAdmins = async () => {
     adminStore.admins = adminStore.admins?.filter(
       id => !deleteList.value.includes(id)
     )
-  } catch (err: any) {
-    alert(err.message)
+  } catch (err) {
+    alert(err)
   }
 }
 const addAdmins = async () => {
@@ -45,8 +45,8 @@ const addAdmins = async () => {
   try {
     await apis.postAdmins(addList.value)
     adminStore.admins = adminStore.admins?.concat(addList.value)
-  } catch (err: any) {
-    alert(err.message)
+  } catch (err) {
+    alert(err)
   }
 }
 </script>

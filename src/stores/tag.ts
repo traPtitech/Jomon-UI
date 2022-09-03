@@ -12,22 +12,22 @@ export const useTagStore = defineStore('tag', () => {
     try {
       tags.value = (await apis.getTags()).data
       isTagFetched.value = true
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err) {
+      alert(err)
     }
   }
   const postTag = async (tag: Tag) => {
     try {
       await apis.postTag(tag)
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err) {
+      alert(err)
     }
   }
   const deleteTag = async (id: string) => {
     try {
       await apis.tagsTagIDDelete(id)
-    } catch (err: any) {
-      alert(err.message)
+    } catch (err) {
+      alert(err)
     }
   }
   return { tags, isTagFetched, fetchTags, postTag, deleteTag }

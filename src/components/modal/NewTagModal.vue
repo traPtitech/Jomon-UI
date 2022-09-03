@@ -22,8 +22,8 @@ async function postTag() {
       tagStore.tags = [response]
     }
     closeModal()
-  } catch (err: any) {
-    alert(err.message)
+  } catch (err) {
+    alert(err)
   }
 }
 </script>

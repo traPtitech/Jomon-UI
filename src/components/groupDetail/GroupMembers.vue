@@ -5,27 +5,44 @@ import { ref } from 'vue'
 
 import UserIcon from '/@/components/shared/UserIcon.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
-import type { Group } from '/@/lib/apis'
-import { useGroupStore } from '/@/stores/group'
+import apis from '/@/lib/apis'
+import type { GroupDetailType } from '/@/pages/GroupDetailPage.vue'
 import { useUserStore } from '/@/stores/user'
 
 interface Props {
-  group: Group
+  group: GroupDetailType
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits<{ (e: 'fixGroup', group: GroupDetailType): void }>()
 const userStore = useUserStore()
 const { users } = storeToRefs(userStore)
-const groupStore = useGroupStore()
 const MembersToBeAdded = ref<string[]>([])
 
-function handleDeleteMember(id: string) {
-  groupStore.deleteGroupMember(props.group.id, [id])
-}
-
-function handleAddMember(members: string[]) {
+async function handleAddMembers(members: string[]) {
   if (members.length !== 0) {
-    groupStore.postGroupOwner(props.group.id, members)
+    try {
+      const res = await apis.postGroupMembers(props.group.id, members)
+      const nextGroup = {
+        ...props.group,
+        members: [...props.group.members, ...res.data]
+      }
+      emit('fixGroup', nextGroup)
+    } catch (err) {
+      alert(err)
+    }
+  }
+}
+async function handleDeleteMember(id: string) {
+  try {
+    await apis.deleteGroupMembers(props.group.id, [id])
+    const nextGroup = {
+      ...props.group,
+      members: props.group.members.filter(member => member !== id)
+    }
+    emit('fixGroup', nextGroup)
+  } catch (err) {
+    alert(err)
   }
 }
 </script>
@@ -58,7 +75,7 @@ function handleAddMember(members: string[]) {
         :options="users"
         placeholder="追加するメンバーを選択"
         :reduce="(user:any) => user.name" />
-      <button @click="handleAddMember(MembersToBeAdded)">
+      <button @click="handleAddMembers(MembersToBeAdded)">
         <plus-icon class="ml-2 w-6" />
       </button>
     </div>

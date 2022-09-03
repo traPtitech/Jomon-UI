@@ -10,7 +10,7 @@ import { toId } from '/@/lib/parsePathParams'
 import { useGroupStore } from '/@/stores/group'
 import { useUserStore } from '/@/stores/user'
 
-interface GroupDetailType {
+export interface GroupDetailType {
   id: string
   name: string
   description: string
@@ -25,23 +25,14 @@ const groupStore = useGroupStore()
 const userStore = useUserStore()
 const route = useRoute()
 const id = toId(route.params.id)
-const group = ref<GroupDetailType>({
-  id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-  name: 'SysAd',
-  description: 'SysAd班',
-  budget: 250000,
-  owners: ['mehm8128', 'traP'],
-  members: ['mehm8128'],
-  created_at: '2022-04-05T14:02:15.431Z',
-  updated_at: '2022-04-05T14:02:15.431Z'
-})
+const group = ref<GroupDetailType>()
 
 const fetchGroup = async (id: string) => {
   try {
     group.value = (await apis.getGroupDetail(id)).data
     groupStore.isGroupFetched = true
-  } catch (err: any) {
-    alert(err.message)
+  } catch (err) {
+    alert(err)
   }
 }
 onMounted(() => {
@@ -53,14 +44,14 @@ onMounted(() => {
 </script>
 
 <template>
+  <div v-if="group === undefined">loading...</div>
   <div
-    v-if="group"
+    v-else
     class="min-w-80 mx-auto flex h-full flex-col justify-between px-12 pt-4 md:flex-row">
-    <group-detail class="md:w-3/4" :group="group" />
+    <group-detail class="md:w-3/4" :group="group" @fix-group="group = $event" />
     <div class="flex flex-col gap-8 py-4 md:w-1/4">
       <group-members :group="group" />
       <group-owners :group="group" />
     </div>
   </div>
-  <div v-else>loading...</div>
 </template>

@@ -1,47 +1,60 @@
 <script lang="ts" setup>
 import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 import SimpleButton from '../shared/SimpleButton.vue'
 import GroupBudget from './GroupBudget.vue'
 import GroupDescription from './GroupDescription.vue'
 import FixButton from '/@/components/shared/FixButton.vue'
 import apis from '/@/lib/apis'
-import type { Group, PostGroup } from '/@/lib/apis'
+import type { PostGroup } from '/@/lib/apis'
+import type { GroupDetailType } from '/@/pages/GroupDetailPage.vue'
 import { useGroupStore } from '/@/stores/group'
 
-export type FixMode = 'name' | 'description' | 'budget' | ''
+export type editMode = 'name' | 'description' | 'budget' | ''
 
 interface Props {
-  group: Group
+  group: GroupDetailType
 }
 
+const router = useRouter()
 const props = defineProps<Props>()
+const emit = defineEmits<{
+  (e: 'fixGroup', value: GroupDetailType): void
+}>()
 const groupStore = useGroupStore()
-const fixMode = ref<FixMode>('')
-const fixedValue = ref({
+const editMode = ref<editMode>('')
+const editedValue = ref({
   name: props.group.name,
   description: props.group.description,
   budget: props.group.budget.toString()
 })
-function changeFixMode(kind: FixMode) {
+function changeEditMode(kind: editMode) {
   if (kind !== '') {
-    fixMode.value = kind
+    editMode.value = kind
   } else {
     const value = {
-      name: fixedValue.value.name,
-      description: fixedValue.value.description,
-      budget: Number(fixedValue.value.budget)
+      name: editedValue.value.name,
+      description: editedValue.value.description,
+      budget: Number(editedValue.value.budget)
     }
     putGroup(props.group.id, value)
-    fixMode.value = ''
+    editMode.value = ''
   }
 }
-const putGroup = async (id: string, group: PostGroup) => {
+const putGroup = async (id: string, willPutGroup: PostGroup) => {
   try {
-    await apis.putGroupDetail(id, group)
-  } catch (err: any) {
-    alert(err.message)
+    const res = (await apis.putGroupDetail(id, willPutGroup)).data
+    const nextGroup: GroupDetailType = {
+      ...props.group,
+      name: res.name,
+      description: res.description,
+      budget: res.budget
+    }
+    emit('fixGroup', nextGroup)
+  } catch (err) {
+    alert(err)
   }
 }
 const deleteGroup = async (id: string) => {
@@ -50,9 +63,14 @@ const deleteGroup = async (id: string) => {
   }
   try {
     await apis.deleteGroup(id)
-    groupStore.groups = groupStore.groups.filter(group => group.id !== id)
-  } catch (err: any) {
-    alert(err.message)
+    if (groupStore.groups !== undefined) {
+      groupStore.groups = groupStore.groups.filter(group => group.id !== id)
+      router.push('/group')
+    } else {
+      throw new Error('group does not exist')
+    }
+  } catch (err) {
+    alert(err)
   }
 }
 </script>
@@ -60,16 +78,16 @@ const deleteGroup = async (id: string) => {
 <template>
   <div>
     <div class="flex items-center">
-      <div v-if="!(fixMode === 'name')" class="flex">
+      <div v-if="!(editMode === 'name')" class="flex">
         <h1 class="text-3xl">
           {{ props.group.name }}
         </h1>
-        <fix-button @click="changeFixMode('name')" />
+        <fix-button @click="changeEditMode('name')" />
         <!--todo:権限-->
       </div>
-      <div v-if="fixMode === 'name'">
+      <div v-if="editMode === 'name'">
         <input
-          v-model="fixedValue.name"
+          v-model="editedValue.name"
           class="rounded p-1"
           placeholder="グループ名"
           type="text" />
@@ -77,28 +95,26 @@ const deleteGroup = async (id: string) => {
           class="ml-2"
           font-size="sm"
           padding="sm"
-          @click.stop="changeFixMode('')">
+          @click.stop="changeEditMode('')">
           完了
         </simple-button>
       </div>
     </div>
     <div class="mt-4">
       <group-description
-        :change-fix-mode="changeFixMode"
-        :fix-mode="fixMode"
+        :edit-mode="editMode"
         :group="group"
-        :put-group="putGroup"
-        :value="fixedValue.description"
-        @input="fixedValue.description = $event" />
+        :value="editedValue.description"
+        @change-edit-mode="changeEditMode($event)"
+        @input="editedValue.description = $event" />
     </div>
     <div class="mt-4 h-10">
       <group-budget
-        :change-fix-mode="changeFixMode"
-        :fix-mode="fixMode"
+        :edit-mode="editMode"
         :group="group"
-        :put-group="putGroup"
-        :value="fixedValue.budget"
-        @input="fixedValue.budget = $event" />
+        :value="editedValue.budget"
+        @change-edit-mode="changeEditMode($event)"
+        @input="editedValue.budget = $event" />
     </div>
     <div class="flex items-center">
       このグループの入出金記録へ

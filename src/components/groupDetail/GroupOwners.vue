@@ -5,27 +5,45 @@ import { ref } from 'vue'
 
 import UserIcon from '/@/components/shared/UserIcon.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
-import type { Group } from '/@/lib/apis'
-import { useGroupStore } from '/@/stores/group'
+import apis from '/@/lib/apis'
+import type { GroupDetailType } from '/@/pages/GroupDetailPage.vue'
 import { useUserStore } from '/@/stores/user'
 
 interface Props {
-  group: Group
+  group: GroupDetailType
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits<{ (e: 'fixGroup', group: GroupDetailType): void }>()
 const userStore = useUserStore()
 const { users } = storeToRefs(userStore)
-const groupStore = useGroupStore()
 const OwnersToBeAdded = ref<string[]>([])
 
-function handleAddOwner(owners: string[]) {
+async function handleAddOwners(owners: string[]) {
   if (owners.length !== 0) {
-    groupStore.postGroupMember(props.group.id, owners)
+    try {
+      const res = await apis.postGroupOwners(props.group.id, owners)
+      const nextGroup = {
+        ...props.group,
+        owners: [...props.group.owners, ...res.data]
+      }
+      emit('fixGroup', nextGroup)
+    } catch (err) {
+      alert(err)
+    }
   }
 }
-function handleDeleteOwner(id: string) {
-  groupStore.deleteGroupOwner(props.group.id, [id])
+async function handleDeleteOwner(id: string) {
+  try {
+    await apis.deleteGroupOwners(props.group.id, [id])
+    const nextGroup = {
+      ...props.group,
+      owners: props.group.owners.filter(owner => owner !== id)
+    }
+    emit('fixGroup', nextGroup)
+  } catch (err) {
+    alert(err)
+  }
 }
 </script>
 
@@ -57,7 +75,7 @@ function handleDeleteOwner(id: string) {
         :options="users"
         placeholder="追加するオーナーを選択"
         :reduce="(user:any) => user.name" />
-      <button @click="handleAddOwner(OwnersToBeAdded)">
+      <button @click="handleAddOwners(OwnersToBeAdded)">
         <plus-icon class="ml-2 w-6" />
       </button>
     </div>

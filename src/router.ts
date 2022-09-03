@@ -9,9 +9,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import('./pages/TransactionsPage.vue')
   },
   { path: '/groups', component: () => import('./pages/GroupsPage.vue') },
-  { path: '/groups/:id', component: () => import('./pages/GroupDetails.vue') },
+  {
+    path: '/groups/:id',
+    component: () => import('./pages/GroupDetailPage.vue')
+  },
   { path: '/admins', component: () => import('./pages/AdminPage.vue') },
-  { path: '/groups/new', component: () => import('./pages/NewGroup.vue') },
+  { path: '/groups/new', component: () => import('./pages/NewGroupPage.vue') },
   { path: '/:path(.*)', component: () => import('./pages/NotFound.vue') }
 ]
 

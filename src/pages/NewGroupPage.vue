@@ -24,32 +24,39 @@ const group = ref({
 const postGroup = async (group: PostGroup) => {
   try {
     const res = (await apis.postGroup(group)).data
-    groupStore.groups = [...groupStore.groups, res]
+    if (groupStore.groups !== undefined) {
+      groupStore.groups.unshift(res)
+    } else {
+      groupStore.groups = [res]
+    }
     return res
-  } catch (err: any) {
-    alert(err.message)
+  } catch (err) {
+    throw new Error('error occured')
   }
 }
 
 async function handlePostGroup() {
   if (
-    /^[1-9][0-9]*$|^0$/.test(group.value.budget.toString()) &&
-    group.value.name !== '' &&
-    group.value.description !== '' &&
-    group.value.owners.length > 0 &&
-    group.value.members.length > 0
+    !(
+      /^[1-9][0-9]*$|^0$/.test(group.value.budget.toString()) &&
+      group.value.name !== '' &&
+      group.value.description !== '' &&
+      group.value.owners.length > 0
+    )
   ) {
-    const willPostGroup = {
-      name: group.value.name,
-      description: group.value.description,
-      budget: group.value.budget
-    }
+    alert('全ての項目を入力してください')
+  }
+  const willPostGroup = {
+    name: group.value.name,
+    description: group.value.description,
+    budget: group.value.budget
+  }
+  try {
     const res: Group = await postGroup(willPostGroup)
     await groupStore.postGroupMember(res.id, group.value.members)
     await groupStore.postGroupOwner(res.id, group.value.owners)
-    groupStore.groups.unshift(res)
-  } else {
-    alert('全ての項目を入力してください')
+  } catch (err) {
+    alert(err)
   }
 }
 </script>

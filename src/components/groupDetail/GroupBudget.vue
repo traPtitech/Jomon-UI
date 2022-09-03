@@ -1,27 +1,28 @@
 <script lang="ts" setup>
 import SimpleButton from '../shared/SimpleButton.vue'
-import type { FixMode } from './GroupDetail.vue'
+import { editMode } from './GroupDetail.vue'
 import FixButton from '/@/components/shared/FixButton.vue'
-import type { Group, PostGroup } from '/@/lib/apis'
+import type { Group } from '/@/lib/apis'
 
 interface Props {
   group: Group
-  putGroup: (id: string, group: PostGroup) => void
-  changeFixMode: (kind: FixMode) => void
-  fixMode: FixMode
+  editMode: editMode
   value: string
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits<{ (e: 'input', value: string): void }>()
+const emit = defineEmits<{
+  (e: 'input', value: string): void
+  (e: 'changeEditMode', value: editMode): void
+}>()
 </script>
 
 <template>
-  <div v-if="!(fixMode === 'budget')" class="flex items-start">
+  <div v-if="!(editMode === 'budget')" class="flex items-start">
     予算：{{ props.group.budget }}円
-    <fix-button @click="changeFixMode('budget')" />
+    <fix-button @click="emit('changeEditMode', 'budget')" />
   </div>
-  <div v-if="fixMode === 'budget'">
+  <div v-if="editMode === 'budget'">
     予算：<input
       class="w-24 p-1"
       placeholder="金額"
@@ -32,7 +33,7 @@ const emit = defineEmits<{ (e: 'input', value: string): void }>()
       class="ml-2"
       font-size="sm"
       padding="sm"
-      @click.stop="changeFixMode('')">
+      @click.stop="emit('changeEditMode', '')">
       完了
     </simple-button>
   </div>

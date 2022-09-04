@@ -25,6 +25,7 @@ const hasAuthority = isCreater(userStore.me, props.request.created_by)
     </h1>
     <edit-button
       v-if="hasAuthority"
+      class="text-secondary"
       @click="requestDetailStore.changeEditMode('title')" />
   </div>
   <div v-if="requestDetailStore.editMode === 'title'">

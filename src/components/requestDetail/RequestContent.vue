@@ -30,6 +30,7 @@ const hasAuthority = isCreater(userStore.me, props.request.created_by)
         :text="props.request.content" />
       <edit-button
         v-if="hasAuthority"
+        class="text-secondary"
         @click="requestDetailStore.changeEditMode('content')" />
     </div>
     <div v-if="requestDetailStore.editMode === 'content'" class="w-9/10">

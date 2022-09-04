@@ -25,6 +25,7 @@ const hasAuthority = isCreater(userStore.me, props.request.created_by)
     <span class="text-2xl"> 金額：{{ props.request.amount }}円 </span>
     <edit-button
       v-if="hasAuthority"
+      class="text-secondary"
       @click="requestDetailStore.changeEditMode('amount')" />
   </div>
   <div

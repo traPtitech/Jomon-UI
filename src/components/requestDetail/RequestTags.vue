@@ -33,6 +33,7 @@ const hasAuthority = isCreater(userStore.me, props.request.created_by)
       <tag-group :tags="props.request.tags" />
       <edit-button
         v-if="hasAuthority"
+        class="text-secondary"
         @click="requestDetailStore.changeEditMode('tags')" />
     </div>
     <div

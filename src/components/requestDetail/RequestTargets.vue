@@ -29,6 +29,7 @@ const hasAuthority = isCreater(userStore.me, props.request.created_by)
       {{ formattedTargets }}
       <edit-button
         v-if="hasAuthority"
+        class="text-secondary"
         @click="requestDetailStore.changeEditMode('targets')" />
     </div>
     <div v-if="requestDetailStore.editMode === 'targets'">

@@ -20,3 +20,10 @@ import 'vue-select/dist/vue-select.css'
     </template>
   </v-select>
 </template>
+
+<style>
+.v-select .vs__selected {
+  background-color: #e5e7eb; /*gray-200*/
+  border-color: #d1d5db;
+}
+</style>

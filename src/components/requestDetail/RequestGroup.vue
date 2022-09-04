@@ -29,6 +29,7 @@ const hasAuthority = isCreater(userStore.me, props.request.created_by)
       {{ props.request.group.name }}
       <edit-button
         v-if="hasAuthority"
+        class="text-secondary"
         @click="requestDetailStore.changeEditMode('group')" />
     </div>
     <div v-else-if="requestDetailStore.editMode === 'group'" class="flex">

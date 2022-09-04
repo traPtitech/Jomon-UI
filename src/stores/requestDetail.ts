@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { watch, computed, ref } from 'vue'
 
 import type { RequestDetail, PostRequest } from '/@/lib/apis'
 import apis from '/@/lib/apis'
@@ -35,8 +35,8 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     amount: 0,
     title: '',
     content: '',
-    targets: targetIds.value,
-    tags: tagIds.value,
+    targets: [],
+    tags: [],
     group: ''
   })
 
@@ -79,6 +79,18 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
       alert(err)
     }
   }
+
+  watch(request, request => {
+    editedValue.value = {
+      title: request?.title ?? '',
+      amount: request?.amount ?? 0,
+      content: request?.content ?? '',
+      targets: request?.targets.map(target => target.id) ?? [],
+      tags: request?.tags.map(tag => tag.id) ?? [],
+      group: request?.group.id ?? '',
+      created_by: request?.created_by ?? ''
+    }
+  })
 
   return {
     request,

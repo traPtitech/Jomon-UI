@@ -3,6 +3,7 @@ import SimpleButton from '../shared/SimpleButton.vue'
 import EditButton from '/@/components/shared/EditButton.vue'
 import MarkdownIt from '/@/components/shared/MarkdownIt.vue'
 import type { RequestDetail } from '/@/lib/apis'
+import { isCreater } from '/@/lib/authorityCheck'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
@@ -14,6 +15,8 @@ const props = defineProps<Props>()
 
 const requestDetailStore = useRequestDetailStore()
 const userStore = useUserStore()
+
+const hasAuthority = isCreater(userStore.me, props.request.created_by)
 </script>
 
 <template>
@@ -26,7 +29,7 @@ const userStore = useUserStore()
         class="h-32 w-full overflow-y-scroll border border-gray-300 pl-2"
         :text="props.request.content" />
       <edit-button
-        v-if="props.request.created_by === userStore.me.name"
+        v-if="hasAuthority"
         @click="requestDetailStore.changeEditMode('content')" />
     </div>
     <div v-if="requestDetailStore.editMode === 'content'" class="w-9/10">

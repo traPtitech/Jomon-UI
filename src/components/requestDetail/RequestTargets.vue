@@ -3,6 +3,7 @@ import SimpleButton from '../shared/SimpleButton.vue'
 import EditButton from '/@/components/shared/EditButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import type { RequestDetail } from '/@/lib/apis'
+import { isCreater } from '/@/lib/authorityCheck'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
@@ -14,17 +15,20 @@ const props = defineProps<Props>()
 
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
+
+const formattedTargets = props.request.targets
+  .map(target => target.id)
+  .join(', ')
+const hasAuthority = isCreater(userStore.me, props.request.created_by)
 </script>
 
 <template>
   <div class="flex">
     <div v-if="!(requestDetailStore.editMode === 'targets')">
       払い戻し対象者：
-      <span v-for="target in props.request.targets" :key="target.id">
-        {{ target.target }},
-      </span>
+      {{ formattedTargets }}
       <edit-button
-        v-if="props.request.created_by === userStore.me.name"
+        v-if="hasAuthority"
         @click="requestDetailStore.changeEditMode('targets')" />
     </div>
     <div v-if="requestDetailStore.editMode === 'targets'">

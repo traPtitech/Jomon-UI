@@ -3,6 +3,7 @@ import SimpleButton from '../shared/SimpleButton.vue'
 import EditButton from '/@/components/shared/EditButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import type { RequestDetail } from '/@/lib/apis'
+import { isCreater } from '/@/lib/authorityCheck'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
@@ -16,16 +17,18 @@ const props = defineProps<Props>()
 const requestDetailStore = useRequestDetailStore()
 const userStore = useUserStore()
 const groupStore = useGroupStore()
+
+const hasAuthority = isCreater(userStore.me, props.request.created_by)
 </script>
 
 <template>
-  <div class="flex">
+  <div class="flex items-center">
     グループ：
     <div v-if="!props.request.group">なし</div>
     <div v-else-if="!(requestDetailStore.editMode === 'group')">
       {{ props.request.group.name }}
       <edit-button
-        v-if="props.request.created_by === userStore.me.name"
+        v-if="hasAuthority"
         @click="requestDetailStore.changeEditMode('group')" />
     </div>
     <div v-else-if="requestDetailStore.editMode === 'group'" class="flex">

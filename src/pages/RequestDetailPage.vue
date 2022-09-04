@@ -3,33 +3,41 @@ import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-import RequestTags from '../components/requestDetail/RequestTags.vue'
-import SimpleButton from '../components/shared/SimpleButton.vue'
 import NewComment from '/@/components/requestDetail/NewComment.vue'
 import RequestAmount from '/@/components/requestDetail/RequestAmount.vue'
 import RequestContent from '/@/components/requestDetail/RequestContent.vue'
 import RequestGroup from '/@/components/requestDetail/RequestGroup.vue'
 import RequestLogs from '/@/components/requestDetail/RequestLogs.vue'
+import RequestTags from '/@/components/requestDetail/RequestTags.vue'
 import RequestTargets from '/@/components/requestDetail/RequestTargets.vue'
 import RequestTitle from '/@/components/requestDetail/RequestTitle.vue'
 import StatusChangeButtons from '/@/components/requestDetail/StatusChangeButtons.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import apis from '/@/lib/apis'
+import { isAdmin } from '/@/lib/authorityCheck'
 import { formatDate } from '/@/lib/date'
 import { toId } from '/@/lib/parsePathParams'
+import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import type { File } from '/@/stores/requestDetail'
+import { useTagStore } from '/@/stores/tag'
 import { useTransactionStore } from '/@/stores/transaction'
+import { useUserStore } from '/@/stores/user'
 
 const route = useRoute()
 const id = toId(route.params.id)
 
 const requestDetailStore = useRequestDetailStore()
 const transactionStore = useTransactionStore()
+const userStore = useUserStore()
+const groupStore = useGroupStore()
+const tagStore = useTagStore()
 
 const files = ref<File[]>()
-const formattedDate = formatDate(requestDetailStore.request?.created_at ?? '')
 const { request } = storeToRefs(requestDetailStore)
+const formattedDate = formatDate(request.value?.created_at ?? '')
+const hasAuthority = isAdmin(userStore.me)
 
 const fetchFiles = async (ids: string[]) => {
   ids.forEach(async id => {
@@ -48,6 +56,15 @@ onMounted(async () => {
   await requestDetailStore.fetchRequestDetail(id)
   transactionStore.fetchTransactions('') //idをparamsに渡して取得
   await fetchFiles(request.value?.files ?? [])
+  if (!groupStore.isGroupFetched) {
+    await groupStore.fetchGroups()
+  }
+  if (!userStore.isUserFetched) {
+    await userStore.fetchUsers()
+  }
+  if (!tagStore.isTagFetched) {
+    await tagStore.fetchTags()
+  }
 })
 </script>
 
@@ -78,7 +95,10 @@ onMounted(async () => {
       <request-logs :files="files" :request="request" />
       <div class="w-1/3">
         <div class="flex flex-col items-center gap-4 py-8">
-          <router-link class="w-2/3" :to="`/transactions/new?requestID=${id}`">
+          <router-link
+            v-if="hasAuthority"
+            class="w-2/3"
+            :to="`/transactions/new?requestID=${id}`">
             <simple-button class="w-full" font-size="md" padding="sm">
               この申請から入出金記録を作成する
             </simple-button>

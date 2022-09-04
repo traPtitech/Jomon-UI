@@ -1,10 +1,15 @@
 <script lang="ts" setup>
 import { container } from 'jenesius-vue-modal'
+import { onMounted } from 'vue'
 
 import JomonHeader from './components/JomonHeader.vue'
 import { useUserStore } from './stores/user'
 
 const userStore = useUserStore()
+
+onMounted(async () => {
+  await userStore.fetchMe()
+})
 </script>
 
 <template>

@@ -7,6 +7,7 @@ import NewTagModal from '/@/components/modal/NewTagModal.vue'
 import EditButton from '/@/components/shared/EditButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import type { RequestDetail } from '/@/lib/apis'
+import { isCreater } from '/@/lib/authorityCheck'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
@@ -20,6 +21,8 @@ const props = defineProps<Props>()
 const requestDetailStore = useRequestDetailStore()
 const tagStore = useTagStore()
 const userStore = useUserStore()
+
+const hasAuthority = isCreater(userStore.me, props.request.created_by)
 </script>
 
 <template>
@@ -29,7 +32,7 @@ const userStore = useUserStore()
     <div v-else-if="!(requestDetailStore.editMode === 'tags')">
       <tag-group :tags="props.request.tags" />
       <edit-button
-        v-if="props.request.created_by === userStore.me.name"
+        v-if="hasAuthority"
         @click="requestDetailStore.changeEditMode('tags')" />
     </div>
     <div

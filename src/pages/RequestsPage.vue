@@ -39,9 +39,6 @@ onMounted(() => {
   if (!userStore.isUserFetched) {
     userStore.fetchUsers()
   }
-  if (!userStore.isMeFetched) {
-    userStore.fetchMe()
-  }
 })
 watch(
   () => route.query.page,

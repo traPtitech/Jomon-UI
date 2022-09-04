@@ -2,6 +2,7 @@
 import SimpleButton from '../shared/SimpleButton.vue'
 import EditButton from '/@/components/shared/EditButton.vue'
 import type { RequestDetail } from '/@/lib/apis'
+import { isCreater } from '/@/lib/authorityCheck'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
@@ -13,6 +14,8 @@ const props = defineProps<Props>()
 
 const requestDetailStore = useRequestDetailStore()
 const userStore = useUserStore()
+
+const hasAuthority = isCreater(userStore.me, props.request.created_by)
 </script>
 
 <template>
@@ -21,7 +24,7 @@ const userStore = useUserStore()
       {{ props.request.title }}
     </h1>
     <edit-button
-      v-if="props.request.created_by === userStore.me.name"
+      v-if="hasAuthority"
       @click="requestDetailStore.changeEditMode('title')" />
   </div>
   <div v-if="requestDetailStore.editMode === 'title'">

@@ -9,6 +9,7 @@ import SideDrawer from './SideDrawer.vue'
 import Logo from './shared/JomonLogo.vue'
 import UserIcon from './shared/UserIcon.vue'
 import type { User } from '/@/lib/apis'
+import { isAdmin } from '/@/lib/authorityCheck'
 
 interface Props {
   me: User | undefined
@@ -51,6 +52,7 @@ async function handleOpenDrawer() {
           path="/groups"
           text="グループ一覧" />
         <header-button
+          v-if="isAdmin(props.me)"
           :is-here="route.fullPath === '/admins'"
           path="/admins"
           text="管理ページ" />

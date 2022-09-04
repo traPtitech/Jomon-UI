@@ -6,6 +6,7 @@ import SimpleButton from '../components/shared/SimpleButton.vue'
 import { toId } from '../lib/parseQueryParams'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import apis from '/@/lib/apis'
+import { isAdmin } from '/@/lib/authorityCheck'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
@@ -19,6 +20,7 @@ const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 
+const hasAuthority = isAdmin(userStore.me)
 const transaction = ref({
   amount:
     requestId && requestDetailStore.request
@@ -45,6 +47,7 @@ async function postTransaction() {
 </script>
 
 <template>
+  <div v-if="!hasAuthority">権限がありません。</div>
   <div class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
     <div class="pb-8">
       <h1 class="text-center text-3xl">入出金記録の新規作成</h1>

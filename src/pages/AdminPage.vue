@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue'
 import SimpleButton from '../components/shared/SimpleButton.vue'
 import apis from '../lib/apis'
 import VueSelect from '/@/components/shared/VueSelect.vue'
+import { isAdmin } from '/@/lib/authorityCheck'
 import { useAdminStore } from '/@/stores/admin'
 import { useUserStore } from '/@/stores/user'
 
@@ -12,6 +13,7 @@ const userStore = useUserStore()
 
 const addList = ref<string[]>([])
 const deleteList = ref<string[]>([])
+const hasAuthority = isAdmin(userStore.me)
 
 onMounted(() => {
   if (userStore.me.admin) {
@@ -44,8 +46,12 @@ const addAdmins = async () => {
     return
   }
   try {
-    await apis.postAdmins(addList.value)
-    adminStore.admins = adminStore.admins?.concat(addList.value)
+    const res = (await apis.postAdmins(addList.value)).data
+    if (adminStore.admins) {
+      adminStore.admins.push(...res)
+    } else {
+      adminStore.admins = [res]
+    }
   } catch (err) {
     alert(err)
   }
@@ -53,9 +59,8 @@ const addAdmins = async () => {
 </script>
 
 <template>
-  <div
-    v-if="userStore.me.admin"
-    class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
+  <div v-if="!hasAuthority">権限がありません。</div>
+  <div v-else class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
     <h1 class="pb-8 text-center text-3xl">管理ページ</h1>
     <div>
       <ul v-if="adminStore.admins" class="flex gap-2">
@@ -92,5 +97,4 @@ const addAdmins = async () => {
       </simple-button>
     </div>
   </div>
-  <div v-else>権限がありません。</div>
 </template>

@@ -63,9 +63,9 @@ const right = computed(
           v-for="page in left"
           :key="page"
           class="not-last:mr-1"
+          :is-selected="page === currentPage"
           :page="page"
-          :path="path"
-          :selected="page === currentPage" />
+          :path="path" />
       </div>
 
       <!-- Center -->
@@ -75,9 +75,9 @@ const right = computed(
           v-for="page in center"
           :key="page"
           class="not-last:mr-1"
+          :is-selected="page === currentPage"
           :page="page"
-          :path="path"
-          :selected="page === currentPage" />
+          :path="path" />
       </div>
 
       <!-- Right -->
@@ -91,9 +91,9 @@ const right = computed(
           v-for="page in right"
           :key="page"
           class="not-last:mr-1"
+          :is-selected="page === currentPage"
           :page="page"
-          :path="path"
-          :selected="page === currentPage" />
+          :path="path" />
       </div>
 
       <!-- Next -->

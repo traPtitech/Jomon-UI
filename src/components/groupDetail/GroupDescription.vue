@@ -1,9 +1,12 @@
 <script lang="ts" setup>
-import type { EditMode } from './GroupDetail.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
-import type { GroupDetailType } from '/@/pages/GroupDetailPage.vue'
 import { useUserStore } from '/@/stores/user'
+
+import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
+
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import type { GroupDetailType } from '/@/pages/GroupDetailPage.vue'
+
+import type { EditMode } from './GroupDetail.vue'
 
 interface Props {
   group: GroupDetailType

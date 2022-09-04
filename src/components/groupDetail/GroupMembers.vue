@@ -2,12 +2,14 @@
 import { MinusIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
 
-import UserIcon from '/@/components/shared/UserIcon.vue'
-import VueSelect from '/@/components/shared/VueSelect.vue'
+import { useUserStore } from '/@/stores/user'
+
 import apis from '/@/lib/apis'
 import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
+
+import UserIcon from '/@/components/shared/UserIcon.vue'
+import VueSelect from '/@/components/shared/VueSelect.vue'
 import type { GroupDetailType } from '/@/pages/GroupDetailPage.vue'
-import { useUserStore } from '/@/stores/user'
 
 interface Props {
   group: GroupDetailType

@@ -3,15 +3,18 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import GroupBudget from './GroupBudget.vue'
-import GroupDescription from './GroupDescription.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import { useGroupStore } from '/@/stores/group'
+import { useUserStore } from '/@/stores/user'
+
 import apis from '/@/lib/apis'
 import type { PostGroup } from '/@/lib/apis'
 import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
+
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { GroupDetailType } from '/@/pages/GroupDetailPage.vue'
-import { useGroupStore } from '/@/stores/group'
-import { useUserStore } from '/@/stores/user'
+
+import GroupBudget from './GroupBudget.vue'
+import GroupDescription from './GroupDescription.vue'
 
 export type EditMode = 'name' | 'description' | 'budget' | ''
 

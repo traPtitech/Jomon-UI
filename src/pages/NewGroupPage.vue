@@ -2,12 +2,14 @@
 import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import VueSelect from '/@/components/shared/VueSelect.vue'
-import type { Group, PostGroup } from '/@/lib/apis'
-import apis from '/@/lib/apis'
 import { useGroupStore } from '/@/stores/group'
 import { useUserStore } from '/@/stores/user'
+
+import type { Group, PostGroup } from '/@/lib/apis'
+import apis from '/@/lib/apis'
+
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import VueSelect from '/@/components/shared/VueSelect.vue'
 
 const userStore = useUserStore()
 const groupStore = useGroupStore()

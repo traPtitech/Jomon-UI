@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-import type { Request } from '/@/lib/apis'
+import type { Request, StatusEnum } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export interface Params {
@@ -52,7 +52,7 @@ export const useRequestStore = defineStore('request', () => {
       requests.value = (
         await apis.getRequests(
           params.sort,
-          params.currentStatus || '',
+          (params.currentStatus as StatusEnum) || '',
           params.target || '',
           params.since,
           params.until,

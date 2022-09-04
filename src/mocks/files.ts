@@ -1,8 +1,8 @@
 import { rest } from 'msw'
 
-import mehm8128 from '/public/assets/mehm8128.png'
-import mehm8128_circle from '/public/assets/mehm8128_circle.png'
-import slide1 from '/public/assets/slide1.png'
+import mehm8128 from '/@/assets/mehm8128.png'
+import mehm8128_circle from '/@/assets/mehm8128_circle.png'
+import slide1 from '/@/assets/slide1.png'
 
 export const files = [
   rest.get('/api/files/:id', (req, res, ctx) => {

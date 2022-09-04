@@ -2,10 +2,12 @@
 import SimpleButton from '../shared/SimpleButton.vue'
 import type { EditMode } from './GroupDetail.vue'
 import FixButton from '/@/components/shared/FixButton.vue'
-import type { Group } from '/@/lib/apis'
+import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
+import type { GroupDetailType } from '/@/pages/GroupDetailPage.vue'
+import { useUserStore } from '/@/stores/user'
 
 interface Props {
-  group: Group
+  group: GroupDetailType
   editMode: EditMode
   value: string
 }
@@ -15,12 +17,16 @@ const emit = defineEmits<{
   (e: 'input', value: string): void
   (e: 'changeEditMode', value: EditMode): void
 }>()
+
+const userStore = useUserStore()
+
+const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
 </script>
 
 <template>
   <div v-if="!(editMode === 'budget')" class="flex items-start">
     予算：{{ props.group.budget }}円
-    <fix-button @click="emit('changeEditMode', 'budget')" />
+    <fix-button v-if="hasAuthority" @click="emit('changeEditMode', 'budget')" />
   </div>
   <div v-if="editMode === 'budget'">
     予算：<input

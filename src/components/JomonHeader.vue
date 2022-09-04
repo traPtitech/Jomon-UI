@@ -7,7 +7,7 @@ import UserIcon from './shared/UserIcon.vue'
 import type { User } from '/@/lib/apis'
 
 interface Props {
-  me: User
+  me: User | undefined
 }
 const route = useRoute()
 
@@ -38,7 +38,7 @@ defineProps<Props>()
           path="/admins"
           text="管理ページ" />
       </div>
-      <user-icon v-if="me.name" :name="me.name" />
+      <user-icon :name="me?.name ?? 'traP'" />
     </div>
   </header>
 </template>

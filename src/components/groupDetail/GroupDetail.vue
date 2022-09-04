@@ -9,8 +9,10 @@ import GroupDescription from './GroupDescription.vue'
 import FixButton from '/@/components/shared/FixButton.vue'
 import apis from '/@/lib/apis'
 import type { PostGroup } from '/@/lib/apis'
+import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 import type { GroupDetailType } from '/@/pages/GroupDetailPage.vue'
 import { useGroupStore } from '/@/stores/group'
+import { useUserStore } from '/@/stores/user'
 
 export type EditMode = 'name' | 'description' | 'budget' | ''
 
@@ -24,6 +26,7 @@ const emit = defineEmits<{
 }>()
 const router = useRouter()
 
+const userStore = useUserStore()
 const groupStore = useGroupStore()
 
 const editMode = ref<EditMode>('')
@@ -32,8 +35,9 @@ const editedValue = ref({
   description: props.group.description,
   budget: props.group.budget.toString()
 })
+const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
 
-function changeEditMode(kind: EditMode) {
+async function changeEditMode(kind: EditMode) {
   if (kind !== '') {
     editMode.value = kind
   } else {
@@ -42,11 +46,15 @@ function changeEditMode(kind: EditMode) {
       description: editedValue.value.description,
       budget: Number(editedValue.value.budget)
     }
-    putGroup(props.group.id, value)
+    await putGroup(props.group.id, value)
     editMode.value = ''
   }
 }
 const putGroup = async (id: string, willPutGroup: PostGroup) => {
+  if (!hasAuthority) {
+    alert('権限がありません。')
+    return
+  }
   try {
     const res = (await apis.putGroupDetail(id, willPutGroup)).data
     const nextGroup: GroupDetailType = {
@@ -56,11 +64,20 @@ const putGroup = async (id: string, willPutGroup: PostGroup) => {
       budget: res.budget
     }
     emit('fixGroup', nextGroup)
+    editedValue.value = {
+      name: nextGroup.name,
+      description: nextGroup.description,
+      budget: nextGroup.budget.toString()
+    }
   } catch (err) {
     alert(err)
   }
 }
 const deleteGroup = async (id: string) => {
+  if (!hasAuthority) {
+    alert('権限がありません。')
+    return
+  }
   if (!confirm('本当にこのグループを削除しますか？')) {
     return
   }
@@ -85,8 +102,7 @@ const deleteGroup = async (id: string) => {
         <h1 class="text-3xl">
           {{ props.group.name }}
         </h1>
-        <fix-button @click="changeEditMode('name')" />
-        <!--todo:権限-->
+        <fix-button v-if="hasAuthority" @click="changeEditMode('name')" />
       </div>
       <div v-if="editMode === 'name'">
         <input
@@ -126,6 +142,7 @@ const deleteGroup = async (id: string) => {
       </router-link>
     </div>
     <simple-button
+      v-if="hasAuthority"
       class="mt-4"
       font-size="sm"
       padding="sm"

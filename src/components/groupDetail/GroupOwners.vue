@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { MinusIcon, PlusIcon } from '@heroicons/vue/24/outline'
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import UserIcon from '/@/components/shared/UserIcon.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import apis from '/@/lib/apis'
+import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 import type { GroupDetailType } from '/@/pages/GroupDetailPage.vue'
 import { useUserStore } from '/@/stores/user'
 
@@ -17,8 +17,9 @@ const props = defineProps<Props>()
 const emit = defineEmits<{ (e: 'fixGroup', group: GroupDetailType): void }>()
 
 const userStore = useUserStore()
-const { users } = storeToRefs(userStore)
+
 const OwnersToBeAdded = ref<string[]>([])
+const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
 
 async function handleAddOwners(owners: string[]) {
   if (owners.length !== 0) {
@@ -61,19 +62,19 @@ async function handleDeleteOwner(id: string) {
           <user-icon class="inline w-12" :name="owner" />
           {{ owner }}
         </div>
-        <button @click="handleDeleteOwner(owner)">
+        <button v-if="hasAuthority" @click="handleDeleteOwner(owner)">
           <minus-icon class="w-6" />
         </button>
       </li>
     </ul>
-    <div class="flex p-2">
+    <div v-if="hasAuthority" class="flex p-2">
       <vue-select
         v-model="OwnersToBeAdded"
         class="flex-grow"
         :close-on-select="false"
         label="name"
         multiple
-        :options="users"
+        :options="userStore.users"
         placeholder="追加するオーナーを選択"
         :reduce="(user:any) => user.name" />
       <button @click="handleAddOwners(OwnersToBeAdded)">

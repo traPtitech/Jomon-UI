@@ -2,7 +2,9 @@
 import SimpleButton from '../shared/SimpleButton.vue'
 import type { EditMode } from './GroupDetail.vue'
 import FixButton from '/@/components/shared/FixButton.vue'
+import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 import type { GroupDetailType } from '/@/pages/GroupDetailPage.vue'
+import { useUserStore } from '/@/stores/user'
 
 interface Props {
   group: GroupDetailType
@@ -15,6 +17,10 @@ const emit = defineEmits<{
   (e: 'input', value: string): void
   (e: 'changeEditMode', value: EditMode): void
 }>()
+
+const userStore = useUserStore()
+
+const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
 </script>
 
 <template>
@@ -25,7 +31,9 @@ const emit = defineEmits<{
     <p class="h-32 w-full overflow-y-scroll border border-gray-300 pl-1">
       {{ props.group.description }}
     </p>
-    <fix-button @click="emit('changeEditMode', 'description')" />
+    <fix-button
+      v-if="hasAuthority"
+      @click="emit('changeEditMode', 'description')" />
   </div>
   <div v-if="editMode === 'description'" class="w-full md:w-2/3">
     <textarea

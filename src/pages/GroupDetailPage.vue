@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import axios from 'axios'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -7,7 +8,6 @@ import GroupMembers from '/@/components/groupDetail/GroupMembers.vue'
 import GroupOwners from '/@/components/groupDetail/GroupOwners.vue'
 import apis from '/@/lib/apis'
 import { toId } from '/@/lib/parsePathParams'
-import { useGroupStore } from '/@/stores/group'
 import { useUserStore } from '/@/stores/user'
 
 export interface GroupDetailType {
@@ -24,7 +24,6 @@ export interface GroupDetailType {
 const route = useRoute()
 const id = toId(route.params.id)
 
-const groupStore = useGroupStore()
 const userStore = useUserStore()
 
 const group = ref<GroupDetailType>()
@@ -32,14 +31,14 @@ const group = ref<GroupDetailType>()
 const fetchGroup = async (id: string) => {
   try {
     group.value = (await apis.getGroupDetail(id)).data
-    groupStore.isGroupFetched = true
   } catch (err) {
     alert(err)
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   fetchGroup(id)
+  group.value = (await axios.get('http://localhost:3000/api/groups/1')).data
   if (!userStore.isUserFetched) {
     userStore.fetchUsers()
   }

@@ -14,6 +14,9 @@ import 'vue-select/dist/vue-select.css'
       <div v-else-if="loading">
         <span>読み込み中...</span>
       </div>
+      <div v-else>
+        <span>選択肢がありません</span>
+      </div>
     </template>
   </v-select>
 </template>

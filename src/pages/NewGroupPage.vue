@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
-import SimpleButton from '../components/shared/SimpleButton.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import type { Group, PostGroup } from '/@/lib/apis'
 import apis from '/@/lib/apis'
@@ -44,7 +44,8 @@ async function handlePostGroup() {
       group.value.owners.length > 0
     )
   ) {
-    alert('全ての項目を入力してください')
+    alert('入力が不正です')
+    return
   }
   const willPostGroup = {
     name: group.value.name,
@@ -59,6 +60,12 @@ async function handlePostGroup() {
     alert(err)
   }
 }
+
+onMounted(() => {
+  if (!userStore.isUserFetched) {
+    userStore.fetchUsers()
+  }
+})
 </script>
 
 <!-- TODO: inputのon-focus -->
@@ -119,7 +126,7 @@ async function handlePostGroup() {
             class="absolute right-0 mt-8"
             font-size="xl"
             padding="md"
-            @clock.stop="handlePostGroup">
+            @click.stop="handlePostGroup">
             グループを作成する
           </simple-button>
         </div>

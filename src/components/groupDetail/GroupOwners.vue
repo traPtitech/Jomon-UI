@@ -52,8 +52,8 @@ async function handleDeleteOwner(id: string) {
 <template>
   <div
     class="relative flex h-1/2 flex-col justify-between border border-gray-400">
-    <h2 class="absolute -top-3 left-2 bg-white px-2">グループオーナー</h2>
-    <ul class="h-full overflow-y-scroll p-4">
+    <h2 class="absolute -top-3 left-2 bg-zinc-50 px-2">グループオーナー</h2>
+    <ul class="h-full p-4">
       <li
         v-for="owner in group.owners"
         :key="owner"
@@ -62,7 +62,10 @@ async function handleDeleteOwner(id: string) {
           <user-icon class="inline w-12" :name="owner" />
           {{ owner }}
         </div>
-        <button v-if="hasAuthority" @click="handleDeleteOwner(owner)">
+        <button
+          v-if="hasAuthority"
+          class="flex items-center"
+          @click="handleDeleteOwner(owner)">
           <minus-icon class="w-6" />
         </button>
       </li>
@@ -77,7 +80,9 @@ async function handleDeleteOwner(id: string) {
         :options="userStore.users"
         placeholder="追加するオーナーを選択"
         :reduce="(user:any) => user.name" />
-      <button @click="handleAddOwners(OwnersToBeAdded)">
+      <button
+        class="flex items-center"
+        @click="handleAddOwners(OwnersToBeAdded)">
         <plus-icon class="ml-2 w-6" />
       </button>
     </div>

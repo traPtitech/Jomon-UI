@@ -13,7 +13,12 @@ export const useUserStore = defineStore('user', () => {
     me.value = (await apis.getMe()).data
   }
   const fetchUsers = async () => {
-    users.value = (await apis.getUsers()).data
+    try {
+      users.value = (await apis.getUsers()).data
+      isUserFetched.value = true
+    } catch (err) {
+      alert(err)
+    }
   }
 
   return {

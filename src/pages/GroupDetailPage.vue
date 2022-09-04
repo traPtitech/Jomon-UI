@@ -46,10 +46,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-if="group === undefined">loading...</div>
   <div
-    v-else
-    class="min-w-80 mx-auto flex h-full flex-col justify-between px-12 pt-4 md:flex-row">
+    v-if="group !== undefined"
+    class="min-w-80 mx-auto flex h-full w-4/5 flex-col justify-between px-12 pt-4 md:flex-row">
     <group-detail class="md:w-3/4" :group="group" @fix-group="group = $event" />
     <div class="flex flex-col gap-8 py-4 md:w-1/4">
       <group-members :group="group" />

@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { onMounted, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import type { LocationQueryValue } from 'vue-router'
 import { useRoute } from 'vue-router'
 
-import SimpleButton from '../components/shared/SimpleButton.vue'
 import GroupItem from '/@/components/GroupItem.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { isAdmin } from '/@/lib/authorityCheck'
 import { useGroupStore } from '/@/stores/group'
 import { useUserStore } from '/@/stores/user'
@@ -35,11 +35,10 @@ const sliceGroupsAt = (index: number, n: number) => {
   return groupStore.groups?.slice(start, end)
 }
 
-onMounted(() => {
-  if (!isGroupFetched.value) {
-    groupStore.fetchGroups()
-  }
-})
+if (!isGroupFetched.value) {
+  await groupStore.fetchGroups()
+}
+
 watch(
   () => route.query.page,
   newPage => {

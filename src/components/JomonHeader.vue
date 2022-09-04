@@ -5,13 +5,16 @@ import HeaderButton from './HeaderButton.vue'
 import Logo from './shared/JomonLogo.vue'
 import UserIcon from './shared/UserIcon.vue'
 import type { User } from '/@/lib/apis'
+import { isAdmin } from '/@/lib/authorityCheck'
 
 interface Props {
-  me: User | undefined
+  me?: User
 }
+
+const props = defineProps<Props>()
 const route = useRoute()
 
-defineProps<Props>()
+const hasAuthority = isAdmin(props.me)
 </script>
 
 <template>
@@ -34,11 +37,12 @@ defineProps<Props>()
           path="/groups"
           text="グループ一覧" />
         <header-button
+          v-if="hasAuthority"
           :is-here="route.fullPath === '/admins'"
           path="/admins"
           text="管理ページ" />
       </div>
-      <user-icon :name="me?.name ?? 'traP'" />
+      <user-icon v-if="me !== undefined" :name="me.name" />
     </div>
   </header>
 </template>

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import SimpleButton from '../shared/SimpleButton.vue'
 import type { EditMode } from './GroupDetail.vue'
-import FixButton from '/@/components/shared/FixButton.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 import type { GroupDetailType } from '/@/pages/GroupDetailPage.vue'
 import { useUserStore } from '/@/stores/user'
@@ -25,28 +24,35 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
 
 <template>
   <p>詳細</p>
-  <div
-    v-if="!(editMode === 'description')"
-    class="flex w-full items-start md:w-2/3">
-    <p class="h-32 w-full overflow-y-scroll border border-gray-300 pl-1">
+  <div v-if="!(editMode === 'description')" class="flex w-full">
+    <p class="h-32 w-4/5 overflow-y-scroll border border-gray-300 pl-1">
       {{ props.group.description }}
     </p>
-    <fix-button
-      v-if="hasAuthority"
-      @click="emit('changeEditMode', 'description')" />
+    <div class="flex items-end">
+      <simple-button
+        v-if="hasAuthority"
+        class="ml-2"
+        font-size="sm"
+        padding="sm"
+        @click="emit('changeEditMode', 'description')">
+        編集
+      </simple-button>
+    </div>
   </div>
-  <div v-if="editMode === 'description'" class="w-full md:w-2/3">
+  <div v-if="editMode === 'description'" class="flex w-full md:w-2/3">
     <textarea
-      class="h-32 w-4/5 resize-none p-1"
+      class="block block h-32 w-4/5 resize-none p-1"
       placeholder="詳細"
       :value="props.value"
       @input="emit('input', ($event.target as HTMLTextAreaElement).value)" />
-    <simple-button
-      class="ml-2"
-      font-size="sm"
-      padding="sm"
-      @click.stop="emit('changeEditMode', '')">
-      完了
-    </simple-button>
+    <div class="flex items-end">
+      <simple-button
+        class="ml-2"
+        font-size="sm"
+        padding="sm"
+        @click.stop="emit('changeEditMode', '')">
+        完了
+      </simple-button>
+    </div>
   </div>
 </template>

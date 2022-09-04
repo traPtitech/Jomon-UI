@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import SimpleButton from '../shared/SimpleButton.vue'
 import type { EditMode } from './GroupDetail.vue'
 import FixButton from '/@/components/shared/FixButton.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 import type { GroupDetailType } from '/@/pages/GroupDetailPage.vue'
 import { useUserStore } from '/@/stores/user'

@@ -10,37 +10,37 @@ interface Props {
   totalPages: number
 }
 
+const props = defineProps<Props>()
+
 // sequence(3, 7) => [3, 4, 5, 6, 7]
 const sequence = (start: number, end: number) => {
   return [...Array(end - start + 1).keys()].map(i => i + start)
 }
 
-const props = defineProps<Props>()
-
-// P1: 001 002 003 004 005 006 007 008 009   -   left
-// P2: 001 002 003 004 005 006 ... 099 100   -   left ... center
-// P3: 001 002 ... 049 050 051 ... 099 100   -   left ... center ... right
-// P4: 001 002 ... 095 096 097 098 099 100   -   left ... center
+// P1: 001 002 003 004 005 006 007 008 009 010 011   -   left
+// P2: 001 002 003 004 005 006 007 008 ... 099 100   -   left ... center
+// P3: 001 002 ... 048 049 050 051 052 ... 099 100   -   left ... center ... right
+// P4: 001 002 ... 093 094 095 096 097 098 099 100   -   left ... center
 
 // 常に表示される
 const left = computed(
   () =>
-    props.totalPages <= 9
+    props.totalPages <= 11
       ? sequence(1, props.totalPages) // P1
-      : props.currentPage <= 5
-      ? sequence(1, 6) // P2
+      : props.currentPage <= 6
+      ? sequence(1, 8) // P2
       : sequence(1, 2) // P3, P4
 )
-// totalPages > 9 のとき、表示される
+// totalPages > 11 のとき、表示される
 const center = computed(
   () =>
-    props.currentPage <= 5
+    props.currentPage <= 6
       ? sequence(props.totalPages - 1, props.totalPages) // P2
-      : props.currentPage <= props.totalPages - 5
-      ? sequence(props.currentPage - 1, props.currentPage + 1) // P3
-      : sequence(props.totalPages - 5, props.totalPages) // P4
+      : props.currentPage <= props.totalPages - 6
+      ? sequence(props.currentPage - 2, props.currentPage + 2) // P3
+      : sequence(props.totalPages - 7, props.totalPages) // P4
 )
-// totalPages > 9 && 5 < currentPage <= totalPages - 5 のとき、表示される
+// totalPages > 11 && 6 < currentPage <= totalPages - 6 のとき、表示される
 const right = computed(
   () => sequence(props.totalPages - 1, props.totalPages) // P3
 )
@@ -69,7 +69,7 @@ const right = computed(
       </div>
 
       <!-- Center -->
-      <div v-if="totalPages > 9" class="flex">
+      <div v-if="totalPages > 11" class="flex">
         <span class="w-10 self-end pb-2">...</span>
         <page-link
           v-for="page in center"
@@ -83,7 +83,7 @@ const right = computed(
       <!-- Right -->
       <div
         v-if="
-          totalPages > 9 && 5 < currentPage && currentPage <= totalPages - 5
+          totalPages > 11 && 6 < currentPage && currentPage <= totalPages - 6
         "
         class="flex">
         <span class="w-10 self-end pb-2">...</span>

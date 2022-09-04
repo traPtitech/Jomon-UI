@@ -52,8 +52,8 @@ async function handleDeleteMember(id: string) {
 <template>
   <div
     class="relative flex h-1/2 flex-col justify-between border border-gray-400">
-    <h2 class="absolute -top-3 left-2 bg-white px-2">グループメンバー</h2>
-    <ul class="h-full overflow-y-scroll p-4">
+    <h2 class="absolute -top-3 left-2 bg-zinc-50 px-2">グループメンバー</h2>
+    <ul class="h-full p-4">
       <li
         v-for="member in group.members"
         :key="member"
@@ -62,7 +62,10 @@ async function handleDeleteMember(id: string) {
           <user-icon class="inline w-12" :name="member" />
           {{ member }}
         </div>
-        <button v-if="hasAuthority" @click="handleDeleteMember(member)">
+        <button
+          v-if="hasAuthority"
+          class="flex items-center"
+          @click="handleDeleteMember(member)">
           <minus-icon class="w-6" />
         </button>
       </li>
@@ -77,7 +80,9 @@ async function handleDeleteMember(id: string) {
         :options="userStore.users"
         placeholder="追加するメンバーを選択"
         :reduce="(user:any) => user.name" />
-      <button @click="handleAddMembers(MembersToBeAdded)">
+      <button
+        class="flex items-center"
+        @click="handleAddMembers(MembersToBeAdded)">
         <plus-icon class="ml-2 w-6" />
       </button>
     </div>

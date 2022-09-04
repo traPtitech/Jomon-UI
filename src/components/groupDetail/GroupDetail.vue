@@ -3,10 +3,9 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import SimpleButton from '../shared/SimpleButton.vue'
 import GroupBudget from './GroupBudget.vue'
 import GroupDescription from './GroupDescription.vue'
-import FixButton from '/@/components/shared/FixButton.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import apis from '/@/lib/apis'
 import type { PostGroup } from '/@/lib/apis'
 import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
@@ -98,16 +97,25 @@ const deleteGroup = async (id: string) => {
 <template>
   <div>
     <div class="flex items-center">
-      <div v-if="!(editMode === 'name')" class="flex">
-        <h1 class="text-3xl">
+      <div v-if="!(editMode === 'name')" class="flex w-full">
+        <h1 class="w-6/7 text-3xl">
           {{ props.group.name }}
         </h1>
-        <fix-button v-if="hasAuthority" @click="changeEditMode('name')" />
+        <div>
+          <simple-button
+            v-if="hasAuthority"
+            class="ml-2"
+            font-size="sm"
+            padding="sm"
+            @click="changeEditMode('name')">
+            編集
+          </simple-button>
+        </div>
       </div>
-      <div v-if="editMode === 'name'">
+      <div v-if="editMode === 'name'" class="flex w-full">
         <input
           v-model="editedValue.name"
-          class="rounded p-1"
+          class="w-6/7 rounded p-1"
           placeholder="グループ名"
           type="text" />
         <simple-button
@@ -135,15 +143,19 @@ const deleteGroup = async (id: string) => {
         @change-edit-mode="changeEditMode($event)"
         @input="editedValue.budget = $event" />
     </div>
-    <div class="flex items-center">
-      このグループの入出金記録へ
-      <router-link :to="`/transactions?group=${props.group.id}`">
-        <arrow-top-right-on-square-icon class="w-6" />
-      </router-link>
+    <div>
+      <button>
+        <router-link
+          class="flex items-center"
+          :to="`/transactions?group=${props.group.id}`">
+          このグループの入出金記録へ
+          <arrow-top-right-on-square-icon class="w-6" />
+        </router-link>
+      </button>
     </div>
     <simple-button
       v-if="hasAuthority"
-      class="mt-4"
+      class="mt-2 bg-red-500 text-white"
       font-size="sm"
       padding="sm"
       @click.stop="deleteGroup(props.group.id)">

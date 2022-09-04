@@ -112,7 +112,7 @@ const deleteGroup = async (id: string) => {
           </simple-button>
         </div>
       </div>
-      <div v-if="editMode === 'name'" class="flex w-full">
+      <div v-else class="flex w-full">
         <input
           v-model="editedValue.name"
           class="w-6/7 rounded p-1"
@@ -129,16 +129,16 @@ const deleteGroup = async (id: string) => {
     </div>
     <div class="mt-4">
       <group-description
-        :edit-mode="editMode"
         :group="group"
+        :is-edit-mode="editMode === 'description'"
         :value="editedValue.description"
         @change-edit-mode="changeEditMode($event)"
         @input="editedValue.description = $event" />
     </div>
     <div class="mt-4 h-10">
       <group-budget
-        :edit-mode="editMode"
         :group="group"
+        :is-edit-mode="editMode === 'budget'"
         :value="editedValue.budget"
         @change-edit-mode="changeEditMode($event)"
         @input="editedValue.budget = $event" />

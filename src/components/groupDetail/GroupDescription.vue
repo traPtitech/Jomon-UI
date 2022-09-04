@@ -7,7 +7,7 @@ import { useUserStore } from '/@/stores/user'
 
 interface Props {
   group: GroupDetailType
-  editMode: EditMode
+  isEditMode: boolean
   value: string
 }
 
@@ -24,8 +24,8 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
 
 <template>
   <p>詳細</p>
-  <div v-if="!(editMode === 'description')" class="flex w-full">
-    <p class="h-32 w-4/5 overflow-y-scroll border border-gray-300 pl-1">
+  <div v-if="!isEditMode" class="flex w-full">
+    <p class="h-32 w-4/5 border border-gray-300 pl-1">
       {{ props.group.description }}
     </p>
     <div class="flex items-end">
@@ -39,9 +39,9 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
       </simple-button>
     </div>
   </div>
-  <div v-if="editMode === 'description'" class="flex w-full md:w-2/3">
+  <div v-else class="flex w-full">
     <textarea
-      class="block block h-32 w-4/5 resize-none p-1"
+      class="block h-32 w-4/5 resize-none p-1"
       placeholder="詳細"
       :value="props.value"
       @input="emit('input', ($event.target as HTMLTextAreaElement).value)" />

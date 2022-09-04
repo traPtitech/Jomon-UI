@@ -8,7 +8,7 @@ import { useUserStore } from '/@/stores/user'
 
 interface Props {
   group: GroupDetailType
-  editMode: EditMode
+  isEditMode: boolean
   value: string
 }
 
@@ -24,13 +24,14 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
 </script>
 
 <template>
-  <div v-if="!(editMode === 'budget')" class="flex items-start">
+  <div v-if="!isEditMode" class="flex items-start">
     予算：{{ props.group.budget }}円
     <fix-button v-if="hasAuthority" @click="emit('changeEditMode', 'budget')" />
   </div>
-  <div v-if="editMode === 'budget'">
-    予算：<input
-      class="w-24 p-1"
+  <div v-else>
+    予算：
+    <input
+      class="mr-1 w-24 p-1"
       placeholder="金額"
       type="text"
       :value="props.value"

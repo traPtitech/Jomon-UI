@@ -12,7 +12,7 @@ import type { PostGroup } from '/@/lib/apis'
 import type { GroupDetailType } from '/@/pages/GroupDetailPage.vue'
 import { useGroupStore } from '/@/stores/group'
 
-export type editMode = 'name' | 'description' | 'budget' | ''
+export type EditMode = 'name' | 'description' | 'budget' | ''
 
 interface Props {
   group: GroupDetailType
@@ -26,14 +26,14 @@ const router = useRouter()
 
 const groupStore = useGroupStore()
 
-const editMode = ref<editMode>('')
+const editMode = ref<EditMode>('')
 const editedValue = ref({
   name: props.group.name,
   description: props.group.description,
   budget: props.group.budget.toString()
 })
 
-function changeEditMode(kind: editMode) {
+function changeEditMode(kind: EditMode) {
   if (kind !== '') {
     editMode.value = kind
   } else {

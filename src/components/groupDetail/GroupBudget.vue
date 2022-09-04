@@ -1,19 +1,19 @@
 <script lang="ts" setup>
 import SimpleButton from '../shared/SimpleButton.vue'
-import { editMode } from './GroupDetail.vue'
+import type { EditMode } from './GroupDetail.vue'
 import FixButton from '/@/components/shared/FixButton.vue'
 import type { Group } from '/@/lib/apis'
 
 interface Props {
   group: Group
-  editMode: editMode
+  editMode: EditMode
   value: string
 }
 
 const props = defineProps<Props>()
 const emit = defineEmits<{
   (e: 'input', value: string): void
-  (e: 'changeEditMode', value: editMode): void
+  (e: 'changeEditMode', value: EditMode): void
 }>()
 </script>
 

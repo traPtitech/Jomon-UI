@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 
 import { useGroupStore } from '/@/stores/group'
@@ -14,7 +13,6 @@ import VueSelect from '/@/components/shared/VueSelect.vue'
 const userStore = useUserStore()
 const groupStore = useGroupStore()
 
-const { users } = storeToRefs(userStore)
 const group = ref({
   name: '',
   description: '',
@@ -37,7 +35,8 @@ const postGroup = async (group: PostGroup) => {
   }
 }
 
-async function handlePostGroup() {
+async function handlePostGroup(e: Event) {
+  e.preventDefault()
   if (
     !(
       /^[1-9][0-9]*$|^0$/.test(group.value.budget.toString()) &&
@@ -77,25 +76,28 @@ onMounted(() => {
       <div class="py-8">
         <h1 class="text-center text-3xl">グループの新規作成</h1>
       </div>
-      <div class="flex flex-col gap-2">
+      <form class="flex flex-col gap-2">
         <div class="flex flex-col">
           <label>グループ名</label>
           <input
             v-model="group.name"
-            class="rounded border border-gray-300 py-1 px-2" />
+            class="rounded border border-gray-300 py-1 px-2"
+            required />
         </div>
         <div class="flex flex-col">
           <label>詳細</label>
           <textarea
             v-model="group.description"
-            class="min-h-36 rounded border border-gray-300 py-1 px-2" />
+            class="min-h-36 rounded border border-gray-300 py-1 px-2"
+            required />
         </div>
         <div class="flex flex-col">
           <label>予算</label>
           <div>
             <input
               v-model="group.budget"
-              class="w-2/5 rounded border border-gray-300 py-1 px-2" />円
+              class="w-2/5 rounded border border-gray-300 py-1 px-2"
+              required />円
           </div>
         </div>
         <div class="flex flex-col">
@@ -105,9 +107,10 @@ onMounted(() => {
             :close-on-select="false"
             label="name"
             multiple
-            :options="users"
+            :options="userStore.users"
             placeholder="追加するオーナーを選択"
-            :reduce="(user:any) => user.name" />
+            :reduce="(user:any) => user.name"
+            required />
           <span class="text-sm">
             注意：オーナーは自動でメンバーには入りません。
           </span>
@@ -119,7 +122,7 @@ onMounted(() => {
             :close-on-select="false"
             label="name"
             multiple
-            :options="users"
+            :options="userStore.users"
             placeholder="追加するメンバーを選択"
             :reduce="(user:any) => user.name" />
         </div>
@@ -132,7 +135,7 @@ onMounted(() => {
             グループを作成する
           </SimpleButton>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </template>

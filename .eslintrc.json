@@ -30,8 +30,8 @@
     "no-restricted-imports": [
       "error",
       {
-        "name": "/@/lib/apis/generated",
-        "message": "Please use /@/lib/apis instead."
+        "paths": ["/@/lib/apis/generated"],
+        "patterns": ["../"]
       }
     ],
     "@typescript-eslint/member-delimiter-style": [
@@ -62,7 +62,6 @@
     "vue/prefer-true-attribute-shorthand": "error",
     "vue/prefer-import-from-vue": "error",
     "import/no-duplicates": "warn",
-    "unused-imports/no-unused-imports": "warn",
-    "no-restricted-imports": ["error", { "patterns": ["../"] }]
+    "unused-imports/no-unused-imports": "warn"
   }
 }

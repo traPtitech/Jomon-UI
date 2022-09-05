@@ -73,6 +73,7 @@ async function handleDeleteOwner(id: string) {
       </li>
     </ul>
     <div v-if="hasAuthority" class="flex p-2">
+      <!--todo:https://vue-select.org/guide/positioning.html#default-->
       <VueSelect
         v-model="OwnersToBeAdded"
         class="flex-grow"

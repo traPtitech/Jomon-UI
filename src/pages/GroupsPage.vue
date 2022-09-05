@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
 import type { LocationQueryValue } from 'vue-router'
 import { useRoute } from 'vue-router'
@@ -28,7 +27,6 @@ const page = ref(toPage(route.query.page))
 const groupStore = useGroupStore()
 const userStore = useUserStore()
 
-const { isGroupFetched } = storeToRefs(groupStore)
 const hasAuthority = isAdmin(userStore.me)
 
 const sliceGroupsAt = (index: number, n: number) => {
@@ -37,7 +35,7 @@ const sliceGroupsAt = (index: number, n: number) => {
   return groupStore.groups?.slice(start, end)
 }
 
-if (!isGroupFetched.value) {
+if (!groupStore.isGroupFetched) {
   await groupStore.fetchGroups()
 }
 

@@ -59,10 +59,10 @@ async function handleDeleteMember(id: string) {
       <li
         v-for="member in group.members"
         :key="member"
-        class="flex items-center justify-between">
-        <div>
+        class="not-first:mt-2 flex items-center justify-between">
+        <div class="flex items-center">
           <UserIcon class="inline w-12" :name="member" />
-          {{ member }}
+          <p class="mx-1 break-all">{{ member }}</p>
         </div>
         <button
           v-if="hasAuthority"

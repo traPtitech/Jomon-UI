@@ -38,7 +38,7 @@ const fetchGroup = async (id: string) => {
   }
 }
 
-await fetchGroup(id)
+//await fetchGroup(id) swagger直ったら使う
 group.value = (await axios.get('http://localhost:3000/api/groups/1')).data //swagger直ったら消す
 if (!userStore.isUserFetched) {
   await userStore.fetchUsers()

@@ -59,10 +59,10 @@ async function handleDeleteOwner(id: string) {
       <li
         v-for="owner in group.owners"
         :key="owner"
-        class="flex items-center justify-between">
-        <div>
+        class="not-first:mt-2 flex items-center justify-between">
+        <div class="flex items-center">
           <UserIcon class="inline w-12" :name="owner" />
-          {{ owner }}
+          <p class="mx-1 break-all">{{ owner }}</p>
         </div>
         <button
           v-if="hasAuthority"

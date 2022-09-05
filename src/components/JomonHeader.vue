@@ -14,8 +14,6 @@ const route = useRoute()
 const userStore = useUserStore()
 
 const hasAuthority = isAdmin(userStore.me)
-
-await userStore.fetchMe()
 </script>
 
 <template>

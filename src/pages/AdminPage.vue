@@ -17,17 +17,6 @@ const addList = ref<string[]>([])
 const deleteList = ref<string[]>([])
 const hasAuthority = isAdmin(userStore.me)
 
-onMounted(() => {
-  if (userStore.me && userStore.me.admin) {
-    if (!adminStore.isAdminFetched) {
-      adminStore.fetchAdmins()
-    }
-    if (!userStore.isUserFetched) {
-      userStore.fetchUsers()
-    }
-  }
-})
-
 const deleteAdmins = async () => {
   if (deleteList.value.length === 0) {
     alert('1人以上選択して下さい')
@@ -58,6 +47,17 @@ const addAdmins = async () => {
     alert(err)
   }
 }
+
+onMounted(() => {
+  if (userStore.me && userStore.me.admin) {
+    if (!adminStore.isAdminFetched) {
+      adminStore.fetchAdmins()
+    }
+    if (!userStore.isUserFetched) {
+      userStore.fetchUsers()
+    }
+  }
+})
 </script>
 
 <template>

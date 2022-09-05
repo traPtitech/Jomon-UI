@@ -12,22 +12,19 @@ onMounted(async () => {
 </script>
 
 <template>
-  <suspense>
-    <template #default>
-      <JomonHeader />
-    </template>
-    <template #fallback>
-      <div class="h-12">loading...</div>
-    </template>
-  </suspense>
+  <JomonHeader />
   <main class="text-primary h-screen overflow-y-scroll bg-zinc-50 pt-12">
-    <suspense>
-      <template #default>
-        <router-view />
+    <router-view v-slot="{ Component }">
+      <template v-if="Component">
+        <suspense>
+          <template #default>
+            <component :is="Component" />
+          </template>
+          <template #fallback>
+            <div>loading...</div>
+          </template>
+        </suspense>
       </template>
-      <template #fallback>
-        <div class="text-3xl text-red-500">loading...</div>
-      </template>
-    </suspense>
+    </router-view>
   </main>
 </template>

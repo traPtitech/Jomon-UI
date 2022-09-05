@@ -22,6 +22,9 @@ const deleteAdmins = async () => {
     alert('1人以上選択して下さい')
     return
   }
+  if (!confirm('本当に削除しますか？')) {
+    return
+  }
   try {
     await apis.deleteAdmins(deleteList.value)
     adminStore.admins = adminStore.admins?.filter(
@@ -34,6 +37,9 @@ const deleteAdmins = async () => {
 const addAdmins = async () => {
   if (addList.value.length === 0) {
     alert('1人以上選択して下さい')
+    return
+  }
+  if (!confirm('本当に追加しますか？')) {
     return
   }
   try {

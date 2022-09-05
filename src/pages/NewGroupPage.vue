@@ -38,12 +38,10 @@ const postGroup = async (group: PostGroup) => {
 async function handlePostGroup(e: Event) {
   e.preventDefault()
   if (
-    !(
-      /^[1-9][0-9]*$|^0$/.test(group.value.budget.toString()) &&
-      group.value.name !== '' &&
-      group.value.description !== '' &&
-      group.value.owners.length > 0
-    )
+    !/^[1-9][0-9]*$|^0$/.test(group.value.budget.toString()) ||
+    group.value.name === '' ||
+    group.value.description === '' ||
+    group.value.owners.length === 0
   ) {
     alert('入力が不正です')
     return

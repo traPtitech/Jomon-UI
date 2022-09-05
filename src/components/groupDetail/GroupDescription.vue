@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { useUserStore } from '/@/stores/user'
 
+import type { GroupDetail } from '/@/lib/apis'
 import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import type { GroupDetailType } from '/@/pages/GroupDetailPage.vue'
 
 import type { EditMode } from './GroupDetail.vue'
 
 interface Props {
-  group: GroupDetailType
+  group: GroupDetail
   isEditMode: boolean
   value: string
 }

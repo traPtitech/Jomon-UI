@@ -1,54 +1,31 @@
 <script lang="ts" setup>
-import { MinusIcon, PlusIcon } from '@heroicons/vue/24/outline'
+import { MinusIcon, PlusIcon, ArrowPathIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
 
 import { useUserStore } from '/@/stores/user'
 
-import apis from '/@/lib/apis'
+import type { GroupDetail } from '/@/lib/apis'
 import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 
 import UserIcon from '/@/components/shared/UserIcon.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
-import type { GroupDetailType } from '/@/pages/GroupDetailPage.vue'
+
+import { useGroupOwner } from './composables/useGroupOwner'
 
 interface Props {
-  group: GroupDetailType
+  group: GroupDetail
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits<{ (e: 'fixGroup', group: GroupDetailType): void }>()
+const emit = defineEmits<{ (e: 'fixGroup', group: GroupDetail): void }>()
 
 const userStore = useUserStore()
 
 const OwnersToBeAdded = ref<string[]>([])
 const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
-
-async function handleAddOwners(owners: string[]) {
-  if (owners.length !== 0) {
-    try {
-      const res = (await apis.postGroupOwners(props.group.id, owners)).data
-      const nextGroup = {
-        ...props.group,
-        owners: [...props.group.owners, ...res]
-      }
-      emit('fixGroup', nextGroup)
-    } catch (err) {
-      alert(err)
-    }
-  }
-}
-async function handleDeleteOwner(id: string) {
-  try {
-    await apis.deleteGroupOwners(props.group.id, [id])
-    const nextGroup = {
-      ...props.group,
-      owners: props.group.owners.filter(owner => owner !== id)
-    }
-    emit('fixGroup', nextGroup)
-  } catch (err) {
-    alert(err)
-  }
-}
+const { absentOwners, isSending, addOwners, removeOwner } = useGroupOwner(
+  props.group
+)
 </script>
 
 <template>
@@ -67,8 +44,9 @@ async function handleDeleteOwner(id: string) {
         <button
           v-if="hasAuthority"
           class="flex items-center"
-          @click="handleDeleteOwner(owner)">
-          <MinusIcon class="w-6" />
+          @click="removeOwner(owner, emit)">
+          <MinusIcon v-if="!isSending" class="w-6" />
+          <ArrowPathIcon v-else class="w-6 animate-spin" />
         </button>
       </li>
     </ul>
@@ -80,13 +58,14 @@ async function handleDeleteOwner(id: string) {
         :close-on-select="false"
         label="name"
         multiple
-        :options="userStore.users"
+        :options="absentOwners"
         placeholder="追加するオーナーを選択"
         :reduce="(user:any) => user.name" />
       <button
         class="flex items-center"
-        @click="handleAddOwners(OwnersToBeAdded)">
-        <PlusIcon class="ml-2 w-6" />
+        @click="addOwners(OwnersToBeAdded, emit)">
+        <PlusIcon v-if="!isSending" class="ml-2 w-6" />
+        <ArrowPathIcon v-else class="ml-2 w-6 animate-spin" />
       </button>
     </div>
   </div>

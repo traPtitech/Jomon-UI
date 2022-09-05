@@ -5,11 +5,10 @@ import { ref } from 'vue'
 import { useUserStore } from '/@/stores/user'
 
 import apis from '/@/lib/apis'
-import type { PostGroup } from '/@/lib/apis'
+import type { PostGroup, GroupDetail } from '/@/lib/apis'
 import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 
 import GroupName from '/@/components/groupDetail/GroupName.vue'
-import type { GroupDetailType } from '/@/pages/GroupDetailPage.vue'
 
 import GroupBudget from './GroupBudget.vue'
 import GroupDescription from './GroupDescription.vue'
@@ -17,12 +16,12 @@ import GroupDescription from './GroupDescription.vue'
 export type EditMode = 'name' | 'description' | 'budget' | ''
 
 interface Props {
-  group: GroupDetailType
+  group: GroupDetail
 }
 
 const props = defineProps<Props>()
 const emit = defineEmits<{
-  (e: 'fixGroup', value: GroupDetailType): void
+  (e: 'fixGroup', value: GroupDetail): void
 }>()
 
 const userStore = useUserStore()
@@ -55,7 +54,7 @@ const putGroup = async (id: string, willPutGroup: PostGroup) => {
   }
   try {
     const res = (await apis.putGroupDetail(id, willPutGroup)).data
-    const nextGroup: GroupDetailType = {
+    const nextGroup: GroupDetail = {
       ...props.group,
       name: res.name,
       description: res.description,

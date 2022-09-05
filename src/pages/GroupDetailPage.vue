@@ -5,30 +5,18 @@ import { useRoute } from 'vue-router'
 
 import { useUserStore } from '/@/stores/user'
 
-import apis from '/@/lib/apis'
+import apis, { GroupDetail } from '/@/lib/apis'
 import { toId } from '/@/lib/parsePathParams'
 
-import GroupDetail from '/@/components/groupDetail/GroupDetail.vue'
 import GroupMembers from '/@/components/groupDetail/GroupMembers.vue'
 import GroupOwners from '/@/components/groupDetail/GroupOwners.vue'
-
-export interface GroupDetailType {
-  id: string
-  name: string
-  description: string
-  budget: number
-  owners: string[]
-  members: string[]
-  created_at: string
-  updated_at: string
-}
 
 const route = useRoute()
 const id = toId(route.params.id)
 
 const userStore = useUserStore()
 
-const group = ref<GroupDetailType>()
+const group = ref<GroupDetail>()
 
 const fetchGroup = async (id: string) => {
   try {

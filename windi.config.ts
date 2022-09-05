@@ -12,8 +12,8 @@ export default defineConfig({
     extend: {
       colors: {
         primary: colors.dark[500],
-        secondary: colors.gray[400]
-        //todo:backgroun-color
+        secondary: colors.gray[400],
+        background: colors.zinc[50]
       }
     }
   }

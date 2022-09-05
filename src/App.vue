@@ -13,7 +13,7 @@ onMounted(async () => {
 
 <template>
   <JomonHeader />
-  <main class="text-primary h-screen overflow-y-scroll bg-zinc-50 pt-12">
+  <main class="text-primary bg-background h-screen overflow-y-scroll pt-12">
     <router-view v-slot="{ Component }">
       <template v-if="Component">
         <suspense>

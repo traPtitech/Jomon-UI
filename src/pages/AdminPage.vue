@@ -72,7 +72,7 @@ if (userStore.me && userStore.me.admin) {
       管理者：
       <ul class="flex gap-2">
         <li v-for="admin in adminStore.admins" :key="admin">
-          <div class="rounded border border-black px-2 text-center">
+          <div class="border-secondary rounded border px-2 text-center">
             {{ admin }}
           </div>
         </li>

@@ -79,14 +79,14 @@ onMounted(() => {
           <label>グループ名</label>
           <input
             v-model="group.name"
-            class="rounded border border-gray-300 py-1 px-2"
+            class="bg-background rounded border border-gray-300 py-1 px-2"
             required />
         </div>
         <div class="flex flex-col">
           <label>詳細</label>
           <textarea
             v-model="group.description"
-            class="min-h-36 rounded border border-gray-300 py-1 px-2"
+            class="min-h-36 bg-background rounded border border-gray-300 py-1 px-2"
             required />
         </div>
         <div class="flex flex-col">
@@ -94,7 +94,7 @@ onMounted(() => {
           <div>
             <input
               v-model="group.budget"
-              class="w-2/5 rounded border border-gray-300 py-1 px-2"
+              class="bg-background w-2/5 rounded border border-gray-300 py-1 px-2"
               required />円
           </div>
         </div>
@@ -109,9 +109,6 @@ onMounted(() => {
             placeholder="追加するオーナーを選択"
             :reduce="(user:any) => user.name"
             required />
-          <span class="text-sm">
-            注意：オーナーは自動でメンバーには入りません。
-          </span>
         </div>
         <div class="flex flex-col">
           <label>メンバー</label>

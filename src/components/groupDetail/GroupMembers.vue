@@ -54,7 +54,7 @@ async function handleDeleteMember(id: string) {
 <template>
   <div
     class="relative flex h-1/2 flex-col justify-between border border-gray-400">
-    <h2 class="absolute -top-3 left-2 bg-zinc-50 px-2">グループメンバー</h2>
+    <h2 class="bg-background absolute -top-3 left-2 px-2">グループメンバー</h2>
     <ul class="h-full p-4">
       <li
         v-for="member in group.members"

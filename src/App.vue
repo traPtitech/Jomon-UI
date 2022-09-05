@@ -14,19 +14,19 @@ onMounted(async () => {
 <template>
   <suspense>
     <template #default>
-      <jomon-header :me="userStore.me" />
-    </template>
-    <template #fallback>
       <jomon-header />
     </template>
+    <template #fallback>
+      <div class="h-12">loading...</div>
+    </template>
   </suspense>
-  <main class="text-primary h-screen overflow-scroll bg-zinc-50 pt-12">
+  <main class="text-primary h-screen overflow-y-scroll bg-zinc-50 pt-12">
     <suspense>
       <template #default>
         <router-view />
       </template>
       <template #fallback>
-        <div>loading...</div>
+        <div class="text-3xl text-red-500">loading...</div>
       </template>
     </suspense>
   </main>

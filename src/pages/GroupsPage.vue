@@ -62,7 +62,7 @@ watch(
           </router-link>
         </div>
       </div>
-      <!--フィルタリングメニューあってもいい気がする-->
+
       <div class="min-h-128">
         <div
           class="flex items-center justify-around bg-gray-200 px-4 pt-2 pb-2">
@@ -70,12 +70,11 @@ watch(
           <div class="w-3/5">詳細</div>
           <div class="w-1/5">予算</div>
         </div>
-        <ul v-if="groupStore.groups" class="divide-y">
+        <ul class="divide-y">
           <li v-for="group in sliceGroupsAt(page, 10)" :key="group.id">
             <group-item :group="group" />
           </li>
         </ul>
-        <div v-else>loading...</div>
       </div>
       <pagination-bar
         v-if="groupStore.groups"

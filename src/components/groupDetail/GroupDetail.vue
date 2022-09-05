@@ -1,16 +1,14 @@
 <script lang="ts" setup>
 import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 
-import { useGroupStore } from '/@/stores/group'
 import { useUserStore } from '/@/stores/user'
 
 import apis from '/@/lib/apis'
 import type { PostGroup } from '/@/lib/apis'
 import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import GroupName from '/@/components/groupDetail/GroupName.vue'
 import type { GroupDetailType } from '/@/pages/GroupDetailPage.vue'
 
 import GroupBudget from './GroupBudget.vue'
@@ -26,10 +24,8 @@ const props = defineProps<Props>()
 const emit = defineEmits<{
   (e: 'fixGroup', value: GroupDetailType): void
 }>()
-const router = useRouter()
 
 const userStore = useUserStore()
-const groupStore = useGroupStore()
 
 const editMode = ref<EditMode>('')
 const editedValue = ref({
@@ -75,60 +71,17 @@ const putGroup = async (id: string, willPutGroup: PostGroup) => {
     alert(err)
   }
 }
-const deleteGroup = async (id: string) => {
-  if (!hasAuthority) {
-    alert('権限がありません。')
-    return
-  }
-  if (!confirm('本当にこのグループを削除しますか？')) {
-    return
-  }
-  try {
-    await apis.deleteGroup(id)
-    if (groupStore.groups !== undefined) {
-      groupStore.groups = groupStore.groups.filter(group => group.id !== id)
-      router.push('/group')
-    } else {
-      throw new Error('group does not exist')
-    }
-  } catch (err) {
-    alert(err)
-  }
-}
 </script>
 
 <template>
   <div>
     <div class="flex items-center">
-      <div v-if="!(editMode === 'name')" class="flex w-full">
-        <h1 class="w-6/7 text-3xl">
-          {{ props.group.name }}
-        </h1>
-        <div>
-          <simple-button
-            v-if="hasAuthority"
-            class="ml-2"
-            font-size="sm"
-            padding="sm"
-            @click="changeEditMode('name')">
-            編集
-          </simple-button>
-        </div>
-      </div>
-      <div v-else class="flex w-full">
-        <input
-          v-model="editedValue.name"
-          class="w-6/7 rounded p-1"
-          placeholder="グループ名"
-          type="text" />
-        <simple-button
-          class="ml-2"
-          font-size="sm"
-          padding="sm"
-          @click.stop="changeEditMode('')">
-          完了
-        </simple-button>
-      </div>
+      <group-name
+        :group="group"
+        :is-edit-mode="editMode === 'name'"
+        :value="editedValue.name"
+        @change-edit-mode="changeEditMode($event)"
+        @input="editedValue.name = $event" />
     </div>
     <div class="mt-4">
       <group-description
@@ -156,13 +109,5 @@ const deleteGroup = async (id: string) => {
         </router-link>
       </button>
     </div>
-    <simple-button
-      v-if="hasAuthority"
-      class="mt-2 bg-red-500 text-white"
-      font-size="sm"
-      padding="sm"
-      @click.stop="deleteGroup(props.group.id)">
-      グループを削除
-    </simple-button>
   </div>
 </template>

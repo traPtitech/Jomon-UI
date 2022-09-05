@@ -1,20 +1,21 @@
 <script lang="ts" setup>
 import { useRoute } from 'vue-router'
 
+import { useUserStore } from '/@/stores/user'
+
+import { isAdmin } from '/@/lib/authorityCheck'
+
 import HeaderButton from './HeaderButton.vue'
 import Logo from './shared/JomonLogo.vue'
 import UserIcon from './shared/UserIcon.vue'
-import type { User } from '/@/lib/apis'
-import { isAdmin } from '/@/lib/authorityCheck'
 
-interface Props {
-  me?: User
-}
-
-const props = defineProps<Props>()
 const route = useRoute()
 
-const hasAuthority = isAdmin(props.me)
+const userStore = useUserStore()
+
+const hasAuthority = isAdmin(userStore.me)
+
+await userStore.fetchMe()
 </script>
 
 <template>
@@ -42,7 +43,7 @@ const hasAuthority = isAdmin(props.me)
           path="/admins"
           text="管理ページ" />
       </div>
-      <user-icon v-if="me !== undefined" :name="me.name" />
+      <user-icon v-if="userStore.me !== undefined" :name="userStore.me.name" />
     </div>
   </header>
 </template>

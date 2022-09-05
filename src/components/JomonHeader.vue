@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useUserStore } from '/@/stores/user'
@@ -13,7 +14,7 @@ const route = useRoute()
 
 const userStore = useUserStore()
 
-const hasAuthority = isAdmin(userStore.me)
+const hasAuthority = computed(() => isAdmin(userStore.me))
 </script>
 
 <template>

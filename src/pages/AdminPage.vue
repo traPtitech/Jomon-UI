@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 
 import { useAdminStore } from '/@/stores/admin'
 import { useUserStore } from '/@/stores/user'
@@ -54,31 +54,29 @@ const addAdmins = async () => {
   }
 }
 
-onMounted(() => {
-  if (userStore.me && userStore.me.admin) {
-    if (!adminStore.isAdminFetched) {
-      adminStore.fetchAdmins()
-    }
-    if (!userStore.isUserFetched) {
-      userStore.fetchUsers()
-    }
+if (userStore.me && userStore.me.admin) {
+  if (!adminStore.isAdminFetched) {
+    await adminStore.fetchAdmins()
   }
-})
+  if (!userStore.isUserFetched) {
+    await userStore.fetchUsers()
+  }
+}
 </script>
 
 <template>
-  <div v-if="!hasAuthority">権限がありません。</div>
+  <div v-if="!hasAuthority" class="p-2">権限がありません。</div>
   <div v-else class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
     <h1 class="pb-8 text-center text-3xl">管理ページ</h1>
-    <div>
-      <ul v-if="adminStore.admins" class="flex gap-2">
+    <div class="flex items-center">
+      管理者：
+      <ul class="flex gap-2">
         <li v-for="admin in adminStore.admins" :key="admin">
           <div class="rounded border border-black px-2 text-center">
             {{ admin }}
           </div>
         </li>
       </ul>
-      <div v-else>loading...</div>
     </div>
     <div class="mt-4 flex gap-4">
       <VueSelect

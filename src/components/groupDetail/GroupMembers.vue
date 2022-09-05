@@ -26,10 +26,10 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
 async function handleAddMembers(members: string[]) {
   if (members.length !== 0) {
     try {
-      const res = await apis.postGroupMembers(props.group.id, members)
+      const res = (await apis.postGroupMembers(props.group.id, members)).data
       const nextGroup = {
         ...props.group,
-        members: [...props.group.members, ...res.data]
+        members: [...props.group.members, ...res]
       }
       emit('fixGroup', nextGroup)
     } catch (err) {

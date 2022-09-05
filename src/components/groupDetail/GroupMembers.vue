@@ -61,19 +61,19 @@ async function handleDeleteMember(id: string) {
         :key="member"
         class="flex items-center justify-between">
         <div>
-          <user-icon class="inline w-12" :name="member" />
+          <UserIcon class="inline w-12" :name="member" />
           {{ member }}
         </div>
         <button
           v-if="hasAuthority"
           class="flex items-center"
           @click="handleDeleteMember(member)">
-          <minus-icon class="w-6" />
+          <MinusIcon class="w-6" />
         </button>
       </li>
     </ul>
     <div v-if="hasAuthority" class="flex p-2">
-      <vue-select
+      <VueSelect
         v-model="MembersToBeAdded"
         class="flex-grow"
         :close-on-select="false"
@@ -85,7 +85,7 @@ async function handleDeleteMember(id: string) {
       <button
         class="flex items-center"
         @click="handleAddMembers(MembersToBeAdded)">
-        <plus-icon class="ml-2 w-6" />
+        <PlusIcon class="ml-2 w-6" />
       </button>
     </div>
   </div>

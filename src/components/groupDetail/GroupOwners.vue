@@ -61,19 +61,19 @@ async function handleDeleteOwner(id: string) {
         :key="owner"
         class="flex items-center justify-between">
         <div>
-          <user-icon class="inline w-12" :name="owner" />
+          <UserIcon class="inline w-12" :name="owner" />
           {{ owner }}
         </div>
         <button
           v-if="hasAuthority"
           class="flex items-center"
           @click="handleDeleteOwner(owner)">
-          <minus-icon class="w-6" />
+          <MinusIcon class="w-6" />
         </button>
       </li>
     </ul>
     <div v-if="hasAuthority" class="flex p-2">
-      <vue-select
+      <VueSelect
         v-model="OwnersToBeAdded"
         class="flex-grow"
         :close-on-select="false"
@@ -85,7 +85,7 @@ async function handleDeleteOwner(id: string) {
       <button
         class="flex items-center"
         @click="handleAddOwners(OwnersToBeAdded)">
-        <plus-icon class="ml-2 w-6" />
+        <PlusIcon class="ml-2 w-6" />
       </button>
     </div>
   </div>

@@ -76,7 +76,7 @@ const putGroup = async (id: string, willPutGroup: PostGroup) => {
 <template>
   <div>
     <div class="flex items-center">
-      <group-name
+      <GroupName
         :group="group"
         :is-edit-mode="editMode === 'name'"
         :value="editedValue.name"
@@ -84,7 +84,7 @@ const putGroup = async (id: string, willPutGroup: PostGroup) => {
         @input="editedValue.name = $event" />
     </div>
     <div class="mt-4">
-      <group-description
+      <GroupDescription
         :group="group"
         :is-edit-mode="editMode === 'description'"
         :value="editedValue.description"
@@ -92,7 +92,7 @@ const putGroup = async (id: string, willPutGroup: PostGroup) => {
         @input="editedValue.description = $event" />
     </div>
     <div class="mt-4 h-10">
-      <group-budget
+      <GroupBudget
         :group="group"
         :is-edit-mode="editMode === 'budget'"
         :value="editedValue.budget"
@@ -105,7 +105,7 @@ const putGroup = async (id: string, willPutGroup: PostGroup) => {
           class="flex items-center"
           :to="`/transactions?group=${props.group.id}`">
           このグループの入出金記録へ
-          <arrow-top-right-on-square-icon class="w-6" />
+          <ArrowTopRightOnSquareIcon class="w-6" />
         </router-link>
       </button>
     </div>

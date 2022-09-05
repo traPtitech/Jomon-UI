@@ -56,9 +56,9 @@ watch(
         <h1 class="text-center text-3xl">グループ一覧</h1>
         <div v-if="hasAuthority" class="absolute right-0">
           <router-link to="/groups/new">
-            <simple-button font-size="lg" padding="md">
+            <SimpleButton font-size="lg" padding="md">
               グループの新規作成
-            </simple-button>
+            </SimpleButton>
           </router-link>
         </div>
       </div>
@@ -72,11 +72,11 @@ watch(
         </div>
         <ul class="divide-y">
           <li v-for="group in sliceGroupsAt(page, 10)" :key="group.id">
-            <group-item :group="group" />
+            <GroupItem :group="group" />
           </li>
         </ul>
       </div>
-      <pagination-bar
+      <PaginationBar
         v-if="groupStore.groups"
         class="mt-4"
         :current-page="page"

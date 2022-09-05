@@ -29,7 +29,7 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
 <template>
   <div v-if="!isEditMode" class="flex items-start">
     予算：{{ props.group.budget }}円
-    <fix-button v-if="hasAuthority" @click="emit('changeEditMode', 'budget')" />
+    <FixButton v-if="hasAuthority" @click="emit('changeEditMode', 'budget')" />
   </div>
   <div v-else>
     予算：
@@ -39,12 +39,12 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
       type="text"
       :value="props.value"
       @input="emit('input', ($event.target as HTMLInputElement).value)" />円
-    <simple-button
+    <SimpleButton
       class="ml-2"
       font-size="sm"
       padding="sm"
       @click.stop="emit('changeEditMode', '')">
       完了
-    </simple-button>
+    </SimpleButton>
   </div>
 </template>

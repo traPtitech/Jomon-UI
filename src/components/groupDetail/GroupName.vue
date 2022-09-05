@@ -64,23 +64,23 @@ const deleteGroup = async (id: string) => {
       type="text"
       :value="props.value"
       @input="emit('input', ($event.target as HTMLInputElement).value)" />
-    <simple-button
+    <SimpleButton
       v-if="hasAuthority && !isEditMode"
       class="ml-2"
       font-size="sm"
       padding="sm"
       @click="emit('changeEditMode', 'name')">
       編集
-    </simple-button>
-    <simple-button
+    </SimpleButton>
+    <SimpleButton
       v-else
       class="ml-2"
       font-size="sm"
       padding="sm"
       @click.stop="emit('changeEditMode', '')">
       完了
-    </simple-button>
-    <simple-button
+    </SimpleButton>
+    <SimpleButton
       v-if="hasAuthority"
       class="ml-2"
       font-size="sm"
@@ -88,6 +88,6 @@ const deleteGroup = async (id: string) => {
       padding="sm"
       @click.stop="deleteGroup(props.group.id)">
       グループを削除
-    </simple-button>
+    </SimpleButton>
   </div>
 </template>

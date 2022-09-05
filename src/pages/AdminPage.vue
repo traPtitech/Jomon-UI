@@ -75,7 +75,7 @@ const addAdmins = async () => {
       <div v-else>loading...</div>
     </div>
     <div class="mt-4 flex gap-4">
-      <vue-select
+      <VueSelect
         v-model="addList"
         class="w-1/2"
         label="name"
@@ -83,20 +83,20 @@ const addAdmins = async () => {
         :options="userStore.users"
         placeholder="追加する管理者を選択"
         :reduce="(user:any) => user.name" />
-      <simple-button font-size="lg" padding="sm" @click.stop="addAdmins">
+      <SimpleButton font-size="lg" padding="sm" @click.stop="addAdmins">
         選択した管理者を追加
-      </simple-button>
+      </SimpleButton>
     </div>
     <div class="mt-12 flex gap-4">
-      <vue-select
+      <VueSelect
         v-model="deleteList"
         class="w-1/2"
         multiple
         :options="adminStore.admins"
         placeholder="削除する管理者を選択" />
-      <simple-button font-size="lg" padding="sm" @click.stop="deleteAdmins">
+      <SimpleButton font-size="lg" padding="sm" @click.stop="deleteAdmins">
         選択した管理者を削除
-      </simple-button>
+      </SimpleButton>
     </div>
   </div>
 </template>

@@ -14,7 +14,7 @@ onMounted(async () => {
 <template>
   <suspense>
     <template #default>
-      <jomon-header />
+      <JomonHeader />
     </template>
     <template #fallback>
       <div class="h-12">loading...</div>

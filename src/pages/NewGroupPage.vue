@@ -100,7 +100,7 @@ onMounted(() => {
         </div>
         <div class="flex flex-col">
           <label>オーナー</label>
-          <vue-select
+          <VueSelect
             v-model="group.owners"
             :close-on-select="false"
             label="name"
@@ -114,7 +114,7 @@ onMounted(() => {
         </div>
         <div class="flex flex-col">
           <label>メンバー</label>
-          <vue-select
+          <VueSelect
             v-model="group.members"
             :close-on-select="false"
             label="name"
@@ -124,13 +124,13 @@ onMounted(() => {
             :reduce="(user:any) => user.name" />
         </div>
         <div class="relative w-full">
-          <simple-button
+          <SimpleButton
             class="absolute right-0 mt-8"
             font-size="xl"
             padding="md"
             @click.stop="handlePostGroup">
             グループを作成する
-          </simple-button>
+          </SimpleButton>
         </div>
       </div>
     </div>

@@ -32,14 +32,14 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
       {{ props.group.description }}
     </p>
     <div class="flex items-end">
-      <simple-button
+      <SimpleButton
         v-if="hasAuthority"
         class="ml-2"
         font-size="sm"
         padding="sm"
         @click="emit('changeEditMode', 'description')">
         編集
-      </simple-button>
+      </SimpleButton>
     </div>
   </div>
   <div v-else class="flex w-full">
@@ -49,13 +49,13 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
       :value="props.value"
       @input="emit('input', ($event.target as HTMLTextAreaElement).value)" />
     <div class="flex items-end">
-      <simple-button
+      <SimpleButton
         class="ml-2"
         font-size="sm"
         padding="sm"
         @click.stop="emit('changeEditMode', '')">
         完了
-      </simple-button>
+      </SimpleButton>
     </div>
   </div>
 </template>

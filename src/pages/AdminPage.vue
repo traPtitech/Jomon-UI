@@ -1,58 +1,24 @@
 <script lang="ts" setup>
+import { ArrowPathIcon } from '@heroicons/vue/24/solid'
 import { ref } from 'vue'
 
 import { useAdminStore } from '/@/stores/admin'
 import { useUserStore } from '/@/stores/user'
 
-import apis from '/@/lib/apis'
 import { isAdmin } from '/@/lib/authorityCheck'
 
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 
+import { useAdmin } from './composables/useAdmin'
+
 const adminStore = useAdminStore()
 const userStore = useUserStore()
 
 const addList = ref<string[]>([])
-const deleteList = ref<string[]>([])
+const removeList = ref<string[]>([])
 const hasAuthority = isAdmin(userStore.me)
-
-const deleteAdmins = async () => {
-  if (deleteList.value.length === 0) {
-    alert('1人以上選択して下さい')
-    return
-  }
-  if (!confirm('本当に削除しますか？')) {
-    return
-  }
-  try {
-    await apis.deleteAdmins(deleteList.value)
-    adminStore.admins = adminStore.admins?.filter(
-      id => !deleteList.value.includes(id)
-    )
-  } catch (err) {
-    alert(err)
-  }
-}
-const addAdmins = async () => {
-  if (addList.value.length === 0) {
-    alert('1人以上選択して下さい')
-    return
-  }
-  if (!confirm('本当に追加しますか？')) {
-    return
-  }
-  try {
-    const res = (await apis.postAdmins(addList.value)).data
-    if (adminStore.admins) {
-      adminStore.admins.push(...res)
-    } else {
-      adminStore.admins = [res]
-    }
-  } catch (err) {
-    alert(err)
-  }
-}
+const { absentMembers, isSending, addAdmins, removeAdmins } = useAdmin()
 
 if (userStore.me && userStore.me.admin) {
   if (!adminStore.isAdminFetched) {
@@ -65,6 +31,7 @@ if (userStore.me && userStore.me.admin) {
 </script>
 
 <template>
+  {{ absentMembers.length }}
   <div v-if="!hasAuthority" class="p-2">権限がありません。</div>
   <div v-else class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
     <h1 class="pb-8 text-center text-3xl">管理ページ</h1>
@@ -84,22 +51,31 @@ if (userStore.me && userStore.me.admin) {
         class="w-1/2"
         label="name"
         multiple
-        :options="userStore.users"
+        :options="absentMembers"
         placeholder="追加する管理者を選択"
         :reduce="(user:any) => user.name" />
-      <SimpleButton font-size="lg" padding="sm" @click.stop="addAdmins">
-        選択した管理者を追加
+      <SimpleButton
+        font-size="lg"
+        padding="sm"
+        @click.stop="addAdmins(addList)">
+        <span v-if="!isSending">選択した管理者を追加</span>
+        <ArrowPathIcon v-else class="w-5" />
       </SimpleButton>
     </div>
     <div class="mt-12 flex gap-4">
       <VueSelect
-        v-model="deleteList"
+        v-model="removeList"
         class="w-1/2"
         multiple
         :options="adminStore.admins"
         placeholder="削除する管理者を選択" />
-      <SimpleButton font-size="lg" padding="sm" @click.stop="deleteAdmins">
-        選択した管理者を削除
+      <SimpleButton
+        class="flex items-center"
+        font-size="lg"
+        padding="sm"
+        @click.stop="removeAdmins(removeList)">
+        <span v-if="!isSending">選択した管理者を削除</span>
+        <ArrowPathIcon v-else class="w-5" />
       </SimpleButton>
     </div>
   </div>

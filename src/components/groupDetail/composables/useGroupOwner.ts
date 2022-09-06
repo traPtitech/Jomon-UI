@@ -7,6 +7,7 @@ import apis from '/@/lib/apis'
 
 export const useGroupOwner = (group: GroupDetail) => {
   const { users } = useUserStore()
+
   const absentOwners = computed(() => {
     if (users === undefined) {
       return []

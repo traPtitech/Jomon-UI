@@ -5,7 +5,6 @@ import { useRoute } from 'vue-router'
 
 import { useUserStore } from '/@/stores/user'
 
-//used by decorater metadata.のせいでtype importできなくてバグってる
 import apis from '/@/lib/apis'
 import type { GroupDetail } from '/@/lib/apis'
 import { toId } from '/@/lib/parsePathParams'

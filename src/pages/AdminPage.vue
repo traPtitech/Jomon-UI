@@ -55,11 +55,12 @@ if (userStore.me && userStore.me.admin) {
         placeholder="追加する管理者を選択"
         :reduce="(user:any) => user.name" />
       <SimpleButton
+        :class="`flex items-center ${isSending && 'px-20'}`"
         font-size="lg"
         padding="sm"
         @click.stop="addAdmins(addList)">
         <span v-if="!isSending">選択した管理者を追加</span>
-        <ArrowPathIcon v-else class="w-5" />
+        <ArrowPathIcon v-else class="w-5 animate-spin" />
       </SimpleButton>
     </div>
     <div class="mt-12 flex gap-4">
@@ -70,12 +71,12 @@ if (userStore.me && userStore.me.admin) {
         :options="adminStore.admins"
         placeholder="削除する管理者を選択" />
       <SimpleButton
-        class="flex items-center"
+        :class="`flex items-center ${isSending && 'px-20'}`"
         font-size="lg"
         padding="sm"
         @click.stop="removeAdmins(removeList)">
         <span v-if="!isSending">選択した管理者を削除</span>
-        <ArrowPathIcon v-else class="w-5" />
+        <ArrowPathIcon v-else class="w-5 animate-spin" />
       </SimpleButton>
     </div>
   </div>

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 import NewRequestImageForm from '/@/components/newRequest/NewRequestImageForm.vue'
 import NewRequestSubmitButton from '/@/components/newRequest/NewRequestSubmitButton.vue'
@@ -9,6 +9,7 @@ import VueSelect from '/@/components/shared/VueSelect.vue'
 import clubBudgetRequestTemplate from '/@/md/clubBudgetRequest.md?raw'
 import travelingExpenseRequestTemplate from '/@/md/travelingExpenseRequest.md?raw'
 import { useGroupStore } from '/@/stores/group'
+import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
 interface File {
@@ -25,6 +26,7 @@ interface RequestRequest {
   group: string | null
 }
 
+const tagStore = useTagStore()
 const userStore = useUserStore()
 const groupStore = useGroupStore()
 
@@ -43,6 +45,18 @@ const request = ref<RequestRequest>({
   group: null
 })
 const images = ref<File[]>([])
+
+onMounted(() => {
+  if (!tagStore.isTagFetched) {
+    tagStore.fetchTags()
+  }
+  if (!groupStore.isGroupFetched) {
+    groupStore.fetchGroups()
+  }
+  if (!userStore.isUserFetched) {
+    userStore.fetchUsers()
+  }
+})
 </script>
 
 <template>

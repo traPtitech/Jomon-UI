@@ -1,9 +1,6 @@
 <script lang="ts" setup>
-import { openModal } from 'jenesius-vue-modal'
 import { ref } from 'vue'
 
-import SimpleButton from '../shared/SimpleButton.vue'
-import NewTagModal from '/@/components/modal/NewTagModal.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import { useTagStore } from '/@/stores/tag'
 
@@ -36,19 +33,15 @@ const tags = ref(props.request.tags)
         v-model="tags"
         class="w-2/3"
         :close-on-select="false"
+        :create-option="(tag: any) => ({ name: tag, id: tag, created_at: '', updated_at: '' })"
         label="name"
         multiple
         :options="tagStore.tags"
         placeholder="タグを選択"
+        push-tags
         :reduce="(tag:any) => tag.id"
+        taggable
         @close="emit('input', tags)" />
-      <simple-button
-        class="ml-8"
-        font-size="lg"
-        padding="sm"
-        @click.stop="openModal(NewTagModal)">
-        タグを新規作成
-      </simple-button>
     </div>
   </div>
 </template>

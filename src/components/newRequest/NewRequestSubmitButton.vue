@@ -1,8 +1,9 @@
 <script lang="ts" setup>
+import type { AxiosResponse } from 'axios'
 import { useRouter } from 'vue-router'
 
 import SimpleButton from '../shared/SimpleButton.vue'
-import type { Request } from '/@/lib/apis'
+import type { Request, Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import { useRequestStore } from '/@/stores/request'
 
@@ -41,8 +42,25 @@ async function postRequest() {
     alert('形式が不正です')
     return
   }
+  const tagPostPromises: Promise<AxiosResponse<Tag, any>>[] = []
+  props.request.tags.forEach((tag: string) => {
+    if (tag === '') {
+      return
+    }
+    tagPostPromises.push(apis.postTag({ name: tag }))
+  })
+  let tags: string[] = []
+  try {
+    tags = (await Promise.all(tagPostPromises)).map(
+      (tag: AxiosResponse<Tag, any>) => tag.data.id
+    )
+  } catch (err) {
+    alert(err)
+    return
+  }
   const requestRequest = {
     ...props.request,
+    tags: [...props.request.tags, ...tags],
     group: props.request.group !== null ? props.request.group : ''
   }
   try {

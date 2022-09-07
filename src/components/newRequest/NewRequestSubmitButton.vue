@@ -42,8 +42,9 @@ async function postRequest() {
     alert('形式が不正です')
     return
   }
-  const tagPostPromises: Promise<AxiosResponse<Tag, any>>[] = []
+  const tagPostPromises: Promise<AxiosResponse<Tag>>[] = []
   props.request.tags.forEach((tag: string) => {
+    //todo:正規表現でuuidを除く
     if (tag === '') {
       return
     }
@@ -52,7 +53,7 @@ async function postRequest() {
   let tags: string[] = []
   try {
     tags = (await Promise.all(tagPostPromises)).map(
-      (tag: AxiosResponse<Tag, any>) => tag.data.id
+      (tag: AxiosResponse<Tag>) => tag.data.id
     )
   } catch (err) {
     alert(err)

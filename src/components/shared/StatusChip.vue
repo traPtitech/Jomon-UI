@@ -13,6 +13,7 @@ export type RequestStatus =
   | 'accepted'
   | 'completed'
   | 'rejected'
+  | ''
 
 interface Props {
   status: RequestStatus

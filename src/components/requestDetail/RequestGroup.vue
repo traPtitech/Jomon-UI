@@ -1,50 +1,63 @@
 <script lang="ts" setup>
-import SimpleButton from '../shared/SimpleButton.vue'
+import { ref } from 'vue'
+
 import EditButton from '/@/components/shared/EditButton.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import type { RequestDetail } from '/@/lib/apis'
 import { isCreater } from '/@/lib/authorityCheck'
+import type { EditMode } from '/@/pages/composables/requestDetail/useRequestDetail'
 import { useGroupStore } from '/@/stores/group'
-import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 interface Props {
   request: RequestDetail
+  isEditMode: boolean
+  value: string
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits<{
+  (e: 'input', value: string): void
+  (e: 'changeEditMode', value: EditMode): void
+}>()
 
-const requestDetailStore = useRequestDetailStore()
 const userStore = useUserStore()
 const groupStore = useGroupStore()
 
 const hasAuthority = isCreater(userStore.me, props.request.created_by)
+const currentGroup = ref(props.request.group)
+
+const handleComplete = () => {
+  emit('input', currentGroup.value.id)
+  emit('changeEditMode', '')
+}
 </script>
 
 <template>
   <div class="flex items-center">
     グループ：
-    <div v-if="!props.request.group">なし</div>
-    <div v-else-if="!(requestDetailStore.editMode === 'group')">
-      {{ props.request.group.name }}
+    <div v-if="!isEditMode">
+      <span v-if="!props.request.group">なし</span>
+      <span v-else>{{ props.request.group.name }}</span>
       <edit-button
         v-if="hasAuthority"
         class="text-secondary"
-        @click="requestDetailStore.changeEditMode('group')" />
+        @click="emit('changeEditMode', 'group')" />
     </div>
-    <div v-else-if="requestDetailStore.editMode === 'group'" class="flex">
+    <div v-else class="flex">
+      <!--@inputとvalueだと@inputが上手く動かなかった-->
       <vue-select
-        v-model="requestDetailStore.editedValue.group"
+        v-model="currentGroup"
         class="w-52"
         label="name"
         :options="groupStore.groups"
-        placeholder="グループ"
-        :reduce="(group:any) => group.id" />
+        placeholder="グループ" />
       <simple-button
         class="ml-2"
         font-size="sm"
         padding="sm"
-        @click.stop="requestDetailStore.changeEditMode('')">
+        @click.stop="handleComplete">
         完了
       </simple-button>
     </div>

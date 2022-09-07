@@ -2,7 +2,7 @@
 import { XCircleIcon } from '@heroicons/vue/24/solid'
 
 import apis from '/@/lib/apis'
-import type { File } from '/@/stores/requestDetail'
+import type { File } from '/@/pages/composables/requestDetail/useRequestFile'
 
 interface Props {
   files: File[] | undefined

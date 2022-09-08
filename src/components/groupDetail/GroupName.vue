@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { ArrowPathIcon } from '@heroicons/vue/24/solid'
-import { useRouter } from 'vue-router'
 
-import { useGroupStore } from '/@/stores/group'
 import { useUserStore } from '/@/stores/user'
 
-import apis from '/@/lib/apis'
 import type { GroupDetail } from '/@/lib/apis'
 import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 
+import { useDeleteGroup } from '/@/components/groupDetail/composables/useDeleteGroup'
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
@@ -24,33 +22,10 @@ const emit = defineEmits<{
   (e: 'input', value: string): void
   (e: 'changeEditMode', value: EditMode): void
 }>()
-const router = useRouter()
-
-const groupStore = useGroupStore()
 const userStore = useUserStore()
 
 const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
-
-const deleteGroup = async (id: string) => {
-  if (!hasAuthority) {
-    alert('権限がありません。')
-    return
-  }
-  if (!confirm('本当にこのグループを削除しますか？')) {
-    return
-  }
-  try {
-    await apis.deleteGroup(id)
-    if (groupStore.groups !== undefined) {
-      groupStore.groups = groupStore.groups.filter(group => group.id !== id)
-      router.push('/group')
-    } else {
-      throw new Error('group does not exist')
-    }
-  } catch (err) {
-    alert(err)
-  }
-}
+const { isDeleting, deleteGroup } = useDeleteGroup()
 </script>
 
 <template>
@@ -75,7 +50,7 @@ const deleteGroup = async (id: string) => {
     </SimpleButton>
     <SimpleButton
       v-else
-      :class="`ml-2 flex items-center ${isSending && 'px-3'}`"
+      :class="`ml-2 flex items-center ${props.isSending && 'px-3'}`"
       font-size="sm"
       padding="sm"
       @click.stop="emit('changeEditMode', '')">
@@ -84,12 +59,13 @@ const deleteGroup = async (id: string) => {
     </SimpleButton>
     <SimpleButton
       v-if="hasAuthority"
-      class="ml-2"
+      :class="`ml-2 flex items-center ${isDeleting && 'px-10'}`"
       font-size="sm"
       kind="danger"
       padding="sm"
       @click.stop="deleteGroup(props.group.id)">
-      グループを削除
+      <span v-if="!isDeleting">グループを削除</span>
+      <ArrowPathIcon v-else class="w-5 animate-spin" />
     </SimpleButton>
   </div>
 </template>

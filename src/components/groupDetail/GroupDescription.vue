@@ -29,7 +29,6 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
 
 <template>
   <p>詳細</p>
-  {{ props.isSending }}
   <div v-if="!isEditMode" class="flex w-full">
     <p class="h-32 w-4/5 border border-gray-300 pl-1">
       {{ props.group.description }}
@@ -53,7 +52,7 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
       @input="emit('input', ($event.target as HTMLTextAreaElement).value)" />
     <div class="flex items-end">
       <SimpleButton
-        :class="`ml-2 flex items-center ${isSending && 'px-3'}`"
+        :class="`ml-2 flex items-center ${props.isSending && 'px-3'}`"
         font-size="sm"
         padding="sm"
         @click.stop="emit('changeEditMode', '')">

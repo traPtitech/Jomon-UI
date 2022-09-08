@@ -31,7 +31,6 @@ if (userStore.me && userStore.me.admin) {
 </script>
 
 <template>
-  {{ absentMembers.length }}
   <div v-if="!hasAuthority" class="p-2">権限がありません。</div>
   <div v-else class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
     <h1 class="pb-8 text-center text-3xl">管理ページ</h1>

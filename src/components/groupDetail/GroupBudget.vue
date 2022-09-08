@@ -42,7 +42,7 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
       :value="props.value"
       @input="emit('input', ($event.target as HTMLInputElement).value)" />円
     <SimpleButton
-      :class="`ml-2 flex items-center ${isSending && 'px-3'}`"
+      :class="`ml-2 flex items-center ${props.isSending && 'px-3'}`"
       font-size="sm"
       padding="sm"
       @click.stop="emit('changeEditMode', '')">

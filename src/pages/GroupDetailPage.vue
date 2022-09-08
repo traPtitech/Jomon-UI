@@ -42,7 +42,7 @@ if (!userStore.isUserFetched) {
 <template>
   <div
     v-if="group !== undefined"
-    class="min-w-80 mx-auto flex h-full w-4/5 flex-col justify-between px-12 pt-4 md:flex-row">
+    class="min-w-80 mx-auto flex h-full w-4/5 flex-col pt-4 md:flex-row">
     <GroupInformation
       class="md:w-3/4"
       :group="group"

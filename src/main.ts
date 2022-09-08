@@ -8,7 +8,9 @@ import { worker } from './mocks/browser'
 import router from './router'
 
 if (process.env.NODE_ENV === 'development') {
-  worker.start()
+  worker.start({
+    onUnhandledRequest: 'bypass'
+  })
 }
 const app = createApp(App)
 

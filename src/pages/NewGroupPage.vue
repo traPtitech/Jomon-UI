@@ -71,65 +71,63 @@ if (!userStore.isUserFetched) {
 
 <!-- TODO: inputのon-focus -->
 <template>
-  <div>
-    <div class="min-w-160 mx-auto flex w-2/3 flex-col">
-      <div class="py-8">
-        <h1 class="text-center text-3xl">グループの新規作成</h1>
-      </div>
-      <form class="flex flex-col gap-2" @submit="handlePostGroup">
-        <div class="flex flex-col">
-          <label>グループ名</label>
-          <input
-            v-model="group.name"
-            class="bg-background rounded border border-gray-300 py-1 px-2"
-            required />
-        </div>
-        <div class="flex flex-col">
-          <label>詳細</label>
-          <textarea
-            v-model="group.description"
-            class="min-h-36 bg-background rounded border border-gray-300 py-1 px-2"
-            required />
-        </div>
-        <div class="flex flex-col">
-          <label>予算</label>
-          <div>
-            <input
-              v-model="group.budget"
-              class="bg-background w-2/5 rounded border border-gray-300 py-1 px-2"
-              :min="1"
-              required
-              type="number" />円
-          </div>
-        </div>
-        <div class="flex flex-col">
-          <label>オーナー</label>
-          <VueSelect
-            v-model="group.owners"
-            :close-on-select="false"
-            label="name"
-            multiple
-            :options="userStore.users"
-            placeholder="追加するオーナーを選択"
-            :reduce="(user:any) => user.name" />
-        </div>
-        <div class="flex flex-col">
-          <label>メンバー</label>
-          <VueSelect
-            v-model="group.members"
-            :close-on-select="false"
-            label="name"
-            multiple
-            :options="userStore.users"
-            placeholder="追加するメンバーを選択"
-            :reduce="(user:any) => user.name" />
-        </div>
-        <div>
-          <SimpleButton class="ml-auto mt-8 block" font-size="xl" padding="md">
-            グループを作成する
-          </SimpleButton>
-        </div>
-      </form>
+  <div class="min-w-160 mx-auto flex w-2/3 flex-col">
+    <div class="py-8">
+      <h1 class="text-center text-3xl">グループの新規作成</h1>
     </div>
+    <form class="flex flex-col gap-2" @submit="handlePostGroup">
+      <div class="flex flex-col">
+        <label>グループ名</label>
+        <input
+          v-model="group.name"
+          class="bg-background rounded border border-gray-300 py-1 px-2"
+          required />
+      </div>
+      <div class="flex flex-col">
+        <label>詳細</label>
+        <textarea
+          v-model="group.description"
+          class="min-h-36 bg-background rounded border border-gray-300 py-1 px-2"
+          required />
+      </div>
+      <div class="flex flex-col">
+        <label>予算</label>
+        <div>
+          <input
+            v-model="group.budget"
+            class="bg-background mr-1 w-2/5 rounded border border-gray-300 py-1 px-2"
+            :min="1"
+            required
+            type="number" />円
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <label>オーナー</label>
+        <VueSelect
+          v-model="group.owners"
+          :close-on-select="false"
+          label="name"
+          multiple
+          :options="userStore.users"
+          placeholder="追加するオーナーを選択"
+          :reduce="(user:any) => user.name" />
+      </div>
+      <div class="flex flex-col">
+        <label>メンバー</label>
+        <VueSelect
+          v-model="group.members"
+          :close-on-select="false"
+          label="name"
+          multiple
+          :options="userStore.users"
+          placeholder="追加するメンバーを選択"
+          :reduce="(user:any) => user.name" />
+      </div>
+      <div>
+        <SimpleButton class="ml-auto mt-8 block" font-size="xl" padding="md">
+          グループを作成する
+        </SimpleButton>
+      </div>
+    </form>
   </div>
 </template>

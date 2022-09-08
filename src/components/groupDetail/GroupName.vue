@@ -22,6 +22,7 @@ const emit = defineEmits<{
   (e: 'input', value: string): void
   (e: 'changeEditMode', value: EditMode): void
 }>()
+
 const userStore = useUserStore()
 
 const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)

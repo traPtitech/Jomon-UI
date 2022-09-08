@@ -30,15 +30,15 @@ const { absentOwners, isSending, addOwners, removeOwner } = useGroupOwner(
 
 <template>
   <div
-    class="relative flex h-1/2 flex-col justify-between border border-gray-400">
-    <h2 class="bg-background absolute -top-3 left-2 px-2">グループオーナー</h2>
+    class="relative flex h-1/2 flex-col justify-between border border-gray-300">
+    <p class="bg-background absolute -top-3 left-2 px-2">グループオーナー</p>
     <ul class="h-full p-4">
       <li
         v-for="owner in group.owners"
         :key="owner"
         class="not-first:mt-2 flex items-center justify-between">
         <div class="flex items-center">
-          <UserIcon class="inline w-12" :name="owner" />
+          <UserIcon class="w-12" :name="owner" />
           <p class="mx-1 break-all">{{ owner }}</p>
         </div>
         <button

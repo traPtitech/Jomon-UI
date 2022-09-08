@@ -46,7 +46,7 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
   </div>
   <div v-else class="flex w-full">
     <textarea
-      class="block h-32 w-4/5 resize-none p-1"
+      class="min-h-32 w-4/5 p-1"
       placeholder="詳細"
       :value="props.value"
       @input="emit('input', ($event.target as HTMLTextAreaElement).value)" />

@@ -30,15 +30,15 @@ const { absentMembers, isSending, addMembers, removeMember } = useGroupMember(
 
 <template>
   <div
-    class="relative flex h-1/2 flex-col justify-between border border-gray-400">
-    <h2 class="bg-background absolute -top-3 left-2 px-2">グループメンバー</h2>
+    class="relative flex h-1/2 flex-col justify-between border border-gray-300">
+    <p class="bg-background absolute -top-3 left-2 px-2">グループメンバー</p>
     <ul class="h-full p-4">
       <li
         v-for="member in group.members"
         :key="member"
         class="not-first:mt-2 flex items-center justify-between">
         <div class="flex items-center">
-          <UserIcon class="inline w-12" :name="member" />
+          <UserIcon class="w-12" :name="member" />
           <p class="mx-1 break-all">{{ member }}</p>
         </div>
         <button

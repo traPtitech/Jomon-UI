@@ -24,7 +24,7 @@ const { isSending, editMode, editedValue, changeEditMode } =
 
 <template>
   <div>
-    <div class="flex items-center">
+    <div>
       <GroupName
         :group="group"
         :is-edit-mode="editMode === 'name'"
@@ -42,7 +42,7 @@ const { isSending, editMode, editedValue, changeEditMode } =
         @change-edit-mode="changeEditMode($event, emit)"
         @input="editedValue.description = $event" />
     </div>
-    <div class="mt-4 h-10">
+    <div class="mt-4">
       <GroupBudget
         :group="group"
         :is-edit-mode="editMode === 'budget'"
@@ -51,15 +51,13 @@ const { isSending, editMode, editedValue, changeEditMode } =
         @change-edit-mode="changeEditMode($event, emit)"
         @input="editedValue.budget = $event" />
     </div>
-    <div>
-      <button>
-        <router-link
-          class="flex items-center"
-          :to="`/transactions?group=${props.group.id}`">
-          このグループの入出金記録へ
-          <ArrowTopRightOnSquareIcon class="w-6" />
-        </router-link>
-      </button>
+    <div class="mt-4">
+      <router-link
+        class="flex items-center"
+        :to="`/transactions?group=${props.group.id}`">
+        このグループの入出金記録へ
+        <ArrowTopRightOnSquareIcon class="w-6" />
+      </router-link>
     </div>
   </div>
 </template>

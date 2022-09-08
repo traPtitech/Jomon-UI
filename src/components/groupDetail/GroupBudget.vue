@@ -1,18 +1,20 @@
 <script lang="ts" setup>
+import { ArrowPathIcon } from '@heroicons/vue/24/solid'
+
 import { useUserStore } from '/@/stores/user'
 
 import type { GroupDetail } from '/@/lib/apis'
 import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 
+import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import FixButton from '/@/components/shared/FixButton.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-
-import type { EditMode } from './GroupDetail.vue'
 
 interface Props {
   group: GroupDetail
   isEditMode: boolean
   value: string
+  isSending: boolean
 }
 
 const props = defineProps<Props>()
@@ -31,7 +33,7 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
     予算：{{ props.group.budget }}円
     <FixButton v-if="hasAuthority" @click="emit('changeEditMode', 'budget')" />
   </div>
-  <div v-else>
+  <div v-else class="flex items-center">
     予算：
     <input
       class="mr-1 w-24 p-1"
@@ -40,11 +42,12 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
       :value="props.value"
       @input="emit('input', ($event.target as HTMLInputElement).value)" />円
     <SimpleButton
-      class="ml-2"
+      :class="`ml-2 flex items-center ${isSending && 'px-3'}`"
       font-size="sm"
       padding="sm"
       @click.stop="emit('changeEditMode', '')">
-      完了
+      <span v-if="!props.isSending">完了</span>
+      <ArrowPathIcon v-else class="w-5 animate-spin" />
     </SimpleButton>
   </div>
 </template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ArrowPathIcon } from '@heroicons/vue/24/solid'
 import { useRouter } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
@@ -8,14 +9,14 @@ import apis from '/@/lib/apis'
 import type { GroupDetail } from '/@/lib/apis'
 import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 
+import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-
-import type { EditMode } from './GroupDetail.vue'
 
 interface Props {
   group: GroupDetail
   isEditMode: boolean
   value: string
+  isSending: boolean
 }
 
 const props = defineProps<Props>()
@@ -74,11 +75,12 @@ const deleteGroup = async (id: string) => {
     </SimpleButton>
     <SimpleButton
       v-else
-      class="ml-2"
+      :class="`ml-2 flex items-center ${isSending && 'px-3'}`"
       font-size="sm"
       padding="sm"
       @click.stop="emit('changeEditMode', '')">
-      完了
+      <span v-if="!props.isSending">完了</span>
+      <ArrowPathIcon v-else class="w-5 animate-spin" />
     </SimpleButton>
     <SimpleButton
       v-if="hasAuthority"

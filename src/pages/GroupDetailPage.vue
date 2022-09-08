@@ -48,8 +48,8 @@ if (!userStore.isUserFetched) {
       :group="group"
       @fix-group="group = $event" />
     <div class="flex flex-col gap-8 py-4 md:w-1/4">
-      <GroupMembers :group="group" />
-      <GroupOwners :group="group" />
+      <GroupMembers :group="group" @fix-group="group = $event" />
+      <GroupOwners :group="group" @fix-group="group = $event" />
     </div>
   </div>
 </template>

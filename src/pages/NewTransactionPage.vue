@@ -8,6 +8,7 @@ import VueSelect from '/@/components/shared/VueSelect.vue'
 import apis from '/@/lib/apis'
 import { isAdmin } from '/@/lib/authorityCheck'
 import { useGroupStore } from '/@/stores/group'
+//多分idから再fetch
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'

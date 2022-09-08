@@ -44,32 +44,28 @@ async function putStatus(nextStatus: RequestStatus | '', comment: string) {
 
 <template>
   <div
-    className="z-10 fixed top-0 left-0 h-full w-full bg-gray-300/50"
-    @click.self="emit('closeModal')">
-    <div
-      className="h-1/2 w-1/2 absolute inset-0 my-auto mx-auto bg-white p-4 overflow-y-scroll shadow-lg">
-      <h1 class="text-center text-3xl">申請の状態変更</h1>
-      <div class="mx-12 mt-8 flex h-4/5 flex-col justify-around gap-4">
-        <div class="flex items-center">
-          申請の状態を
-          <status-chip has-text :status="props.request.status" />
-          から
-          <status-chip has-text :status="nextStatus" />
-          へ変更します
-        </div>
-        <markdown-textarea
-          placeholder="コメント"
-          :value="comment"
-          @input="comment = $event" />
-        <div class="mt-8 text-center">
-          <simple-button
-            class="mb-4 w-60"
-            font-size="xl"
-            padding="sm"
-            @click="putStatus(nextStatus, comment)">
-            申請の状態を変更する
-          </simple-button>
-        </div>
+    className="h-1/2 w-1/2 absolute inset-0 my-auto mx-auto bg-white p-4 overflow-y-scroll shadow-lg">
+    <h1 class="text-center text-3xl">申請の状態変更</h1>
+    <div class="mx-12 mt-8 flex h-4/5 flex-col justify-around gap-4">
+      <div class="flex items-center">
+        申請の状態を
+        <status-chip has-text :status="props.request.status" />
+        から
+        <status-chip has-text :status="nextStatus" />
+        へ変更します
+      </div>
+      <markdown-textarea
+        placeholder="コメント"
+        :value="comment"
+        @input="comment = $event" />
+      <div class="mt-8 text-center">
+        <simple-button
+          class="mb-4 w-60"
+          font-size="xl"
+          padding="sm"
+          @click="putStatus(nextStatus, comment)">
+          申請の状態を変更する
+        </simple-button>
       </div>
     </div>
   </div>

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { container } from 'jenesius-vue-modal'
 import { onMounted } from 'vue'
 
 import JomonHeader from './components/JomonHeader.vue'
@@ -17,7 +16,6 @@ onMounted(async () => {
   <main class="text-primary h-screen overflow-scroll bg-zinc-50 pt-12">
     <router-view />
   </main>
-  <container />
 </template>
 
 <style>

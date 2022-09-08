@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { Bars3Icon } from '@heroicons/vue/24/outline'
-import { openModal } from 'jenesius-vue-modal'
-import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import HeaderButton from './HeaderButton.vue'
 import SideDrawer from './SideDrawer.vue'
+import ModalWrapper from './modal/ModalWrapper.vue'
+import { useModal } from './modal/composables/useModal'
 import Logo from './shared/JomonLogo.vue'
 import UserIcon from './shared/UserIcon.vue'
 import type { User } from '/@/lib/apis'
@@ -18,13 +18,13 @@ interface Props {
 const props = defineProps<Props>()
 const route = useRoute()
 
-const drawer = ref()
+const { shouldShowModal, openModal, closeModal } = useModal()
 
 async function handleOpenDrawer() {
-  if (!drawer.value || drawer.value.closed) {
-    drawer.value = await openModal(SideDrawer)
+  if (!shouldShowModal.value) {
+    openModal()
   } else {
-    drawer.value.close()
+    closeModal()
   }
 }
 </script>
@@ -32,8 +32,10 @@ async function handleOpenDrawer() {
 <template>
   <header
     class="fixed flex h-12 w-full items-center bg-white pl-2 shadow"
-    :class="drawer ? 'z-30' : 'z-10'">
-    <bars3-icon class="h-8 w-8 md:hidden" @click="handleOpenDrawer" />
+    :class="shouldShowModal ? 'z-30' : 'z-10'">
+    <button class="flex items-center" @click="handleOpenDrawer">
+      <bars3-icon class="h-8 w-8" />
+    </button>
     <router-link to="/">
       <logo />
     </router-link>
@@ -60,4 +62,9 @@ async function handleOpenDrawer() {
       <user-icon :name="props.me?.name ?? 'traP'" />
     </div>
   </header>
+  <!--遷移時にドロワーを閉じるようにするためにドロワーコンポーネント内でwrapperを使うことになりそう？-->
+  <!--onBeforeRouteUpdateはヘッダーコンポーネントがルーター内に入っていないので使えない-->
+  <modal-wrapper v-if="shouldShowModal" @close-modal="closeModal">
+    <side-drawer />
+  </modal-wrapper>
 </template>

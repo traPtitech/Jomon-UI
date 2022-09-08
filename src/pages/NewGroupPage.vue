@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
 import { useUserStore } from '/@/stores/user'
@@ -10,6 +11,8 @@ import apis from '/@/lib/apis'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 
+const router = useRouter()
+
 const userStore = useUserStore()
 const groupStore = useGroupStore()
 
@@ -17,7 +20,7 @@ const group = ref({
   name: '',
   description: '',
   budget: 0,
-  owners: [],
+  owners: userStore.me?.name ? [userStore.me.name] : [],
   members: []
 })
 
@@ -31,19 +34,14 @@ const postGroup = async (group: PostGroup) => {
     }
     return res
   } catch (err) {
-    throw new Error('error occured')
+    alert(err)
   }
 }
 
 async function handlePostGroup(e: Event) {
   e.preventDefault()
-  if (
-    !/^[1-9][0-9]*$|^0$/.test(group.value.budget.toString()) ||
-    group.value.name === '' ||
-    group.value.description === '' ||
-    group.value.owners.length === 0
-  ) {
-    alert('入力が不正です')
+  if (group.value.owners.length === 0) {
+    alert('オーナーを1人以上入れてください')
     return
   }
   const willPostGroup = {
@@ -52,21 +50,23 @@ async function handlePostGroup(e: Event) {
     budget: group.value.budget
   }
   try {
-    const res: Group = await postGroup(willPostGroup)
+    const res: Group | undefined = await postGroup(willPostGroup)
+    if (res === undefined) {
+      return
+    }
     await Promise.all([
       apis.postGroupMembers(res.id, group.value.members),
       apis.postGroupOwners(res.id, group.value.owners)
     ])
+    router.push(`/groups/${res.id}`)
   } catch (err) {
     alert(err)
   }
 }
 
-onMounted(() => {
-  if (!userStore.isUserFetched) {
-    userStore.fetchUsers()
-  }
-})
+if (!userStore.isUserFetched) {
+  await userStore.fetchUsers()
+}
 </script>
 
 <!-- TODO: inputのon-focus -->
@@ -76,7 +76,7 @@ onMounted(() => {
       <div class="py-8">
         <h1 class="text-center text-3xl">グループの新規作成</h1>
       </div>
-      <form class="flex flex-col gap-2">
+      <form class="flex flex-col gap-2" @submit="handlePostGroup">
         <div class="flex flex-col">
           <label>グループ名</label>
           <input
@@ -97,7 +97,9 @@ onMounted(() => {
             <input
               v-model="group.budget"
               class="bg-background w-2/5 rounded border border-gray-300 py-1 px-2"
-              required />円
+              :min="1"
+              required
+              type="number" />円
           </div>
         </div>
         <div class="flex flex-col">
@@ -109,8 +111,7 @@ onMounted(() => {
             multiple
             :options="userStore.users"
             placeholder="追加するオーナーを選択"
-            :reduce="(user:any) => user.name"
-            required />
+            :reduce="(user:any) => user.name" />
         </div>
         <div class="flex flex-col">
           <label>メンバー</label>
@@ -123,12 +124,8 @@ onMounted(() => {
             placeholder="追加するメンバーを選択"
             :reduce="(user:any) => user.name" />
         </div>
-        <div class="relative w-full">
-          <SimpleButton
-            class="absolute right-0 mt-8"
-            font-size="xl"
-            padding="md"
-            @click.stop="handlePostGroup">
+        <div>
+          <SimpleButton class="ml-auto mt-8 block" font-size="xl" padding="md">
             グループを作成する
           </SimpleButton>
         </div>

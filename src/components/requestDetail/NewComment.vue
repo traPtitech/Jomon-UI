@@ -26,12 +26,12 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <form class="pl-4">
+  <form class="mx-4 w-full">
     <markdown-textarea
       placeholder="コメント"
       :value="comment"
       @input="comment = $event" />
-    <div class="mt-2">
+    <div class="mt-1">
       <simple-button
         :class="`ml-auto flex items-center ${isSending && 'px-8'}`"
         font-size="md"

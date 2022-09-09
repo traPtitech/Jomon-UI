@@ -27,13 +27,13 @@ const hasAuthority = isCreater(userStore.me, props.request.created_by)
 <template>
   <div class="flex">
     詳細：
-    <div v-if="!isEditMode" class="flex w-4/5 items-start">
+    <div v-if="!isEditMode" class="w-9/10 flex items-end">
       <markdown-it
-        class="h-32 w-full overflow-y-scroll border border-gray-300 pl-2"
+        class="h-32 w-4/5 overflow-y-scroll border border-gray-300 pl-1"
         :text="props.request.content" />
       <edit-button
         v-if="hasAuthority"
-        class="text-secondary"
+        class="ml-1"
         @click="emit('changeEditMode', 'content')" />
     </div>
     <div v-else class="w-9/10">

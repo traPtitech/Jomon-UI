@@ -37,17 +37,18 @@ const handleComplete = () => {
 </script>
 
 <template>
-  <div class="flex">
-    タグ：
-    <div v-if="!props.request.tags">なし</div>
-    <div v-else-if="!isEditMode">
-      <tag-group :tags="props.request.tags" />
+  <div class="flex items-center">
+    <div v-if="!isEditMode" class="pb-2">
+      タグ：
+      <span v-if="props.request.tags.length === 0">なし</span>
+      <tag-group v-else :tags="props.request.tags" />
       <edit-button
         v-if="hasAuthority"
-        class="text-secondary"
+        class="ml-1"
         @click="emit('changeEditMode', 'tags')" />
     </div>
     <div v-else class="flex items-center">
+      タグ：
       <vue-select
         v-model="currentTags"
         :close-on-select="false"

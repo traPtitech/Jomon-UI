@@ -42,7 +42,7 @@ const handleComplete = () => {
       <span v-else>{{ props.request.group.name }}</span>
       <edit-button
         v-if="hasAuthority"
-        class="text-secondary"
+        class="ml-1"
         @click="emit('changeEditMode', 'group')" />
     </div>
     <div v-else class="flex">

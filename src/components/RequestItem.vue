@@ -25,7 +25,7 @@ const formattedDate = formatDate(props.request.created_at)
           <tag-group :tags="request.tags" />
         </div>
       </div>
-      <div class="flex flex-col">
+      <div>
         <div class="flex gap-4">
           <span>グループ：{{ request.group.name }}</span>
           <span>申請者：{{ request.created_by }}</span>

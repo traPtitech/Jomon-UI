@@ -2,6 +2,7 @@
 import { onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
+import ToTransactionButtons from '../components/requestDetail/ToTransactionButtons.vue'
 import NewComment from '/@/components/requestDetail/NewComment.vue'
 import RequestAmount from '/@/components/requestDetail/RequestAmount.vue'
 import RequestContent from '/@/components/requestDetail/RequestContent.vue'
@@ -11,10 +12,8 @@ import RequestTags from '/@/components/requestDetail/RequestTags.vue'
 import RequestTargets from '/@/components/requestDetail/RequestTargets.vue'
 import RequestTitle from '/@/components/requestDetail/RequestTitle.vue'
 import StatusChangeButtons from '/@/components/requestDetail/StatusChangeButtons.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import type { Status, Comment } from '/@/lib/apis'
-import { isAdmin } from '/@/lib/authorityCheck'
 import { formatDate } from '/@/lib/date'
 import { toId } from '/@/lib/parseQueryParams'
 import { useRequestDetail } from '/@/pages/composables/requestDetail/useRequestDetail'
@@ -32,7 +31,6 @@ const userStore = useUserStore()
 const groupStore = useGroupStore()
 const tagStore = useTagStore()
 
-const hasAuthority = isAdmin(userStore.me)
 const { editedValue, editMode, request, fetchRequestDetail, changeEditMode } =
   useRequestDetail()
 const { files, fetchFiles } = useRequestFile()
@@ -69,11 +67,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-if="request === undefined">loading...</div>
-  <div v-else class="min-w-160 mx-auto flex flex-col px-12 pt-4">
+  <div v-if="request !== undefined" class="min-w-160 mx-auto px-12 pt-4">
     <div class="bottom-bar">
-      <div class="flex flex-col justify-between md:flex-row">
-        <div class="flex flex-col md:flex-row">
+      <div class="flex justify-between">
+        <div class="flex">
           <request-title
             :is-edit-mode="editMode === 'title'"
             :request="request"
@@ -85,15 +82,15 @@ onMounted(async () => {
             :request="request"
             @push-status="pushStatus($event)" />
         </div>
-        <div class="flex flex-col-reverse md:flex-row md:items-center md:gap-4">
+        <div class="flex items-center gap-4">
           <request-group
             :is-edit-mode="editMode === 'group'"
             :request="request"
             :value="editedValue.group"
             @change-edit-mode="changeEditMode($event)"
             @input="editedValue.group = $event" />
-          <div>申請者：{{ request.created_by }}</div>
-          <div>申請日：{{ formattedDate }}</div>
+          <p>申請者：{{ request.created_by }}</p>
+          <p>申請日：{{ formattedDate }}</p>
           <request-amount
             :is-edit-mode="editMode === 'amount'"
             :request="request"
@@ -109,7 +106,7 @@ onMounted(async () => {
         :value="editedValue.tags"
         @change-edit-mode="changeEditMode($event)"
         @input="editedValue.tags = $event" />
-      <div class="mt-4 flex flex-col gap-4 md:flex-row">
+      <div class="mt-2 flex gap-4">
         <request-content
           class="w-3/5"
           :is-edit-mode="editMode === 'content'"
@@ -127,23 +124,9 @@ onMounted(async () => {
       </div>
     </div>
     <div class="flex">
-      <request-logs :files="files" :request="request" />
+      <request-logs class="w-2/3" :files="files" :request="request" />
       <div class="w-1/3">
-        <div class="flex flex-col items-center gap-4 py-8">
-          <router-link
-            v-if="hasAuthority"
-            class="w-2/3"
-            :to="`/transactions/new?requestID=${id}`">
-            <simple-button class="w-full" font-size="md" padding="sm">
-              この申請から入出金記録を作成する
-            </simple-button>
-          </router-link>
-          <router-link class="w-2/3" :to="`/transactions?requestID=${id}`">
-            <simple-button class="w-full" font-size="md" padding="sm">
-              この申請の入出金記録へ移動
-            </simple-button>
-          </router-link>
-        </div>
+        <to-transaction-buttons :id="id" />
         <new-comment
           :request-id="request.id"
           @push-comment="pushComment($event)" />

@@ -2,13 +2,13 @@
 import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
-import SimpleButton from '../components/shared/SimpleButton.vue'
-import { toPage } from '../lib/parseQueryParams'
-import { useRequestStore } from '../stores/request'
 import RequestFilteringMenu from '/@/components/RequestFilteringMenu.vue'
 import RequestItem from '/@/components/RequestItem.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import { toPage } from '/@/lib/parseQueryParams'
 import { useGroupStore } from '/@/stores/group'
+import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
@@ -23,7 +23,7 @@ const userStore = useUserStore()
 const sliceRequestsAt = (index: number, n: number) => {
   const start = (index - 1) * n
   const end = index * n
-  return requestStore.requests?.slice(start, end)
+  return requestStore.requests?.slice(start, end) ?? []
 }
 
 onMounted(() => {
@@ -40,6 +40,7 @@ onMounted(() => {
     userStore.fetchUsers()
   }
 })
+
 watch(
   () => route.query.page,
   newPage => {
@@ -63,16 +64,13 @@ watch(
   </div>
   <request-filtering-menu />
   <div class="min-h-120">
-    <div
-      v-if="requestStore.requests && requestStore.requests.length !== 0"
-      class="mx-auto mt-4 w-3/4 shadow">
+    <div class="mx-auto mt-4 w-3/4 shadow">
       <ul>
         <li v-for="request in sliceRequestsAt(page, 7)" :key="request.id">
           <request-item :request="request" />
         </li>
       </ul>
     </div>
-    <div v-else class="mx-auto mt-4 w-3/4">loading...</div>
   </div>
   <pagination-bar
     v-if="requestStore.requests"

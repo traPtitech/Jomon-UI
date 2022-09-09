@@ -25,10 +25,10 @@ const hasAuthority = isCreater(userStore.me, props.request.created_by)
 
 <template>
   <div v-if="!isEditMode" class="flex items-center">
-    <span class="text-2xl"> 金額：{{ props.request.amount }}円 </span>
+    <span class="text-2xl">金額：{{ props.request.amount }}円</span>
     <edit-button
       v-if="hasAuthority"
-      class="text-secondary"
+      class="ml-1"
       @click="emit('changeEditMode', 'amount')" />
   </div>
   <div v-else class="flex items-center">

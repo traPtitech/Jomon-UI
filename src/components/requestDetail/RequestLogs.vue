@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { computed } from 'vue'
+
 import CommentLog from './CommentLog.vue'
 import RequestImage from './RequestImage.vue'
 import StatusChangeLog from './StatusChangeLog.vue'
@@ -20,7 +22,7 @@ interface Log {
 
 const props = defineProps<Props>()
 
-const logs = () => {
+const logs = computed(() => {
   //2つの配列(commentsとstatuses)の中身の型が違うので1つにまとめ、ソートして表示ができない
   let array = new Array<Log>()
   //2つの配列からcreated_at、種類、インデックスだけ取り出して1つの配列にまとめる
@@ -49,15 +51,15 @@ const logs = () => {
   })
   return array
   //その後この配列のkindで配列を選び、indexでindexを選ぶことで2つの配列をいい感じに並べ替えられる
-}
+})
 </script>
 
 <template>
-  <div class="h-120 h-full w-2/3 overflow-y-scroll p-2">
+  <div class="h-120 overflow-y-scroll p-2">
     <request-image :files="files" />
     <ul>
       <li
-        v-for="log in logs()"
+        v-for="log in logs"
         :key="log.created_at.toDateString"
         class="vertical-bar">
         <comment-log

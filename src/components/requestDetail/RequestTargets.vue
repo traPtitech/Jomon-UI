@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 import EditButton from '/@/components/shared/EditButton.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
@@ -23,9 +23,9 @@ const emit = defineEmits<{
 
 const userStore = useUserStore()
 
-const formattedTargets = props.request.targets
-  .map(target => target.id)
-  .join(', ')
+const formattedTargets = computed(() =>
+  props.request.targets.map(target => target.id).join(', ')
+)
 const hasAuthority = isCreater(userStore.me, props.request.created_by)
 const targetIds = props.request.targets.map(target => target.id) ?? []
 const currentTargets = ref(targetIds)
@@ -38,15 +38,15 @@ const handleComplete = () => {
 
 <template>
   <div class="flex">
-    <div v-if="!isEditMode">
+    <div v-if="!isEditMode" class="w-full">
       払い戻し対象者：
       {{ formattedTargets }}
       <edit-button
         v-if="hasAuthority"
-        class="text-secondary"
+        class="ml-1"
         @click="emit('changeEditMode', 'targets')" />
     </div>
-    <div v-else>
+    <div v-else class="w-full">
       払い戻し対象者：
       <vue-select
         v-model="currentTargets"

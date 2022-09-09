@@ -20,22 +20,21 @@ async function deleteFile(id: string) {
 </script>
 
 <template>
-  <div>
-    <div v-if="props.files && props.files.length > 0" class="mx-4 mt-4">
-      <details>
-        <summary>画像</summary>
-        <div class="flex flex-wrap">
-          <div v-for="file in props.files" :key="file.file" class="relative">
-            <img :alt="file.name" :src="file.file" />
-            <button
-              class="absolute top-0 right-0 h-6 w-6"
-              @click="deleteFile(file.id)">
-              <x-circle-icon />
-            </button>
-          </div>
+  <div v-if="props.files && props.files.length > 0" class="mx-4 mt-4">
+    <details>
+      <summary>画像</summary>
+      <div class="flex flex-wrap">
+        <div v-for="file in props.files" :key="file.file" class="relative">
+          <img :alt="file.name" :src="file.file" />
+          <!--画像の色によっては見えづらい-->
+          <button
+            class="absolute top-0 right-0 h-6 w-6"
+            @click="deleteFile(file.id)">
+            <x-circle-icon />
+          </button>
         </div>
-      </details>
-    </div>
-    <div v-else class="text-center">(画像はありません)</div>
+      </div>
+    </details>
   </div>
+  <div v-else class="text-center">(画像はありません)</div>
 </template>

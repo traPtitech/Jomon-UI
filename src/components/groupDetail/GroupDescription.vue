@@ -6,6 +6,7 @@ import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import TextareaForm from '/@/components/shared/TextareaForm.vue'
 
 interface Props {
   group: GroupDetail
@@ -28,7 +29,7 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
 <template>
   <p>詳細</p>
   <div v-if="!isEditMode" class="flex w-full">
-    <p class="h-32 w-4/5 border border-gray-300 pl-1">
+    <p class="h-32 w-4/5 rounded border border-gray-300 pl-1">
       {{ props.group.description }}
     </p>
     <div class="flex items-end">
@@ -43,11 +44,11 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
     </div>
   </div>
   <div v-else class="flex w-full">
-    <textarea
-      class="min-h-32 w-4/5 p-1"
+    <TextareaForm
+      class="w-4/5"
       placeholder="詳細"
       :value="props.value"
-      @input="emit('input', ($event.target as HTMLTextAreaElement).value)" />
+      @input="emit('input', $event)" />
     <div class="flex items-end">
       <SimpleButton
         class="ml-2 flex items-center"

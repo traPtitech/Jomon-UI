@@ -8,7 +8,10 @@ import { useUserStore } from '/@/stores/user'
 import type { Group, PostGroup } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
+import InputForm from '/@/components/shared/InputForm.vue'
+import NumberInputForm from '/@/components/shared/NumberInputForm.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import TextareaForm from '/@/components/shared/TextareaForm.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 
 const emit = defineEmits<{
@@ -92,24 +95,18 @@ if (!userStore.isUserFetched) {
     <form class="flex flex-col gap-2" @submit="handlePostGroup">
       <div class="flex flex-col">
         <label>グループ名</label>
-        <input
-          v-model="group.name"
-          class="bg-background rounded border border-gray-300 py-1 px-2"
-          required />
+        <InputForm v-model="group.name" required />
       </div>
       <div class="flex flex-col">
         <label>詳細</label>
-        <textarea
-          v-model="group.description"
-          class="min-h-36 bg-background rounded border border-gray-300 py-1 px-2"
-          required />
+        <TextareaForm v-model="group.description" required />
       </div>
       <div class="flex flex-col">
         <label>予算</label>
         <div>
-          <input
+          <NumberInputForm
             v-model="group.budget"
-            class="bg-background mr-1 w-2/5 rounded border border-gray-300 py-1 px-2"
+            class="mr-1 w-2/5"
             :min="1"
             required
             type="number" />円

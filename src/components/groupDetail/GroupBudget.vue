@@ -6,6 +6,7 @@ import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import FixButton from '/@/components/shared/FixButton.vue'
+import InputForm from '/@/components/shared/InputForm.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 interface Props {
@@ -27,18 +28,20 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
 </script>
 
 <template>
-  <div v-if="!isEditMode" class="flex items-center">
+  <div v-if="!isEditMode" class="flex items-center pb-2">
     予算：{{ props.group.budget }}円
-    <FixButton v-if="hasAuthority" @click="emit('changeEditMode', 'budget')" />
+    <FixButton
+      v-if="hasAuthority"
+      class="ml-1"
+      @click="emit('changeEditMode', 'budget')" />
   </div>
   <div v-else class="flex items-center">
     予算：
-    <input
-      class="mr-1 w-24 p-1"
+    <InputForm
+      class="mr-1 w-24"
       placeholder="金額"
-      type="text"
       :value="props.value"
-      @input="emit('input', ($event.target as HTMLInputElement).value)" />円
+      @input="emit('input', $event)" />円
     <SimpleButton
       class="ml-2 flex items-center"
       font-size="sm"

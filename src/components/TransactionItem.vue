@@ -28,8 +28,13 @@ const props = defineProps<Props>()
     <div class="w-2/10">
       {{ formatDate(props.transaction.created_at) }}
     </div>
-    <div class="w-1/10">
-      {{ props.transaction.amount }}
+    <div class="w-1/10 text-right">
+      <span
+        :class="` ${
+          props.transaction.amount > 0 ? 'text-blue-400' : 'text-red-400'
+        }`">
+        {{ props.transaction.amount }}円
+      </span>
     </div>
     <div class="w-2/10">
       {{ props.transaction.target }}

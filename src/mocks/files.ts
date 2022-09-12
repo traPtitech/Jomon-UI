@@ -32,9 +32,9 @@ export const files = [
       case '3fa85f64-5717-4562-b3fc-2c963f66afa8':
         name = 'slide1.png'
         break
-        // case '3fa85f64-5717-4562-b3fc-2c963f66afb6':
-        //   name = 'aaa.pdf'
-        break
+      // case '3fa85f64-5717-4562-b3fc-2c963f66afb6':
+      //   name = 'aaa.pdf'
+      //   break
       default:
         return res(ctx.status(404))
     }

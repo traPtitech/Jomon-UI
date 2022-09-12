@@ -11,6 +11,16 @@ import apis from '/@/lib/apis'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 
+const emit = defineEmits<{
+  (
+    e: 'showToast',
+    arg: {
+      type: 'success' | 'error'
+      message: string
+    }
+  ): void
+}>()
+
 const router = useRouter()
 
 const userStore = useUserStore()
@@ -58,6 +68,10 @@ async function handlePostGroup(e: Event) {
       apis.postGroupMembers(res.id, group.value.members),
       apis.postGroupOwners(res.id, group.value.owners)
     ])
+    emit('showToast', {
+      type: 'success',
+      message: 'グループを作成しました'
+    })
     router.push(`/groups/${res.id}`)
   } catch (err) {
     alert(err)

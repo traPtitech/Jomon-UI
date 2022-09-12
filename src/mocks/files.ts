@@ -1,5 +1,6 @@
 import { rest } from 'msw'
 
+//import aaa from '/@/assets/aaa.pdf'
 import mehm8128 from '/@/assets/mehm8128.png'
 import mehm8128_circle from '/@/assets/mehm8128_circle.png'
 import slide1 from '/@/assets/slide1.png'
@@ -13,6 +14,8 @@ export const files = [
         return res(ctx.status(200), ctx.text(mehm8128_circle))
       case '3fa85f64-5717-4562-b3fc-2c963f66afa8':
         return res(ctx.status(200), ctx.text(slide1))
+      // case '3fa85f64-5717-4562-b3fc-2c963f66afb6':
+      //   return res(ctx.status(200), ctx.text(aaa))
       default:
         return res(ctx.status(404))
     }
@@ -28,6 +31,9 @@ export const files = [
         break
       case '3fa85f64-5717-4562-b3fc-2c963f66afa8':
         name = 'slide1.png'
+        break
+        // case '3fa85f64-5717-4562-b3fc-2c963f66afb6':
+        //   name = 'aaa.pdf'
         break
       default:
         return res(ctx.status(404))

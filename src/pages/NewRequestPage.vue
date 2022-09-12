@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 
-import NewRequestImageForm from '/@/components/newRequest/NewRequestImageForm.vue'
+import NewRequestFileForm from '/@/components/newRequest/NewRequestFileForm.vue'
 import NewRequestSubmitButton from '/@/components/newRequest/NewRequestSubmitButton.vue'
 import NewRequestTag from '/@/components/newRequest/NewRequestTag.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
@@ -12,9 +12,10 @@ import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-interface File {
+export interface FileRequest {
   name: string
   src: string
+  type: string
 }
 interface RequestRequest {
   created_by: string
@@ -44,7 +45,11 @@ const request = ref<RequestRequest>({
   tags: [],
   group: null
 })
-const images = ref<File[]>([])
+const files = ref<FileRequest[]>([])
+
+function removeFile(file: FileRequest) {
+  files.value = files.value.filter(f => f !== file)
+}
 
 onMounted(() => {
   if (!tagStore.isTagFetched) {
@@ -112,8 +117,11 @@ onMounted(() => {
           :reduce="(group:any) => group.id" />
       </div>
       <new-request-tag :request="request" @input="request.tags = $event" />
-      <new-request-image-form :images="images" @input="images = $event" />
-      <new-request-submit-button :images="images" :request="request" />
+      <new-request-file-form :files="files" @input="files = $event" />
+      <new-request-submit-button
+        :files="files"
+        :request="request"
+        @remove="removeFile($event)" />
     </div>
   </div>
 </template>

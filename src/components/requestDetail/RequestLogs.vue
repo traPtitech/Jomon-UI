@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 
 import CommentLog from './CommentLog.vue'
-import RequestImage from './RequestImage.vue'
+import RequestFiles from './RequestFiles.vue'
 import StatusChangeLog from './StatusChangeLog.vue'
 import type { RequestDetail } from '/@/lib/apis'
 import type { File } from '/@/pages/composables/requestDetail/useRequestFile'
@@ -21,6 +21,9 @@ interface Log {
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits<{
+  (event: 'removeFile', fileId: string): void
+}>()
 
 const logs = computed(() => {
   //2つの配列(commentsとstatuses)の中身の型が違うので1つにまとめ、ソートして表示ができない
@@ -56,7 +59,7 @@ const logs = computed(() => {
 
 <template>
   <div class="h-120 overflow-y-scroll p-2">
-    <request-image :files="files" />
+    <request-files :files="files" @remove-file="emit('removeFile', $event)" />
     <ul>
       <li
         v-for="log in logs"

@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 import SimpleButton from '../shared/SimpleButton.vue'
 import type { Request, Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
+import type { FileRequest } from '/@/pages/NewRequestPage.vue'
 import { useRequestStore } from '/@/stores/request'
 
 interface RequestRequest {
@@ -16,18 +17,22 @@ interface RequestRequest {
   tags: string[]
   group: string | null
 }
-interface File {
-  name: string
-  src: string
-}
 
 const props = defineProps<{
   request: RequestRequest
-  images: File[]
+  files: FileRequest[]
 }>()
+
 const router = useRouter()
 
 const requestStore = useRequestStore()
+
+const isUUID = (str: string) => {
+  const uuidRegexp = new RegExp(
+    '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
+  )
+  return uuidRegexp.test(str)
+}
 
 async function postFile(requestId: string, name: string, file: string) {
   await apis.postFile(file, name, requestId)
@@ -43,25 +48,28 @@ async function postRequest() {
     return
   }
   const tagPostPromises: Promise<AxiosResponse<Tag>>[] = []
+  let tags: string[] = []
   props.request.tags.forEach((tag: string) => {
-    //todo:正規表現でuuidを除く
-    if (tag === '') {
+    if (isUUID(tag)) {
+      tags.push(tag)
       return
     }
     tagPostPromises.push(apis.postTag({ name: tag }))
   })
-  let tags: string[] = []
   try {
-    tags = (await Promise.all(tagPostPromises)).map(
-      (tag: AxiosResponse<Tag>) => tag.data.id
+    tags = tags.concat(
+      (await Promise.all(tagPostPromises)).map(
+        (tag: AxiosResponse<Tag>) => tag.data.id
+      )
     )
   } catch (err) {
     alert(err)
     return
   }
+
   const requestRequest = {
     ...props.request,
-    tags: [...props.request.tags, ...tags],
+    tags: tags,
     group: props.request.group !== null ? props.request.group : ''
   }
   try {
@@ -73,8 +81,8 @@ async function postRequest() {
       requestStore.requests = [response]
     }
     try {
-      props.images.forEach((image: File) => {
-        postFile(id, image.name, image.src)
+      props.files.forEach((file: FileRequest) => {
+        postFile(id, file.name, file.src)
       })
       alert('申請を作成しました')
       router.push('/')

@@ -33,7 +33,7 @@ async function handleOpenDrawer() {
   <header
     class="fixed flex h-12 w-full items-center bg-white pl-2 shadow"
     :class="shouldShowModal ? 'z-30' : 'z-10'">
-    <button class="flex items-center" @click="handleOpenDrawer">
+    <button class="flex items-center md:hidden" @click="handleOpenDrawer">
       <bars3-icon class="h-8 w-8" />
     </button>
     <router-link to="/">

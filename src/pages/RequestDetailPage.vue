@@ -50,6 +50,12 @@ function pushStatus(status: Status) {
   }
 }
 
+function removeFile(fileId: string) {
+  if (files.value) {
+    files.value = files.value.filter(file => file.id !== fileId)
+  }
+}
+
 onMounted(async () => {
   await fetchRequestDetail(id)
   transactionStore.fetchTransactions('') //idをparamsに渡して取得
@@ -124,7 +130,11 @@ onMounted(async () => {
       </div>
     </div>
     <div class="flex">
-      <request-logs class="w-2/3" :files="files" :request="request" />
+      <request-logs
+        class="w-2/3"
+        :files="files"
+        :request="request"
+        @remove-file="removeFile($event)" />
       <div class="w-1/3">
         <to-transaction-buttons :id="id" />
         <new-comment

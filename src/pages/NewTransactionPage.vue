@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import SimpleButton from '../components/shared/SimpleButton.vue'
@@ -7,33 +7,27 @@ import { toId } from '../lib/parseQueryParams'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import apis from '/@/lib/apis'
 import { isAdmin } from '/@/lib/authorityCheck'
+import { useRequestDetail } from '/@/pages/composables/requestDetail/useRequestDetail'
 import { useGroupStore } from '/@/stores/group'
-//多分idから再fetch
-import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
 const route = useRoute()
 const requestId = toId(route.query.requestID) //requestIDには申請の詳細画面から新規作成ページに移動するときだけIDを渡す
 
-const requestDetailStore = useRequestDetailStore()
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 
 const hasAuthority = isAdmin(userStore.me)
+const { request, targetIds, tagIds, fetchRequestDetail } = useRequestDetail()
 const transaction = ref({
-  amount:
-    requestId && requestDetailStore.request
-      ? requestDetailStore.request.amount
-      : 0,
-  targets: requestId ? requestDetailStore.targetIds : [],
+  //requestのraective性が失われてそうでamountとgroupがバグってる
+  amount: requestId && request.value ? request.value.amount : 0,
+  targets: requestId ? targetIds : [],
   request: requestId,
-  tags: requestId ? requestDetailStore.tagIds : [],
-  group:
-    requestId && requestDetailStore.request
-      ? requestDetailStore.request.group.id
-      : ''
+  tags: requestId ? tagIds : [],
+  group: requestId && request.value ? request.value.group.id : ''
 })
 async function postTransaction() {
   if (
@@ -45,6 +39,19 @@ async function postTransaction() {
   }
   await apis.postTransaction(transaction.value)
 }
+
+onMounted(async () => {
+  if (!groupStore.isGroupFetched) {
+    await groupStore.fetchGroups()
+  }
+  if (!userStore.isUserFetched) {
+    await userStore.fetchUsers()
+  }
+  if (!tagStore.isTagFetched) {
+    await tagStore.fetchTags()
+  }
+  await fetchRequestDetail(requestId)
+})
 </script>
 
 <template>
@@ -56,7 +63,7 @@ async function postTransaction() {
     <div class="flex flex-col gap-2">
       <div>
         紐づけられている申請：
-        <span v-if="requestId">{{ requestDetailStore.request!.title }}</span>
+        <span v-if="requestId && request">{{ request.title }}</span>
         <span v-if="!requestId">なし</span>
       </div>
       <div class="flex flex-col">

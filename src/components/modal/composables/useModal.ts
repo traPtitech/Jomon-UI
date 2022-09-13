@@ -1,5 +1,4 @@
 import { ref } from 'vue'
-import { onBeforeRouteUpdate } from 'vue-router'
 
 export const useModal = () => {
   const shouldShowModal = ref(false)
@@ -9,8 +8,5 @@ export const useModal = () => {
   const closeModal = () => {
     shouldShowModal.value = false
   }
-  onBeforeRouteUpdate(() => {
-    console.log('aaa')
-  })
   return { shouldShowModal, openModal, closeModal }
 }

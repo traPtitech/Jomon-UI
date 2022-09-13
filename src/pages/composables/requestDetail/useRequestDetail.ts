@@ -113,6 +113,8 @@ export const useRequestDetail = () => {
     editedValue,
     editMode,
     request,
+    targetIds,
+    tagIds,
     fetchRequestDetail,
     changeEditMode
   }

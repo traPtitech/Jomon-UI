@@ -6,8 +6,7 @@ import NewRequestSubmitButton from '/@/components/newRequest/NewRequestSubmitBut
 import NewRequestTag from '/@/components/newRequest/NewRequestTag.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
-import clubBudgetRequestTemplate from '/@/md/clubBudgetRequest.md?raw'
-import travelingExpenseRequestTemplate from '/@/md/travelingExpenseRequest.md?raw'
+import { requestTemplates } from '/@/consts/consts'
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
@@ -17,24 +16,19 @@ export interface FileRequest {
   src: string
   type: string
 }
-interface RequestRequest {
+export interface RequestRequest {
   created_by: string
   amount: number
   title: string
   content: string
   targets: string[]
   tags: string[]
-  group: string | null
+  group: string
 }
 
 const tagStore = useTagStore()
 const userStore = useUserStore()
 const groupStore = useGroupStore()
-
-const templates = [
-  { name: '部費利用申請', value: clubBudgetRequestTemplate },
-  { name: '交通費申請', value: travelingExpenseRequestTemplate }
-]
 
 const request = ref<RequestRequest>({
   created_by: userStore.me.name,
@@ -43,7 +37,7 @@ const request = ref<RequestRequest>({
   targets: [],
   content: '',
   tags: [],
-  group: null
+  group: ''
 })
 const files = ref<FileRequest[]>([])
 
@@ -92,7 +86,7 @@ onMounted(() => {
         <label>詳細</label>
         <markdown-textarea
           placeholder=""
-          :templates="templates"
+          :templates="requestTemplates"
           :value="request.content"
           @input="request.content = $event" />
       </div>

@@ -1,68 +1,58 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-import type { Request, StatusEnum } from '/@/lib/apis'
+import type { Status } from '/@/consts/consts'
+import type { Request } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export interface Params {
   sort: string
-  currentStatus: string | null
-  target: string | null
+  currentStatus: string
+  target: string
   since: string
   until: string
-  tag:
-    | {
-        id: string
-        name: string
-        created_at: string
-        updated_at: string
-      }[]
-    | null
-  group: string | null
+  tags: string[]
+  group: string
 }
 
 const defaultParams: Params = {
   sort: 'created_at',
-  currentStatus: null,
-  target: null,
+  currentStatus: '',
+  target: '',
   since: '',
   until: '',
-  tag: null,
-  group: null
+  tags: [],
+  group: ''
 }
 
 export const useRequestStore = defineStore('request', () => {
   const requests = ref<Request[]>()
-  const tagList = ref<string[]>([])
   const isRequestFetched = ref(false)
 
-  const fetchRequests = async (tmpParams: Params = defaultParams) => {
+  const fetchRequests = async (params: Params = defaultParams) => {
     const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
-    const params = { ...tmpParams, tag: '' }
     if (
-      (tmpParams.since && !rule.test(tmpParams.since)) ||
-      (tmpParams.until && !rule.test(tmpParams.until))
+      (params.since && !rule.test(params.since)) ||
+      (params.until && !rule.test(params.until))
     ) {
       alert('日付が不正です')
       return
     }
-    const tmpTagList = tmpParams.tag?.slice() ?? []
-    params.tag = tmpTagList.map(tag => tag.id).join(',')
     try {
       requests.value = (
         await apis.getRequests(
           params.sort,
-          (params.currentStatus as StatusEnum) || '',
-          params.target || '',
+          params.currentStatus as Status,
+          params.target,
           params.since,
           params.until,
-          params.tag || '',
-          params.group || ''
+          params.tags.join(','),
+          params.group
         )
       ).data
     } catch (err) {
       alert(err)
     }
   }
-  return { requests, isRequestFetched, fetchRequests, tagList }
+  return { requests, isRequestFetched, fetchRequests }
 })

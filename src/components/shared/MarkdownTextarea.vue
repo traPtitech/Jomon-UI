@@ -16,14 +16,12 @@ const props = withDefaults(defineProps<Props>(), { placeholder: '' })
 const emit = defineEmits<{ (e: 'input', value: string): void }>()
 
 const currentTab = ref<TabType>('input')
-const selectedTemplate = ref(null)
+const selectedTemplate = ref('')
 
-function setTemplate(template: string | null) {
-  if (template !== null) {
-    const foundTemplate = props.templates?.find(t => t.name === template)
-    if (foundTemplate !== undefined) {
-      emit('input', foundTemplate.value)
-    }
+function setTemplate(template: string) {
+  const foundTemplate = props.templates?.find(t => t.name === template)
+  if (foundTemplate !== undefined) {
+    emit('input', foundTemplate.value)
   }
 }
 

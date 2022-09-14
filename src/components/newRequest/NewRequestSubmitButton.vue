@@ -5,18 +5,8 @@ import { useRouter } from 'vue-router'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { Request, Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
-import type { FileRequest } from '/@/pages/NewRequestPage.vue'
+import type { FileRequest, RequestRequest } from '/@/pages/NewRequestPage.vue'
 import { useRequestStore } from '/@/stores/request'
-
-interface RequestRequest {
-  created_by: string
-  amount: number
-  title: string
-  content: string
-  targets: string[]
-  tags: string[]
-  group: string | null
-}
 
 const props = defineProps<{
   request: RequestRequest
@@ -70,7 +60,7 @@ async function postRequest() {
   const requestRequest = {
     ...props.request,
     tags: tags,
-    group: props.request.group !== null ? props.request.group : ''
+    group: props.request.group
   }
   try {
     const response: Request = (await apis.postRequest(requestRequest)).data

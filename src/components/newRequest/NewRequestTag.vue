@@ -2,21 +2,12 @@
 import { ref } from 'vue'
 
 import VueSelect from '/@/components/shared/VueSelect.vue'
+import type { RequestRequest } from '/@/pages/NewRequestPage.vue'
 import { useTagStore } from '/@/stores/tag'
 
 interface Props {
   request: RequestRequest
 }
-interface RequestRequest {
-  created_by: string
-  amount: number
-  title: string
-  content: string
-  targets: string[]
-  tags: string[]
-  group: string | null
-}
-
 const props = defineProps<Props>()
 const emit = defineEmits<{ (e: 'input', value: string[]): void }>()
 

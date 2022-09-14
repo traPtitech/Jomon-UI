@@ -2,9 +2,10 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
 
-import { useRequestStore } from '../stores/request'
 import VueSelect from './shared/VueSelect.vue'
+import { requestStates } from '/@/consts/consts'
 import { useGroupStore } from '/@/stores/group'
+import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
@@ -15,20 +16,13 @@ const groupStore = useGroupStore()
 
 const params = ref({
   sort: 'created_at',
-  currentStatus: null,
-  target: null,
+  currentStatus: '',
+  target: '',
   since: '',
   until: '',
-  tag: null,
-  group: null
+  tags: [],
+  group: ''
 })
-const states = [
-  { state: 'submitted', jpn: '承認待ち' },
-  { state: 'rejected', jpn: '却下' },
-  { state: 'fix_required', jpn: '要修正' },
-  { state: 'accepted', jpn: '承認済み' },
-  { state: 'fully_repaid', jpn: '返済完了' }
-]
 
 function sortByCreatedAt() {
   if (params.value.sort === 'created_at') {
@@ -75,7 +69,7 @@ function sortByCreatedAt() {
       v-model="params.currentStatus"
       class="w-64"
       label="jpn"
-      :options="states"
+      :options="requestStates"
       placeholder="申請の状態"
       :reduce="(state:any) => state.state"
       :searchable="false"
@@ -89,7 +83,7 @@ function sortByCreatedAt() {
       :reduce="(group:any) => group.id"
       @close="requestStore.fetchRequests(params)" />
     <vue-select
-      v-model="params.tag"
+      v-model="params.tags"
       class="w-100"
       :close-on-select="false"
       label="name"
@@ -102,11 +96,7 @@ function sortByCreatedAt() {
   <span
     v-if="requestStore.requests && requestStore.requests.length !== 0"
     class="ml-1/8">
-    {{ requestStore.requests!.length }}件取得しました
+    {{ requestStore.requests.length }}件取得しました
   </span>
-  <span
-    v-if="requestStore.requests && requestStore.requests.length === 0"
-    class="ml-1/8">
-    条件に一致する申請は見つかりませんでした
-  </span>
+  <span v-else class="ml-1/8"> 条件に一致する申請は見つかりませんでした </span>
 </template>

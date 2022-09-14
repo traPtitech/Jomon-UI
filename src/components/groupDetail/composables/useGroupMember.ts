@@ -18,16 +18,16 @@ export const useGroupMember = (group: GroupDetail) => {
   const isSending = ref(false)
 
   const addMembers = async (
-    members: string[],
+    membersToBeAdded: string[],
     emit: (e: 'fixGroup', group: GroupDetail) => void
   ) => {
-    if (members.length !== 0) {
+    if (membersToBeAdded.length !== 0) {
       try {
         isSending.value = true
-        const res = (await apis.postGroupMembers(group.id, members)).data
+        await apis.postGroupMembers(group.id, membersToBeAdded)
         const nextGroup = {
           ...group,
-          members: [...group.members, ...res]
+          members: [...group.members, ...membersToBeAdded]
         }
         emit('fixGroup', nextGroup)
       } catch (err) {

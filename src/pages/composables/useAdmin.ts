@@ -20,8 +20,8 @@ export const useAdmin = () => {
 
   const isSending = ref(false)
 
-  const addAdmins = async (addList: string[]) => {
-    if (addList.length === 0) {
+  const addAdmins = async (adminsToBeAdded: string[]) => {
+    if (adminsToBeAdded.length === 0) {
       alert('1人以上選択して下さい')
       return
     }
@@ -30,11 +30,11 @@ export const useAdmin = () => {
     }
     try {
       isSending.value = true
-      const res = (await apis.postAdmins(addList)).data
+      await apis.postAdmins(adminsToBeAdded)
       if (admins.value !== undefined) {
-        admins.value.push(...res)
+        admins.value.push(...adminsToBeAdded)
       } else {
-        admins.value = [res]
+        admins.value = adminsToBeAdded
       }
     } catch (err) {
       alert(err)
@@ -42,8 +42,8 @@ export const useAdmin = () => {
       isSending.value = false
     }
   }
-  const removeAdmins = async (removeList: string[]) => {
-    if (removeList.length === 0) {
+  const removeAdmins = async (adminsToBeRemoved: string[]) => {
+    if (adminsToBeRemoved.length === 0) {
       alert('1人以上選択して下さい')
       return
     }
@@ -52,9 +52,11 @@ export const useAdmin = () => {
     }
     try {
       isSending.value = true
-      await apis.deleteAdmins(removeList)
+      await apis.deleteAdmins(adminsToBeRemoved)
       if (admins.value !== undefined) {
-        admins.value = admins.value.filter(id => !removeList.includes(id))
+        admins.value = admins.value.filter(
+          id => !adminsToBeRemoved.includes(id)
+        )
       } else {
         throw new Error('admins is empty')
       }

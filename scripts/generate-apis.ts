@@ -6,7 +6,7 @@ import { addApis } from './add-apis'
 import { addTsIgnoreToImports } from './add-ts-ignore-to-imports'
 
 const SWAGGER_PATH =
-  'https://raw.githubusercontent.com/traPtitech/Jomon/swagger-latest-group-fix/docs/swagger.yaml'
+  'https://raw.githubusercontent.com/traPtitech/Jomon/v2/docs/swagger.yaml'
 const GENERATED_DIR = 'src/lib/apis/generated'
 
 const generateCmd = [

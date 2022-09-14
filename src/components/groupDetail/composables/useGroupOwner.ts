@@ -18,18 +18,18 @@ export const useGroupOwner = (group: GroupDetail) => {
   const isSending = ref(false)
 
   const addOwners = async (
-    owners: string[],
+    ownersToBeAdded: string[],
     emit: (e: 'fixGroup', group: GroupDetail) => void
   ) => {
-    if (owners.length === 0) {
+    if (ownersToBeAdded.length === 0) {
       return
     }
     try {
       isSending.value = true
-      const res = (await apis.postGroupOwners(group.id, owners)).data
+      await apis.postGroupOwners(group.id, ownersToBeAdded)
       const nextGroup = {
         ...group,
-        owners: [...group.owners, ...res]
+        owners: [...group.owners, ...ownersToBeAdded]
       }
       emit('fixGroup', nextGroup)
     } catch (err) {

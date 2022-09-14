@@ -2,7 +2,7 @@
 import type { AxiosResponse } from 'axios'
 import { useRouter } from 'vue-router'
 
-import SimpleButton from '../shared/SimpleButton.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { Request, Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import type { FileRequest } from '/@/pages/NewRequestPage.vue'

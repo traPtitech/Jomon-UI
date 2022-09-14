@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 
-import SimpleButton from '../components/shared/SimpleButton.vue'
-import apis from '../lib/apis'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
+import apis from '/@/lib/apis'
 import { isAdmin } from '/@/lib/authorityCheck'
 import { useAdminStore } from '/@/stores/admin'
 import { useUserStore } from '/@/stores/user'

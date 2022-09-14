@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { ArrowPathIcon } from '@heroicons/vue/24/solid'
 
-import SimpleButton from '../shared/SimpleButton.vue'
 import { useComment } from './composables/useComment'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { Comment } from '/@/lib/apis'
 
 interface Props {

@@ -38,7 +38,7 @@ const handleComplete = () => {
 
 <template>
   <div class="flex">
-    <div v-if="!isEditMode" class="w-full">
+    <div v-if="!isEditMode">
       払い戻し対象者：
       {{ formattedTargets }}
       <edit-button
@@ -46,11 +46,11 @@ const handleComplete = () => {
         class="ml-1"
         @click="emit('changeEditMode', 'targets')" />
     </div>
-    <div v-else class="w-full">
+    <div v-else>
       払い戻し対象者：
       <vue-select
         v-model="currentTargets"
-        class="inline-block w-2/3"
+        class="inline"
         :close-on-select="false"
         label="name"
         multiple

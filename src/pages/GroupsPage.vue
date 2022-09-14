@@ -2,10 +2,10 @@
 import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
-import SimpleButton from '../components/shared/SimpleButton.vue'
-import { toPage } from '../lib/parseQueryParams'
 import GroupItem from '/@/components/GroupItem.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import { toPage } from '/@/lib/parseQueryParams'
 import { useGroupStore } from '/@/stores/group'
 
 const route = useRoute()

@@ -2,7 +2,6 @@
 import { onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
-import ToTransactionButtons from '../components/requestDetail/ToTransactionButtons.vue'
 import NewComment from '/@/components/requestDetail/NewComment.vue'
 import RequestAmount from '/@/components/requestDetail/RequestAmount.vue'
 import RequestContent from '/@/components/requestDetail/RequestContent.vue'
@@ -12,6 +11,7 @@ import RequestTags from '/@/components/requestDetail/RequestTags.vue'
 import RequestTargets from '/@/components/requestDetail/RequestTargets.vue'
 import RequestTitle from '/@/components/requestDetail/RequestTitle.vue'
 import StatusChangeButtons from '/@/components/requestDetail/StatusChangeButtons.vue'
+import ToTransactionButtons from '/@/components/requestDetail/ToTransactionButtons.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import type { Status, Comment } from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
@@ -76,18 +76,26 @@ onMounted(async () => {
   <div v-if="request !== undefined" class="min-w-160 mx-auto px-12 pt-4">
     <div class="bottom-bar">
       <div class="flex justify-between">
+        <request-title
+          :is-edit-mode="editMode === 'title'"
+          :request="request"
+          :value="editedValue.title"
+          @change-edit-mode="changeEditMode($event)"
+          @input="editedValue.title = $event" />
         <div class="flex">
-          <request-title
-            :is-edit-mode="editMode === 'title'"
-            :request="request"
-            :value="editedValue.title"
-            @change-edit-mode="changeEditMode($event)"
-            @input="editedValue.title = $event" />
           <status-chip has-text :status="request.status" />
           <status-change-buttons
             :request="request"
             @push-status="pushStatus($event)" />
         </div>
+      </div>
+      <div class="mt-4 flex justify-between">
+        <request-tags
+          :is-edit-mode="editMode === 'tags'"
+          :request="request"
+          :value="editedValue.tags"
+          @change-edit-mode="changeEditMode($event)"
+          @input="editedValue.tags = $event" />
         <div class="flex items-center gap-4">
           <request-group
             :is-edit-mode="editMode === 'group'"
@@ -105,23 +113,14 @@ onMounted(async () => {
             @input="editedValue.amount = $event" />
         </div>
       </div>
-      <request-tags
-        class="mt-4"
-        :is-edit-mode="editMode === 'tags'"
-        :request="request"
-        :value="editedValue.tags"
-        @change-edit-mode="changeEditMode($event)"
-        @input="editedValue.tags = $event" />
-      <div class="mt-2 flex gap-4">
+      <div class="mt-4 flex">
         <request-content
-          class="w-3/5"
           :is-edit-mode="editMode === 'content'"
           :request="request"
           :value="editedValue.content"
           @change-edit-mode="changeEditMode($event)"
           @input="editedValue.content = $event" />
         <request-targets
-          class="w-2/5"
           :is-edit-mode="editMode === 'targets'"
           :request="request"
           :value="editedValue.targets"

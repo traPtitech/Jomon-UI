@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import EditButton from '/@/components/shared/EditButton.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { RequestDetail } from '/@/lib/apis'
 import { isCreater } from '/@/lib/authorityCheck'
@@ -24,18 +23,22 @@ const hasAuthority = isCreater(userStore.me, props.request.created_by)
 </script>
 
 <template>
-  <div v-if="!props.isEditMode" class="flex">
-    <h1 class="text-3xl">
+  <div v-if="!props.isEditMode" class="flex flex-grow">
+    <h1 class="flex-grow text-3xl">
       {{ props.request.title }}
     </h1>
-    <edit-button
+    <simple-button
       v-if="hasAuthority"
-      class="ml-1"
-      @click="emit('changeEditMode', 'title')" />
+      class="ml-2"
+      font-size="sm"
+      padding="sm"
+      @click="emit('changeEditMode', 'title')">
+      編集
+    </simple-button>
   </div>
-  <div v-else>
+  <div v-else class="flex flex-grow">
     <input
-      class="rounded p-1"
+      class="flex-grow rounded p-1"
       placeholder="タイトル"
       type="text"
       :value="props.value"

@@ -2,15 +2,15 @@
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-import SimpleButton from '../components/shared/SimpleButton.vue'
-import { toId } from '../lib/parseQueryParams'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import apis from '/@/lib/apis'
 import { isAdmin } from '/@/lib/authorityCheck'
+import { toId } from '/@/lib/parseQueryParams'
 import { useRequestDetail } from '/@/pages/composables/requestDetail/useRequestDetail'
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
+import SimpleButton from '/components/shared/SimpleButton.vue'
 
 const route = useRoute()
 const requestId = toId(route.query.requestID) //requestIDには申請の詳細画面から新規作成ページに移動するときだけIDを渡す

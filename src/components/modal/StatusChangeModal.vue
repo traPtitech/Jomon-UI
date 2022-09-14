@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import MarkdownTextarea from '../shared/MarkdownTextarea.vue'
-import SimpleButton from '../shared/SimpleButton.vue'
+import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import type { RequestStatus } from '/@/components/shared/StatusChip.vue'
 import type { Status, RequestDetail } from '/@/lib/apis'

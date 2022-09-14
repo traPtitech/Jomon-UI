@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import EditButton from '/@/components/shared/EditButton.vue'
 import MarkdownIt from '/@/components/shared/MarkdownIt.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { RequestDetail } from '/@/lib/apis'
@@ -25,20 +24,24 @@ const hasAuthority = isCreater(userStore.me, props.request.created_by)
 </script>
 
 <template>
-  <div class="flex">
+  <div class="flex w-3/5">
     詳細：
-    <div v-if="!isEditMode" class="w-9/10 flex items-end">
+    <div v-if="!isEditMode" class="flex flex-grow items-end">
       <markdown-it
-        class="h-32 w-4/5 overflow-y-scroll border border-gray-300 pl-1"
+        class="h-32 flex-grow overflow-y-scroll border border-gray-300 pl-1"
         :text="props.request.content" />
-      <edit-button
+      <simple-button
         v-if="hasAuthority"
-        class="ml-1"
-        @click="emit('changeEditMode', 'content')" />
+        class="ml-2"
+        font-size="sm"
+        padding="sm"
+        @click="emit('changeEditMode', 'content')">
+        編集
+      </simple-button>
     </div>
-    <div v-else class="w-9/10">
+    <div v-else class="flex flex-grow items-end">
       <textarea
-        class="h-30 w-4/5 resize-none p-1"
+        class="h-30 flex-grow resize-none p-1"
         placeholder="詳細"
         :value="props.value"
         @input="emit('input', ($event.target as HTMLTextAreaElement).value)" />

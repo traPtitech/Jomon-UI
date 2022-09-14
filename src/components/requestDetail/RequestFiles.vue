@@ -2,7 +2,7 @@
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
 
-import SimpleButton from '../shared/SimpleButton.vue'
+import SimpleButton from '/@/components/shared/components/SimpleButton.vue'
 import apis from '/@/lib/apis'
 import { isImageByName } from '/@/lib/checkFileType'
 import type { File } from '/@/pages/composables/requestDetail/useRequestFile'

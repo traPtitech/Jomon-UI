@@ -6,6 +6,7 @@ import {
   XCircleIcon,
   CheckCircleIcon
 } from '@heroicons/vue/24/solid'
+import { computed } from 'vue'
 
 export type RequestStatus =
   | 'submitted'
@@ -24,7 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
   hasText: false
 })
 
-function statusToJpn(status: RequestStatus) {
+const statusToJpn = computed(() => (status: RequestStatus) => {
   switch (status) {
     case 'submitted':
       return '承認待ち'
@@ -39,26 +40,39 @@ function statusToJpn(status: RequestStatus) {
     default:
       return 'ERROR'
   }
-}
+})
+
+const backgroundColor = computed(() => (status: RequestStatus) => {
+  switch (status) {
+    case 'submitted':
+      return 'bg-yellow-400'
+    case 'fix_required':
+      return 'bg-red-400'
+    case 'accepted':
+      return 'bg-green-400'
+    case 'completed':
+      return 'bg-gray-400'
+    case 'rejected':
+      return 'bg-gray-400'
+    default:
+      return 'bg-gray-400'
+  }
+})
 </script>
 
 <template>
-  <div class="inline flex items-center px-2" :title="statusToJpn(status)">
-    <check-circle-icon
-      v-if="status === 'accepted'"
-      class="w-8 text-green-500" />
-    <exclamation-triangle-icon
-      v-else-if="status === 'submitted'"
-      class="w-8 text-yellow-500" />
-    <x-circle-icon
-      v-else-if="status === 'fix_required'"
-      class="w-8 text-red-500" />
-    <cloud-arrow-up-icon
-      v-else-if="status === 'rejected'"
-      class="w-8 text-gray-500" />
-    <hand-thumb-up-icon
-      v-else-if="status === 'completed'"
-      class="w-8 text-gray-500" />
-    <span v-if="props.hasText === true">{{ statusToJpn(status) }}</span>
+  <div
+    :class="`inline flex items-center rounded-full p-2 text-white ${backgroundColor(
+      status
+    )}`"
+    :title="statusToJpn(status)">
+    <check-circle-icon v-if="status === 'accepted'" class="w-8" />
+    <exclamation-triangle-icon v-else-if="status === 'submitted'" class="w-8" />
+    <x-circle-icon v-else-if="status === 'fix_required'" class="w-8" />
+    <cloud-arrow-up-icon v-else-if="status === 'rejected'" class="w-8" />
+    <hand-thumb-up-icon v-else-if="status === 'completed'" class="w-8" />
+    <span v-if="props.hasText === true">
+      {{ statusToJpn(status) }}
+    </span>
   </div>
 </template>

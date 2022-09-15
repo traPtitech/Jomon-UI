@@ -21,7 +21,7 @@ const formattedDateAndTime = formatDateAndTime(props.log.created_at)
     <user-icon class="mr-2 w-12" :name="log.created_by" />
     {{ log.created_by }}
     が申請の状態を
-    <status-chip has-text :status="log.status" />
+    <status-chip class="mx-2" has-text :status="log.status" />
     にしました。
     <div class="ml-auto">
       {{ formattedDateAndTime }}

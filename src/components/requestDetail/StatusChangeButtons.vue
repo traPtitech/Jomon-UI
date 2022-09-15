@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
+import ModalWrapper from '/@/components/modal/ModalWrapper.vue'
 import StatusChangeModal from '/@/components/modal/StatusChangeModal.vue'
 import { useModal } from '/@/components/modal/composables/useModal'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { RequestStatus } from '/@/components/shared/StatusChip.vue'
 import type { RequestDetail, Status } from '/@/lib/apis'
 import { isCreater, isAdmin } from '/@/lib/authorityCheck'
-import ModalWrapper from '/@/modal/ModalWrapper.vue'
 import { useUserStore } from '/@/stores/user'
 
 interface Props {

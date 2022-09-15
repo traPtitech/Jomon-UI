@@ -8,12 +8,10 @@ import {
 } from '@heroicons/vue/24/solid'
 import { computed } from 'vue'
 
+import type { RequestStatusEnum } from '/@/lib/apis'
+
 export type RequestStatus =
-  | 'submitted'
-  | 'fix_required'
-  | 'accepted'
-  | 'completed'
-  | 'rejected'
+  | typeof RequestStatusEnum[keyof typeof RequestStatusEnum]
   | ''
 
 interface Props {

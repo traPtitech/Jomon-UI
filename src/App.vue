@@ -12,7 +12,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <jomon-header :me="userStore.me" />
+  <jomon-header />
   <main class="text-primary h-screen overflow-scroll bg-zinc-50 pt-12">
     <router-view />
   </main>

@@ -1,25 +1,16 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
-import type { LocationQueryValue } from 'vue-router'
 import { useRoute } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
 import { useUserStore } from '/@/stores/user'
 
 import { isAdmin } from '/@/lib/authorityCheck'
+import { toPage } from '/@/lib/parseQueryParams'
 
 import GroupItem from '/@/components/GroupItem.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-
-const toPage = (v: LocationQueryValue | LocationQueryValue[]) => {
-  if (Array.isArray(v)) {
-    v = v[0]
-  }
-  if (!v) return 1
-  const parsed = parseInt(v)
-  return isNaN(parsed) ? 1 : parsed
-}
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))

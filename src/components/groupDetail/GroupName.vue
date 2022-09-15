@@ -30,13 +30,13 @@ const { isDeleting, deleteGroup } = useDeleteGroup()
 </script>
 
 <template>
-  <div class="flex w-full">
-    <h1 v-if="!isEditMode" class="w-4/5 text-3xl">
+  <div class="flex w-full items-center">
+    <h1 v-if="!isEditMode" class="flex-grow text-3xl">
       {{ props.group.name }}
     </h1>
     <input
       v-else
-      class="w-4/5 rounded p-1"
+      class="flex-grow rounded p-1"
       placeholder="グループ名"
       type="text"
       :value="props.value"
@@ -60,7 +60,7 @@ const { isDeleting, deleteGroup } = useDeleteGroup()
     </SimpleButton>
     <SimpleButton
       v-if="hasAuthority"
-      :class="`ml-2 flex items-center ${isDeleting && 'px-10'}`"
+      :class="`mx-2 flex items-center ${isDeleting && 'px-10'}`"
       font-size="sm"
       kind="danger"
       padding="sm"

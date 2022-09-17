@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { ArrowPathIcon } from '@heroicons/vue/24/solid'
 import { ref } from 'vue'
 
 import { useAdminStore } from '/@/stores/admin'
@@ -54,12 +53,12 @@ if (userStore.me && userStore.me.admin) {
         placeholder="追加する管理者を選択"
         :reduce="(user:any) => user.name" />
       <SimpleButton
-        :class="`flex items-center ${isSending && 'px-20'}`"
+        class="flex items-center"
         font-size="lg"
+        :is-disabled="isSending"
         padding="sm"
         @click.stop="addAdmins(addList)">
-        <span v-if="!isSending">選択した管理者を追加</span>
-        <ArrowPathIcon v-else class="w-5 animate-spin" />
+        選択した管理者を追加
       </SimpleButton>
     </div>
     <div class="mt-12 flex gap-4">
@@ -70,12 +69,12 @@ if (userStore.me && userStore.me.admin) {
         :options="adminStore.admins"
         placeholder="削除する管理者を選択" />
       <SimpleButton
-        :class="`flex items-center ${isSending && 'px-20'}`"
+        class="flex items-center"
         font-size="lg"
+        :is-disabled="isSending"
         padding="sm"
         @click.stop="removeAdmins(removeList)">
-        <span v-if="!isSending">選択した管理者を削除</span>
-        <ArrowPathIcon v-else class="w-5 animate-spin" />
+        選択した管理者を削除
       </SimpleButton>
     </div>
   </div>

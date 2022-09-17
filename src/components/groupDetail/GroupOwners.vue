@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { MinusIcon, PlusIcon, ArrowPathIcon } from '@heroicons/vue/24/outline'
+import { MinusIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
 
 import { useUserStore } from '/@/stores/user'
@@ -44,9 +44,9 @@ const { absentOwners, isSending, addOwners, removeOwner } = useGroupOwner(
         <button
           v-if="hasAuthority"
           class="flex items-center"
+          :is-disabled="isSending"
           @click="removeOwner(owner, emit)">
-          <MinusIcon v-if="!isSending" class="w-6" />
-          <ArrowPathIcon v-else class="w-6 animate-spin" />
+          <MinusIcon class="w-6" />
         </button>
       </li>
     </ul>
@@ -64,8 +64,8 @@ const { absentOwners, isSending, addOwners, removeOwner } = useGroupOwner(
       <button
         class="flex items-center"
         @click="addOwners(OwnersToBeAdded, emit)">
-        <PlusIcon v-if="!isSending" class="ml-2 w-6" />
-        <ArrowPathIcon v-else class="ml-2 w-6 animate-spin" />
+        :is-disabled="isSending"
+        <PlusIcon class="ml-2 w-6" />
       </button>
     </div>
   </div>

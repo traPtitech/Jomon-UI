@@ -5,17 +5,20 @@ interface Props {
   kind?: 'plain' | 'danger'
   fontSize: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
   padding: 'sm' | 'md' | 'lg' | 'xl'
+  isDisabled?: boolean
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), { isDisabled: false })
 
 const kindClass = computed(() => {
   switch (props.kind) {
     case 'plain':
-      return 'hover:bg-gray-200 border-gray-300'
+      return `${!props.isDisabled && 'hover:bg-gray-200'} border-gray-300`
     case 'danger':
-      return 'hover:bg-red-300 bg-red-500 border-red-300 text-white'
+      return `${
+        !props.isDisabled && 'hover:bg-red-300'
+      } bg-red-500 border-red-300 text-white`
     default:
-      return 'hover:bg-gray-200 border-gray-300'
+      return `${!props.isDisabled && 'hover:bg-gray-200'} border-gray-300`
   }
 })
 const fontSizeClass = computed(() => {
@@ -41,7 +44,10 @@ const paddingClass = computed(() => {
 
 <template>
   <button
-    :class="`rounded-md border ${kindClass} ${fontSizeClass} ${paddingClass}`">
+    :class="`rounded-md border ${kindClass} ${fontSizeClass} ${paddingClass} ${
+      props.isDisabled ? 'cursor-not-allowed opacity-50' : ''
+    }`"
+    :disabled="props.isDisabled">
     <slot />
   </button>
 </template>

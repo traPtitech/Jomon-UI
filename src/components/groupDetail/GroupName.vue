@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ArrowPathIcon } from '@heroicons/vue/24/solid'
-
 import { useUserStore } from '/@/stores/user'
 
 import type { GroupDetail } from '/@/lib/apis'
@@ -51,22 +49,22 @@ const { isDeleting, deleteGroup } = useDeleteGroup()
     </SimpleButton>
     <SimpleButton
       v-else
-      :class="`ml-2 flex items-center ${props.isSending && 'px-3'}`"
+      class="ml-2 flex items-center"
       font-size="sm"
+      :is-disabled="props.isSending"
       padding="sm"
       @click.stop="emit('changeEditMode', '')">
-      <span v-if="!props.isSending">完了</span>
-      <ArrowPathIcon v-else class="w-5 animate-spin" />
+      完了
     </SimpleButton>
     <SimpleButton
       v-if="hasAuthority"
-      :class="`mx-2 flex items-center ${isDeleting && 'px-10'}`"
+      class="mx-2 flex items-center"
       font-size="sm"
+      :is-disabled="isDeleting"
       kind="danger"
       padding="sm"
       @click.stop="deleteGroup(props.group.id)">
-      <span v-if="!isDeleting">グループを削除</span>
-      <ArrowPathIcon v-else class="w-5 animate-spin" />
+      グループを削除
     </SimpleButton>
   </div>
 </template>

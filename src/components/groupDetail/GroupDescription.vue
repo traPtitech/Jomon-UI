@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { ArrowPathIcon } from '@heroicons/vue/24/solid'
-
 import { useUserStore } from '/@/stores/user'
 
 import type { GroupDetail } from '/@/lib/apis'
@@ -52,12 +50,12 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
       @input="emit('input', ($event.target as HTMLTextAreaElement).value)" />
     <div class="flex items-end">
       <SimpleButton
-        :class="`ml-2 flex items-center ${props.isSending && 'px-3'}`"
+        class="ml-2 flex items-center"
         font-size="sm"
+        :is-disabled="props.isSending"
         padding="sm"
         @click.stop="emit('changeEditMode', '')">
-        <span v-if="!props.isSending">完了</span>
-        <ArrowPathIcon v-else class="w-5 animate-spin" />
+        完了
       </SimpleButton>
     </div>
   </div>

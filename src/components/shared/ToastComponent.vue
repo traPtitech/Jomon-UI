@@ -1,34 +1,31 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 
-import type { ToastType } from './composables/useToast'
+import { useToastStore } from '/@/stores/toast'
 
-interface Props {
-  shouldShowToast: boolean
-  type: ToastType
-}
-
-const props = defineProps<Props>()
-const emit = defineEmits<{ (e: 'remove'): void }>()
+const toastStore = useToastStore()
 
 const backgroundColor = computed(() => {
-  switch (props.type) {
+  switch (toastStore.toastType) {
     case 'success':
       return 'bg-emerald-400'
     case 'error':
       return 'bg-red-400'
     default: {
-      const check: never = props.type
+      const check: never = toastStore.toastType
       throw new Error(`unexpected type: ${check}`)
     }
   }
 })
 
 watch(
-  () => props.shouldShowToast,
-  () => {
+  () => toastStore.shouldShowToast,
+  shouldShowToast => {
+    if (!shouldShowToast) {
+      return
+    }
     setTimeout(() => {
-      emit('remove')
+      toastStore.removeToast()
     }, 3000)
   }
 )
@@ -38,7 +35,7 @@ watch(
   <transition name="toast">
     <div
       :class="`top-17/20 left-4/5 absolute flex h-12 w-80 items-center justify-center rounded px-12 text-white opacity-90 ${backgroundColor}`">
-      <slot />
+      {{ toastStore.toastMessage }}
     </div>
   </transition>
 </template>

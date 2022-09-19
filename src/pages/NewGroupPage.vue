@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
+import { useToastStore } from '/@/stores/toast'
 import { useUserStore } from '/@/stores/user'
 
 import type { Group, PostGroup } from '/@/lib/apis'
@@ -10,22 +11,13 @@ import apis from '/@/lib/apis'
 
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
-import type { ToastType } from '/@/components/shared/composables/useToast'
-
-const emit = defineEmits<{
-  (
-    e: 'showToast',
-    arg: {
-      type: ToastType
-      message: string
-    }
-  ): void
-}>()
 
 const router = useRouter()
 
 const userStore = useUserStore()
 const groupStore = useGroupStore()
+
+const toastStore = useToastStore()
 
 const group = ref({
   name: '',
@@ -69,7 +61,7 @@ async function handlePostGroup(e: Event) {
       apis.postGroupMembers(res.id, group.value.members),
       apis.postGroupOwners(res.id, group.value.owners)
     ])
-    emit('showToast', {
+    toastStore.showToast({
       type: 'success',
       message: 'グループを作成しました'
     })

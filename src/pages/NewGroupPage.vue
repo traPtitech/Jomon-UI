@@ -10,12 +10,13 @@ import apis from '/@/lib/apis'
 
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
+import type { ToastType } from '/@/components/shared/composables/useToast'
 
 const emit = defineEmits<{
   (
     e: 'showToast',
     arg: {
-      type: 'success' | 'error'
+      type: ToastType
       message: string
     }
   ): void

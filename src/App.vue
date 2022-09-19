@@ -32,7 +32,8 @@ onMounted(async () => {
       </template>
     </router-view>
     <ToastComponent
-      v-if="shouldShowToast"
+      v-show="shouldShowToast"
+      :should-show-toast="shouldShowToast"
       :type="toastType"
       @remove="shouldShowToast = false">
       {{ toastMessage }}

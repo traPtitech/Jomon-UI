@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { onMounted, computed } from 'vue'
+import { computed, watch } from 'vue'
 
 import type { ToastType } from './composables/useToast'
 
 interface Props {
+  shouldShowToast: boolean
   type: ToastType
 }
 
@@ -23,16 +24,37 @@ const backgroundColor = computed(() => {
   }
 })
 
-onMounted(() => {
-  setTimeout(() => {
-    emit('remove')
-  }, 3000)
-})
+watch(
+  () => props.shouldShowToast,
+  () => {
+    setTimeout(() => {
+      emit('remove')
+    }, 3000)
+  }
+)
 </script>
 
 <template>
-  <div
-    :class="`top-17/20 left-4/5 absolute flex h-12 w-80 items-center justify-center rounded px-12 text-white opacity-90 ${backgroundColor}`">
-    <slot />
-  </div>
+  <transition name="toast">
+    <div
+      :class="`top-17/20 left-4/5 absolute flex h-12 w-80 items-center justify-center rounded px-12 text-white opacity-90 ${backgroundColor}`">
+      <slot />
+    </div>
+  </transition>
 </template>
+
+<style scoped>
+.toast-enter-active,
+.toast-leave-active {
+  transition: all 0.6s ease-in-out;
+}
+
+.toast-enter-from {
+  opacity: 0;
+  transform: translate(20px, 0);
+}
+.toast-leave-to {
+  opacity: 0;
+  transform: translate(0, 40px);
+}
+</style>

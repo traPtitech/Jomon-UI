@@ -2,6 +2,7 @@ import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 
 import { useAdminStore } from '/@/stores/admin'
+import { useToastStore } from '/@/stores/toast'
 import { useUserStore } from '/@/stores/user'
 
 import apis from '/@/lib/apis'
@@ -9,6 +10,7 @@ import apis from '/@/lib/apis'
 export const useAdmin = () => {
   const { users } = storeToRefs(useUserStore())
   const { admins } = storeToRefs(useAdminStore())
+  const toastStore = useToastStore()
 
   const absentMembers = computed(() => {
     if (users.value !== undefined && admins !== undefined) {
@@ -36,8 +38,11 @@ export const useAdmin = () => {
       } else {
         admins.value = adminsToBeAdded
       }
-    } catch (err) {
-      alert(err)
+    } catch {
+      toastStore.showToast({
+        type: 'error',
+        message: '管理者の追加に失敗しました'
+      })
     } finally {
       isSending.value = false
     }
@@ -60,8 +65,11 @@ export const useAdmin = () => {
       } else {
         throw new Error('admins is empty')
       }
-    } catch (err) {
-      alert(err)
+    } catch {
+      toastStore.showToast({
+        type: 'error',
+        message: '管理者の削除に失敗しました'
+      })
     } finally {
       isSending.value = false
     }

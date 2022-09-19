@@ -63,8 +63,8 @@ const { absentOwners, isSending, addOwners, removeOwner } = useGroupOwner(
         :reduce="(user:any) => user.name" />
       <button
         class="flex items-center"
-        @click="addOwners(OwnersToBeAdded, emit)">
         :is-disabled="isSending"
+        @click="addOwners(OwnersToBeAdded, emit)">
         <PlusIcon class="ml-2 w-6" />
       </button>
     </div>

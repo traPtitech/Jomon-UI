@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
+import { useToastStore } from '/@/stores/toast'
 import { useUserStore } from '/@/stores/user'
 
 import apis from '/@/lib/apis'
@@ -16,14 +17,18 @@ const route = useRoute()
 const id = toId(route.params.id)
 
 const userStore = useUserStore()
+const toastStore = useToastStore()
 
 const group = ref<GroupDetail>()
 
 const fetchGroup = async (id: string) => {
   try {
     group.value = (await apis.getGroupDetail(id)).data
-  } catch (err) {
-    alert(err)
+  } catch {
+    toastStore.showToast({
+      type: 'error',
+      message: 'グループの取得に失敗しました'
+    })
   }
 }
 

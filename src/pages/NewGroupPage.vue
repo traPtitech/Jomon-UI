@@ -36,8 +36,11 @@ const postGroup = async (group: PostGroup) => {
       groupStore.groups = [res]
     }
     return res
-  } catch (err) {
-    alert(err)
+  } catch {
+    toastStore.showToast({
+      type: 'error',
+      message: 'グループの作成に失敗しました'
+    })
   }
 }
 
@@ -66,8 +69,8 @@ async function handlePostGroup(e: Event) {
       message: 'グループを作成しました'
     })
     router.push(`/groups/${res.id}`)
-  } catch (err) {
-    alert(err)
+  } catch {
+    throw new Error('グループの作成に失敗しました')
   }
 }
 

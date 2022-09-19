@@ -46,8 +46,8 @@ if (userStore.me && userStore.me.admin) {
     <div class="mt-4 flex gap-4">
       <VueSelect
         v-model="addList"
-        :close-on-select="false"
         class="w-1/2"
+        :close-on-select="false"
         label="name"
         multiple
         :options="absentMembers"
@@ -66,8 +66,8 @@ if (userStore.me && userStore.me.admin) {
       <VueSelect
         v-model="removeList"
         class="w-1/2"
-        multiple
         :close-on-select="false"
+        multiple
         :options="adminStore.admins"
         placeholder="削除する管理者を選択" />
       <SimpleButton

@@ -11,8 +11,7 @@ import { computed } from 'vue'
 import type { RequestStatusEnum } from '/@/lib/apis'
 
 export type RequestStatus =
-  | typeof RequestStatusEnum[keyof typeof RequestStatusEnum]
-  | ''
+  typeof RequestStatusEnum[keyof typeof RequestStatusEnum]
 
 interface Props {
   status: RequestStatus

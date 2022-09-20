@@ -55,7 +55,7 @@ function changeCurrentTab(tab: TabType) {
         :options="templates"
         placeholder="テンプレートを選択"
         :reduce="(template:any) => template.name"
-        @close="setTemplate(selectedTemplate)">
+        @option:selected="setTemplate(selectedTemplate)">
       </vue-select>
     </div>
     <div>

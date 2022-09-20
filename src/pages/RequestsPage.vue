@@ -64,9 +64,12 @@ watch(
   </div>
   <request-filtering-menu />
   <div class="min-h-120">
-    <div class="mx-auto mt-4 w-3/4 shadow">
+    <div class="mx-auto mt-4 w-3/4 rounded-xl shadow">
       <ul>
-        <li v-for="request in sliceRequestsAt(page, 7)" :key="request.id">
+        <li
+          v-for="request in sliceRequestsAt(page, 7)"
+          :key="request.id"
+          class="hover:bg-zinc-100 first:hover:rounded-t-xl last:hover:rounded-b-xl">
           <request-item :request="request" />
         </li>
       </ul>

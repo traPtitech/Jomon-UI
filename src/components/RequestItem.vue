@@ -14,25 +14,23 @@ const formattedDate = formatDate(props.request.created_at)
 </script>
 
 <template>
-  <router-link :to="'/requests/' + request.id">
-    <div class="flex p-1 hover:bg-zinc-100">
-      <div class="mx-2 flex items-center justify-center">
-        <status-chip :status="request.status" />
+  <router-link class="flex p-2" :to="'/requests/' + request.id">
+    <div class="mx-2 flex items-center justify-center">
+      <status-chip :status="request.status" />
+    </div>
+    <div class="flex-grow">
+      <span class="text-xl">{{ request.title }}</span>
+      <div class="mt-2">
+        <tag-group :tags="request.tags" />
       </div>
-      <div class="flex-grow">
-        <span class="text-xl">{{ request.title }}</span>
-        <div class="mt-2">
-          <tag-group :tags="request.tags" />
-        </div>
+    </div>
+    <div>
+      <div class="flex gap-4">
+        <span>グループ：{{ request.group.name }}</span>
+        <span>申請者：{{ request.created_by }}</span>
+        <span> 申請日：{{ formattedDate }} </span>
       </div>
-      <div>
-        <div class="flex gap-4">
-          <span>グループ：{{ request.group.name }}</span>
-          <span>申請者：{{ request.created_by }}</span>
-          <span> 申請日：{{ formattedDate }} </span>
-        </div>
-        <div class="text-right text-3xl">{{ request.amount }}円</div>
-      </div>
+      <div class="text-right text-3xl">{{ request.amount }}円</div>
     </div>
   </router-link>
 </template>

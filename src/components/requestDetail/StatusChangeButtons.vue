@@ -21,7 +21,7 @@ const emit = defineEmits<{
 
 const userStore = useUserStore()
 
-const nextStatus = ref<RequestStatus>('')
+const nextStatus = ref<RequestStatus>()
 const hasCreaterAuthority = isCreater(userStore.me, props.request.created_by)
 const hasAdminAuthority = isAdmin(userStore.me)
 const { shouldShowModal, openModal, closeModal } = useModal()
@@ -80,6 +80,7 @@ function handleOpenModal(status: RequestStatus) {
   </div>
   <modal-wrapper v-if="shouldShowModal" @close-modal="closeModal">
     <status-change-modal
+      v-if="nextStatus"
       :next-status="nextStatus"
       :request="props.request"
       @close-modal="closeModal"

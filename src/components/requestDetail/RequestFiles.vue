@@ -50,7 +50,7 @@ async function removeFile(id: string) {
           <document-icon v-else class="h-32" />
           <!--画像の色によっては見えづらい(新規作成画面も)-->
           <button
-            class="absolute top-0 right-0 h-6 w-6"
+            class="absolute top-0 right-0 h-8 w-8"
             @click="removeFile(file.id)">
             <x-circle-icon />
           </button>

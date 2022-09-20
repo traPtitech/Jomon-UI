@@ -34,7 +34,7 @@ const hasAuthority = isCreater(userStore.me, props.request.created_by)
   <div v-else class="flex items-center">
     金額：
     <input
-      class="w-24 p-1"
+      class="mr-1 w-24 p-1"
       placeholder="金額"
       type="text"
       :value="props.value"

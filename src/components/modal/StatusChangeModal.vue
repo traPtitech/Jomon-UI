@@ -46,12 +46,12 @@ async function putStatus(nextStatus: RequestStatus | '', comment: string) {
   <div
     className="h-1/2 w-1/2 absolute inset-0 my-auto mx-auto bg-white p-4 overflow-y-scroll shadow-lg">
     <h1 class="text-center text-3xl">申請の状態変更</h1>
-    <div class="mx-12 mt-8 flex h-4/5 flex-col justify-around gap-4">
+    <div class="mx-12 mt-8 flex flex-col justify-around gap-4">
       <div class="flex items-center">
         申請の状態を
-        <status-chip has-text :status="props.request.status" />
+        <status-chip class="mx-1" has-text :status="props.request.status" />
         から
-        <status-chip has-text :status="nextStatus" />
+        <status-chip class="mx-1" has-text :status="nextStatus" />
         へ変更します
       </div>
       <markdown-textarea

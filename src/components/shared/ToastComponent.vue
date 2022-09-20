@@ -34,7 +34,7 @@ watch(
 <template>
   <transition name="toast">
     <div
-      :class="`top-17/20 left-4/5 absolute flex h-12 w-80 items-center justify-center rounded px-12 text-white opacity-90 ${backgroundColor}`">
+      :class="`top-9/10 absolute left-4 flex h-12 w-80 items-center justify-center rounded px-12 text-white opacity-90 ${backgroundColor}`">
       {{ toastStore.toastMessage }}
     </div>
   </transition>
@@ -48,7 +48,7 @@ watch(
 
 .toast-enter-from {
   opacity: 0;
-  transform: translate(20px, 0);
+  transform: translate(-20px, 0);
 }
 .toast-leave-to {
   opacity: 0;

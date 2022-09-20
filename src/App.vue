@@ -34,5 +34,4 @@ onMounted(async () => {
     </router-view>
     <ToastComponent v-show="toastStore.shouldShowToast" />
   </main>
-  {{ toastStore.shouldShowToast }}
 </template>

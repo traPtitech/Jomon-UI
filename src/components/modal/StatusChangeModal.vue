@@ -43,11 +43,10 @@ async function putStatus(nextStatus: RequestStatus | '', comment: string) {
 </script>
 
 <template>
-  <div
-    className="h-1/2 w-1/2 absolute inset-0 my-auto mx-auto bg-white p-4 overflow-y-scroll shadow-lg">
+  <div class="absolute inset-0 m-auto h-3/5 w-1/2 bg-white p-4 shadow-lg">
     <h1 class="text-center text-3xl">申請の状態変更</h1>
     <div class="mx-12 mt-8 flex flex-col justify-around gap-4">
-      <div class="flex items-center">
+      <div class="mb-4 flex items-center">
         申請の状態を
         <status-chip class="mx-1" has-text :status="props.request.status" />
         から
@@ -58,7 +57,7 @@ async function putStatus(nextStatus: RequestStatus | '', comment: string) {
         placeholder="コメント"
         :value="comment"
         @input="comment = $event" />
-      <div class="mt-8 text-center">
+      <div class="mt-4 text-center">
         <simple-button
           class="mb-4 w-60"
           font-size="xl"

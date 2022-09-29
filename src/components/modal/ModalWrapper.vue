@@ -5,9 +5,11 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div
-    className="z-10 fixed top-0 left-0 h-full w-full bg-gray-300/50"
-    @click.self="emit('closeModal')">
-    <slot />
-  </div>
+  <teleport to="body">
+    <div
+      className="z-10 fixed top-0 left-0 h-full w-full bg-gray-300/50"
+      @click.self="emit('closeModal')">
+      <slot />
+    </div>
+  </teleport>
 </template>

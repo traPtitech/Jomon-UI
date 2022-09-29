@@ -12,7 +12,16 @@ const props = withDefaults(defineProps<Props>(), {
 })
 const emit = defineEmits<{
   (e: 'input', value: string): void
+  (e: 'update:modelValue', modelValue: string): void
 }>()
+
+function handleInput(value: string) {
+  if (props.value) {
+    emit('input', value)
+  } else {
+    emit('update:modelValue', value)
+  }
+}
 </script>
 
 <template>
@@ -23,5 +32,5 @@ const emit = defineEmits<{
     :required="props.required"
     type="number"
     :value="props.modelValue"
-    @input="emit('input', ($event.target as HTMLInputElement).value)" />
+    @input="handleInput(($event.target as HTMLInputElement).value)" />
 </template>

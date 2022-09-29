@@ -9,7 +9,16 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), { required: false })
 const emit = defineEmits<{
   (e: 'input', value: string): void
+  (e: 'update:modelValue', modelValue: string): void
 }>()
+
+function handleInput(value: string) {
+  if (props.value) {
+    emit('input', value)
+  } else {
+    emit('update:modelValue', value)
+  }
+}
 </script>
 
 <template>
@@ -18,5 +27,5 @@ const emit = defineEmits<{
     :placeholder="props.placeholder"
     :required="required"
     :value="props.value ?? props.modelValue"
-    @input="emit('input', ($event.target as HTMLTextAreaElement).value)" />
+    @input="handleInput(($event.target as HTMLTextAreaElement).value)" />
 </template>

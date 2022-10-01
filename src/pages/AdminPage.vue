@@ -26,6 +26,23 @@ onMounted(() => {
   }
 })
 
+const addAdmins = async () => {
+  if (addList.value.length === 0) {
+    alert('1人以上選択して下さい')
+    return
+  }
+  try {
+    await apis.postAdmins(addList.value)
+    if (adminStore.admins) {
+      adminStore.admins.push(...addList.value)
+    } else {
+      adminStore.admins = addList.value
+    }
+  } catch (err) {
+    alert(err)
+  }
+}
+
 const deleteAdmins = async () => {
   if (deleteList.value.length === 0) {
     alert('1人以上選択して下さい')
@@ -36,22 +53,6 @@ const deleteAdmins = async () => {
     adminStore.admins = adminStore.admins?.filter(
       id => !deleteList.value.includes(id)
     )
-  } catch (err) {
-    alert(err)
-  }
-}
-const addAdmins = async () => {
-  if (addList.value.length === 0) {
-    alert('1人以上選択して下さい')
-    return
-  }
-  try {
-    const res = (await apis.postAdmins(addList.value)).data
-    if (adminStore.admins) {
-      adminStore.admins.push(...res)
-    } else {
-      adminStore.admins = [res]
-    }
   } catch (err) {
     alert(err)
   }

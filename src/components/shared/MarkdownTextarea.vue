@@ -9,7 +9,7 @@ type TabType = 'input' | 'preview'
 interface Props {
   placeholder?: string
   value: string
-  templates?: { name: string; value: string }[]
+  templates?: readonly { name: string; value: string }[]
 }
 
 const props = withDefaults(defineProps<Props>(), { placeholder: '' })

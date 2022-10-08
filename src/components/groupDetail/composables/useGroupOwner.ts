@@ -10,11 +10,18 @@ export const useGroupOwner = (group: GroupDetail) => {
   const { users } = useUserStore()
   const toastStore = useToastStore()
 
-  const absentOwners = computed(() => {
+  const absentOwnersOption = computed(() => {
     if (users === undefined) {
       return []
     }
-    return users.filter(member => !group.owners.includes(member.name))
+    return users
+      .filter(user => !group.owners.includes(user.name))
+      .map(user => {
+        return {
+          key: user.name,
+          value: user.name
+        }
+      })
   })
 
   const isSending = ref(false)
@@ -64,5 +71,5 @@ export const useGroupOwner = (group: GroupDetail) => {
       isSending.value = false
     }
   }
-  return { absentOwners, isSending, addOwners, removeOwner }
+  return { absentOwnersOption, isSending, addOwners, removeOwner }
 }

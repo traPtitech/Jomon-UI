@@ -6,6 +6,7 @@ import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 
 import { useDeleteGroup } from '/@/components/groupDetail/composables/useDeleteGroup'
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
+import FormInput from '/@/components/shared/FormInput.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 interface Props {
@@ -32,13 +33,12 @@ const { isDeleting, deleteGroup } = useDeleteGroup()
     <h1 v-if="!isEditMode" class="flex-grow text-3xl">
       {{ props.group.name }}
     </h1>
-    <input
+    <FormInput
       v-else
-      class="flex-grow rounded p-1"
+      class="flex-grow"
       placeholder="グループ名"
-      type="text"
       :value="props.value"
-      @input="emit('input', ($event.target as HTMLInputElement).value)" />
+      @input="emit('input', $event)" />
     <SimpleButton
       v-if="hasAuthority && !isEditMode"
       class="ml-2"

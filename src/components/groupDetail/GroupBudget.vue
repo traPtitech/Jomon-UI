@@ -6,8 +6,8 @@ import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import FixButton from '/@/components/shared/FixButton.vue'
+import FormInput from '/@/components/shared/FormInput.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import FormInput from '/@/shared/FormInput.vue'
 
 interface Props {
   group: GroupDetail

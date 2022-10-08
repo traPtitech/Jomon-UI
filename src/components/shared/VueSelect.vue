@@ -22,8 +22,8 @@ import 'vue-select/dist/vue-select.css'
 </template>
 
 <style>
-.v-select .vs__selected {
+.vs--multiple .vs__selected {
   background-color: #e5e7eb; /*gray-200*/
-  border-color: #d1d5db;
+  border: none;
 }
 </style>

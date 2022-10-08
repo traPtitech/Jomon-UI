@@ -1,11 +1,15 @@
 import { ref } from 'vue'
 
+import { useToastStore } from '/@/stores/toast'
+
 import type { GroupDetail, PostGroup } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export type EditMode = 'name' | 'description' | 'budget' | ''
 
 export const useGroupInformation = (group: GroupDetail) => {
+  const toastStore = useToastStore()
+
   const isSending = ref(false)
 
   const editMode = ref<EditMode>('')
@@ -51,8 +55,11 @@ export const useGroupInformation = (group: GroupDetail) => {
         description: nextGroup.description,
         budget: nextGroup.budget.toString()
       }
-    } catch (err) {
-      alert(err)
+    } catch {
+      toastStore.showToast({
+        type: 'error',
+        message: 'グループの更新に失敗しました'
+      })
     } finally {
       isSending.value = false
     }

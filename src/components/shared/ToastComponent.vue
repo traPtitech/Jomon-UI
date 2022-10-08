@@ -1,38 +1,57 @@
 <script setup lang="ts">
-import { onMounted, computed } from 'vue'
+import { computed, watch } from 'vue'
 
-import type { ToastType } from './composables/useToast'
+import { useToastStore } from '/@/stores/toast'
 
-interface Props {
-  type: ToastType
-}
-
-const props = defineProps<Props>()
-const emit = defineEmits<{ (e: 'remove'): void }>()
+const toastStore = useToastStore()
 
 const backgroundColor = computed(() => {
-  switch (props.type) {
+  switch (toastStore.toastType) {
     case 'success':
       return 'bg-emerald-400'
     case 'error':
       return 'bg-red-400'
     default: {
-      const check: never = props.type
+      const check: never = toastStore.toastType
       throw new Error(`unexpected type: ${check}`)
     }
   }
 })
 
-onMounted(() => {
-  setTimeout(() => {
-    emit('remove')
-  }, 3000)
-})
+watch(
+  () => toastStore.shouldShowToast,
+  shouldShowToast => {
+    if (!shouldShowToast) {
+      return
+    }
+    setTimeout(() => {
+      toastStore.removeToast()
+    }, 3000)
+  }
+)
 </script>
 
 <template>
-  <div
-    :class="`top-17/20 left-4/5 absolute flex h-12 w-80 items-center justify-center rounded px-12 text-white opacity-90 ${backgroundColor}`">
-    <slot />
-  </div>
+  <transition name="toast">
+    <div
+      :class="`top-9/10 absolute left-4 flex h-12 w-80 items-center justify-center rounded px-12 text-white opacity-90 ${backgroundColor}`">
+      {{ toastStore.toastMessage }}
+    </div>
+  </transition>
 </template>
+
+<style scoped>
+.toast-enter-active,
+.toast-leave-active {
+  transition: all 0.6s ease-in-out;
+}
+
+.toast-enter-from {
+  opacity: 0;
+  transform: translate(-20px, 0);
+}
+.toast-leave-to {
+  opacity: 0;
+  transform: translate(0, 40px);
+}
+</style>

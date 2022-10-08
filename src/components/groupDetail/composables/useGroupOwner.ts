@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue'
 
+import { useToastStore } from '/@/stores/toast'
 import { useUserStore } from '/@/stores/user'
 
 import type { GroupDetail } from '/@/lib/apis'
@@ -7,6 +8,7 @@ import apis from '/@/lib/apis'
 
 export const useGroupOwner = (group: GroupDetail) => {
   const { users } = useUserStore()
+  const toastStore = useToastStore()
 
   const absentOwnersOption = computed(() => {
     if (users === undefined) {
@@ -39,8 +41,11 @@ export const useGroupOwner = (group: GroupDetail) => {
         owners: [...group.owners, ...ownersToBeAdded]
       }
       emit('fixGroup', nextGroup)
-    } catch (err) {
-      alert(err)
+    } catch {
+      toastStore.showToast({
+        type: 'error',
+        message: 'グループオーナーの追加に失敗しました'
+      })
     } finally {
       isSending.value = false
     }
@@ -57,8 +62,11 @@ export const useGroupOwner = (group: GroupDetail) => {
         owners: group.owners.filter(owner => owner !== id)
       }
       emit('fixGroup', nextGroup)
-    } catch (err) {
-      alert(err)
+    } catch {
+      toastStore.showToast({
+        type: 'error',
+        message: 'グループオーナーの削除に失敗しました'
+      })
     } finally {
       isSending.value = false
     }

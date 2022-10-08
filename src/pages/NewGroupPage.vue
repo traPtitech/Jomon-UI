@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
+import { useToastStore } from '/@/stores/toast'
 import { useUserStore } from '/@/stores/user'
 
 import type { Group, PostGroup } from '/@/lib/apis'
@@ -14,20 +15,12 @@ import FormSelect from '/@/components/shared/FormSelect.vue'
 import FormTextarea from '/@/components/shared/FormTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
-const emit = defineEmits<{
-  (
-    e: 'showToast',
-    arg: {
-      type: 'success' | 'error'
-      message: string
-    }
-  ): void
-}>()
-
 const router = useRouter()
 
 const userStore = useUserStore()
 const groupStore = useGroupStore()
+
+const toastStore = useToastStore()
 
 const group = ref({
   name: '',
@@ -56,8 +49,11 @@ const postGroup = async (group: PostGroup) => {
       groupStore.groups = [res]
     }
     return res
-  } catch (err) {
-    alert(err)
+  } catch {
+    toastStore.showToast({
+      type: 'error',
+      message: 'グループの作成に失敗しました'
+    })
   }
 }
 
@@ -81,13 +77,13 @@ async function handlePostGroup(e: Event) {
       apis.postGroupMembers(res.id, group.value.members),
       apis.postGroupOwners(res.id, group.value.owners)
     ])
-    emit('showToast', {
+    toastStore.showToast({
       type: 'success',
       message: 'グループを作成しました'
     })
     router.push(`/groups/${res.id}`)
-  } catch (err) {
-    alert(err)
+  } catch {
+    throw new Error('グループの作成に失敗しました')
   }
 }
 

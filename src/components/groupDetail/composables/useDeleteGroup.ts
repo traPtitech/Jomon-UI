@@ -2,6 +2,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
+import { useToastStore } from '/@/stores/toast'
 
 import apis from '/@/lib/apis'
 
@@ -9,6 +10,7 @@ export const useDeleteGroup = () => {
   const router = useRouter()
 
   const groupStore = useGroupStore()
+  const toastStore = useToastStore()
 
   const isDeleting = ref(false)
 
@@ -25,8 +27,11 @@ export const useDeleteGroup = () => {
       } else {
         throw new Error('group does not exist')
       }
-    } catch (err) {
-      alert(err)
+    } catch {
+      toastStore.showToast({
+        type: 'error',
+        message: 'グループの削除に失敗しました'
+      })
     } finally {
       isDeleting.value = false
     }

@@ -1,9 +1,13 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
+import { useToastStore } from '/@/stores/toast'
+
 import apis from '/@/lib/apis'
 
 export const useAdminStore = defineStore('admin', () => {
+  const toastStore = useToastStore()
+
   const admins = ref<string[]>()
   const isAdminFetched = ref(false)
 
@@ -11,8 +15,11 @@ export const useAdminStore = defineStore('admin', () => {
     try {
       admins.value = (await apis.getAdmins()).data
       isAdminFetched.value = true
-    } catch (err) {
-      alert(err)
+    } catch {
+      toastStore.showToast({
+        type: 'error',
+        message: '管理者の取得に失敗しました'
+      })
     }
   }
   return {

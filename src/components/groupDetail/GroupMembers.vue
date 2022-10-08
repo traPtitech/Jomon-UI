@@ -52,7 +52,7 @@ const { absentMembersOption, isSending, addMembers, removeMember } =
     <div v-if="hasAuthority" class="flex p-2">
       <FormSelect
         v-model="MembersToBeAdded"
-        class="flex-grow"
+        class="mr-2 flex-grow"
         is-multiple
         :options="absentMembersOption"
         placeholder="追加するメンバーを選択" />
@@ -60,7 +60,7 @@ const { absentMembersOption, isSending, addMembers, removeMember } =
         class="flex items-center"
         :is-disabled="isSending"
         @click="addMembers(MembersToBeAdded, emit)">
-        <PlusIcon class="ml-2 w-6" />
+        <PlusIcon class="w-6" />
       </button>
     </div>
   </div>

@@ -54,7 +54,7 @@ const { absentOwnersOption, isSending, addOwners, removeOwner } = useGroupOwner(
       <!--todo:https://vue-select.org/guide/positioning.html#default-->
       <FormSelect
         v-model="OwnersToBeAdded"
-        class="flex-grow"
+        class="mr-2 flex-grow"
         is-multiple
         :options="absentOwnersOption"
         placeholder="追加するオーナーを選択" />
@@ -62,7 +62,7 @@ const { absentOwnersOption, isSending, addOwners, removeOwner } = useGroupOwner(
         class="flex items-center"
         :is-disabled="isSending"
         @click="addOwners(OwnersToBeAdded, emit)">
-        <PlusIcon class="ml-2 w-6" />
+        <PlusIcon class="w-6" />
       </button>
     </div>
   </div>

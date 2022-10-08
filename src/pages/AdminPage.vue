@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import { useAdminStore } from '/@/stores/admin'
 import { useUserStore } from '/@/stores/user'
 
 import { isAdmin } from '/@/lib/authorityCheck'
 
+import FormSelect from '/@/components/shared/FormSelect.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
-import FormSelect from '../components/shared/FormSelect.vue'
 import { useAdmin } from './composables/useAdmin'
 
 const adminStore = useAdminStore()
@@ -18,6 +18,17 @@ const addList = ref<string[]>([])
 const removeList = ref<string[]>([])
 const hasAuthority = isAdmin(userStore.me)
 const { absentMembers, isSending, addAdmins, removeAdmins } = useAdmin()
+
+const adminsOption = computed(() => {
+  return (
+    adminStore.admins?.map(admin => {
+      return {
+        key: admin,
+        value: admin
+      }
+    }) ?? []
+  )
+})
 
 if (userStore.me && userStore.me.admin) {
   if (!adminStore.isAdminFetched) {
@@ -47,11 +58,9 @@ if (userStore.me && userStore.me.admin) {
       <FormSelect
         v-model="addList"
         class="w-1/2"
-        label="name"
-        multiple
+        is-multiple
         :options="absentMembers"
-        placeholder="追加する管理者を選択"
-        :reduce="(user:any) => user.name" />
+        placeholder="追加する管理者を選択" />
       <SimpleButton
         class="flex items-center"
         font-size="lg"
@@ -65,8 +74,8 @@ if (userStore.me && userStore.me.admin) {
       <FormSelect
         v-model="removeList"
         class="w-1/2"
-        multiple
-        :options="adminStore.admins"
+        is-multiple
+        :options="adminsOption"
         placeholder="削除する管理者を選択" />
       <SimpleButton
         class="flex items-center"

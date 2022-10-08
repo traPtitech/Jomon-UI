@@ -12,7 +12,14 @@ export const useAdmin = () => {
 
   const absentMembers = computed(() => {
     if (users.value !== undefined && admins !== undefined) {
-      return users.value.filter(member => !admins.value?.includes(member.name)) //assertionしないでどうにかしたい
+      return users.value
+        .filter(user => !admins.value?.includes(user.name))
+        .map(user => {
+          return {
+            key: user.name,
+            value: user.name
+          }
+        })
     } else {
       return []
     }

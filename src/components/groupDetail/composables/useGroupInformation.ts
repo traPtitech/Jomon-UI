@@ -40,8 +40,9 @@ export const useGroupInformation = (group: GroupDetail) => {
     willPutGroup: PostGroup,
     emit: (e: 'fixGroup', value: GroupDetail) => void
   ) => {
+    isSending.value = true //挙動怪しい
+
     try {
-      isSending.value = true
       const res = (await apis.putGroupDetail(id, willPutGroup)).data
       const nextGroup: GroupDetail = {
         ...group,
@@ -60,8 +61,13 @@ export const useGroupInformation = (group: GroupDetail) => {
         type: 'error',
         message: 'グループの更新に失敗しました'
       })
+      editedValue.value = {
+        name: group.name,
+        description: group.description,
+        budget: group.budget.toString()
+      }
     } finally {
-      isSending.value = false
+      //isSending.value = false
     }
   }
   return { isSending, editMode, editedValue, changeEditMode }

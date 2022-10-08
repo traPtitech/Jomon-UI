@@ -14,6 +14,9 @@ export default defineConfig({
         primary: colors.dark[500],
         secondary: colors.gray[400],
         background: colors.zinc[50]
+      },
+      width: {
+        fit: 'fit-content'
       }
     }
   }

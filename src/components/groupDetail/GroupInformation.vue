@@ -51,7 +51,7 @@ const { isSending, editMode, editedValue, changeEditMode } =
         @change-edit-mode="changeEditMode($event, emit)"
         @input="editedValue.budget = $event" />
     </div>
-    <div class="mt-2">
+    <div class="mt-2 w-fit">
       <router-link
         class="flex items-center"
         :to="`/transactions?group=${props.group.id}`">

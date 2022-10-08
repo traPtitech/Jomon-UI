@@ -11,15 +11,15 @@ const props = withDefaults(defineProps<Props>(), {
   required: false
 })
 const emit = defineEmits<{
-  (e: 'input', value: string): void
-  (e: 'update:modelValue', modelValue: string): void
+  (e: 'input', value: number): void
+  (e: 'update:modelValue', modelValue: number): void
 }>()
 
 function handleInput(value: string) {
   if (props.value) {
-    emit('input', value)
+    emit('input', Number(value))
   } else {
-    emit('update:modelValue', value)
+    emit('update:modelValue', Number(value))
   }
 }
 </script>

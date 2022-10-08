@@ -6,8 +6,9 @@ import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import FixButton from '/@/components/shared/FixButton.vue'
-import InputForm from '/@/components/shared/InputForm.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+
+import FormInput from '../shared/FormInput.vue'
 
 interface Props {
   group: GroupDetail
@@ -37,7 +38,7 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
   </div>
   <div v-else class="flex items-center">
     予算：
-    <InputForm
+    <FormInput
       class="mr-1 w-24"
       placeholder="金額"
       :value="props.value"

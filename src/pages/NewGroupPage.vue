@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
@@ -8,11 +8,11 @@ import { useUserStore } from '/@/stores/user'
 import type { Group, PostGroup } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
-import InputForm from '/@/components/shared/InputForm.vue'
-import NumberInputForm from '/@/components/shared/NumberInputForm.vue'
+import FormInput from '/@/components/shared/FormInput.vue'
+import FormInputNumber from '/@/components/shared/FormInputNumber.vue'
+import FormSelect from '/@/components/shared/FormSelect.vue'
+import FormTextarea from '/@/components/shared/FormTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import TextareaForm from '/@/components/shared/TextareaForm.vue'
-import VueSelect from '/@/components/shared/VueSelect.vue'
 
 const emit = defineEmits<{
   (
@@ -35,6 +35,16 @@ const group = ref({
   budget: 0,
   owners: userStore.me?.name ? [userStore.me.name] : [],
   members: []
+})
+const membersOption = computed(() => {
+  return (
+    userStore.users?.map(user => {
+      return {
+        key: user.name,
+        value: user.name
+      }
+    }) ?? []
+  )
 })
 
 const postGroup = async (group: PostGroup) => {
@@ -86,7 +96,6 @@ if (!userStore.isUserFetched) {
 }
 </script>
 
-<!-- TODO: inputのon-focus -->
 <template>
   <div class="min-w-160 mx-auto flex w-2/3 flex-col">
     <div class="py-8">
@@ -95,44 +104,37 @@ if (!userStore.isUserFetched) {
     <form class="flex flex-col gap-2" @submit="handlePostGroup">
       <div class="flex flex-col">
         <label>グループ名</label>
-        <InputForm v-model="group.name" required />
+        <FormInput v-model="group.name" required />
       </div>
       <div class="flex flex-col">
         <label>詳細</label>
-        <TextareaForm v-model="group.description" required />
+        <FormTextarea v-model="group.description" required />
       </div>
       <div class="flex flex-col">
         <label>予算</label>
         <div>
-          <NumberInputForm
+          <FormInputNumber
             v-model="group.budget"
             class="mr-1 w-2/5"
             :min="1"
-            required
-            type="number" />円
+            required />円
         </div>
       </div>
       <div class="flex flex-col">
         <label>オーナー</label>
-        <VueSelect
+        <FormSelect
           v-model="group.owners"
-          :close-on-select="false"
-          label="name"
-          multiple
-          :options="userStore.users"
-          placeholder="追加するオーナーを選択"
-          :reduce="(user:any) => user.name" />
+          is-multiple
+          :options="membersOption"
+          placeholder="追加するオーナーを選択" />
       </div>
       <div class="flex flex-col">
         <label>メンバー</label>
-        <VueSelect
+        <FormSelect
           v-model="group.members"
-          :close-on-select="false"
-          label="name"
-          multiple
-          :options="userStore.users"
-          placeholder="追加するメンバーを選択"
-          :reduce="(user:any) => user.name" />
+          is-multiple
+          :options="membersOption"
+          placeholder="追加するメンバーを選択" />
       </div>
       <div>
         <SimpleButton class="ml-auto mt-8 block" font-size="xl" padding="md">

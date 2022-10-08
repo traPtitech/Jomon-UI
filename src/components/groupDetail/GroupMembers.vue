@@ -7,8 +7,8 @@ import { useUserStore } from '/@/stores/user'
 import type { GroupDetail } from '/@/lib/apis'
 import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 
+import FormSelect from '/@/components/shared/FormSelect.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
-import VueSelect from '/@/components/shared/VueSelect.vue'
 
 import { useGroupMember } from './composables/useGroupMember'
 
@@ -23,9 +23,8 @@ const userStore = useUserStore()
 
 const MembersToBeAdded = ref<string[]>([])
 const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
-const { absentMembers, isSending, addMembers, removeMember } = useGroupMember(
-  props.group
-)
+const { absentMembersOption, isSending, addMembers, removeMember } =
+  useGroupMember(props.group)
 </script>
 
 <template>
@@ -51,15 +50,12 @@ const { absentMembers, isSending, addMembers, removeMember } = useGroupMember(
       </li>
     </ul>
     <div v-if="hasAuthority" class="flex p-2">
-      <VueSelect
+      <FormSelect
         v-model="MembersToBeAdded"
         class="flex-grow"
-        :close-on-select="false"
-        label="name"
-        multiple
-        :options="absentMembers"
-        placeholder="追加するメンバーを選択"
-        :reduce="(user:any) => user.name" />
+        is-multiple
+        :options="absentMembersOption"
+        placeholder="追加するメンバーを選択" />
       <button
         class="flex items-center"
         :is-disabled="isSending"

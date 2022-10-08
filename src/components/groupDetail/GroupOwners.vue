@@ -7,8 +7,8 @@ import { useUserStore } from '/@/stores/user'
 import type { GroupDetail } from '/@/lib/apis'
 import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 
+import FormSelect from '/@/components/shared/FormSelect.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
-import VueSelect from '/@/components/shared/VueSelect.vue'
 
 import { useGroupOwner } from './composables/useGroupOwner'
 
@@ -23,7 +23,7 @@ const userStore = useUserStore()
 
 const OwnersToBeAdded = ref<string[]>([])
 const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
-const { absentOwners, isSending, addOwners, removeOwner } = useGroupOwner(
+const { absentOwnersOption, isSending, addOwners, removeOwner } = useGroupOwner(
   props.group
 )
 </script>
@@ -52,19 +52,16 @@ const { absentOwners, isSending, addOwners, removeOwner } = useGroupOwner(
     </ul>
     <div v-if="hasAuthority" class="flex p-2">
       <!--todo:https://vue-select.org/guide/positioning.html#default-->
-      <VueSelect
+      <FormSelect
         v-model="OwnersToBeAdded"
         class="flex-grow"
-        :close-on-select="false"
-        label="name"
-        multiple
-        :options="absentOwners"
-        placeholder="追加するオーナーを選択"
-        :reduce="(user:any) => user.name" />
+        is-multiple
+        :options="absentOwnersOption"
+        placeholder="追加するオーナーを選択" />
       <button
         class="flex items-center"
-        @click="addOwners(OwnersToBeAdded, emit)">
         :is-disabled="isSending"
+        @click="addOwners(OwnersToBeAdded, emit)">
         <PlusIcon class="ml-2 w-6" />
       </button>
     </div>

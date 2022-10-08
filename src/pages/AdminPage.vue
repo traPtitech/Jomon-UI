@@ -7,8 +7,8 @@ import { useUserStore } from '/@/stores/user'
 import { isAdmin } from '/@/lib/authorityCheck'
 
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import VueSelect from '/@/components/shared/VueSelect.vue'
 
+import FormSelect from '../components/shared/FormSelect.vue'
 import { useAdmin } from './composables/useAdmin'
 
 const adminStore = useAdminStore()
@@ -44,7 +44,7 @@ if (userStore.me && userStore.me.admin) {
       </ul>
     </div>
     <div class="mt-4 flex gap-4">
-      <VueSelect
+      <FormSelect
         v-model="addList"
         class="w-1/2"
         label="name"
@@ -62,7 +62,7 @@ if (userStore.me && userStore.me.admin) {
       </SimpleButton>
     </div>
     <div class="mt-12 flex gap-4">
-      <VueSelect
+      <FormSelect
         v-model="removeList"
         class="w-1/2"
         multiple

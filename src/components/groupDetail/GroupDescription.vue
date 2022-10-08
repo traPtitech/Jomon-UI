@@ -5,8 +5,8 @@ import type { GroupDetail } from '/@/lib/apis'
 import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
+import FormTextarea from '/@/components/shared/FormTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import TextareaForm from '/@/components/shared/TextareaForm.vue'
 
 interface Props {
   group: GroupDetail
@@ -44,7 +44,7 @@ const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
     </div>
   </div>
   <div v-else class="flex w-full">
-    <TextareaForm
+    <FormTextarea
       class="w-4/5"
       placeholder="詳細"
       :value="props.value"

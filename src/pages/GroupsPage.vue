@@ -39,10 +39,13 @@ watch(
 </script>
 
 <template>
-  <div class="min-w-160 mx-auto flex w-2/3 flex-col">
-    <div class="relative flex w-full items-center justify-center py-8">
+  <div class="min-w-96 mx-auto flex w-2/3 flex-col">
+    <div
+      class="relative w-full items-center justify-center pt-8 pb-4 md:flex md:py-8">
       <h1 class="text-center text-3xl">グループ一覧</h1>
-      <div v-if="hasAuthority" class="absolute right-0">
+      <div
+        v-if="hasAuthority"
+        class="right-0 mt-2 text-right md:absolute md:mt-0">
         <router-link to="/groups/new">
           <SimpleButton font-size="lg" padding="md">
             グループの新規作成
@@ -52,7 +55,7 @@ watch(
     </div>
 
     <div class="min-h-128">
-      <div class="flex items-center justify-around bg-gray-200 px-4 pt-2 pb-2">
+      <div class="flex items-center justify-around bg-gray-200 px-4 py-2">
         <div class="w-1/5">グループ名</div>
         <div class="w-3/5">詳細</div>
         <div class="w-1/5">予算</div>

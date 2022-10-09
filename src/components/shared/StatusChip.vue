@@ -59,9 +59,8 @@ const backgroundColor = computed(() => (status: RequestStatus) => {
 
 <template>
   <div
-    :class="`inline flex items-center rounded-full p-2 text-white ${backgroundColor(
-      status
-    )}`"
+    :class="`inline-flex items-center rounded-full p-2 text-white
+    ${backgroundColor(status)}`"
     :title="statusToJpn(status)">
     <check-circle-icon v-if="status === 'accepted'" class="w-8" />
     <exclamation-triangle-icon v-else-if="status === 'submitted'" class="w-8" />

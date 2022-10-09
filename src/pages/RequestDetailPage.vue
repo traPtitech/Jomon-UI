@@ -73,31 +73,33 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-if="request !== undefined" class="min-w-160 mx-auto px-12 pt-4">
+  <div v-if="request !== undefined" class="min-w-96 mx-auto px-2 pt-4 md:px-12">
     <div class="bottom-bar">
-      <div class="flex items-center justify-between">
-        <status-chip has-text :status="request.status" />
+      <status-chip has-text :status="request.status" />
+      <div
+        class="flex flex-col items-start justify-between md:flex-row md:items-center">
         <request-title
-          class="ml-2"
+          class="ml-2 mt-2"
           :is-edit-mode="editMode === 'title'"
           :request="request"
           :value="editedValue.title"
           @change-edit-mode="changeEditMode($event)"
           @input="editedValue.title = $event" />
-        <div class="ml-2">
+        <div class="ml-2 mt-2">
           <status-change-buttons
             :request="request"
             @push-status="pushStatus($event)" />
         </div>
       </div>
-      <div class="mt-4 flex justify-between">
+      <div class="mt-4 flex flex-col justify-between md:flex-row">
         <request-tags
           :is-edit-mode="editMode === 'tags'"
           :request="request"
           :value="editedValue.tags"
           @change-edit-mode="changeEditMode($event)"
           @input="editedValue.tags = $event" />
-        <div class="flex items-center gap-4">
+        <div
+          class="flex flex-col items-start gap-1 md:flex-row md:items-center md:gap-4">
           <request-group
             :is-edit-mode="editMode === 'group'"
             :request="request"
@@ -114,7 +116,7 @@ onMounted(async () => {
             @input="editedValue.amount = $event" />
         </div>
       </div>
-      <div class="mt-4 flex">
+      <div class="mt-4 flex flex-col md:flex-row">
         <request-content
           :is-edit-mode="editMode === 'content'"
           :request="request"

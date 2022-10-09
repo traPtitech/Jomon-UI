@@ -35,9 +35,9 @@ const handleComplete = () => {
 </script>
 
 <template>
-  <div class="flex items-center">
-    グループ：
+  <div class="items-center md:flex">
     <div v-if="!isEditMode">
+      グループ：
       <span v-if="!props.request.group">なし</span>
       <span v-else>{{ props.request.group.name }}</span>
       <edit-button
@@ -46,10 +46,9 @@ const handleComplete = () => {
         @click="emit('changeEditMode', 'group')" />
     </div>
     <div v-else class="flex">
-      <!--@inputとvalueだと@inputが上手く動かなかった-->
+      グループ：
       <vue-select
         v-model="currentGroup"
-        class="w-52"
         label="name"
         :options="groupStore.groups"
         placeholder="グループ" />

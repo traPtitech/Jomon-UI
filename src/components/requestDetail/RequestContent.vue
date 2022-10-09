@@ -24,7 +24,7 @@ const hasAuthority = isCreater(userStore.me, props.request.created_by)
 </script>
 
 <template>
-  <div class="flex w-3/5">
+  <div class="flex md:w-3/5">
     詳細：
     <div v-if="!isEditMode" class="flex flex-grow items-end">
       <markdown-it

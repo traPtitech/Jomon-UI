@@ -131,9 +131,9 @@ onMounted(async () => {
           @input="editedValue.targets = $event" />
       </div>
     </div>
-    <div class="flex">
+    <div class="md:flex">
       <request-logs
-        class="w-2/3"
+        class="md:w-2/3"
         :files="files"
         :request="request"
         @remove-file="removeFile($event)" />

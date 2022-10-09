@@ -58,7 +58,7 @@ const logs = computed(() => {
 </script>
 
 <template>
-  <div class="h-120 overflow-y-scroll p-2">
+  <div class="md:h-120 p-2 md:overflow-y-scroll">
     <request-files :files="files" @remove-file="emit('removeFile', $event)" />
     <ul>
       <li

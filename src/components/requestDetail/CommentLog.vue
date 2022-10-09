@@ -22,12 +22,10 @@ const formattedDateAndTime = formatDateAndTime(props.log.created_at)
   <div class="flex w-full p-2">
     <user-icon class="w-12" :name="log.user" />
     <div class="w-full pl-2">
-      <div class="flex h-12 items-center justify-between">
-        {{ log.user }}がコメントしました。
-        <span>
-          {{ formattedDateAndTime }}
-        </span>
-      </div>
+      <p class="flex h-12 items-center justify-between">
+        <span>{{ log.user }}がコメントしました。</span>
+        <span>{{ formattedDateAndTime }}</span>
+      </p>
       <markdown-it class="border border-zinc-300 p-1" :text="log.comment" />
     </div>
   </div>

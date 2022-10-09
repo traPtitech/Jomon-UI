@@ -7,6 +7,7 @@ import ToastComponent from '/@/components/shared/ToastComponent.vue'
 
 import JomonHeader from './components/JomonHeader.vue'
 import { useUserStore } from './stores/user'
+import './styles/main.css'
 
 const userStore = useUserStore()
 

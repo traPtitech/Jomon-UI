@@ -67,7 +67,7 @@ export const useGroupInformation = (group: GroupDetail) => {
         budget: group.budget.toString()
       }
     } finally {
-      //isSending.value = false
+      isSending.value = false
     }
   }
   return { isSending, editMode, editedValue, changeEditMode }

@@ -41,14 +41,14 @@ if (!userStore.isUserFetched) {
 <template>
   <div
     v-if="group !== undefined"
-    class="min-w-80 mx-auto flex h-full w-4/5 flex-row pt-4">
+    class="min-w-96 mx-auto flex h-full w-4/5 flex-col pt-4 md:flex-row">
     <GroupInformation
-      class="w-3/4"
+      class="md:w-3/4"
       :group="group"
       @fix-group="group = $event" />
-    <div class="flex w-1/4 flex-col gap-8 py-4">
-      <GroupMembers :group="group" @fix-group="group = $event" />
+    <div class="flex flex-col gap-8 py-4 md:w-1/4">
       <GroupOwners :group="group" @fix-group="group = $event" />
+      <GroupMembers :group="group" @fix-group="group = $event" />
     </div>
   </div>
 </template>

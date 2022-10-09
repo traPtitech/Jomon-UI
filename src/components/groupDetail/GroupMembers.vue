@@ -29,9 +29,9 @@ const { absentMembersOption, isSending, addMembers, removeMember } =
 
 <template>
   <div
-    class="relative flex h-1/2 flex-col justify-between border border-gray-300">
+    class="h-min-2/5 relative flex flex-col justify-between border border-gray-300">
     <p class="bg-background absolute -top-3 left-2 px-2">グループメンバー</p>
-    <ul class="h-full p-4">
+    <ul class="h-full overflow-y-scroll p-4">
       <li
         v-for="member in group.members"
         :key="member"

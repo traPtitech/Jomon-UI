@@ -10,7 +10,7 @@ export const useGroupMember = (group: GroupDetail) => {
   const { users } = useUserStore()
   const toastStore = useToastStore()
 
-  const absentMembersOption = computed(() => {
+  const absentMemberOptions = computed(() => {
     if (users === undefined) {
       return []
     }
@@ -70,5 +70,5 @@ export const useGroupMember = (group: GroupDetail) => {
       isSending.value = false
     }
   }
-  return { absentMembersOption, isSending, addMembers, removeMember }
+  return { absentMemberOptions, isSending, addMembers, removeMember }
 }

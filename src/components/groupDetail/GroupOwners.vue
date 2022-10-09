@@ -23,7 +23,7 @@ const userStore = useUserStore()
 
 const OwnersToBeAdded = ref<string[]>([])
 const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
-const { absentOwnersOption, isSending, addOwners, removeOwner } = useGroupOwner(
+const { absentOwnerOptions, isSending, addOwners, removeOwner } = useGroupOwner(
   props.group
 )
 </script>
@@ -56,7 +56,7 @@ const { absentOwnersOption, isSending, addOwners, removeOwner } = useGroupOwner(
         v-model="OwnersToBeAdded"
         class="mr-2 flex-grow"
         is-multiple
-        :options="absentOwnersOption"
+        :options="absentOwnerOptions"
         placeholder="追加するオーナーを選択" />
       <button
         class="flex items-center rounded-full p-1 hover:bg-gray-300"

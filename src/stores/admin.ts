@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import { useToastStore } from '/@/stores/toast'
 
@@ -10,6 +10,17 @@ export const useAdminStore = defineStore('admin', () => {
 
   const admins = ref<string[]>()
   const isAdminFetched = ref(false)
+
+  const adminsOptions = computed(() => {
+    return (
+      admins.value?.map(admin => {
+        return {
+          key: admin,
+          value: admin
+        }
+      }) ?? []
+    )
+  })
 
   const fetchAdmins = async () => {
     try {
@@ -22,8 +33,10 @@ export const useAdminStore = defineStore('admin', () => {
       })
     }
   }
+
   return {
     admins,
+    adminsOptions,
     isAdminFetched,
     fetchAdmins
   }

@@ -10,7 +10,7 @@ export const useGroupOwner = (group: GroupDetail) => {
   const { users } = useUserStore()
   const toastStore = useToastStore()
 
-  const absentOwnersOption = computed(() => {
+  const absentOwnerOptions = computed(() => {
     if (users === undefined) {
       return []
     }
@@ -71,5 +71,5 @@ export const useGroupOwner = (group: GroupDetail) => {
       isSending.value = false
     }
   }
-  return { absentOwnersOption, isSending, addOwners, removeOwner }
+  return { absentOwnerOptions, isSending, addOwners, removeOwner }
 }

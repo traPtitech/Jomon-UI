@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import { useToastStore } from '/@/stores/toast'
 
@@ -11,6 +11,17 @@ export const useGroupStore = defineStore('group', () => {
 
   const groups = ref<Group[]>()
   const isGroupFetched = ref(false)
+
+  const groupOptions = computed(() => {
+    return (
+      groups.value?.map(group => {
+        return {
+          key: group.name,
+          value: group.id
+        }
+      }) ?? []
+    )
+  })
 
   const fetchGroups = async () => {
     try {
@@ -26,6 +37,7 @@ export const useGroupStore = defineStore('group', () => {
 
   return {
     groups,
+    groupOptions,
     isGroupFetched,
     fetchGroups
   }

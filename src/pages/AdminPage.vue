@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 
 import { useAdminStore } from '/@/stores/admin'
 import { useUserStore } from '/@/stores/user'
@@ -18,17 +18,6 @@ const addList = ref<string[]>([])
 const removeList = ref<string[]>([])
 const hasAuthority = isAdmin(userStore.me)
 const { absentMembers, isSending, addAdmins, removeAdmins } = useAdmin()
-
-const adminsOption = computed(() => {
-  return (
-    adminStore.admins?.map(admin => {
-      return {
-        key: admin,
-        value: admin
-      }
-    }) ?? []
-  )
-})
 
 if (userStore.me && userStore.me.admin) {
   if (!adminStore.isAdminFetched) {
@@ -75,7 +64,7 @@ if (userStore.me && userStore.me.admin) {
         v-model="removeList"
         class="w-1/2"
         is-multiple
-        :options="adminsOption"
+        :options="adminStore.adminsOptions"
         placeholder="削除する管理者を選択" />
       <SimpleButton
         class="flex items-center"

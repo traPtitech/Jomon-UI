@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
@@ -28,16 +28,6 @@ const group = ref({
   budget: 0,
   owners: userStore.me?.name ? [userStore.me.name] : [],
   members: []
-})
-const membersOption = computed(() => {
-  return (
-    userStore.users?.map(user => {
-      return {
-        key: user.name,
-        value: user.name
-      }
-    }) ?? []
-  )
 })
 
 const postGroup = async (group: PostGroup) => {
@@ -121,7 +111,7 @@ if (!userStore.isUserFetched) {
         <FormSelect
           v-model="group.owners"
           is-multiple
-          :options="membersOption"
+          :options="userStore.userOptions"
           placeholder="追加するオーナーを選択" />
       </div>
       <div class="flex flex-col">
@@ -129,7 +119,7 @@ if (!userStore.isUserFetched) {
         <FormSelect
           v-model="group.members"
           is-multiple
-          :options="membersOption"
+          :options="userStore.userOptions"
           placeholder="追加するメンバーを選択" />
       </div>
       <div>

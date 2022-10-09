@@ -4,7 +4,7 @@ import 'vue-select/dist/vue-select.css'
 </script>
 
 <template>
-  <v-select v-bind="$attrs">
+  <v-select v-bind="$attrs" class="w-70">
     <template #no-options="{ search, searching, loading }">
       <div v-if="searching">
         <span>
@@ -22,9 +22,6 @@ import 'vue-select/dist/vue-select.css'
 </template>
 
 <style>
-.vs__dropdown-toggle {
-  width: 280px;
-}
 .vs--multiple .vs__selected {
   background-color: #e5e7eb; /*gray-200*/
   border: none;

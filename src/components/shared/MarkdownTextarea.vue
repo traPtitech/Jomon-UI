@@ -50,7 +50,7 @@ function changeCurrentTab(tab: TabType) {
       <vue-select
         v-if="templates !== undefined"
         v-model="selectedTemplate"
-        class="m-1 ml-auto inline-block w-1/3"
+        class="m-1 ml-auto inline-block"
         label="name"
         :options="templates"
         placeholder="テンプレートを選択"

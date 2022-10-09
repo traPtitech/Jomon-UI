@@ -64,7 +64,7 @@ if (userStore.me && userStore.me.admin) {
         v-model="removeList"
         class="w-1/2"
         is-multiple
-        :options="adminStore.adminsOptions"
+        :options="adminStore.adminOptions"
         placeholder="削除する管理者を選択" />
       <SimpleButton
         class="flex items-center"

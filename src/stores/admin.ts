@@ -11,7 +11,7 @@ export const useAdminStore = defineStore('admin', () => {
   const admins = ref<string[]>()
   const isAdminFetched = ref(false)
 
-  const adminsOptions = computed(() => {
+  const adminOptions = computed(() => {
     return (
       admins.value?.map(admin => {
         return {
@@ -36,7 +36,7 @@ export const useAdminStore = defineStore('admin', () => {
 
   return {
     admins,
-    adminsOptions,
+    adminOptions,
     isAdminFetched,
     fetchAdmins
   }

@@ -59,7 +59,6 @@ function sortByCreatedAt() {
     </div>
     <vue-select
       v-model="params.target"
-      class="w-64"
       label="name"
       :options="userStore.users"
       placeholder="申請者"
@@ -67,7 +66,6 @@ function sortByCreatedAt() {
       @close="requestStore.fetchRequests(params)" />
     <vue-select
       v-model="params.currentStatus"
-      class="w-64"
       label="jpn"
       :options="requestStates"
       placeholder="申請の状態"
@@ -76,7 +74,6 @@ function sortByCreatedAt() {
       @close="requestStore.fetchRequests(params)" />
     <vue-select
       v-model="params.group"
-      class="w-64"
       label="name"
       :options="groupStore.groups"
       placeholder="グループ"
@@ -84,7 +81,6 @@ function sortByCreatedAt() {
       @close="requestStore.fetchRequests(params)" />
     <vue-select
       v-model="params.tags"
-      class="w-100"
       :close-on-select="false"
       label="name"
       multiple

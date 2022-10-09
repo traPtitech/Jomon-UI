@@ -22,8 +22,15 @@ import 'vue-select/dist/vue-select.css'
 </template>
 
 <style>
-.v-select .vs__selected {
+.vs__dropdown-toggle {
+  width: 280px;
+}
+.vs--multiple .vs__selected {
   background-color: #e5e7eb; /*gray-200*/
-  border-color: #d1d5db;
+  border: none;
+}
+.vs__dropdown-option--selected::before {
+  color: green;
+  content: '\2713';
 }
 </style>

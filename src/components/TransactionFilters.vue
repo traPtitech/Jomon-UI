@@ -54,20 +54,20 @@ function sort(sortKind: 'created_at' | 'amount') {
   <div class="flex h-8 gap-2">
     <!-- 年月日 -->
     <button
-      class="w-2/10 flex items-center justify-center border"
+      class="md:w-2/10 w-3/10 flex items-center justify-center border"
       @click="sort('created_at')">
       <span>年 月 日</span>
       <sort-order-buttons />
     </button>
     <!-- 取引額 -->
     <button
-      class="w-1/10 flex items-center justify-center border"
+      class="md:w-1/10 w-2/10 flex items-center justify-center border"
       @click="sort('amount')">
       <span>取引額</span>
       <sort-order-buttons />
     </button>
     <!-- 取引相手 -->
-    <div class="w-2/10">
+    <div class="md:w-2/10 w-5/10">
       <div
         v-if="!isTargetSearchMode"
         class="flex h-full items-center justify-center border">
@@ -86,7 +86,7 @@ function sort(sortKind: 'created_at' | 'amount') {
     <!-- グループ -->
     <vue-select
       v-model="params.group"
-      class="w-2/10"
+      class="md:w-2/10 hidden md:block"
       label="name"
       :options="groupStore.groups"
       placeholder="取引グループ"
@@ -95,7 +95,7 @@ function sort(sortKind: 'created_at' | 'amount') {
     <!-- タグ -->
     <vue-select
       v-model="params.tag"
-      class="w-3/10"
+      class="md:w-3/10 hidden md:block"
       label="name"
       :options="tagStore.tags"
       placeholder="タグ"

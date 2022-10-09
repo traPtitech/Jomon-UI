@@ -40,7 +40,7 @@ async function postTransaction() {
 </script>
 
 <template>
-  <div class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
+  <div class="min-w-96 mx-auto flex w-2/3 flex-col pt-8">
     <div class="pb-8">
       <h1 class="text-center text-3xl">入出金記録の新規作成</h1>
     </div>

@@ -42,13 +42,14 @@ watch(
 
 <template>
   <div>
-    <div class="min-w-160 mx-auto flex w-2/3 flex-col">
-      <div class="relative flex w-full items-center justify-center pt-8 pb-4">
+    <div class="min-w-96 mx-auto flex w-2/3 flex-col">
+      <div
+        class="relative w-full items-center justify-center pt-8 pb-4 md:flex md:py-8">
         <h1 class="text-center text-3xl">入出金記録</h1>
-        <div class="absolute right-0">
+        <div class="right-0 mt-2 text-right md:absolute md:mt-0">
           <router-link to="/transactions/new">
             <simple-button font-size="lg" padding="md">
-              新規レコード作成
+              新規入出金記録作成
             </simple-button>
           </router-link>
         </div>

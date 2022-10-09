@@ -13,10 +13,10 @@ const props = defineProps<Props>()
 <template>
   <router-link :to="`transactions/${transaction.id}`">
     <div class="relative flex h-12 items-center gap-2 px-4 hover:bg-gray-100">
-      <div class="w-2/10">
+      <div class="md:w-2/10 w-3/10">
         {{ formatDate(props.transaction.created_at) }}
       </div>
-      <div class="w-1/10 text-right">
+      <div class="md:w-1/10 w-2/10 text-right">
         <span
           :class="` ${
             props.transaction.amount > 0 ? 'text-blue-400' : 'text-red-400'
@@ -24,13 +24,13 @@ const props = defineProps<Props>()
           {{ props.transaction.amount }}円
         </span>
       </div>
-      <div class="w-2/10">
+      <div class="md:w-2/10 w-5/10">
         {{ props.transaction.target }}
       </div>
-      <div class="w-2/10 truncate">
+      <div class="md:w-2/10 hidden truncate md:block">
         {{ props.transaction.group.description }}
       </div>
-      <div class="w-3/10">
+      <div class="md:w-3/10 hidden md:block">
         <tag-group :limit="3" :tags="props.transaction.tags" />
       </div>
     </div>

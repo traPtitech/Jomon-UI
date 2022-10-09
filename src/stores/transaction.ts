@@ -34,7 +34,7 @@ export const useTransactionStore = defineStore('transaction', () => {
           ? {
               id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
               amount: 1200,
-              target: 'hoge株式会社',
+              target: 'SysAd',
               request: 'c2cd9bd7-a4e9-4dbd-a26a-5dbb063a7ae7',
               tags: [
                 {

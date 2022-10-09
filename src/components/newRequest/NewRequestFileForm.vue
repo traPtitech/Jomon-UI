@@ -54,19 +54,19 @@ function deleteFile(index: number) {
       <div
         v-for="(file, index) in files"
         :key="index"
-        class="not-first:ml-2 relative flex flex-col items-center">
+        class="not-first:ml-2 relative flex w-32 flex-col items-center text-center">
         <img
           v-if="isImageByType(file.type)"
           :alt="file.name"
-          class="h-32"
+          class="w-full"
           :src="file.src" />
-        <document-icon v-else class="h-32" />
+        <document-icon v-else class="w-full" />
         <button
           class="absolute top-0 right-0 h-6 w-6"
           @click="deleteFile(index)">
           <x-circle-icon />
         </button>
-        <span>{{ file.name }}</span>
+        <span class="w-full truncate">{{ file.name }}</span>
       </div>
     </div>
   </div>

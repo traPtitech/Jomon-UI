@@ -93,7 +93,7 @@ if (!userStore.isUserFetched) {
 </script>
 
 <template>
-  <div class="min-w-160 mx-auto flex w-2/3 flex-col">
+  <div class="min-w-96 mx-auto flex w-2/3 flex-col">
     <div class="py-8">
       <h1 class="text-center text-3xl">グループの新規作成</h1>
     </div>

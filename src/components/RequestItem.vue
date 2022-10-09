@@ -19,18 +19,20 @@ const formattedDate = formatDate(props.request.created_at)
       <status-chip :status="request.status" />
     </div>
     <div class="flex-grow">
-      <span class="text-xl">{{ request.title }}</span>
-      <div class="mt-2">
-        <tag-group :tags="request.tags" />
+      <div class="flex flex-col justify-between md:flex-row">
+        <p class="flex-grow text-xl">{{ request.title }}</p>
+        <div class="flex md:gap-4">
+          <span>申請者：{{ request.created_by }}</span>
+          <span class="hidden md:inline">
+            グループ：{{ request.group.name }}
+          </span>
+          <span class="hidden md:inline">申請日：{{ formattedDate }}</span>
+        </div>
       </div>
-    </div>
-    <div>
-      <div class="flex gap-4">
-        <span>グループ：{{ request.group.name }}</span>
-        <span>申請者：{{ request.created_by }}</span>
-        <span> 申請日：{{ formattedDate }} </span>
+      <div class="flex flex-col justify-between md:flex-row md:items-center">
+        <tag-group class="hidden md:inline" :tags="request.tags" />
+        <p class="text-right text-2xl md:text-3xl">{{ request.amount }}円</p>
       </div>
-      <div class="text-right text-3xl">{{ request.amount }}円</div>
     </div>
   </router-link>
 </template>

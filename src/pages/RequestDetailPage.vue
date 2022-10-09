@@ -75,17 +75,17 @@ onMounted(async () => {
 <template>
   <div v-if="request !== undefined" class="min-w-96 mx-auto px-2 pt-4 md:px-12">
     <div class="bottom-bar">
-      <status-chip has-text :status="request.status" />
       <div
         class="flex flex-col items-start justify-between md:flex-row md:items-center">
+        <status-chip has-text :status="request.status" />
         <request-title
-          class="ml-2 mt-2"
+          class="ml-2 mt-2 md:mt-0"
           :is-edit-mode="editMode === 'title'"
           :request="request"
           :value="editedValue.title"
           @change-edit-mode="changeEditMode($event)"
           @input="editedValue.title = $event" />
-        <div class="ml-2 mt-2">
+        <div class="ml-2 mt-2 md:mt-0">
           <status-change-buttons
             :request="request"
             @push-status="pushStatus($event)" />

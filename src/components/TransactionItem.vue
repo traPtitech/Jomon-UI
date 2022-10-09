@@ -1,10 +1,7 @@
 <script lang="ts" setup>
-import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
-
 import type { Transaction } from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
 
-import EditButton from './shared/EditButton.vue'
 import TagGroup from './shared/TagGroup.vue'
 
 interface Props {
@@ -35,12 +32,6 @@ const props = defineProps<Props>()
       </div>
       <div class="w-3/10">
         <tag-group :limit="3" :tags="props.transaction.tags" />
-      </div>
-      <div class="absolute -right-16">
-        <router-link class="mr-2" :to="`/requests/${transaction.request}`">
-          <arrow-top-right-on-square-icon class="h-5" />
-        </router-link>
-        <edit-button />
       </div>
     </div>
   </router-link>

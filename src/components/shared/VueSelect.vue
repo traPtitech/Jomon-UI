@@ -4,7 +4,7 @@ import 'vue-select/dist/vue-select.css'
 </script>
 
 <template>
-  <v-select v-bind="$attrs">
+  <v-select v-bind="$attrs" class="w-70">
     <template #no-options="{ search, searching, loading }">
       <div v-if="searching">
         <span>

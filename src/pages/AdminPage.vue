@@ -42,7 +42,7 @@ if (userStore.me && userStore.me.admin) {
 
 <template>
   <div v-if="!hasAuthority" class="p-2">権限がありません。</div>
-  <div v-else class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
+  <div v-else class="min-w-96 mx-auto flex w-2/3 flex-col px-12 pt-8">
     <h1 class="pb-8 text-center text-3xl">管理ページ</h1>
     <div class="flex items-center">
       管理者：
@@ -54,15 +54,14 @@ if (userStore.me && userStore.me.admin) {
         </li>
       </ul>
     </div>
-    <div class="mt-4 flex gap-4">
+    <div class="mt-4 gap-4 md:flex">
       <FormSelect
         v-model="addList"
-        class="w-1/2"
+        class="mb-2"
         is-multiple
         :options="absentMembers"
         placeholder="追加する管理者を選択" />
       <SimpleButton
-        class="flex items-center"
         font-size="lg"
         :is-disabled="isSending"
         padding="sm"
@@ -70,15 +69,14 @@ if (userStore.me && userStore.me.admin) {
         選択した管理者を追加
       </SimpleButton>
     </div>
-    <div class="mt-12 flex gap-4">
+    <div class="mt-12 gap-4 md:flex">
       <FormSelect
         v-model="removeList"
-        class="w-1/2"
+        class="mb-2"
         is-multiple
         :options="adminsOption"
         placeholder="削除する管理者を選択" />
       <SimpleButton
-        class="flex items-center"
         font-size="lg"
         :is-disabled="isSending"
         padding="sm"

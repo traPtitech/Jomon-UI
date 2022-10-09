@@ -42,7 +42,7 @@ const { absentMembersOption, isSending, addMembers, removeMember } =
         </div>
         <button
           v-if="hasAuthority"
-          class="flex items-center"
+          class="flex items-center rounded-full p-1 hover:bg-gray-300"
           :is-disabled="isSending"
           @click="removeMember(member, emit)">
           <MinusIcon class="w-6" />
@@ -57,7 +57,7 @@ const { absentMembersOption, isSending, addMembers, removeMember } =
         :options="absentMembersOption"
         placeholder="追加するメンバーを選択" />
       <button
-        class="flex items-center"
+        class="flex items-center rounded-full p-1 hover:bg-gray-300"
         :is-disabled="isSending"
         @click="addMembers(MembersToBeAdded, emit)">
         <PlusIcon class="w-6" />

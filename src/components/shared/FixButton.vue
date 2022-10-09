@@ -4,6 +4,7 @@ import { PencilIcon } from '@heroicons/vue/24/solid'
 
 <template>
   <button class="inline-block">
-    <PencilIcon class="text-secondary h-5 w-5 opacity-50" />
+    <PencilIcon
+      class="text-secondary hover:text-secondaryHover h-5 w-5 opacity-50" />
   </button>
 </template>

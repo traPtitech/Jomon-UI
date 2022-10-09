@@ -13,6 +13,7 @@ export default defineConfig({
       colors: {
         primary: colors.dark[500],
         secondary: colors.gray[400],
+        secondaryHover: colors.gray[600],
         background: colors.zinc[50]
       },
       width: {

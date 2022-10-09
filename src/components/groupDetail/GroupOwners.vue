@@ -37,13 +37,13 @@ const { absentOwnersOption, isSending, addOwners, removeOwner } = useGroupOwner(
         v-for="owner in group.owners"
         :key="owner"
         class="not-first:mt-2 flex items-center justify-between">
-        <div class="flex items-center">
+        <div class="items-cente flex">
           <UserIcon class="w-12" :name="owner" />
           <p class="mx-1 break-all">{{ owner }}</p>
         </div>
         <button
           v-if="hasAuthority"
-          class="flex items-center"
+          class="flex items-center rounded-full p-1 hover:bg-gray-300"
           :is-disabled="isSending"
           @click="removeOwner(owner, emit)">
           <MinusIcon class="w-6" />
@@ -59,7 +59,7 @@ const { absentOwnersOption, isSending, addOwners, removeOwner } = useGroupOwner(
         :options="absentOwnersOption"
         placeholder="追加するオーナーを選択" />
       <button
-        class="flex items-center"
+        class="flex items-center rounded-full p-1 hover:bg-gray-300"
         :is-disabled="isSending"
         @click="addOwners(OwnersToBeAdded, emit)">
         <PlusIcon class="w-6" />

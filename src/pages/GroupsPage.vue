@@ -10,6 +10,7 @@ import { toPage } from '/@/lib/parseQueryParams'
 
 import GroupItem from '/@/components/GroupItem.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
+import PaginationBarSp from '/@/components/shared/PaginationBarSp.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 const route = useRoute()
@@ -68,7 +69,13 @@ watch(
     </div>
     <PaginationBar
       v-if="groupStore.groups"
-      class="mt-4"
+      class="mt-4 hidden md:block"
+      :current-page="page"
+      path="/groups"
+      :total-pages="Math.ceil(groupStore.groups.length / 10)" />
+    <PaginationBarSp
+      v-if="groupStore.groups"
+      class="mt-4 md:hidden"
       :current-page="page"
       path="/groups"
       :total-pages="Math.ceil(groupStore.groups.length / 10)" />

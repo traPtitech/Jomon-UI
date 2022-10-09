@@ -137,60 +137,60 @@ onMounted(async () => {
     class="min-w-96 mx-auto h-full w-4/5 pt-4">
     <div class="flex items-center pb-4">
       <h1 class="text-3xl">取引記録の詳細</h1>
-      <SimpleButton
+      <simple-button
         v-if="hasAuthority && !transaction.request && !isEditMode"
         class="ml-2"
         font-size="sm"
         padding="sm"
         @click="isEditMode = true">
         編集
-      </SimpleButton>
+      </simple-button>
     </div>
-    <ul class="mb-4 space-y-2" v-if="!isEditMode">
+    <ul v-if="!isEditMode" class="mb-4 space-y-2">
       <li>年月日： {{ formatDate(transaction.created_at) }}</li>
       <li>取引額： {{ transaction.amount }}円</li>
       <li>取引相手： {{ transaction.target }}</li>
       <li>取引グループ： {{ transaction.group.name }}</li>
       <li>タグ：<tag-group :tags="transaction.tags" /></li>
     </ul>
-    <form class="mb-4 space-y-2" v-else>
+    <form v-else class="mb-4 space-y-2">
       <div>年月日：{{ formatDate(transaction.created_at) }}</div>
       <div>
         取引額：
-        <FormInputNumber
+        <form-input-number
+          v-model="editedValue.amount"
           :min="1"
-          placeholder="金額"
-          v-model="editedValue.amount" />円
+          placeholder="金額" />円
       </div>
       <div>
         取引相手：
-        <FormSelect
+        <form-select
           v-model="editedValue.target"
           :options="userOption"
           placeholder="取引相手を選択" />
       </div>
       <div>
         取引グループ：
-        <FormSelect
+        <form-select
           v-model="editedValue.group"
           :options="groupOption"
           placeholder="グループを選択" />
       </div>
       <div>
         タグ：
-        <FormSelect
+        <form-select
           v-model="editedValue.tags"
           is-multiple
           :options="tagOption"
           placeholder="タグを選択" />
       </div>
       <div class="text-right">
-        <SimpleButton
+        <simple-button
           font-size="sm"
           padding="sm"
           @click.prevent="handlePutTransaction">
           完了
-        </SimpleButton>
+        </simple-button>
       </div>
     </form>
     <router-link class="w-fit" :to="`requests/${transaction.request}`">

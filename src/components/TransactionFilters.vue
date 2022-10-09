@@ -102,6 +102,7 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
       </div>
       <div v-else class="relative">
         <input v-model="params.target" class="h-8 w-full" type="text" />
+        <!-- todo:v-selectに -->
         <x-mark-icon
           class="absolute right-2 top-2 h-4 cursor-pointer"
           @click="changeIsTargetSearchMode" />

@@ -26,7 +26,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <form class="mx-4 w-full">
+  <form class="md:ml-2">
     <markdown-textarea
       placeholder="コメント"
       :value="comment"

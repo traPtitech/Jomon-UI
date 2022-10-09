@@ -137,7 +137,7 @@ onMounted(async () => {
         :files="files"
         :request="request"
         @remove-file="removeFile($event)" />
-      <div class="w-1/3">
+      <div class="md:w-1/3">
         <to-transaction-buttons :id="id" />
         <new-comment
           :request-id="request.id"

@@ -83,6 +83,11 @@ const logs = computed(() => {
   width: 4px;
   height: 36px;
   background-color: #d4d4d8;
-  margin-left: 70px;
+  margin-left: 38px;
+}
+@media screen and (min-width: 768px) {
+  .vertical-bar::after {
+    margin-left: 70px;
+  }
 }
 </style>

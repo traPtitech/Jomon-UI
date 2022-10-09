@@ -6,5 +6,12 @@ import typography from 'windicss/plugin/typography'
 
 export default defineConfig({
   darkMode: 'media',
-  plugins: [aspectRatio, forms, lineClamp, typography()]
+  plugins: [aspectRatio, forms, lineClamp, typography()],
+  theme: {
+    extend: {
+      width: {
+        fit: 'fit-content'
+      }
+    }
+  }
 })

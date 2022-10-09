@@ -193,7 +193,7 @@ onMounted(async () => {
         </simple-button>
       </div>
     </form>
-    <router-link class="w-fit" :to="`requests/${transaction.request}`">
+    <router-link class="w-fit" :to="`/requests/${transaction.request}`">
       <simple-button font-size="md" padding="sm">
         紐づいている申請へ移動
       </simple-button>

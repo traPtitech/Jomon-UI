@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 import { XMarkIcon } from '@heroicons/vue/24/solid'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
@@ -36,18 +36,42 @@ function sort(sortKind: 'created_at' | 'amount') {
   if (sortKind === 'created_at') {
     if (params.value.sort === 'created_at') {
       params.value.sort = '-created_at'
+    } else if (params.value.sort === '-created_at') {
+      params.value.sort = ''
     } else {
       params.value.sort = 'created_at'
     }
   } else {
     if (params.value.sort === 'amount') {
       params.value.sort = '-amount'
+    } else if (params.value.sort === '-amount') {
+      params.value.sort = ''
     } else {
       params.value.sort = 'amount'
     }
   }
   transactionStore.fetchTransactions(params.value)
 }
+
+const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
+  if (sortKind === 'created_at') {
+    if (params.value.sort === 'created_at') {
+      return 'asc'
+    } else if (params.value.sort === '-created_at') {
+      return 'desc'
+    } else {
+      return 'none'
+    }
+  } else {
+    if (params.value.sort === 'amount') {
+      return 'asc'
+    } else if (params.value.sort === '-amount') {
+      return 'desc'
+    } else {
+      return 'none'
+    }
+  }
+})
 </script>
 
 <template>
@@ -57,14 +81,14 @@ function sort(sortKind: 'created_at' | 'amount') {
       class="w-2/10 flex items-center justify-center border"
       @click="sort('created_at')">
       <span>年 月 日</span>
-      <sort-order-buttons />
+      <sort-order-buttons :sort="sortOption('created_at')" />
     </button>
     <!-- 取引額 -->
     <button
       class="w-1/10 flex items-center justify-center border"
       @click="sort('amount')">
       <span>取引額</span>
-      <sort-order-buttons />
+      <sort-order-buttons :sort="sortOption('amount')" />
     </button>
     <!-- 取引相手 -->
     <div class="w-2/10">

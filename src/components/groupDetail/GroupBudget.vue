@@ -42,7 +42,7 @@ const hasAuthority = userStore.isAdminOrGroupOwner(
       :min="1"
       placeholder="金額" />円
     <SimpleButton
-      class="ml-2 flex items-center"
+      class="ml-2"
       font-size="sm"
       :is-disabled="props.isSending"
       padding="sm"

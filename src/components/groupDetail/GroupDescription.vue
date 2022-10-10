@@ -50,7 +50,7 @@ const hasAuthority = userStore.isAdminOrGroupOwner(
         placeholder="詳細" />
       <div class="flex items-end">
         <SimpleButton
-          class="ml-2 flex items-center"
+          class="ml-2"
           font-size="sm"
           :is-disabled="props.isSending"
           padding="sm"

@@ -1,13 +1,12 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-
-import { useToastStore } from '/@/stores/toast'
+import { useToast } from 'vue-toastification'
 
 import type { Group } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export const useGroupStore = defineStore('group', () => {
-  const toastStore = useToastStore()
+  const toast = useToast()
 
   const groups = ref<Group[]>()
   const isGroupFetched = ref(false)
@@ -28,10 +27,7 @@ export const useGroupStore = defineStore('group', () => {
       groups.value = (await apis.getGroups()).data
       isGroupFetched.value = true
     } catch {
-      toastStore.showToast({
-        type: 'error',
-        message: 'グループの取得に失敗しました'
-      })
+      toast.error('グループの取得に失敗しました')
     }
   }
 

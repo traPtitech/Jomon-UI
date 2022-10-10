@@ -1,16 +1,11 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 
-import { useToastStore } from '/@/stores/toast'
-
-import ToastComponent from '/@/components/shared/ToastComponent.vue'
-
 import JomonHeader from './components/JomonHeader.vue'
 import { useUserStore } from './stores/user'
+import './styles/toast.css'
 
 const userStore = useUserStore()
-
-const toastStore = useToastStore()
 
 onMounted(async () => {
   await userStore.fetchMe()
@@ -32,6 +27,5 @@ onMounted(async () => {
         </suspense>
       </template>
     </router-view>
-    <ToastComponent v-show="toastStore.shouldShowToast" />
   </main>
 </template>

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
 
 import { useGroupStore } from '/@/stores/group'
-import { useToastStore } from '/@/stores/toast'
 import { useUserStore } from '/@/stores/user'
 
 import type { Group, PostGroup } from '/@/lib/apis'
@@ -20,7 +20,7 @@ const router = useRouter()
 const userStore = useUserStore()
 const groupStore = useGroupStore()
 
-const toastStore = useToastStore()
+const toast = useToast()
 
 const group = ref({
   name: '',
@@ -40,10 +40,7 @@ const postGroup = async (group: PostGroup) => {
     }
     return res
   } catch {
-    toastStore.showToast({
-      type: 'error',
-      message: 'グループの作成に失敗しました'
-    })
+    toast.error('グループの作成に失敗しました')
     throw new Error('グループの作成に失敗しました')
   }
 }
@@ -65,10 +62,7 @@ const handlePostGroup = async (e: Event) => {
       apis.postGroupMembers(res.id, group.value.members),
       apis.postGroupOwners(res.id, group.value.owners)
     ])
-    toastStore.showToast({
-      type: 'success',
-      message: 'グループを作成しました'
-    })
+    toast.success('グループを作成しました')
     router.push(`/groups/${res.id}`)
   } catch {
     throw new Error('グループの作成に失敗しました')

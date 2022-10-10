@@ -1,13 +1,12 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-
-import { useToastStore } from '/@/stores/toast'
+import { useToast } from 'vue-toastification'
 
 import type { User } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export const useUserStore = defineStore('user', () => {
-  const toastStore = useToastStore()
+  const toast = useToast()
 
   const me = ref<User>()
   const users = ref<User[]>()
@@ -40,10 +39,7 @@ export const useUserStore = defineStore('user', () => {
     try {
       me.value = (await apis.getMe()).data
     } catch {
-      toastStore.showToast({
-        type: 'error',
-        message: 'ユーザーの取得に失敗しました'
-      })
+      toast.error('ユーザーの取得に失敗しました')
     }
   }
   const fetchUsers = async () => {
@@ -51,10 +47,7 @@ export const useUserStore = defineStore('user', () => {
       users.value = (await apis.getUsers()).data
       isUserFetched.value = true
     } catch {
-      toastStore.showToast({
-        type: 'error',
-        message: 'ユーザーの取得に失敗しました'
-      })
+      toast.error('ユーザーの取得に失敗しました')
     }
   }
 

@@ -1,0 +1,12 @@
+.Vue-Toastification__toast--info {
+  background-color: #38bdf8;
+}
+.Vue-Toastification__toast--success {
+  background-color: #34d399;
+}
+.Vue-Toastification__toast--error {
+  background-color: #f87171;
+}
+.Vue-Toastification__toast--warning {
+  background-color: #fbbf24;
+}

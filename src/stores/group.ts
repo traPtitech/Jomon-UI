@@ -9,6 +9,7 @@ export const useGroupStore = defineStore('group', () => {
   const toast = useToast()
 
   const groups = ref<Group[]>()
+
   const isGroupFetched = ref(false)
 
   const groupOptions = computed(() => {

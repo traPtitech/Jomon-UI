@@ -1,7 +1,6 @@
 <script setup lang="ts">
+import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
-
-import type { GroupDetail } from '/@/lib/apis'
 
 import { useDeleteGroup } from '/@/components/groupDetail/composables/useDeleteGroup'
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
@@ -9,23 +8,21 @@ import FormInput from '/@/components/shared/FormInput.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 interface Props {
-  group: GroupDetail
   isEditMode: boolean
-  value: string
   isSending: boolean
 }
 
 const props = defineProps<Props>()
 const emit = defineEmits<{
-  (e: 'input', value: string): void
   (e: 'changeEditMode', value: EditMode): void
 }>()
 
 const userStore = useUserStore()
+const groupDetailStore = useGroupDetailStore()
 
 const hasAuthority = userStore.isAdminOrGroupOwner(
   userStore.me,
-  props.group.owners
+  groupDetailStore.group.owners
 )
 const { isDeleting, deleteGroup } = useDeleteGroup()
 </script>
@@ -33,14 +30,13 @@ const { isDeleting, deleteGroup } = useDeleteGroup()
 <template>
   <div class="flex w-full items-center">
     <h1 v-if="!isEditMode" class="flex-grow text-3xl">
-      {{ props.group.name }}
+      {{ groupDetailStore.group.name }}
     </h1>
     <FormInput
       v-else
+      v-model="groupDetailStore.editedValue.name"
       class="flex-grow"
-      placeholder="グループ名"
-      :value="props.value"
-      @input="emit('input', $event)" />
+      placeholder="グループ名" />
     <SimpleButton
       v-if="hasAuthority && !isEditMode"
       class="ml-2"
@@ -65,7 +61,7 @@ const { isDeleting, deleteGroup } = useDeleteGroup()
       :is-disabled="isDeleting"
       kind="danger"
       padding="sm"
-      @click.stop="deleteGroup(props.group.id)">
+      @click.stop="deleteGroup(groupDetailStore.group.id)">
       グループを削除
     </SimpleButton>
   </div>

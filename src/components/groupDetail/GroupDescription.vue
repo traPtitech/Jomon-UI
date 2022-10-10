@@ -1,30 +1,27 @@
 <script lang="ts" setup>
+import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
-
-import type { GroupDetail } from '/@/lib/apis'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import FormTextarea from '/@/components/shared/FormTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 interface Props {
-  group: GroupDetail
   isEditMode: boolean
-  value: string
   isSending: boolean
 }
 
 const props = defineProps<Props>()
 const emit = defineEmits<{
-  (e: 'input', value: string): void
   (e: 'changeEditMode', value: EditMode): void
 }>()
 
 const userStore = useUserStore()
+const groupDetailStore = useGroupDetailStore()
 
 const hasAuthority = userStore.isAdminOrGroupOwner(
   userStore.me,
-  props.group.owners
+  groupDetailStore.group.owners
 )
 </script>
 
@@ -33,7 +30,7 @@ const hasAuthority = userStore.isAdminOrGroupOwner(
     <p>詳細</p>
     <div v-if="!isEditMode" class="flex w-full">
       <p class="h-32 w-4/5 rounded border border-gray-300 pl-1">
-        {{ props.group.description }}
+        {{ groupDetailStore.group.description }}
       </p>
       <div class="flex items-end">
         <SimpleButton
@@ -48,10 +45,9 @@ const hasAuthority = userStore.isAdminOrGroupOwner(
     </div>
     <div v-else class="flex w-full">
       <FormTextarea
+        v-model="groupDetailStore.editedValue.description"
         class="w-4/5"
-        placeholder="詳細"
-        :value="props.value"
-        @input="emit('input', $event)" />
+        placeholder="詳細" />
       <div class="flex items-end">
         <SimpleButton
           class="ml-2 flex items-center"

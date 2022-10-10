@@ -1,37 +1,34 @@
 <script lang="ts" setup>
+import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
-
-import type { GroupDetail } from '/@/lib/apis'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import FixButton from '/@/components/shared/FixButton.vue'
-import FormInput from '/@/components/shared/FormInput.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import FormInputNumber from '/@/shared/FormInputNumber.vue'
 
 interface Props {
-  group: GroupDetail
   isEditMode: boolean
-  value: string
   isSending: boolean
 }
 
 const props = defineProps<Props>()
 const emit = defineEmits<{
-  (e: 'input', value: string): void
   (e: 'changeEditMode', value: EditMode): void
 }>()
 
 const userStore = useUserStore()
+const groupDetailStore = useGroupDetailStore()
 
 const hasAuthority = userStore.isAdminOrGroupOwner(
   userStore.me,
-  props.group.owners
+  groupDetailStore.group.owners
 )
 </script>
 
 <template>
   <div v-if="!isEditMode" class="flex items-center pb-2">
-    予算：{{ props.group.budget }}円
+    予算：{{ groupDetailStore.group.budget }}円
     <FixButton
       v-if="hasAuthority"
       class="ml-1"
@@ -39,11 +36,11 @@ const hasAuthority = userStore.isAdminOrGroupOwner(
   </div>
   <div v-else class="flex items-center">
     予算：
-    <FormInput
+    <FormInputNumber
+      v-model="groupDetailStore.editedValue.budget"
       class="mr-1 w-24"
-      placeholder="金額"
-      :value="props.value"
-      @input="emit('input', $event)" />円
+      :min="1"
+      placeholder="金額" />円
     <SimpleButton
       class="ml-2 flex items-center"
       font-size="sm"

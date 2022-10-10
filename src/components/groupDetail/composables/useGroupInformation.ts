@@ -1,70 +1,30 @@
 import { ref } from 'vue'
-import { useToast } from 'vue-toastification'
 
-import type { GroupDetail, PostGroup } from '/@/lib/apis'
-import apis from '/@/lib/apis'
+import { useGroupDetailStore } from '/@/stores/groupDetail'
 
 export type EditMode = 'name' | 'description' | 'budget' | ''
 
-export const useGroupInformation = (group: GroupDetail) => {
-  const toast = useToast()
+export const useGroupInformation = () => {
+  const groupDetailStore = useGroupDetailStore()
 
   const isSending = ref(false)
 
   const editMode = ref<EditMode>('')
-  const editedValue = ref({
-    name: group.name,
-    description: group.description,
-    budget: group.budget.toString()
-  })
 
-  const changeEditMode = async (
-    kind: EditMode,
-    emit: (e: 'fixGroup', value: GroupDetail) => void
-  ) => {
+  const changeEditMode = async (kind: EditMode) => {
     if (kind !== '') {
       editMode.value = kind
     } else {
+      isSending.value = true
       const value = {
-        name: editedValue.value.name,
-        description: editedValue.value.description,
-        budget: Number(editedValue.value.budget)
+        name: groupDetailStore.editedValue.name,
+        description: groupDetailStore.editedValue.description,
+        budget: Number(groupDetailStore.editedValue.budget)
       }
-      await putGroup(group.id, value, emit)
+      await groupDetailStore.putGroup(groupDetailStore.group?.id ?? '', value)
       editMode.value = ''
-    }
-  }
-  const putGroup = async (
-    id: string,
-    willPutGroup: PostGroup,
-    emit: (e: 'fixGroup', value: GroupDetail) => void
-  ) => {
-    isSending.value = true //挙動怪しい
-
-    try {
-      const res = (await apis.putGroupDetail(id, willPutGroup)).data
-      const nextGroup: GroupDetail = {
-        ...group,
-        name: res.name,
-        description: res.description,
-        budget: res.budget
-      }
-      emit('fixGroup', nextGroup)
-      editedValue.value = {
-        name: nextGroup.name,
-        description: nextGroup.description,
-        budget: nextGroup.budget.toString()
-      }
-    } catch {
-      toast.error('グループの更新に失敗しました')
-      editedValue.value = {
-        name: group.name,
-        description: group.description,
-        budget: group.budget.toString()
-      }
-    } finally {
       isSending.value = false
     }
   }
-  return { isSending, editMode, editedValue, changeEditMode }
+  return { isSending, editMode, changeEditMode }
 }

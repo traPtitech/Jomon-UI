@@ -1,12 +1,9 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { useToast } from 'vue-toastification'
 
+import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
 
-import apis from '/@/lib/apis'
-import type { GroupDetail } from '/@/lib/apis'
 import { toId } from '/@/lib/parsePathParams'
 
 import GroupInformation from '/@/components/groupDetail/GroupInformation.vue'
@@ -17,35 +14,20 @@ const route = useRoute()
 const id = toId(route.params.id)
 
 const userStore = useUserStore()
-const toast = useToast()
+const groupDetailStore = useGroupDetailStore()
 
-const group = ref<GroupDetail>()
-
-const fetchGroup = async (id: string) => {
-  try {
-    group.value = (await apis.getGroupDetail(id)).data
-  } catch {
-    toast.error('グループの取得に失敗しました')
-  }
-}
-
-await fetchGroup(id)
+await groupDetailStore.fetchGroup(id)
 if (!userStore.isUserFetched) {
   await userStore.fetchUsers()
 }
 </script>
 
 <template>
-  <div
-    v-if="group !== undefined"
-    class="min-w-80 mx-auto flex h-full w-4/5 flex-row pt-4">
-    <GroupInformation
-      class="w-3/4"
-      :group="group"
-      @fix-group="group = $event" />
+  <div class="min-w-80 mx-auto flex h-full w-4/5 flex-row pt-4">
+    <GroupInformation class="w-3/4" />
     <div class="flex w-1/4 flex-col gap-8 py-4">
-      <GroupMembers :group="group" @fix-group="group = $event" />
-      <GroupOwners :group="group" @fix-group="group = $event" />
+      <GroupMembers :group="groupDetailStore.group" />
+      <GroupOwners :group="groupDetailStore.group" />
     </div>
   </div>
 </template>

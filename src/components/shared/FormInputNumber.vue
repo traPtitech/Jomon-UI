@@ -1,7 +1,6 @@
 <script setup lang="ts">
 interface Props {
-  value?: number
-  modelValue?: number
+  modelValue: number
   required?: boolean
   placeholder?: string
   min?: number
@@ -16,11 +15,7 @@ const emit = defineEmits<{
 }>()
 
 function handleInput(value: string) {
-  if (props.value) {
-    emit('input', Number(value))
-  } else {
-    emit('update:modelValue', Number(value))
-  }
+  emit('update:modelValue', Number(value))
 }
 </script>
 

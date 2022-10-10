@@ -1,7 +1,6 @@
 <script setup lang="ts">
 interface Props {
-  value?: string
-  modelValue?: string
+  modelValue: string
   required?: boolean
   placeholder?: string
 }
@@ -15,11 +14,7 @@ const emit = defineEmits<{
 }>()
 
 function handleInput(value: string) {
-  if (props.value) {
-    emit('input', value)
-  } else {
-    emit('update:modelValue', value)
-  }
+  emit('update:modelValue', value)
 }
 </script>
 
@@ -28,6 +23,6 @@ function handleInput(value: string) {
     class="bg-background rounded border border-gray-300 py-1 px-2"
     :placeholder="props.placeholder"
     :required="props.required"
-    :value="props.value ?? props.modelValue"
+    :value="props.modelValue"
     @input="handleInput(($event.target as HTMLInputElement).value)" />
 </template>

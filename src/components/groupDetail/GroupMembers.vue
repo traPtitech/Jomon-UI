@@ -2,31 +2,24 @@
 import { MinusIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
 
+import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
-
-import type { GroupDetail } from '/@/lib/apis'
 
 import FormSelect from '/@/components/shared/FormSelect.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
 
 import { useGroupMember } from './composables/useGroupMember'
 
-interface Props {
-  group: GroupDetail
-}
-
-const props = defineProps<Props>()
-const emit = defineEmits<{ (e: 'fixGroup', group: GroupDetail): void }>()
-
 const userStore = useUserStore()
+const groupDetailStore = useGroupDetailStore()
 
 const MembersToBeAdded = ref<string[]>([])
 const hasAuthority = userStore.isAdminOrGroupOwner(
   userStore.me,
-  props.group.owners
+  groupDetailStore.group.owners
 )
 const { absentMemberOptions, isSending, addMembers, removeMember } =
-  useGroupMember(props.group)
+  useGroupMember()
 </script>
 
 <template>
@@ -35,7 +28,7 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
     <p class="bg-background absolute -top-3 left-2 px-2">グループメンバー</p>
     <ul class="h-full p-4">
       <li
-        v-for="member in group.members"
+        v-for="member in groupDetailStore.group.members"
         :key="member"
         class="not-first:mt-2 flex items-center justify-between">
         <div class="flex items-center">
@@ -46,7 +39,7 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
           v-if="hasAuthority"
           class="flex items-center rounded-full p-1 hover:bg-gray-300"
           :is-disabled="isSending"
-          @click="removeMember(member, emit)">
+          @click="removeMember(member)">
           <MinusIcon class="w-6" />
         </button>
       </li>
@@ -61,7 +54,7 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
       <button
         class="flex items-center rounded-full p-1 hover:bg-gray-300"
         :is-disabled="isSending"
-        @click="addMembers(MembersToBeAdded, emit)">
+        @click="addMembers(MembersToBeAdded)">
         <PlusIcon class="w-6" />
       </button>
     </div>

@@ -1,12 +1,13 @@
 import { ref, computed } from 'vue'
 import { useToast } from 'vue-toastification'
 
+import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
 
-import type { GroupDetail } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
-export const useGroupOwner = (group: GroupDetail) => {
+export const useGroupOwner = () => {
+  const groupDetailStore = useGroupDetailStore()
   const { users } = useUserStore()
   const toast = useToast()
 
@@ -15,7 +16,7 @@ export const useGroupOwner = (group: GroupDetail) => {
       return []
     }
     return users
-      .filter(user => !group.owners.includes(user.name))
+      .filter(user => !groupDetailStore.group.owners.includes(user.name))
       .map(user => {
         return {
           key: user.name,
@@ -26,39 +27,33 @@ export const useGroupOwner = (group: GroupDetail) => {
 
   const isSending = ref(false)
 
-  const addOwners = async (
-    ownersToBeAdded: string[],
-    emit: (e: 'fixGroup', group: GroupDetail) => void
-  ) => {
+  const addOwners = async (ownersToBeAdded: string[]) => {
     if (ownersToBeAdded.length === 0) {
       return
     }
     try {
       isSending.value = true
-      await apis.postGroupOwners(group.id, ownersToBeAdded)
+      await apis.postGroupOwners(groupDetailStore.group.id, ownersToBeAdded)
       const nextGroup = {
-        ...group,
-        owners: [...group.owners, ...ownersToBeAdded]
+        ...groupDetailStore.group,
+        owners: [...groupDetailStore.group.owners, ...ownersToBeAdded]
       }
-      emit('fixGroup', nextGroup)
+      groupDetailStore.group = nextGroup
     } catch {
       toast.error('グループオーナーの追加に失敗しました')
     } finally {
       isSending.value = false
     }
   }
-  const removeOwner = async (
-    id: string,
-    emit: (e: 'fixGroup', group: GroupDetail) => void
-  ) => {
+  const removeOwner = async (id: string) => {
     try {
       isSending.value = true
-      await apis.deleteGroupOwners(group.id, [id])
+      await apis.deleteGroupOwners(groupDetailStore.group.id, [id])
       const nextGroup = {
-        ...group,
-        owners: group.owners.filter(owner => owner !== id)
+        ...groupDetailStore.group,
+        owners: groupDetailStore.group.owners.filter(owner => owner !== id)
       }
-      emit('fixGroup', nextGroup)
+      groupDetailStore.group = nextGroup
     } catch {
       toast.error('グループオーナーの削除に失敗しました')
     } finally {

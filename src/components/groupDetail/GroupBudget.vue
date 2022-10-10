@@ -4,8 +4,8 @@ import { useUserStore } from '/@/stores/user'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import FixButton from '/@/components/shared/FixButton.vue'
+import FormInputNumber from '/@/components/shared/FormInputNumber.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import FormInputNumber from '/@/shared/FormInputNumber.vue'
 
 interface Props {
   isEditMode: boolean

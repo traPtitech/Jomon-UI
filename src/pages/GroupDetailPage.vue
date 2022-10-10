@@ -26,8 +26,8 @@ if (!userStore.isUserFetched) {
   <div class="min-w-80 mx-auto flex h-full w-4/5 flex-row pt-4">
     <GroupInformation class="w-3/4" />
     <div class="flex w-1/4 flex-col gap-8 py-4">
-      <GroupMembers :group="groupDetailStore.group" />
-      <GroupOwners :group="groupDetailStore.group" />
+      <GroupMembers />
+      <GroupOwners />
     </div>
   </div>
 </template>

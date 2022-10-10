@@ -1,12 +1,13 @@
 import { ref, computed } from 'vue'
 import { useToast } from 'vue-toastification'
 
+import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
 
-import type { GroupDetail } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
-export const useGroupMember = (group: GroupDetail) => {
+export const useGroupMember = () => {
+  const groupDetailStore = useGroupDetailStore()
   const { users } = useUserStore()
   const toast = useToast()
 
@@ -15,7 +16,7 @@ export const useGroupMember = (group: GroupDetail) => {
       return []
     }
     return users
-      .filter(user => !group.members.includes(user.name))
+      .filter(user => !groupDetailStore.group.members.includes(user.name))
       .map(user => {
         return {
           key: user.name,
@@ -26,19 +27,16 @@ export const useGroupMember = (group: GroupDetail) => {
 
   const isSending = ref(false)
 
-  const addMembers = async (
-    membersToBeAdded: string[],
-    emit: (e: 'fixGroup', group: GroupDetail) => void
-  ) => {
+  const addMembers = async (membersToBeAdded: string[]) => {
     if (membersToBeAdded.length !== 0) {
       try {
         isSending.value = true
-        await apis.postGroupMembers(group.id, membersToBeAdded)
+        await apis.postGroupMembers(groupDetailStore.group.id, membersToBeAdded)
         const nextGroup = {
-          ...group,
-          members: [...group.members, ...membersToBeAdded]
+          ...groupDetailStore.group,
+          members: [...groupDetailStore.group.members, ...membersToBeAdded]
         }
-        emit('fixGroup', nextGroup)
+        groupDetailStore.group = nextGroup
       } catch {
         toast.error('グループメンバーの追加に失敗しました')
       } finally {
@@ -46,18 +44,15 @@ export const useGroupMember = (group: GroupDetail) => {
       }
     }
   }
-  const removeMember = async (
-    id: string,
-    emit: (e: 'fixGroup', group: GroupDetail) => void
-  ) => {
+  const removeMember = async (id: string) => {
     try {
       isSending.value = true
-      await apis.deleteGroupMembers(group.id, [id])
+      await apis.deleteGroupMembers(groupDetailStore.group.id, [id])
       const nextGroup = {
-        ...group,
-        members: group.members.filter(member => member !== id)
+        ...groupDetailStore.group,
+        members: groupDetailStore.group.members.filter(member => member !== id)
       }
-      emit('fixGroup', nextGroup)
+      groupDetailStore.group = nextGroup
     } catch {
       toast.error('グループメンバーの削除に失敗しました')
     } finally {

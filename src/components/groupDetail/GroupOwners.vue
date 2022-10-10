@@ -2,32 +2,24 @@
 import { MinusIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
 
+import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
-
-import type { GroupDetail } from '/@/lib/apis'
 
 import FormSelect from '/@/components/shared/FormSelect.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
 
 import { useGroupOwner } from './composables/useGroupOwner'
 
-interface Props {
-  group: GroupDetail
-}
-
-const props = defineProps<Props>()
-const emit = defineEmits<{ (e: 'fixGroup', group: GroupDetail): void }>()
-
 const userStore = useUserStore()
+const groupDetailStore = useGroupDetailStore()
 
 const OwnersToBeAdded = ref<string[]>([])
 const hasAuthority = userStore.isAdminOrGroupOwner(
   userStore.me,
-  props.group.owners
+  groupDetailStore.group.owners
 )
-const { absentOwnerOptions, isSending, addOwners, removeOwner } = useGroupOwner(
-  props.group
-)
+const { absentOwnerOptions, isSending, addOwners, removeOwner } =
+  useGroupOwner()
 </script>
 
 <template>
@@ -36,7 +28,7 @@ const { absentOwnerOptions, isSending, addOwners, removeOwner } = useGroupOwner(
     <p class="bg-background absolute -top-3 left-2 px-2">グループオーナー</p>
     <ul class="h-full p-4">
       <li
-        v-for="owner in group.owners"
+        v-for="owner in groupDetailStore.group.owners"
         :key="owner"
         class="not-first:mt-2 flex items-center justify-between">
         <div class="items-cente flex">
@@ -47,7 +39,7 @@ const { absentOwnerOptions, isSending, addOwners, removeOwner } = useGroupOwner(
           v-if="hasAuthority"
           class="flex items-center rounded-full p-1 hover:bg-gray-300"
           :is-disabled="isSending"
-          @click="removeOwner(owner, emit)">
+          @click="removeOwner(owner)">
           <MinusIcon class="w-6" />
         </button>
       </li>
@@ -63,7 +55,7 @@ const { absentOwnerOptions, isSending, addOwners, removeOwner } = useGroupOwner(
       <button
         class="flex items-center rounded-full p-1 hover:bg-gray-300"
         :is-disabled="isSending"
-        @click="addOwners(OwnersToBeAdded, emit)">
+        @click="addOwners(OwnersToBeAdded)">
         <PlusIcon class="w-6" />
       </button>
     </div>

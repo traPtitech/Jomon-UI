@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { useGroupDetailStore } from '/@/stores/groupDetail'
-import { useUserStore } from '/@/stores/user'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import FixButton from '/@/components/shared/FixButton.vue'
@@ -17,13 +16,9 @@ const emit = defineEmits<{
   (e: 'changeEditMode', value: EditMode): void
 }>()
 
-const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
 
-const hasAuthority = userStore.isAdminOrGroupOwner(
-  userStore.me,
-  groupDetailStore.group.owners
-)
+const hasAuthority = groupDetailStore.canEdit()
 </script>
 
 <template>

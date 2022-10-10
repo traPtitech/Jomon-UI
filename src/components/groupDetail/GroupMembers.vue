@@ -3,21 +3,16 @@ import { MinusIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
 
 import { useGroupDetailStore } from '/@/stores/groupDetail'
-import { useUserStore } from '/@/stores/user'
 
 import FormSelect from '/@/components/shared/FormSelect.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
 
 import { useGroupMember } from './composables/useGroupMember'
 
-const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
 
 const MembersToBeAdded = ref<string[]>([])
-const hasAuthority = userStore.isAdminOrGroupOwner(
-  userStore.me,
-  groupDetailStore.group.owners
-)
+const hasAuthority = groupDetailStore.canEdit()
 const { absentMemberOptions, isSending, addMembers, removeMember } =
   useGroupMember()
 </script>

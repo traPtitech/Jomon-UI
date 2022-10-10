@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useGroupDetailStore } from '/@/stores/groupDetail'
-import { useUserStore } from '/@/stores/user'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import FormInput from '/@/components/shared/FormInput.vue'
@@ -16,13 +15,9 @@ const emit = defineEmits<{
   (e: 'changeEditMode', value: EditMode): void
 }>()
 
-const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
 
-const hasAuthority = userStore.isAdminOrGroupOwner(
-  userStore.me,
-  groupDetailStore.group.owners
-)
+const hasAuthority = groupDetailStore.canEdit()
 </script>
 
 <template>

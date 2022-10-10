@@ -14,7 +14,7 @@ const userStore = useUserStore()
 
 const addList = ref<string[]>([])
 const removeList = ref<string[]>([])
-const hasAuthority = userStore.isAdmin(userStore.me)
+const hasAuthority = userStore.isAdmin()
 const { absentMembers, isSending, addAdmins, removeAdmins } = useAdmin()
 
 if (userStore.me && userStore.me.admin) {

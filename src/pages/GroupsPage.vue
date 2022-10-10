@@ -17,7 +17,7 @@ const page = ref(toPage(route.query.page))
 const groupStore = useGroupStore()
 const userStore = useUserStore()
 
-const hasAuthority = userStore.isAdmin(userStore.me)
+const hasAuthority = userStore.isAdmin()
 
 const sliceGroupsAt = (index: number, n: number) => {
   const start = (index - 1) * n

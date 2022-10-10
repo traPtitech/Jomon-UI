@@ -23,10 +23,7 @@ const groupDetailStore = useGroupDetailStore()
 
 const { isSending, editMode, changeEditMode } = useGroupInformation()
 
-const hasAuthority = userStore.isAdminOrGroupOwner(
-  userStore.me,
-  groupDetailStore.group.owners
-)
+const hasAuthority = groupDetailStore.canEdit()
 const { isDeleting, deleteGroup } = useDeleteGroup()
 
 await groupDetailStore.fetchGroup(id)

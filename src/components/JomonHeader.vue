@@ -12,7 +12,7 @@ const route = useRoute()
 
 const userStore = useUserStore()
 
-const hasAuthority = computed(() => userStore.isAdmin(userStore.me))
+const hasAuthority = computed(() => userStore.isAdmin())
 </script>
 
 <template>

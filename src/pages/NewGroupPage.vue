@@ -44,10 +44,11 @@ const postGroup = async (group: PostGroup) => {
       type: 'error',
       message: 'グループの作成に失敗しました'
     })
+    throw new Error('グループの作成に失敗しました')
   }
 }
 
-async function handlePostGroup(e: Event) {
+const handlePostGroup = async (e: Event) => {
   e.preventDefault()
   if (group.value.owners.length === 0) {
     alert('オーナーを1人以上入れてください')
@@ -59,10 +60,7 @@ async function handlePostGroup(e: Event) {
     budget: group.value.budget
   }
   try {
-    const res: Group | undefined = await postGroup(willPostGroup)
-    if (res === undefined) {
-      return
-    }
+    const res: Group = await postGroup(willPostGroup)
     await Promise.all([
       apis.postGroupMembers(res.id, group.value.members),
       apis.postGroupOwners(res.id, group.value.owners)

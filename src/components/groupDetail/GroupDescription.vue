@@ -2,7 +2,6 @@
 import { useUserStore } from '/@/stores/user'
 
 import type { GroupDetail } from '/@/lib/apis'
-import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import FormTextarea from '/@/components/shared/FormTextarea.vue'
@@ -23,41 +22,46 @@ const emit = defineEmits<{
 
 const userStore = useUserStore()
 
-const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
+const hasAuthority = userStore.isAdminOrGroupOwner(
+  userStore.me,
+  props.group.owners
+)
 </script>
 
 <template>
-  <p>詳細</p>
-  <div v-if="!isEditMode" class="flex w-full">
-    <p class="h-32 w-4/5 rounded border border-gray-300 pl-1">
-      {{ props.group.description }}
-    </p>
-    <div class="flex items-end">
-      <SimpleButton
-        v-if="hasAuthority"
-        class="ml-2"
-        font-size="sm"
-        padding="sm"
-        @click="emit('changeEditMode', 'description')">
-        編集
-      </SimpleButton>
+  <div>
+    <p>詳細</p>
+    <div v-if="!isEditMode" class="flex w-full">
+      <p class="h-32 w-4/5 rounded border border-gray-300 pl-1">
+        {{ props.group.description }}
+      </p>
+      <div class="flex items-end">
+        <SimpleButton
+          v-if="hasAuthority"
+          class="ml-2"
+          font-size="sm"
+          padding="sm"
+          @click="emit('changeEditMode', 'description')">
+          編集
+        </SimpleButton>
+      </div>
     </div>
-  </div>
-  <div v-else class="flex w-full">
-    <FormTextarea
-      class="w-4/5"
-      placeholder="詳細"
-      :value="props.value"
-      @input="emit('input', $event)" />
-    <div class="flex items-end">
-      <SimpleButton
-        class="ml-2 flex items-center"
-        font-size="sm"
-        :is-disabled="props.isSending"
-        padding="sm"
-        @click.stop="emit('changeEditMode', '')">
-        完了
-      </SimpleButton>
+    <div v-else class="flex w-full">
+      <FormTextarea
+        class="w-4/5"
+        placeholder="詳細"
+        :value="props.value"
+        @input="emit('input', $event)" />
+      <div class="flex items-end">
+        <SimpleButton
+          class="ml-2 flex items-center"
+          font-size="sm"
+          :is-disabled="props.isSending"
+          padding="sm"
+          @click.stop="emit('changeEditMode', '')">
+          完了
+        </SimpleButton>
+      </div>
     </div>
   </div>
 </template>

@@ -2,7 +2,6 @@
 import { useUserStore } from '/@/stores/user'
 
 import type { GroupDetail } from '/@/lib/apis'
-import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 
 import { useDeleteGroup } from '/@/components/groupDetail/composables/useDeleteGroup'
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
@@ -24,7 +23,10 @@ const emit = defineEmits<{
 
 const userStore = useUserStore()
 
-const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
+const hasAuthority = userStore.isAdminOrGroupOwner(
+  userStore.me,
+  props.group.owners
+)
 const { isDeleting, deleteGroup } = useDeleteGroup()
 </script>
 

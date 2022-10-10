@@ -4,8 +4,6 @@ import { ref } from 'vue'
 import { useAdminStore } from '/@/stores/admin'
 import { useUserStore } from '/@/stores/user'
 
-import { isAdmin } from '/@/lib/authorityCheck'
-
 import FormSelect from '/@/components/shared/FormSelect.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
@@ -16,7 +14,7 @@ const userStore = useUserStore()
 
 const addList = ref<string[]>([])
 const removeList = ref<string[]>([])
-const hasAuthority = isAdmin(userStore.me)
+const hasAuthority = userStore.isAdmin(userStore.me)
 const { absentMembers, isSending, addAdmins, removeAdmins } = useAdmin()
 
 if (userStore.me && userStore.me.admin) {

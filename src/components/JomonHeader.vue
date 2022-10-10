@@ -4,8 +4,6 @@ import { useRoute } from 'vue-router'
 
 import { useUserStore } from '/@/stores/user'
 
-import { isAdmin } from '/@/lib/authorityCheck'
-
 import HeaderButton from './HeaderButton.vue'
 import Logo from './shared/JomonLogo.vue'
 import UserIcon from './shared/UserIcon.vue'
@@ -14,7 +12,7 @@ const route = useRoute()
 
 const userStore = useUserStore()
 
-const hasAuthority = computed(() => isAdmin(userStore.me))
+const hasAuthority = computed(() => userStore.isAdmin(userStore.me))
 </script>
 
 <template>

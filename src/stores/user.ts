@@ -13,6 +13,18 @@ export const useUserStore = defineStore('user', () => {
   const users = ref<User[]>()
   const isUserFetched = ref(false)
 
+  const isAdmin = (user: User | undefined) => {
+    if (!user) return false
+    return user.admin
+  }
+  const isAdminOrGroupOwner = (
+    user: User | undefined,
+    groupOwners: string[]
+  ) => {
+    if (!user) return false
+    return user.admin || groupOwners.includes(user.name)
+  }
+
   const userOptions = computed(() => {
     return (
       users.value?.map(user => {
@@ -49,6 +61,8 @@ export const useUserStore = defineStore('user', () => {
   return {
     me,
     users,
+    isAdmin,
+    isAdminOrGroupOwner,
     userOptions,
     isUserFetched,
     fetchMe,

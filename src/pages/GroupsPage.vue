@@ -5,7 +5,6 @@ import { useRoute } from 'vue-router'
 import { useGroupStore } from '/@/stores/group'
 import { useUserStore } from '/@/stores/user'
 
-import { isAdmin } from '/@/lib/authorityCheck'
 import { toPage } from '/@/lib/parseQueryParams'
 
 import GroupItem from '/@/components/GroupItem.vue'
@@ -18,7 +17,7 @@ const page = ref(toPage(route.query.page))
 const groupStore = useGroupStore()
 const userStore = useUserStore()
 
-const hasAuthority = isAdmin(userStore.me)
+const hasAuthority = userStore.isAdmin(userStore.me)
 
 const sliceGroupsAt = (index: number, n: number) => {
   const start = (index - 1) * n

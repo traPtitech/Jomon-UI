@@ -24,40 +24,34 @@ const { isSending, editMode, editedValue, changeEditMode } =
 
 <template>
   <div>
-    <div>
-      <GroupName
-        :group="group"
-        :is-edit-mode="editMode === 'name'"
-        :is-sending="isSending"
-        :value="editedValue.name"
-        @change-edit-mode="changeEditMode($event, emit)"
-        @input="editedValue.name = $event" />
-    </div>
-    <div class="mt-4">
-      <GroupDescription
-        :group="group"
-        :is-edit-mode="editMode === 'description'"
-        :is-sending="isSending"
-        :value="editedValue.description"
-        @change-edit-mode="changeEditMode($event, emit)"
-        @input="editedValue.description = $event" />
-    </div>
-    <div class="mt-4">
-      <GroupBudget
-        :group="group"
-        :is-edit-mode="editMode === 'budget'"
-        :is-sending="isSending"
-        :value="editedValue.budget"
-        @change-edit-mode="changeEditMode($event, emit)"
-        @input="editedValue.budget = $event" />
-    </div>
-    <div class="mt-2 w-fit">
-      <router-link
-        class="flex items-center"
-        :to="`/transactions?group=${props.group.id}`">
-        このグループの入出金記録へ
-        <ArrowTopRightOnSquareIcon class="w-6" />
-      </router-link>
-    </div>
+    <GroupName
+      :group="group"
+      :is-edit-mode="editMode === 'name'"
+      :is-sending="isSending"
+      :value="editedValue.name"
+      @change-edit-mode="changeEditMode($event, emit)"
+      @input="editedValue.name = $event" />
+    <GroupDescription
+      class="mt-4"
+      :group="group"
+      :is-edit-mode="editMode === 'description'"
+      :is-sending="isSending"
+      :value="editedValue.description"
+      @change-edit-mode="changeEditMode($event, emit)"
+      @input="editedValue.description = $event" />
+    <GroupBudget
+      class="mt-4"
+      :group="group"
+      :is-edit-mode="editMode === 'budget'"
+      :is-sending="isSending"
+      :value="editedValue.budget"
+      @change-edit-mode="changeEditMode($event, emit)"
+      @input="editedValue.budget = $event" />
+    <router-link
+      class="mt-2 flex w-fit items-center"
+      :to="`/transactions?group=${props.group.id}`">
+      このグループの入出金記録へ
+      <ArrowTopRightOnSquareIcon class="w-6" />
+    </router-link>
   </div>
 </template>

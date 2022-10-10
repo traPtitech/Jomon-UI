@@ -5,7 +5,6 @@ import { ref } from 'vue'
 import { useUserStore } from '/@/stores/user'
 
 import type { GroupDetail } from '/@/lib/apis'
-import { isAdminOrGroupOwner } from '/@/lib/authorityCheck'
 
 import FormSelect from '/@/components/shared/FormSelect.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
@@ -22,7 +21,10 @@ const emit = defineEmits<{ (e: 'fixGroup', group: GroupDetail): void }>()
 const userStore = useUserStore()
 
 const OwnersToBeAdded = ref<string[]>([])
-const hasAuthority = isAdminOrGroupOwner(userStore.me, props.group.owners)
+const hasAuthority = userStore.isAdminOrGroupOwner(
+  userStore.me,
+  props.group.owners
+)
 const { absentOwnerOptions, isSending, addOwners, removeOwner } = useGroupOwner(
   props.group
 )

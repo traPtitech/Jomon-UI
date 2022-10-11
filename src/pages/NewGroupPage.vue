@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
@@ -22,7 +22,7 @@ const groupStore = useGroupStore()
 
 const toast = useToast()
 
-const group = ref({
+const group = reactive({
   name: '',
   description: '',
   budget: 0,
@@ -47,20 +47,20 @@ const postGroup = async (group: PostGroup) => {
 
 const handlePostGroup = async (e: Event) => {
   e.preventDefault()
-  if (group.value.owners.length === 0) {
+  if (group.owners.length === 0) {
     alert('オーナーを1人以上入れてください')
     return
   }
   const willPostGroup = {
-    name: group.value.name,
-    description: group.value.description,
-    budget: group.value.budget
+    name: group.name,
+    description: group.description,
+    budget: group.budget
   }
   try {
     const res: Group = await postGroup(willPostGroup)
     await Promise.all([
-      apis.postGroupMembers(res.id, group.value.members),
-      apis.postGroupOwners(res.id, group.value.owners)
+      apis.postGroupMembers(res.id, group.members),
+      apis.postGroupOwners(res.id, group.owners)
     ])
     toast.success('グループを作成しました')
     router.push(`/groups/${res.id}`)

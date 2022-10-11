@@ -23,7 +23,7 @@ const groupDetailStore = useGroupDetailStore()
 
 const { isSending, editMode, changeEditMode } = useGroupInformation()
 
-const hasAuthority = groupDetailStore.canEdit()
+const hasAuthority = groupDetailStore.canEdit(userStore.me)
 const { isDeleting, deleteGroup } = useDeleteGroup()
 
 await groupDetailStore.fetchGroup(id)
@@ -33,7 +33,9 @@ if (!userStore.isUserFetched) {
 </script>
 
 <template>
-  <div class="min-w-96 mx-auto h-full w-4/5 pt-4">
+  <div
+    v-if="groupDetailStore.group !== undefined"
+    class="min-w-96 mx-auto h-full w-4/5 pt-4">
     <div class="flex justify-between">
       <GroupName
         class="flex-grow"
@@ -47,7 +49,7 @@ if (!userStore.isUserFetched) {
         :is-disabled="isDeleting"
         kind="danger"
         padding="sm"
-        @click.stop="deleteGroup(groupDetailStore.group.id)">
+        @click.stop="deleteGroup(groupDetailStore.group?.id ?? '')">
         グループを削除
       </SimpleButton>
     </div>

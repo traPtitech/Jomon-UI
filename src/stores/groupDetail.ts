@@ -2,25 +2,22 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import { useUserStore } from '/@/stores/user'
-
-import type { PostGroup } from '/@/lib/apis'
+import type { PostGroup, User } from '/@/lib/apis'
 import apis, { type GroupDetail } from '/@/lib/apis'
 
 export const useGroupDetailStore = defineStore('groupDetail', () => {
   const toast = useToast()
-  const userStore = useUserStore()
 
-  const group = ref<GroupDetail>({} as GroupDetail)
+  const group = ref<GroupDetail>()
 
   const editedValue = ref({
     name: '',
     description: '',
     budget: 0
   })
-  const canEdit = () => {
-    if (!userStore.me) return false
-    return userStore.me.admin || group.value.owners.includes(userStore.me.name)
+  const canEdit = (user: User | undefined) => {
+    if (!user) return false
+    return user.admin || group.value?.owners.includes(user.name)
   }
 
   const putGroup = async (id: string, willPutGroup: PostGroup) => {

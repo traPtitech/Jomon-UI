@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useGroupDetailStore } from '/@/stores/groupDetail'
+import { useUserStore } from '/@/stores/user'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import FormTextarea from '/@/components/shared/FormTextarea.vue'
@@ -15,13 +16,14 @@ const emit = defineEmits<{
   (e: 'changeEditMode', value: EditMode): void
 }>()
 
+const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
 
-const hasAuthority = groupDetailStore.canEdit()
+const hasAuthority = groupDetailStore.canEdit(userStore.me)
 </script>
 
 <template>
-  <div>
+  <div v-if="groupDetailStore.group">
     <p>詳細</p>
     <div v-if="!isEditMode" class="flex w-full">
       <p class="h-32 w-4/5 rounded border border-gray-300 pl-1">

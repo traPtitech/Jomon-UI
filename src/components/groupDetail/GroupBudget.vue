@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useGroupDetailStore } from '/@/stores/groupDetail'
+import { useUserStore } from '/@/stores/user'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import FixButton from '/@/components/shared/FixButton.vue'
@@ -16,13 +17,16 @@ const emit = defineEmits<{
   (e: 'changeEditMode', value: EditMode): void
 }>()
 
+const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
 
-const hasAuthority = groupDetailStore.canEdit()
+const hasAuthority = groupDetailStore.canEdit(userStore.me)
 </script>
 
 <template>
-  <div v-if="!isEditMode" class="flex items-center pb-2">
+  <div
+    v-if="!isEditMode && groupDetailStore.group"
+    class="flex items-center pb-2">
     予算：{{ groupDetailStore.group.budget }}円
     <FixButton
       v-if="hasAuthority"

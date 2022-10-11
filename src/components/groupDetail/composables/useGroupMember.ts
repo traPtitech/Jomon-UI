@@ -16,7 +16,7 @@ export const useGroupMember = () => {
       return []
     }
     return users
-      .filter(user => !groupDetailStore.group.members.includes(user.name))
+      .filter(user => !groupDetailStore.group?.members.includes(user.name))
       .map(user => {
         return {
           key: user.name,
@@ -28,23 +28,27 @@ export const useGroupMember = () => {
   const isSending = ref(false)
 
   const addMembers = async (membersToBeAdded: string[]) => {
-    if (membersToBeAdded.length !== 0) {
-      try {
-        isSending.value = true
-        await apis.postGroupMembers(groupDetailStore.group.id, membersToBeAdded)
-        const nextGroup = {
-          ...groupDetailStore.group,
-          members: [...groupDetailStore.group.members, ...membersToBeAdded]
-        }
-        groupDetailStore.group = nextGroup
-      } catch {
-        toast.error('グループメンバーの追加に失敗しました')
-      } finally {
-        isSending.value = false
+    if (membersToBeAdded.length === 0 || groupDetailStore.group === undefined) {
+      return
+    }
+    try {
+      isSending.value = true
+      await apis.postGroupMembers(groupDetailStore.group.id, membersToBeAdded)
+      const nextGroup = {
+        ...groupDetailStore.group,
+        members: [...groupDetailStore.group.members, ...membersToBeAdded]
       }
+      groupDetailStore.group = nextGroup
+    } catch {
+      toast.error('グループメンバーの追加に失敗しました')
+    } finally {
+      isSending.value = false
     }
   }
   const removeMember = async (id: string) => {
+    if (groupDetailStore.group === undefined) {
+      return
+    }
     try {
       isSending.value = true
       await apis.deleteGroupMembers(groupDetailStore.group.id, [id])

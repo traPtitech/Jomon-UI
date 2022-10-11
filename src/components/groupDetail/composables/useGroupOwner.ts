@@ -16,7 +16,7 @@ export const useGroupOwner = () => {
       return []
     }
     return users
-      .filter(user => !groupDetailStore.group.owners.includes(user.name))
+      .filter(user => !groupDetailStore.group?.owners.includes(user.name))
       .map(user => {
         return {
           key: user.name,
@@ -28,7 +28,7 @@ export const useGroupOwner = () => {
   const isSending = ref(false)
 
   const addOwners = async (ownersToBeAdded: string[]) => {
-    if (ownersToBeAdded.length === 0) {
+    if (ownersToBeAdded.length === 0 || groupDetailStore.group === undefined) {
       return
     }
     try {
@@ -46,6 +46,9 @@ export const useGroupOwner = () => {
     }
   }
   const removeOwner = async (id: string) => {
+    if (groupDetailStore.group === undefined) {
+      return
+    }
     try {
       isSending.value = true
       await apis.deleteGroupOwners(groupDetailStore.group.id, [id])

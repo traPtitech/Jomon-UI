@@ -5,7 +5,6 @@ interface Props {
   placeholder?: string
   min?: number
 }
-
 const props = withDefaults(defineProps<Props>(), {
   required: false
 })

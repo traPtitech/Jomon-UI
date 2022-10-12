@@ -1,8 +1,8 @@
 <script lang="ts" setup>
+import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 import type { RequestDetail } from '/@/lib/apis'
-import { isCreater } from '/@/lib/authorityCheck'
 
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { EditMode } from '/@/pages/composables/requestDetail/useRequestDetail'
@@ -20,8 +20,9 @@ const emit = defineEmits<{
 }>()
 
 const userStore = useUserStore()
+const requestDetailStore = useRequestDetailStore()
 
-const hasAuthority = isCreater(userStore.me, props.request.created_by)
+const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
 </script>
 
 <template>

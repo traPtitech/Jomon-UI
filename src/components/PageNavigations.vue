@@ -1,17 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useUserStore } from '/@/stores/user'
-
-import { isAdmin } from '/@/lib/authorityCheck'
 
 import HeaderButton from '/@/components/HeaderButton.vue'
 
 const userStore = useUserStore()
 
 const route = useRoute()
-const hasAuthority = computed(() => isAdmin(userStore.me))
 </script>
 
 <template>
@@ -29,7 +25,7 @@ const hasAuthority = computed(() => isAdmin(userStore.me))
       path="/groups"
       text="グループ一覧" />
     <HeaderButton
-      v-if="hasAuthority"
+      v-if="userStore.isAdmin()"
       :is-here="route.fullPath === '/admins'"
       path="/admins"
       text="管理ページ" />

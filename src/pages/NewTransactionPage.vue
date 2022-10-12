@@ -7,7 +7,6 @@ import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
 import apis from '/@/lib/apis'
-import { isAdmin } from '/@/lib/authorityCheck'
 import { toId } from '/@/lib/parseQueryParams'
 
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
@@ -21,7 +20,6 @@ const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 
-const hasAuthority = isAdmin(userStore.me)
 const { request, targetIds, tagIds, fetchRequestDetail } = useRequestDetail()
 const transaction = ref({
   //requestのraective性が失われてそうでamountとgroupがバグってる
@@ -57,7 +55,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-if="!hasAuthority">権限がありません。</div>
+  <div v-if="!userStore.isAdmin()">権限がありません。</div>
   <div class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
     <div class="pb-8">
       <h1 class="text-center text-3xl">入出金記録の新規作成</h1>

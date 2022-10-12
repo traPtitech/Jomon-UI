@@ -2,10 +2,10 @@
 import { ref } from 'vue'
 
 import { useGroupStore } from '/@/stores/group'
+import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 import type { RequestDetail } from '/@/lib/apis'
-import { isCreater } from '/@/lib/authorityCheck'
 
 import EditButton from '/@/components/shared/EditButton.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
@@ -26,8 +26,9 @@ const emit = defineEmits<{
 
 const userStore = useUserStore()
 const groupStore = useGroupStore()
+const requestDetailStore = useRequestDetailStore()
 
-const hasAuthority = isCreater(userStore.me, props.request.created_by)
+const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
 const currentGroup = ref(props.request.group)
 
 const handleComplete = () => {

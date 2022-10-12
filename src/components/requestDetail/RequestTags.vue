@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
+import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
 import type { RequestDetail } from '/@/lib/apis'
-import { isCreater } from '/@/lib/authorityCheck'
 
 import EditButton from '/@/components/shared/EditButton.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
@@ -27,8 +27,9 @@ const emit = defineEmits<{
 
 const tagStore = useTagStore()
 const userStore = useUserStore()
+const requestDetailStore = useRequestDetailStore()
 
-const hasAuthority = isCreater(userStore.me, props.request.created_by)
+const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
 const tagIds = props.request.tags.map(tag => tag.id) ?? []
 const currentTags = ref(tagIds)
 

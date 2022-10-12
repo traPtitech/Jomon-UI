@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
+import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 import type { RequestDetail, Status } from '/@/lib/apis'
-import { isCreater, isAdmin } from '/@/lib/authorityCheck'
 
 import ModalWrapper from '/@/components/modal/ModalWrapper.vue'
 import StatusChangeModal from '/@/components/modal/StatusChangeModal.vue'
@@ -22,23 +22,23 @@ const emit = defineEmits<{
 }>()
 
 const userStore = useUserStore()
+const requestDetailStore = useRequestDetailStore()
 
 const nextStatus = ref<RequestStatus>()
-const hasCreaterAuthority = isCreater(userStore.me, props.request.created_by)
-const hasAdminAuthority = isAdmin(userStore.me)
+const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
 const { shouldShowModal, openModal, closeModal } = useModal()
 
 const hasToSubmittedAuthority =
-  (hasCreaterAuthority && props.request.status === 'fix_required') ||
-  (hasAdminAuthority &&
+  (hasAuthority && props.request.status === 'fix_required') ||
+  (userStore.isAdmin() &&
     (props.request.status === 'fix_required' ||
       props.request.status === 'accepted'))
 const hasToFixRequiredAuthority =
-  hasAdminAuthority && props.request.status === 'submitted'
+  userStore.isAdmin() && props.request.status === 'submitted'
 const hasToAcceptedAuthority =
-  hasAdminAuthority && props.request.status === 'submitted'
+  userStore.isAdmin() && props.request.status === 'submitted'
 const hasToRejectedAuthority =
-  hasAdminAuthority && props.request.status === 'submitted'
+  userStore.isAdmin() && props.request.status === 'submitted'
 
 function handlePushStatus(event: Status) {
   emit('pushStatus', event)

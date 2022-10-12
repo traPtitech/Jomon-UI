@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
+import { useToast } from 'vue-toastification'
 
 import apis from '/@/lib/apis'
 import { isImageByName } from '/@/lib/checkFileType'
@@ -17,6 +18,8 @@ const emit = defineEmits<{
   (event: 'removeFile', fileId: string): void
 }>()
 
+const toast = useToast()
+
 const downloadLink = (file: string) => {
   return URL.createObjectURL(new Blob([file]))
 }
@@ -29,8 +32,8 @@ async function removeFile(id: string) {
   try {
     await apis.deleteFile(id)
     emit('removeFile', id)
-  } catch (err) {
-    alert(err)
+  } catch {
+    toast.error('ファイルの削除に失敗しました')
   }
 }
 </script>

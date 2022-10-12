@@ -1,5 +1,6 @@
 import type { AxiosResponse } from 'axios'
 import { computed, ref } from 'vue'
+import { useToast } from 'vue-toastification'
 
 import type { RequestDetail, Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
@@ -24,6 +25,8 @@ export interface EditedValue {
 }
 
 export const useRequestDetail = () => {
+  const toast = useToast()
+
   const request = ref<RequestDetail>()
 
   const targetIds = computed(() => {
@@ -48,8 +51,8 @@ export const useRequestDetail = () => {
   const fetchRequestDetail = async (id: string) => {
     try {
       request.value = (await apis.getRequestDetail(id)).data
-    } catch (err) {
-      alert(err)
+    } catch {
+      toast.error('申請の取得に失敗しました')
     }
   }
 
@@ -93,8 +96,8 @@ export const useRequestDetail = () => {
       tags = (await Promise.all(tagPostPromises)).map(
         (tag: AxiosResponse<Tag>) => tag.data.id
       )
-    } catch (err) {
-      alert(err)
+    } catch {
+      toast.error('申請の修正に失敗しました')
       return
     }
     const putRequest = {
@@ -105,8 +108,8 @@ export const useRequestDetail = () => {
     }
     try {
       request.value = (await apis.putRequestDetail(id, putRequest)).data
-    } catch (err) {
-      alert(err)
+    } catch {
+      toast.error('申請の修正に失敗しました')
     }
   }
   return {

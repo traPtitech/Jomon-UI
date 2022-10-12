@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { useToast } from 'vue-toastification'
 
 import type { Status, RequestDetail } from '/@/lib/apis'
 import apis from '/@/lib/apis'
@@ -20,6 +21,8 @@ const emit = defineEmits<{
   (e: 'closeModal'): void
 }>()
 
+const toast = useToast()
+
 const comment = ref('')
 
 async function putStatus(nextStatus: RequestStatus | '', comment: string) {
@@ -37,8 +40,8 @@ async function putStatus(nextStatus: RequestStatus | '', comment: string) {
     //コメントをpushできない最上川
     emit('pushStatus', response)
     emit('closeModal')
-  } catch (err) {
-    alert(err)
+  } catch {
+    toast.error('状態の変更に失敗しました')
   }
 }
 </script>

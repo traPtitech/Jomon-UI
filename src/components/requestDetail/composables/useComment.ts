@@ -1,9 +1,12 @@
 import { ref } from 'vue'
+import { useToast } from 'vue-toastification'
 
 import type { Comment } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export const useComment = () => {
+  const toast = useToast()
+
   const comment = ref('')
   const isSending = ref(false)
 
@@ -22,8 +25,8 @@ export const useComment = () => {
       ).data
       comment.value = ''
       isSending.value = false
-    } catch (err) {
-      alert(err)
+    } catch {
+      toast.error('コメントの投稿に失敗しました')
       isSending.value = false
       return
     }

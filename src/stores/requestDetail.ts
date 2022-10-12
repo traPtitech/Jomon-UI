@@ -141,7 +141,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
       alert('金額の形式が不正です')
       return
     }
-    if (editMode.value !== 'tags' && kind === '') {
+    if (kind === '') {
       const result = confirm(
         '入出金記録に紐づいている申請のこの情報を変更すると、入出金記録の情報にも変更が反映されます。よろしいですか？'
       )
@@ -166,6 +166,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     try {
       const res = (await apis.putRequestDetail(id, willPutRequest)).data
       request.value = res
+      toast.success('申請の修正に成功しました')
     } catch {
       toast.error('申請の修正に失敗しました')
     }

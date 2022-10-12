@@ -5,6 +5,7 @@ import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 import EditButton from '/@/components/shared/EditButton.vue'
+import FormInputNumber from '/@/components/shared/FormInputNumber.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { EditMode } from '/@/pages/composables/requestDetail/useRequestDetail'
 
@@ -35,9 +36,9 @@ const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
   </div>
   <div v-else class="flex items-center">
     金額：
-    <input
+    <FormInputNumber
       v-model="editedValue.amount"
-      class="mr-1 w-24 p-1"
+      class="mr-1 w-24"
       placeholder="金額"
       type="text" />円
     <SimpleButton

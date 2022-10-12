@@ -10,6 +10,7 @@ import { useUserStore } from '/@/stores/user'
 
 import { requestStates } from '/@/consts/consts'
 
+import FormInput from './shared/FormInput.vue'
 import VueSelect from './shared/VueSelect.vue'
 
 const requestStore = useRequestStore()
@@ -48,16 +49,16 @@ function sortByCreatedAt() {
       <ChevronUpIcon v-if="params.sort === '-created_at'" class="w-4" />
     </button>
     <div>
-      <input
+      <FormInput
         v-model="params.since"
-        class="h-8 w-28 rounded border border-gray-300 p-1"
-        placeholder="YYYY-MM-DD"
+        class="w-30 h-8"
+        placeholder="yyyy-MM-dd"
         @blur="requestStore.fetchRequests(params)" />
       ～
-      <input
+      <FormInput
         v-model="params.until"
-        class="h-8 w-28 rounded border border-gray-300 p-1"
-        placeholder="YYYY-MM-DD"
+        class="w-30 h-8"
+        placeholder="yyyy-MM-dd"
         @blur="requestStore.fetchRequests(params)" />
     </div>
     <VueSelect

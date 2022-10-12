@@ -8,6 +8,8 @@ import { useUserStore } from '/@/stores/user'
 import NewRequestFileForm from '/@/components/newRequest/NewRequestFileForm.vue'
 import NewRequestSubmitButton from '/@/components/newRequest/NewRequestSubmitButton.vue'
 import NewRequestTag from '/@/components/newRequest/NewRequestTag.vue'
+import FormInput from '/@/components/shared/FormInput.vue'
+import FormInputNumber from '/@/components/shared/FormInputNumber.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import { requestTemplates } from '/@/consts/consts'
@@ -71,16 +73,12 @@ onMounted(() => {
       </div>
       <div class="flex flex-col">
         <label>タイトル</label>
-        <input
-          v-model="request.title"
-          class="h-8 rounded border border-gray-300 p-1" />
+        <FormInput v-model="request.title" class="h-8" />
       </div>
       <div class="flex flex-col">
         <label>金額</label>
         <div>
-          <input
-            v-model="request.amount"
-            class="h-8 rounded border border-gray-300 p-1" />円
+          <FormInputNumber v-model="request.amount" class="mr-1 h-8" />円
         </div>
       </div>
       <div class="flex flex-col">

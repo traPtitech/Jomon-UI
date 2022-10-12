@@ -12,6 +12,7 @@ import { useUserStore } from '/@/stores/user'
 import apis from '/@/lib/apis'
 import { toId } from '/@/lib/parseQueryParams'
 
+import FormInputNumber from '/@/components/shared/FormInputNumber.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 
@@ -69,9 +70,7 @@ onMounted(async () => {
       <div class="flex flex-col">
         <label>金額</label>
         <div>
-          <input
-            v-model="transaction.amount"
-            class="rounded border border-gray-300" />円
+          <FormInputNumber v-model="transaction.amount" class="mr-1" />円
         </div>
       </div>
       <div class="flex flex-col">

@@ -9,7 +9,7 @@ import { isCreater } from '/@/lib/authorityCheck'
 
 import EditButton from '/@/components/shared/EditButton.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import TagGroup from '/@/components/shared/TagsGroup.vue'
+import TagsGroup from '/@/components/shared/TagsGroup.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import type { EditMode } from '/@/pages/composables/requestDetail/useRequestDetail'
 
@@ -43,7 +43,7 @@ const handleComplete = () => {
     <div v-if="!isEditMode" class="pb-2">
       タグ：
       <span v-if="props.request.tags.length === 0">なし</span>
-      <TagGroup v-else :tags="props.request.tags" />
+      <TagsGroup v-else :tags="props.request.tags" />
       <EditButton
         v-if="hasAuthority"
         class="ml-1"

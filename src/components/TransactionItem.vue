@@ -2,7 +2,7 @@
 import type { Transaction } from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
 
-import TagGroup from './shared/TagGroup.vue'
+import TagsGroup from './shared/TagsGroup.vue'
 
 interface Props {
   transaction: Transaction
@@ -31,7 +31,7 @@ const props = defineProps<Props>()
         {{ props.transaction.group.description }}
       </div>
       <div class="w-3/10">
-        <TagGroup :limit="3" :tags="props.transaction.tags" />
+        <TagsGroup :limit="3" :tags="props.transaction.tags" />
       </div>
     </div>
   </router-link>

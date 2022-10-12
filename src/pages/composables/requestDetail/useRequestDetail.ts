@@ -108,6 +108,7 @@ export const useRequestDetail = () => {
     }
     try {
       request.value = (await apis.putRequestDetail(id, putRequest)).data
+      toast.success('申請を修正しました')
     } catch {
       toast.error('申請の修正に失敗しました')
     }

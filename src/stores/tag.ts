@@ -22,6 +22,7 @@ export const useTagStore = defineStore('tag', () => {
   const postTag = async (tag: Tag) => {
     try {
       tags.value?.push((await apis.postTag(tag)).data)
+      toast.success('タグを追加しました')
     } catch {
       toast.error('タグの追加に失敗しました')
     }
@@ -30,6 +31,7 @@ export const useTagStore = defineStore('tag', () => {
     try {
       await apis.tagsTagIDDelete(id)
       tags.value = tags.value?.filter(tag => tag.id !== id)
+      toast.success('タグを削除しました')
     } catch {
       toast.error('タグの削除に失敗しました')
     }

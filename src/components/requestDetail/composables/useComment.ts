@@ -25,8 +25,9 @@ export const useComment = () => {
       ).data
       comment.value = ''
       isSending.value = false
+      toast.success('コメントを送信しました')
     } catch {
-      toast.error('コメントの投稿に失敗しました')
+      toast.error('コメントの送信に失敗しました')
       isSending.value = false
       return
     }

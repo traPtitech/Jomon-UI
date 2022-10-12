@@ -4,6 +4,7 @@ interface Props {
   page: number
   isSelected: boolean
 }
+
 const props = defineProps<Props>()
 </script>
 

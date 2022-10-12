@@ -39,7 +39,7 @@ const userOption = computed(() => {
 })
 const tagOption = computed(() => {
   return (
-    tagStore.tags.map(tag => {
+    tagStore.tags?.map(tag => {
       return {
         key: tag.name,
         value: tag.id

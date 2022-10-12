@@ -2,20 +2,39 @@
 import { ref } from 'vue'
 
 import { useAdminStore } from '/@/stores/admin'
+import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
 import FormSelect from '/@/components/shared/FormSelect.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import VueSelect from '/@/components/shared/VueSelect.vue'
 
 import { useAdmin } from './composables/useAdmin'
 
 const adminStore = useAdminStore()
 const userStore = useUserStore()
+const tagStore = useTagStore()
 
 const addList = ref<string[]>([])
 const removeList = ref<string[]>([])
+const deleteTagList = ref<string[]>([])
 const hasAuthority = userStore.isAdmin()
 const { absentMembers, isSending, addAdmins, removeAdmins } = useAdmin()
+
+const deleteTags = async () => {
+  if (deleteTagList.value.length === 0) {
+    alert('1つ以上選択して下さい')
+    return
+  }
+  try {
+    const deleteTagPromiseList = deleteTagList.value.map(tag =>
+      tagStore.deleteTag(tag)
+    )
+    await Promise.all(deleteTagPromiseList)
+  } catch (err) {
+    alert(err)
+  }
+}
 
 if (userStore.me && userStore.me.admin) {
   if (!adminStore.isAdminFetched) {
@@ -23,6 +42,9 @@ if (userStore.me && userStore.me.admin) {
   }
   if (!userStore.isUserFetched) {
     await userStore.fetchUsers()
+  }
+  if (!tagStore.isTagFetched) {
+    await tagStore.fetchTags()
   }
 }
 </script>
@@ -70,6 +92,20 @@ if (userStore.me && userStore.me.admin) {
         padding="sm"
         @click.stop="removeAdmins(removeList)">
         選択した管理者を削除
+      </SimpleButton>
+    </div>
+    <div class="mt-24 flex gap-4">
+      <VueSelect
+        v-model="deleteTagList"
+        class="w-1/2"
+        :close-on-select="false"
+        label="name"
+        multiple
+        :options="tagStore.tags"
+        placeholder="削除するタグを選択"
+        :reduce="(tag:any) => tag.id" />
+      <SimpleButton font-size="lg" padding="sm" @click.stop="deleteTags">
+        選択したタグを削除
       </SimpleButton>
     </div>
   </div>

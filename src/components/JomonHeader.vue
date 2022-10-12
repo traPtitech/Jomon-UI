@@ -1,46 +1,46 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { Bars3Icon } from '@heroicons/vue/24/outline'
 
 import { useUserStore } from '/@/stores/user'
 
-import HeaderButton from './HeaderButton.vue'
+import PageNavigations from './PageNavigations.vue'
+import SideDrawer from './SideDrawer.vue'
+import ModalWrapper from './modal/ModalWrapper.vue'
+import { useModal } from './modal/composables/useModal'
 import JomonLogo from './shared/JomonLogo.vue'
 import UserIcon from './shared/UserIcon.vue'
 
-const route = useRoute()
-
 const userStore = useUserStore()
 
-const hasAuthority = computed(() => userStore.isAdmin())
+const { shouldShowModal, openModal, closeModal } = useModal()
+
+const handleOpenDrawer = () => {
+  if (!shouldShowModal.value) {
+    openModal()
+  } else {
+    closeModal()
+  }
+}
 </script>
 
 <template>
-  <header class="z-9999 fixed flex h-12 w-full items-center bg-white shadow">
+  <header
+    class="fixed flex h-12 w-full items-center bg-white pl-2 shadow"
+    :class="shouldShowModal ? 'z-30' : 'z-10'">
+    <button class="flex items-center md:hidden" @click="handleOpenDrawer">
+      <Bars3Icon class="h-8 w-8" />
+    </button>
     <router-link to="/">
       <JomonLogo />
     </router-link>
     <div class="flex h-full flex-1 justify-between px-2">
-      <div class="flex items-center gap-2">
-        <HeaderButton
-          :is-here="route.fullPath === '/requests'"
-          path="/requests"
-          text="申請一覧" />
-        <HeaderButton
-          :is-here="route.fullPath === '/transactions'"
-          path="/transactions"
-          text="入出金記録一覧" />
-        <HeaderButton
-          :is-here="route.fullPath === '/groups'"
-          path="/groups"
-          text="グループ一覧" />
-        <HeaderButton
-          v-if="hasAuthority"
-          :is-here="route.fullPath === '/admins'"
-          path="/admins"
-          text="管理ページ" />
-      </div>
+      <PageNavigations class="invisible md:visible" />
       <UserIcon v-if="userStore.me !== undefined" :name="userStore.me.name" />
     </div>
   </header>
+  <!--遷移時にドロワーを閉じるようにするためにドロワーコンポーネント内でwrapperを使うことになりそう？-->
+  <!--onBeforeRouteUpdateはヘッダーコンポーネントがルーター内に入っていないので使えない-->
+  <ModalWrapper v-if="shouldShowModal" @close-modal="closeModal">
+    <SideDrawer />
+  </ModalWrapper>
 </template>

@@ -11,6 +11,7 @@ export const useUserStore = defineStore('user', () => {
   const me = ref<User>()
   const users = ref<User[]>()
   const isUserFetched = ref(false)
+  const isMeFetched = ref(false)
 
   const isAdmin = () => {
     if (!me.value) return false
@@ -50,6 +51,7 @@ export const useUserStore = defineStore('user', () => {
     isAdmin,
     userOptions,
     isUserFetched,
+    isMeFetched,
     fetchMe,
     fetchUsers
   }

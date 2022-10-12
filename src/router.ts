@@ -3,7 +3,18 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/requests' },
-  { path: '/requests', component: () => import('./pages/RequestsPage.vue') },
+  {
+    path: '/requests',
+    component: () => import('./pages/RequestsPage.vue')
+  },
+  {
+    path: '/requests/:id',
+    component: () => import('./pages/RequestDetailPage.vue')
+  },
+  {
+    path: '/requests/new',
+    component: () => import('./pages/NewRequestPage.vue')
+  },
   {
     path: '/transactions',
     component: () => import('./pages/TransactionsPage.vue')
@@ -14,16 +25,16 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/transactions/new',
-    component: () => import('./pages/NewTransaction.vue')
+    component: () => import('./pages/NewTransactionPage.vue')
   },
   { path: '/groups', component: () => import('./pages/GroupsPage.vue') },
   {
     path: '/groups/:id',
     component: () => import('./pages/GroupDetailPage.vue')
   },
-  { path: '/admins', component: () => import('./pages/AdminPage.vue') },
   { path: '/groups/new', component: () => import('./pages/NewGroupPage.vue') },
-  { path: '/:path(.*)', component: () => import('./pages/NotFound.vue') }
+  { path: '/admins', component: () => import('./pages/AdminPage.vue') },
+  { path: '/:path(.*)', component: () => import('./pages/NotFoundPage.vue') }
 ]
 
 const router = createRouter({

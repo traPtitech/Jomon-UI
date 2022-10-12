@@ -29,3 +29,10 @@ onMounted(async () => {
     </router-view>
   </main>
 </template>
+
+<style>
+.modal-container {
+  cursor: default;
+  z-index: 20;
+}
+</style>

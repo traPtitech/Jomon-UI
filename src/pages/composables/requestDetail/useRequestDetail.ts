@@ -78,7 +78,7 @@ export const useRequestDetail = () => {
     if (request.value !== undefined) {
       await putRequest(request.value.id, editedValue.value)
     } else {
-      alert('error')
+      toast.error('申請の修正に失敗しました')
     }
     editMode.value = ''
   }

@@ -14,14 +14,15 @@ const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
 
 const MembersToBeAdded = ref<string[]>([])
-const hasAuthority = groupDetailStore.canEdit(userStore.me)
+const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
 const { absentMemberOptions, isSending, addMembers, removeMember } =
   useGroupMember()
 </script>
 
 <template>
-  <div v-if="groupDetailStore.group">
-    class="relative flex h-1/2 flex-col justify-between border border-gray-300">
+  <div
+    v-if="groupDetailStore.group"
+    class="relative flex h-2/5 flex-col justify-between border border-gray-300">
     <p class="bg-background absolute -top-3 left-2 px-2">グループメンバー</p>
     <ul class="h-full p-4">
       <li

@@ -11,6 +11,7 @@ import GroupBudget from '/@/components/groupDetail/GroupBudget.vue'
 import GroupDescription from '/@/components/groupDetail/GroupDescription.vue'
 import GroupMembers from '/@/components/groupDetail/GroupMembers.vue'
 import GroupName from '/@/components/groupDetail/GroupName.vue'
+import GroupOwners from '/@/components/groupDetail/GroupOwners.vue'
 import { useDeleteGroup } from '/@/components/groupDetail/composables/useDeleteGroup'
 import { useGroupInformation } from '/@/components/groupDetail/composables/useGroupInformation'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
@@ -23,7 +24,7 @@ const groupDetailStore = useGroupDetailStore()
 
 const { isSending, editMode, changeEditMode } = useGroupInformation()
 
-const hasAuthority = groupDetailStore.canEdit(userStore.me)
+const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
 const { isDeleting, deleteGroup } = useDeleteGroup()
 
 await groupDetailStore.fetchGroup(id)
@@ -71,7 +72,10 @@ if (!userStore.isUserFetched) {
           <ArrowTopRightOnSquareIcon class="w-6" />
         </router-link>
       </div>
-      <GroupMembers class="w-1/4" />
+      <div class="flex w-1/4 flex-col gap-8">
+        <GroupOwners />
+        <GroupMembers />
+      </div>
     </div>
   </div>
 </template>

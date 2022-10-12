@@ -15,7 +15,7 @@ export const useGroupDetailStore = defineStore('groupDetail', () => {
     description: '',
     budget: 0
   })
-  const canEdit = (user: User | undefined) => {
+  const canEditGroup = (user: User | undefined) => {
     if (!user) return false
     return user.admin || group.value?.owners.includes(user.name)
   }
@@ -63,7 +63,7 @@ export const useGroupDetailStore = defineStore('groupDetail', () => {
   return {
     group,
     editedValue,
-    canEdit,
+    canEditGroup,
     fetchGroup,
     putGroup
   }

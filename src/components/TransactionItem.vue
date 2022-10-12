@@ -31,7 +31,7 @@ const props = defineProps<Props>()
         {{ props.transaction.group.description }}
       </div>
       <div class="w-3/10">
-        <tag-group :limit="3" :tags="props.transaction.tags" />
+        <TagGroup :limit="3" :tags="props.transaction.tags" />
       </div>
     </div>
   </router-link>

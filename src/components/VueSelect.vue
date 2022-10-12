@@ -4,7 +4,7 @@ import 'vue-select/dist/vue-select.css'
 </script>
 
 <template>
-  <vue-select v-bind="$attrs">
+  <VueSelect v-bind="$attrs">
     <template #no-options="{ search, searching, loading }">
       <div v-if="searching">
         <span
@@ -17,5 +17,5 @@ import 'vue-select/dist/vue-select.css'
         <span>読み込み中...</span>
       </div>
     </template>
-  </vue-select>
+  </VueSelect>
 </template>

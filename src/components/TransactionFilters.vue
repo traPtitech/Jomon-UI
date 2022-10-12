@@ -81,14 +81,14 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
       class="w-2/10 flex items-center justify-center border"
       @click="sort('created_at')">
       <span>年 月 日</span>
-      <sort-order-buttons :sort="sortOption('created_at')" />
+      <SortOrderButtons :sort="sortOption('created_at')" />
     </button>
     <!-- 取引額 -->
     <button
       class="w-1/10 flex items-center justify-center border"
       @click="sort('amount')">
       <span>取引額</span>
-      <sort-order-buttons :sort="sortOption('amount')" />
+      <SortOrderButtons :sort="sortOption('amount')" />
     </button>
     <!-- 取引相手 -->
     <div class="w-2/10">
@@ -97,19 +97,19 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
         class="flex h-full items-center justify-center border">
         <button class="h-full w-full" @click="changeIsTargetSearchMode">
           <span>取引相手</span>
-          <magnifying-glass-icon class="h-4" />
+          <MagnifyingGlassIcon class="h-4" />
         </button>
       </div>
       <div v-else class="relative">
         <input v-model="params.target" class="h-8 w-full" type="text" />
         <!-- todo:v-selectに -->
-        <x-mark-icon
+        <XMarkIcon
           class="absolute right-2 top-2 h-4 cursor-pointer"
           @click="changeIsTargetSearchMode" />
       </div>
     </div>
     <!-- グループ -->
-    <vue-select
+    <VueSelect
       v-model="params.group"
       class="w-2/10"
       label="name"
@@ -118,7 +118,7 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
       :reduce="(group:any) => group.id"
       @close="'updateTransactions'" />
     <!-- タグ -->
-    <vue-select
+    <VueSelect
       v-model="params.tag"
       class="w-3/10"
       label="name"

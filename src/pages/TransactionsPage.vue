@@ -10,8 +10,7 @@ import { toPage } from '/@/lib/parseQueryParams'
 import TransactionFilters from '/@/components/TransactionFilters.vue'
 import TransactionItem from '/@/components/TransactionItem.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
-
-import SimpleButton from '../components/shared/SimpleButton.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))
@@ -47,9 +46,9 @@ watch(
         <h1 class="text-center text-3xl">入出金記録</h1>
         <div class="absolute right-0">
           <router-link to="/transactions/new">
-            <simple-button font-size="lg" padding="md">
+            <SimpleButton font-size="lg" padding="md">
               新規レコード作成
-            </simple-button>
+            </SimpleButton>
           </router-link>
         </div>
       </div>
@@ -64,16 +63,16 @@ watch(
           </span>
           <span v-else>条件に一致する申請は見つかりませんでした</span>
         </div>
-        <transaction-filters />
+        <TransactionFilters />
         <ul v-if="transactionStore.transactions" class="mt-2 divide-y">
           <li
             v-for="transaction in sliceTransactionAt(page, 10)"
             :key="transaction.id">
-            <transaction-item :transaction="transaction" />
+            <TransactionItem :transaction="transaction" />
           </li>
         </ul>
         <div v-else>loading...</div>
-        <pagination-bar
+        <PaginationBar
           v-if="
             transactionStore.transactions &&
             transactionStore.transactions.length > 0

@@ -8,11 +8,10 @@ import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
 import apis from '/@/lib/apis'
+import { toId } from '/@/lib/parseQueryParams'
 
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
-
-import SimpleButton from '../components/shared/SimpleButton.vue'
-import { toId } from '../lib/parseQueryParams'
 
 const route = useRoute()
 const requestId = toId(route.query.requestID) //requestIDには申請の詳細画面から新規作成ページに移動するときだけIDを渡す
@@ -60,7 +59,7 @@ async function postTransaction() {
       </div>
       <div class="flex flex-col">
         <label>払い戻し対象者：</label>
-        <vue-select
+        <VueSelect
           v-model="transaction.targets"
           :close-on-select="false"
           label="name"
@@ -71,7 +70,7 @@ async function postTransaction() {
       </div>
       <div class="flex flex-col">
         <label>グループ：</label>
-        <vue-select
+        <VueSelect
           v-model="transaction.group"
           label="name"
           :options="groupStore.groups"
@@ -80,7 +79,7 @@ async function postTransaction() {
       </div>
       <div class="flex flex-col">
         <label>タグ：</label>
-        <vue-select
+        <VueSelect
           v-model="transaction.tags"
           :close-on-select="false"
           label="name"
@@ -90,13 +89,13 @@ async function postTransaction() {
           :reduce="(tag:any) => tag.id" />
       </div>
       <div class="text-right">
-        <simple-button
+        <SimpleButton
           class="mb-4 w-64"
           font-size="xl"
           padding="sm"
           @click.stop="postTransaction">
           入出金記録を作成する
-        </simple-button>
+        </SimpleButton>
       </div>
     </div>
   </div>

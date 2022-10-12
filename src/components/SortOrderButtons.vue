@@ -18,12 +18,12 @@ const props = defineProps<Props>()
 </script>
 
 <template>
-  <arrow-down-circle-icon-solid
+  <ArrowDownCircleIconSolid
     v-if="props.sort === 'desc'"
     class="h-5 cursor-pointer" />
-  <arrow-down-circle-icon v-else class="h-5 cursor-pointer" />
-  <arrow-up-circle-icon-solid
+  <ArrowDownCircleIcon v-else class="h-5 cursor-pointer" />
+  <ArrowUpCircleIconSolid
     v-if="props.sort === 'asc'"
     class="h-5 cursor-pointer" />
-  <arrow-up-circle-icon v-else class="h-5 cursor-pointer" />
+  <ArrowUpCircleIcon v-else class="h-5 cursor-pointer" />
 </template>

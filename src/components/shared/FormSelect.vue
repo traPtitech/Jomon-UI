@@ -26,7 +26,7 @@ const value = computed({
 </script>
 
 <template>
-  <vue-select
+  <VueSelect
     v-model="value"
     :close-on-select="!props.isMultiple"
     label="key"

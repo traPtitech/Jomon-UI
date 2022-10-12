@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
+import FormSelect from './FormSelect.vue'
 import MarkdownIt from './MarkdownIt.vue'
-import VueSelect from './VueSelect.vue'
 
 type TabType = 'input' | 'preview'
 
@@ -17,6 +17,17 @@ const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>()
 
 const currentTab = ref<TabType>('input')
 const selectedTemplate = ref('')
+
+const templateOptions = computed(() => {
+  return (
+    props.templates?.map(template => {
+      return {
+        key: template.name,
+        value: template.name
+      }
+    }) ?? []
+  )
+})
 
 function setTemplate(template: string) {
   const foundTemplate = props.templates?.find(t => t.name === template)
@@ -47,16 +58,14 @@ function changeCurrentTab(tab: TabType) {
         @click.prevent="changeCurrentTab('preview')">
         プレビュー
       </button>
-      <VueSelect
-        v-if="templates !== undefined"
+      <FormSelect
+        v-if="props.templates !== undefined"
         v-model="selectedTemplate"
         class="m-1 ml-auto inline-block w-1/3"
-        label="name"
-        :options="templates"
+        :options="templateOptions"
         placeholder="テンプレートを選択"
-        :reduce="(template:any) => template.name"
         @option:selected="setTemplate(selectedTemplate)">
-      </VueSelect>
+      </FormSelect>
     </div>
     <div>
       <textarea

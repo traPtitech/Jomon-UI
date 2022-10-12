@@ -8,10 +8,10 @@ import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-import { requestStates } from '/@/consts/consts'
+import { requestStatusOptions } from '/@/consts/consts'
 
 import FormInput from './shared/FormInput.vue'
-import VueSelect from './shared/VueSelect.vue'
+import FormSelect from './shared/FormSelect.vue'
 
 const requestStore = useRequestStore()
 const userStore = useUserStore()
@@ -61,40 +61,26 @@ function sortByCreatedAt() {
         placeholder="yyyy-MM-dd"
         @blur="requestStore.fetchRequests(params)" />
     </div>
-    <VueSelect
+    <FormSelect
       v-model="params.target"
-      class="w-64"
-      label="name"
-      :options="userStore.users"
+      :options="userStore.userOptions"
       placeholder="申請者"
-      :reduce="(user:any) => user.name"
       @close="requestStore.fetchRequests(params)" />
-    <VueSelect
+    <FormSelect
       v-model="params.currentStatus"
-      class="w-64"
-      label="jpn"
-      :options="requestStates"
+      :options="requestStatusOptions()"
       placeholder="申請の状態"
-      :reduce="(state:any) => state.state"
-      :searchable="false"
       @close="requestStore.fetchRequests(params)" />
-    <VueSelect
+    <FormSelect
       v-model="params.group"
-      class="w-64"
-      label="name"
-      :options="groupStore.groups"
+      :options="groupStore.groupOptions"
       placeholder="グループ"
-      :reduce="(group:any) => group.id"
       @close="requestStore.fetchRequests(params)" />
-    <VueSelect
+    <FormSelect
       v-model="params.tags"
-      class="w-100"
-      :close-on-select="false"
-      label="name"
-      multiple
-      :options="tagStore.tags"
+      is-multiple
+      :options="tagStore.tagOptions"
       placeholder="タグ"
-      :reduce="(tag:any) => tag.id"
       @close="requestStore.fetchRequests(params)" />
   </div>
   <span

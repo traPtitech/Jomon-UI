@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useToast } from 'vue-toastification'
 
 import type { Tag } from '/@/lib/apis'
@@ -10,6 +10,17 @@ export const useTagStore = defineStore('tag', () => {
 
   const tags = ref<Tag[]>()
   const isTagFetched = ref(false)
+
+  const tagOptions = computed(() => {
+    return (
+      tags.value?.map(tag => {
+        return {
+          key: tag.name,
+          value: tag.id
+        }
+      }) ?? []
+    )
+  })
 
   const fetchTags = async () => {
     try {
@@ -36,5 +47,5 @@ export const useTagStore = defineStore('tag', () => {
       toast.error('タグの削除に失敗しました')
     }
   }
-  return { tags, isTagFetched, fetchTags, postTag, deleteTag }
+  return { tags, isTagFetched, tagOptions, fetchTags, postTag, deleteTag }
 })

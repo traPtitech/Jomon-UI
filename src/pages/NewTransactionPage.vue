@@ -13,8 +13,8 @@ import apis from '/@/lib/apis'
 import { toId } from '/@/lib/parseQueryParams'
 
 import FormInputNumber from '/@/components/shared/FormInputNumber.vue'
+import FormSelect from '/@/components/shared/FormSelect.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import VueSelect from '/@/components/shared/VueSelect.vue'
 
 const route = useRoute()
 const requestId = toId(route.query.requestID) //requestIDには申請の詳細画面から新規作成ページに移動するときだけIDを渡す
@@ -75,34 +75,29 @@ onMounted(async () => {
       </div>
       <div class="flex flex-col">
         <label>払い戻し対象者：</label>
-        <VueSelect
+        <FormSelect
           v-model="transaction.targets"
-          :close-on-select="false"
-          label="name"
-          multiple
-          :options="userStore.users"
-          placeholder="払い戻し対象者"
-          :reduce="(user:any) => user.name" />
+          class="!w-2/3"
+          is-multiple
+          :options="userStore.userOptions"
+          placeholder="払い戻し対象者" />
       </div>
       <div class="flex flex-col">
         <label>グループ：</label>
-        <VueSelect
+        <FormSelect
           v-model="transaction.group"
-          label="name"
-          :options="groupStore.groups"
-          placeholder="グループ"
-          :reduce="(group:any) => group.id" />
+          class="!w-2/3"
+          :options="groupStore.groupOptions"
+          placeholder="グループ" />
       </div>
       <div class="flex flex-col">
         <label>タグ：</label>
-        <VueSelect
+        <FormSelect
           v-model="transaction.tags"
-          :close-on-select="false"
-          label="name"
-          multiple
-          :options="tagStore.tags"
-          placeholder="タグ"
-          :reduce="(tag:any) => tag.id" />
+          class="!w-2/3"
+          is-multiple
+          :options="tagStore.tagOptions"
+          placeholder="タグ" />
       </div>
       <div class="text-right">
         <SimpleButton

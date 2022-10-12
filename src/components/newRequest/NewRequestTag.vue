@@ -34,6 +34,7 @@ const tags = ref(props.request.tags)
         :reduce="(tag:any) => tag.id"
         taggable
         @close="emit('input', tags)" />
+      <!-- todo:FormTagSelectにする -->
     </div>
   </div>
 </template>

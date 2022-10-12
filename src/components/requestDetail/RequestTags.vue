@@ -57,6 +57,7 @@ const handleComplete = () => {
         push-tags
         :reduce="(tag:any) => tag.id"
         taggable />
+      <!-- todo:FormTagSelectにする -->
       <SimpleButton
         class="ml-2"
         font-size="sm"

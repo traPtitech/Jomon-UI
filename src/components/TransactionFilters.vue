@@ -10,7 +10,7 @@ import type { SearchTransactionParams } from '/@/stores/transaction'
 
 // import { useTransactionStore } from '/@/stores/transaction'
 import SortOrderButtons from './SortOrderButtons.vue'
-import VueSelect from './VueSelect.vue'
+import FormSelect from './shared/FormSelect.vue'
 
 const transactionStore = useTransactionStore()
 const groupStore = useGroupStore()
@@ -105,28 +105,25 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
       </div>
       <div v-else class="relative">
         <input v-model="params.target" class="h-8 w-full" type="text" />
+        <!-- todo:FormInputにする -->
         <XMarkIcon
           class="absolute right-2 top-2 h-4 cursor-pointer"
           @click="changeIsTargetSearchMode" />
       </div>
     </div>
     <!-- グループ -->
-    <VueSelect
+    <FormSelect
       v-model="params.group"
-      class="w-2/10"
-      label="name"
-      :options="groupStore.groups"
+      class="!w-2/10"
+      :options="groupStore.groupOptions"
       placeholder="取引グループ"
-      :reduce="(group:any) => group.id"
       @close="'updateTransactions'" />
     <!-- タグ -->
-    <VueSelect
+    <FormSelect
       v-model="params.tag"
-      class="w-3/10"
-      label="name"
-      :options="tagStore.tags"
+      class="!w-3/10"
+      :options="tagStore.tagOptions"
       placeholder="タグ"
-      :reduce="(tag:any) => tag.id"
       @close="'updateTransactions'" />
   </div>
 </template>

@@ -28,6 +28,7 @@ const value = computed({
 <template>
   <VueSelect
     v-model="value"
+    class="w-70"
     :close-on-select="!props.isMultiple"
     label="key"
     :multiple="props.isMultiple"

@@ -10,8 +10,8 @@ import NewRequestSubmitButton from '/@/components/newRequest/NewRequestSubmitBut
 import NewRequestTag from '/@/components/newRequest/NewRequestTag.vue'
 import FormInput from '/@/components/shared/FormInput.vue'
 import FormInputNumber from '/@/components/shared/FormInputNumber.vue'
+import FormSelect from '/@/components/shared/FormSelect.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
-import VueSelect from '/@/components/shared/VueSelect.vue'
 import { requestTemplates } from '/@/consts/consts'
 
 export interface FileRequest {
@@ -90,23 +90,20 @@ onMounted(() => {
       </div>
       <div class="flex flex-col">
         <label>払い戻し対象者</label>
-        <VueSelect
+        <FormSelect
           v-model="request.targets"
-          :close-on-select="false"
-          label="name"
-          multiple
-          :options="userStore.users"
-          placeholder="払い戻し対象者を選択"
-          :reduce="(user:any) => user.name" />
+          class="!w-2/3"
+          is-multiple
+          :options="userStore.userOptions"
+          placeholder="払い戻し対象者を選択" />
       </div>
       <div class="flex flex-col">
         <label>グループ</label>
-        <VueSelect
+        <FormSelect
           v-model="request.group"
-          label="name"
-          :options="groupStore.groups"
-          placeholder="グループを選択"
-          :reduce="(group:any) => group.id" />
+          class="!w-2/3"
+          :options="groupStore.groupOptions"
+          placeholder="グループを選択" />
       </div>
       <NewRequestTag :request="request" @input="request.tags = $event" />
       <NewRequestFileForm :files="files" @input="files = $event" />

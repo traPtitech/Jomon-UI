@@ -7,6 +7,7 @@ import { useUserStore } from '/@/stores/user'
 
 import FormSelect from '/@/components/shared/FormSelect.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import VueSelect from '/@/components/shared/VueSelect.vue'
 
 import { useAdmin } from './composables/useAdmin'
 
@@ -41,6 +42,9 @@ if (userStore.me && userStore.me.admin) {
   }
   if (!userStore.isUserFetched) {
     await userStore.fetchUsers()
+  }
+  if (!tagStore.isTagFetched) {
+    await tagStore.fetchTags()
   }
 }
 </script>
@@ -91,7 +95,7 @@ if (userStore.me && userStore.me.admin) {
       </SimpleButton>
     </div>
     <div class="mt-24 flex gap-4">
-      <vue-select
+      <VueSelect
         v-model="deleteTagList"
         class="w-1/2"
         :close-on-select="false"

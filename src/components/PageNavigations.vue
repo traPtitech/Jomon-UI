@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useUserStore } from '/@/stores/user'
@@ -10,7 +11,7 @@ import HeaderButton from '/@/components/HeaderButton.vue'
 const userStore = useUserStore()
 
 const route = useRoute()
-const hasAuthority = isAdmin(userStore.me)
+const hasAuthority = computed(() => isAdmin(userStore.me))
 </script>
 
 <template>

@@ -25,7 +25,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/transactions/new',
-    component: () => import('./pages/NewTransaction.vue')
+    component: () => import('./pages/NewTransactionPage.vue')
   },
   { path: '/groups', component: () => import('./pages/GroupsPage.vue') },
   {

@@ -1,7 +1,10 @@
 <script lang="ts" setup>
+import { Bars3Icon } from '@heroicons/vue/24/outline'
+
 import { useUserStore } from '/@/stores/user'
 
 import PageNavigations from './PageNavigations.vue'
+import SideDrawer from './SideDrawer.vue'
 import ModalWrapper from './modal/ModalWrapper.vue'
 import { useModal } from './modal/composables/useModal'
 import JomonLogo from './shared/JomonLogo.vue'
@@ -25,7 +28,7 @@ const handleOpenDrawer = () => {
     class="fixed flex h-12 w-full items-center bg-white pl-2 shadow"
     :class="shouldShowModal ? 'z-30' : 'z-10'">
     <button class="flex items-center md:hidden" @click="handleOpenDrawer">
-      <bars3-icon class="h-8 w-8" />
+      <Bars3Icon class="h-8 w-8" />
     </button>
     <router-link to="/">
       <JomonLogo />
@@ -38,6 +41,6 @@ const handleOpenDrawer = () => {
   <!--遷移時にドロワーを閉じるようにするためにドロワーコンポーネント内でwrapperを使うことになりそう？-->
   <!--onBeforeRouteUpdateはヘッダーコンポーネントがルーター内に入っていないので使えない-->
   <ModalWrapper v-if="shouldShowModal" @close-modal="closeModal">
-    <side-drawer />
+    <SideDrawer />
   </ModalWrapper>
 </template>

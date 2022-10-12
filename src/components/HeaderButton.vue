@@ -4,14 +4,16 @@ interface Props {
   path: string
   text: string
 }
-defineProps<Props>()
+
+const props = defineProps<Props>()
 </script>
+
 <template>
-  <router-link :class="isHere ? 'cursor-default' : ''" :to="path">
+  <router-link :class="props.isHere ? 'cursor-default' : ''" :to="props.path">
     <div
-      class="p-2 rounded-3xl"
-      :class="isHere ? 'bg-zinc-200' : 'hover:bg-zinc-200'">
-      <span>{{ text }}</span>
+      class="rounded-3xl p-2"
+      :class="props.isHere ? 'bg-zinc-200' : 'hover:bg-zinc-200'">
+      <span>{{ props.text }}</span>
     </div>
   </router-link>
 </template>

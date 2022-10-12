@@ -1,29 +1,39 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useToast } from 'vue-toastification'
 
 import apis from '/@/lib/apis'
 
 export const useAdminStore = defineStore('admin', () => {
-  const admins = ref<string[]>([])
+  const toast = useToast()
+
+  const admins = ref<string[]>()
   const isAdminFetched = ref(false)
 
+  const adminOptions = computed(() => {
+    return (
+      admins.value?.map(admin => {
+        return {
+          key: admin,
+          value: admin
+        }
+      }) ?? []
+    )
+  })
+
   const fetchAdmins = async () => {
-    admins.value = (await apis.getAdmins()).data
-    isAdminFetched.value = true
+    try {
+      admins.value = (await apis.getAdmins()).data
+      isAdminFetched.value = true
+    } catch {
+      toast.error('管理者の取得に失敗しました')
+    }
   }
-  const postAdmins = async (ids: string[]) => {
-    await apis.postAdmins(ids)
-    admins.value = admins.value.concat(ids)
-  }
-  const deleteAdmins = async (ids: string[]) => {
-    await apis.deleteAdmins(ids)
-    admins.value = admins.value.filter(id => !ids.includes(id))
-  }
+
   return {
     admins,
+    adminOptions,
     isAdminFetched,
-    fetchAdmins,
-    postAdmins,
-    deleteAdmins
+    fetchAdmins
   }
 })

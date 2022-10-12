@@ -2,16 +2,18 @@
 interface Props {
   path: string
   page: number
-  selected: boolean
+  isSelected: boolean
 }
-defineProps<Props>()
+const props = defineProps<Props>()
 </script>
 
 <template>
   <router-link
-    class="rounded flex w-10 block justify-center items-center"
-    :class="selected ? 'bg-blue-200 cursor-default' : 'hover:bg-gray-200'"
-    :to="`${path}?page=${page}`">
-    <span>{{ page }}</span>
+    class="block flex w-10 items-center justify-center rounded"
+    :class="
+      props.isSelected ? 'cursor-default bg-blue-200' : 'hover:bg-gray-200'
+    "
+    :to="`${props.path}?page=${props.page}`">
+    <span>{{ props.page }}</span>
   </router-link>
 </template>

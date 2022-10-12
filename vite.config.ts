@@ -6,7 +6,7 @@ import { defineConfig } from 'vite'
 import WindiCSS from 'vite-plugin-windicss'
 
 const keepAliveAgent = new https.Agent({ keepAlive: true })
-const DEV_SERVER_PROXY_HOST = 'https://jomon-dev.tokyotech.org'
+const DEV_SERVER_PROXY_HOST = 'https://jomon-dev.trapti.tech'
 
 export default defineConfig({
   plugins: [vue(), brotli(), WindiCSS()],
@@ -16,6 +16,7 @@ export default defineConfig({
     }
   },
   server: {
+    port: 3000,
     proxy: {
       '/api/*': {
         target: DEV_SERVER_PROXY_HOST,

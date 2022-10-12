@@ -1,7 +1,8 @@
 <script lang="ts" setup>
+import { formatDateAndTime } from '/@/lib/date'
+
 import MarkdownIt from '/@/components//shared/MarkdownIt.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
-import { formatDateAndTime } from '/@/lib/date'
 
 interface Props {
   log: {
@@ -20,7 +21,7 @@ const formattedDateAndTime = formatDateAndTime(props.log.created_at)
 
 <template>
   <div class="flex w-full p-2">
-    <user-icon class="w-12" :name="log.user" />
+    <UserIcon class="w-12" :name="log.user" />
     <div class="w-full pl-2">
       <div class="flex h-12 items-center justify-between">
         {{ log.user }}がコメントしました。
@@ -28,7 +29,7 @@ const formattedDateAndTime = formatDateAndTime(props.log.created_at)
           {{ formattedDateAndTime }}
         </span>
       </div>
-      <markdown-it class="border border-zinc-300 p-1" :text="log.comment" />
+      <MarkdownIt class="border border-zinc-300 p-1" :text="log.comment" />
     </div>
   </div>
 </template>

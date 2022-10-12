@@ -3,6 +3,7 @@ import { onMounted } from 'vue'
 
 import JomonHeader from './components/JomonHeader.vue'
 import { useUserStore } from './stores/user'
+import './styles/toast.css'
 
 const userStore = useUserStore()
 
@@ -12,9 +13,20 @@ onMounted(async () => {
 </script>
 
 <template>
-  <jomon-header />
-  <main class="text-primary h-screen overflow-scroll bg-zinc-50 pt-12">
-    <router-view />
+  <JomonHeader />
+  <main class="text-primary bg-background h-screen overflow-y-scroll pt-12">
+    <router-view v-slot="{ Component }">
+      <template v-if="Component">
+        <suspense>
+          <template #default>
+            <component :is="Component" />
+          </template>
+          <template #fallback>
+            <div>loading...</div>
+          </template>
+        </suspense>
+      </template>
+    </router-view>
   </main>
 </template>
 

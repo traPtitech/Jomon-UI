@@ -1,15 +1,16 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 
+import { useGroupStore } from '/@/stores/group'
+import { useTagStore } from '/@/stores/tag'
+import { useUserStore } from '/@/stores/user'
+
 import NewRequestFileForm from '/@/components/newRequest/NewRequestFileForm.vue'
 import NewRequestSubmitButton from '/@/components/newRequest/NewRequestSubmitButton.vue'
 import NewRequestTag from '/@/components/newRequest/NewRequestTag.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import { requestTemplates } from '/@/consts/consts'
-import { useGroupStore } from '/@/stores/group'
-import { useTagStore } from '/@/stores/tag'
-import { useUserStore } from '/@/stores/user'
 
 export interface FileRequest {
   name: string
@@ -31,7 +32,7 @@ const userStore = useUserStore()
 const groupStore = useGroupStore()
 
 const request = ref<RequestRequest>({
-  created_by: userStore.me.name,
+  created_by: userStore.me?.name ?? '',
   amount: 0,
   title: '',
   targets: [],
@@ -66,7 +67,7 @@ onMounted(() => {
     <div class="flex flex-col gap-2">
       <div class="flex flex-col">
         申請者
-        <span class="text-xl">{{ userStore.me.name }}</span>
+        <span class="text-xl">{{ userStore.me?.name }}</span>
       </div>
       <div class="flex flex-col">
         <label>タイトル</label>
@@ -84,7 +85,7 @@ onMounted(() => {
       </div>
       <div class="flex flex-col">
         <label>詳細</label>
-        <markdown-textarea
+        <MarkdownTextarea
           placeholder=""
           :templates="requestTemplates"
           :value="request.content"
@@ -92,7 +93,7 @@ onMounted(() => {
       </div>
       <div class="flex flex-col">
         <label>払い戻し対象者</label>
-        <vue-select
+        <VueSelect
           v-model="request.targets"
           :close-on-select="false"
           label="name"
@@ -103,16 +104,16 @@ onMounted(() => {
       </div>
       <div class="flex flex-col">
         <label>グループ</label>
-        <vue-select
+        <VueSelect
           v-model="request.group"
           label="name"
           :options="groupStore.groups"
           placeholder="グループを選択"
           :reduce="(group:any) => group.id" />
       </div>
-      <new-request-tag :request="request" @input="request.tags = $event" />
-      <new-request-file-form :files="files" @input="files = $event" />
-      <new-request-submit-button
+      <NewRequestTag :request="request" @input="request.tags = $event" />
+      <NewRequestFileForm :files="files" @input="files = $event" />
+      <NewRequestSubmitButton
         :files="files"
         :request="request"
         @remove="removeFile($event)" />

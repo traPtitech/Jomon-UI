@@ -2,12 +2,14 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
 import { ref } from 'vue'
 
-import VueSelect from './shared/VueSelect.vue'
-import { requestStates } from '/@/consts/consts'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
+
+import { requestStates } from '/@/consts/consts'
+
+import VueSelect from './shared/VueSelect.vue'
 
 const requestStore = useRequestStore()
 const userStore = useUserStore()
@@ -41,8 +43,8 @@ function sortByCreatedAt() {
       :class="params.sort === 'created_at' ? '' : 'bg-gray-200'"
       @click="sortByCreatedAt">
       日付順
-      <chevron-down-icon v-if="params.sort === 'created_at'" class="w-4" />
-      <chevron-up-icon v-if="params.sort === '-created_at'" class="w-4" />
+      <ChevronDownIcon v-if="params.sort === 'created_at'" class="w-4" />
+      <ChevronUpIcon v-if="params.sort === '-created_at'" class="w-4" />
     </button>
     <div>
       <input
@@ -57,7 +59,7 @@ function sortByCreatedAt() {
         placeholder="YYYY-MM-DD"
         @blur="requestStore.fetchRequests(params)" />
     </div>
-    <vue-select
+    <VueSelect
       v-model="params.target"
       class="w-64"
       label="name"
@@ -65,7 +67,7 @@ function sortByCreatedAt() {
       placeholder="申請者"
       :reduce="(user:any) => user.name"
       @close="requestStore.fetchRequests(params)" />
-    <vue-select
+    <VueSelect
       v-model="params.currentStatus"
       class="w-64"
       label="jpn"
@@ -74,7 +76,7 @@ function sortByCreatedAt() {
       :reduce="(state:any) => state.state"
       :searchable="false"
       @close="requestStore.fetchRequests(params)" />
-    <vue-select
+    <VueSelect
       v-model="params.group"
       class="w-64"
       label="name"
@@ -82,7 +84,7 @@ function sortByCreatedAt() {
       placeholder="グループ"
       :reduce="(group:any) => group.id"
       @close="requestStore.fetchRequests(params)" />
-    <vue-select
+    <VueSelect
       v-model="params.tags"
       class="w-100"
       :close-on-select="false"

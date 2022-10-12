@@ -1,14 +1,16 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
+import { useUserStore } from '/@/stores/user'
+
+import type { RequestDetail, Status } from '/@/lib/apis'
+import { isCreater, isAdmin } from '/@/lib/authorityCheck'
+
 import ModalWrapper from '/@/components/modal/ModalWrapper.vue'
 import StatusChangeModal from '/@/components/modal/StatusChangeModal.vue'
 import { useModal } from '/@/components/modal/composables/useModal'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { RequestStatus } from '/@/components/shared/StatusChip.vue'
-import type { RequestDetail, Status } from '/@/lib/apis'
-import { isCreater, isAdmin } from '/@/lib/authorityCheck'
-import { useUserStore } from '/@/stores/user'
 
 interface Props {
   request: RequestDetail
@@ -49,41 +51,41 @@ function handleOpenModal(status: RequestStatus) {
 
 <template>
   <div class="flex gap-4">
-    <simple-button
+    <SimpleButton
       v-if="hasToSubmittedAuthority"
       font-size="sm"
       padding="sm"
       @click.stop="handleOpenModal('submitted')">
       承認待ちにする
-    </simple-button>
-    <simple-button
+    </SimpleButton>
+    <SimpleButton
       v-if="hasToFixRequiredAuthority"
       font-size="sm"
       padding="sm"
       @click.stop="handleOpenModal('fix_required')">
       要修正にする
-    </simple-button>
-    <simple-button
+    </SimpleButton>
+    <SimpleButton
       v-if="hasToAcceptedAuthority"
       font-size="sm"
       padding="sm"
       @click.stop="handleOpenModal('accepted')">
       承認済みにする
-    </simple-button>
-    <simple-button
+    </SimpleButton>
+    <SimpleButton
       v-if="hasToRejectedAuthority"
       font-size="sm"
       padding="sm"
       @click.stop="handleOpenModal('rejected')">
       却下する
-    </simple-button>
+    </SimpleButton>
   </div>
-  <modal-wrapper v-if="shouldShowModal" @close-modal="closeModal">
-    <status-change-modal
+  <ModalWrapper v-if="shouldShowModal" @close-modal="closeModal">
+    <StatusChangeModal
       v-if="nextStatus"
       :next-status="nextStatus"
       :request="props.request"
       @close-modal="closeModal"
       @push-status="handlePushStatus($event)" />
-  </modal-wrapper>
+  </ModalWrapper>
 </template>

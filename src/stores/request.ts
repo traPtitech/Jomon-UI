@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-import type { Status } from '/@/consts/consts'
 import type { Request } from '/@/lib/apis'
 import apis from '/@/lib/apis'
+
+import type { Status } from '/@/consts/consts'
 
 export interface Params {
   sort: string

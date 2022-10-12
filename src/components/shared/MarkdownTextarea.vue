@@ -47,7 +47,7 @@ function changeCurrentTab(tab: TabType) {
         @click.prevent="changeCurrentTab('preview')">
         プレビュー
       </button>
-      <vue-select
+      <VueSelect
         v-if="templates !== undefined"
         v-model="selectedTemplate"
         class="m-1 ml-auto inline-block w-1/3"
@@ -56,7 +56,7 @@ function changeCurrentTab(tab: TabType) {
         placeholder="テンプレートを選択"
         :reduce="(template:any) => template.name"
         @option:selected="setTemplate(selectedTemplate)">
-      </vue-select>
+      </VueSelect>
     </div>
     <div>
       <textarea
@@ -68,7 +68,7 @@ function changeCurrentTab(tab: TabType) {
       <div
         v-if="currentTab === 'preview'"
         class="h-40 w-full overflow-y-scroll border border-gray-500 p-1">
-        <markdown-it :text="value" />
+        <MarkdownIt :text="value" />
       </div>
     </div>
   </div>

@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
+import { useTagStore } from '/@/stores/tag'
+
 import VueSelect from '/@/components/shared/VueSelect.vue'
 import type { RequestRequest } from '/@/pages/NewRequestPage.vue'
-import { useTagStore } from '/@/stores/tag'
 
 interface Props {
   request: RequestRequest
@@ -20,7 +21,7 @@ const tags = ref(props.request.tags)
   <div class="flex flex-col">
     <label>タグ</label>
     <div class="flex">
-      <vue-select
+      <VueSelect
         v-model="tags"
         class="w-2/3"
         :close-on-select="false"

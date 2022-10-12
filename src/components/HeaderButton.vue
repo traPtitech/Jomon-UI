@@ -4,6 +4,7 @@ interface Props {
   path: string
   text: string
 }
+
 const props = defineProps<Props>()
 </script>
 

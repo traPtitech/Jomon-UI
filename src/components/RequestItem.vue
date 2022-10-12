@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import StatusChip from './shared/StatusChip.vue'
-import TagGroup from './shared/TagsGroup.vue'
 import type { Request } from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
+
+import StatusChip from './shared/StatusChip.vue'
+import TagGroup from './shared/TagsGroup.vue'
 
 interface Props {
   request: Request
@@ -16,12 +17,12 @@ const formattedDate = formatDate(props.request.created_at)
 <template>
   <router-link class="flex p-2" :to="'/requests/' + request.id">
     <div class="mx-2 flex items-center justify-center">
-      <status-chip :status="request.status" />
+      <StatusChip :status="request.status" />
     </div>
     <div class="flex-grow">
       <span class="text-xl">{{ request.title }}</span>
       <div class="mt-2">
-        <tag-group :tags="request.tags" />
+        <TagGroup :tags="request.tags" />
       </div>
     </div>
     <div>

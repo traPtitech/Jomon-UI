@@ -19,7 +19,9 @@
   "vueIndentScriptAndStyle": false,
   "endOfLine": "auto",
   "importOrder": [
-    "^/@/store/(.*)$",
+    "^/@/stores/(.*)$",
+    "^/@/lib/(.*)$",
+    "^/@/(.*)",
     "^[./]"
   ],
   "importOrderSeparation": true

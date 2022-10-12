@@ -1,13 +1,15 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 
+import { useUserStore } from '/@/stores/user'
+
+import type { RequestDetail } from '/@/lib/apis'
+import { isCreater } from '/@/lib/authorityCheck'
+
 import EditButton from '/@/components/shared/EditButton.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
-import type { RequestDetail } from '/@/lib/apis'
-import { isCreater } from '/@/lib/authorityCheck'
 import type { EditMode } from '/@/pages/composables/requestDetail/useRequestDetail'
-import { useUserStore } from '/@/stores/user'
 
 interface Props {
   request: RequestDetail
@@ -41,14 +43,14 @@ const handleComplete = () => {
     <div v-if="!isEditMode">
       払い戻し対象者：
       {{ formattedTargets }}
-      <edit-button
+      <EditButton
         v-if="hasAuthority"
         class="ml-1"
         @click="emit('changeEditMode', 'targets')" />
     </div>
     <div v-else class="flex items-center">
       払い戻し対象者：
-      <vue-select
+      <VueSelect
         v-model="currentTargets"
         :close-on-select="false"
         label="name"
@@ -56,13 +58,13 @@ const handleComplete = () => {
         :options="userStore.users"
         placeholder="払い戻し対象者"
         :reduce="(user:any) => user.name" />
-      <simple-button
+      <SimpleButton
         class="ml-2"
         font-size="sm"
         padding="sm"
         @click.stop="handleComplete">
         完了
-      </simple-button>
+      </SimpleButton>
     </div>
   </div>
 </template>

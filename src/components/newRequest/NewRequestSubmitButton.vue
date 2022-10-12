@@ -2,11 +2,13 @@
 import type { AxiosResponse } from 'axios'
 import { useRouter } from 'vue-router'
 
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import { useRequestStore } from '/@/stores/request'
+
 import type { Request, Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
+
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { FileRequest, RequestRequest } from '/@/pages/NewRequestPage.vue'
-import { useRequestStore } from '/@/stores/request'
 
 const props = defineProps<{
   request: RequestRequest
@@ -87,12 +89,12 @@ async function postRequest() {
 
 <template>
   <div class="text-right">
-    <simple-button
+    <SimpleButton
       class="mb-4"
       font-size="xl"
       padding="md"
       @click.stop="postRequest">
       申請を作成する
-    </simple-button>
+    </SimpleButton>
   </div>
 </template>

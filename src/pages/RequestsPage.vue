@@ -2,15 +2,17 @@
 import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
-import RequestFilteringMenu from '/@/components/RequestFilteringMenu.vue'
-import RequestItem from '/@/components/RequestItem.vue'
-import PaginationBar from '/@/components/shared/PaginationBar.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import { toPage } from '/@/lib/parseQueryParams'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
+
+import { toPage } from '/@/lib/parseQueryParams'
+
+import RequestFilteringMenu from '/@/components/RequestFilteringMenu.vue'
+import RequestItem from '/@/components/RequestItem.vue'
+import PaginationBar from '/@/components/shared/PaginationBar.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))
@@ -55,14 +57,14 @@ watch(
       <h1 class="text-center text-3xl">申請一覧</h1>
       <div class="absolute right-0">
         <router-link to="/requests/new">
-          <simple-button font-size="lg" padding="md">
+          <SimpleButton font-size="lg" padding="md">
             申請の新規作成
-          </simple-button>
+          </SimpleButton>
         </router-link>
       </div>
     </div>
   </div>
-  <request-filtering-menu />
+  <RequestFilteringMenu />
   <div class="min-h-120">
     <div class="mx-auto mt-4 w-3/4 rounded-xl shadow">
       <ul>
@@ -70,12 +72,12 @@ watch(
           v-for="request in sliceRequestsAt(page, 7)"
           :key="request.id"
           class="hover:bg-zinc-100 first:hover:rounded-t-xl last:hover:rounded-b-xl">
-          <request-item :request="request" />
+          <RequestItem :request="request" />
         </li>
       </ul>
     </div>
   </div>
-  <pagination-bar
+  <PaginationBar
     v-if="requestStore.requests"
     class="mt-4"
     :current-page="page"

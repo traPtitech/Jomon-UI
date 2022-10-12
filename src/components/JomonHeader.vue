@@ -1,19 +1,17 @@
 <script lang="ts" setup>
-import { Bars3Icon } from '@heroicons/vue/24/outline'
+import { useUserStore } from '/@/stores/user'
 
-import SideDrawer from './SideDrawer.vue'
+import PageNavigations from './PageNavigations.vue'
 import ModalWrapper from './modal/ModalWrapper.vue'
 import { useModal } from './modal/composables/useModal'
-import Logo from './shared/JomonLogo.vue'
+import JomonLogo from './shared/JomonLogo.vue'
 import UserIcon from './shared/UserIcon.vue'
-import PageNavigations from '/@/components/PageNavigations.vue'
-import { useUserStore } from '/@/stores/user'
 
 const userStore = useUserStore()
 
 const { shouldShowModal, openModal, closeModal } = useModal()
 
-async function handleOpenDrawer() {
+const handleOpenDrawer = () => {
   if (!shouldShowModal.value) {
     openModal()
   } else {
@@ -30,16 +28,16 @@ async function handleOpenDrawer() {
       <bars3-icon class="h-8 w-8" />
     </button>
     <router-link to="/">
-      <logo />
+      <JomonLogo />
     </router-link>
     <div class="flex h-full flex-1 justify-between px-2">
-      <page-navigations class="invisible md:visible" />
-      <user-icon :name="userStore.me.name ?? 'traP'" />
+      <PageNavigations class="invisible md:visible" />
+      <UserIcon v-if="userStore.me !== undefined" :name="userStore.me.name" />
     </div>
   </header>
   <!--遷移時にドロワーを閉じるようにするためにドロワーコンポーネント内でwrapperを使うことになりそう？-->
   <!--onBeforeRouteUpdateはヘッダーコンポーネントがルーター内に入っていないので使えない-->
-  <modal-wrapper v-if="shouldShowModal" @close-modal="closeModal">
+  <ModalWrapper v-if="shouldShowModal" @close-modal="closeModal">
     <side-drawer />
-  </modal-wrapper>
+  </ModalWrapper>
 </template>

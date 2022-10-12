@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import vSelect from 'vue-select'
+import VueSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 </script>
 
 <template>
-  <v-select v-bind="$attrs">
+  <VueSelect v-bind="$attrs">
     <template #no-options="{ search, searching, loading }">
       <div v-if="searching">
         <span>
@@ -18,12 +18,12 @@ import 'vue-select/dist/vue-select.css'
         <span>選択肢がありません</span>
       </div>
     </template>
-  </v-select>
+  </VueSelect>
 </template>
 
 <style>
-.v-select .vs__selected {
+.vs--multiple .vs__selected {
   background-color: #e5e7eb; /*gray-200*/
-  border-color: #d1d5db;
+  border: none;
 }
 </style>

@@ -1,9 +1,11 @@
 <script lang="ts" setup>
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import { useUserStore } from '/@/stores/user'
+
 import type { RequestDetail } from '/@/lib/apis'
 import { isCreater } from '/@/lib/authorityCheck'
+
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { EditMode } from '/@/pages/composables/requestDetail/useRequestDetail'
-import { useUserStore } from '/@/stores/user'
 
 interface Props {
   request: RequestDetail
@@ -27,14 +29,14 @@ const hasAuthority = isCreater(userStore.me, props.request.created_by)
     <h1 class="flex-grow text-3xl">
       {{ props.request.title }}
     </h1>
-    <simple-button
+    <SimpleButton
       v-if="hasAuthority"
       class="ml-2"
       font-size="sm"
       padding="sm"
       @click="emit('changeEditMode', 'title')">
       編集
-    </simple-button>
+    </SimpleButton>
   </div>
   <div v-else class="flex flex-grow">
     <input
@@ -43,12 +45,12 @@ const hasAuthority = isCreater(userStore.me, props.request.created_by)
       type="text"
       :value="props.value"
       @input="emit('input', ($event.target as HTMLInputElement).value)" />
-    <simple-button
+    <SimpleButton
       class="ml-2"
       font-size="sm"
       padding="sm"
       @click.stop="emit('changeEditMode', '')">
       完了
-    </simple-button>
+    </SimpleButton>
   </div>
 </template>

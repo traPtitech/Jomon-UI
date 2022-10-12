@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import EditButton from '/@/components/shared/EditButton.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import { useUserStore } from '/@/stores/user'
+
 import type { RequestDetail } from '/@/lib/apis'
 import { isCreater } from '/@/lib/authorityCheck'
+
+import EditButton from '/@/components/shared/EditButton.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { EditMode } from '/@/pages/composables/requestDetail/useRequestDetail'
-import { useUserStore } from '/@/stores/user'
 
 interface Props {
   request: RequestDetail
@@ -26,7 +28,7 @@ const hasAuthority = isCreater(userStore.me, props.request.created_by)
 <template>
   <div v-if="!isEditMode" class="flex items-center">
     <span class="text-2xl">金額：{{ props.request.amount }}円</span>
-    <edit-button
+    <EditButton
       v-if="hasAuthority"
       class="ml-1"
       @click="emit('changeEditMode', 'amount')" />
@@ -39,12 +41,12 @@ const hasAuthority = isCreater(userStore.me, props.request.created_by)
       type="text"
       :value="props.value"
       @input="emit('input', ($event.target as HTMLInputElement).value)" />円
-    <simple-button
+    <SimpleButton
       class="ml-2"
       font-size="sm"
       padding="sm"
       @click.stop="emit('changeEditMode', '')">
       完了
-    </simple-button>
+    </SimpleButton>
   </div>
 </template>

@@ -1,15 +1,17 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
+import { useTagStore } from '/@/stores/tag'
+import { useUserStore } from '/@/stores/user'
+
+import type { RequestDetail } from '/@/lib/apis'
+import { isCreater } from '/@/lib/authorityCheck'
+
 import EditButton from '/@/components/shared/EditButton.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import TagGroup from '/@/components/shared/TagsGroup.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
-import type { RequestDetail } from '/@/lib/apis'
-import { isCreater } from '/@/lib/authorityCheck'
 import type { EditMode } from '/@/pages/composables/requestDetail/useRequestDetail'
-import { useTagStore } from '/@/stores/tag'
-import { useUserStore } from '/@/stores/user'
 
 interface Props {
   request: RequestDetail
@@ -41,15 +43,15 @@ const handleComplete = () => {
     <div v-if="!isEditMode" class="pb-2">
       タグ：
       <span v-if="props.request.tags.length === 0">なし</span>
-      <tag-group v-else :tags="props.request.tags" />
-      <edit-button
+      <TagGroup v-else :tags="props.request.tags" />
+      <EditButton
         v-if="hasAuthority"
         class="ml-1"
         @click="emit('changeEditMode', 'tags')" />
     </div>
     <div v-else class="flex items-center">
       タグ：
-      <vue-select
+      <VueSelect
         v-model="currentTags"
         :close-on-select="false"
         :create-option="(tag: any) => ({ name: tag, id: tag, created_at: '', updated_at: '' })"
@@ -60,13 +62,13 @@ const handleComplete = () => {
         push-tabs
         :reduce="(tag:any) => tag.id"
         taggable />
-      <simple-button
+      <SimpleButton
         class="ml-2"
         font-size="sm"
         padding="sm"
         @click.stop="handleComplete">
         完了
-      </simple-button>
+      </SimpleButton>
     </div>
   </div>
 </template>

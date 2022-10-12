@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 
+import type { RequestDetail } from '/@/lib/apis'
+
+import type { File } from '/@/pages/composables/requestDetail/useRequestFile'
+
 import CommentLog from './CommentLog.vue'
 import RequestFiles from './RequestFiles.vue'
 import StatusChangeLog from './StatusChangeLog.vue'
-import type { RequestDetail } from '/@/lib/apis'
-import type { File } from '/@/pages/composables/requestDetail/useRequestFile'
 
 type LogKind = 'comment' | 'statusChange'
 
@@ -59,16 +61,16 @@ const logs = computed(() => {
 
 <template>
   <div class="h-120 overflow-y-scroll p-2">
-    <request-files :files="files" @remove-file="emit('removeFile', $event)" />
+    <RequestFiles :files="files" @remove-file="emit('removeFile', $event)" />
     <ul>
       <li
         v-for="log in logs"
         :key="log.created_at.toDateString"
         class="vertical-bar">
-        <comment-log
+        <CommentLog
           v-if="log.kind === 'comment'"
           :log="props.request.comments[log.index]" />
-        <status-change-log
+        <StatusChangeLog
           v-if="log.kind === 'statusChange'"
           :log="props.request.statuses[log.index]" />
       </li>

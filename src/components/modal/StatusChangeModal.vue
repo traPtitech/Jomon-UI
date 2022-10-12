@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
+import type { Status, RequestDetail } from '/@/lib/apis'
+import apis from '/@/lib/apis'
+
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import type { RequestStatus } from '/@/components/shared/StatusChip.vue'
-import type { Status, RequestDetail } from '/@/lib/apis'
-import apis from '/@/lib/apis'
 
 interface Props {
   request: RequestDetail
@@ -48,23 +49,23 @@ async function putStatus(nextStatus: RequestStatus | '', comment: string) {
     <div class="mx-12 mt-8 flex flex-col justify-around gap-4">
       <div class="mb-4 flex items-center">
         申請の状態を
-        <status-chip class="mx-1" has-text :status="props.request.status" />
+        <StatusChip class="mx-1" has-text :status="props.request.status" />
         から
-        <status-chip class="mx-1" has-text :status="nextStatus" />
+        <StatusChip class="mx-1" has-text :status="nextStatus" />
         へ変更します
       </div>
-      <markdown-textarea
+      <MarkdownTextarea
         placeholder="コメント"
         :value="comment"
         @input="comment = $event" />
       <div class="mt-4 text-center">
-        <simple-button
+        <SimpleButton
           class="mb-4 w-60"
           font-size="xl"
           padding="sm"
           @click="putStatus(nextStatus, comment)">
           申請の状態を変更する
-        </simple-button>
+        </SimpleButton>
       </div>
     </div>
   </div>

@@ -1,4 +1,5 @@
 import type { StatusEnum } from '/@/lib/apis'
+
 import clubBudgetRequestTemplate from '/@/md/clubBudgetRequest.md?raw'
 import travelingExpenseRequestTemplate from '/@/md/travelingExpenseRequest.md?raw'
 

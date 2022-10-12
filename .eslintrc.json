@@ -30,8 +30,8 @@
     "no-restricted-imports": [
       "error",
       {
-        "name": "/@/lib/apis/generated",
-        "message": "Please use /@/lib/apis instead."
+        "paths": ["/@/lib/apis/generated"],
+        "patterns": ["../"]
       }
     ],
     "@typescript-eslint/member-delimiter-style": [
@@ -46,6 +46,7 @@
       }
     ],
     "@typescript-eslint/consistent-type-imports": "error",
+    "@typescript-eslint/no-unused-vars": "off",
     "vue/require-default-prop": "off",
     "vue/block-lang": [
       "error",
@@ -54,7 +55,7 @@
       }
     ],
     "vue/component-api-style": ["error", ["script-setup"]],
-    "vue/component-name-in-template-casing": ["error", "kebab-case"],
+    "vue/component-name-in-template-casing": ["error", "PascalCase"],
     "vue/custom-event-name-casing": ["error", "camelCase"],
     "vue/v-on-event-hyphenation": ["error", "always", { "autofix": true }],
     "vue/v-on-function-call": "error",

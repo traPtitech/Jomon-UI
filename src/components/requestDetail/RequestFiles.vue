@@ -2,9 +2,10 @@
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
 
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import apis from '/@/lib/apis'
 import { isImageByName } from '/@/lib/checkFileType'
+
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { File } from '/@/pages/composables/requestDetail/useRequestFile'
 
 interface Props {
@@ -47,23 +48,23 @@ async function removeFile(id: string) {
             v-if="isImageByName(file.name)"
             :alt="file.name"
             :src="file.file" />
-          <document-icon v-else class="h-32" />
+          <DocumentIcon v-else class="h-32" />
           <!--画像の色によっては見えづらい(新規作成画面も)-->
           <button
             class="absolute top-0 right-0 h-8 w-8"
             @click="removeFile(file.id)">
-            <x-circle-icon />
+            <XCircleIcon />
           </button>
           <!--mockの場合は:href="file.file"、本番で動くか不明-->
           {{ file.name }}
-          <simple-button
+          <SimpleButton
             v-if="!isImageByName(file.name)"
             font-size="sm"
             padding="sm">
             <a :download="file.name" :href="downloadLink(file.file)">
               ダウンロード
             </a>
-          </simple-button>
+          </SimpleButton>
         </div>
       </div>
     </details>

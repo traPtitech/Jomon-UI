@@ -4,6 +4,7 @@ import { XCircleIcon } from '@heroicons/vue/24/solid'
 import { ref } from 'vue'
 
 import { isImageByType } from '/@/lib/checkFileType'
+
 import type { FileRequest } from '/@/pages/NewRequestPage.vue'
 
 interface Props {
@@ -60,11 +61,11 @@ function deleteFile(index: number) {
           :alt="file.name"
           class="h-32"
           :src="file.src" />
-        <document-icon v-else class="h-32" />
+        <DocumentIcon v-else class="h-32" />
         <button
           class="absolute top-0 right-0 h-6 w-6"
           @click="deleteFile(index)">
-          <x-circle-icon />
+          <XCircleIcon />
         </button>
         <span>{{ file.name }}</span>
       </div>

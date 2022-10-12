@@ -63,11 +63,11 @@ const backgroundColor = computed(() => (status: RequestStatus) => {
       status
     )}`"
     :title="statusToJpn(status)">
-    <check-circle-icon v-if="status === 'accepted'" class="w-8" />
-    <exclamation-triangle-icon v-else-if="status === 'submitted'" class="w-8" />
-    <x-circle-icon v-else-if="status === 'fix_required'" class="w-8" />
-    <cloud-arrow-up-icon v-else-if="status === 'rejected'" class="w-8" />
-    <hand-thumb-up-icon v-else-if="status === 'completed'" class="w-8" />
+    <CheckCircleIcon v-if="status === 'accepted'" class="w-8" />
+    <ExclamationTriangleIcon v-else-if="status === 'submitted'" class="w-8" />
+    <XCircleIcon v-else-if="status === 'fix_required'" class="w-8" />
+    <CloudArrowUpIcon v-else-if="status === 'rejected'" class="w-8" />
+    <HandThumbUpIcon v-else-if="status === 'completed'" class="w-8" />
     <span v-if="props.hasText">
       {{ statusToJpn(status) }}
     </span>

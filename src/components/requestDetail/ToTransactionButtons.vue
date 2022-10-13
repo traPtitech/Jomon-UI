@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from '/@/stores/user'
 
-import { isAdmin } from '/@/lib/authorityCheck'
-
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 interface Props {
@@ -12,14 +10,12 @@ interface Props {
 const props = defineProps<Props>()
 
 const userStore = useUserStore()
-
-const hasAuthority = isAdmin(userStore.me)
 </script>
 
 <template>
   <div class="px-1/6 flex flex-col items-center gap-4 py-8">
     <router-link
-      v-if="hasAuthority"
+      v-if="userStore.isAdmin()"
       class="w-full"
       :to="`/transactions/new?requestID=${props.id}`">
       <SimpleButton class="w-full" font-size="md" padding="sm">

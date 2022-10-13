@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 
+import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 import type { RequestDetail } from '/@/lib/apis'
-import { isCreater } from '/@/lib/authorityCheck'
 
 import EditButton from '/@/components/shared/EditButton.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
@@ -24,11 +24,13 @@ const emit = defineEmits<{
 }>()
 
 const userStore = useUserStore()
+const requestDetailStore = useRequestDetailStore()
 
 const formattedTargets = computed(() =>
   props.request.targets.map(target => target.id).join(', ')
 )
-const hasAuthority = isCreater(userStore.me, props.request.created_by)
+
+const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
 const targetIds = props.request.targets.map(target => target.id) ?? []
 const currentTargets = ref(targetIds)
 

@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 
 import { useTagStore } from '/@/stores/tag'
 import { useTransactionStore } from '/@/stores/transaction'
+import { useUserStore } from '/@/stores/user'
 
 import { toPage } from '/@/lib/parseQueryParams'
 
@@ -14,7 +15,10 @@ import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))
+
 const transactionStore = useTransactionStore()
+const userStore = useUserStore()
+
 const tagStore = useTagStore()
 
 const sliceTransactionAt = (index: number, n: number) => {
@@ -44,10 +48,10 @@ watch(
     <div class="min-w-160 mx-auto flex w-2/3 flex-col">
       <div class="relative flex w-full items-center justify-center pt-8 pb-4">
         <h1 class="text-center text-3xl">入出金記録</h1>
-        <div class="absolute right-0">
+        <div v-if="userStore.isAdmin()" class="absolute right-0">
           <router-link to="/transactions/new">
             <SimpleButton font-size="lg" padding="md">
-              新規レコード作成
+              新規入出金記録作成
             </SimpleButton>
           </router-link>
         </div>

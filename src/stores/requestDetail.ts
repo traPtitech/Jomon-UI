@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-import type { RequestDetail, PostRequest } from '/@/lib/apis'
+import type { RequestDetail, PostRequest, User } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 interface File {
@@ -127,6 +127,11 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     tags: tagIds,
     group: request.value.group.id
   })
+  const isRequestCreater = (user: User | undefined) => {
+    if (!user) return false
+    return user.name === request.value.created_by
+  }
+
   function changeEditMode(
     kind: 'title' | 'content' | 'amount' | 'group' | 'tags' | 'targets' | ''
   ) {
@@ -184,6 +189,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     tagIds,
     editMode,
     editedValue,
+    isRequestCreater,
     changeEditMode,
     fetchRequestDetail,
     putRequest,

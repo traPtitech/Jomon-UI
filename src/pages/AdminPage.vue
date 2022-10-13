@@ -18,7 +18,6 @@ const tagStore = useTagStore()
 const addList = ref<string[]>([])
 const removeList = ref<string[]>([])
 const deleteTagList = ref<string[]>([])
-const hasAuthority = userStore.isAdmin()
 const { absentMembers, isSending, addAdmins, removeAdmins } = useAdmin()
 
 const deleteTags = async () => {
@@ -50,7 +49,7 @@ if (userStore.me && userStore.me.admin) {
 </script>
 
 <template>
-  <div v-if="!hasAuthority" class="p-2">権限がありません。</div>
+  <div v-if="!userStore.isAdmin()" class="p-2">権限がありません。</div>
   <div v-else class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
     <h1 class="pb-8 text-center text-3xl">管理ページ</h1>
     <div class="flex items-center">

@@ -17,8 +17,6 @@ const page = ref(toPage(route.query.page))
 const groupStore = useGroupStore()
 const userStore = useUserStore()
 
-const hasAuthority = userStore.isAdmin()
-
 const sliceGroupsAt = (index: number, n: number) => {
   const start = (index - 1) * n
   const end = index * n
@@ -42,7 +40,7 @@ watch(
     <div class="min-w-160 mx-auto flex w-2/3 flex-col">
       <div class="relative flex w-full items-center justify-center py-8">
         <h1 class="text-center text-3xl">グループ一覧</h1>
-        <div v-if="hasAuthority" class="absolute right-0">
+        <div v-if="userStore.isAdmin()" class="absolute right-0">
           <router-link to="/groups/new">
             <SimpleButton font-size="lg" padding="md">
               グループの新規作成

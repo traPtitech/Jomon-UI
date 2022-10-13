@@ -8,7 +8,6 @@ import { useUserStore } from '/@/stores/user'
 
 import type { PostTransactionWithOneTarget, Transaction } from '/@/lib/apis'
 import apis from '/@/lib/apis'
-import { isAdmin } from '/@/lib/authorityCheck'
 import { formatDate } from '/@/lib/date'
 import { toId } from '/@/lib/parsePathParams'
 
@@ -24,7 +23,6 @@ const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 
-const hasAuthority = isAdmin(userStore.me)
 const isEditMode = ref(false)
 
 const userOption = computed(() => {
@@ -138,7 +136,7 @@ onMounted(async () => {
     <div class="flex items-center pb-4">
       <h1 class="text-3xl">取引記録の詳細</h1>
       <SimpleButton
-        v-if="hasAuthority && !transaction.request && !isEditMode"
+        v-if="userStore.isAdmin() && !transaction.request && !isEditMode"
         class="ml-2"
         font-size="sm"
         padding="sm"

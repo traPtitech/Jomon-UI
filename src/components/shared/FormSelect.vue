@@ -30,9 +30,11 @@ const value = computed({
     v-model="value"
     class="w-70"
     :close-on-select="!props.isMultiple"
+    deselect-from-dropdown
     label="key"
     :multiple="props.isMultiple"
     :options="props.options"
     :placeholder="props.placeholder"
     :reduce="(option: Option) => option.value" />
+  <!-- todo:selected optionのCSSをいい感じにする。どこかでやった気もする -->
 </template>

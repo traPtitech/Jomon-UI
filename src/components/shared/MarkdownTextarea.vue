@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 
 import FormSelect from './FormSelect.vue'
+import FormTextarea from './FormTextarea.vue'
 import MarkdownIt from './MarkdownIt.vue'
 
 type TabType = 'input' | 'preview'
@@ -68,19 +69,16 @@ function changeCurrentTab(tab: TabType) {
       </FormSelect>
     </div>
     <div>
-      <textarea
+      <FormTextarea
         v-if="currentTab === 'input'"
-        class="min-h-40 w-full rounded-b p-1"
+        class="min-h-40 w-full"
+        :model-value="modelValue"
         :placeholder="placeholder"
-        :value="modelValue"
-        @input="
-          emit('update:modelValue', ($event.target as HTMLInputElement).value)
-        " />
-      <div
+        @update:model-value="emit('update:modelValue', $event)" />
+      <MarkdownIt
         v-if="currentTab === 'preview'"
-        class="h-40 w-full overflow-y-scroll border border-gray-500 p-1">
-        <MarkdownIt :text="modelValue" />
-      </div>
+        class="min-h-40 w-full overflow-y-scroll border border-gray-500 px-1"
+        :text="modelValue" />
     </div>
   </div>
 </template>

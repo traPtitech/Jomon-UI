@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { useToast } from 'vue-toastification'
 
 import type { Request } from '/@/lib/apis'
 import apis from '/@/lib/apis'
@@ -27,6 +28,8 @@ const defaultParams: Params = {
 }
 
 export const useRequestStore = defineStore('request', () => {
+  const toast = useToast()
+
   const requests = ref<Request[]>()
   const isRequestFetched = ref(false)
 
@@ -51,8 +54,8 @@ export const useRequestStore = defineStore('request', () => {
           params.group
         )
       ).data
-    } catch (err) {
-      alert(err)
+    } catch {
+      toast.error('申請の取得に失敗しました')
     }
   }
   return { requests, isRequestFetched, fetchRequests }

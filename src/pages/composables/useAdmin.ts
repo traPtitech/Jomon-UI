@@ -45,6 +45,7 @@ export const useAdmin = () => {
       } else {
         admins.value = adminsToBeAdded
       }
+      toast.success('管理者を追加しました')
     } catch {
       toast.error('管理者の追加に失敗しました')
     } finally {
@@ -69,6 +70,7 @@ export const useAdmin = () => {
       } else {
         throw new Error('admins is empty')
       }
+      toast.success('管理者を削除しました')
     } catch {
       toast.error('管理者の削除に失敗しました')
     } finally {

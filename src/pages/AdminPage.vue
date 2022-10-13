@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { useToast } from 'vue-toastification'
 
 import { useAdminStore } from '/@/stores/admin'
 import { useTagStore } from '/@/stores/tag'
@@ -14,6 +15,7 @@ import { useAdmin } from './composables/useAdmin'
 const adminStore = useAdminStore()
 const userStore = useUserStore()
 const tagStore = useTagStore()
+const toast = useToast()
 
 const addList = ref<string[]>([])
 const removeList = ref<string[]>([])
@@ -30,8 +32,8 @@ const deleteTags = async () => {
       tagStore.deleteTag(tag)
     )
     await Promise.all(deleteTagPromiseList)
-  } catch (err) {
-    alert(err)
+  } catch {
+    toast.error('タグの削除に失敗しました')
   }
 }
 

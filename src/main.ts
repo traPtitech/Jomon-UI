@@ -19,6 +19,7 @@ const app = createApp(App)
 
 const options: PluginOptions = {
   position: POSITION.BOTTOM_LEFT,
+  maxToasts: 5,
   timeout: 3000,
   closeButton: false,
   pauseOnHover: false,

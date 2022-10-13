@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { useToast } from 'vue-toastification'
 
 import type { Transaction } from '/@/lib/apis'
 import apis from '/@/lib/apis'
@@ -26,6 +27,8 @@ const defaultParams: Params = {
 }
 
 export const useTransactionStore = defineStore('transaction', () => {
+  const toast = useToast()
+
   const transactions = ref<Transaction[]>()
   const isTransactionFetched = ref(false)
 
@@ -49,8 +52,8 @@ export const useTransactionStore = defineStore('transaction', () => {
         )
       ).data
       isTransactionFetched.value = true
-    } catch (err: any) {
-      alert(err.message)
+    } catch {
+      toast.error('入出金記録の取得に失敗しました')
     }
   }
   return {

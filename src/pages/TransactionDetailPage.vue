@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useToast } from 'vue-toastification'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
@@ -22,6 +23,7 @@ const id = toId(route.params.id)
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
+const toast = useToast()
 
 const isEditMode = ref(false)
 
@@ -99,8 +101,8 @@ async function handlePutTransaction() {
   try {
     const res = (await apis.putTransactionDetail(id, editedValue.value)).data
     transaction.value = res
-  } catch (e) {
-    alert(e)
+  } catch {
+    toast.error('入出金記録の修正に失敗しました')
   } finally {
     editedValue.value = {
       amount: transaction.value.amount,
@@ -117,7 +119,7 @@ const fetchTransaction = async (id: string) => {
   try {
     transaction.value = (await apis.getTransactionDetail(id)).data
   } catch {
-    alert('エラー')
+    toast.error('入出金記録の取得に失敗しました')
   }
 }
 

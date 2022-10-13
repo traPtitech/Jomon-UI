@@ -27,6 +27,7 @@ export const useDeleteGroup = () => {
       } else {
         throw new Error('group does not exist')
       }
+      toast.success('グループを削除しました')
     } catch {
       toast.error('グループの削除に失敗しました')
     } finally {

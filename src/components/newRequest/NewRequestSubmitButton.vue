@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { AxiosResponse } from 'axios'
 import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
 
 import { useRequestStore } from '/@/stores/request'
 
@@ -18,6 +19,7 @@ const props = defineProps<{
 const router = useRouter()
 
 const requestStore = useRequestStore()
+const toast = useToast()
 
 const isUUID = (str: string) => {
   const uuidRegexp = new RegExp(
@@ -54,8 +56,8 @@ async function postRequest() {
         (tag: AxiosResponse<Tag>) => tag.data.id
       )
     )
-  } catch (err) {
-    alert(err)
+  } catch {
+    toast.error('申請の作成に失敗しました')
     return
   }
 
@@ -78,11 +80,11 @@ async function postRequest() {
       })
       alert('申請を作成しました')
       router.push('/')
-    } catch (err) {
-      alert(err)
+    } catch {
+      toast.error('申請の作成に失敗しました')
     }
-  } catch (err) {
-    alert(err)
+  } catch {
+    toast.error('申請の作成に失敗しました')
   }
 }
 </script>

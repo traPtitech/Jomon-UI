@@ -39,6 +39,7 @@ export const useGroupMember = () => {
         members: [...groupDetailStore.group.members, ...membersToBeAdded]
       }
       groupDetailStore.group = nextGroup
+      toast.success('メンバーを追加しました')
     } catch {
       toast.error('グループメンバーの追加に失敗しました')
     } finally {
@@ -57,6 +58,7 @@ export const useGroupMember = () => {
         members: groupDetailStore.group.members.filter(member => member !== id)
       }
       groupDetailStore.group = nextGroup
+      toast.success('メンバーを削除しました')
     } catch {
       toast.error('グループメンバーの削除に失敗しました')
     } finally {

@@ -39,6 +39,7 @@ export const useGroupOwner = () => {
         owners: [...groupDetailStore.group.owners, ...ownersToBeAdded]
       }
       groupDetailStore.group = nextGroup
+      toast.success('オーナーを追加しました')
     } catch {
       toast.error('グループオーナーの追加に失敗しました')
     } finally {
@@ -57,6 +58,7 @@ export const useGroupOwner = () => {
         owners: groupDetailStore.group.owners.filter(owner => owner !== id)
       }
       groupDetailStore.group = nextGroup
+      toast.success('オーナーを削除しました')
     } catch {
       toast.error('グループオーナーの削除に失敗しました')
     } finally {

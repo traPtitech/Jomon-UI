@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
+import { useToast } from 'vue-toastification'
 
 import type { RequestDetail, PostRequest, User } from '/@/lib/apis'
 import apis from '/@/lib/apis'
@@ -10,6 +11,8 @@ interface File {
 }
 
 export const useRequestDetailStore = defineStore('requestDetail', () => {
+  const toast = useToast()
+
   const request = ref<RequestDetail>({
     id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
     amount: 1200,
@@ -143,7 +146,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
       alert('金額の形式が不正です')
       return
     }
-    if (editMode.value !== 'tags' && kind === '') {
+    if (kind === '') {
       const result = confirm(
         '入出金記録に紐づいている申請のこの情報を変更すると、入出金記録の情報にも変更が反映されます。よろしいですか？'
       )
@@ -160,16 +163,17 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   const fetchRequestDetail = async (id: string) => {
     try {
       request.value = (await apis.getRequestDetail(id)).data
-    } catch (err: any) {
-      alert(err.message)
+    } catch {
+      toast.error('申請の取得に失敗しました')
     }
   }
   const putRequest = async (id: string, willPutRequest: PostRequest) => {
     try {
       const res = (await apis.putRequestDetail(id, willPutRequest)).data
       request.value = res
-    } catch (err: any) {
-      alert(err.message)
+      toast.success('申請の修正に成功しました')
+    } catch {
+      toast.error('申請の修正に失敗しました')
     }
   }
   const fetchFiles = async (ids: string[]) => {
@@ -177,8 +181,8 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
       ids.forEach(async id => {
         files.value.concat((await apis.getFile(id)).data)
       })
-    } catch (err: any) {
-      alert(err.message)
+    } catch {
+      toast.error('ファイルの取得に失敗しました')
     }
   }
 

@@ -15,7 +15,7 @@ import { toId } from '/@/lib/parsePathParams'
 import FormInputNumber from '/@/components/shared/FormInputNumber.vue'
 import FormSelect from '/@/components/shared/FormSelect.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import TagGroup from '/@/components/shared/TagGroup.vue'
+import TagsGroup from '/@/components/shared/TagsGroup.vue'
 
 const route = useRoute()
 const id = toId(route.params.id)
@@ -151,7 +151,7 @@ onMounted(async () => {
       <li>取引額： {{ transaction.amount }}円</li>
       <li>取引相手： {{ transaction.target }}</li>
       <li>取引グループ： {{ transaction.group.name }}</li>
-      <li>タグ：<TagGroup :tags="transaction.tags" /></li>
+      <li>タグ：<TagsGroup :tags="transaction.tags" /></li>
     </ul>
     <form v-else class="mb-4 space-y-2">
       <div>年月日：{{ formatDate(transaction.created_at) }}</div>

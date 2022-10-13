@@ -3,7 +3,7 @@ import type { Request } from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
 
 import StatusChip from './shared/StatusChip.vue'
-import TagGroup from './shared/TagsGroup.vue'
+import TagsGroup from './shared/TagsGroup.vue'
 
 interface Props {
   request: Request
@@ -22,14 +22,14 @@ const formattedDate = formatDate(props.request.created_at)
     <div class="flex-grow">
       <span class="text-xl">{{ request.title }}</span>
       <div class="mt-2">
-        <TagGroup :tags="request.tags" />
+        <TagsGroup :tags="request.tags" />
       </div>
     </div>
     <div>
       <div class="flex gap-4">
         <span>グループ：{{ request.group.name }}</span>
         <span>申請者：{{ request.created_by }}</span>
-        <span> 申請日：{{ formattedDate }} </span>
+        <span>申請日：{{ formattedDate }}</span>
       </div>
       <div class="text-right text-3xl">{{ request.amount }}円</div>
     </div>

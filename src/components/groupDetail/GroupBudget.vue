@@ -3,7 +3,7 @@ import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
-import FixButton from '/@/components/shared/FixButton.vue'
+import EditButton from '/@/components/shared/EditButton.vue'
 import FormInputNumber from '/@/components/shared/FormInputNumber.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
@@ -28,7 +28,7 @@ const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
     v-if="!isEditMode && groupDetailStore.group"
     class="flex items-center pb-2">
     予算：{{ groupDetailStore.group.budget }}円
-    <FixButton
+    <EditButton
       v-if="hasAuthority"
       class="ml-1"
       @click="emit('changeEditMode', 'budget')" />

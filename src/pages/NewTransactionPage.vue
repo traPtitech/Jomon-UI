@@ -44,6 +44,7 @@ async function postTransaction() {
   try {
     tags = await tagStore.createTagIfNotExist(transaction.tags)
   } catch {
+    //todo:エラーハンドリングの方法考える
     return
   }
   const transactionRequest = {

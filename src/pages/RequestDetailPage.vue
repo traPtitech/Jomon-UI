@@ -6,7 +6,6 @@ import { useRoute } from 'vue-router'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
-import { useTransactionStore } from '/@/stores/transaction'
 import { useUserStore } from '/@/stores/user'
 
 import { formatDate } from '/@/lib/date'
@@ -28,7 +27,6 @@ import { useRequestDetail } from '/@/pages/composables/requestDetail/useRequestD
 const route = useRoute()
 const id = toId(route.params.id)
 
-const transactionStore = useTransactionStore()
 const requestDetailStore = useRequestDetailStore()
 const userStore = useUserStore()
 const groupStore = useGroupStore()
@@ -43,12 +41,6 @@ const formattedDate = computed(() =>
 
 onMounted(async () => {
   await requestDetailStore.fetchRequestDetail(id)
-  transactionStore.fetchTransactions({
-    sort: 'created_at',
-    target: request.value?.id ?? '',
-    tag: null,
-    group: null
-  })
   if (!groupStore.isGroupFetched) {
     await groupStore.fetchGroups()
   }

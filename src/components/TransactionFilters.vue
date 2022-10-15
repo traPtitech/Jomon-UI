@@ -19,9 +19,12 @@ const isTargetSearchMode = ref(false)
 
 const params = ref<Params>({
   sort: 'created_at',
-  target: null,
-  group: null,
-  tag: null
+  target: '',
+  since: '',
+  until: '',
+  group: '',
+  tag: [] as string[],
+  request: ''
 })
 
 function changeIsTargetSearchMode() {

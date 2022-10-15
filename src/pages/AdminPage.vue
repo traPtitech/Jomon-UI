@@ -72,7 +72,6 @@ if (userStore.me && userStore.me.admin) {
         :options="absentMembers"
         placeholder="追加する管理者を選択" />
       <SimpleButton
-        class="flex items-center"
         font-size="lg"
         :is-disabled="isSending"
         padding="sm"

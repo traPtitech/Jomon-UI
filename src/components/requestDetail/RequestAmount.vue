@@ -25,9 +25,9 @@ const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
   <div
     v-if="!props.isEditMode && requestDetailStore.request"
     class="flex items-center">
-    <span class="text-2xl"
-      >金額：{{ requestDetailStore.request.amount }}円</span
-    >
+    <span class="text-2xl">
+      金額：{{ requestDetailStore.request.amount }}円
+    </span>
     <EditButton
       v-if="hasAuthority"
       class="ml-1"

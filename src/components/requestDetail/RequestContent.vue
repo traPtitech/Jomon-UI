@@ -2,21 +2,16 @@
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
-import type { RequestDetail } from '/@/lib/apis'
-
 import MarkdownIt from '/@/components/shared/MarkdownIt.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { EditMode } from '/@/pages/composables/requestDetail/useRequestDetail'
 
 interface Props {
-  request: RequestDetail
   isEditMode: boolean
-  value: string
 }
 
 const props = defineProps<Props>()
 const emit = defineEmits<{
-  (e: 'input', value: string): void
   (e: 'changeEditMode', value: EditMode): void
 }>()
 
@@ -29,10 +24,12 @@ const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
 <template>
   <div class="flex w-3/5">
     詳細：
-    <div v-if="!isEditMode" class="flex flex-grow items-end">
+    <div
+      v-if="!props.isEditMode && requestDetailStore.request"
+      class="flex flex-grow items-end">
       <MarkdownIt
         class="h-32 flex-grow overflow-y-scroll border border-gray-300 pl-1"
-        :text="props.request.content" />
+        :text="requestDetailStore.request.content" />
       <SimpleButton
         v-if="hasAuthority"
         class="ml-2"
@@ -44,10 +41,9 @@ const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
     </div>
     <div v-else class="flex flex-grow items-end">
       <textarea
+        v-model="requestDetailStore.editedValue.content"
         class="h-30 flex-grow resize-none p-1"
-        placeholder="詳細"
-        :value="props.value"
-        @input="emit('input', ($event.target as HTMLTextAreaElement).value)" />
+        placeholder="詳細" />
       <SimpleButton
         class="ml-2"
         font-size="sm"

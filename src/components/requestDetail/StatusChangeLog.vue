@@ -1,16 +1,12 @@
 <script lang="ts" setup>
+import type { Status } from '/@/lib/apis'
 import { formatDateAndTime } from '/@/lib/date'
 
-import type { RequestStatus } from '/@/components/shared/StatusChip.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
 
 interface Props {
-  log: {
-    created_by: string
-    status: RequestStatus
-    created_at: string
-  }
+  log: Omit<Status, 'comment'>
 }
 const props = defineProps<Props>()
 

@@ -1,8 +1,10 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
+import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
@@ -11,7 +13,6 @@ import { toId } from '/@/lib/parseQueryParams'
 
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
-import { useRequestDetail } from '/@/pages/composables/requestDetail/useRequestDetail'
 
 const route = useRoute()
 const requestId = toId(route.query.requestID) //requestIDには申請の詳細画面から新規作成ページに移動するときだけIDを渡す
@@ -19,8 +20,9 @@ const requestId = toId(route.query.requestID) //requestIDには申請の詳細�
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
+const requestDetailStore = useRequestDetailStore()
 
-const { request, targetIds, tagIds, fetchRequestDetail } = useRequestDetail()
+const { request, targetIds, tagIds } = storeToRefs(requestDetailStore)
 const transaction = ref({
   //requestのraective性が失われてそうでamountとgroupがバグってる
   amount: requestId && request.value ? request.value.amount : 0,
@@ -50,7 +52,7 @@ onMounted(async () => {
   if (!tagStore.isTagFetched) {
     await tagStore.fetchTags()
   }
-  await fetchRequestDetail(requestId)
+  await requestDetailStore.fetchRequestDetail(requestId)
 })
 </script>
 

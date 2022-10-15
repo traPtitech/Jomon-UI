@@ -86,10 +86,9 @@ onMounted(() => {
       <div class="flex flex-col">
         <label>詳細</label>
         <MarkdownTextarea
+          v-model="request.content"
           placeholder=""
-          :templates="requestTemplates"
-          :value="request.content"
-          @input="request.content = $event" />
+          :templates="requestTemplates" />
       </div>
       <div class="flex flex-col">
         <label>払い戻し対象者</label>

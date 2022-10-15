@@ -1,25 +1,22 @@
 <script lang="ts" setup>
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
+import { onMounted } from 'vue'
 import { useToast } from 'vue-toastification'
+
+import { useRequestDetailStore } from '/@/stores/requestDetail'
 
 import apis from '/@/lib/apis'
 import { isImageByName } from '/@/lib/checkFileType'
 
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import type { File } from '/@/pages/composables/requestDetail/useRequestFile'
 
-interface Props {
-  files: File[] | undefined
-}
-
-const props = defineProps<Props>()
-const emit = defineEmits<{
-  (event: 'removeFile', fileId: string): void
-}>()
+import { useRequestFile } from './composables/useRequestFile'
 
 const toast = useToast()
+const requestDetailStore = useRequestDetailStore()
 
+const { files, fetchFiles } = useRequestFile()
 const downloadLink = (file: string) => {
   return URL.createObjectURL(new Blob([file]))
 }
@@ -31,20 +28,24 @@ async function removeFile(id: string) {
   }
   try {
     await apis.deleteFile(id)
-    emit('removeFile', id)
+    files.value = files.value.filter(file => file.id !== id)
   } catch {
     toast.error('ファイルの削除に失敗しました')
   }
 }
+
+onMounted(async () => {
+  await fetchFiles(requestDetailStore.request?.files ?? [])
+})
 </script>
 
 <template>
-  <div v-if="props.files && props.files.length > 0" class="mx-4 mt-4">
+  <div v-if="files.length > 0" class="mx-4 mt-4">
     <details>
       <summary>画像</summary>
       <div class="flex flex-wrap">
         <div
-          v-for="file in props.files"
+          v-for="file in files"
           :key="file.file"
           class="not-first:ml-2 relative flex flex-col items-center">
           <img

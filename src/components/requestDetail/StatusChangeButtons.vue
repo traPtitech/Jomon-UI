@@ -4,46 +4,32 @@ import { ref } from 'vue'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
-import type { RequestDetail, Status } from '/@/lib/apis'
-
 import ModalWrapper from '/@/components/modal/ModalWrapper.vue'
 import StatusChangeModal from '/@/components/modal/StatusChangeModal.vue'
 import { useModal } from '/@/components/modal/composables/useModal'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import type { RequestStatus } from '/@/components/shared/StatusChip.vue'
-
-interface Props {
-  request: RequestDetail
-}
-
-const props = defineProps<Props>()
-const emit = defineEmits<{
-  (e: 'pushStatus', value: Status): void
-}>()
+import type { Status } from '/@/consts/consts'
 
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
 
-const nextStatus = ref<RequestStatus>()
+const nextStatus = ref<Status>()
 const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
 const { shouldShowModal, openModal, closeModal } = useModal()
 
 const hasToSubmittedAuthority =
-  (hasAuthority && props.request.status === 'fix_required') ||
+  (hasAuthority && requestDetailStore.request?.status === 'fix_required') ||
   (userStore.isAdmin() &&
-    (props.request.status === 'fix_required' ||
-      props.request.status === 'accepted'))
+    (requestDetailStore.request?.status === 'fix_required' ||
+      requestDetailStore.request?.status === 'accepted'))
 const hasToFixRequiredAuthority =
-  userStore.isAdmin() && props.request.status === 'submitted'
+  userStore.isAdmin() && requestDetailStore.request?.status === 'submitted'
 const hasToAcceptedAuthority =
-  userStore.isAdmin() && props.request.status === 'submitted'
+  userStore.isAdmin() && requestDetailStore.request?.status === 'submitted'
 const hasToRejectedAuthority =
-  userStore.isAdmin() && props.request.status === 'submitted'
+  userStore.isAdmin() && requestDetailStore.request?.status === 'submitted'
 
-function handlePushStatus(event: Status) {
-  emit('pushStatus', event)
-}
-function handleOpenModal(status: RequestStatus) {
+function handleOpenModal(status: Status) {
   nextStatus.value = status
   openModal()
 }
@@ -84,8 +70,6 @@ function handleOpenModal(status: RequestStatus) {
     <StatusChangeModal
       v-if="nextStatus"
       :next-status="nextStatus"
-      :request="props.request"
-      @close-modal="closeModal"
-      @push-status="handlePushStatus($event)" />
+      @close-modal="closeModal" />
   </ModalWrapper>
 </template>

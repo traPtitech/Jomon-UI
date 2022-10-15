@@ -8,13 +8,10 @@ import {
 } from '@heroicons/vue/24/solid'
 import { computed } from 'vue'
 
-import type { RequestStatusEnum } from '/@/lib/apis'
-
-export type RequestStatus =
-  typeof RequestStatusEnum[keyof typeof RequestStatusEnum]
+import type { Status } from '/@/consts/consts'
 
 interface Props {
-  status: RequestStatus
+  status: Status
   hasText?: boolean
 }
 
@@ -22,7 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
   hasText: false
 })
 
-const statusToJpn = computed(() => (status: RequestStatus) => {
+const statusToJpn = computed(() => (status: Status) => {
   switch (status) {
     case 'submitted':
       return '承認待ち'
@@ -39,7 +36,7 @@ const statusToJpn = computed(() => (status: RequestStatus) => {
   }
 })
 
-const backgroundColor = computed(() => (status: RequestStatus) => {
+const backgroundColor = computed(() => (status: Status) => {
   switch (status) {
     case 'submitted':
       return 'bg-yellow-400'

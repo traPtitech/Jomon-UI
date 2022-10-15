@@ -1,17 +1,12 @@
 <script lang="ts" setup>
+import type { Comment } from '/@/lib/apis'
 import { formatDateAndTime } from '/@/lib/date'
 
 import MarkdownIt from '/@/components//shared/MarkdownIt.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
 
 interface Props {
-  log: {
-    id: string
-    user: string
-    comment: string
-    created_at: string
-    updated_at: string
-  }
+  log: Comment
 }
 
 const props = defineProps<Props>()

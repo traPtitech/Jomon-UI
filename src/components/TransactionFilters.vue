@@ -122,6 +122,7 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
     <FormSelect
       v-model="params.tag"
       class="!w-3/10"
+      is-multiple
       :options="tagStore.tagOptions"
       placeholder="タグ"
       @close="'updateTransactions'" />

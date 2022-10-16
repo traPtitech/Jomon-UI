@@ -8,12 +8,12 @@ type TabType = 'input' | 'preview'
 
 interface Props {
   placeholder?: string
-  value: string
+  modelValue: string
   templates?: readonly { name: string; value: string }[]
 }
 
 const props = withDefaults(defineProps<Props>(), { placeholder: '' })
-const emit = defineEmits<{ (e: 'input', value: string): void }>()
+const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>()
 
 const currentTab = ref<TabType>('input')
 const selectedTemplate = ref('')
@@ -21,7 +21,7 @@ const selectedTemplate = ref('')
 function setTemplate(template: string) {
   const foundTemplate = props.templates?.find(t => t.name === template)
   if (foundTemplate !== undefined) {
-    emit('input', foundTemplate.value)
+    emit('update:modelValue', foundTemplate.value)
   }
 }
 
@@ -63,12 +63,14 @@ function changeCurrentTab(tab: TabType) {
         v-if="currentTab === 'input'"
         class="min-h-40 w-full rounded-b p-1"
         :placeholder="placeholder"
-        :value="value"
-        @input="emit('input', ($event.target as HTMLInputElement).value)" />
+        :value="modelValue"
+        @input="
+          emit('update:modelValue', ($event.target as HTMLInputElement).value)
+        " />
       <div
         v-if="currentTab === 'preview'"
         class="h-40 w-full overflow-y-scroll border border-gray-500 p-1">
-        <MarkdownIt :text="value" />
+        <MarkdownIt :text="modelValue" />
       </div>
     </div>
   </div>

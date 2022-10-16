@@ -48,7 +48,7 @@ const postGroup = async (group: PostGroup) => {
 const handlePostGroup = async (e: Event) => {
   e.preventDefault()
   if (group.owners.length === 0) {
-    alert('オーナーを1人以上入れてください')
+    toast.warning('オーナーは必須です')
     return
   }
   const willPostGroup = {

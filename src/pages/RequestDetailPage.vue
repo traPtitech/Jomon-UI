@@ -1,13 +1,13 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
+import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
-import { useTransactionStore } from '/@/stores/transaction'
 import { useUserStore } from '/@/stores/user'
 
-import type { Status, Comment } from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
 import { toId } from '/@/lib/parseQueryParams'
 
@@ -23,50 +23,24 @@ import StatusChangeButtons from '/@/components/requestDetail/StatusChangeButtons
 import ToTransactionButtons from '/@/components/requestDetail/ToTransactionButtons.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import { useRequestDetail } from '/@/pages/composables/requestDetail/useRequestDetail'
-import { useRequestFile } from '/@/pages/composables/requestDetail/useRequestFile'
 
 const route = useRoute()
 const id = toId(route.params.id)
 
-const transactionStore = useTransactionStore()
+const requestDetailStore = useRequestDetailStore()
 const userStore = useUserStore()
 const groupStore = useGroupStore()
 const tagStore = useTagStore()
 
-const { editedValue, editMode, request, fetchRequestDetail, changeEditMode } =
-  useRequestDetail()
-const { files, fetchFiles } = useRequestFile()
+const { editMode, changeEditMode } = useRequestDetail()
+const { request } = storeToRefs(requestDetailStore)
+
 const formattedDate = computed(() =>
   formatDate(request.value?.created_at ?? '')
 )
 
-function pushComment(comment: Comment) {
-  if (request.value) {
-    request.value.comments.push(comment)
-  }
-}
-function pushStatus(status: Status) {
-  if (request.value) {
-    request.value.statuses.push(status)
-    request.value.status = status.status
-  }
-}
-
-function removeFile(fileId: string) {
-  if (files.value) {
-    files.value = files.value.filter(file => file.id !== fileId)
-  }
-}
-
 onMounted(async () => {
-  await fetchRequestDetail(id)
-  transactionStore.fetchTransactions({
-    sort: 'created_at',
-    target: request.value?.id ?? '',
-    tag: null,
-    group: null
-  }) //idをparamsに渡して取得
-  await fetchFiles(request.value?.files ?? [])
+  await requestDetailStore.fetchRequestDetail(id)
   if (!groupStore.isGroupFetched) {
     await groupStore.fetchGroups()
   }
@@ -87,66 +61,40 @@ onMounted(async () => {
         <RequestTitle
           class="ml-2"
           :is-edit-mode="editMode === 'title'"
-          :request="request"
-          :value="editedValue.title"
-          @change-edit-mode="changeEditMode($event)"
-          @input="editedValue.title = $event" />
+          @change-edit-mode="changeEditMode($event)" />
         <div class="ml-2">
-          <StatusChangeButtons
-            :request="request"
-            @push-status="pushStatus($event)" />
+          <StatusChangeButtons />
         </div>
       </div>
       <div class="mt-4 flex justify-between">
         <RequestTags
           :is-edit-mode="editMode === 'tags'"
-          :request="request"
-          :value="editedValue.tags"
-          @change-edit-mode="changeEditMode($event)"
-          @input="editedValue.tags = $event" />
+          @change-edit-mode="changeEditMode($event)" />
         <div class="flex items-center gap-4">
           <RequestGroup
             :is-edit-mode="editMode === 'group'"
-            :request="request"
-            :value="editedValue.group"
-            @change-edit-mode="changeEditMode($event)"
-            @input="editedValue.group = $event" />
+            @change-edit-mode="changeEditMode($event)" />
           <p>申請者：{{ request.created_by }}</p>
           <p>申請日：{{ formattedDate }}</p>
           <RequestAmount
             :is-edit-mode="editMode === 'amount'"
-            :request="request"
-            :value="editedValue.amount"
-            @change-edit-mode="changeEditMode($event)"
-            @input="editedValue.amount = $event" />
+            @change-edit-mode="changeEditMode($event)" />
         </div>
       </div>
       <div class="mt-4 flex">
         <RequestContent
           :is-edit-mode="editMode === 'content'"
-          :request="request"
-          :value="editedValue.content"
-          @change-edit-mode="changeEditMode($event)"
-          @input="editedValue.content = $event" />
+          @change-edit-mode="changeEditMode($event)" />
         <RequestTargets
           :is-edit-mode="editMode === 'targets'"
-          :request="request"
-          :value="editedValue.targets"
-          @change-edit-mode="changeEditMode($event)"
-          @input="editedValue.targets = $event" />
+          @change-edit-mode="changeEditMode($event)" />
       </div>
     </div>
     <div class="flex">
-      <RequestLogs
-        class="w-2/3"
-        :files="files"
-        :request="request"
-        @remove-file="removeFile($event)" />
+      <RequestLogs class="w-2/3" />
       <div class="w-1/3">
-        <ToTransactionButtons :id="id" />
-        <NewComment
-          :request-id="request.id"
-          @push-comment="pushComment($event)" />
+        <ToTransactionButtons />
+        <NewComment />
       </div>
     </div>
   </div>

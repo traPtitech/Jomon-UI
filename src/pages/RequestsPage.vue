@@ -9,7 +9,7 @@ import { useUserStore } from '/@/stores/user'
 
 import { toPage } from '/@/lib/parseQueryParams'
 
-import RequestFilteringMenu from '/@/components/RequestFilteringMenu.vue'
+import RequestFilters from '/@/components/RequestFilters.vue'
 import RequestItem from '/@/components/RequestItem.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
@@ -64,7 +64,7 @@ watch(
       </div>
     </div>
   </div>
-  <RequestFilteringMenu />
+  <RequestFilters />
   <div class="min-h-120">
     <div class="mx-auto mt-4 w-3/4 rounded-xl shadow">
       <ul>

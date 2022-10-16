@@ -1,8 +1,11 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { onMounted, reactive } from 'vue'
 import { useRoute } from 'vue-router'
+import { useToast } from 'vue-toastification'
 
 import { useGroupStore } from '/@/stores/group'
+import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
@@ -11,7 +14,6 @@ import { toId } from '/@/lib/parseQueryParams'
 
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
-import { useRequestDetail } from '/@/pages/composables/requestDetail/useRequestDetail'
 
 const route = useRoute()
 const requestId = toId(route.query.requestID) //requestIDには申請の詳細画面から新規作成ページに移動するときだけIDを渡す
@@ -19,10 +21,11 @@ const requestId = toId(route.query.requestID) //requestIDには申請の詳細�
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
+const requestDetailStore = useRequestDetailStore()
+const toast = useToast()
 
-const { request, targetIds, tagIds, fetchRequestDetail } = useRequestDetail()
-const transaction = ref({
-  //requestのraective性が失われてそうでamountとgroupがバグってる
+const { request, targetIds, tagIds } = storeToRefs(requestDetailStore)
+const transaction = reactive({
   amount: requestId && request.value ? request.value.amount : 0,
   targets: requestId ? targetIds : [],
   request: requestId,
@@ -30,14 +33,11 @@ const transaction = ref({
   group: requestId && request.value ? request.value.group.id : ''
 })
 async function postTransaction() {
-  if (
-    !/^[1-9][0-9]*$/.test(transaction.value.amount.toString()) ||
-    transaction.value.targets.length === 0
-  ) {
-    alert('不正です')
+  if (transaction.targets.length === 0) {
+    toast.warning('払い戻し対象者は必須です')
     return
   }
-  await apis.postTransaction(transaction.value)
+  await apis.postTransaction(transaction)
 }
 
 onMounted(async () => {
@@ -50,7 +50,7 @@ onMounted(async () => {
   if (!tagStore.isTagFetched) {
     await tagStore.fetchTags()
   }
-  await fetchRequestDetail(requestId)
+  await requestDetailStore.fetchRequestDetail(requestId)
 })
 </script>
 

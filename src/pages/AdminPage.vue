@@ -24,7 +24,7 @@ const { absentMembers, isSending, addAdmins, removeAdmins } = useAdmin()
 
 const deleteTags = async () => {
   if (deleteTagList.value.length === 0) {
-    alert('1つ以上選択して下さい')
+    toast.warning('削除するタグを選択してください')
     return
   }
   try {
@@ -72,7 +72,6 @@ if (userStore.me && userStore.me.admin) {
         :options="absentMembers"
         placeholder="追加する管理者を選択" />
       <SimpleButton
-        class="flex items-center"
         font-size="lg"
         :is-disabled="isSending"
         padding="sm"

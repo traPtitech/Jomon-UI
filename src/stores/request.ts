@@ -5,9 +5,9 @@ import { useToast } from 'vue-toastification'
 import type { Request } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
-import type { Status } from '/@/consts/consts'
+import type { RequestStatus } from '/@/consts/consts'
 
-export interface Params {
+export interface SearchRequestParams {
   sort: string
   currentStatus: string
   target: string
@@ -17,7 +17,7 @@ export interface Params {
   group: string
 }
 
-const defaultParams: Params = {
+const defaultParams: SearchRequestParams = {
   sort: 'created_at',
   currentStatus: '',
   target: '',
@@ -33,7 +33,7 @@ export const useRequestStore = defineStore('request', () => {
   const requests = ref<Request[]>()
   const isRequestFetched = ref(false)
 
-  const fetchRequests = async (params: Params = defaultParams) => {
+  const fetchRequests = async (params: SearchRequestParams = defaultParams) => {
     const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
     if (
       (params.since && !rule.test(params.since)) ||
@@ -46,7 +46,7 @@ export const useRequestStore = defineStore('request', () => {
       requests.value = (
         await apis.getRequests(
           params.sort,
-          params.currentStatus as Status,
+          params.currentStatus as RequestStatus,
           params.target,
           params.since,
           params.until,

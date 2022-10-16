@@ -19,4 +19,4 @@ export const requestTemplates = [
 const requestTemplateNames = requestTemplates.map(v => v.name)
 export type RequestTemplate = typeof requestTemplateNames[number]
 
-export type Status = typeof StatusEnum[keyof typeof StatusEnum]
+export type RequestStatus = typeof StatusEnum[keyof typeof StatusEnum]

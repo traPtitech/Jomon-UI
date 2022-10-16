@@ -1,9 +1,8 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
-import type { RequestDetail } from '/@/lib/apis'
-
-import type { File } from '/@/pages/composables/requestDetail/useRequestFile'
+import { useRequestDetailStore } from '/@/stores/requestDetail'
 
 import CommentLog from './CommentLog.vue'
 import RequestFiles from './RequestFiles.vue'
@@ -11,43 +10,38 @@ import StatusChangeLog from './StatusChangeLog.vue'
 
 type LogKind = 'comment' | 'statusChange'
 
-interface Props {
-  files: File[] | undefined
-  request: RequestDetail
-}
-
 interface Log {
   created_at: Date
   kind: LogKind
   index: number
 }
 
-const props = defineProps<Props>()
-const emit = defineEmits<{
-  (event: 'removeFile', fileId: string): void
-}>()
+const requestDetailStore = useRequestDetailStore()
+
+const { request } = storeToRefs(requestDetailStore)
 
 const logs = computed(() => {
   //2つの配列(commentsとstatuses)の中身の型が違うので1つにまとめ、ソートして表示ができない
   let array = new Array<Log>()
   //2つの配列からcreated_at、種類、インデックスだけ取り出して1つの配列にまとめる
-  array = props.request.comments
-    .map(
-      (comment, i): Log => ({
-        created_at: new Date(comment.created_at),
-        kind: 'comment',
-        index: i
-      })
-    )
-    .concat(
-      props.request.statuses.map(
-        (status, i): Log => ({
-          created_at: new Date(status.created_at),
-          kind: 'statusChange',
+  array =
+    request.value?.comments
+      .map(
+        (comment, i): Log => ({
+          created_at: new Date(comment.created_at),
+          kind: 'comment',
           index: i
         })
       )
-    )
+      .concat(
+        request.value.statuses.map(
+          (status, i): Log => ({
+            created_at: new Date(status.created_at),
+            kind: 'statusChange',
+            index: i
+          })
+        )
+      ) ?? []
   //created_atでソート
   array = array.sort(function (a, b) {
     if (a.created_at > b.created_at) return 1
@@ -60,8 +54,8 @@ const logs = computed(() => {
 </script>
 
 <template>
-  <div class="h-120 overflow-y-scroll p-2">
-    <RequestFiles :files="files" @remove-file="emit('removeFile', $event)" />
+  <div v-if="request" class="h-120 overflow-y-scroll p-2">
+    <RequestFiles />
     <ul>
       <li
         v-for="log in logs"
@@ -69,10 +63,10 @@ const logs = computed(() => {
         class="vertical-bar">
         <CommentLog
           v-if="log.kind === 'comment'"
-          :log="props.request.comments[log.index]" />
+          :comment="request.comments[log.index]" />
         <StatusChangeLog
           v-if="log.kind === 'statusChange'"
-          :log="props.request.statuses[log.index]" />
+          :log="request.statuses[log.index]" />
       </li>
     </ul>
   </div>

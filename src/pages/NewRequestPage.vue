@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
@@ -31,7 +31,7 @@ const tagStore = useTagStore()
 const userStore = useUserStore()
 const groupStore = useGroupStore()
 
-const request = ref<RequestRequest>({
+const request = reactive<RequestRequest>({
   created_by: userStore.me?.name ?? '',
   amount: 0,
   title: '',
@@ -86,10 +86,9 @@ onMounted(() => {
       <div class="flex flex-col">
         <label>詳細</label>
         <MarkdownTextarea
+          v-model="request.content"
           placeholder=""
-          :templates="requestTemplates"
-          :value="request.content"
-          @input="request.content = $event" />
+          :templates="requestTemplates" />
       </div>
       <div class="flex flex-col">
         <label>払い戻し対象者</label>

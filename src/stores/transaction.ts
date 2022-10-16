@@ -5,25 +5,24 @@ import { useToast } from 'vue-toastification'
 import type { Transaction } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
-export interface Params {
+export interface SearchTransactionParams {
   sort: string
-  target: string | null
-  tag:
-    | {
-        id: string
-        name: string
-        created_at: string
-        updated_at: string
-      }[]
-    | null
-  group: string | null
+  target: string
+  since: string
+  until: string
+  tag: string[]
+  group: string
+  request: string
 }
 
-const defaultParams: Params = {
+export const defaultParams: SearchTransactionParams = {
   sort: 'created_at',
-  target: null,
-  tag: null,
-  group: null
+  target: '',
+  tag: [],
+  since: '',
+  until: '',
+  group: '',
+  request: ''
 }
 
 export const useTransactionStore = defineStore('transaction', () => {
@@ -32,23 +31,23 @@ export const useTransactionStore = defineStore('transaction', () => {
   const transactions = ref<Transaction[]>()
   const isTransactionFetched = ref(false)
 
-  const fetchTransactions = async (tmpParams: Params = defaultParams) => {
+  const fetchTransactions = async (
+    tmpParams: SearchTransactionParams = defaultParams
+  ) => {
     const params = { ...tmpParams, tag: '' }
-    const tmpTagList = tmpParams.tag?.slice() || []
-    for (let i = 0; i < tmpTagList.length; i++) {
-      if (i === 0) {
-        params.tag = tmpTagList[i].id
-      } else {
-        params.tag += ',' + tmpTagList[i].id
-      }
+    if (tmpParams.tag.length > 0) {
+      params.tag = tmpParams.tag.join(',')
     }
     try {
       transactions.value = (
         await apis.getTransactions(
           params.sort,
-          params.target || '',
-          params.tag || '',
-          params.group || ''
+          params.target,
+          params.since,
+          params.until,
+          params.tag,
+          params.group,
+          params.request
         )
       ).data
       isTransactionFetched.value = true

@@ -33,12 +33,11 @@ async function postFile(requestId: string, name: string, file: string) {
 }
 async function postRequest() {
   if (
-    !/^[1-9][0-9]*$|^0$/.test(props.request.amount.toString()) ||
     props.request.title === '' ||
     props.request.content === '' ||
     props.request.targets.length === 0
   ) {
-    alert('形式が不正です')
+    toast.warning('タイトル、内容、対象者は必須です')
     return
   }
   const tagPostPromises: Promise<AxiosResponse<Tag>>[] = []
@@ -78,7 +77,7 @@ async function postRequest() {
       props.files.forEach((file: FileRequest) => {
         postFile(id, file.name, file.src)
       })
-      alert('申請を作成しました')
+      toast.success('申請を作成しました')
       router.push('/')
     } catch {
       toast.error('申請の作成に失敗しました')

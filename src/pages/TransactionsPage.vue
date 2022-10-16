@@ -3,10 +3,10 @@ import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useTagStore } from '/@/stores/tag'
-import { useTransactionStore } from '/@/stores/transaction'
+import { useTransactionStore, defaultParams } from '/@/stores/transaction'
 import { useUserStore } from '/@/stores/user'
 
-import { toPage } from '/@/lib/parseQueryParams'
+import { toId, toPage } from '/@/lib/parseQueryParams'
 
 import TransactionFilters from '/@/components/TransactionFilters.vue'
 import TransactionItem from '/@/components/TransactionItem.vue'
@@ -27,12 +27,14 @@ const sliceTransactionAt = (index: number, n: number) => {
   return transactionStore.transactions?.slice(start, end)
 }
 
-onMounted(() => {
-  if (!transactionStore.isTransactionFetched) {
-    transactionStore.fetchTransactions()
-  }
+onMounted(async () => {
+  await transactionStore.fetchTransactions({
+    ...defaultParams,
+    request: toId(route.query.requestID)
+  })
+
   if (!tagStore.isTagFetched) {
-    tagStore.fetchTags()
+    await tagStore.fetchTags()
   }
 })
 watch(

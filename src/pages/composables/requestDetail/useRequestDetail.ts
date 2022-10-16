@@ -1,8 +1,12 @@
 import type { AxiosResponse } from 'axios'
-import { computed, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import type { RequestDetail, Tag } from '/@/lib/apis'
+import { useRequestDetailStore } from '/@/stores/requestDetail'
+import { useTagStore } from '/@/stores/tag'
+
+import type { Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export type EditMode =
@@ -16,7 +20,7 @@ export type EditMode =
 
 export interface EditedValue {
   title: string
-  amount: string
+  amount: number
   content: string
   targets: string[]
   tags: string[]
@@ -25,36 +29,12 @@ export interface EditedValue {
 }
 
 export const useRequestDetail = () => {
+  const requestDetailStore = useRequestDetailStore()
+  const tagStore = useTagStore()
   const toast = useToast()
+  const { request } = storeToRefs(requestDetailStore)
 
-  const request = ref<RequestDetail>()
-
-  const targetIds = computed(() => {
-    return request.value?.targets.map(target => target.id) ?? []
-  })
-  const tagIds = computed(() => {
-    return request.value?.tags.map(tag => tag.id) ?? []
-  })
-  const editedValue = computed(() => {
-    return {
-      title: request.value?.title ?? '',
-      amount: request.value?.amount.toString() ?? '',
-      content: request.value?.content ?? '',
-      targets: targetIds.value,
-      tags: tagIds.value,
-      group: request.value?.group?.id ?? '',
-      created_by: request.value?.created_by ?? ''
-    }
-  })
   const editMode = ref<EditMode>('')
-
-  const fetchRequestDetail = async (id: string) => {
-    try {
-      request.value = (await apis.getRequestDetail(id)).data
-    } catch {
-      toast.error('申請の取得に失敗しました')
-    }
-  }
 
   const changeEditMode = async (kind: EditMode) => {
     if (kind !== '') {
@@ -63,8 +43,8 @@ export const useRequestDetail = () => {
     }
     if (
       editMode.value === 'amount' &&
-      (isNaN(Number(editedValue.value.amount)) ||
-        Number(editedValue.value.amount) === 0)
+      (isNaN(Number(requestDetailStore.editedValue.amount)) ||
+        Number(requestDetailStore.editedValue.amount) === 0)
     ) {
       alert('金額の形式が不正です')
       return
@@ -76,7 +56,7 @@ export const useRequestDetail = () => {
       if (!result) return
     }
     if (request.value !== undefined) {
-      await putRequest(request.value.id, editedValue.value)
+      await putRequest(request.value.id, requestDetailStore.editedValue)
     } else {
       toast.error('申請の修正に失敗しました')
     }
@@ -84,17 +64,18 @@ export const useRequestDetail = () => {
   }
   const putRequest = async (id: string, willPutRequest: EditedValue) => {
     const tagPostPromises: Promise<AxiosResponse<Tag>>[] = []
-    const preTags = [...willPutRequest.tags]
+    let preTags = [...willPutRequest.tags]
     preTags.forEach((tag: string) => {
-      if (tag !== '') {
+      if (tagStore.tags?.some(t => t.id === tag)) {
         return
       }
       tagPostPromises.push(apis.postTag({ name: tag }))
     })
-    let tags: string[] = []
     try {
-      tags = (await Promise.all(tagPostPromises)).map(
-        (tag: AxiosResponse<Tag>) => tag.data.id
+      preTags = preTags.concat(
+        (await Promise.all(tagPostPromises)).map(
+          (tag: AxiosResponse<Tag>) => tag.data.id
+        )
       )
     } catch {
       toast.error('申請の修正に失敗しました')
@@ -104,7 +85,7 @@ export const useRequestDetail = () => {
       ...willPutRequest,
       targets: [...willPutRequest.targets],
       amount: Number(willPutRequest.amount),
-      tags: tags
+      tags: preTags
     }
     try {
       request.value = (await apis.putRequestDetail(id, putRequest)).data
@@ -114,12 +95,7 @@ export const useRequestDetail = () => {
     }
   }
   return {
-    editedValue,
     editMode,
-    request,
-    targetIds,
-    tagIds,
-    fetchRequestDetail,
     changeEditMode
   }
 }

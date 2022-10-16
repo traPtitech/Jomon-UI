@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
-import { ref } from 'vue'
+import { reactive } from 'vue'
 
 import { useGroupStore } from '/@/stores/group'
+import type { SearchRequestParams } from '/@/stores/request'
 import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
@@ -16,7 +17,7 @@ const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 
-const params = ref({
+const params = reactive<SearchRequestParams>({
   sort: 'created_at',
   currentStatus: '',
   target: '',
@@ -27,12 +28,12 @@ const params = ref({
 })
 
 function sortByCreatedAt() {
-  if (params.value.sort === 'created_at') {
-    params.value.sort = '-created_at'
+  if (params.sort === 'created_at') {
+    params.sort = '-created_at'
   } else {
-    params.value.sort = 'created_at'
+    params.sort = 'created_at'
   }
-  requestStore.fetchRequests(params.value)
+  requestStore.fetchRequests(params)
 }
 </script>
 

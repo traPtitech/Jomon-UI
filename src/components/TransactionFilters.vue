@@ -10,6 +10,7 @@ import type { SearchTransactionParams } from '/@/stores/transaction'
 
 // import { useTransactionStore } from '/@/stores/transaction'
 import SortOrderButtons from './SortOrderButtons.vue'
+import FormInput from './shared/FormInput.vue'
 import FormSelect from './shared/FormSelect.vue'
 
 const transactionStore = useTransactionStore()
@@ -104,8 +105,7 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
         </button>
       </div>
       <div v-else class="relative">
-        <input v-model="params.target" class="h-8 w-full" type="text" />
-        <!-- todo:FormInputにする -->
+        <FormInput v-model="params.target" class="w-full" type="text" />
         <XMarkIcon
           class="absolute right-2 top-2 h-4 cursor-pointer"
           @click="changeIsTargetSearchMode" />

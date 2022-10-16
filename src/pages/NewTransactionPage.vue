@@ -2,6 +2,7 @@
 import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useToast } from 'vue-toastification'
 
 import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
@@ -21,10 +22,10 @@ const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const requestDetailStore = useRequestDetailStore()
+const toast = useToast()
 
 const { request, targetIds, tagIds } = storeToRefs(requestDetailStore)
 const transaction = ref({
-  //requestのraective性が失われてそうでamountとgroupがバグってる
   amount: requestId && request.value ? request.value.amount : 0,
   targets: requestId ? targetIds : [],
   request: requestId,
@@ -32,11 +33,8 @@ const transaction = ref({
   group: requestId && request.value ? request.value.group.id : ''
 })
 async function postTransaction() {
-  if (
-    !/^[1-9][0-9]*$/.test(transaction.value.amount.toString()) ||
-    transaction.value.targets.length === 0
-  ) {
-    alert('不正です')
+  if (transaction.value.targets.length === 0) {
+    toast.warning('払い戻し対象者は必須です')
     return
   }
   await apis.postTransaction(transaction.value)

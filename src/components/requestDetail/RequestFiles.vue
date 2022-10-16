@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
+import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 import { useToast } from 'vue-toastification'
 
@@ -15,6 +16,8 @@ import { useRequestFile } from './composables/useRequestFile'
 
 const toast = useToast()
 const requestDetailStore = useRequestDetailStore()
+
+const { request } = storeToRefs(requestDetailStore)
 
 const { files, fetchFiles } = useRequestFile()
 const downloadLink = (file: string) => {
@@ -35,7 +38,7 @@ async function removeFile(id: string) {
 }
 
 onMounted(async () => {
-  await fetchFiles(requestDetailStore.request?.files ?? [])
+  await fetchFiles(request.value?.files ?? [])
 })
 </script>
 

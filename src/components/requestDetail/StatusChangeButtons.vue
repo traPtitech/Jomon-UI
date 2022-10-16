@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import { useRequestDetailStore } from '/@/stores/requestDetail'
@@ -13,21 +14,23 @@ import type { RequestStatus } from '/@/consts/consts'
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
 
+const { request } = storeToRefs(requestDetailStore)
+
 const nextStatus = ref<RequestStatus>()
 const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
 const { shouldShowModal, openModal, closeModal } = useModal()
 
 const showToSubmitted =
-  (hasAuthority && requestDetailStore.request?.status === 'fix_required') ||
+  (hasAuthority && request.value?.status === 'fix_required') ||
   (userStore.isAdmin() &&
-    (requestDetailStore.request?.status === 'fix_required' ||
-      requestDetailStore.request?.status === 'accepted'))
+    (request.value?.status === 'fix_required' ||
+      request.value?.status === 'accepted'))
 const showToRequired =
-  userStore.isAdmin() && requestDetailStore.request?.status === 'submitted'
+  userStore.isAdmin() && request.value?.status === 'submitted'
 const showToAccepted =
-  userStore.isAdmin() && requestDetailStore.request?.status === 'submitted'
+  userStore.isAdmin() && request.value?.status === 'submitted'
 const showToRejected =
-  userStore.isAdmin() && requestDetailStore.request?.status === 'submitted'
+  userStore.isAdmin() && request.value?.status === 'submitted'
 
 function handleOpenModal(status: RequestStatus) {
   nextStatus.value = status

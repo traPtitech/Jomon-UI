@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
+
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
@@ -18,18 +20,18 @@ const emit = defineEmits<{
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
 
+const { request, editedValue } = storeToRefs(requestDetailStore)
+
 const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
 </script>
 
 <template>
   <div class="flex w-3/5">
     詳細：
-    <div
-      v-if="!props.isEditMode && requestDetailStore.request"
-      class="flex flex-grow items-end">
+    <div v-if="!props.isEditMode && request" class="flex flex-grow items-end">
       <MarkdownIt
         class="h-32 flex-grow overflow-y-scroll border border-gray-300 pl-1"
-        :text="requestDetailStore.request.content" />
+        :text="request.content" />
       <SimpleButton
         v-if="hasAuthority"
         class="ml-2"
@@ -41,7 +43,7 @@ const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
     </div>
     <div v-else class="flex flex-grow items-end">
       <textarea
-        v-model="requestDetailStore.editedValue.content"
+        v-model="editedValue.content"
         class="h-30 flex-grow resize-none p-1"
         placeholder="詳細" />
       <SimpleButton

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
 import { useRequestDetailStore } from '/@/stores/requestDetail'
@@ -17,12 +18,14 @@ interface Log {
 
 const requestDetailStore = useRequestDetailStore()
 
+const { request } = storeToRefs(requestDetailStore)
+
 const logs = computed(() => {
   //2つの配列(commentsとstatuses)の中身の型が違うので1つにまとめ、ソートして表示ができない
   let array = new Array<Log>()
   //2つの配列からcreated_at、種類、インデックスだけ取り出して1つの配列にまとめる
   array =
-    requestDetailStore.request?.comments
+    request.value?.comments
       .map(
         (comment, i): Log => ({
           created_at: new Date(comment.created_at),
@@ -31,7 +34,7 @@ const logs = computed(() => {
         })
       )
       .concat(
-        requestDetailStore.request.statuses.map(
+        request.value.statuses.map(
           (status, i): Log => ({
             created_at: new Date(status.created_at),
             kind: 'statusChange',
@@ -51,7 +54,7 @@ const logs = computed(() => {
 </script>
 
 <template>
-  <div v-if="requestDetailStore.request" class="h-120 overflow-y-scroll p-2">
+  <div v-if="request" class="h-120 overflow-y-scroll p-2">
     <RequestFiles />
     <ul>
       <li
@@ -60,10 +63,10 @@ const logs = computed(() => {
         class="vertical-bar">
         <CommentLog
           v-if="log.kind === 'comment'"
-          :comment="requestDetailStore.request.comments[log.index]" />
+          :comment="request.comments[log.index]" />
         <StatusChangeLog
           v-if="log.kind === 'statusChange'"
-          :log="requestDetailStore.request.statuses[log.index]" />
+          :log="request.statuses[log.index]" />
       </li>
     </ul>
   </div>

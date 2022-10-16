@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
+
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
@@ -18,16 +20,14 @@ const emit = defineEmits<{
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
 
+const { request, editedValue } = storeToRefs(requestDetailStore)
+
 const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
 </script>
 
 <template>
-  <div
-    v-if="!props.isEditMode && requestDetailStore.request"
-    class="flex items-center">
-    <span class="text-2xl">
-      金額：{{ requestDetailStore.request.amount }}円
-    </span>
+  <div v-if="!props.isEditMode && request" class="flex items-center">
+    <span class="text-2xl">金額：{{ request.amount }}円</span>
     <EditButton
       v-if="hasAuthority"
       class="ml-1"
@@ -36,7 +36,7 @@ const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
   <div v-else class="flex items-center">
     金額：
     <input
-      v-model="requestDetailStore.editedValue.amount"
+      v-model="editedValue.amount"
       class="mr-1 w-24 p-1"
       placeholder="金額"
       type="text" />円

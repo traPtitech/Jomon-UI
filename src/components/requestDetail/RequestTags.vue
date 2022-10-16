@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
+
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
@@ -22,6 +24,8 @@ const tagStore = useTagStore()
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
 
+const { request, editedValue } = storeToRefs(requestDetailStore)
+
 const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
 
 const handleComplete = () => {
@@ -31,10 +35,10 @@ const handleComplete = () => {
 
 <template>
   <div class="flex items-center">
-    <div v-if="!props.isEditMode && requestDetailStore.request" class="pb-2">
+    <div v-if="!props.isEditMode && request" class="pb-2">
       タグ：
-      <span v-if="requestDetailStore.request.tags.length === 0">なし</span>
-      <TagsGroup v-else :tags="requestDetailStore.request.tags" />
+      <span v-if="request.tags.length === 0">なし</span>
+      <TagsGroup v-else :tags="request.tags" />
       <EditButton
         v-if="hasAuthority"
         class="ml-1"
@@ -43,7 +47,7 @@ const handleComplete = () => {
     <div v-else class="flex items-center">
       タグ：
       <VueSelect
-        v-model="requestDetailStore.editedValue.tags"
+        v-model="editedValue.tags"
         :close-on-select="false"
         :create-option="(tag:any) => ({name:tag,id:tag,created_at:'',updated_at:''})"
         label="name"

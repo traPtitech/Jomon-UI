@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
+
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
 import { useNewComment } from '/@/components/requestDetail/composables/useNewComment'
@@ -6,10 +8,8 @@ import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 const requestDetailStore = useRequestDetailStore()
-
-const { comment, isSending, submit } = useNewComment(
-  requestDetailStore.request?.id ?? ''
-)
+const { request } = storeToRefs(requestDetailStore)
+const { comment, isSending, submit } = useNewComment(request.value?.id ?? '')
 </script>
 
 <template>

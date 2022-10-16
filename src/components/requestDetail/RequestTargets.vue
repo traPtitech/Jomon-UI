@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
 import { useRequestDetailStore } from '/@/stores/requestDetail'
@@ -21,10 +22,10 @@ const emit = defineEmits<{
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
 
+const { request, editedValue } = storeToRefs(requestDetailStore)
+
 const formattedTargets = computed(
-  () =>
-    requestDetailStore.request?.targets.map(target => target.id).join(', ') ??
-    ''
+  () => request.value?.targets.map(target => target.id).join(', ') ?? ''
 )
 
 const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
@@ -47,7 +48,7 @@ const handleComplete = () => {
     <div v-else class="flex items-center">
       払い戻し対象者：
       <VueSelect
-        v-model="requestDetailStore.editedValue.targets"
+        v-model="editedValue.targets"
         :close-on-select="false"
         label="name"
         multiple

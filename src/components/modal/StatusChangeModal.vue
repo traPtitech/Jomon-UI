@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
@@ -23,6 +24,8 @@ const emit = defineEmits<{
 const toast = useToast()
 const requestDetailStore = useRequestDetailStore()
 
+const { request } = storeToRefs(requestDetailStore)
+
 const comment = ref('')
 
 async function putStatus(nextStatus: RequestStatus, comment: string) {
@@ -31,14 +34,13 @@ async function putStatus(nextStatus: RequestStatus, comment: string) {
     comment: comment
   }
   try {
-    if (requestDetailStore.request === undefined) {
+    if (request.value === undefined) {
       throw new Error('request is undefined')
     }
-    const response = (
-      await apis.putStatus(requestDetailStore.request.id, statusRequest)
-    ).data
-    requestDetailStore.request.statuses.push(response)
-    requestDetailStore.request.status = response.status
+    const response = (await apis.putStatus(request.value.id, statusRequest))
+      .data
+    request.value.statuses.push(response)
+    request.value.status = response.status
     emit('closeModal')
   } catch {
     toast.error('状態の変更に失敗しました')
@@ -48,16 +50,13 @@ async function putStatus(nextStatus: RequestStatus, comment: string) {
 
 <template>
   <div
-    v-if="requestDetailStore.request"
+    v-if="request"
     class="absolute inset-0 m-auto h-3/5 w-1/2 bg-white p-4 shadow-lg">
     <h1 class="text-center text-3xl">申請の状態変更</h1>
     <div class="mx-12 mt-8 flex flex-col justify-around gap-4">
       <div class="mb-4 flex items-center">
         申請の状態を
-        <StatusChip
-          class="mx-1"
-          has-text
-          :status="requestDetailStore.request.status" />
+        <StatusChip class="mx-1" has-text :status="request.status" />
         から
         <StatusChip class="mx-1" has-text :status="props.nextStatus" />
         へ変更します

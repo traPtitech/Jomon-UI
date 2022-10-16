@@ -5,11 +5,6 @@ import { useToast } from 'vue-toastification'
 import type { RequestDetail, PostRequest, User } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
-interface File {
-  file: string
-  name: string
-}
-
 interface EditedValue {
   created_by: string
   amount: number
@@ -24,7 +19,6 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   const toast = useToast()
 
   const request = ref<RequestDetail>()
-  const files = ref<File[]>([])
 
   const targetIds = computed(() => {
     const targetIds = new Array<string>()
@@ -86,26 +80,15 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
       toast.error('申請の修正に失敗しました')
     }
   }
-  const fetchFiles = async (ids: string[]) => {
-    try {
-      ids.forEach(async id => {
-        files.value.concat((await apis.getFile(id)).data)
-      })
-    } catch {
-      toast.error('ファイルの取得に失敗しました')
-    }
-  }
 
   return {
     request,
-    files,
     targetIds,
     tagIds,
     editMode,
     editedValue,
     isRequestCreater,
     fetchRequestDetail,
-    putRequest,
-    fetchFiles
+    putRequest
   }
 })

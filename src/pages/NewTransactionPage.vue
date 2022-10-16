@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { onMounted, ref } from 'vue'
+import { onMounted, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
@@ -25,7 +25,7 @@ const requestDetailStore = useRequestDetailStore()
 const toast = useToast()
 
 const { request, targetIds, tagIds } = storeToRefs(requestDetailStore)
-const transaction = ref({
+const transaction = reactive({
   amount: requestId && request.value ? request.value.amount : 0,
   targets: requestId ? targetIds : [],
   request: requestId,
@@ -33,11 +33,11 @@ const transaction = ref({
   group: requestId && request.value ? request.value.group.id : ''
 })
 async function postTransaction() {
-  if (transaction.value.targets.length === 0) {
+  if (transaction.targets.length === 0) {
     toast.warning('払い戻し対象者は必須です')
     return
   }
-  await apis.postTransaction(transaction.value)
+  await apis.postTransaction(transaction)
 }
 
 onMounted(async () => {

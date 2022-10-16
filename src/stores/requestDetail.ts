@@ -10,6 +10,16 @@ interface File {
   name: string
 }
 
+interface EditedValue {
+  created_by: string
+  amount: number
+  title: string
+  content: string
+  targets: string[]
+  tags: string[]
+  group: string
+}
+
 export const useRequestDetailStore = defineStore('requestDetail', () => {
   const toast = useToast()
 
@@ -37,13 +47,13 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     return tagIds
   })
   const editMode = ref('')
-  const editedValue = ref({
+  const editedValue = ref<EditedValue>({
     created_by: '',
     amount: 0,
     title: '',
     content: '',
-    targets: [] as string[],
-    tags: [] as string[],
+    targets: [],
+    tags: [],
     group: ''
   })
   const isRequestCreater = (user: User | undefined) => {

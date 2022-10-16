@@ -18,7 +18,7 @@ export interface Params {
 export const defaultParams: Params = {
   sort: 'created_at',
   target: '',
-  tag: [] as string[],
+  tag: [],
   since: '',
   until: '',
   group: '',

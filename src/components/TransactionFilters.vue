@@ -23,7 +23,7 @@ const params = ref<Params>({
   since: '',
   until: '',
   group: '',
-  tag: [] as string[],
+  tag: [],
   request: ''
 })
 

@@ -73,7 +73,10 @@ onMounted(() => {
       </div>
       <div class="flex flex-col">
         <label>タイトル</label>
-        <FormInput v-model="request.title" class="h-8" />
+        <FormInput
+          v-model="request.title"
+          class="h-8"
+          placeholder="タイトルを入力" />
       </div>
       <div class="flex flex-col">
         <label>金額</label>

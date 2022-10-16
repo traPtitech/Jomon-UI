@@ -82,11 +82,17 @@ if (!userStore.isUserFetched) {
     <form class="flex flex-col gap-2" @submit="handlePostGroup">
       <div class="flex flex-col">
         <label>グループ名</label>
-        <FormInput v-model="group.name" required />
+        <FormInput
+          v-model="group.name"
+          placeholder="グループ名を入力"
+          required />
       </div>
       <div class="flex flex-col">
         <label>詳細</label>
-        <FormTextarea v-model="group.description" required />
+        <FormTextarea
+          v-model="group.description"
+          placeholder="詳細を入力"
+          required />
       </div>
       <div class="flex flex-col">
         <label>予算</label>

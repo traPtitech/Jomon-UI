@@ -80,7 +80,7 @@ onMounted(async () => {
           class="!w-2/3"
           is-multiple
           :options="userStore.userOptions"
-          placeholder="払い戻し対象者" />
+          placeholder="払い戻し対象者を選択" />
       </div>
       <div class="flex flex-col">
         <label>グループ：</label>
@@ -88,7 +88,7 @@ onMounted(async () => {
           v-model="transaction.group"
           class="!w-2/3"
           :options="groupStore.groupOptions"
-          placeholder="グループ" />
+          placeholder="グループを選択" />
       </div>
       <div class="flex flex-col">
         <label>タグ：</label>
@@ -97,7 +97,7 @@ onMounted(async () => {
           class="!w-2/3"
           is-multiple
           :options="tagStore.tagOptions"
-          placeholder="タグ" />
+          placeholder="タグを選択" />
       </div>
       <div class="text-right">
         <SimpleButton

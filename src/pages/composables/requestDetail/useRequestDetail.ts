@@ -63,18 +63,18 @@ export const useRequestDetail = () => {
     editMode.value = ''
   }
   const putRequest = async (id: string, willPutRequest: EditedValue) => {
-    const tagPostPromises: Promise<AxiosResponse<Tag>>[] = []
-    let preTags: string[] = []
+    const tagPostPromises: ReturnType<typeof apis.postTag>[] = []
+    let tags: string[] = []
     // タグが新規作成されている(tagStore.tagsに存在しないidである)場合に、タグを作成する
     willPutRequest.tags.forEach((tag: string) => {
       if (tagStore.tags?.some(t => t.id === tag)) {
-        preTags.push(tag)
+        tags.push(tag)
         return
       }
       tagPostPromises.push(apis.postTag({ name: tag }))
     })
     try {
-      preTags = preTags.concat(
+      tags = tags.concat(
         (await Promise.all(tagPostPromises)).map(
           (tag: AxiosResponse<Tag>) => tag.data.id
         )
@@ -87,7 +87,7 @@ export const useRequestDetail = () => {
       ...willPutRequest,
       targets: [...willPutRequest.targets],
       amount: Number(willPutRequest.amount),
-      tags: preTags
+      tags: tags
     }
     try {
       request.value = (await apis.putRequestDetail(id, putRequest)).data

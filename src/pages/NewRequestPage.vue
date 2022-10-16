@@ -1,52 +1,26 @@
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { onMounted } from 'vue'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
 import NewRequestFileForm from '/@/components/newRequest/NewRequestFileForm.vue'
-import NewRequestSubmitButton from '/@/components/newRequest/NewRequestSubmitButton.vue'
 import NewRequestTag from '/@/components/newRequest/NewRequestTag.vue'
 import FormInput from '/@/components/shared/FormInput.vue'
 import FormInputNumber from '/@/components/shared/FormInputNumber.vue'
 import FormSelect from '/@/components/shared/FormSelect.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { requestTemplates } from '/@/consts/consts'
 
-export interface FileRequest {
-  name: string
-  src: string
-  type: string
-}
-export interface RequestRequest {
-  created_by: string
-  amount: number
-  title: string
-  content: string
-  targets: string[]
-  tags: string[]
-  group: string
-}
+import { useNewRequest } from './composables/useNewRequest'
 
 const tagStore = useTagStore()
 const userStore = useUserStore()
 const groupStore = useGroupStore()
 
-const request = reactive<RequestRequest>({
-  created_by: userStore.me?.name ?? '',
-  amount: 0,
-  title: '',
-  targets: [],
-  content: '',
-  tags: [],
-  group: ''
-})
-const files = ref<FileRequest[]>([])
-
-function removeFile(file: FileRequest) {
-  files.value = files.value.filter(f => f !== file)
-}
+const { request, files, postRequest } = useNewRequest()
 
 onMounted(() => {
   if (!tagStore.isTagFetched) {
@@ -110,10 +84,15 @@ onMounted(() => {
       </div>
       <NewRequestTag :request="request" @input="request.tags = $event" />
       <NewRequestFileForm :files="files" @input="files = $event" />
-      <NewRequestSubmitButton
-        :files="files"
-        :request="request"
-        @remove="removeFile($event)" />
+      <div class="text-right">
+        <SimpleButton
+          class="mb-4"
+          font-size="xl"
+          padding="md"
+          @click.stop="postRequest(request, files)">
+          申請を作成する
+        </SimpleButton>
+      </div>
     </div>
   </div>
 </template>

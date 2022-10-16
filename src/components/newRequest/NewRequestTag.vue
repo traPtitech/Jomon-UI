@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import FormTagSelectWithCreation from '/@/components/shared/FormTagSelectWithCreation.vue'
-import type { RequestRequest } from '/@/pages/NewRequestPage.vue'
+import type { RequestRequest } from '/@/pages/composables/useNewRequest'
 
 interface Props {
   request: RequestRequest

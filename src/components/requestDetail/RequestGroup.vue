@@ -47,7 +47,6 @@ const handleComplete = () => {
       <FormSelect
         v-model="editedValue.group"
         class="w-52"
-        label="name"
         :options="groupStore.groupOptions"
         placeholder="グループ" />
       <SimpleButton

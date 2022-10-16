@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
 import { useRequestStore } from '/@/stores/request'
+import { useTagStore } from '/@/stores/tag'
 
 import type { Request, Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
@@ -19,14 +20,8 @@ const props = defineProps<{
 const router = useRouter()
 
 const requestStore = useRequestStore()
+const tagStore = useTagStore()
 const toast = useToast()
-
-const isUUID = (str: string) => {
-  const uuidRegexp = new RegExp(
-    '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
-  )
-  return uuidRegexp.test(str)
-}
 
 async function postFile(requestId: string, name: string, file: string) {
   await apis.postFile(file, name, requestId)
@@ -41,16 +36,17 @@ async function postRequest() {
     return
   }
   const tagPostPromises: Promise<AxiosResponse<Tag>>[] = []
-  let tags: string[] = []
+  let preTags: string[] = []
+  // タグが新規作成されている(tagStore.tagsに存在しないidである)場合に、タグを作成する
   props.request.tags.forEach((tag: string) => {
-    if (isUUID(tag)) {
-      tags.push(tag)
+    if (tagStore.tags?.some(t => t.id === tag)) {
+      preTags.push(tag)
       return
     }
     tagPostPromises.push(apis.postTag({ name: tag }))
   })
   try {
-    tags = tags.concat(
+    preTags = preTags.concat(
       (await Promise.all(tagPostPromises)).map(
         (tag: AxiosResponse<Tag>) => tag.data.id
       )
@@ -62,7 +58,7 @@ async function postRequest() {
 
   const requestRequest = {
     ...props.request,
-    tags: tags,
+    tags: preTags,
     group: props.request.group
   }
   try {

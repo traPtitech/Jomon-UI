@@ -64,9 +64,11 @@ export const useRequestDetail = () => {
   }
   const putRequest = async (id: string, willPutRequest: EditedValue) => {
     const tagPostPromises: Promise<AxiosResponse<Tag>>[] = []
-    let preTags = [...willPutRequest.tags]
-    preTags.forEach((tag: string) => {
+    let preTags: string[] = []
+    // タグが新規作成されている(tagStore.tagsに存在しないidである)場合に、タグを作成する
+    willPutRequest.tags.forEach((tag: string) => {
       if (tagStore.tags?.some(t => t.id === tag)) {
+        preTags.push(tag)
         return
       }
       tagPostPromises.push(apis.postTag({ name: tag }))

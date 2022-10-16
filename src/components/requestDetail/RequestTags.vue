@@ -2,13 +2,12 @@
 import { storeToRefs } from 'pinia'
 
 import { useRequestDetailStore } from '/@/stores/requestDetail'
-import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
 import EditButton from '/@/components/shared/EditButton.vue'
+import FormTagSelect from '/@/components/shared/FormTagSelect.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import TagsGroup from '/@/components/shared/TagsGroup.vue'
-import VueSelect from '/@/components/shared/VueSelect.vue'
 import type { EditMode } from '/@/pages/composables/requestDetail/useRequestDetail'
 
 interface Props {
@@ -20,7 +19,6 @@ const emit = defineEmits<{
   (e: 'changeEditMode', value: EditMode): void
 }>()
 
-const tagStore = useTagStore()
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
 
@@ -46,18 +44,7 @@ const handleComplete = () => {
     </div>
     <div v-else class="flex items-center">
       タグ：
-      <VueSelect
-        v-model="editedValue.tags"
-        :close-on-select="false"
-        :create-option="(tag:any) => ({name:tag,id:tag,created_at:'',updated_at:''})"
-        label="name"
-        multiple
-        :options="tagStore.tags"
-        placeholder="タグ"
-        push-tags
-        :reduce="(tag:any) => tag.id"
-        taggable />
-      <!-- todo:FormTagSelectにする -->
+      <FormTagSelect v-model="editedValue.tags" />
       <SimpleButton
         class="ml-2"
         font-size="sm"

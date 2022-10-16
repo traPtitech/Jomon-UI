@@ -24,4 +24,12 @@ import 'vue-select/dist/vue-select.css'
   background-color: #e5e7eb; /*gray-200*/
   border: none;
 }
+.vs__dropdown-option--selected::before {
+  color: green;
+  content: '\2713';
+}
+.vs__dropdown-option--deselect {
+  background-color: #e5e7eb; /*gray-400*/
+  color: #1f1f1f; /*dark-500*/
+}
 </style>

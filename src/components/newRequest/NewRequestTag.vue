@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import FormTagSelect from '/@/components/shared/FormTagSelect.vue'
+import FormTagSelectWithCreation from '/@/components/shared/FormTagSelectWithCreation.vue'
 import type { RequestRequest } from '/@/pages/NewRequestPage.vue'
 
 interface Props {
@@ -13,7 +13,7 @@ const emit = defineEmits<{ (e: 'input', value: string[]): void }>()
   <div class="flex flex-col">
     <label>タグ</label>
     <div class="flex">
-      <FormTagSelect
+      <FormTagSelectWithCreation
         class="w-2/3"
         :model-value="props.request.tags"
         @update:model-value="emit('input', $event)" />

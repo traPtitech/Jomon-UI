@@ -36,5 +36,4 @@ const value = computed({
     :options="props.options"
     :placeholder="props.placeholder"
     :reduce="(option: Option) => option.value" />
-  <!-- todo:selected optionのCSSをいい感じにする。どこかでやった気もする -->
 </template>

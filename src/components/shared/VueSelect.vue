@@ -25,8 +25,8 @@ import 'vue-select/dist/vue-select.css'
   border: none;
 }
 .vs__dropdown-option--selected::before {
-  color: green;
-  content: '\2713';
+  color: #10b981; /*emerald-500*/
+  content: '\2713'; /*チェックマーク*/
 }
 .vs__dropdown-option--deselect {
   background-color: #e5e7eb; /*gray-400*/

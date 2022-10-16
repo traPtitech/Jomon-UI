@@ -5,7 +5,7 @@ import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 import EditButton from '/@/components/shared/EditButton.vue'
-import FormTagSelect from '/@/components/shared/FormTagSelect.vue'
+import FormTagSelectWithCreation from '/@/components/shared/FormTagSelectWithCreation.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import TagsGroup from '/@/components/shared/TagsGroup.vue'
 import type { EditMode } from '/@/pages/composables/requestDetail/useRequestDetail'
@@ -44,7 +44,7 @@ const handleComplete = () => {
     </div>
     <div v-else class="flex items-center">
       タグ：
-      <FormTagSelect v-model="editedValue.tags" />
+      <FormTagSelectWithCreation v-model="editedValue.tags" />
       <SimpleButton
         class="ml-2"
         font-size="sm"

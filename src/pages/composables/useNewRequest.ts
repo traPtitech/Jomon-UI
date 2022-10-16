@@ -47,11 +47,11 @@ export const useNewRequest = () => {
     await apis.postFile(file, name, requestId)
   }
 
-  const postRequest = async (request: RequestRequest, files: FileRequest[]) => {
+  const postRequest = async () => {
     if (
-      request.title === '' ||
-      request.content === '' ||
-      request.targets.length === 0
+      request.value.title === '' ||
+      request.value.content === '' ||
+      request.value.targets.length === 0
     ) {
       toast.warning('タイトル、内容、対象者は必須です')
       return
@@ -59,7 +59,7 @@ export const useNewRequest = () => {
     const postTagResults: ReturnType<typeof apis.postTag>[] = []
     let tags: string[] = []
     // タグが新規作成されている(tagStore.tagsに存在しないidである)場合に、タグを作成する
-    request.tags.forEach((tag: string) => {
+    request.value.tags.forEach((tag: string) => {
       if (tagStore.tags?.some(t => t.id === tag)) {
         tags.push(tag)
         return
@@ -78,9 +78,9 @@ export const useNewRequest = () => {
     }
 
     const requestRequest = {
-      ...request,
+      ...request.value,
       tags: tags,
-      group: request.group
+      group: request.value.group
     }
     try {
       const response: Request = (await apis.postRequest(requestRequest)).data
@@ -91,7 +91,7 @@ export const useNewRequest = () => {
         requestStore.requests = [response]
       }
       try {
-        files.forEach((file: FileRequest) => {
+        files.value.forEach((file: FileRequest) => {
           postFile(id, file.name, file.src)
         })
         toast.success('申請を作成しました')

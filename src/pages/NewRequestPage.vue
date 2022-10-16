@@ -89,7 +89,7 @@ onMounted(() => {
           class="mb-4"
           font-size="xl"
           padding="md"
-          @click.stop="postRequest(request, files)">
+          @click.stop="postRequest">
           申請を作成する
         </SimpleButton>
       </div>

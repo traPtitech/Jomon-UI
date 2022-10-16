@@ -1,14 +1,15 @@
 <script lang="ts" setup>
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
+import { useNewComment } from '/@/components/requestDetail/composables/useNewComment'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
-import { useComment } from './composables/useComment'
-
 const requestDetailStore = useRequestDetailStore()
 
-const { comment, isSending, submit } = useComment()
+const { comment, isSending, submit } = useNewComment(
+  requestDetailStore.request?.id ?? ''
+)
 </script>
 
 <template>
@@ -20,7 +21,7 @@ const { comment, isSending, submit } = useComment()
         font-size="md"
         :is-disabled="isSending"
         padding="sm"
-        @click.prevent="submit(requestDetailStore.request?.id ?? '')">
+        @click.prevent="submit">
         コメントする
       </SimpleButton>
     </div>

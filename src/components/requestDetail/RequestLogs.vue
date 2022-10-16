@@ -60,7 +60,7 @@ const logs = computed(() => {
         class="vertical-bar">
         <CommentLog
           v-if="log.kind === 'comment'"
-          :log="requestDetailStore.request.comments[log.index]" />
+          :comment="requestDetailStore.request.comments[log.index]" />
         <StatusChangeLog
           v-if="log.kind === 'statusChange'"
           :log="requestDetailStore.request.statuses[log.index]" />

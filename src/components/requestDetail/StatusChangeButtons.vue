@@ -8,28 +8,28 @@ import ModalWrapper from '/@/components/modal/ModalWrapper.vue'
 import StatusChangeModal from '/@/components/modal/StatusChangeModal.vue'
 import { useModal } from '/@/components/modal/composables/useModal'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import type { Status } from '/@/consts/consts'
+import type { RequestStatus } from '/@/consts/consts'
 
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
 
-const nextStatus = ref<Status>()
+const nextStatus = ref<RequestStatus>()
 const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
 const { shouldShowModal, openModal, closeModal } = useModal()
 
-const hasToSubmittedAuthority =
+const showToSubmitted =
   (hasAuthority && requestDetailStore.request?.status === 'fix_required') ||
   (userStore.isAdmin() &&
     (requestDetailStore.request?.status === 'fix_required' ||
       requestDetailStore.request?.status === 'accepted'))
-const hasToFixRequiredAuthority =
+const showToRequired =
   userStore.isAdmin() && requestDetailStore.request?.status === 'submitted'
-const hasToAcceptedAuthority =
+const showToAccepted =
   userStore.isAdmin() && requestDetailStore.request?.status === 'submitted'
-const hasToRejectedAuthority =
+const showToRejected =
   userStore.isAdmin() && requestDetailStore.request?.status === 'submitted'
 
-function handleOpenModal(status: Status) {
+function handleOpenModal(status: RequestStatus) {
   nextStatus.value = status
   openModal()
 }
@@ -38,28 +38,28 @@ function handleOpenModal(status: Status) {
 <template>
   <div class="flex gap-4">
     <SimpleButton
-      v-if="hasToSubmittedAuthority"
+      v-if="showToSubmitted"
       font-size="sm"
       padding="sm"
       @click.stop="handleOpenModal('submitted')">
       承認待ちにする
     </SimpleButton>
     <SimpleButton
-      v-if="hasToFixRequiredAuthority"
+      v-if="showToRequired"
       font-size="sm"
       padding="sm"
       @click.stop="handleOpenModal('fix_required')">
       要修正にする
     </SimpleButton>
     <SimpleButton
-      v-if="hasToAcceptedAuthority"
+      v-if="showToAccepted"
       font-size="sm"
       padding="sm"
       @click.stop="handleOpenModal('accepted')">
       承認済みにする
     </SimpleButton>
     <SimpleButton
-      v-if="hasToRejectedAuthority"
+      v-if="showToRejected"
       font-size="sm"
       padding="sm"
       @click.stop="handleOpenModal('rejected')">

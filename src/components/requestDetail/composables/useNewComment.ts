@@ -6,14 +6,14 @@ import { useRequestDetailStore } from '/@/stores/requestDetail'
 import type { Comment } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
-export const useComment = () => {
+export const useNewComment = (requestId: string) => {
   const requestDetailStore = useRequestDetailStore()
   const toast = useToast()
 
   const comment = ref('')
   const isSending = ref(false)
 
-  const submit = async (requestId: string) => {
+  const submit = async () => {
     if (comment.value === '') {
       alert('1文字以上入力してください')
       return

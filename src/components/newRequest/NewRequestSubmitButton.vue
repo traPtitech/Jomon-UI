@@ -33,7 +33,6 @@ async function postFile(requestId: string, name: string, file: string) {
 }
 async function postRequest() {
   if (
-    !/^[1-9][0-9]*$|^0$/.test(props.request.amount.toString()) ||
     props.request.title === '' ||
     props.request.content === '' ||
     props.request.targets.length === 0

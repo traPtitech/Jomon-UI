@@ -5,7 +5,7 @@ import { useToast } from 'vue-toastification'
 import type { Transaction } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
-export interface Params {
+export interface SearchTransactionParams {
   sort: string
   target: string
   since: string
@@ -15,7 +15,7 @@ export interface Params {
   request: string
 }
 
-export const defaultParams: Params = {
+export const defaultParams: SearchTransactionParams = {
   sort: 'created_at',
   target: '',
   tag: [],
@@ -31,7 +31,9 @@ export const useTransactionStore = defineStore('transaction', () => {
   const transactions = ref<Transaction[]>()
   const isTransactionFetched = ref(false)
 
-  const fetchTransactions = async (tmpParams: Params = defaultParams) => {
+  const fetchTransactions = async (
+    tmpParams: SearchTransactionParams = defaultParams
+  ) => {
     const params = { ...tmpParams, tag: '' }
     if (tmpParams.tag.length > 0) {
       params.tag = tmpParams.tag.join(',')

@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 import { XMarkIcon } from '@heroicons/vue/24/solid'
-import { computed, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 import { useTransactionStore } from '/@/stores/transaction'
-import type { Params } from '/@/stores/transaction'
+import type { SearchTransactionParams } from '/@/stores/transaction'
 
 // import { useTransactionStore } from '/@/stores/transaction'
 import SortOrderButtons from './SortOrderButtons.vue'
@@ -17,7 +17,7 @@ const groupStore = useGroupStore()
 const tagStore = useTagStore()
 const isTargetSearchMode = ref(false)
 
-const params = ref<Params>({
+const params = reactive<SearchTransactionParams>({
   sort: 'created_at',
   target: '',
   since: '',
@@ -29,7 +29,7 @@ const params = ref<Params>({
 
 function changeIsTargetSearchMode() {
   if (isTargetSearchMode.value) {
-    params.value.target = ''
+    params.target = ''
     isTargetSearchMode.value = false
   } else {
     isTargetSearchMode.value = true
@@ -37,38 +37,38 @@ function changeIsTargetSearchMode() {
 }
 function sort(sortKind: 'created_at' | 'amount') {
   if (sortKind === 'created_at') {
-    if (params.value.sort === 'created_at') {
-      params.value.sort = '-created_at'
-    } else if (params.value.sort === '-created_at') {
-      params.value.sort = ''
+    if (params.sort === 'created_at') {
+      params.sort = '-created_at'
+    } else if (params.sort === '-created_at') {
+      params.sort = ''
     } else {
-      params.value.sort = 'created_at'
+      params.sort = 'created_at'
     }
   } else {
-    if (params.value.sort === 'amount') {
-      params.value.sort = '-amount'
-    } else if (params.value.sort === '-amount') {
-      params.value.sort = ''
+    if (params.sort === 'amount') {
+      params.sort = '-amount'
+    } else if (params.sort === '-amount') {
+      params.sort = ''
     } else {
-      params.value.sort = 'amount'
+      params.sort = 'amount'
     }
   }
-  transactionStore.fetchTransactions(params.value)
+  transactionStore.fetchTransactions(params)
 }
 
 const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
   if (sortKind === 'created_at') {
-    if (params.value.sort === 'created_at') {
+    if (params.sort === 'created_at') {
       return 'asc'
-    } else if (params.value.sort === '-created_at') {
+    } else if (params.sort === '-created_at') {
       return 'desc'
     } else {
       return 'none'
     }
   } else {
-    if (params.value.sort === 'amount') {
+    if (params.sort === 'amount') {
       return 'asc'
-    } else if (params.value.sort === '-amount') {
+    } else if (params.sort === '-amount') {
       return 'desc'
     } else {
       return 'none'

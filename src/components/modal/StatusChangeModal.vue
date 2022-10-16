@@ -9,10 +9,10 @@ import apis from '/@/lib/apis'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
-import type { Status } from '/@/consts/consts'
+import type { RequestStatus } from '/@/consts/consts'
 
 interface Props {
-  nextStatus: Status
+  nextStatus: RequestStatus
 }
 
 const props = defineProps<Props>()
@@ -25,23 +25,18 @@ const requestDetailStore = useRequestDetailStore()
 
 const comment = ref('')
 
-async function putStatus(nextStatus: Status | '', comment: string) {
-  if (nextStatus === '') {
-    alert('エラーが発生しました')
-    return
-  }
+async function putStatus(nextStatus: RequestStatus, comment: string) {
   const statusRequest = {
     status: nextStatus,
     comment: comment
   }
   try {
-    const response = (
-      await apis.putStatus(requestDetailStore.request?.id ?? '', statusRequest)
-    ).data
-    //コメントをpushできない最上川
     if (requestDetailStore.request === undefined) {
       throw new Error('request is undefined')
     }
+    const response = (
+      await apis.putStatus(requestDetailStore.request.id, statusRequest)
+    ).data
     requestDetailStore.request.statuses.push(response)
     requestDetailStore.request.status = response.status
     emit('closeModal')

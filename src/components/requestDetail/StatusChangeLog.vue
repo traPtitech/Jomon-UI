@@ -6,7 +6,7 @@ import StatusChip from '/@/components/shared/StatusChip.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
 
 interface Props {
-  log: Omit<Status, 'comment'>
+  log: Status
 }
 const props = defineProps<Props>()
 

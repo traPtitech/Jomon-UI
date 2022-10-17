@@ -10,8 +10,8 @@ import type { SearchTransactionParams } from '/@/stores/transaction'
 
 // import { useTransactionStore } from '/@/stores/transaction'
 import SortOrderButtons from './SortOrderButtons.vue'
-import FormInput from './shared/FormInput.vue'
-import FormSelect from './shared/FormSelect.vue'
+import InputSelect from './shared/InputSelect.vue'
+import InputText from './shared/InputText.vue'
 
 const transactionStore = useTransactionStore()
 const groupStore = useGroupStore()
@@ -105,21 +105,21 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
         </button>
       </div>
       <div v-else class="relative">
-        <FormInput v-model="params.target" class="w-full" type="text" />
+        <InputText v-model="params.target" class="w-full" type="text" />
         <XMarkIcon
           class="absolute right-2 top-2 h-4 cursor-pointer"
           @click="changeIsTargetSearchMode" />
       </div>
     </div>
     <!-- グループ -->
-    <FormSelect
+    <InputSelect
       v-model="params.group"
       class="!w-2/10"
       :options="groupStore.groupOptions"
       placeholder="取引グループ"
       @close="'updateTransactions'" />
     <!-- タグ -->
-    <FormSelect
+    <InputSelect
       v-model="params.tag"
       class="!w-3/10"
       is-multiple

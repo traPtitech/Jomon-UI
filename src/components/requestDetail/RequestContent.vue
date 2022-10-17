@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
-import FormTextarea from '/@/components/shared/FormTextarea.vue'
+import InputTextarea from '/@/components/shared/InputTextarea.vue'
 import MarkdownIt from '/@/components/shared/MarkdownIt.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { EditMode } from '/@/pages/composables/requestDetail/useRequestDetail'
@@ -43,7 +43,7 @@ const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
       </SimpleButton>
     </div>
     <div v-else class="flex flex-grow items-end">
-      <FormTextarea
+      <InputTextarea
         v-model="editedValue.content"
         class="h-30 flex-grow resize-none"
         placeholder="詳細" />

@@ -3,7 +3,7 @@ import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
-import FormTextarea from '/@/components/shared/FormTextarea.vue'
+import InputTextarea from '/@/components/shared/InputTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 interface Props {
@@ -41,7 +41,7 @@ const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
       </div>
     </div>
     <div v-else class="flex w-full">
-      <FormTextarea
+      <InputTextarea
         v-model="groupDetailStore.editedValue.description"
         class="w-4/5"
         placeholder="詳細" />

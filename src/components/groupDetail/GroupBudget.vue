@@ -4,7 +4,7 @@ import { useUserStore } from '/@/stores/user'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import EditButton from '/@/components/shared/EditButton.vue'
-import FormInputNumber from '/@/components/shared/FormInputNumber.vue'
+import InputNumber from '/@/components/shared/InputNumber.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 interface Props {
@@ -35,7 +35,7 @@ const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
   </div>
   <div v-else class="flex items-center">
     予算：
-    <FormInputNumber
+    <InputNumber
       v-model="groupDetailStore.editedValue.budget"
       class="mr-1 w-24"
       :min="1"

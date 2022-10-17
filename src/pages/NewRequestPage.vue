@@ -7,9 +7,9 @@ import { useUserStore } from '/@/stores/user'
 
 import NewRequestFileForm from '/@/components/newRequest/NewRequestFileForm.vue'
 import NewRequestTag from '/@/components/newRequest/NewRequestTag.vue'
-import FormInput from '/@/components/shared/FormInput.vue'
-import FormInputNumber from '/@/components/shared/FormInputNumber.vue'
-import FormSelect from '/@/components/shared/FormSelect.vue'
+import InputNumber from '/@/components/shared/InputNumber.vue'
+import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputText from '/@/components/shared/InputText.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { requestTemplates } from '/@/consts/consts'
@@ -47,16 +47,14 @@ onMounted(() => {
       </div>
       <div class="flex flex-col">
         <label>タイトル</label>
-        <FormInput
+        <InputText
           v-model="request.title"
           class="h-8"
           placeholder="タイトルを入力" />
       </div>
       <div class="flex flex-col">
         <label>金額</label>
-        <div>
-          <FormInputNumber v-model="request.amount" class="mr-1 h-8" />円
-        </div>
+        <div><InputNumber v-model="request.amount" class="mr-1 h-8" />円</div>
       </div>
       <div class="flex flex-col">
         <label>詳細</label>
@@ -67,7 +65,7 @@ onMounted(() => {
       </div>
       <div class="flex flex-col">
         <label>払い戻し対象者</label>
-        <FormSelect
+        <InputSelect
           v-model="request.targets"
           class="!w-2/3"
           is-multiple
@@ -76,7 +74,7 @@ onMounted(() => {
       </div>
       <div class="flex flex-col">
         <label>グループ</label>
-        <FormSelect
+        <InputSelect
           v-model="request.group"
           class="!w-2/3"
           :options="groupStore.groupOptions"

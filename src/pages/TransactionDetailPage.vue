@@ -12,8 +12,8 @@ import apis from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
 import { toId } from '/@/lib/parsePathParams'
 
-import FormInputNumber from '/@/components/shared/FormInputNumber.vue'
-import FormSelect from '/@/components/shared/FormSelect.vue'
+import InputNumber from '/@/components/shared/InputNumber.vue'
+import InputSelect from '/@/components/shared/InputSelect.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import TagsGroup from '/@/components/shared/TagsGroup.vue'
 
@@ -157,28 +157,28 @@ onMounted(async () => {
       <div>年月日：{{ formatDate(transaction.created_at) }}</div>
       <div>
         取引額：
-        <FormInputNumber
+        <InputNumber
           v-model="editedValue.amount"
           :min="1"
           placeholder="金額" />円
       </div>
       <div>
         取引相手：
-        <FormSelect
+        <InputSelect
           v-model="editedValue.target"
           :options="userOption"
           placeholder="取引相手を選択" />
       </div>
       <div>
         取引グループ：
-        <FormSelect
+        <InputSelect
           v-model="editedValue.group"
           :options="groupOption"
           placeholder="グループを選択" />
       </div>
       <div>
         タグ：
-        <FormSelect
+        <InputSelect
           v-model="editedValue.tags"
           is-multiple
           :options="tagOption"

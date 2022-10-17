@@ -10,8 +10,8 @@ import { useUserStore } from '/@/stores/user'
 
 import { requestStatusOptions } from '/@/consts/consts'
 
-import FormInput from './shared/FormInput.vue'
-import FormSelect from './shared/FormSelect.vue'
+import InputSelect from './shared/InputSelect.vue'
+import InputText from './shared/InputText.vue'
 
 const requestStore = useRequestStore()
 const userStore = useUserStore()
@@ -49,34 +49,34 @@ function sortByCreatedAt() {
       <ChevronUpIcon v-if="params.sort === '-created_at'" class="w-4" />
     </button>
     <div>
-      <FormInput
+      <InputText
         v-model="params.since"
         class="w-30 h-8"
         placeholder="yyyy-MM-dd"
         @blur="requestStore.fetchRequests(params)" />
       ～
-      <FormInput
+      <InputText
         v-model="params.until"
         class="w-30 h-8"
         placeholder="yyyy-MM-dd"
         @blur="requestStore.fetchRequests(params)" />
     </div>
-    <FormSelect
+    <InputSelect
       v-model="params.target"
       :options="userStore.userOptions"
       placeholder="申請者"
       @close="requestStore.fetchRequests(params)" />
-    <FormSelect
+    <InputSelect
       v-model="params.currentStatus"
       :options="requestStatusOptions()"
       placeholder="申請の状態"
       @close="requestStore.fetchRequests(params)" />
-    <FormSelect
+    <InputSelect
       v-model="params.group"
       :options="groupStore.groupOptions"
       placeholder="グループ"
       @close="requestStore.fetchRequests(params)" />
-    <FormSelect
+    <InputSelect
       v-model="params.tags"
       is-multiple
       :options="tagStore.tagOptions"

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 
-import FormSelect from './FormSelect.vue'
-import FormTextarea from './FormTextarea.vue'
+import InputSelect from './InputSelect.vue'
+import InputTextarea from './InputTextarea.vue'
 import MarkdownIt from './MarkdownIt.vue'
 
 type TabType = 'input' | 'preview'
@@ -59,17 +59,17 @@ function changeCurrentTab(tab: TabType) {
         @click.prevent="changeCurrentTab('preview')">
         プレビュー
       </button>
-      <FormSelect
+      <InputSelect
         v-if="props.templates !== undefined"
         v-model="selectedTemplate"
         class="m-1 ml-auto inline-block w-1/3"
         :options="templateOptions"
         placeholder="テンプレートを選択"
         @option:selected="setTemplate(selectedTemplate)">
-      </FormSelect>
+      </InputSelect>
     </div>
     <div>
-      <FormTextarea
+      <InputTextarea
         v-if="currentTab === 'input'"
         class="min-h-40 w-full"
         :model-value="modelValue"

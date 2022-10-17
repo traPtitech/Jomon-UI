@@ -6,7 +6,7 @@ import { useAdminStore } from '/@/stores/admin'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-import FormSelect from '/@/components/shared/FormSelect.vue'
+import InputSelect from '/@/components/shared/InputSelect.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 import { useAdmin } from './composables/useAdmin'
@@ -64,7 +64,7 @@ if (userStore.me && userStore.me.admin) {
       </ul>
     </div>
     <div class="mt-4 flex gap-4">
-      <FormSelect
+      <InputSelect
         v-model="addList"
         class="!w-1/2"
         is-multiple
@@ -79,7 +79,7 @@ if (userStore.me && userStore.me.admin) {
       </SimpleButton>
     </div>
     <div class="mt-12 flex gap-4">
-      <FormSelect
+      <InputSelect
         v-model="removeList"
         class="!w-1/2"
         is-multiple
@@ -94,7 +94,7 @@ if (userStore.me && userStore.me.admin) {
       </SimpleButton>
     </div>
     <div class="mt-24 flex gap-4">
-      <FormSelect
+      <InputSelect
         v-model="deleteTagList"
         class="!w-1/2"
         is-multiple

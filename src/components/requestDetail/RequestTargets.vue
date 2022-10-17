@@ -6,7 +6,7 @@ import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 import EditButton from '/@/components/shared/EditButton.vue'
-import FormSelect from '/@/components/shared/FormSelect.vue'
+import InputSelect from '/@/components/shared/InputSelect.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { EditMode } from '/@/pages/composables/requestDetail/useRequestDetail'
 
@@ -47,7 +47,7 @@ const handleComplete = () => {
     </div>
     <div v-else class="flex items-center">
       払い戻し対象者：
-      <FormSelect
+      <InputSelect
         v-model="editedValue.targets"
         is-multiple
         :options="userStore.userOptions"

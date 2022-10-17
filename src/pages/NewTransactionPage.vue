@@ -12,8 +12,8 @@ import { useUserStore } from '/@/stores/user'
 import apis from '/@/lib/apis'
 import { toId } from '/@/lib/parseQueryParams'
 
-import FormInputNumber from '/@/components/shared/FormInputNumber.vue'
-import FormSelect from '/@/components/shared/FormSelect.vue'
+import InputNumber from '/@/components/shared/InputNumber.vue'
+import InputSelect from '/@/components/shared/InputSelect.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 const route = useRoute()
@@ -69,13 +69,11 @@ onMounted(async () => {
       </div>
       <div class="flex flex-col">
         <label>金額</label>
-        <div>
-          <FormInputNumber v-model="transaction.amount" class="mr-1" />円
-        </div>
+        <div><InputNumber v-model="transaction.amount" class="mr-1" />円</div>
       </div>
       <div class="flex flex-col">
         <label>払い戻し対象者：</label>
-        <FormSelect
+        <InputSelect
           v-model="transaction.targets"
           class="!w-2/3"
           is-multiple
@@ -84,7 +82,7 @@ onMounted(async () => {
       </div>
       <div class="flex flex-col">
         <label>グループ：</label>
-        <FormSelect
+        <InputSelect
           v-model="transaction.group"
           class="!w-2/3"
           :options="groupStore.groupOptions"
@@ -92,7 +90,7 @@ onMounted(async () => {
       </div>
       <div class="flex flex-col">
         <label>タグ：</label>
-        <FormSelect
+        <InputSelect
           v-model="transaction.tags"
           class="!w-2/3"
           is-multiple

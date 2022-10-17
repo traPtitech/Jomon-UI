@@ -7,7 +7,7 @@ import { useUserStore } from '/@/stores/user'
 import EditButton from '/@/components/shared/EditButton.vue'
 import InputNumber from '/@/components/shared/InputNumber.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import type { EditMode } from '/@/pages/composables/requestDetail/useRequestDetail'
+import type { EditMode } from '/@/pages/composables/useRequestDetail'
 
 interface Props {
   isEditMode: boolean

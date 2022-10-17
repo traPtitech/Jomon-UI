@@ -65,7 +65,10 @@ export const useRequestDetail = () => {
   const putRequest = async (id: string, willPutRequest: EditedValue) => {
     const tagPostPromises: ReturnType<typeof apis.postTag>[] = []
     let tags: string[] = []
-    // タグが新規作成されている(tagStore.tagsに存在しないidである)場合に、タグを作成する
+    // 以下の2パターンで場合分けしていて、条件式が1でtrue、2でfalseになる
+    // 1. willPutRequest.tagsに入っているidがtagStore.tagsのタグのidと一致する
+    // 2. タグが新規作成されて、そのタグ名がwillPutRequest.tagsに入っている
+    // 2の場合にはタグ名がtagStore.tagsのタグidと一致することはないので、tagPostPromisesにpostTag関数がpushされる
     willPutRequest.tags.forEach((tag: string) => {
       if (tagStore.tags?.some(t => t.id === tag)) {
         tags.push(tag)

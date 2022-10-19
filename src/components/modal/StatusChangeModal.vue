@@ -44,7 +44,9 @@ async function putStatus(nextStatus: RequestStatus, comment: string) {
       created_at: response.created_at,
       status: response.status
     })
-    request.value.comments.push(response.comment)
+    if (response.comment !== undefined) {
+      request.value.comments.push(response.comment)
+    }
     request.value.status = response.status
     emit('closeModal')
   } catch {

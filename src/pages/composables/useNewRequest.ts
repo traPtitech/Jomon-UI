@@ -3,12 +3,11 @@ import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
 import { useRequestStore } from '/@/stores/request'
+import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
 import type { Request } from '/@/lib/apis'
 import apis from '/@/lib/apis'
-
-import { usePostTags } from './usePostTags'
 
 export interface FileRequest {
   name: string
@@ -30,7 +29,7 @@ export const useNewRequest = () => {
   const router = useRouter()
   const requestStore = useRequestStore()
   const userStore = useUserStore()
-  const { postTags } = usePostTags()
+  const tagStore = useTagStore()
 
   const request = ref<RequestRequest>({
     created_by: userStore.me?.name ?? '',
@@ -58,7 +57,7 @@ export const useNewRequest = () => {
     }
     let tags
     try {
-      tags = await postTags(request.value.tags)
+      tags = await tagStore.postTags(request.value.tags)
     } catch {
       return
     }

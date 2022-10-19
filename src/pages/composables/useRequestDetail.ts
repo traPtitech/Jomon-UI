@@ -3,10 +3,9 @@ import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
 import { useRequestDetailStore } from '/@/stores/requestDetail'
+import { useTagStore } from '/@/stores/tag'
 
 import apis from '/@/lib/apis'
-
-import { usePostTags } from './usePostTags'
 
 export type EditMode =
   | 'title'
@@ -30,7 +29,7 @@ export interface EditedValue {
 export const useRequestDetail = () => {
   const requestDetailStore = useRequestDetailStore()
   const toast = useToast()
-  const { postTags } = usePostTags()
+  const tagStore = useTagStore()
   const { request } = storeToRefs(requestDetailStore)
 
   const editMode = ref<EditMode>('')
@@ -57,7 +56,7 @@ export const useRequestDetail = () => {
   const putRequest = async (id: string, willPutRequest: EditedValue) => {
     let tags
     try {
-      tags = await postTags(willPutRequest.tags)
+      tags = await tagStore.postTags(willPutRequest.tags)
     } catch {
       return
     }

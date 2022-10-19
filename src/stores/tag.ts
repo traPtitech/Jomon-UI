@@ -1,3 +1,4 @@
+import type { AxiosResponse } from 'axios'
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useToast } from 'vue-toastification'
@@ -38,6 +39,33 @@ export const useTagStore = defineStore('tag', () => {
       toast.error('タグの追加に失敗しました')
     }
   }
+  const postTags = async (requestTags: string[]) => {
+    const postTagResults: ReturnType<typeof apis.postTag>[] = []
+    let preTags: string[] = []
+    // 以下の2パターンで場合分けしていて、条件式が1でtrue、2でfalseになる
+    // 1. willPutRequest.tagsに入っているidがtagStore.tagsのタグのidと一致する
+    // 2. タグが新規作成されて、そのタグ名がwillPutRequest.tagsに入っている
+    // 2の場合にはタグ名がtagStore.tagsのタグidと一致することはないので、tagPostPromisesにpostTag関数がpushされる
+    requestTags.forEach((tag: string) => {
+      if (tags.value?.some(t => t.id === tag)) {
+        preTags.push(tag)
+        return
+      }
+      postTagResults.push(apis.postTag({ name: tag }))
+    })
+    try {
+      preTags = preTags.concat(
+        (await Promise.all(postTagResults)).map(
+          (tag: AxiosResponse<Tag>) => tag.data.id
+        )
+      )
+    } catch {
+      toast.error('新規タグの作成に失敗しました')
+      throw new Error('新規タグの作成に失敗しました')
+    }
+    return preTags
+  }
+
   const deleteTag = async (id: string) => {
     try {
       await apis.tagsTagIDDelete(id)
@@ -47,5 +75,13 @@ export const useTagStore = defineStore('tag', () => {
       toast.error('タグの削除に失敗しました')
     }
   }
-  return { tags, isTagFetched, tagOptions, fetchTags, postTag, deleteTag }
+  return {
+    tags,
+    isTagFetched,
+    tagOptions,
+    fetchTags,
+    postTag,
+    postTags,
+    deleteTag
+  }
 })

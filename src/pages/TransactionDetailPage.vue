@@ -183,6 +183,7 @@ onMounted(async () => {
           is-multiple
           :options="tagOption"
           placeholder="タグを選択" />
+        <!-- todo:専用formを使うようにする (transaction detailページ修正のPRでやります)-->
       </div>
       <div class="text-right">
         <SimpleButton

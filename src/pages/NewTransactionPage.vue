@@ -14,6 +14,7 @@ import { toId } from '/@/lib/parseQueryParams'
 
 import InputNumber from '/@/components/shared/InputNumber.vue'
 import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 const route = useRoute()
@@ -25,12 +26,12 @@ const groupStore = useGroupStore()
 const requestDetailStore = useRequestDetailStore()
 const toast = useToast()
 
-const { request, targetIds, tagIds } = storeToRefs(requestDetailStore)
+const { request, targetIds } = storeToRefs(requestDetailStore)
 const transaction = reactive({
   amount: requestId && request.value ? request.value.amount : 0,
   targets: requestId ? targetIds : [],
   request: requestId,
-  tags: requestId ? tagIds : [],
+  tags: requestId && request.value ? request.value.tags : [],
   group: requestId && request.value ? request.value.group.id : ''
 })
 async function postTransaction() {
@@ -38,7 +39,23 @@ async function postTransaction() {
     toast.warning('払い戻し対象者は必須です')
     return
   }
-  await apis.postTransaction(transaction)
+  let tags
+  try {
+    tags = await tagStore.createTagIfNotExist(transaction.tags)
+  } catch {
+    return
+  }
+  const transactionRequest = {
+    ...transaction,
+    tags: tags
+  }
+  try {
+    await apis.postTransaction(transactionRequest)
+  } catch {
+    toast.error('入出金記録の作成に失敗しました')
+    return
+  }
+  toast.success('入出金記録の作成に成功しました')
 }
 
 onMounted(async () => {
@@ -69,7 +86,9 @@ onMounted(async () => {
       </div>
       <div class="flex flex-col">
         <label>金額</label>
-        <div><InputNumber v-model="transaction.amount" class="mr-1" />円</div>
+        <div>
+          <InputNumber v-model="transaction.amount" class="mr-1" :min="1" />円
+        </div>
       </div>
       <div class="flex flex-col">
         <label>払い戻し対象者：</label>
@@ -90,12 +109,7 @@ onMounted(async () => {
       </div>
       <div class="flex flex-col">
         <label>タグ：</label>
-        <InputSelect
-          v-model="transaction.tags"
-          class="!w-2/3"
-          is-multiple
-          :options="tagStore.tagOptions"
-          placeholder="タグを選択" />
+        <InputSelectTagWithCreation v-model="transaction.tags" class="!w-2/3" />
       </div>
       <div class="text-right">
         <SimpleButton

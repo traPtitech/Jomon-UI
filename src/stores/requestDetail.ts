@@ -30,16 +30,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     }
     return targetIds
   })
-  const tagIds = computed(() => {
-    const tagIds = new Array<string>()
-    if (request.value === undefined) {
-      return []
-    }
-    for (let i = 0; i < request.value.tags.length; i++) {
-      tagIds.push(request.value.tags[i].id)
-    }
-    return tagIds
-  })
+
   const editMode = ref('')
   const editedValue = ref<EditedValue>({
     created_by: '',
@@ -84,7 +75,6 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   return {
     request,
     targetIds,
-    tagIds,
     editMode,
     editedValue,
     isRequestCreater,

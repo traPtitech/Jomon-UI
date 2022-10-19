@@ -41,14 +41,6 @@ export const useRequestDetail = () => {
       editMode.value = kind
       return
     }
-    if (
-      editMode.value === 'amount' &&
-      (isNaN(Number(requestDetailStore.editedValue.amount)) ||
-        Number(requestDetailStore.editedValue.amount) === 0)
-    ) {
-      alert('金額の形式が不正です')
-      return
-    }
     if (editMode.value !== 'tags') {
       const result = confirm(
         '入出金記録に紐づいている申請のこの情報を変更すると、入出金記録の情報にも変更が反映されます。よろしいですか？'

@@ -39,6 +39,7 @@ const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
     <InputNumber
       v-model="editedValue.amount"
       class="mr-1 w-24"
+      :min="1"
       placeholder="金額"
       type="text" />円
     <SimpleButton

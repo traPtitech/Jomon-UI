@@ -15,7 +15,7 @@ export const useNewComment = (requestId: string) => {
 
   const submit = async () => {
     if (comment.value === '') {
-      alert('1文字以上入力してください')
+      toast.warning('1文字以上入力してください')
       return
     }
     let response: Comment

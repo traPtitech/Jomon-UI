@@ -31,7 +31,7 @@ export const useAdmin = () => {
 
   const addAdmins = async (adminsToBeAdded: string[]) => {
     if (adminsToBeAdded.length === 0) {
-      alert('1人以上選択して下さい')
+      toast.warning('1人以上選択してください')
       return
     }
     if (!confirm('本当に追加しますか？')) {
@@ -54,7 +54,7 @@ export const useAdmin = () => {
   }
   const removeAdmins = async (adminsToBeRemoved: string[]) => {
     if (adminsToBeRemoved.length === 0) {
-      alert('1人以上選択して下さい')
+      toast.warning('1人以上選択してください')
       return
     }
     if (!confirm('本当に削除しますか？')) {

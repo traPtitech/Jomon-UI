@@ -55,7 +55,7 @@ export const useRequestDetail = () => {
   }
 
   const putRequest = async (id: string, willPutRequest: EditedValue) => {
-    let tags
+    let tags: Tag[]
     try {
       tags = await tagStore.createTagIfNotExist(willPutRequest.tags)
     } catch {
@@ -65,7 +65,7 @@ export const useRequestDetail = () => {
       ...willPutRequest,
       targets: [...willPutRequest.targets],
       amount: willPutRequest.amount,
-      tags: tags
+      tags: tags.map(tag => tag.id)
     }
     try {
       request.value = (await apis.putRequestDetail(id, putRequest)).data

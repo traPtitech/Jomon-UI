@@ -55,7 +55,7 @@ export const useNewRequest = () => {
       toast.warning('タイトル、内容、対象者は必須です')
       return
     }
-    let tags
+    let tags: Tag[]
     try {
       tags = await tagStore.createTagIfNotExist(request.value.tags)
     } catch {
@@ -63,7 +63,7 @@ export const useNewRequest = () => {
     }
     const requestRequest = {
       ...request.value,
-      tags: tags,
+      tags: tags.map(tag => tag.id),
       group: request.value.group
     }
     try {

@@ -41,29 +41,27 @@ export const useTagStore = defineStore('tag', () => {
   }
   const createTagIfNotExist = async (requestTags: Tag[]) => {
     const postTagResults: ReturnType<typeof apis.postTag>[] = []
-    let preTags: string[] = []
-    // 以下の2パターンで場合分けしていて、条件式が1でtrue、2でfalseになる
-    // 1. willPutRequest.tagsに入っているidがtagStore.tagsのタグのidと一致する
-    // 2. タグが新規作成されて、そのタグ名がwillPutRequest.tagsに入っている
-    // 2の場合にはタグ名がtagStore.tagsのタグidと一致することはないので、tagPostPromisesにpostTag関数がpushされる
+    let response: Tag[] = []
+    // requestTagsに入っているtag.idが空文字であれば、タグを新規作成する
+    // ↑によって、返り値の配列には必ずidのついたタグが入っている
     requestTags.forEach((tag: Tag) => {
       if (tags.value?.some(t => t.id === tag.id)) {
-        preTags.push(tag.id)
+        response.push(tag)
         return
       }
       postTagResults.push(apis.postTag({ name: tag.name }))
     })
     try {
-      preTags = preTags.concat(
-        (await Promise.all(postTagResults)).map(
-          (tag: AxiosResponse<Tag>) => tag.data.id
-        )
+      const postTagResponses = (await Promise.all(postTagResults)).map(
+        (res: AxiosResponse<Tag>) => res.data
       )
+      response = response.concat(postTagResponses)
+      tags.value?.concat(postTagResponses)
     } catch {
       toast.error('新規タグの作成に失敗しました')
       throw new Error('新規タグの作成に失敗しました')
     }
-    return preTags
+    return response
   }
 
   const deleteTag = async (id: string) => {

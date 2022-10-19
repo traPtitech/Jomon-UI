@@ -1,4 +1,3 @@
-import type { AxiosResponse } from 'axios'
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useToast } from 'vue-toastification'
@@ -31,37 +30,33 @@ export const useTagStore = defineStore('tag', () => {
       toast.error('タグの取得に失敗しました')
     }
   }
-  const postTag = async (tag: Tag) => {
-    try {
-      tags.value?.push((await apis.postTag(tag)).data)
-      toast.success('タグを追加しました')
-    } catch {
-      toast.error('タグの追加に失敗しました')
-    }
-  }
-  const createTagIfNotExist = async (requestTags: Tag[]) => {
-    const postTagResults: ReturnType<typeof apis.postTag>[] = []
-    let response: Tag[] = []
-    // requestTagsに入っているtag.idが空文字であれば、タグを新規作成する
-    // ↑によって、返り値の配列には必ずidのついたタグが入っている
-    requestTags.forEach((tag: Tag) => {
-      if (tags.value?.some(t => t.id === tag.id)) {
-        response.push(tag)
-        return
+
+  const createTagIfNotExist = async (containNewTags: Tag[]) => {
+    const alreadyExists: Tag[] = []
+
+    // idが空文字のタグは新しいタグなので新規作成する
+    const promises: ReturnType<typeof apis.postTag>[] = []
+    for (const tag of containNewTags) {
+      if (tag.id === '') {
+        promises.push(apis.postTag({ name: tag.name }))
+      } else {
+        alreadyExists.push(tag)
       }
-      postTagResults.push(apis.postTag({ name: tag.name }))
-    })
+    }
+
     try {
-      const postTagResponses = (await Promise.all(postTagResults)).map(
-        (res: AxiosResponse<Tag>) => res.data
-      )
-      response = response.concat(postTagResponses)
-      tags.value?.concat(postTagResponses)
+      const created = (await Promise.all(promises)).map(res => res.data)
+      if (tags.value) {
+        tags.value.push(...created)
+      } else {
+        tags.value = created
+      }
+      alreadyExists.push(...created)
     } catch {
       toast.error('新規タグの作成に失敗しました')
-      throw new Error('新規タグの作成に失敗しました')
     }
-    return response
+
+    return alreadyExists
   }
 
   const deleteTag = async (id: string) => {
@@ -78,7 +73,6 @@ export const useTagStore = defineStore('tag', () => {
     isTagFetched,
     tagOptions,
     fetchTags,
-    postTag,
     createTagIfNotExist,
     deleteTag
   }

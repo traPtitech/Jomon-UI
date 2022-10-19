@@ -49,7 +49,6 @@ async function handlePutTransaction() {
   try {
     tags = await tagStore.createTagIfNotExist(editedValue.value.tags)
   } catch {
-    //todo:エラーハンドリングの方法考える
     return
   }
   const transaction = {

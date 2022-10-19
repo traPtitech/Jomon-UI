@@ -6,7 +6,7 @@ import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-import type { Request } from '/@/lib/apis'
+import type { Request, Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export interface FileRequest {
@@ -20,7 +20,7 @@ export interface RequestRequest {
   title: string
   content: string
   targets: string[]
-  tags: string[]
+  tags: Tag[]
   group: string
 }
 
@@ -57,7 +57,7 @@ export const useNewRequest = () => {
     }
     let tags
     try {
-      tags = await tagStore.postTags(request.value.tags)
+      tags = await tagStore.createTagIfNotExist(request.value.tags)
     } catch {
       return
     }

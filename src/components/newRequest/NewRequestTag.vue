@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { Tag } from '/@/lib/apis'
+
 import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
 import type { RequestRequest } from '/@/pages/composables/useNewRequest'
 
@@ -6,7 +8,7 @@ interface Props {
   request: RequestRequest
 }
 const props = defineProps<Props>()
-const emit = defineEmits<{ (e: 'input', value: string[]): void }>()
+const emit = defineEmits<{ (e: 'input', value: Tag[]): void }>()
 </script>
 
 <template>

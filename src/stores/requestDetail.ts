@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import type { RequestDetail, PostRequest, User } from '/@/lib/apis'
+import type { RequestDetail, PostRequest, User, Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 interface EditedValue {
@@ -11,7 +11,7 @@ interface EditedValue {
   title: string
   content: string
   targets: string[]
-  tags: string[]
+  tags: Tag[]
   group: string
 }
 
@@ -64,7 +64,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
         title: request.value.title,
         content: request.value.content,
         targets: targetIds.value,
-        tags: tagIds.value,
+        tags: request.value.tags,
         group: request.value.group.id
       }
     } catch {

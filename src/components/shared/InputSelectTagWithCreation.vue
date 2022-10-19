@@ -3,13 +3,15 @@ import { computed } from 'vue'
 
 import { useTagStore } from '/@/stores/tag'
 
+import type { Tag } from '/@/lib/apis'
+
 import VueSelect from '/@/components/shared/VueSelect.vue'
 
 interface Props {
-  modelValue: string[]
+  modelValue: Tag[]
 }
 const props = defineProps<Props>()
-const emit = defineEmits<{ (e: 'update:modelValue', value: string[]): void }>()
+const emit = defineEmits<{ (e: 'update:modelValue', value: Tag[]): void }>()
 
 const tagStore = useTagStore()
 
@@ -23,12 +25,11 @@ const value = computed({
   <VueSelect
     v-model="value"
     :close-on-select="false"
-    :create-option="(tag: any) => ({ name: tag, id: tag, created_at: '', updated_at: '' })"
+    :create-option="(tag: any) => ({ name: tag, id: '', created_at: '', updated_at: '' })"
     label="name"
     multiple
     :options="tagStore.tags"
     placeholder="タグを選択"
     push-tags
-    :reduce="(tag:any) => tag.id"
     taggable />
 </template>

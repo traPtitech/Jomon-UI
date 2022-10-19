@@ -5,6 +5,7 @@ import { useToast } from 'vue-toastification'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 
+import type { Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export type EditMode =
@@ -21,7 +22,7 @@ export interface EditedValue {
   amount: number
   content: string
   targets: string[]
-  tags: string[]
+  tags: Tag[]
   group: string
   created_by: string
 }
@@ -56,14 +57,14 @@ export const useRequestDetail = () => {
   const putRequest = async (id: string, willPutRequest: EditedValue) => {
     let tags
     try {
-      tags = await tagStore.postTags(willPutRequest.tags)
+      tags = await tagStore.createTagIfNotExist(willPutRequest.tags)
     } catch {
       return
     }
     const putRequest = {
       ...willPutRequest,
       targets: [...willPutRequest.targets],
-      amount: Number(willPutRequest.amount),
+      amount: willPutRequest.amount,
       tags: tags
     }
     try {

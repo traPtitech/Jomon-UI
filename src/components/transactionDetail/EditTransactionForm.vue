@@ -60,6 +60,7 @@ async function handlePutTransaction() {
     emit('edited', res)
   } catch {
     toast.error('入出金記録の修正に失敗しました')
+    emit('edited', undefined)
   } finally {
     editedValue.value = {
       amount: props.transaction.amount,
@@ -68,7 +69,6 @@ async function handlePutTransaction() {
       tags: props.transaction.tags,
       group: props.transaction.group.id
     }
-    emit('edited', undefined)
   }
 }
 </script>

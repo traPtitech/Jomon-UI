@@ -39,7 +39,12 @@ async function putStatus(nextStatus: RequestStatus, comment: string) {
     }
     const response = (await apis.putStatus(request.value.id, statusRequest))
       .data
-    request.value.statuses.push(response)
+    request.value.statuses.push({
+      created_by: response.created_by,
+      created_at: response.created_at,
+      status: response.status
+    })
+    request.value.comments.push(response.comment)
     request.value.status = response.status
     emit('closeModal')
   } catch {

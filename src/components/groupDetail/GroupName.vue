@@ -3,7 +3,7 @@ import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
-import FormInput from '/@/components/shared/FormInput.vue'
+import InputText from '/@/components/shared/InputText.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 interface Props {
@@ -27,7 +27,7 @@ const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
     <h1 v-if="!isEditMode" class="flex-grow text-3xl">
       {{ groupDetailStore.group.name }}
     </h1>
-    <FormInput
+    <InputText
       v-else
       v-model="groupDetailStore.editedValue.name"
       class="flex-grow"

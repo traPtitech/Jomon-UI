@@ -5,7 +5,7 @@ import { ref } from 'vue'
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
 
-import FormSelect from '/@/components/shared/FormSelect.vue'
+import InputSelect from '/@/components/shared/InputSelect.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
 
 import { useGroupMember } from './composables/useGroupMember'
@@ -43,7 +43,7 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
       </li>
     </ul>
     <div v-if="hasAuthority" class="flex p-2">
-      <FormSelect
+      <InputSelect
         v-model="MembersToBeAdded"
         class="mr-2 flex-grow"
         is-multiple

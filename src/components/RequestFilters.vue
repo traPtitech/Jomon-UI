@@ -8,9 +8,10 @@ import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-import { requestStates } from '/@/consts/consts'
+import { requestStatusOptions } from '/@/consts/consts'
 
-import VueSelect from './shared/VueSelect.vue'
+import InputSelect from './shared/InputSelect.vue'
+import InputText from './shared/InputText.vue'
 
 const requestStore = useRequestStore()
 const userStore = useUserStore()
@@ -48,52 +49,38 @@ function sortByCreatedAt() {
       <ChevronUpIcon v-if="params.sort === '-created_at'" class="w-4" />
     </button>
     <div>
-      <input
+      <InputText
         v-model="params.since"
-        class="h-8 w-28 rounded border border-gray-300 p-1"
-        placeholder="YYYY-MM-DD"
+        class="w-30 h-8"
+        placeholder="yyyy-MM-dd"
         @blur="requestStore.fetchRequests(params)" />
       ～
-      <input
+      <InputText
         v-model="params.until"
-        class="h-8 w-28 rounded border border-gray-300 p-1"
-        placeholder="YYYY-MM-DD"
+        class="w-30 h-8"
+        placeholder="yyyy-MM-dd"
         @blur="requestStore.fetchRequests(params)" />
     </div>
-    <VueSelect
+    <InputSelect
       v-model="params.target"
-      class="w-64"
-      label="name"
-      :options="userStore.users"
+      :options="userStore.userOptions"
       placeholder="申請者"
-      :reduce="(user:any) => user.name"
       @close="requestStore.fetchRequests(params)" />
-    <VueSelect
+    <InputSelect
       v-model="params.currentStatus"
-      class="w-64"
-      label="jpn"
-      :options="requestStates"
+      :options="requestStatusOptions()"
       placeholder="申請の状態"
-      :reduce="(state:any) => state.state"
-      :searchable="false"
       @close="requestStore.fetchRequests(params)" />
-    <VueSelect
+    <InputSelect
       v-model="params.group"
-      class="w-64"
-      label="name"
-      :options="groupStore.groups"
+      :options="groupStore.groupOptions"
       placeholder="グループ"
-      :reduce="(group:any) => group.id"
       @close="requestStore.fetchRequests(params)" />
-    <VueSelect
+    <InputSelect
       v-model="params.tags"
-      class="w-100"
-      :close-on-select="false"
-      label="name"
-      multiple
-      :options="tagStore.tags"
+      is-multiple
+      :options="tagStore.tagOptions"
       placeholder="タグ"
-      :reduce="(tag:any) => tag.id"
       @close="requestStore.fetchRequests(params)" />
   </div>
   <span

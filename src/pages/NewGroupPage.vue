@@ -9,10 +9,10 @@ import { useUserStore } from '/@/stores/user'
 import type { Group, PostGroup } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
-import FormInput from '/@/components/shared/FormInput.vue'
-import FormInputNumber from '/@/components/shared/FormInputNumber.vue'
-import FormSelect from '/@/components/shared/FormSelect.vue'
-import FormTextarea from '/@/components/shared/FormTextarea.vue'
+import InputNumber from '/@/components/shared/InputNumber.vue'
+import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputText from '/@/components/shared/InputText.vue'
+import InputTextarea from '/@/components/shared/InputTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 const router = useRouter()
@@ -82,16 +82,22 @@ if (!userStore.isUserFetched) {
     <form class="flex flex-col gap-2" @submit="handlePostGroup">
       <div class="flex flex-col">
         <label>グループ名</label>
-        <FormInput v-model="group.name" required />
+        <InputText
+          v-model="group.name"
+          placeholder="グループ名を入力"
+          required />
       </div>
       <div class="flex flex-col">
         <label>詳細</label>
-        <FormTextarea v-model="group.description" required />
+        <InputTextarea
+          v-model="group.description"
+          placeholder="詳細を入力"
+          required />
       </div>
       <div class="flex flex-col">
         <label>予算</label>
         <div>
-          <FormInputNumber
+          <InputNumber
             v-model="group.budget"
             class="mr-1 w-2/5"
             :min="1"
@@ -100,7 +106,7 @@ if (!userStore.isUserFetched) {
       </div>
       <div class="flex flex-col">
         <label>オーナー</label>
-        <FormSelect
+        <InputSelect
           v-model="group.owners"
           is-multiple
           :options="userStore.userOptions"
@@ -108,7 +114,7 @@ if (!userStore.isUserFetched) {
       </div>
       <div class="flex flex-col">
         <label>メンバー</label>
-        <FormSelect
+        <InputSelect
           v-model="group.members"
           is-multiple
           :options="userStore.userOptions"

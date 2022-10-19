@@ -35,11 +35,12 @@ export const useRequestStore = defineStore('request', () => {
 
   const fetchRequests = async (params: SearchRequestParams = defaultParams) => {
     const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
+    // todo:date型を使うようにすればバリデーションが不要になりそう
     if (
       (params.since && !rule.test(params.since)) ||
       (params.until && !rule.test(params.until))
     ) {
-      alert('日付が不正です')
+      toast.warning('日付はyyyy-MM-ddの形式で入力してください')
       return
     }
     try {

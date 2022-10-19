@@ -7,9 +7,7 @@ import 'vue-select/dist/vue-select.css'
   <VueSelect v-bind="$attrs">
     <template #no-options="{ search, searching, loading }">
       <div v-if="searching">
-        <span>
-          "{{ search }}"に一致する{{ $attrs.placeholder }}は見つかりませんでした
-        </span>
+        <span> "{{ search }}" は見つかりませんでした </span>
       </div>
       <div v-else-if="loading">
         <span>読み込み中...</span>
@@ -25,5 +23,13 @@ import 'vue-select/dist/vue-select.css'
 .vs--multiple .vs__selected {
   background-color: #e5e7eb; /*gray-200*/
   border: none;
+}
+.vs__dropdown-option--selected::before {
+  color: #10b981; /*emerald-500*/
+  content: '\2713'; /*チェックマーク*/
+}
+.vs__dropdown-option--deselect {
+  background-color: #e5e7eb; /*gray-400*/
+  color: #1f1f1f; /*dark-500*/
 }
 </style>

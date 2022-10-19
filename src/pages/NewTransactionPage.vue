@@ -9,11 +9,14 @@ import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
+import type { Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import { toId } from '/@/lib/parseQueryParams'
 
+import InputNumber from '/@/components/shared/InputNumber.vue'
+import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import VueSelect from '/@/components/shared/VueSelect.vue'
 
 const route = useRoute()
 const requestId = toId(route.query.requestID) //requestIDには申請の詳細画面から新規作成ページに移動するときだけIDを渡す
@@ -24,12 +27,12 @@ const groupStore = useGroupStore()
 const requestDetailStore = useRequestDetailStore()
 const toast = useToast()
 
-const { request, targetIds, tagIds } = storeToRefs(requestDetailStore)
+const { request, targetIds } = storeToRefs(requestDetailStore)
 const transaction = reactive({
   amount: requestId && request.value ? request.value.amount : 0,
   targets: requestId ? targetIds : [],
   request: requestId,
-  tags: requestId ? tagIds : [],
+  tags: requestId && request.value ? request.value.tags : [],
   group: requestId && request.value ? request.value.group.id : ''
 })
 async function postTransaction() {
@@ -37,7 +40,23 @@ async function postTransaction() {
     toast.warning('払い戻し対象者は必須です')
     return
   }
-  await apis.postTransaction(transaction)
+  let tags: Tag[]
+  try {
+    tags = await tagStore.createTagIfNotExist(transaction.tags)
+  } catch {
+    return
+  }
+  const transactionRequest = {
+    ...transaction,
+    tags: tags.map(tag => tag.id)
+  }
+  try {
+    await apis.postTransaction(transactionRequest)
+  } catch {
+    toast.error('入出金記録の作成に失敗しました')
+    return
+  }
+  toast.success('入出金記録の作成に成功しました')
 }
 
 onMounted(async () => {
@@ -69,41 +88,29 @@ onMounted(async () => {
       <div class="flex flex-col">
         <label>金額</label>
         <div>
-          <input
-            v-model="transaction.amount"
-            class="rounded border border-gray-300" />円
+          <InputNumber v-model="transaction.amount" class="mr-1" :min="1" />円
         </div>
       </div>
       <div class="flex flex-col">
         <label>払い戻し対象者：</label>
-        <VueSelect
+        <InputSelect
           v-model="transaction.targets"
-          :close-on-select="false"
-          label="name"
-          multiple
-          :options="userStore.users"
-          placeholder="払い戻し対象者"
-          :reduce="(user:any) => user.name" />
+          class="!w-2/3"
+          is-multiple
+          :options="userStore.userOptions"
+          placeholder="払い戻し対象者を選択" />
       </div>
       <div class="flex flex-col">
         <label>グループ：</label>
-        <VueSelect
+        <InputSelect
           v-model="transaction.group"
-          label="name"
-          :options="groupStore.groups"
-          placeholder="グループ"
-          :reduce="(group:any) => group.id" />
+          class="!w-2/3"
+          :options="groupStore.groupOptions"
+          placeholder="グループを選択" />
       </div>
       <div class="flex flex-col">
         <label>タグ：</label>
-        <VueSelect
-          v-model="transaction.tags"
-          :close-on-select="false"
-          label="name"
-          multiple
-          :options="tagStore.tags"
-          placeholder="タグ"
-          :reduce="(tag:any) => tag.id" />
+        <InputSelectTagWithCreation v-model="transaction.tags" class="!w-2/3" />
       </div>
       <div class="text-right">
         <SimpleButton

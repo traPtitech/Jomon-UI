@@ -5,7 +5,7 @@ import { ref } from 'vue'
 
 import { isImageByType } from '/@/lib/checkFileType'
 
-import type { FileRequest } from '/@/pages/NewRequestPage.vue'
+import type { FileRequest } from '/@/pages/composables/useNewRequest'
 
 interface Props {
   files: FileRequest[]
@@ -36,7 +36,7 @@ function handleFileChange(e: Event) {
   }
 }
 
-function deleteFile(index: number) {
+function removeFile(index: number) {
   emit(
     'input',
     props.files.filter((_, i) => index !== i)
@@ -64,7 +64,7 @@ function deleteFile(index: number) {
         <DocumentIcon v-else class="h-32" />
         <button
           class="absolute top-0 right-0 h-6 w-6"
-          @click="deleteFile(index)">
+          @click="removeFile(index)">
           <XCircleIcon />
         </button>
         <span>{{ file.name }}</span>

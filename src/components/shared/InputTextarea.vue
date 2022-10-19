@@ -7,7 +7,6 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), { required: false })
 const emit = defineEmits<{
-  (e: 'input', value: string): void
   (e: 'update:modelValue', modelValue: string): void
 }>()
 

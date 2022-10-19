@@ -6,9 +6,9 @@ import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 import EditButton from '/@/components/shared/EditButton.vue'
+import InputSelect from '/@/components/shared/InputSelect.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import VueSelect from '/@/components/shared/VueSelect.vue'
-import type { EditMode } from '/@/pages/composables/requestDetail/useRequestDetail'
+import type { EditMode } from '/@/pages/composables/useRequestDetail'
 
 interface Props {
   isEditMode: boolean
@@ -47,14 +47,11 @@ const handleComplete = () => {
     </div>
     <div v-else class="flex items-center">
       払い戻し対象者：
-      <VueSelect
+      <InputSelect
         v-model="editedValue.targets"
-        :close-on-select="false"
-        label="name"
-        multiple
-        :options="userStore.users"
-        placeholder="払い戻し対象者"
-        :reduce="(user:any) => user.name" />
+        is-multiple
+        :options="userStore.userOptions"
+        placeholder="払い戻し対象者" />
       <SimpleButton
         class="ml-2"
         font-size="sm"

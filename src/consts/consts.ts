@@ -3,13 +3,24 @@ import type { StatusEnum } from '/@/lib/apis'
 import clubBudgetRequestTemplate from '/@/md/clubBudgetRequest.md?raw'
 import travelingExpenseRequestTemplate from '/@/md/travelingExpenseRequest.md?raw'
 
-export const requestStates = [
+export const requestStatuses = [
   { state: 'submitted', jpn: '承認待ち' },
   { state: 'rejected', jpn: '却下' },
   { state: 'fix_required', jpn: '要修正' },
   { state: 'accepted', jpn: '承認済み' },
   { state: 'fully_repaid', jpn: '返済完了' }
 ] as const
+
+export const requestStatusOptions = () => {
+  return (
+    requestStatuses.map(requestStatus => {
+      return {
+        key: requestStatus.jpn,
+        value: requestStatus.state
+      }
+    }) ?? []
+  )
+}
 
 export const requestTemplates = [
   { name: '部費利用申請', value: clubBudgetRequestTemplate },

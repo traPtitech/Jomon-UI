@@ -1,50 +1,26 @@
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { onMounted } from 'vue'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
 import NewRequestFileForm from '/@/components/newRequest/NewRequestFileForm.vue'
-import NewRequestSubmitButton from '/@/components/newRequest/NewRequestSubmitButton.vue'
 import NewRequestTag from '/@/components/newRequest/NewRequestTag.vue'
+import InputNumber from '/@/components/shared/InputNumber.vue'
+import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputText from '/@/components/shared/InputText.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
-import VueSelect from '/@/components/shared/VueSelect.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { requestTemplates } from '/@/consts/consts'
 
-export interface FileRequest {
-  name: string
-  src: string
-  type: string
-}
-export interface RequestRequest {
-  created_by: string
-  amount: number
-  title: string
-  content: string
-  targets: string[]
-  tags: string[]
-  group: string
-}
+import { useNewRequest } from './composables/useNewRequest'
 
 const tagStore = useTagStore()
 const userStore = useUserStore()
 const groupStore = useGroupStore()
 
-const request = reactive<RequestRequest>({
-  created_by: userStore.me?.name ?? '',
-  amount: 0,
-  title: '',
-  targets: [],
-  content: '',
-  tags: [],
-  group: ''
-})
-const files = ref<FileRequest[]>([])
-
-function removeFile(file: FileRequest) {
-  files.value = files.value.filter(f => f !== file)
-}
+const { request, files, postRequest } = useNewRequest()
 
 onMounted(() => {
   if (!tagStore.isTagFetched) {
@@ -71,17 +47,14 @@ onMounted(() => {
       </div>
       <div class="flex flex-col">
         <label>タイトル</label>
-        <input
+        <InputText
           v-model="request.title"
-          class="h-8 rounded border border-gray-300 p-1" />
+          class="h-8"
+          placeholder="タイトルを入力" />
       </div>
       <div class="flex flex-col">
         <label>金額</label>
-        <div>
-          <input
-            v-model="request.amount"
-            class="h-8 rounded border border-gray-300 p-1" />円
-        </div>
+        <div><InputNumber v-model="request.amount" class="mr-1 h-8" />円</div>
       </div>
       <div class="flex flex-col">
         <label>詳細</label>
@@ -92,30 +65,32 @@ onMounted(() => {
       </div>
       <div class="flex flex-col">
         <label>払い戻し対象者</label>
-        <VueSelect
+        <InputSelect
           v-model="request.targets"
-          :close-on-select="false"
-          label="name"
-          multiple
-          :options="userStore.users"
-          placeholder="払い戻し対象者を選択"
-          :reduce="(user:any) => user.name" />
+          class="!w-2/3"
+          is-multiple
+          :options="userStore.userOptions"
+          placeholder="払い戻し対象者を選択" />
       </div>
       <div class="flex flex-col">
         <label>グループ</label>
-        <VueSelect
+        <InputSelect
           v-model="request.group"
-          label="name"
-          :options="groupStore.groups"
-          placeholder="グループを選択"
-          :reduce="(group:any) => group.id" />
+          class="!w-2/3"
+          :options="groupStore.groupOptions"
+          placeholder="グループを選択" />
       </div>
       <NewRequestTag :request="request" @input="request.tags = $event" />
       <NewRequestFileForm :files="files" @input="files = $event" />
-      <NewRequestSubmitButton
-        :files="files"
-        :request="request"
-        @remove="removeFile($event)" />
+      <div class="text-right">
+        <SimpleButton
+          class="mb-4"
+          font-size="xl"
+          padding="md"
+          @click.stop="postRequest">
+          申請を作成する
+        </SimpleButton>
+      </div>
     </div>
   </div>
 </template>

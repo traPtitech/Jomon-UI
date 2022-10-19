@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
+import InputSelect from './InputSelect.vue'
+import InputTextarea from './InputTextarea.vue'
 import MarkdownIt from './MarkdownIt.vue'
-import VueSelect from './VueSelect.vue'
 
 type TabType = 'input' | 'preview'
 
@@ -17,6 +18,17 @@ const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>()
 
 const currentTab = ref<TabType>('input')
 const selectedTemplate = ref('')
+
+const templateOptions = computed(() => {
+  return (
+    props.templates?.map(template => {
+      return {
+        key: template.name,
+        value: template.name
+      }
+    }) ?? []
+  )
+})
 
 function setTemplate(template: string) {
   const foundTemplate = props.templates?.find(t => t.name === template)
@@ -47,31 +59,26 @@ function changeCurrentTab(tab: TabType) {
         @click.prevent="changeCurrentTab('preview')">
         プレビュー
       </button>
-      <VueSelect
-        v-if="templates !== undefined"
+      <InputSelect
+        v-if="props.templates !== undefined"
         v-model="selectedTemplate"
         class="m-1 ml-auto inline-block w-1/3"
-        label="name"
-        :options="templates"
+        :options="templateOptions"
         placeholder="テンプレートを選択"
-        :reduce="(template:any) => template.name"
         @option:selected="setTemplate(selectedTemplate)">
-      </VueSelect>
+      </InputSelect>
     </div>
     <div>
-      <textarea
+      <InputTextarea
         v-if="currentTab === 'input'"
-        class="min-h-40 w-full rounded-b p-1"
+        class="min-h-40 w-full"
+        :model-value="modelValue"
         :placeholder="placeholder"
-        :value="modelValue"
-        @input="
-          emit('update:modelValue', ($event.target as HTMLInputElement).value)
-        " />
-      <div
+        @update:model-value="emit('update:modelValue', $event)" />
+      <MarkdownIt
         v-if="currentTab === 'preview'"
-        class="h-40 w-full overflow-y-scroll border border-gray-500 p-1">
-        <MarkdownIt :text="modelValue" />
-      </div>
+        class="min-h-40 w-full overflow-y-scroll border border-gray-500 px-1"
+        :text="modelValue" />
     </div>
   </div>
 </template>

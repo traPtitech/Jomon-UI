@@ -4,8 +4,9 @@ import { storeToRefs } from 'pinia'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
+import InputText from '/@/components/shared/InputText.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import type { EditMode } from '/@/pages/composables/requestDetail/useRequestDetail'
+import type { EditMode } from '/@/pages/composables/useRequestDetail'
 
 interface Props {
   isEditMode: boolean
@@ -39,9 +40,9 @@ const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
     </SimpleButton>
   </div>
   <div v-else class="flex flex-grow">
-    <input
+    <InputText
       v-model="editedValue.title"
-      class="flex-grow rounded p-1"
+      class="flex-grow"
       placeholder="タイトル"
       type="text" />
     <SimpleButton

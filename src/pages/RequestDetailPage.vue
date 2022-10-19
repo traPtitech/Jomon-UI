@@ -22,7 +22,8 @@ import RequestTitle from '/@/components/requestDetail/RequestTitle.vue'
 import StatusChangeButtons from '/@/components/requestDetail/StatusChangeButtons.vue'
 import ToTransactionButtons from '/@/components/requestDetail/ToTransactionButtons.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
-import { useRequestDetail } from '/@/pages/composables/requestDetail/useRequestDetail'
+
+import { useRequestDetail } from './composables/useRequestDetail'
 
 const route = useRoute()
 const id = toId(route.params.id)

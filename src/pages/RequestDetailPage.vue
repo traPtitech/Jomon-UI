@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { onMounted, computed } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
@@ -40,18 +40,16 @@ const formattedDate = computed(() =>
   formatDate(request.value?.created_at ?? '')
 )
 
-onMounted(async () => {
-  await requestDetailStore.fetchRequestDetail(id)
-  if (!groupStore.isGroupFetched) {
-    await groupStore.fetchGroups()
-  }
-  if (!userStore.isUserFetched) {
-    await userStore.fetchUsers()
-  }
-  if (!tagStore.isTagFetched) {
-    await tagStore.fetchTags()
-  }
-})
+await requestDetailStore.fetchRequestDetail(id)
+if (!groupStore.isGroupFetched) {
+  await groupStore.fetchGroups()
+}
+if (!userStore.isUserFetched) {
+  await userStore.fetchUsers()
+}
+if (!tagStore.isTagFetched) {
+  await tagStore.fetchTags()
+}
 </script>
 
 <template>

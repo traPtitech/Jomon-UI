@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
@@ -28,20 +28,18 @@ const sliceRequestsAt = (index: number, n: number) => {
   return requestStore.requests?.slice(start, end) ?? []
 }
 
-onMounted(() => {
-  if (!requestStore.isRequestFetched) {
-    requestStore.fetchRequests()
-  }
-  if (!tagStore.isTagFetched) {
-    tagStore.fetchTags()
-  }
-  if (!groupStore.isGroupFetched) {
-    groupStore.fetchGroups()
-  }
-  if (!userStore.isUserFetched) {
-    userStore.fetchUsers()
-  }
-})
+if (!requestStore.isRequestFetched) {
+  requestStore.fetchRequests()
+}
+if (!tagStore.isTagFetched) {
+  tagStore.fetchTags()
+}
+if (!groupStore.isGroupFetched) {
+  groupStore.fetchGroups()
+}
+if (!userStore.isUserFetched) {
+  userStore.fetchUsers()
+}
 
 watch(
   () => route.query.page,

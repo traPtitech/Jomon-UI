@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { onMounted, reactive } from 'vue'
+import { reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
@@ -60,18 +60,18 @@ async function postTransaction() {
   toast.success('入出金記録の作成に成功しました')
 }
 
-onMounted(async () => {
-  if (!groupStore.isGroupFetched) {
-    await groupStore.fetchGroups()
-  }
-  if (!userStore.isUserFetched) {
-    await userStore.fetchUsers()
-  }
-  if (!tagStore.isTagFetched) {
-    await tagStore.fetchTags()
-  }
+if (!groupStore.isGroupFetched) {
+  await groupStore.fetchGroups()
+}
+if (!userStore.isUserFetched) {
+  await userStore.fetchUsers()
+}
+if (!tagStore.isTagFetched) {
+  await tagStore.fetchTags()
+}
+if (requestId !== '') {
   await requestDetailStore.fetchRequestDetail(requestId)
-})
+}
 </script>
 
 <template>

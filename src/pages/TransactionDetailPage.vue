@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
@@ -59,18 +59,16 @@ function handleEditTransaction(editedTransaction: Transaction | undefined) {
   isEditMode.value = false
 }
 
-onMounted(async () => {
-  await fetchTransaction(id)
-  if (!userStore.isUserFetched) {
-    await userStore.fetchUsers()
-  }
-  if (!tagStore.isTagFetched) {
-    await tagStore.fetchTags()
-  }
-  if (!groupStore.isGroupFetched) {
-    await groupStore.fetchGroups()
-  }
-})
+await fetchTransaction(id)
+if (!userStore.isUserFetched) {
+  await userStore.fetchUsers()
+}
+if (!tagStore.isTagFetched) {
+  await tagStore.fetchTags()
+}
+if (!groupStore.isGroupFetched) {
+  await groupStore.fetchGroups()
+}
 </script>
 
 <template>

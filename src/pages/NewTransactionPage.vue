@@ -9,6 +9,7 @@ import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
+import type { Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import { toId } from '/@/lib/parseQueryParams'
 
@@ -39,7 +40,7 @@ async function postTransaction() {
     toast.warning('払い戻し対象者は必須です')
     return
   }
-  let tags
+  let tags: Tag[]
   try {
     tags = await tagStore.createTagIfNotExist(transaction.tags)
   } catch {
@@ -47,7 +48,7 @@ async function postTransaction() {
   }
   const transactionRequest = {
     ...transaction,
-    tags: tags
+    tags: tags.map(tag => tag.id)
   }
   try {
     await apis.postTransaction(transactionRequest)

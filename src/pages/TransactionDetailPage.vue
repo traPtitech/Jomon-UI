@@ -78,7 +78,7 @@ if (!groupStore.isGroupFetched) {
     <div class="flex items-center pb-4">
       <h1 class="text-3xl">取引記録の詳細</h1>
       <SimpleButton
-        v-if="userStore.isAdmin() && transaction.request && !isEditMode"
+        v-if="userStore.isAdmin() && !transaction.request && !isEditMode"
         class="ml-2"
         font-size="sm"
         padding="sm"
@@ -95,7 +95,6 @@ if (!groupStore.isGroupFetched) {
     </ul>
     <EditTransactionForm
       v-else
-      class="mb-4 space-y-2"
       :transaction="transaction"
       @edited="handleEditTransaction" />
     <router-link class="w-fit" :to="`/requests/${transaction.request}`">

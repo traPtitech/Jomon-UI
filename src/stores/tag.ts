@@ -54,6 +54,7 @@ export const useTagStore = defineStore('tag', () => {
       alreadyExists.push(...created)
     } catch {
       toast.error('新規タグの作成に失敗しました')
+      throw new Error('新規タグの作成に失敗しました')
     }
 
     return alreadyExists

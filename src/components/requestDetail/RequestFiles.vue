@@ -2,7 +2,6 @@
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
 import { useToast } from 'vue-toastification'
 
 import { useRequestDetailStore } from '/@/stores/requestDetail'
@@ -37,9 +36,7 @@ async function removeFile(id: string) {
   }
 }
 
-onMounted(async () => {
-  await fetchFiles(request.value?.files ?? [])
-})
+await fetchFiles(request.value?.files ?? [])
 </script>
 
 <template>

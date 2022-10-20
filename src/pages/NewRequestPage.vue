@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue'
-
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
@@ -22,17 +20,15 @@ const groupStore = useGroupStore()
 
 const { request, files, postRequest } = useNewRequest()
 
-onMounted(() => {
-  if (!tagStore.isTagFetched) {
-    tagStore.fetchTags()
-  }
-  if (!groupStore.isGroupFetched) {
-    groupStore.fetchGroups()
-  }
-  if (!userStore.isUserFetched) {
-    userStore.fetchUsers()
-  }
-})
+if (!tagStore.isTagFetched) {
+  tagStore.fetchTags()
+}
+if (!groupStore.isGroupFetched) {
+  groupStore.fetchGroups()
+}
+if (!userStore.isUserFetched) {
+  userStore.fetchUsers()
+}
 </script>
 
 <template>

@@ -79,8 +79,9 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
 </script>
 
 <template>
-  <div class="flex h-8 gap-2">
+  <div class="flex h-8 gap-2 px-4">
     <!-- 年月日 -->
+    <!-- todo:多分since,untilでの検索をつける -->
     <button
       class="w-2/10 flex items-center justify-center border"
       @click="sort('created_at')">

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useTagStore } from '/@/stores/tag'
@@ -27,16 +27,15 @@ const sliceTransactionAt = (index: number, n: number) => {
   return transactionStore.transactions?.slice(start, end)
 }
 
-onMounted(async () => {
-  await transactionStore.fetchTransactions({
-    ...defaultParams,
-    request: toId(route.query.requestID)
-  })
-
-  if (!tagStore.isTagFetched) {
-    await tagStore.fetchTags()
-  }
+await transactionStore.fetchTransactions({
+  ...defaultParams,
+  request: toId(route.query.requestID)
 })
+
+if (!tagStore.isTagFetched) {
+  await tagStore.fetchTags()
+}
+
 watch(
   () => route.query.page,
   newPage => {

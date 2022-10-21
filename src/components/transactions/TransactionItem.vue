@@ -2,7 +2,7 @@
 import type { Transaction } from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
 
-import TagsGroup from './shared/TagsGroup.vue'
+import TagsGroup from '/@/components/shared/TagsGroup.vue'
 
 interface Props {
   transaction: Transaction

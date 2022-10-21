@@ -7,7 +7,7 @@ import { useUserStore } from '/@/stores/user'
 
 import { toPage } from '/@/lib/parseQueryParams'
 
-import GroupItem from '/@/components/GroupItem.vue'
+import GroupItem from '/@/components/groups/GroupItem.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 

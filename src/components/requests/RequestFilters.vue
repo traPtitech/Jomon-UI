@@ -50,13 +50,13 @@ function sortByCreatedAt() {
     <div>
       <InputText
         v-model="params.since"
-        class="w-30 h-8"
+        class="w-28"
         placeholder="yyyy-MM-dd"
         @blur="requestStore.fetchRequests(params)" />
       ～
       <InputText
         v-model="params.until"
-        class="w-30 h-8"
+        class="w-28"
         placeholder="yyyy-MM-dd"
         @blur="requestStore.fetchRequests(params)" />
     </div>

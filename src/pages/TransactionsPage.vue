@@ -8,10 +8,10 @@ import { useUserStore } from '/@/stores/user'
 
 import { toId, toPage } from '/@/lib/parseQueryParams'
 
-import TransactionFilters from '/@/components/TransactionFilters.vue'
-import TransactionItem from '/@/components/TransactionItem.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import TransactionFilters from '/@/components/transactions/TransactionFilters.vue'
+import TransactionItem from '/@/components/transactions/TransactionItem.vue'
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))

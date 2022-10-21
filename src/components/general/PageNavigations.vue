@@ -3,7 +3,7 @@ import { useRoute } from 'vue-router'
 
 import { useUserStore } from '/@/stores/user'
 
-import HeaderButton from '/@/components/HeaderButton.vue'
+import HeaderButton from './HeaderButton.vue'
 
 const userStore = useUserStore()
 

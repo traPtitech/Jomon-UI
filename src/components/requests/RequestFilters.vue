@@ -8,10 +8,9 @@ import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
+import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputText from '/@/components/shared/InputText.vue'
 import { requestStatusOptions } from '/@/consts/consts'
-
-import InputSelect from './shared/InputSelect.vue'
-import InputText from './shared/InputText.vue'
 
 const requestStore = useRequestStore()
 const userStore = useUserStore()

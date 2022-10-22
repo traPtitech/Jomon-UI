@@ -80,42 +80,42 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
 
 <template>
   <div class="divider">
-    <div class="flex h-8 gap-2 px-4">
-      <div class="children:px-2 divide-x-1 flex w-1/2 items-center">
-        <!-- 年月日 -->
-        <!-- todo:多分since,untilでの検索をつける -->
-        <button
-          class="w-3/10 flex items-center justify-between"
-          @click="sort('created_at')">
-          <span>年 月 日</span>
-          <SortOrderButtons :sort="sortOption('created_at')" />
-        </button>
-        <!-- 取引額 -->
-        <button
-          class="w-3/10 flex items-center justify-between"
-          @click="sort('amount')">
-          <span>取引額</span>
-          <SortOrderButtons :sort="sortOption('amount')" />
-        </button>
-        <!-- 取引相手 -->
-        <div class="w-4/10 flex h-full w-full items-center">
-          <div v-if="!isTargetSearchMode" class="w-full">
-            <button
-              class="flex h-full w-full items-center justify-between"
-              @click="changeIsTargetSearchMode">
-              <span>取引相手</span>
-              <MagnifyingGlassIcon class="h-4" />
-            </button>
-          </div>
-          <div v-else class="relative w-full">
-            <InputText
-              v-model="params.target"
-              class="w-full border-none"
-              type="text" />
-            <XMarkIcon
-              class="absolute right-2 top-2 h-4 cursor-pointer"
-              @click="changeIsTargetSearchMode" />
-          </div>
+    <div class="divide-x-1 children:px-2 flex h-8 px-4">
+      <!-- 年月日 -->
+      <!-- todo:多分since,untilでの検索をつける -->
+      <button
+        class="w-3/20 flex items-center justify-between"
+        @click="sort('created_at')">
+        <span>年 月 日</span>
+        <SortOrderButtons :sort="sortOption('created_at')" />
+      </button>
+      <!-- 取引額 -->
+      <!-- todo:多分範囲で検索にする -->
+      <button
+        class="w-3/20 flex items-center justify-between"
+        @click="sort('amount')">
+        <span>取引額</span>
+        <SortOrderButtons :sort="sortOption('amount')" />
+      </button>
+      <!-- 取引相手 -->
+      <div class="w-4/20 flex h-full w-full items-center">
+        <div v-if="!isTargetSearchMode" class="w-full">
+          <button
+            class="flex h-full w-full items-center justify-between"
+            @click="changeIsTargetSearchMode">
+            <span>取引相手</span>
+            <MagnifyingGlassIcon class="mr-1 h-4" />
+          </button>
+        </div>
+        <div v-else class="relative w-full">
+          <InputText
+            v-model="params.target"
+            class="w-full border-none"
+            placeholder="取引相手"
+            type="text" />
+          <XMarkIcon
+            class="absolute right-1 top-2 h-4 cursor-pointer"
+            @click="changeIsTargetSearchMode" />
         </div>
       </div>
       <!-- グループ -->

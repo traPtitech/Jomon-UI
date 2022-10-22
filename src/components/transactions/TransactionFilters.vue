@@ -91,6 +91,7 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
           <SortOrderButtons :sort="sortOption('created_at')" />
         </button>
         <!-- 取引額 -->
+        <!-- todo:多分範囲指定にする -->
         <button
           class="w-3/10 flex items-center justify-between"
           @click="sort('amount')">
@@ -113,7 +114,7 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
               class="w-full border-none"
               type="text" />
             <XMarkIcon
-              class="absolute right-2 top-2 h-4 cursor-pointer"
+              class="absolute right-0 top-2 h-4 cursor-pointer"
               @click="changeIsTargetSearchMode" />
           </div>
         </div>

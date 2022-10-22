@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
+import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 import { useTransactionStore, defaultParams } from '/@/stores/transaction'
 import { useUserStore } from '/@/stores/user'
@@ -18,8 +19,8 @@ const page = ref(toPage(route.query.page))
 
 const transactionStore = useTransactionStore()
 const userStore = useUserStore()
-
 const tagStore = useTagStore()
+const groupStore = useGroupStore()
 
 const sliceTransactionAt = (index: number, n: number) => {
   const start = (index - 1) * n
@@ -32,6 +33,9 @@ await transactionStore.fetchTransactions({
   request: toId(route.query.requestID)
 })
 
+if (!groupStore.isGroupFetched) {
+  await groupStore.fetchGroups()
+}
 if (!tagStore.isTagFetched) {
   await tagStore.fetchTags()
 }

@@ -13,19 +13,21 @@ const props = defineProps<Props>()
 <template>
   <router-link :to="`transactions/${transaction.id}`">
     <div class="relative flex h-12 items-center gap-2 px-4 hover:bg-gray-100">
-      <div class="w-2/10">
-        {{ formatDate(props.transaction.created_at) }}
-      </div>
-      <div class="w-1/10 text-right">
-        <span
-          :class="` ${
-            props.transaction.amount > 0 ? 'text-blue-400' : 'text-red-400'
-          }`">
-          {{ props.transaction.amount }}円
-        </span>
-      </div>
-      <div class="w-2/10">
-        {{ props.transaction.target }}
+      <div class="children:px-2 flex w-1/2 items-center">
+        <div class="w-3/10">
+          {{ formatDate(props.transaction.created_at) }}
+        </div>
+        <div class="w-3/10 text-right">
+          <span
+            :class="` ${
+              props.transaction.amount > 0 ? 'text-blue-400' : 'text-red-400'
+            }`">
+            {{ props.transaction.amount }}円
+          </span>
+        </div>
+        <div class="w-4/10">
+          {{ props.transaction.target }}
+        </div>
       </div>
       <div class="w-2/10 truncate">
         {{ props.transaction.group.description }}

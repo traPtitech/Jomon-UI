@@ -79,53 +79,71 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
 </script>
 
 <template>
-  <div class="flex h-8 gap-2 px-4">
-    <!-- 年月日 -->
-    <!-- todo:多分since,untilでの検索をつける -->
-    <button
-      class="w-2/10 flex items-center justify-center border"
-      @click="sort('created_at')">
-      <span>年 月 日</span>
-      <SortOrderButtons :sort="sortOption('created_at')" />
-    </button>
-    <!-- 取引額 -->
-    <button
-      class="w-1/10 flex items-center justify-center border"
-      @click="sort('amount')">
-      <span>取引額</span>
-      <SortOrderButtons :sort="sortOption('amount')" />
-    </button>
-    <!-- 取引相手 -->
-    <div class="w-2/10">
-      <div
-        v-if="!isTargetSearchMode"
-        class="flex h-full items-center justify-center border">
-        <button class="h-full w-full" @click="changeIsTargetSearchMode">
-          <span>取引相手</span>
-          <MagnifyingGlassIcon class="h-4" />
+  <div class="divider">
+    <div class="flex h-8 gap-2 px-4">
+      <div class="children:px-2 divide-x-1 flex w-1/2 items-center">
+        <!-- 年月日 -->
+        <!-- todo:多分since,untilでの検索をつける -->
+        <button
+          class="w-3/10 flex items-center justify-between"
+          @click="sort('created_at')">
+          <span>年 月 日</span>
+          <SortOrderButtons :sort="sortOption('created_at')" />
         </button>
+        <!-- 取引額 -->
+        <button
+          class="w-3/10 flex items-center justify-between"
+          @click="sort('amount')">
+          <span>取引額</span>
+          <SortOrderButtons :sort="sortOption('amount')" />
+        </button>
+        <!-- 取引相手 -->
+        <div class="w-4/10 flex h-full w-full items-center">
+          <div v-if="!isTargetSearchMode" class="w-full">
+            <button
+              class="flex h-full w-full items-center justify-between"
+              @click="changeIsTargetSearchMode">
+              <span>取引相手</span>
+              <MagnifyingGlassIcon class="h-4" />
+            </button>
+          </div>
+          <div v-else class="relative w-full">
+            <InputText
+              v-model="params.target"
+              class="w-full border-none"
+              type="text" />
+            <XMarkIcon
+              class="absolute right-2 top-2 h-4 cursor-pointer"
+              @click="changeIsTargetSearchMode" />
+          </div>
+        </div>
       </div>
-      <div v-else class="relative">
-        <InputText v-model="params.target" class="w-full" type="text" />
-        <XMarkIcon
-          class="absolute right-2 top-2 h-4 cursor-pointer"
-          @click="changeIsTargetSearchMode" />
-      </div>
+      <!-- グループ -->
+      <InputSelect
+        v-model="params.group"
+        class="!w-2/10"
+        :options="groupStore.groupOptions"
+        placeholder="取引グループ"
+        @close="'updateTransactions'" />
+      <!-- タグ -->
+      <InputSelect
+        v-model="params.tag"
+        class="!w-3/10"
+        is-multiple
+        :options="tagStore.tagOptions"
+        placeholder="タグ"
+        @close="'updateTransactions'" />
     </div>
-    <!-- グループ -->
-    <InputSelect
-      v-model="params.group"
-      class="!w-2/10"
-      :options="groupStore.groupOptions"
-      placeholder="取引グループ"
-      @close="'updateTransactions'" />
-    <!-- タグ -->
-    <InputSelect
-      v-model="params.tag"
-      class="!w-3/10"
-      is-multiple
-      :options="tagStore.tagOptions"
-      placeholder="タグ"
-      @close="'updateTransactions'" />
   </div>
 </template>
+
+<style scoped>
+.divider::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: #d4d4d8;
+  margin-top: 8px;
+}
+</style>

@@ -60,12 +60,11 @@ const backgroundColor = computed(() => (status: RequestStatus) => {
       status
     )}`"
     :title="statusToJpn(status)">
-    <CheckCircleIcon v-if="status === 'accepted'" class="w-6" />
-    <ExclamationTriangleIcon v-else-if="status === 'submitted'" class="w-6" />
-    <XCircleIcon v-else-if="status === 'fix_required'" class="w-6" />
-    <CloudArrowUpIcon v-else-if="status === 'rejected'" class="w-6" />
-    <HandThumbUpIcon v-else-if="status === 'completed'" class="w-6" />
-    <!-- todo:アイコン考える。別のアイコンライブラリ使うのもありかも -->
+    <CheckCircleIcon v-if="status === 'accepted'" class="w-8" />
+    <ExclamationTriangleIcon v-else-if="status === 'submitted'" class="w-8" />
+    <XCircleIcon v-else-if="status === 'fix_required'" class="w-8" />
+    <CloudArrowUpIcon v-else-if="status === 'rejected'" class="w-8" />
+    <HandThumbUpIcon v-else-if="status === 'completed'" class="w-8" />
     <span v-if="props.hasText">
       {{ statusToJpn(status) }}
     </span>

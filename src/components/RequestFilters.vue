@@ -8,9 +8,10 @@ import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-import InputSelect from '/@/components/shared/InputSelect.vue'
-import InputText from '/@/components/shared/InputText.vue'
 import { requestStatusOptions } from '/@/consts/consts'
+
+import InputSelect from './shared/InputSelect.vue'
+import InputText from './shared/InputText.vue'
 
 const requestStore = useRequestStore()
 const userStore = useUserStore()
@@ -50,13 +51,13 @@ function sortByCreatedAt() {
     <div>
       <InputText
         v-model="params.since"
-        class="w-28"
+        class="w-30 h-8"
         placeholder="yyyy-MM-dd"
         @blur="requestStore.fetchRequests(params)" />
       ～
       <InputText
         v-model="params.until"
-        class="w-28"
+        class="w-30 h-8"
         placeholder="yyyy-MM-dd"
         @blur="requestStore.fetchRequests(params)" />
     </div>

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import PageNavigations from './PageNavigations.vue'
+import PageNavigations from '/@/components/PageNavigations.vue'
 </script>
 
 <template>

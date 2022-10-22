@@ -18,14 +18,12 @@ const props = defineProps<Props>()
 </script>
 
 <template>
-  <div class="flex items-center">
-    <ArrowUpCircleIconSolid
-      v-if="props.sort === 'asc'"
-      class="h-5 cursor-pointer" />
-    <ArrowUpCircleIcon v-else class="h-5 cursor-pointer" />
-    <ArrowDownCircleIconSolid
-      v-if="props.sort === 'desc'"
-      class="h-5 cursor-pointer" />
-    <ArrowDownCircleIcon v-else class="h-5 cursor-pointer" />
-  </div>
+  <ArrowDownCircleIconSolid
+    v-if="props.sort === 'desc'"
+    class="h-5 cursor-pointer" />
+  <ArrowDownCircleIcon v-else class="h-5 cursor-pointer" />
+  <ArrowUpCircleIconSolid
+    v-if="props.sort === 'asc'"
+    class="h-5 cursor-pointer" />
+  <ArrowUpCircleIcon v-else class="h-5 cursor-pointer" />
 </template>

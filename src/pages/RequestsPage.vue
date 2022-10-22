@@ -9,8 +9,8 @@ import { useUserStore } from '/@/stores/user'
 
 import { toPage } from '/@/lib/parseQueryParams'
 
-import RequestFilters from '/@/components/requests/RequestFilters.vue'
-import RequestItem from '/@/components/requests/RequestItem.vue'
+import RequestFilters from '/@/components/RequestFilters.vue'
+import RequestItem from '/@/components/RequestItem.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 

@@ -92,7 +92,7 @@ if (requestId !== '') {
         </div>
       </div>
       <div class="flex flex-col">
-        <label>払い戻し対象者</label>
+        <label>払い戻し対象者：</label>
         <InputSelect
           v-model="transaction.targets"
           class="!w-2/3"
@@ -101,7 +101,7 @@ if (requestId !== '') {
           placeholder="払い戻し対象者を選択" />
       </div>
       <div class="flex flex-col">
-        <label>グループ</label>
+        <label>グループ：</label>
         <InputSelect
           v-model="transaction.group"
           class="!w-2/3"
@@ -109,7 +109,7 @@ if (requestId !== '') {
           placeholder="グループを選択" />
       </div>
       <div class="flex flex-col">
-        <label>タグ</label>
+        <label>タグ：</label>
         <InputSelectTagWithCreation v-model="transaction.tags" class="!w-2/3" />
       </div>
       <div class="text-right">

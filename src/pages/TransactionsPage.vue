@@ -2,24 +2,25 @@
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
+import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 import { useTransactionStore, defaultParams } from '/@/stores/transaction'
 import { useUserStore } from '/@/stores/user'
 
 import { toId, toPage } from '/@/lib/parseQueryParams'
 
-import TransactionFilters from '/@/components/TransactionFilters.vue'
-import TransactionItem from '/@/components/TransactionItem.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import TransactionFilters from '/@/components/transactions/TransactionFilters.vue'
+import TransactionItem from '/@/components/transactions/TransactionItem.vue'
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))
 
 const transactionStore = useTransactionStore()
 const userStore = useUserStore()
-
 const tagStore = useTagStore()
+const groupStore = useGroupStore()
 
 const sliceTransactionAt = (index: number, n: number) => {
   const start = (index - 1) * n
@@ -32,6 +33,9 @@ await transactionStore.fetchTransactions({
   request: toId(route.query.requestID)
 })
 
+if (!groupStore.isGroupFetched) {
+  await groupStore.fetchGroups()
+}
 if (!tagStore.isTagFetched) {
   await tagStore.fetchTags()
 }

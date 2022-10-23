@@ -3,12 +3,13 @@ import { Bars3Icon } from '@heroicons/vue/24/outline'
 
 import { useUserStore } from '/@/stores/user'
 
+import ModalWrapper from '/@/components/modal/ModalWrapper.vue'
+import { useModal } from '/@/components/modal/composables/useModal'
+import JomonLogo from '/@/components/shared/JomonLogo.vue'
+import UserIcon from '/@/components/shared/UserIcon.vue'
+
 import PageNavigations from './PageNavigations.vue'
 import SideDrawer from './SideDrawer.vue'
-import ModalWrapper from './modal/ModalWrapper.vue'
-import { useModal } from './modal/composables/useModal'
-import JomonLogo from './shared/JomonLogo.vue'
-import UserIcon from './shared/UserIcon.vue'
 
 const userStore = useUserStore()
 

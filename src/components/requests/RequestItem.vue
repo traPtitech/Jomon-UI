@@ -2,8 +2,8 @@
 import type { Request } from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
 
-import StatusChip from './shared/StatusChip.vue'
-import TagsGroup from './shared/TagsGroup.vue'
+import StatusChip from '/@/components/shared/StatusChip.vue'
+import TagsGroup from '/@/components/shared/TagsGroup.vue'
 
 interface Props {
   request: Request

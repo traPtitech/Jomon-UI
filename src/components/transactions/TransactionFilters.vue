@@ -80,7 +80,7 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
 
 <template>
   <div class="divider">
-    <div class="divide-x-1 children:px-2 flex h-8 px-4">
+    <div class="children:px-2 flex h-8 px-4">
       <!-- 年月日 -->
       <!-- todo:多分since,untilでの検索をつける -->
       <button
@@ -101,7 +101,7 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
       <div class="w-4/20 flex h-full w-full items-center">
         <div v-if="!isTargetSearchMode" class="w-full">
           <button
-            class="flex h-full w-full items-center justify-between"
+            class="flex w-full items-center justify-between"
             @click="changeIsTargetSearchMode">
             <span>取引相手</span>
             <MagnifyingGlassIcon class="mr-1 h-4" />

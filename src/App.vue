@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 
-import JomonHeader from './components/general/JomonHeader.vue'
+import JomonHeader from './components/navigation/JomonHeader.vue'
 import { useUserStore } from './stores/user'
 import './styles/toast.css'
 

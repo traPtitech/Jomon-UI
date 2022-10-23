@@ -16,7 +16,8 @@ import SortOrderButtons from './SortOrderButtons.vue'
 const transactionStore = useTransactionStore()
 const groupStore = useGroupStore()
 const tagStore = useTagStore()
-const isTargetSearchMode = ref(false)
+
+const isFilterByTarget = ref(false)
 
 const params = reactive<SearchTransactionParams>({
   sort: 'created_at',
@@ -29,11 +30,11 @@ const params = reactive<SearchTransactionParams>({
 })
 
 function changeIsTargetSearchMode() {
-  if (isTargetSearchMode.value) {
+  if (isFilterByTarget.value) {
     params.target = ''
-    isTargetSearchMode.value = false
+    isFilterByTarget.value = false
   } else {
-    isTargetSearchMode.value = true
+    isFilterByTarget.value = true
   }
 }
 function sort(sortKind: 'created_at' | 'amount') {
@@ -99,7 +100,7 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
       </button>
       <!-- 取引相手 -->
       <div class="w-4/20 flex h-full w-full items-center">
-        <div v-if="!isTargetSearchMode" class="w-full">
+        <div v-if="!isFilterByTarget" class="w-full">
           <button
             class="flex w-full items-center justify-between"
             @click="changeIsTargetSearchMode">

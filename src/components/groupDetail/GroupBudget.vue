@@ -24,9 +24,7 @@ const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
 </script>
 
 <template>
-  <div
-    v-if="!isEditMode && groupDetailStore.group"
-    class="flex items-center pb-2">
+  <div v-if="!isEditMode && groupDetailStore.group" class="flex items-center">
     予算：{{ groupDetailStore.group.budget }}円
     <EditButton
       v-if="hasAuthority"

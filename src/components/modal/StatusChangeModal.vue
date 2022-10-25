@@ -58,7 +58,7 @@ async function putStatus(nextStatus: RequestStatus, comment: string) {
 <template>
   <div
     v-if="request"
-    class="absolute inset-0 m-auto h-3/5 w-1/2 bg-white p-4 shadow-lg">
+    class="bg-background h-5/7 absolute inset-0 m-auto w-1/2 p-8 shadow-lg">
     <h1 class="text-center text-3xl">申請の状態変更</h1>
     <div class="mx-12 mt-8 flex flex-col justify-around gap-4">
       <div class="mb-4 flex items-center">

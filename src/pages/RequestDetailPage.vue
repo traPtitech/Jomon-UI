@@ -61,7 +61,7 @@ if (!tagStore.isTagFetched) {
           class="ml-2"
           :is-edit-mode="editMode === 'title'"
           @change-edit-mode="changeEditMode($event)" />
-        <div class="ml-2">
+        <div class="ml-12">
           <StatusChangeButtons />
         </div>
       </div>

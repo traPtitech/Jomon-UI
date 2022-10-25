@@ -14,7 +14,7 @@ const formattedDateAndTime = formatDateAndTime(props.log.created_at)
 </script>
 
 <template>
-  <div class="w-5/7 flex items-center pl-12">
+  <div class="flex w-full items-center pl-12 pr-2">
     <UserIcon class="mr-2 w-12" :name="log.created_by" />
     {{ log.created_by }}
     が申請の状態を

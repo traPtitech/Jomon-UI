@@ -50,7 +50,7 @@ function changeCurrentTab(tab: TabType) {
       <button
         :class="`w-20 rounded-t py-1 ${
           currentTab === 'input'
-            ? 'bg-background border-x border-t border-zinc-200'
+            ? 'border-x border-t border-zinc-200 bg-white'
             : 'bg-zinc-100'
         }`"
         @click.prevent="changeCurrentTab('input')">
@@ -59,7 +59,7 @@ function changeCurrentTab(tab: TabType) {
       <button
         :class="`w-20 rounded-t py-1 ${
           currentTab === 'preview'
-            ? 'bg-background border-x border-t border-zinc-200'
+            ? 'border-x border-t border-zinc-200 bg-white'
             : 'bg-zinc-100'
         }`"
         @click.prevent="changeCurrentTab('preview')">

@@ -43,18 +43,18 @@ function changeCurrentTab(tab: TabType) {
 </script>
 
 <template>
-  <div>
-    <div class="flex gap-2">
+  <div class="rounded border border-gray-200">
+    <div class="flex gap-2 rounded-t bg-gray-200 px-2 pt-2">
       <button
         :class="`w-20 rounded-t py-1 ${
-          currentTab === 'input' ? 'bg-gray-400 text-white' : 'bg-gray-200'
+          currentTab === 'input' ? 'bg-gray-100' : ''
         }`"
         @click.prevent="changeCurrentTab('input')">
         入力
       </button>
       <button
         :class="`w-20 rounded-t py-1 ${
-          currentTab === 'preview' ? 'bg-gray-400 text-white' : 'bg-gray-200'
+          currentTab === 'preview' ? 'bg-gray-100' : ''
         }`"
         @click.prevent="changeCurrentTab('preview')">
         プレビュー
@@ -68,7 +68,8 @@ function changeCurrentTab(tab: TabType) {
         @option:selected="setTemplate(selectedTemplate)">
       </InputSelect>
     </div>
-    <div>
+    <div class="bg-gray-100 p-2">
+      <!-- todo:入力モードだけ下の幅が微妙に広いのをどうにかする -->
       <InputTextarea
         v-if="currentTab === 'input'"
         class="min-h-40 w-full"
@@ -77,7 +78,7 @@ function changeCurrentTab(tab: TabType) {
         @update:model-value="emit('update:modelValue', $event)" />
       <MarkdownIt
         v-if="currentTab === 'preview'"
-        class="min-h-40 w-full overflow-y-scroll border border-gray-500 px-1"
+        class="min-h-40 bg-background w-full rounded border border-gray-300 px-1"
         :text="modelValue" />
     </div>
   </div>

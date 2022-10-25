@@ -80,7 +80,7 @@ if (!tagStore.isTagFetched) {
             @change-edit-mode="changeEditMode($event)" />
         </div>
       </div>
-      <div class="mt-4 flex">
+      <div class="mt-4 flex justify-between">
         <RequestContent
           :is-edit-mode="editMode === 'content'"
           @change-edit-mode="changeEditMode($event)" />

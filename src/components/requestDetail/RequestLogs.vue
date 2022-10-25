@@ -54,7 +54,7 @@ const logs = computed(() => {
 </script>
 
 <template>
-  <div v-if="request" class="h-120 overflow-y-scroll p-2">
+  <div v-if="request" class="p-2">
     <RequestFiles />
     <ul>
       <li
@@ -76,9 +76,9 @@ const logs = computed(() => {
 .vertical-bar::after {
   content: '';
   display: inline-block;
-  width: 4px;
+  width: 2px;
   height: 36px;
   background-color: #d4d4d8;
-  margin-left: 70px;
+  margin-left: 72px;
 }
 </style>

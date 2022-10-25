@@ -40,38 +40,33 @@ await fetchFiles(request.value?.files ?? [])
 </script>
 
 <template>
-  <div v-if="files.length > 0" class="mx-4 mt-4">
-    <details>
-      <summary>画像</summary>
-      <div class="flex flex-wrap">
-        <div
-          v-for="file in files"
-          :key="file.file"
-          class="not-first:ml-2 relative flex flex-col items-center">
-          <img
-            v-if="isImageByName(file.name)"
-            :alt="file.name"
-            :src="file.file" />
-          <DocumentIcon v-else class="h-32" />
-          <!--画像の色によっては見えづらい(新規作成画面も)-->
-          <button
-            class="absolute top-0 right-0 h-8 w-8"
-            @click="removeFile(file.id)">
-            <XCircleIcon />
-          </button>
-          <!--mockの場合は:href="file.file"、本番で動くか不明-->
-          {{ file.name }}
-          <SimpleButton
-            v-if="!isImageByName(file.name)"
-            font-size="sm"
-            padding="sm">
-            <a :download="file.name" :href="downloadLink(file.file)">
-              ダウンロード
-            </a>
-          </SimpleButton>
-        </div>
-      </div>
-    </details>
+  <div v-if="files.length > 0" class="mx-4 mt-4 flex flex-wrap gap-8">
+    <div
+      v-for="file in files"
+      :key="file.file"
+      class="relative flex w-60 flex-col items-center">
+      <img v-if="isImageByName(file.name)" :alt="file.name" :src="file.file" />
+      <DocumentIcon v-else class="h-32" />
+      <!--画像の色によっては見えづらい(新規作成画面も)-->
+
+      <p class="relative mt-2 flex items-center gap-2 break-all">
+        {{ file.name }}
+        <button
+          class="absolute -right-8 h-6 w-6 text-red-500 hover:text-red-300"
+          @click="removeFile(file.id)">
+          <XCircleIcon />
+        </button>
+      </p>
+      <!--mockの場合は:href="file.file"、本番で動くか不明-->
+      <SimpleButton
+        v-if="!isImageByName(file.name)"
+        font-size="sm"
+        padding="sm">
+        <a :download="file.name" :href="downloadLink(file.file)">
+          ダウンロード
+        </a>
+      </SimpleButton>
+    </div>
   </div>
   <div v-else class="text-center">(画像はありません)</div>
 </template>

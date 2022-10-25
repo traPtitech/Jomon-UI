@@ -68,7 +68,7 @@ function changeCurrentTab(tab: TabType) {
         @option:selected="setTemplate(selectedTemplate)">
       </InputSelect>
     </div>
-    <div class="bg-gray-100 p-2">
+    <div class="bg-gray-100 px-2 pt-2 pb-12">
       <!-- todo:入力モードだけ下の幅が微妙に広いのをどうにかする -->
       <InputTextarea
         v-if="currentTab === 'input'"

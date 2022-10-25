@@ -40,12 +40,11 @@ export const useRequestDetail = () => {
       editMode.value = kind
       return
     }
-    if (editMode.value !== 'tags') {
-      const result = confirm(
-        '入出金記録に紐づいている申請のこの情報を変更すると、入出金記録の情報にも変更が反映されます。よろしいですか？'
-      )
-      if (!result) return
-    }
+    const result = confirm(
+      '入出金記録に紐づいている申請のこの情報を変更すると、入出金記録の情報にも変更が反映されます。よろしいですか？'
+    )
+    if (!result) return
+
     if (request.value !== undefined) {
       await putRequest(request.value.id, requestDetailStore.editedValue)
     } else {

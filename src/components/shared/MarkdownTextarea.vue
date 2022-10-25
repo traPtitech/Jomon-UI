@@ -43,18 +43,24 @@ function changeCurrentTab(tab: TabType) {
 </script>
 
 <template>
-  <div class="rounded border border-gray-200">
-    <div class="flex gap-2 rounded-t bg-gray-200 px-2 pt-2">
+  <div class="rounded border border-zinc-200">
+    <div
+      class="flex gap-2 rounded-t border-b border-zinc-200 bg-zinc-100 px-2 pt-2">
+      <!-- todo:ボタンの下はborder消したい -->
       <button
         :class="`w-20 rounded-t py-1 ${
-          currentTab === 'input' ? 'bg-gray-100' : ''
+          currentTab === 'input'
+            ? 'bg-background border-x border-t border-zinc-200'
+            : 'bg-zinc-100'
         }`"
         @click.prevent="changeCurrentTab('input')">
         入力
       </button>
       <button
         :class="`w-20 rounded-t py-1 ${
-          currentTab === 'preview' ? 'bg-gray-100' : ''
+          currentTab === 'preview'
+            ? 'bg-background border-x border-t border-zinc-200'
+            : 'bg-zinc-100'
         }`"
         @click.prevent="changeCurrentTab('preview')">
         プレビュー
@@ -68,11 +74,11 @@ function changeCurrentTab(tab: TabType) {
         @option:selected="setTemplate(selectedTemplate)">
       </InputSelect>
     </div>
-    <div class="bg-gray-100 px-2 pt-2 pb-12">
+    <div class="px-2 pt-2 pb-12">
       <!-- todo:入力モードだけ下の幅が微妙に広いのをどうにかする -->
       <InputTextarea
         v-if="currentTab === 'input'"
-        class="min-h-40 w-full"
+        class="min-h-40 w-full bg-zinc-100"
         :model-value="modelValue"
         :placeholder="placeholder"
         @update:model-value="emit('update:modelValue', $event)" />

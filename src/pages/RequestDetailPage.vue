@@ -19,7 +19,7 @@ import RequestLogs from '/@/components/requestDetail/RequestLogs.vue'
 import RequestTags from '/@/components/requestDetail/RequestTags.vue'
 import RequestTargets from '/@/components/requestDetail/RequestTargets.vue'
 import RequestTitle from '/@/components/requestDetail/RequestTitle.vue'
-import StatusChangeButtons from '/@/components/requestDetail/StatusChangeButtons.vue'
+import StatusChangeForm from '/@/components/requestDetail/StatusChangeForm.vue'
 import ToTransactionButtons from '/@/components/requestDetail/ToTransactionButtons.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
 
@@ -62,7 +62,7 @@ if (!tagStore.isTagFetched) {
           :is-edit-mode="editMode === 'title'"
           @change-edit-mode="changeEditMode($event)" />
         <div class="ml-12">
-          <StatusChangeButtons />
+          <StatusChangeForm />
         </div>
       </div>
       <div class="mt-4 flex justify-between">

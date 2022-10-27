@@ -3,6 +3,12 @@ import type { StatusEnum } from '/@/lib/apis'
 import clubBudgetRequestTemplate from '/@/md/clubBudgetRequest.md?raw'
 import travelingExpenseRequestTemplate from '/@/md/travelingExpenseRequest.md?raw'
 
+export type RequestStatus = typeof StatusEnum[keyof typeof StatusEnum]
+export interface RequestStatusInterface {
+  key: string
+  value: RequestStatus
+}
+
 export const requestStatuses = [
   { state: 'submitted', jpn: '承認待ち' },
   { state: 'rejected', jpn: '却下' },
@@ -10,7 +16,10 @@ export const requestStatuses = [
   { state: 'accepted', jpn: '承認済み' },
   { state: 'fully_repaid', jpn: '返済完了' }
 ] as const
-
+export const stateToJpn = (state: RequestStatus | 'error') => {
+  const status = requestStatuses.find(s => s.state === state)?.jpn
+  return status ?? 'エラー'
+}
 export const requestStatusOptions = () => {
   return (
     requestStatuses.map(requestStatus => {
@@ -29,5 +38,3 @@ export const requestTemplates = [
 
 const requestTemplateNames = requestTemplates.map(v => v.name)
 export type RequestTemplate = typeof requestTemplateNames[number]
-
-export type RequestStatus = typeof StatusEnum[keyof typeof StatusEnum]

@@ -1,12 +1,14 @@
 <script lang="ts" setup>
+import { DateTime } from 'luxon'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
+import type { Transaction } from '/@/stores/transaction'
 
-import type { Tag, Transaction } from '/@/lib/apis'
+import type { Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
 import { toId } from '/@/lib/parsePathParams'
@@ -56,8 +58,13 @@ async function handlePutTransaction() {
     tags: tags.map(tag => tag.id)
   }
   try {
-    const res = (await apis.putTransactionDetail(id, transaction)).data
-    emit('edited', res)
+    const response = (await apis.putTransactionDetail(id, transaction)).data
+    const nextTransaction = {
+      ...response,
+      created_at: DateTime.fromISO(response.created_at),
+      updated_at: DateTime.fromISO(response.updated_at)
+    }
+    emit('edited', nextTransaction)
   } catch {
     toast.error('入出金記録の修正に失敗しました')
     emit('edited', undefined)

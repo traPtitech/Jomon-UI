@@ -1,13 +1,15 @@
 <script lang="ts" setup>
+import { DateTime } from 'luxon/src/luxon'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
+import type { Transaction } from '/@/stores/transaction'
 import { useUserStore } from '/@/stores/user'
 
-import type { PostTransactionWithOneTarget, Transaction } from '/@/lib/apis'
+import type { PostTransactionWithOneTarget } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
 import { toId } from '/@/lib/parsePathParams'
@@ -28,6 +30,10 @@ const isEditMode = ref(false)
 
 const transaction = ref<Transaction>()
 
+const formattedDate = formatDate(
+  transaction.value?.created_at ?? DateTime.fromISO('')
+)
+
 const editedValue = ref<PostTransactionWithOneTarget>({
   amount: 0,
   target: '',
@@ -38,13 +44,19 @@ const editedValue = ref<PostTransactionWithOneTarget>({
 
 const fetchTransaction = async (id: string) => {
   try {
-    transaction.value = (await apis.getTransactionDetail(id)).data
+    const response = (await apis.getTransactionDetail(id)).data
+    transaction.value = {
+      ...response,
+      created_at: DateTime.fromISO(response.created_at),
+      updated_at: DateTime.fromISO(response.updated_at)
+    }
+
     editedValue.value = {
-      amount: transaction.value.amount,
-      target: transaction.value.target,
-      request: transaction.value.request,
-      tags: transaction.value.tags.map(tag => tag.id),
-      group: transaction.value.group.id
+      amount: response.amount,
+      target: response.target,
+      request: response.request,
+      tags: response.tags.map(tag => tag.id),
+      group: response.group.id
     }
   } catch {
     toast.error('入出金記録の取得に失敗しました')
@@ -87,7 +99,7 @@ if (!groupStore.isGroupFetched) {
       </SimpleButton>
     </div>
     <ul v-if="!isEditMode" class="mb-4 space-y-2">
-      <li>年月日：{{ formatDate(transaction.created_at) }}</li>
+      <li>年月日：{{ formattedDate }}</li>
       <li>取引額：{{ transaction.amount }}円</li>
       <li>取引相手：{{ transaction.target }}</li>
       <li>取引グループ：{{ transaction.group.name }}</li>

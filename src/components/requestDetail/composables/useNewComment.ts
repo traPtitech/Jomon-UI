@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
@@ -24,10 +25,15 @@ export const useNewComment = (requestId: string) => {
           comment: comment.value
         })
       ).data
+      const newComment = {
+        ...response,
+        created_at: DateTime.fromISO(response.created_at),
+        updated_at: DateTime.fromISO(response.updated_at)
+      }
       comment.value = ''
       isSending.value = false
       toast.success('コメントを送信しました')
-      requestDetailStore.request?.comments.push(response)
+      requestDetailStore.request?.comments.push(newComment)
     } catch {
       isSending.value = false
       toast.error('コメントの送信に失敗しました')

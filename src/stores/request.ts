@@ -41,7 +41,6 @@ export const useRequestStore = defineStore('request', () => {
 
   const fetchRequests = async (params: SearchRequestParams = defaultParams) => {
     const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
-    // todo:luxonでいい感じにバリデーションできそう
     if (
       (params.since && !rule.test(params.since)) ||
       (params.until && !rule.test(params.until))

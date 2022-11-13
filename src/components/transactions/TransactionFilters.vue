@@ -25,7 +25,7 @@ const params = reactive<SearchTransactionParams>({
   since: '',
   until: '',
   group: '',
-  tag: [],
+  tags: [],
   request: ''
 })
 
@@ -128,7 +128,7 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
         @close="'updateTransactions'" />
       <!-- タグ -->
       <InputSelect
-        v-model="params.tag"
+        v-model="params.tags"
         class="!w-3/10"
         is-multiple
         :options="tagStore.tagOptions"

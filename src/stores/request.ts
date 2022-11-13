@@ -68,6 +68,7 @@ export const useRequestStore = defineStore('request', () => {
           updated_at: DateTime.fromISO(request.updated_at)
         }
       })
+      isRequestFetched.value = true
     } catch {
       toast.error('申請の取得に失敗しました')
     }

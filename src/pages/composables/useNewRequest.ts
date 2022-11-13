@@ -1,3 +1,4 @@
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
@@ -30,6 +31,8 @@ export const useNewRequest = () => {
   const requestStore = useRequestStore()
   const userStore = useUserStore()
   const tagStore = useTagStore()
+
+  const { requests } = storeToRefs(requestStore)
 
   const request = ref<RequestRequest>({
     created_by: userStore.me?.name ?? '',
@@ -69,10 +72,10 @@ export const useNewRequest = () => {
     try {
       const response: Request = (await apis.postRequest(requestRequest)).data
       const id = response.id
-      if (requestStore.requests) {
-        requestStore.requests.unshift(response)
+      if (requests.value) {
+        requests.value.unshift(response)
       } else {
-        requestStore.requests = [response]
+        requests.value = [response]
       }
       try {
         files.value.forEach((file: FileRequest) => {

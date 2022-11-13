@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
+import { storeToRefs } from 'pinia'
 import { reactive } from 'vue'
 
 import { useGroupStore } from '/@/stores/group'
@@ -17,6 +18,9 @@ const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 
+const { fetchRequests } = requestStore
+const { requests } = storeToRefs(requestStore)
+
 const params = reactive<SearchRequestParams>({
   sort: 'created_at',
   currentStatus: '',
@@ -33,7 +37,7 @@ function sortByCreatedAt() {
   } else {
     params.sort = 'created_at'
   }
-  requestStore.fetchRequests(params)
+  fetchRequests(params)
 }
 </script>
 
@@ -52,40 +56,38 @@ function sortByCreatedAt() {
         v-model="params.since"
         class="w-28"
         placeholder="yyyy-MM-dd"
-        @blur="requestStore.fetchRequests(params)" />
+        @blur="fetchRequests(params)" />
       ～
       <InputText
         v-model="params.until"
         class="w-28"
         placeholder="yyyy-MM-dd"
-        @blur="requestStore.fetchRequests(params)" />
+        @blur="fetchRequests(params)" />
     </div>
     <InputSelect
       v-model="params.target"
       :options="userStore.userOptions"
       placeholder="申請者"
-      @close="requestStore.fetchRequests(params)" />
+      @close="fetchRequests(params)" />
     <InputSelect
       v-model="params.currentStatus"
       :options="requestStatusOptions()"
       placeholder="申請の状態"
-      @close="requestStore.fetchRequests(params)" />
+      @close="fetchRequests(params)" />
     <InputSelect
       v-model="params.group"
       :options="groupStore.groupOptions"
       placeholder="グループ"
-      @close="requestStore.fetchRequests(params)" />
+      @close="fetchRequests(params)" />
     <InputSelect
       v-model="params.tags"
       is-multiple
       :options="tagStore.tagOptions"
       placeholder="タグ"
-      @close="requestStore.fetchRequests(params)" />
+      @close="fetchRequests(params)" />
   </div>
-  <span
-    v-if="requestStore.requests && requestStore.requests.length !== 0"
-    class="ml-1/8">
-    {{ requestStore.requests.length }}件取得しました
+  <span v-if="requests && requests.length !== 0" class="ml-1/8">
+    {{ requests.length }}件取得しました
   </span>
   <span v-else class="ml-1/8"> 条件に一致する申請は見つかりませんでした </span>
 </template>

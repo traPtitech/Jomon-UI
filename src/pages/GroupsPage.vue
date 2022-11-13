@@ -1,6 +1,7 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
 import { useUserStore } from '/@/stores/user'
@@ -16,6 +17,8 @@ const page = ref(toPage(route.query.page))
 
 const groupStore = useGroupStore()
 const userStore = useUserStore()
+
+const { groups } = storeToRefs(groupStore)
 
 const sliceGroupsAt = (index: number, n: number) => {
   const start = (index - 1) * n
@@ -41,11 +44,11 @@ watch(
       <div class="relative flex w-full items-center justify-center py-8">
         <h1 class="text-center text-3xl">グループ一覧</h1>
         <div v-if="userStore.isAdmin()" class="absolute right-0">
-          <router-link to="/groups/new">
+          <RouterLink to="/groups/new">
             <SimpleButton font-size="lg" padding="md">
               グループの新規作成
             </SimpleButton>
-          </router-link>
+          </RouterLink>
         </div>
       </div>
 
@@ -63,11 +66,11 @@ watch(
         </ul>
       </div>
       <PaginationBar
-        v-if="groupStore.groups"
+        v-if="groups"
         class="mt-4"
         :current-page="page"
         path="/groups"
-        :total-pages="Math.ceil(groupStore.groups.length / 10)" />
+        :total-pages="Math.ceil(groups.length / 10)" />
     </div>
   </div>
 </template>

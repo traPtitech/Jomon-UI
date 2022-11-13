@@ -1,3 +1,4 @@
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import { useGroupDetailStore } from '/@/stores/groupDetail'
@@ -6,6 +7,8 @@ export type EditMode = 'name' | 'description' | 'budget' | ''
 
 export const useGroupInformation = () => {
   const groupDetailStore = useGroupDetailStore()
+
+  const { group, editedValue } = storeToRefs(groupDetailStore)
 
   const isSending = ref(false)
 
@@ -17,11 +20,11 @@ export const useGroupInformation = () => {
     } else {
       isSending.value = true
       const value = {
-        name: groupDetailStore.editedValue.name,
-        description: groupDetailStore.editedValue.description,
-        budget: Number(groupDetailStore.editedValue.budget)
+        name: editedValue.value.name,
+        description: editedValue.value.description,
+        budget: Number(editedValue.value.budget)
       }
-      await groupDetailStore.putGroup(groupDetailStore.group?.id ?? '', value)
+      await groupDetailStore.putGroup(group.value?.id ?? '', value)
       editMode.value = ''
       isSending.value = false
     }

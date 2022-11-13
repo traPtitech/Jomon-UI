@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { DateTime } from 'luxon/src/luxon'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
@@ -30,8 +30,8 @@ const isEditMode = ref(false)
 
 const transaction = ref<Transaction>()
 
-const formattedDate = formatDate(
-  transaction.value?.created_at ?? DateTime.fromISO('')
+const formattedDate = computed(() =>
+  formatDate(transaction.value?.created_at ?? DateTime.fromISO(''))
 )
 
 const editedValue = ref<PostTransactionWithOneTarget>({

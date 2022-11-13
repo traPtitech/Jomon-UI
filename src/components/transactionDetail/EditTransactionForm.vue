@@ -35,6 +35,8 @@ const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const toast = useToast()
 
+const formattedDate = formatDate(props.transaction.created_at)
+
 const editedValue = ref({
   amount: props.transaction.amount,
   target: props.transaction.target,
@@ -82,7 +84,7 @@ async function handlePutTransaction() {
 
 <template>
   <form class="mb-4 space-y-2">
-    <div>年月日：{{ formatDate(transaction.created_at) }}</div>
+    <div>年月日：{{ formattedDate }}</div>
     <div>
       取引額：
       <InputNumber

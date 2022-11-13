@@ -1,22 +1,20 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { reactive } from 'vue'
 import { useRoute } from 'vue-router'
-import { useToast } from 'vue-toastification'
 
 import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-import type { Tag } from '/@/lib/apis'
-import apis from '/@/lib/apis'
 import { toId } from '/@/lib/parseQueryParams'
 
 import InputNumber from '/@/components/shared/InputNumber.vue'
 import InputSelect from '/@/components/shared/InputSelect.vue'
 import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+
+import { useNewTransaction } from './composables/useNewTransaction'
 
 const route = useRoute()
 const requestId = toId(route.query.requestID) //requestIDには申請の詳細画面から新規作成ページに移動するときだけIDを渡す
@@ -25,39 +23,9 @@ const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const requestDetailStore = useRequestDetailStore()
-const toast = useToast()
 
-const { request, targetIds } = storeToRefs(requestDetailStore)
-const transaction = reactive({
-  amount: requestId && request.value ? request.value.amount : 0,
-  targets: requestId ? targetIds : [],
-  request: requestId,
-  tags: requestId && request.value ? request.value.tags : [],
-  group: requestId && request.value ? request.value.group.id : ''
-})
-async function postTransaction() {
-  if (transaction.targets.length === 0) {
-    toast.warning('払い戻し対象者は必須です')
-    return
-  }
-  let tags: Tag[]
-  try {
-    tags = await tagStore.createTagIfNotExist(transaction.tags)
-  } catch {
-    return
-  }
-  const transactionRequest = {
-    ...transaction,
-    tags: tags.map(tag => tag.id)
-  }
-  try {
-    await apis.postTransaction(transactionRequest)
-  } catch {
-    toast.error('入出金記録の作成に失敗しました')
-    return
-  }
-  toast.success('入出金記録の作成に成功しました')
-}
+const { request } = storeToRefs(requestDetailStore)
+const { transaction, postTransaction } = useNewTransaction(requestId)
 
 if (!groupStore.isGroupFetched) {
   await groupStore.fetchGroups()

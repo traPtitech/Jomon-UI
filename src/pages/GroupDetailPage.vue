@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
-import { useRoute } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { RouterLink, useRoute } from 'vue-router'
 
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
@@ -22,6 +23,8 @@ const id = toId(route.params.id)
 const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
 
+const { group } = storeToRefs(groupDetailStore)
+
 const { isSending, editMode, changeEditMode } = useGroupInformation()
 
 const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
@@ -34,9 +37,7 @@ if (!userStore.isUserFetched) {
 </script>
 
 <template>
-  <div
-    v-if="groupDetailStore.group !== undefined"
-    class="min-w-96 mx-auto h-full w-4/5 pt-4">
+  <div v-if="group !== undefined" class="min-w-96 mx-auto h-full w-4/5 pt-4">
     <div class="flex h-12 justify-between">
       <GroupName
         class="flex-grow"
@@ -55,12 +56,12 @@ if (!userStore.isUserFetched) {
           :is-edit-mode="editMode === 'budget'"
           :is-sending="isSending"
           @change-edit-mode="changeEditMode($event)" />
-        <router-link
+        <RouterLink
           class="mt-4 flex w-fit items-center"
-          :to="`/transactions?group=${groupDetailStore.group.id}`">
+          :to="`/transactions?group=${group.id}`">
           このグループの入出金記録へ
           <ArrowTopRightOnSquareIcon class="ml-1 w-6" />
-        </router-link>
+        </RouterLink>
         <div class="text-right">
           <SimpleButton
             v-if="hasAuthority"
@@ -69,7 +70,7 @@ if (!userStore.isUserFetched) {
             :is-disabled="isDeleting"
             kind="danger"
             padding="sm"
-            @click.stop="deleteGroup(groupDetailStore.group?.id ?? '')">
+            @click.stop="deleteGroup(group?.id ?? '')">
             グループを削除
           </SimpleButton>
         </div>

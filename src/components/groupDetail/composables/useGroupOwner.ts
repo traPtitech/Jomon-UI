@@ -1,3 +1,4 @@
+import { storeToRefs } from 'pinia'
 import { ref, computed } from 'vue'
 import { useToast } from 'vue-toastification'
 
@@ -8,15 +9,17 @@ import apis from '/@/lib/apis'
 
 export const useGroupOwner = () => {
   const groupDetailStore = useGroupDetailStore()
-  const { users } = useUserStore()
   const toast = useToast()
 
+  const { users } = storeToRefs(useUserStore())
+  const { group } = storeToRefs(groupDetailStore)
+
   const absentOwnerOptions = computed(() => {
-    if (users === undefined) {
+    if (users.value === undefined) {
       return []
     }
-    return users
-      .filter(user => !groupDetailStore.group?.owners.includes(user.name))
+    return users.value
+      .filter(user => !group.value?.owners.includes(user.name))
       .map(user => {
         return {
           key: user.name,
@@ -28,17 +31,17 @@ export const useGroupOwner = () => {
   const isSending = ref(false)
 
   const addOwners = async (ownersToBeAdded: string[]) => {
-    if (ownersToBeAdded.length === 0 || groupDetailStore.group === undefined) {
+    if (ownersToBeAdded.length === 0 || group.value === undefined) {
       return
     }
     try {
       isSending.value = true
-      await apis.postGroupOwners(groupDetailStore.group.id, ownersToBeAdded)
+      await apis.postGroupOwners(group.value.id, ownersToBeAdded)
       const nextGroup = {
-        ...groupDetailStore.group,
-        owners: [...groupDetailStore.group.owners, ...ownersToBeAdded]
+        ...group.value,
+        owners: [...group.value.owners, ...ownersToBeAdded]
       }
-      groupDetailStore.group = nextGroup
+      group.value = nextGroup
       toast.success('オーナーを追加しました')
     } catch {
       toast.error('グループオーナーの追加に失敗しました')
@@ -47,17 +50,17 @@ export const useGroupOwner = () => {
     }
   }
   const removeOwner = async (id: string) => {
-    if (groupDetailStore.group === undefined) {
+    if (group.value === undefined) {
       return
     }
     try {
       isSending.value = true
-      await apis.deleteGroupOwners(groupDetailStore.group.id, [id])
+      await apis.deleteGroupOwners(group.value.id, [id])
       const nextGroup = {
-        ...groupDetailStore.group,
-        owners: groupDetailStore.group.owners.filter(owner => owner !== id)
+        ...group.value,
+        owners: group.value.owners.filter(owner => owner !== id)
       }
-      groupDetailStore.group = nextGroup
+      group.value = nextGroup
       toast.success('オーナーを削除しました')
     } catch {
       toast.error('グループオーナーの削除に失敗しました')

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { MinusIcon, PlusIcon } from '@heroicons/vue/24/outline'
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import { useGroupDetailStore } from '/@/stores/groupDetail'
@@ -13,6 +14,8 @@ import { useGroupMember } from './composables/useGroupMember'
 const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
 
+const { group } = storeToRefs(groupDetailStore)
+
 const MembersToBeAdded = ref<string[]>([])
 const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
 const { absentMemberOptions, isSending, addMembers, removeMember } =
@@ -21,12 +24,12 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
 
 <template>
   <div
-    v-if="groupDetailStore.group"
+    v-if="group"
     class="relative flex h-2/5 flex-col justify-between border border-gray-300">
     <p class="bg-background absolute -top-3 left-2 px-2">グループメンバー</p>
     <ul class="h-full p-4">
       <li
-        v-for="member in groupDetailStore.group.members"
+        v-for="member in group.members"
         :key="member"
         class="not-first:mt-2 flex items-center justify-between">
         <div class="flex items-center">

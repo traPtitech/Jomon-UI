@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
+
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
 
@@ -18,16 +20,17 @@ const emit = defineEmits<{
 
 const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
+const { group, editedValue } = storeToRefs(groupDetailStore)
 
 const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
 </script>
 
 <template>
-  <div v-if="groupDetailStore.group">
+  <div v-if="group">
     <p>詳細</p>
     <div v-if="!isEditMode" class="flex w-full">
       <p class="h-32 w-4/5 rounded border border-gray-300 pl-1">
-        {{ groupDetailStore.group.description }}
+        {{ group.description }}
       </p>
       <div class="flex items-end">
         <SimpleButton
@@ -42,7 +45,7 @@ const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
     </div>
     <div v-else class="flex w-full">
       <InputTextarea
-        v-model="groupDetailStore.editedValue.description"
+        v-model="editedValue.description"
         class="w-4/5"
         placeholder="詳細" />
       <div class="flex items-end">

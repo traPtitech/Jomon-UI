@@ -1,6 +1,7 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
@@ -22,10 +23,12 @@ const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 
+const { transactions } = storeToRefs(transactionStore)
+
 const sliceTransactionAt = (index: number, n: number) => {
   const start = (index - 1) * n
   const end = index * n
-  return transactionStore.transactions?.slice(start, end)
+  return transactions.value?.slice(start, end)
 }
 
 await transactionStore.fetchTransactions({
@@ -54,26 +57,22 @@ watch(
       <div class="relative flex w-full items-center justify-center pt-8 pb-4">
         <h1 class="text-center text-3xl">入出金記録</h1>
         <div v-if="userStore.isAdmin()" class="absolute right-0">
-          <router-link to="/transactions/new">
+          <RouterLink to="/transactions/new">
             <SimpleButton font-size="lg" padding="md">
               新規入出金記録作成
             </SimpleButton>
-          </router-link>
+          </RouterLink>
         </div>
       </div>
       <div class="min-h-128">
         <div class="mb-2">
-          <span
-            v-if="
-              transactionStore.transactions &&
-              transactionStore.transactions.length !== 0
-            ">
-            {{ transactionStore.transactions?.length }}件取得しました
+          <span v-if="transactions && transactions.length !== 0">
+            {{ transactions?.length }}件取得しました
           </span>
           <span v-else>条件に一致する申請は見つかりませんでした</span>
         </div>
         <TransactionFilters />
-        <ul v-if="transactionStore.transactions" class="mt-2 divide-y">
+        <ul v-if="transactions" class="mt-2 divide-y">
           <li
             v-for="transaction in sliceTransactionAt(page, 10)"
             :key="transaction.id">
@@ -82,14 +81,11 @@ watch(
         </ul>
         <div v-else>loading...</div>
         <PaginationBar
-          v-if="
-            transactionStore.transactions &&
-            transactionStore.transactions.length > 0
-          "
+          v-if="transactions && transactions.length > 0"
           class="my-4"
           :current-page="page"
           path="/transactions"
-          :total-pages="Math.ceil(transactionStore.transactions.length / 10)" />
+          :total-pages="Math.ceil(transactions.length / 10)" />
       </div>
     </div>
   </div>

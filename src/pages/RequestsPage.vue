@@ -1,6 +1,7 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
 import { useRequestStore } from '/@/stores/request'
@@ -21,6 +22,8 @@ const requestStore = useRequestStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const userStore = useUserStore()
+
+const { requests } = storeToRefs(requestStore)
 
 const sliceRequestsAt = (index: number, n: number) => {
   const start = (index - 1) * n
@@ -54,11 +57,11 @@ watch(
     <div class="relative flex w-full items-center justify-center pb-8">
       <h1 class="text-center text-3xl">申請一覧</h1>
       <div class="absolute right-0">
-        <router-link to="/requests/new">
+        <RouterLink to="/requests/new">
           <SimpleButton font-size="lg" padding="md">
             申請の新規作成
           </SimpleButton>
-        </router-link>
+        </RouterLink>
       </div>
     </div>
   </div>
@@ -76,9 +79,9 @@ watch(
     </div>
   </div>
   <PaginationBar
-    v-if="requestStore.requests"
+    v-if="requests"
     class="mt-4"
     :current-page="page"
     path="/requests"
-    :total-pages="Math.ceil(requestStore.requests.length / 7)" />
+    :total-pages="Math.ceil(requests.length / 7)" />
 </template>

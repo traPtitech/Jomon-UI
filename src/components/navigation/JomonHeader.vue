@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { Bars3Icon } from '@heroicons/vue/24/outline'
+import { storeToRefs } from 'pinia'
+import { RouterLink } from 'vue-router'
 
 import { useUserStore } from '/@/stores/user'
 
@@ -12,6 +14,8 @@ import PageNavigations from './PageNavigations.vue'
 import SideDrawer from './SideDrawer.vue'
 
 const userStore = useUserStore()
+
+const { me } = storeToRefs(userStore)
 
 const { shouldShowModal, openModal, closeModal } = useModal()
 
@@ -31,12 +35,12 @@ const handleOpenDrawer = () => {
     <button class="flex items-center md:hidden" @click="handleOpenDrawer">
       <Bars3Icon class="h-8 w-8" />
     </button>
-    <router-link to="/">
+    <RouterLink to="/">
       <JomonLogo />
-    </router-link>
+    </RouterLink>
     <div class="flex h-full flex-1 justify-between px-2">
       <PageNavigations class="invisible md:visible" />
-      <UserIcon v-if="userStore.me !== undefined" :name="userStore.me.name" />
+      <UserIcon v-if="me !== undefined" :name="me.name" />
     </div>
   </header>
   <!--遷移時にドロワーを閉じるようにするためにドロワーコンポーネント内でwrapperを使うことになりそう？-->

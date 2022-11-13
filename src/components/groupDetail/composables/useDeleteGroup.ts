@@ -1,3 +1,4 @@
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
@@ -12,6 +13,8 @@ export const useDeleteGroup = () => {
   const groupStore = useGroupStore()
   const toast = useToast()
 
+  const { groups } = storeToRefs(groupStore)
+
   const isDeleting = ref(false)
 
   const deleteGroup = async (id: string) => {
@@ -21,8 +24,8 @@ export const useDeleteGroup = () => {
     try {
       isDeleting.value = true
       await apis.deleteGroup(id)
-      if (groupStore.groups !== undefined) {
-        groupStore.groups = groupStore.groups.filter(group => group.id !== id)
+      if (groups.value !== undefined) {
+        groups.value = groups.value.filter(group => group.id !== id)
         router.push('/group')
       } else {
         throw new Error('group does not exist')

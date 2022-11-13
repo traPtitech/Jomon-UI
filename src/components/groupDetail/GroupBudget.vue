@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
+
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
 
@@ -20,12 +22,14 @@ const emit = defineEmits<{
 const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
 
+const { group, editedValue } = storeToRefs(groupDetailStore)
+
 const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
 </script>
 
 <template>
-  <div v-if="!isEditMode && groupDetailStore.group" class="flex items-center">
-    予算：{{ groupDetailStore.group.budget }}円
+  <div v-if="!isEditMode && group" class="flex items-center">
+    予算：{{ group.budget }}円
     <EditButton
       v-if="hasAuthority"
       class="ml-1"
@@ -34,7 +38,7 @@ const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
   <div v-else class="flex items-center">
     予算：
     <InputNumber
-      v-model="groupDetailStore.editedValue.budget"
+      v-model="editedValue.budget"
       class="mr-1 w-24"
       :min="1"
       placeholder="金額" />円

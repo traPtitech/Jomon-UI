@@ -3,7 +3,6 @@ import { useToast } from 'vue-toastification'
 
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
-import type { Comment } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export const useNewComment = (requestId: string) => {
@@ -18,10 +17,9 @@ export const useNewComment = (requestId: string) => {
       toast.warning('1文字以上入力してください')
       return
     }
-    let response: Comment
     try {
       isSending.value = true
-      response = (
+      const response = (
         await apis.postComment(requestId, {
           comment: comment.value
         })

@@ -37,6 +37,7 @@ export const useGroupDetailStore = defineStore('groupDetail', () => {
         description: nextGroup.description,
         budget: nextGroup.budget
       }
+      group.value = nextGroup
       toast.success('グループを修正しました')
     } catch {
       toast.error('グループの更新に失敗しました')

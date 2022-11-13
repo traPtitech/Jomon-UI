@@ -1,8 +1,9 @@
+import { DateTime } from 'luxon'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import type { Request } from '/@/lib/apis'
+import type { Request as APIRequest } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 import type { RequestStatus } from '/@/consts/consts'
@@ -27,6 +28,11 @@ const defaultParams: SearchRequestParams = {
   group: ''
 }
 
+export interface Request extends Omit<APIRequest, 'created_at' | 'updated_at'> {
+  created_at: DateTime
+  updated_at: DateTime
+}
+
 export const useRequestStore = defineStore('request', () => {
   const toast = useToast()
 
@@ -35,7 +41,7 @@ export const useRequestStore = defineStore('request', () => {
 
   const fetchRequests = async (params: SearchRequestParams = defaultParams) => {
     const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
-    // todo:date型を使うようにすればバリデーションが不要になりそう
+    // todo:luxonでいい感じにバリデーションできそう
     if (
       (params.since && !rule.test(params.since)) ||
       (params.until && !rule.test(params.until))
@@ -44,7 +50,7 @@ export const useRequestStore = defineStore('request', () => {
       return
     }
     try {
-      requests.value = (
+      const response = (
         await apis.getRequests(
           params.sort,
           params.currentStatus as RequestStatus,
@@ -55,6 +61,13 @@ export const useRequestStore = defineStore('request', () => {
           params.group
         )
       ).data
+      requests.value = response.map((request: APIRequest) => {
+        return {
+          ...request,
+          created_at: DateTime.fromISO(request.created_at),
+          updated_at: DateTime.fromISO(request.updated_at)
+        }
+      })
     } catch {
       toast.error('申請の取得に失敗しました')
     }

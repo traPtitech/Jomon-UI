@@ -8,14 +8,7 @@ import { useTagStore } from '/@/stores/tag'
 import type { Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
-export type EditMode =
-  | 'title'
-  | 'content'
-  | 'amount'
-  | 'group'
-  | 'tags'
-  | 'targets'
-  | ''
+export type EditMode = 'update' | 'cancel' | 'edit'
 
 export interface EditedValue {
   title: string
@@ -33,15 +26,18 @@ export const useRequestDetail = () => {
   const tagStore = useTagStore()
   const { request } = storeToRefs(requestDetailStore)
 
-  const editMode = ref<EditMode>('')
+  const isEditMode = ref(false)
 
-  const changeEditMode = async (kind: EditMode) => {
-    if (kind !== '') {
-      editMode.value = kind
+  const changeEditMode = async (editMode: EditMode) => {
+    if (editMode === 'edit') {
+      isEditMode.value = true
+      return
+    } else if (editMode === 'cancel') {
+      isEditMode.value = false
       return
     }
     const result = confirm(
-      '入出金記録に紐づいている申請のこの情報を変更すると、入出金記録の情報にも変更が反映されます。よろしいですか？'
+      '入出金記録に紐づいている申請の情報を変更すると、入出金記録の情報にも変更が反映されます。よろしいですか？'
     )
     if (!result) return
 
@@ -50,7 +46,7 @@ export const useRequestDetail = () => {
     } else {
       toast.error('申請の修正に失敗しました')
     }
-    editMode.value = ''
+    isEditMode.value = false
   }
 
   const putRequest = async (id: string, willPutRequest: EditedValue) => {
@@ -74,7 +70,7 @@ export const useRequestDetail = () => {
     }
   }
   return {
-    editMode,
+    isEditMode,
     changeEditMode
   }
 }

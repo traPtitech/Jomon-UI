@@ -10,11 +10,9 @@ import { useUserStore } from '/@/stores/user'
 import { toId } from '/@/lib/parseQueryParams'
 
 import NewComment from '/@/components/requestDetail/NewComment.vue'
-import RequestAmount from '/@/components/requestDetail/RequestAmount.vue'
-import RequestGroup from '/@/components/requestDetail/RequestGroup.vue'
+import RequestDetail from '/@/components/requestDetail/RequestDetail.vue'
+import RequestDetailEdit from '/@/components/requestDetail/RequestDetailEdit.vue'
 import RequestLogs from '/@/components/requestDetail/RequestLogs.vue'
-import RequestTags from '/@/components/requestDetail/RequestTags.vue'
-import RequestTargets from '/@/components/requestDetail/RequestTargets.vue'
 import RequestTitle from '/@/components/requestDetail/RequestTitle.vue'
 //import StatusChangeForm from '/@/components/requestDetail/StatusChangeForm.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
@@ -29,7 +27,7 @@ const userStore = useUserStore()
 const groupStore = useGroupStore()
 const tagStore = useTagStore()
 
-const { editMode, changeEditMode } = useRequestDetail()
+const { isEditMode, changeEditMode } = useRequestDetail()
 const { request } = storeToRefs(requestDetailStore)
 
 await requestDetailStore.fetchRequestDetail(id)
@@ -52,34 +50,14 @@ if (!tagStore.isTagFetched) {
         <!-- todo:StatusChangeFormを置く -->
         <RequestTitle
           class="ml-2"
-          :is-edit-mode="editMode === 'title'"
+          :is-edit-mode="isEditMode"
           @change-edit-mode="changeEditMode($event)" />
       </div>
-      <div class="mt-2 flex justify-between">
-        <RequestGroup
-          :is-edit-mode="editMode === 'group'"
-          @change-edit-mode="changeEditMode($event)" />
-        <RequestAmount
-          :is-edit-mode="editMode === 'amount'"
-          @change-edit-mode="changeEditMode($event)" />
-      </div>
-      <div class="mt-2 flex justify-between">
-        <RequestTags
-          class="mt-2"
-          :is-edit-mode="editMode === 'tags'"
-          @change-edit-mode="changeEditMode($event)" />
-      </div>
-      <div class="mt-2 flex justify-between">
-        <RequestTargets
-          :is-edit-mode="editMode === 'targets'"
-          @change-edit-mode="changeEditMode($event)" />
-      </div>
+      <RequestDetail v-if="!isEditMode" />
+      <RequestDetailEdit v-else @change-edit-mode="changeEditMode($event)" />
     </div>
     <div>
-      <RequestLogs
-        class="w-3/4"
-        :edit-mode="editMode"
-        @change-edit-mode="changeEditMode($event)" />
+      <RequestLogs class="w-3/4" />
       <NewComment class="mb-12" />
     </div>
   </div>

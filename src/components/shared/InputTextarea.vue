@@ -17,7 +17,7 @@ function handleInput(value: string) {
 
 <template>
   <textarea
-    class="bg-background min-h-32 rounded border border-gray-300 px-1"
+    class="bg-background min-h-40 rounded border border-gray-300 px-1"
     :placeholder="props.placeholder"
     :required="required"
     :value="props.modelValue"

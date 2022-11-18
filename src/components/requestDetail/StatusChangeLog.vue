@@ -14,14 +14,16 @@ const formattedDateAndTime = formatDateAndTime(props.log.created_at)
 </script>
 
 <template>
-  <div class="flex w-full items-center pl-12 pr-2">
-    <UserIcon class="mr-1 w-12" :name="log.created_by" />
-    {{ log.created_by }}
-    が申請の状態を
-    <StatusChip class="mx-2" has-text :status="log.status" />
-    にしました。
-    <div class="ml-auto">
-      {{ formattedDateAndTime }}
+  <div class="flex w-full items-center justify-between pl-12 pr-2">
+    <div class="flex items-center">
+      <UserIcon class="mr-1 w-12" :name="log.created_by" />
+      {{ log.created_by }}
+      が申請の状態を
+      <StatusChip class="mx-2" has-text :status="log.status" />
+      にしました。
     </div>
+    <p class="mr-2">
+      {{ formattedDateAndTime }}
+    </p>
   </div>
 </template>

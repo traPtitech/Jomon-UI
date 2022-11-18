@@ -20,9 +20,9 @@ const formattedDateAndTime = formatDateAndTime(props.comment.created_at)
     <div class="w-full pl-1">
       <div class="flex h-12 items-center justify-between">
         {{ comment.user }}がコメントしました。
-        <span>
+        <p class="mr-2">
           {{ formattedDateAndTime }}
-        </span>
+        </p>
       </div>
       <MarkdownIt class="border border-zinc-300 p-1" :text="comment.comment" />
     </div>

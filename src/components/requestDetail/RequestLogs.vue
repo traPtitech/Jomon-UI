@@ -8,7 +8,6 @@ import { formatDateAndTime } from '/@/lib/date'
 
 import RequestContent from '/@/components/requestDetail/RequestContent.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
-import type { EditMode } from '/@/pages/composables/useRequestDetail'
 
 import CommentLog from './CommentLog.vue'
 import RequestFiles from './RequestFiles.vue'
@@ -21,15 +20,6 @@ interface Log {
   kind: LogKind
   index: number
 }
-
-interface Props {
-  editMode: EditMode
-}
-
-defineProps<Props>()
-const emit = defineEmits<{
-  (e: 'changeEditMode', value: EditMode): void
-}>()
 
 const requestDetailStore = useRequestDetailStore()
 
@@ -72,7 +62,7 @@ const logs = computed(() => {
 </script>
 
 <template>
-  <div v-if="request" class="p-2">
+  <div v-if="request">
     <RequestFiles />
     <ul>
       <li class="flex p-2">
@@ -80,13 +70,11 @@ const logs = computed(() => {
         <div class="w-full pl-1">
           <div class="flex h-12 items-center justify-between">
             {{ request.created_by }}がこの申請を作成しました。
-            <span>
+            <p class="mr-2">
               {{ formattedDateAndTime }}
-            </span>
+            </p>
           </div>
-          <RequestContent
-            :is-edit-mode="editMode === 'content'"
-            @change-edit-mode="emit('changeEditMode', $event)" />
+          <RequestContent />
         </div>
       </li>
       <li

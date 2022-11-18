@@ -68,5 +68,4 @@ await fetchFiles(request.value?.files ?? [])
       </SimpleButton>
     </div>
   </div>
-  <div v-else class="text-center">(画像はありません)</div>
 </template>

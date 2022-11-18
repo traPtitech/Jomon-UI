@@ -13,17 +13,17 @@ const { request } = storeToRefs(requestDetailStore)
 </script>
 
 <template>
-  <div class="px-1/6 flex flex-col items-center gap-4 py-8">
+  <div class="py-8">
     <router-link
       v-if="userStore.isAdmin()"
-      class="w-full"
+      class=""
       :to="`/transactions/new?requestID=${request?.id}`">
-      <SimpleButton class="w-full" font-size="md" padding="sm">
+      <SimpleButton font-size="md" padding="sm">
         この申請から入出金記録を作成する
       </SimpleButton>
     </router-link>
-    <router-link class="w-full" :to="`/transactions?requestID=${request?.id}`">
-      <SimpleButton class="w-full" font-size="md" padding="sm">
+    <router-link :to="`/transactions?requestID=${request?.id}`">
+      <SimpleButton font-size="md" padding="sm">
         この申請の入出金記録へ移動
       </SimpleButton>
     </router-link>

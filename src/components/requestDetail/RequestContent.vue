@@ -27,28 +27,27 @@ const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
 </script>
 
 <template>
-  <div class="flex w-1/2">
-    詳細：
-    <div v-if="!props.isEditMode && request" class="flex flex-grow items-end">
+  <div class="flex">
+    <div v-if="!props.isEditMode && request" class="relative flex flex-grow">
       <MarkdownIt
         class="flex-grow border border-gray-300 pl-1"
         :text="request.content" />
       <SimpleButton
         v-if="hasAuthority"
-        class="ml-2"
+        class="absolute -right-16"
         font-size="sm"
         padding="sm"
         @click="emit('changeEditMode', 'content')">
         編集
       </SimpleButton>
     </div>
-    <div v-else class="flex flex-grow items-end">
+    <div v-else class="relative flex flex-grow">
       <InputTextarea
         v-model="editedValue.content"
         class="flex-grow resize-none"
         placeholder="詳細" />
       <SimpleButton
-        class="ml-2"
+        class="absolute -right-16"
         font-size="sm"
         padding="sm"
         @click.stop="emit('changeEditMode', '')">

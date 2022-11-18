@@ -17,7 +17,7 @@ const formattedDateAndTime = formatDateAndTime(props.comment.created_at)
 <template>
   <div class="flex w-full p-2">
     <UserIcon class="w-12" :name="comment.user" />
-    <div class="w-full pl-2">
+    <div class="w-full pl-1">
       <div class="flex h-12 items-center justify-between">
         {{ comment.user }}がコメントしました。
         <span>

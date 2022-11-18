@@ -13,7 +13,7 @@ const { comment, isSending, submit } = useNewComment(request.value?.id ?? '')
 </script>
 
 <template>
-  <form class="relative mx-4 w-full">
+  <form class="relative w-3/4">
     <MarkdownTextarea v-model="comment" placeholder="コメント" />
     <SimpleButton
       class="absolute right-4 bottom-2"

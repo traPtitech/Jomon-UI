@@ -63,7 +63,7 @@ if (userStore.me && userStore.me.admin) {
         </li>
       </ul>
     </div>
-    <div class="mt-4 flex gap-4">
+    <div class="mt-8 flex gap-4">
       <InputSelect
         v-model="addList"
         class="!w-1/2"

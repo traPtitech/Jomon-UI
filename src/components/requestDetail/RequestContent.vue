@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+import { useToast } from 'vue-toastification'
 
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
@@ -8,17 +9,29 @@ import { useUserStore } from '/@/stores/user'
 import InputTextarea from '/@/components/shared/InputTextarea.vue'
 import MarkdownIt from '/@/components/shared/MarkdownIt.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import { useRequestDetail } from '/@/pages/composables/useRequestDetail'
 
+const toast = useToast()
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
 
 const { request, editedValue } = storeToRefs(requestDetailStore)
+const { putRequest } = useRequestDetail()
 
 const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
 const isEditMode = ref(false)
 
-function changeEditMode() {
-  isEditMode.value = !isEditMode.value
+async function changeEditMode() {
+  if (!isEditMode.value) {
+    isEditMode.value = true
+    return
+  }
+  if (request.value !== undefined) {
+    await putRequest(request.value.id, requestDetailStore.editedValue)
+  } else {
+    toast.error('申請の修正に失敗しました')
+  }
+  isEditMode.value = false
 }
 </script>
 

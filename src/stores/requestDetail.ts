@@ -31,7 +31,6 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     return targetIds
   })
 
-  const editMode = ref('')
   const editedValue = ref<EditedValue>({
     created_by: '',
     amount: 0,
@@ -75,7 +74,6 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   return {
     request,
     targetIds,
-    editMode,
     editedValue,
     isRequestCreater,
     fetchRequestDetail,

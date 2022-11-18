@@ -71,6 +71,7 @@ export const useRequestDetail = () => {
   }
   return {
     isEditMode,
-    changeEditMode
+    changeEditMode,
+    putRequest
   }
 }

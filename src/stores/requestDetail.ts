@@ -44,6 +44,10 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     if (!user || request.value === undefined) return false
     return user.name === request.value.created_by
   }
+  const canChangeStatus = (user: User | undefined) => {
+    if (!user || request.value === undefined) return false
+    return user.name === request.value.created_by || user.admin
+  }
 
   const fetchRequestDetail = async (id: string) => {
     try {
@@ -76,6 +80,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
     targetIds,
     editedValue,
     isRequestCreater,
+    canChangeStatus,
     fetchRequestDetail,
     putRequest
   }

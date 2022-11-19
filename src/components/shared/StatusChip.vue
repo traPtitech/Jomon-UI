@@ -84,6 +84,9 @@ const handleToggleSelectMenu = () => {
       </span>
       <ChevronDownIcon v-if="props.hasSelectMenu" class="ml-1 w-4" />
     </button>
-    <StatusSelectMenu v-if="isSelectMenuOpen" class="absolute right-2 top-8" />
+    <StatusSelectMenu
+      class="absolute right-2 top-8"
+      :should-menu-open="isSelectMenuOpen"
+      @close-menu="handleToggleSelectMenu" />
   </div>
 </template>

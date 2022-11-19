@@ -10,6 +10,14 @@ import StatusChangeModal from '/@/components/modal/StatusChangeModal.vue'
 import { useModal } from '/@/components/modal/composables/useModal'
 import type { RequestStatus, RequestStatusInterface } from '/@/consts/consts'
 
+interface Props {
+  shouldMenuOpen: boolean
+}
+const props = withDefaults(defineProps<Props>(), { shouldMenuOpen: false })
+const emit = defineEmits<{
+  (e: 'closeMenu'): void
+}>()
+
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
 
@@ -51,13 +59,16 @@ const showToRejected =
 const handleOpenModal = (status: RequestStatus) => {
   nextStatus.value = status
   openModal()
+  emit('closeMenu')
 }
 //todo:ContextMenuと同様、外側クリックで閉じる
 </script>
 
 <template>
   <div>
-    <ul class="text-primary rounded-md border bg-white p-2">
+    <ul
+      v-if="props.shouldMenuOpen"
+      class="text-primary rounded-md border bg-white p-2">
       <li
         v-for="status in statusOptions"
         :key="status.key"

@@ -4,19 +4,23 @@ import {
   CloudArrowUpIcon,
   ExclamationTriangleIcon,
   XCircleIcon,
-  CheckCircleIcon
+  CheckCircleIcon,
+  ChevronDownIcon
 } from '@heroicons/vue/24/solid'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
+import StatusSelectMenu from '/@/components/requestDetail/StatusSelectMenu.vue'
 import type { RequestStatus } from '/@/consts/consts'
 
 interface Props {
   status: RequestStatus
   hasText?: boolean
+  hasSelectMenu?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  hasText: false
+  hasText: false,
+  hasSelectMenu: false
 })
 
 const statusToJpn = computed(() => (status: RequestStatus) => {
@@ -52,22 +56,34 @@ const backgroundColor = computed(() => (status: RequestStatus) => {
       return 'bg-gray-400'
   }
 })
+
+const isSelectMenuOpen = ref(false)
+const handleToggleSelectMenu = () => {
+  if (!props.hasSelectMenu) return
+  isSelectMenuOpen.value = !isSelectMenuOpen.value
+}
 </script>
 
 <template>
   <div
-    :class="`inline flex items-center rounded-full p-2 text-white ${backgroundColor(
+    :class="`relative inline rounded-full p-2 text-white ${backgroundColor(
       status
     )}`"
     :title="statusToJpn(status)">
-    <CheckCircleIcon v-if="status === 'accepted'" class="w-6" />
-    <ExclamationTriangleIcon v-else-if="status === 'submitted'" class="w-6" />
-    <XCircleIcon v-else-if="status === 'fix_required'" class="w-6" />
-    <CloudArrowUpIcon v-else-if="status === 'rejected'" class="w-6" />
-    <HandThumbUpIcon v-else-if="status === 'completed'" class="w-6" />
-    <!-- todo:アイコン考える。別のアイコンライブラリ使うのもありかも -->
-    <span v-if="props.hasText">
-      {{ statusToJpn(status) }}
-    </span>
+    <button
+      :class="`flex items-center ${!props.hasSelectMenu && 'cursor-default'}`"
+      @click="handleToggleSelectMenu">
+      <CheckCircleIcon v-if="status === 'accepted'" class="w-6" />
+      <ExclamationTriangleIcon v-else-if="status === 'submitted'" class="w-6" />
+      <XCircleIcon v-else-if="status === 'fix_required'" class="w-6" />
+      <CloudArrowUpIcon v-else-if="status === 'rejected'" class="w-6" />
+      <HandThumbUpIcon v-else-if="status === 'completed'" class="w-6" />
+      <!-- todo:アイコン考える。別のアイコンライブラリ使うのもありかも -->
+      <span v-if="props.hasText">
+        {{ statusToJpn(status) }}
+      </span>
+      <ChevronDownIcon v-if="props.hasSelectMenu" class="ml-1 w-4" />
+    </button>
+    <StatusSelectMenu v-if="isSelectMenuOpen" class="absolute right-2 top-8" />
   </div>
 </template>

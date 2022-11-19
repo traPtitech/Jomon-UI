@@ -54,7 +54,7 @@ if (!tagStore.isTagFetched) {
   <div v-if="request !== undefined" class="min-w-100 mx-auto w-4/5 px-12 pt-4">
     <div class="bottom-bar">
       <div class="relative flex items-center justify-between">
-        <StatusChip has-text :status="request.status" />
+        <StatusChip has-select-menu has-text :status="request.status" />
         <!-- todo:StatusChangeFormを置く -->
         <RequestTitle
           class="ml-2"

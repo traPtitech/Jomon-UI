@@ -1,5 +1,7 @@
 <script lang="ts" setup>
+import { EllipsisHorizontalIcon } from '@heroicons/vue/24/solid'
 import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
@@ -9,6 +11,7 @@ import { useUserStore } from '/@/stores/user'
 
 import { toId } from '/@/lib/parseQueryParams'
 
+import ContextMenu from '/@/components/requestDetail/ContextMenu.vue'
 import NewComment from '/@/components/requestDetail/NewComment.vue'
 import RequestDetail from '/@/components/requestDetail/RequestDetail.vue'
 import RequestDetailEdit from '/@/components/requestDetail/RequestDetailEdit.vue'
@@ -30,6 +33,11 @@ const tagStore = useTagStore()
 const { isEditMode, changeEditMode } = useRequestDetail()
 const { request } = storeToRefs(requestDetailStore)
 
+const isContextMenuOpen = ref(false)
+const handleToggleContextMenu = () => {
+  isContextMenuOpen.value = !isContextMenuOpen.value
+}
+
 await requestDetailStore.fetchRequestDetail(id)
 if (!groupStore.isGroupFetched) {
   await groupStore.fetchGroups()
@@ -45,13 +53,21 @@ if (!tagStore.isTagFetched) {
 <template>
   <div v-if="request !== undefined" class="min-w-100 mx-auto w-4/5 px-12 pt-4">
     <div class="bottom-bar">
-      <div class="flex items-center justify-between">
+      <div class="relative flex items-center justify-between">
         <StatusChip has-text :status="request.status" />
         <!-- todo:StatusChangeFormを置く -->
         <RequestTitle
           class="ml-2"
           :is-edit-mode="isEditMode"
           @change-edit-mode="changeEditMode($event)" />
+        <button v-if="!isEditMode" @click="handleToggleContextMenu">
+          <EllipsisHorizontalIcon class="w-10" />
+        </button>
+        <ContextMenu
+          v-if="isContextMenuOpen"
+          class="absolute right-6 top-6"
+          @change-edit-mode="changeEditMode($event)"
+          @close-menu="isContextMenuOpen = false" />
       </div>
       <RequestDetail v-if="!isEditMode" />
       <RequestDetailEdit v-else @change-edit-mode="changeEditMode($event)" />

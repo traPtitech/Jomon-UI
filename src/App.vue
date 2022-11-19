@@ -28,6 +28,8 @@ onMounted(async () => {
       </template>
     </router-view>
   </main>
+  <!--以下がteleportされている-->
+  <!--<ModalWrapper />-->
 </template>
 
 <style>

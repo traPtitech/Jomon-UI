@@ -9,6 +9,8 @@ import { useTransactionStore } from '/@/stores/transaction'
 import type { Tag, Transaction } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
+export type MoneyDirection = 'plus' | 'minus'
+
 export const useNewTransaction = (requestId: string) => {
   const toast = useToast()
   const transactionStore = useTransactionStore()
@@ -25,6 +27,7 @@ export const useNewTransaction = (requestId: string) => {
     tags: requestId && request.value ? request.value.tags : [],
     group: requestId && request.value ? request.value.group.id : ''
   })
+  const moneyDirection = ref<MoneyDirection>('plus')
 
   async function postTransaction() {
     if (transaction.value.targets.length === 0) {
@@ -36,6 +39,9 @@ export const useNewTransaction = (requestId: string) => {
       tags = await tagStore.createTagIfNotExist(transaction.value.tags)
     } catch {
       return
+    }
+    if (moneyDirection.value === 'minus') {
+      transaction.value.amount = -transaction.value.amount
     }
     const transactionRequest = {
       ...transaction.value,
@@ -57,5 +63,5 @@ export const useNewTransaction = (requestId: string) => {
     toast.success('入出金記録の作成に成功しました')
   }
 
-  return { transaction, postTransaction }
+  return { transaction, moneyDirection, postTransaction }
 }

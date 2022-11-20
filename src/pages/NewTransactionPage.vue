@@ -10,6 +10,7 @@ import { useUserStore } from '/@/stores/user'
 import { toId } from '/@/lib/parseQueryParams'
 
 import InputNumber from '/@/components/shared/InputNumber.vue'
+import InputRadioButton from '/@/components/shared/InputRadioButton.vue'
 import InputSelect from '/@/components/shared/InputSelect.vue'
 import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
@@ -25,7 +26,19 @@ const groupStore = useGroupStore()
 const requestDetailStore = useRequestDetailStore()
 
 const { request } = storeToRefs(requestDetailStore)
-const { transaction, postTransaction } = useNewTransaction(requestId)
+const { transaction, moneyDirection, postTransaction } =
+  useNewTransaction(requestId)
+
+const directionOptions = [
+  {
+    key: 'traPへ入金',
+    value: 'plus'
+  },
+  {
+    key: 'traPから出金',
+    value: 'minus'
+  }
+]
 
 if (!groupStore.isGroupFetched) {
   await groupStore.fetchGroups()
@@ -58,6 +71,12 @@ if (requestId !== '') {
         <div>
           <InputNumber v-model="transaction.amount" class="mr-1" :min="1" />円
         </div>
+      </div>
+      <div class="flex flex-col">
+        <label>お金の方向</label>
+        <InputRadioButton
+          v-model="moneyDirection"
+          :options="directionOptions" />
       </div>
       <div class="flex flex-col">
         <label>払い戻し対象者</label>

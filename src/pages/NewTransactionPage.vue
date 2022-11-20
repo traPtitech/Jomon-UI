@@ -79,13 +79,13 @@ if (requestId !== '') {
           :options="directionOptions" />
       </div>
       <div class="flex flex-col">
-        <label>払い戻し対象者</label>
+        <label>取引相手</label>
         <InputSelect
           v-model="transaction.targets"
           class="!w-2/3"
           is-multiple
           :options="userStore.userOptions"
-          placeholder="払い戻し対象者を選択" />
+          placeholder="取引相手を選択" />
       </div>
       <div class="flex flex-col">
         <label>グループ</label>

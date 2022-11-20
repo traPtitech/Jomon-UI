@@ -78,7 +78,7 @@ if (!groupStore.isGroupFetched) {
     <div class="flex items-center pb-4">
       <h1 class="text-3xl">取引記録の詳細</h1>
       <SimpleButton
-        v-if="userStore.isAdmin() && !transaction.request && !isEditMode"
+        v-if="userStore.isAdmin() && transaction.request && !isEditMode"
         class="ml-2"
         font-size="sm"
         padding="sm"
@@ -88,7 +88,7 @@ if (!groupStore.isGroupFetched) {
     </div>
     <ul v-if="!isEditMode" class="mb-4 space-y-2">
       <li>年月日：{{ formatDate(transaction.created_at) }}</li>
-      <li>取引額：{{ transaction.amount }}円</li>
+      <li>取引額：{{ Math.abs(transaction.amount) }}円</li>
       <li>取引相手：{{ transaction.target }}</li>
       <li>取引グループ：{{ transaction.group.name }}</li>
       <li>タグ：<TagsGroup :tags="transaction.tags" /></li>

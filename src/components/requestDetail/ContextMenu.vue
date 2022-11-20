@@ -30,10 +30,8 @@ const toggleEditMode = () => {
         編集
       </button>
     </li>
-    <li v-if="hasAuthority" class="p-1 hover:bg-zinc-100">
-      <RouterLink
-        v-if="userStore.isAdmin()"
-        :to="`/transactions/new?requestID=${request?.id}`">
+    <li v-if="userStore.isAdmin()" class="p-1 hover:bg-zinc-100">
+      <RouterLink :to="`/transactions/new?requestID=${request?.id}`">
         この申請から入出金記録を作成する
       </RouterLink>
     </li>

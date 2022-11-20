@@ -29,7 +29,7 @@ const { absentOwnerOptions, isSending, addOwners, removeOwner } =
         v-for="owner in groupDetailStore.group.owners"
         :key="owner"
         class="not-first:mt-2 flex items-center justify-between">
-        <div class="items-cente flex">
+        <div class="flex items-center">
           <UserIcon class="w-12" :name="owner" />
           <p class="mx-1 break-all">{{ owner }}</p>
         </div>

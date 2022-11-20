@@ -78,6 +78,9 @@ const handleOpenModal = (status: RequestStatus) => {
           {{ status.key }}
         </button>
       </li>
+      <li v-if="statusOptions.length === 0">
+        現在変更可能な状態はありません。
+      </li>
     </ul>
     <ModalWrapper v-if="shouldShowModal" @close-modal="closeModal">
       <StatusChangeModal

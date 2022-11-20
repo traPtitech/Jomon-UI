@@ -82,6 +82,7 @@ if (!userStore.isUserFetched) {
         <SimpleButton
           class="mb-4"
           font-size="xl"
+          kind="success"
           padding="md"
           @click.stop="postRequest">
           申請を作成する

@@ -19,6 +19,7 @@ const { comment, isSending, submit } = useNewComment(request.value?.id ?? '')
       class="absolute right-4 bottom-2"
       font-size="md"
       :is-disabled="isSending"
+      kind="success"
       padding="sm"
       @click.prevent="submit">
       コメントする

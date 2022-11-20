@@ -116,6 +116,7 @@ if (requestId !== '') {
         <SimpleButton
           class="mb-4 w-64"
           font-size="xl"
+          kind="success"
           padding="sm"
           @click.stop="postTransaction">
           入出金記録を作成する

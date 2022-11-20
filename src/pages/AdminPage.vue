@@ -73,6 +73,7 @@ if (userStore.me && userStore.me.admin) {
       <SimpleButton
         font-size="lg"
         :is-disabled="isSending"
+        kind="success"
         padding="sm"
         @click.stop="addAdmins(addList)">
         選択した管理者を追加
@@ -88,6 +89,7 @@ if (userStore.me && userStore.me.admin) {
       <SimpleButton
         font-size="lg"
         :is-disabled="isSending"
+        kind="success"
         padding="sm"
         @click.stop="removeAdmins(removeList)">
         選択した管理者を削除
@@ -100,7 +102,11 @@ if (userStore.me && userStore.me.admin) {
         is-multiple
         :options="tagStore.tagOptions"
         placeholder="削除するタグを選択" />
-      <SimpleButton font-size="lg" padding="sm" @click.stop="deleteTags">
+      <SimpleButton
+        font-size="lg"
+        kind="danger"
+        padding="sm"
+        @click.stop="deleteTags">
         選択したタグを削除
       </SimpleButton>
     </div>

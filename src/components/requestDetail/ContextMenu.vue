@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { RouterLink } from 'vue-router'
+
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
@@ -19,28 +21,26 @@ const toggleEditMode = () => {
   emit('closeMenu')
   emit('changeEditMode', 'edit')
 }
-//todo:メニューの外側クリックでも閉じるように
-//wrapper用意してそこで状態保持がよさそう
 </script>
 
 <template>
-  <ul class="rounded-md border bg-white p-2">
+  <ul class="rounded-md border bg-white p-2" @click.stop="">
     <li v-if="hasAuthority" class="p-1 hover:bg-zinc-100">
       <button class="h-full w-full text-left" @click="toggleEditMode">
         編集
       </button>
     </li>
     <li v-if="hasAuthority" class="p-1 hover:bg-zinc-100">
-      <router-link
+      <RouterLink
         v-if="userStore.isAdmin()"
         :to="`/transactions/new?requestID=${request?.id}`">
         この申請から入出金記録を作成する
-      </router-link>
+      </RouterLink>
     </li>
     <li class="p-1 hover:bg-zinc-100">
-      <router-link :to="`/transactions?requestID=${request?.id}`">
+      <RouterLink :to="`/transactions?requestID=${request?.id}`">
         この申請の入出金記録へ移動
-      </router-link>
+      </RouterLink>
     </li>
   </ul>
 </template>

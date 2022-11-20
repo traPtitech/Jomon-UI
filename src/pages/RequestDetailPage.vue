@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { EllipsisHorizontalIcon } from '@heroicons/vue/24/solid'
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
+import { useContextMenuStore } from '/@/stores/contextMenu'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
@@ -17,7 +17,6 @@ import RequestDetail from '/@/components/requestDetail/RequestDetail.vue'
 import RequestDetailEdit from '/@/components/requestDetail/RequestDetailEdit.vue'
 import RequestLogs from '/@/components/requestDetail/RequestLogs.vue'
 import RequestTitle from '/@/components/requestDetail/RequestTitle.vue'
-//import StatusChangeForm from '/@/components/requestDetail/StatusChangeForm.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
 
 import { useRequestDetail } from './composables/useRequestDetail'
@@ -31,12 +30,11 @@ const groupStore = useGroupStore()
 const tagStore = useTagStore()
 
 const { isEditMode, changeEditMode } = useRequestDetail()
-const { request } = storeToRefs(requestDetailStore)
+const contextMenuStore = useContextMenuStore()
 
-const isContextMenuOpen = ref(false)
-const handleToggleContextMenu = () => {
-  isContextMenuOpen.value = !isContextMenuOpen.value
-}
+const { handleOpenContextMenu, handleCloseContextMenu } = contextMenuStore
+const { contextMenuState } = storeToRefs(contextMenuStore)
+const { request } = storeToRefs(requestDetailStore)
 
 await requestDetailStore.fetchRequestDetail(id)
 if (!groupStore.isGroupFetched) {
@@ -58,19 +56,20 @@ if (!tagStore.isTagFetched) {
           :has-select-menu="requestDetailStore.canChangeStatus(userStore.me)"
           has-text
           :status="request.status" />
-        <!-- todo:StatusChangeFormを置く -->
         <RequestTitle
           class="ml-2"
           :is-edit-mode="isEditMode"
           @change-edit-mode="changeEditMode($event)" />
-        <button v-if="!isEditMode" @click="handleToggleContextMenu">
+        <button
+          v-if="!isEditMode"
+          @click.stop="handleOpenContextMenu('requestDetail')">
           <EllipsisHorizontalIcon class="w-10" />
         </button>
         <ContextMenu
-          v-if="isContextMenuOpen"
+          v-if="contextMenuState === 'requestDetail'"
           class="absolute right-6 top-6"
           @change-edit-mode="changeEditMode($event)"
-          @close-menu="isContextMenuOpen = false" />
+          @close-menu="handleCloseContextMenu" />
       </div>
       <RequestDetail v-if="!isEditMode" />
       <RequestDetailEdit v-else @change-edit-mode="changeEditMode($event)" />

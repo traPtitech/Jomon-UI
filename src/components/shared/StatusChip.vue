@@ -7,7 +7,10 @@ import {
   CheckCircleIcon,
   ChevronDownIcon
 } from '@heroicons/vue/24/solid'
-import { computed, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
+
+import { useContextMenuStore } from '/@/stores/contextMenu'
 
 import StatusSelectMenu from '/@/components/requestDetail/StatusSelectMenu.vue'
 import type { RequestStatus } from '/@/consts/consts'
@@ -22,6 +25,10 @@ const props = withDefaults(defineProps<Props>(), {
   hasText: false,
   hasSelectMenu: false
 })
+
+const contextMenuStore = useContextMenuStore()
+const { contextMenuState } = storeToRefs(contextMenuStore)
+const { handleOpenContextMenu, handleCloseContextMenu } = contextMenuStore
 
 const statusToJpn = computed(() => (status: RequestStatus) => {
   switch (status) {
@@ -56,12 +63,6 @@ const backgroundColor = computed(() => (status: RequestStatus) => {
       return 'bg-gray-400'
   }
 })
-
-const isSelectMenuOpen = ref(false)
-const handleToggleSelectMenu = () => {
-  if (!props.hasSelectMenu) return
-  isSelectMenuOpen.value = !isSelectMenuOpen.value
-}
 </script>
 
 <template>
@@ -72,7 +73,7 @@ const handleToggleSelectMenu = () => {
     :title="statusToJpn(status)">
     <button
       :class="`flex items-center ${!props.hasSelectMenu && 'cursor-default'}`"
-      @click="handleToggleSelectMenu">
+      @click.stop="handleOpenContextMenu('statusChange')">
       <CheckCircleIcon v-if="status === 'accepted'" class="w-6" />
       <ExclamationTriangleIcon v-else-if="status === 'submitted'" class="w-6" />
       <XCircleIcon v-else-if="status === 'fix_required'" class="w-6" />
@@ -86,7 +87,7 @@ const handleToggleSelectMenu = () => {
     </button>
     <StatusSelectMenu
       class="absolute right-2 top-8"
-      :should-menu-open="isSelectMenuOpen"
-      @close-menu="handleToggleSelectMenu" />
+      :should-menu-open="contextMenuState === 'statusChange'"
+      @close-menu="handleCloseContextMenu" />
   </div>
 </template>

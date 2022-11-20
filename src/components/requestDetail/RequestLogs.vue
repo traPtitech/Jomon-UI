@@ -63,7 +63,6 @@ const logs = computed(() => {
 
 <template>
   <div v-if="request">
-    <RequestFiles />
     <ul>
       <li class="flex p-2">
         <UserIcon class="w-12" :name="request.created_by" />
@@ -75,6 +74,7 @@ const logs = computed(() => {
             </p>
           </div>
           <RequestContent />
+          <RequestFiles />
         </div>
       </li>
       <li

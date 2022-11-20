@@ -11,7 +11,7 @@ import { useModal } from '/@/components/modal/composables/useModal'
 import type { RequestStatus, RequestStatusInterface } from '/@/consts/consts'
 
 interface Props {
-  shouldMenuOpen: boolean
+  shouldMenuOpen?: boolean
 }
 const props = withDefaults(defineProps<Props>(), { shouldMenuOpen: false })
 const emit = defineEmits<{
@@ -61,11 +61,10 @@ const handleOpenModal = (status: RequestStatus) => {
   openModal()
   emit('closeMenu')
 }
-//todo:ContextMenuと同様、外側クリックで閉じる
 </script>
 
 <template>
-  <div>
+  <div @click.stop="">
     <ul
       v-if="props.shouldMenuOpen"
       class="text-primary rounded-md border bg-white p-2">

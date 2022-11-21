@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
+import { useRouter, RouterView } from 'vue-router'
 
 import { useContextMenuStore } from '/@/stores/contextMenu'
 
@@ -7,8 +8,13 @@ import JomonHeader from './components/navigation/JomonHeader.vue'
 import { useUserStore } from './stores/user'
 import './styles/toast.css'
 
+const router = useRouter()
 const userStore = useUserStore()
 const { handleCloseContextMenu } = useContextMenuStore()
+
+router.beforeEach(() => {
+  handleCloseContextMenu()
+})
 
 onMounted(async () => {
   await userStore.fetchMe()
@@ -19,7 +25,7 @@ onMounted(async () => {
   <div @click="handleCloseContextMenu">
     <JomonHeader />
     <main class="text-primary bg-background h-screen overflow-y-scroll pt-12">
-      <router-view v-slot="{ Component }">
+      <RouterView v-slot="{ Component }">
         <template v-if="Component">
           <suspense>
             <template #default>
@@ -30,7 +36,7 @@ onMounted(async () => {
             </template>
           </suspense>
         </template>
-      </router-view>
+      </RouterView>
     </main>
   </div>
   <!--以下がteleportされている-->

@@ -73,7 +73,7 @@ if (requestId !== '') {
         </div>
       </div>
       <div class="flex flex-col">
-        <label>お金の方向</label>
+        <label>入出金</label>
         <InputRadioButton
           v-model="moneyDirection"
           :options="directionOptions" />

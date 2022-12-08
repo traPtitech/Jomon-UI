@@ -9,7 +9,7 @@ import { useTransactionStore } from '/@/stores/transaction'
 import type { Tag, Transaction } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
-export type MoneyDirection = 'plus' | 'minus'
+export type MoneyDirection = 'toTraP' | 'fromTraP'
 
 export const useNewTransaction = (requestId: string) => {
   const toast = useToast()
@@ -27,7 +27,7 @@ export const useNewTransaction = (requestId: string) => {
     tags: requestId && request.value ? request.value.tags : [],
     group: requestId && request.value ? request.value.group.id : ''
   })
-  const moneyDirection = ref<MoneyDirection>('plus')
+  const moneyDirection = ref<MoneyDirection>('toTraP')
 
   async function postTransaction() {
     if (transaction.value.targets.length === 0) {
@@ -40,7 +40,7 @@ export const useNewTransaction = (requestId: string) => {
     } catch {
       return
     }
-    if (moneyDirection.value === 'minus') {
+    if (moneyDirection.value === 'fromTraP') {
       transaction.value.amount = -transaction.value.amount
     }
     const transactionRequest = {

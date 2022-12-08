@@ -38,11 +38,11 @@ const toast = useToast()
 const directionOptions = [
   {
     key: 'traPへ入金',
-    value: 'plus'
+    value: 'toTraP'
   },
   {
     key: 'traPから出金',
-    value: 'minus'
+    value: 'fromTraP'
   }
 ]
 
@@ -53,7 +53,7 @@ const editedValue = ref({
   tags: props.transaction.tags,
   group: props.transaction.group.id
 })
-const moneyDirection = ref<MoneyDirection>('plus')
+const moneyDirection = ref<MoneyDirection>('toTraP')
 
 async function handlePutTransaction() {
   if (props.transaction === undefined) {
@@ -65,7 +65,7 @@ async function handlePutTransaction() {
   } catch {
     return
   }
-  if (moneyDirection.value === 'minus') {
+  if (moneyDirection.value === 'fromTraP') {
     editedValue.value.amount = -editedValue.value.amount
   }
   const transaction = {

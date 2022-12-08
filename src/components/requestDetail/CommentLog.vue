@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import type { Comment } from '/@/lib/convertRequestDetailResponse'
 import { formatDateAndTime } from '/@/lib/date'
+import type { Comment } from '/@/lib/requestDetailTypes'
 
 import MarkdownIt from '/@/components//shared/MarkdownIt.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'

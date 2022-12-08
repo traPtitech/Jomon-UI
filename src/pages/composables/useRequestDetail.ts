@@ -7,7 +7,7 @@ import { useTagStore } from '/@/stores/tag'
 
 import type { Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
-import { convertRequestDetail } from '/@/lib/convertRequestDetailResponse'
+import { convertRequestDetail } from '/@/lib/date'
 
 export type EditMode =
   | 'title'

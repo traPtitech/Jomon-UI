@@ -4,8 +4,8 @@ import { useToast } from 'vue-toastification'
 
 import type { PostRequest, User, Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
-import type { RequestDetail } from '/@/lib/convertRequestDetailResponse'
-import { convertRequestDetail } from '/@/lib/convertRequestDetailResponse'
+import { convertRequestDetail } from '/@/lib/date'
+import type { RequestDetail } from '/@/lib/requestDetailTypes'
 
 interface EditedValue {
   created_by: string

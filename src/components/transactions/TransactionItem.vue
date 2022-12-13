@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import type { Transaction } from '/@/lib/apis'
+import type { Transaction } from '/@/stores/transaction'
+
 import { formatDate } from '/@/lib/date'
 
 import TagsGroup from '/@/components/shared/TagsGroup.vue'
@@ -8,6 +9,8 @@ interface Props {
   transaction: Transaction
 }
 const props = defineProps<Props>()
+
+const formattedDate = formatDate(props.transaction.created_at)
 </script>
 
 <template>
@@ -15,7 +18,7 @@ const props = defineProps<Props>()
     <div
       class="children:px-2 relative flex h-12 items-center px-4 hover:bg-gray-100">
       <div class="w-3/20">
-        {{ formatDate(props.transaction.created_at) }}
+        {{ formattedDate }}
       </div>
       <div class="w-3/20 text-right">
         <span

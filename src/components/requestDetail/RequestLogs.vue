@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { DateTime } from 'luxon'
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
@@ -11,7 +12,7 @@ import StatusChangeLog from './StatusChangeLog.vue'
 type LogKind = 'comment' | 'statusChange'
 
 interface Log {
-  created_at: Date
+  created_at: DateTime
   kind: LogKind
   index: number
 }
@@ -28,7 +29,7 @@ const logs = computed(() => {
     request.value?.comments
       .map(
         (comment, i): Log => ({
-          created_at: new Date(comment.created_at),
+          created_at: comment.created_at,
           kind: 'comment',
           index: i
         })
@@ -36,7 +37,7 @@ const logs = computed(() => {
       .concat(
         request.value.statuses.map(
           (status, i): Log => ({
-            created_at: new Date(status.created_at),
+            created_at: status.created_at,
             kind: 'statusChange',
             index: i
           })
@@ -59,7 +60,7 @@ const logs = computed(() => {
     <ul>
       <li
         v-for="log in logs"
-        :key="log.created_at.toDateString"
+        :key="log.created_at.toISO()"
         class="vertical-bar">
         <CommentLog
           v-if="log.kind === 'comment'"

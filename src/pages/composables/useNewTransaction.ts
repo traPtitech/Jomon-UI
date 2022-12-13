@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
@@ -5,8 +6,9 @@ import { useToast } from 'vue-toastification'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useTransactionStore } from '/@/stores/transaction'
+import type { Transaction } from '/@/stores/transaction'
 
-import type { Tag, Transaction } from '/@/lib/apis'
+import type { Tag, Transaction as APITransaction } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export const useNewTransaction = (requestId: string) => {
@@ -42,13 +44,22 @@ export const useNewTransaction = (requestId: string) => {
       tags: tags.map(tag => tag.id)
     }
     try {
-      const response: Transaction[] = (
+      const response: APITransaction[] = (
         await apis.postTransaction(transactionRequest)
       ).data
+      const newTransactions: Transaction[] = response.map(
+        (transaction: APITransaction) => {
+          return {
+            ...transaction,
+            created_at: DateTime.fromISO(transaction.created_at),
+            updated_at: DateTime.fromISO(transaction.updated_at)
+          }
+        }
+      )
       if (transactions.value !== undefined) {
-        transactions.value = [...response, ...transactions.value]
+        transactions.value = [...newTransactions, ...transactions.value]
       } else {
-        transactions.value = response
+        transactions.value = newTransactions
       }
     } catch {
       toast.error('入出金記録の作成に失敗しました')

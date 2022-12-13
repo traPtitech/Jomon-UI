@@ -7,6 +7,7 @@ import { useTagStore } from '/@/stores/tag'
 
 import type { Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
+import { convertRequestDetail } from '/@/lib/date'
 
 export type EditMode =
   | 'title'
@@ -68,7 +69,10 @@ export const useRequestDetail = () => {
       tags: tags.map(tag => tag.id)
     }
     try {
-      request.value = (await apis.putRequestDetail(id, putRequest)).data
+      const response = (await apis.putRequestDetail(id, putRequest)).data
+
+      request.value = convertRequestDetail(response)
+
       toast.success('申請を修正しました')
     } catch {
       toast.error('申請の修正に失敗しました')

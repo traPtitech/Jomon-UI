@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import type { Request } from '/@/lib/apis'
+import type { Request } from '/@/stores/request'
+
 import { formatDate } from '/@/lib/date'
 
 import StatusChip from '/@/components/shared/StatusChip.vue'

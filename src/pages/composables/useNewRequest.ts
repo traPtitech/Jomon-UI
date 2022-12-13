@@ -1,13 +1,15 @@
+import { DateTime } from 'luxon'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
+import type { Request } from '/@/stores/request'
 import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-import type { Request, Tag } from '/@/lib/apis'
+import type { Request as APIRequest, Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export interface FileRequest {
@@ -70,12 +72,17 @@ export const useNewRequest = () => {
       group: request.value.group
     }
     try {
-      const response: Request = (await apis.postRequest(requestRequest)).data
+      const response: APIRequest = (await apis.postRequest(requestRequest)).data
       const id = response.id
+      const newRequest: Request = {
+        ...response,
+        created_at: DateTime.fromISO(response.created_at),
+        updated_at: DateTime.fromISO(response.updated_at)
+      }
       if (requests.value) {
-        requests.value.unshift(response)
+        requests.value.unshift(newRequest)
       } else {
-        requests.value = [response]
+        requests.value = [newRequest]
       }
       try {
         files.value.forEach((file: FileRequest) => {

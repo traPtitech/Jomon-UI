@@ -2,8 +2,10 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import type { RequestDetail, PostRequest, User, Tag } from '/@/lib/apis'
+import type { PostRequest, User, Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
+import { convertRequestDetail } from '/@/lib/date'
+import type { RequestDetail } from '/@/lib/requestDetailTypes'
 
 interface EditedValue {
   created_by: string
@@ -48,7 +50,10 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
 
   const fetchRequestDetail = async (id: string) => {
     try {
-      request.value = (await apis.getRequestDetail(id)).data
+      const response = (await apis.getRequestDetail(id)).data
+
+      request.value = convertRequestDetail(response)
+
       editedValue.value = {
         created_by: request.value.created_by,
         amount: request.value.amount,
@@ -64,8 +69,10 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   }
   const putRequest = async (id: string, willPutRequest: PostRequest) => {
     try {
-      const res = (await apis.putRequestDetail(id, willPutRequest)).data
-      request.value = res
+      const response = (await apis.putRequestDetail(id, willPutRequest)).data
+
+      request.value = convertRequestDetail(response)
+
       toast.success('申請の修正に成功しました')
     } catch {
       toast.error('申請の修正に失敗しました')

@@ -1,9 +1,9 @@
+import { DateTime } from 'luxon'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
-import type { Comment } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export const useNewComment = (requestId: string) => {
@@ -18,18 +18,22 @@ export const useNewComment = (requestId: string) => {
       toast.warning('1文字以上入力してください')
       return
     }
-    let response: Comment
     try {
       isSending.value = true
-      response = (
+      const response = (
         await apis.postComment(requestId, {
           comment: comment.value
         })
       ).data
+      const newComment = {
+        ...response,
+        created_at: DateTime.fromISO(response.created_at),
+        updated_at: DateTime.fromISO(response.updated_at)
+      }
       comment.value = ''
       isSending.value = false
       toast.success('コメントを送信しました')
-      requestDetailStore.request?.comments.push(response)
+      requestDetailStore.request?.comments.push(newComment)
     } catch {
       isSending.value = false
       toast.error('コメントの送信に失敗しました')

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { DateTime } from 'luxon'
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
@@ -37,7 +38,7 @@ const { editMode, changeEditMode } = useRequestDetail()
 const { request } = storeToRefs(requestDetailStore)
 
 const formattedDate = computed(() =>
-  formatDate(request.value?.created_at ?? '')
+  formatDate(request.value?.created_at ?? DateTime.fromISO(''))
 )
 
 await requestDetailStore.fetchRequestDetail(id)

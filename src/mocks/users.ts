@@ -6,6 +6,7 @@ export const users = [
       ctx.status(200),
       ctx.json([
         {
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
           name: 'nagatech',
           display_name: 'ながてち',
           admin: true,
@@ -14,6 +15,7 @@ export const users = [
           deleted_at: '2022-01-25T13:45:36.048Z'
         },
         {
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           name: 'mehm8128',
           display_name: 'mehm8128',
           admin: true,
@@ -28,6 +30,7 @@ export const users = [
     return res(
       ctx.status(200),
       ctx.json({
+        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         name: 'mehm8128',
         display_name: 'mehm8128',
         admin: true,

@@ -37,7 +37,7 @@ export const useNewRequest = () => {
   const { requests } = storeToRefs(requestStore)
 
   const request = ref<RequestRequest>({
-    created_by: userStore.me?.name ?? '',
+    created_by: userStore.me?.id ?? '',
     amount: 0,
     title: '',
     targets: [],

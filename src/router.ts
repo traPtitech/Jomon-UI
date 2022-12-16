@@ -48,7 +48,7 @@ router.beforeEach(async (to, from, next) => {
   try {
     await apis.getMe()
   } catch {
-    await apis.generatePKCE()
+    document.location = 'api/auth/genpkce'
   }
   next()
 })

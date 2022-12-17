@@ -48,7 +48,7 @@ router.beforeEach(async (to, from, next) => {
   try {
     await apis.getMe()
   } catch {
-    document.location = 'api/auth/genpkce'
+    document.location = 'https://jomon-dev.trapti.tech/api/auth/genpkce'
   }
   next()
 })

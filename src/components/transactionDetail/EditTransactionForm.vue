@@ -19,6 +19,14 @@ import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithC
 import InputText from '/@/components/shared/InputText.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
+interface EditedValue {
+  amount: number
+  target: string
+  request: string | null
+  tags: Tag[]
+  group: string
+}
+
 interface Props {
   transaction: Transaction
 }
@@ -37,7 +45,7 @@ const toast = useToast()
 
 const formattedDate = formatDate(props.transaction.created_at)
 
-const editedValue = ref({
+const editedValue = ref<EditedValue>({
   amount: props.transaction.amount,
   target: props.transaction.target,
   request: props.transaction.request ?? '',
@@ -57,7 +65,10 @@ async function handlePutTransaction() {
   }
   const transaction = {
     ...editedValue.value,
-    tags: tags.map(tag => tag.id)
+    request:
+      editedValue.value.request !== '' ? editedValue.value.request : null,
+    tags: tags.map(tag => tag.id),
+    group: editedValue.value.group !== '0' ? editedValue.value.group : null
   }
   try {
     const response = (await apis.putTransactionDetail(id, transaction)).data

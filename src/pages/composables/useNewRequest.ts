@@ -69,7 +69,7 @@ export const useNewRequest = () => {
     const requestRequest = {
       ...request.value,
       tags: tags.map(tag => tag.id),
-      group: request.value.group
+      group: request.value.group !== '' ? request.value.group : null
     }
     try {
       const response: APIRequest = (await apis.postRequest(requestRequest)).data

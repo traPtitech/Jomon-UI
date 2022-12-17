@@ -20,8 +20,11 @@ export const useNewTransaction = (requestId: string) => {
   const { transactions } = storeToRefs(transactionStore)
   const { request, targetIds } = storeToRefs(requestDetailStore)
 
+  const totalAmount =
+    request.value?.targets.reduce((a, target) => a + target.amount, 0) ?? 0
+
   const transaction = ref({
-    amount: requestId && request.value ? request.value.amount : 0,
+    amount: requestId ? totalAmount : 0,
     targets: requestId ? targetIds : [],
     request: requestId,
     tags: requestId && request.value ? request.value.tags : [],

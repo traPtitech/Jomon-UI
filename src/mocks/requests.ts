@@ -19,7 +19,6 @@ export const requests = [
             created_at: '2022-01-25T13:29:19.918Z',
             updated_at: '2022-01-25T13:29:19.918Z',
             created_by: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            amount: 1200,
             title: 'SysAd講習会の開催費用',
             tags: [
               {
@@ -58,7 +57,6 @@ export const requests = [
       ctx.status(200),
       ctx.json({
         id: req.params.id,
-        amount: 1200,
         title: 'SysAd講習会の開催費用',
         created_by: 'mehm8128',
         status: 'submitted',

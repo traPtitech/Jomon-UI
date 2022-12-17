@@ -9,7 +9,6 @@ import type { RequestDetail } from '/@/lib/requestDetailTypes'
 
 interface EditedValue {
   created_by: string
-  amount: number
   title: string
   content: string
   targets: string[]
@@ -36,7 +35,6 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   const editMode = ref('')
   const editedValue = ref<EditedValue>({
     created_by: '',
-    amount: 0,
     title: '',
     content: '',
     targets: [],
@@ -56,7 +54,6 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
 
       editedValue.value = {
         created_by: request.value.created_by,
-        amount: request.value.amount,
         title: request.value.title,
         content: request.value.content,
         targets: targetIds.value,

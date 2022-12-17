@@ -19,7 +19,6 @@ export interface FileRequest {
 }
 export interface RequestRequest {
   created_by: string
-  amount: number
   title: string
   content: string
   targets: string[]
@@ -38,7 +37,6 @@ export const useNewRequest = () => {
 
   const request = ref<RequestRequest>({
     created_by: userStore.me?.id ?? '',
-    amount: 0,
     title: '',
     targets: [],
     content: '',
@@ -69,7 +67,11 @@ export const useNewRequest = () => {
     const requestRequest = {
       ...request.value,
       tags: tags.map(tag => tag.id),
-      group: request.value.group !== '' ? request.value.group : null
+      group: request.value.group !== '' ? request.value.group : null,
+      targets: request.value.targets.map(target => ({
+        target: target,
+        amount: 0
+      }))
     }
     try {
       const response: APIRequest = (await apis.postRequest(requestRequest)).data

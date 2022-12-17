@@ -20,7 +20,6 @@ export type EditMode =
 
 export interface EditedValue {
   title: string
-  amount: number
   content: string
   targets: string[]
   tags: Tag[]
@@ -64,8 +63,10 @@ export const useRequestDetail = () => {
     }
     const putRequest = {
       ...willPutRequest,
-      targets: [...willPutRequest.targets],
-      amount: willPutRequest.amount,
+      targets: willPutRequest.targets.map(target => ({
+        target: target,
+        amount: 0
+      })),
       tags: tags.map(tag => tag.id),
       group: willPutRequest.group !== '' ? willPutRequest.group : null
     }

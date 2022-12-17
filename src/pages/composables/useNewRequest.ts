@@ -6,6 +6,7 @@ import { useToast } from 'vue-toastification'
 
 import type { Request } from '/@/stores/request'
 import { useRequestStore } from '/@/stores/request'
+import type { RequestRequest } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
@@ -16,14 +17,6 @@ export interface FileRequest {
   name: string
   src: string
   type: string
-}
-export interface RequestRequest {
-  created_by: string
-  title: string
-  content: string
-  targets: string[]
-  tags: Tag[]
-  group: string
 }
 
 export const useNewRequest = () => {
@@ -67,11 +60,7 @@ export const useNewRequest = () => {
     const requestRequest = {
       ...request.value,
       tags: tags.map(tag => tag.id),
-      group: request.value.group !== '' ? request.value.group : null,
-      targets: request.value.targets.map(target => ({
-        target: target,
-        amount: 0
-      }))
+      group: request.value.group !== '' ? request.value.group : null
     }
     try {
       const response: APIRequest = (await apis.postRequest(requestRequest)).data

@@ -18,14 +18,14 @@ export const useNewTransaction = (requestId: string) => {
   const tagStore = useTagStore()
 
   const { transactions } = storeToRefs(transactionStore)
-  const { request, targetIds } = storeToRefs(requestDetailStore)
+  const { request, targets } = storeToRefs(requestDetailStore)
 
   const totalAmount =
     request.value?.targets.reduce((a, target) => a + target.amount, 0) ?? 0
 
   const transaction = ref({
     amount: requestId ? totalAmount : 0,
-    targets: requestId ? targetIds : [],
+    targets: requestId ? targets.value.map(target => target.target) : [],
     request: requestId,
     tags: requestId && request.value ? request.value.tags : [],
     group: requestId && request.value ? request.value.group.id : ''

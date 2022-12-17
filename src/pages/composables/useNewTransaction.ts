@@ -41,7 +41,8 @@ export const useNewTransaction = (requestId: string) => {
     }
     const transactionRequest = {
       ...transaction.value,
-      tags: tags.map(tag => tag.id)
+      tags: tags.map(tag => tag.id),
+      group: transaction.value.group !== '' ? transaction.value.group : null
     }
     try {
       const response: APITransaction[] = (

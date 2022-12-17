@@ -66,7 +66,8 @@ export const useRequestDetail = () => {
       ...willPutRequest,
       targets: [...willPutRequest.targets],
       amount: willPutRequest.amount,
-      tags: tags.map(tag => tag.id)
+      tags: tags.map(tag => tag.id),
+      group: willPutRequest.group !== '' ? willPutRequest.group : null
     }
     try {
       const response = (await apis.putRequestDetail(id, putRequest)).data

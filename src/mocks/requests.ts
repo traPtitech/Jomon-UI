@@ -20,6 +20,25 @@ export const requests = [
             updated_at: '2022-01-25T13:29:19.918Z',
             created_by: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
             title: 'SysAd講習会の開催費用',
+            content: `# aaaaa
+- aaa
+  - bbb`,
+            targets: [
+              {
+                id: 'mehm8128',
+                amount: 1200,
+                target: 'mehm8128',
+                paid_at: '2020-01-01',
+                created_at: '2020-01-01'
+              },
+              {
+                id: 'nagatech',
+                amount: 1500,
+                target: 'nagatech',
+                paid_at: '2020-01-02',
+                created_at: '2020-01-02'
+              }
+            ],
             tags: [
               {
                 id: '3fa85f64-5717-4562-b3fc-2c963f66afa5',

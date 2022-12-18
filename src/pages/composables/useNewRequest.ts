@@ -4,12 +4,12 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
-import type { Request } from '/@/stores/request'
 import { useRequestStore } from '/@/stores/request'
 import type { RequestRequest } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
+import type { Request } from '/@/lib/apiTypes'
 import type { Request as APIRequest, Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 

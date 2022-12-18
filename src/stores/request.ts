@@ -1,10 +1,10 @@
-import { DateTime } from 'luxon'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import type { Request as APIRequest } from '/@/lib/apis'
+import type { Request } from '/@/lib/apiTypes'
 import apis from '/@/lib/apis'
+import { convertRequest } from '/@/lib/date'
 
 import type { RequestStatus } from '/@/consts/consts'
 
@@ -26,11 +26,6 @@ const defaultParams: SearchRequestParams = {
   until: '',
   tags: [],
   group: ''
-}
-
-export interface Request extends Omit<APIRequest, 'created_at' | 'updated_at'> {
-  created_at: DateTime
-  updated_at: DateTime
 }
 
 export const useRequestStore = defineStore('request', () => {
@@ -60,13 +55,7 @@ export const useRequestStore = defineStore('request', () => {
           params.group
         )
       ).data
-      requests.value = response.map((request: APIRequest) => {
-        return {
-          ...request,
-          created_at: DateTime.fromISO(request.created_at),
-          updated_at: DateTime.fromISO(request.updated_at)
-        }
-      })
+      requests.value = convertRequest(response)
       isRequestFetched.value = true
     } catch {
       toast.error('申請の取得に失敗しました')

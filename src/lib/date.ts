@@ -3,10 +3,18 @@ import { DateTime } from 'luxon'
 import type {
   Status as APIStatus,
   Comment as APIComment,
-  RequestDetail as APIRequestDetail
+  RequestDetail as APIRequestDetail,
+  Request as APIRequest,
+  Transaction as APITransaction
 } from '/@/lib/apis'
 
-import type { Comment, Status, RequestDetail } from './requestDetailTypes'
+import type {
+  Comment,
+  Status,
+  RequestDetail,
+  Request,
+  Transaction
+} from './apiTypes'
 
 export const formatDate = (date: DateTime) => {
   const dateStr = date.toFormat('yyyy/MM/dd')
@@ -16,6 +24,14 @@ export const formatDate = (date: DateTime) => {
 export const formatDateAndTime = (date: DateTime) => {
   const dateStr = date.toFormat('yyyy/MM/dd HH:mm')
   return dateStr
+}
+
+export const convertRequest = (response: APIRequest[]): Request[] => {
+  return response.map((request: APIRequest) => ({
+    ...request,
+    created_at: DateTime.fromISO(request.created_at),
+    updated_at: DateTime.fromISO(request.updated_at)
+  }))
 }
 
 export const convertRequestDetail = (
@@ -41,4 +57,16 @@ export const convertRequestDetail = (
     created_at: DateTime.fromISO(response.created_at),
     updated_at: DateTime.fromISO(response.updated_at)
   }
+}
+
+export const convertTransaction = (
+  response: APITransaction[]
+): Transaction[] => {
+  return response.map((transaction: APITransaction) => {
+    return {
+      ...transaction,
+      created_at: DateTime.fromISO(transaction.created_at),
+      updated_at: DateTime.fromISO(transaction.updated_at)
+    }
+  })
 }

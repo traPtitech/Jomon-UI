@@ -6,8 +6,8 @@ import { useToast } from 'vue-toastification'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useTransactionStore } from '/@/stores/transaction'
-import type { Transaction } from '/@/stores/transaction'
 
+import type { Transaction } from '/@/lib/apiTypes'
 import type { Tag, Transaction as APITransaction } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 

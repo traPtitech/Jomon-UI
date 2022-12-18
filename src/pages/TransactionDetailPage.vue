@@ -6,9 +6,9 @@ import { useToast } from 'vue-toastification'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
-import type { Transaction } from '/@/stores/transaction'
 import { useUserStore } from '/@/stores/user'
 
+import type { Transaction } from '/@/lib/apiTypes'
 import type { PostTransactionWithOneTarget } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'

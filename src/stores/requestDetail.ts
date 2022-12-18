@@ -2,10 +2,10 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
+import type { RequestDetail } from '/@/lib/apiTypes'
 import type { PostRequest, User, Tag, RequestTarget } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import { convertRequestDetail } from '/@/lib/date'
-import type { RequestDetail } from '/@/lib/requestDetailTypes'
 
 export interface RequestRequest {
   created_by: string

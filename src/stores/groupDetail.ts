@@ -17,7 +17,7 @@ export const useGroupDetailStore = defineStore('groupDetail', () => {
   })
   const canEditGroup = (user: User | undefined) => {
     if (!user) return false
-    return user.admin || group.value?.owners.includes(user.name)
+    return user.admin || group.value?.owners.includes(user.id)
   }
 
   const putGroup = async (id: string, willPutGroup: PostGroup) => {

@@ -31,7 +31,7 @@ export const useNewRequest = () => {
   const request = ref<RequestRequest>({
     created_by: userStore.me?.id ?? '',
     title: '',
-    targets: [],
+    targets: [{ target: '', amount: 0 }],
     content: '',
     tags: [],
     group: ''
@@ -49,6 +49,13 @@ export const useNewRequest = () => {
       request.value.targets.length === 0
     ) {
       toast.warning('タイトル、内容、対象者は必須です')
+      return
+    }
+    if (
+      request.value.targets.some(target => target.target === '') ||
+      request.value.targets.some(target => target.amount === 0)
+    ) {
+      toast.warning('対象者の選択と金額の入力は必須です')
       return
     }
     let tags: Tag[]

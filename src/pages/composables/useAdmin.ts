@@ -15,11 +15,11 @@ export const useAdmin = () => {
   const absentMembers = computed(() => {
     if (users.value !== undefined && admins !== undefined) {
       return users.value
-        .filter(user => !admins.value?.includes(user.name))
+        .filter(user => !admins.value?.includes(user.id))
         .map(user => {
           return {
             key: user.name,
-            value: user.name
+            value: user.id
           }
         })
     } else {

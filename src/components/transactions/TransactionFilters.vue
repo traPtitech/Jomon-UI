@@ -112,8 +112,7 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
           <InputText
             v-model="params.target"
             class="w-full border-none"
-            placeholder="取引相手"
-            type="text" />
+            placeholder="取引相手" />
           <XMarkIcon
             class="absolute right-1 top-2 h-4 cursor-pointer"
             @click="changeIsTargetSearchMode" />

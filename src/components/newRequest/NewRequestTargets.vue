@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { PlusCircleIcon, MinusCircleIcon } from '@heroicons/vue/24/solid'
+import { computed } from 'vue'
 import { useToast } from 'vue-toastification'
 
 import { useUserStore } from '/@/stores/user'
@@ -19,27 +20,48 @@ const emit = defineEmits<{ (e: 'input', value: RequestTarget[]): void }>()
 const userStore = useUserStore()
 const toast = useToast()
 
+const userOptions = computed(() =>
+  userStore.userOptions.map(user => ({
+    ...user,
+    used: false
+  }))
+)
+//todo:userOptionsNotUsedをtemplate内ではなくてここに書く。computedだとなぜか上手くいかなかった
+
 function handleEditTarget(index: number, value: unknown) {
-  //target
   if (typeof value === 'string') {
     const requestTarget = {
       target: value,
       amount: props.targets[index].amount
     }
-    return emit(
+    emit(
       'input',
       props.targets.map((target, i) => (i === index ? requestTarget : target))
     )
+    // 既に選択されているユーザーを選択できないようにする
+    userOptions.value.forEach(user => {
+      if (
+        props.targets
+          .map((target, i) => (i === index ? requestTarget : target))
+          .some(target => target.target === user.value)
+      ) {
+        user.used = true
+      } else {
+        user.used = false
+      }
+    })
+    return
   }
   if (typeof value === 'number') {
     const requestTarget = {
       target: props.targets[index].target,
       amount: value
     }
-    return emit(
+    emit(
       'input',
       props.targets.map((target, i) => (i === index ? requestTarget : target))
     )
+    return
   }
 }
 
@@ -68,10 +90,17 @@ function handleRemoveTarget(index: number) {
         <InputSelect
           class="!w-1/3 flex-grow"
           :model-value="target.target"
-          :options="userStore.userOptions"
+          :options="
+            userOptions
+              .filter(user => !user.used)
+              .map(user => ({
+                key: user.key,
+                value: user.value
+              }))
+          "
           placeholder="払い戻し対象者を選択"
           @update:model-value="handleEditTarget(i, $event)" />
-        <div class="mt-0">
+        <div>
           <InputNumber
             class="mr-1"
             :min="1"
@@ -84,7 +113,16 @@ function handleRemoveTarget(index: number) {
         </button>
       </li>
     </ul>
-    <div class="w-2/3 text-center">
+    <div
+      v-if="
+        userOptions
+          .filter(user => !user.used)
+          .map(user => ({
+            key: user.key,
+            value: user.value
+          })).length > 0
+      "
+      class="w-2/3 text-center">
       <button @click="handleAddTarget">
         <PlusCircleIcon class="w-8" />
       </button>

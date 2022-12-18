@@ -55,7 +55,7 @@ export const useRequestStore = defineStore('request', () => {
           params.group
         )
       ).data
-      requests.value = convertRequest(response)
+      requests.value = response.map(request => convertRequest(request))
       isRequestFetched.value = true
     } catch {
       toast.error('申請の取得に失敗しました')

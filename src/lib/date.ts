@@ -26,47 +26,47 @@ export const formatDateAndTime = (date: DateTime) => {
   return dateStr
 }
 
-export const convertRequest = (response: APIRequest[]): Request[] => {
-  return response.map((request: APIRequest) => ({
+export const convertRequest = (request: APIRequest): Request => {
+  return {
     ...request,
     created_at: DateTime.fromISO(request.created_at),
     updated_at: DateTime.fromISO(request.updated_at)
-  }))
+  }
 }
 
 export const convertRequestDetail = (
-  response: APIRequestDetail
+  requestDetail: APIRequestDetail
 ): RequestDetail => {
-  const comments: Comment[] = response.comments.map((comment: APIComment) => {
-    return {
-      ...comment,
-      created_at: DateTime.fromISO(comment.created_at),
-      updated_at: DateTime.fromISO(comment.updated_at)
+  const comments: Comment[] = requestDetail.comments.map(
+    (comment: APIComment) => {
+      return {
+        ...comment,
+        created_at: DateTime.fromISO(comment.created_at),
+        updated_at: DateTime.fromISO(comment.updated_at)
+      }
     }
-  })
-  const statuses: Status[] = response.statuses.map((status: APIStatus) => {
+  )
+  const statuses: Status[] = requestDetail.statuses.map((status: APIStatus) => {
     return {
       ...status,
       created_at: DateTime.fromISO(status.created_at)
     }
   })
   return {
-    ...response,
+    ...requestDetail,
     comments: comments,
     statuses: statuses,
-    created_at: DateTime.fromISO(response.created_at),
-    updated_at: DateTime.fromISO(response.updated_at)
+    created_at: DateTime.fromISO(requestDetail.created_at),
+    updated_at: DateTime.fromISO(requestDetail.updated_at)
   }
 }
 
 export const convertTransaction = (
-  response: APITransaction[]
-): Transaction[] => {
-  return response.map((transaction: APITransaction) => {
-    return {
-      ...transaction,
-      created_at: DateTime.fromISO(transaction.created_at),
-      updated_at: DateTime.fromISO(transaction.updated_at)
-    }
-  })
+  transaction: APITransaction
+): Transaction => {
+  return {
+    ...transaction,
+    created_at: DateTime.fromISO(transaction.created_at),
+    updated_at: DateTime.fromISO(transaction.updated_at)
+  }
 }

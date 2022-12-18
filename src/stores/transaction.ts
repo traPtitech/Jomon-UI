@@ -55,7 +55,9 @@ export const useTransactionStore = defineStore('transaction', () => {
           params.request
         )
       ).data
-      transactions.value = convertTransaction(response)
+      transactions.value = response.map(transaction =>
+        convertTransaction(transaction)
+      )
       isTransactionFetched.value = true
     } catch {
       toast.error('入出金記録の取得に失敗しました')

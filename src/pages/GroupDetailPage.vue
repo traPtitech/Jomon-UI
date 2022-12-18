@@ -68,8 +68,8 @@ if (!userStore.isUserFetched) {
             class="mr-8"
             font-size="sm"
             :is-disabled="isDeleting"
-            kind="danger"
             padding="sm"
+            type="danger"
             @click.stop="deleteGroup(group?.id ?? '')">
             グループを削除
           </SimpleButton>

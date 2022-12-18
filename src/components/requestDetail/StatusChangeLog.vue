@@ -1,6 +1,6 @@
 <script lang="ts" setup>
+import type { Status } from '/@/lib/apiTypes'
 import { formatDateAndTime } from '/@/lib/date'
-import type { Status } from '/@/lib/requestDetailTypes'
 
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'

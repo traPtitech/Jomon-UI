@@ -1,10 +1,10 @@
-import { DateTime } from 'luxon'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import type { Transaction as APITransaction } from '/@/lib/apis'
+import type { Transaction } from '/@/lib/apiTypes'
 import apis from '/@/lib/apis'
+import { convertTransaction } from '/@/lib/date'
 
 export interface SearchTransactionParams {
   sort: string
@@ -24,12 +24,6 @@ export const defaultParams: SearchTransactionParams = {
   until: '',
   group: '',
   request: ''
-}
-
-export interface Transaction
-  extends Omit<APITransaction, 'created_at' | 'updated_at'> {
-  created_at: DateTime
-  updated_at: DateTime
 }
 
 export const useTransactionStore = defineStore('transaction', () => {
@@ -61,13 +55,9 @@ export const useTransactionStore = defineStore('transaction', () => {
           params.request
         )
       ).data
-      transactions.value = response.map((transaction: APITransaction) => {
-        return {
-          ...transaction,
-          created_at: DateTime.fromISO(transaction.created_at),
-          updated_at: DateTime.fromISO(transaction.updated_at)
-        }
-      })
+      transactions.value = response.map(transaction =>
+        convertTransaction(transaction)
+      )
       isTransactionFetched.value = true
     } catch {
       toast.error('入出金記録の取得に失敗しました')

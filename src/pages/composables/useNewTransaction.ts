@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
@@ -6,10 +5,10 @@ import { useToast } from 'vue-toastification'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useTransactionStore } from '/@/stores/transaction'
-import type { Transaction } from '/@/stores/transaction'
 
 import type { Tag, Transaction as APITransaction } from '/@/lib/apis'
 import apis from '/@/lib/apis'
+import { convertTransaction } from '/@/lib/date'
 
 export const useNewTransaction = (requestId: string) => {
   const toast = useToast()
@@ -51,14 +50,8 @@ export const useNewTransaction = (requestId: string) => {
       const response: APITransaction[] = (
         await apis.postTransaction(transactionRequest)
       ).data
-      const newTransactions: Transaction[] = response.map(
-        (transaction: APITransaction) => {
-          return {
-            ...transaction,
-            created_at: DateTime.fromISO(transaction.created_at),
-            updated_at: DateTime.fromISO(transaction.updated_at)
-          }
-        }
+      const newTransactions = response.map(transaction =>
+        convertTransaction(transaction)
       )
       if (transactions.value !== undefined) {
         transactions.value = [...newTransactions, ...transactions.value]

@@ -4,20 +4,20 @@ import { computed } from 'vue'
 import VueSelect from '/@/components/shared/VueSelect.vue'
 
 interface Props {
-  modelValue: any
+  modelValue: Props['options'][number]['value']
   options: Option[]
   placeholder: string
   isMultiple?: boolean
 }
 interface Option {
   key: string
-  value: any
+  value: unknown
 }
 const props = withDefaults(defineProps<Props>(), {
   isMultiple: false
 })
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: any): void
+  (e: 'update:modelValue', value: Props['modelValue']): void
 }>()
 const value = computed({
   get: () => props.modelValue,

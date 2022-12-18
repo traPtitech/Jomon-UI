@@ -6,8 +6,8 @@ import { useToast } from 'vue-toastification'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
-import type { Transaction } from '/@/stores/transaction'
 
+import type { Transaction } from '/@/lib/apiTypes'
 import type { Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'

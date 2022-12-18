@@ -2,8 +2,7 @@
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import type { Request } from '/@/stores/request'
-
+import type { Request } from '/@/lib/apiTypes'
 import { formatDate } from '/@/lib/date'
 
 import StatusChip from '/@/components/shared/StatusChip.vue'

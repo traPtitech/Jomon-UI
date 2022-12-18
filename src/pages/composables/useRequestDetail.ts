@@ -60,7 +60,6 @@ export const useRequestDetail = () => {
     }
     try {
       const response = (await apis.putRequestDetail(id, putRequest)).data
-
       request.value = convertRequestDetail(response)
 
       toast.success('申請を修正しました')

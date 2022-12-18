@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import type { Transaction } from '/@/stores/transaction'
-
+import type { Transaction } from '/@/lib/apiTypes'
 import { formatDate } from '/@/lib/date'
 
 import TagsGroup from '/@/components/shared/TagsGroup.vue'

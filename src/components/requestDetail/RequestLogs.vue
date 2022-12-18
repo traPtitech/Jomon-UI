@@ -9,11 +9,11 @@ import CommentLog from './CommentLog.vue'
 import RequestFiles from './RequestFiles.vue'
 import StatusChangeLog from './StatusChangeLog.vue'
 
-type LogKind = 'comment' | 'statusChange'
+type LogType = 'comment' | 'statusChange'
 
 interface Log {
   created_at: DateTime
-  kind: LogKind
+  type: LogType
   index: number
 }
 
@@ -30,7 +30,7 @@ const logs = computed(() => {
       .map(
         (comment, i): Log => ({
           created_at: comment.created_at,
-          kind: 'comment',
+          type: 'comment',
           index: i
         })
       )
@@ -38,7 +38,7 @@ const logs = computed(() => {
         request.value.statuses.map(
           (status, i): Log => ({
             created_at: status.created_at,
-            kind: 'statusChange',
+            type: 'statusChange',
             index: i
           })
         )
@@ -50,7 +50,7 @@ const logs = computed(() => {
     return 0
   })
   return array
-  //その後この配列のkindで配列を選び、indexでindexを選ぶことで2つの配列をいい感じに並べ替えられる
+  //その後この配列のtypeで配列を選び、indexでindexを選ぶことで2つの配列をいい感じに並べ替えられる
 })
 </script>
 
@@ -63,10 +63,10 @@ const logs = computed(() => {
         :key="log.created_at.toISO()"
         class="vertical-bar">
         <CommentLog
-          v-if="log.kind === 'comment'"
+          v-if="log.type === 'comment'"
           :comment="request.comments[log.index]" />
         <StatusChangeLog
-          v-if="log.kind === 'statusChange'"
+          v-if="log.type === 'statusChange'"
           :log="request.statuses[log.index]" />
       </li>
     </ul>

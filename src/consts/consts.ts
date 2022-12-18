@@ -12,14 +12,12 @@ export const requestStatuses = [
 ] as const
 
 export const requestStatusOptions = () => {
-  return (
-    requestStatuses.map(requestStatus => {
-      return {
-        key: requestStatus.jpn,
-        value: requestStatus.state
-      }
-    }) ?? []
-  )
+  return requestStatuses.map(requestStatus => {
+    return {
+      key: requestStatus.jpn,
+      value: requestStatus.state
+    }
+  })
 }
 
 export const requestTemplates = [

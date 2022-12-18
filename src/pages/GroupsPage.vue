@@ -66,7 +66,7 @@ watch(
         </ul>
       </div>
       <PaginationBar
-        v-if="groups"
+        v-if="groups && groups.length > 0"
         class="mt-4"
         :current-page="page"
         path="/groups"

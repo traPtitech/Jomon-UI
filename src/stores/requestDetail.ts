@@ -42,7 +42,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   })
   const isRequestCreater = (user: User | undefined) => {
     if (!user || request.value === undefined) return false
-    return user.name === request.value.created_by
+    return user.id === request.value.created_by
   }
 
   const fetchRequestDetail = async (id: string) => {

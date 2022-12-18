@@ -56,6 +56,7 @@ if (!userStore.isUserFetched) {
       </div>
       <div class="flex flex-col">
         <label>払い戻し対象者</label>
+        <!--todo: valueをamountを加えたオブジェクトにしないといけない-->
         <InputSelect
           v-model="request.targets"
           class="!w-2/3"

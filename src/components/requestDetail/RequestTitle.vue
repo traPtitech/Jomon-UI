@@ -43,8 +43,7 @@ const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
     <InputText
       v-model="editedValue.title"
       class="flex-grow"
-      placeholder="タイトル"
-      type="text" />
+      placeholder="タイトル" />
     <SimpleButton
       class="ml-2"
       font-size="sm"

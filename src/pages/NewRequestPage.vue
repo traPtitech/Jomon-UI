@@ -5,6 +5,7 @@ import { useUserStore } from '/@/stores/user'
 
 import NewRequestFileForm from '/@/components/newRequest/NewRequestFileForm.vue'
 import NewRequestTag from '/@/components/newRequest/NewRequestTag.vue'
+import NewRequestTargets from '/@/components/newRequest/NewRequestTargets.vue'
 import InputSelect from '/@/components/shared/InputSelect.vue'
 import InputText from '/@/components/shared/InputText.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
@@ -54,16 +55,9 @@ if (!userStore.isUserFetched) {
           placeholder=""
           :templates="requestTemplates" />
       </div>
-      <div class="flex flex-col">
-        <label>払い戻し対象者</label>
-        <!--todo: valueをamountを加えたオブジェクトにしないといけない-->
-        <InputSelect
-          v-model="request.targets"
-          class="!w-2/3"
-          is-multiple
-          :options="userStore.userOptions"
-          placeholder="払い戻し対象者を選択" />
-      </div>
+      <NewRequestTargets
+        :targets="request.targets"
+        @input="request.targets = $event" />
       <div class="flex flex-col">
         <label>グループ</label>
         <InputSelect
@@ -72,7 +66,7 @@ if (!userStore.isUserFetched) {
           :options="groupStore.groupOptions"
           placeholder="グループを選択" />
       </div>
-      <NewRequestTag :request="request" @input="request.tags = $event" />
+      <NewRequestTag :tags="request.tags" @input="request.tags = $event" />
       <NewRequestFileForm :files="files" @input="files = $event" />
       <div class="text-right">
         <SimpleButton

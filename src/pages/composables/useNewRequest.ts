@@ -31,7 +31,7 @@ export const useNewRequest = () => {
   const request = ref<RequestRequest>({
     created_by: userStore.me?.id ?? '',
     title: '',
-    targets: [],
+    targets: [{ target: '', amount: 0 }],
     content: '',
     tags: [],
     group: ''

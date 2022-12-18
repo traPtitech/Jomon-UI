@@ -2,6 +2,7 @@ import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
+import type { RequestRequest } from '/@/stores/requestDetail'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 
@@ -17,16 +18,6 @@ export type EditMode =
   | 'tags'
   | 'targets'
   | ''
-
-export interface EditedValue {
-  title: string
-  amount: number
-  content: string
-  targets: string[]
-  tags: Tag[]
-  group: string
-  created_by: string
-}
 
 export const useRequestDetail = () => {
   const requestDetailStore = useRequestDetailStore()
@@ -55,7 +46,7 @@ export const useRequestDetail = () => {
     editMode.value = ''
   }
 
-  const putRequest = async (id: string, willPutRequest: EditedValue) => {
+  const putRequest = async (id: string, willPutRequest: RequestRequest) => {
     let tags: Tag[]
     try {
       tags = await tagStore.createTagIfNotExist(willPutRequest.tags)
@@ -64,8 +55,6 @@ export const useRequestDetail = () => {
     }
     const putRequest = {
       ...willPutRequest,
-      targets: [...willPutRequest.targets],
-      amount: willPutRequest.amount,
       tags: tags.map(tag => tag.id),
       group: willPutRequest.group !== '' ? willPutRequest.group : null
     }

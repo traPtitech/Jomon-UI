@@ -2,17 +2,16 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import type { PostRequest, User, Tag } from '/@/lib/apis'
+import type { PostRequest, User, Tag, RequestTarget } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import { convertRequestDetail } from '/@/lib/date'
 import type { RequestDetail } from '/@/lib/requestDetailTypes'
 
-interface EditedValue {
+export interface RequestRequest {
   created_by: string
-  amount: number
   title: string
   content: string
-  targets: string[]
+  targets: RequestTarget[]
   tags: Tag[]
   group: string
 }
@@ -22,21 +21,19 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
 
   const request = ref<RequestDetail>()
 
-  const targetIds = computed(() => {
-    const targetIds = new Array<string>()
+  const targets = computed((): RequestTarget[] => {
     if (request.value === undefined) {
       return []
     }
-    for (let i = 0; i < request.value.targets.length; i++) {
-      targetIds.push(request.value.targets[i].id)
-    }
-    return targetIds
+    return request.value.targets.map(target => ({
+      target: target.id,
+      amount: target.amount
+    }))
   })
 
   const editMode = ref('')
-  const editedValue = ref<EditedValue>({
+  const editedValue = ref<RequestRequest>({
     created_by: '',
-    amount: 0,
     title: '',
     content: '',
     targets: [],
@@ -56,10 +53,9 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
 
       editedValue.value = {
         created_by: request.value.created_by,
-        amount: request.value.amount,
         title: request.value.title,
         content: request.value.content,
-        targets: targetIds.value,
+        targets: targets.value,
         tags: request.value.tags,
         group: request.value.group.id
       }
@@ -81,7 +77,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
 
   return {
     request,
-    targetIds,
+    targets,
     editMode,
     editedValue,
     isRequestCreater,

@@ -5,7 +5,6 @@ import { useUserStore } from '/@/stores/user'
 
 import NewRequestFileForm from '/@/components/newRequest/NewRequestFileForm.vue'
 import NewRequestTag from '/@/components/newRequest/NewRequestTag.vue'
-import InputNumber from '/@/components/shared/InputNumber.vue'
 import InputSelect from '/@/components/shared/InputSelect.vue'
 import InputText from '/@/components/shared/InputText.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
@@ -49,10 +48,6 @@ if (!userStore.isUserFetched) {
           placeholder="タイトルを入力" />
       </div>
       <div class="flex flex-col">
-        <label>金額</label>
-        <div><InputNumber v-model="request.amount" class="mr-1 h-8" />円</div>
-      </div>
-      <div class="flex flex-col">
         <label>詳細</label>
         <MarkdownTextarea
           v-model="request.content"
@@ -61,6 +56,7 @@ if (!userStore.isUserFetched) {
       </div>
       <div class="flex flex-col">
         <label>払い戻し対象者</label>
+        <!--todo: valueをamountを加えたオブジェクトにしないといけない-->
         <InputSelect
           v-model="request.targets"
           class="!w-2/3"

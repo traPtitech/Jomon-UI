@@ -6,6 +6,7 @@ import { useToast } from 'vue-toastification'
 
 import type { Request } from '/@/stores/request'
 import { useRequestStore } from '/@/stores/request'
+import type { RequestRequest } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
@@ -16,15 +17,6 @@ export interface FileRequest {
   name: string
   src: string
   type: string
-}
-export interface RequestRequest {
-  created_by: string
-  amount: number
-  title: string
-  content: string
-  targets: string[]
-  tags: Tag[]
-  group: string
 }
 
 export const useNewRequest = () => {
@@ -38,7 +30,6 @@ export const useNewRequest = () => {
 
   const request = ref<RequestRequest>({
     created_by: userStore.me?.id ?? '',
-    amount: 0,
     title: '',
     targets: [],
     content: '',

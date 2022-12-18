@@ -1,8 +1,9 @@
 <script lang="ts" setup>
+import type { RequestRequest } from '/@/stores/requestDetail'
+
 import type { Tag } from '/@/lib/apis'
 
 import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
-import type { RequestRequest } from '/@/pages/composables/useNewRequest'
 
 interface Props {
   request: RequestRequest

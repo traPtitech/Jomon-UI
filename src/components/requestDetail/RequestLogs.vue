@@ -50,7 +50,7 @@ const logs = computed(() => {
     return 0
   })
   return array
-  //その後この配列のkindで配列を選び、indexでindexを選ぶことで2つの配列をいい感じに並べ替えられる
+  //その後この配列のtypeで配列を選び、indexでindexを選ぶことで2つの配列をいい感じに並べ替えられる
 })
 </script>
 

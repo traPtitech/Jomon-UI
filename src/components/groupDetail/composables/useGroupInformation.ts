@@ -14,9 +14,9 @@ export const useGroupInformation = () => {
 
   const editMode = ref<EditMode>('')
 
-  const changeEditMode = async (kind: EditMode) => {
-    if (kind !== '') {
-      editMode.value = kind
+  const changeEditMode = async (mode: EditMode) => {
+    if (mode !== '') {
+      editMode.value = mode
     } else {
       isSending.value = true
       const value = {

@@ -2,15 +2,15 @@
 import { computed } from 'vue'
 
 interface Props {
-  kind?: 'plain' | 'danger'
+  type?: 'plain' | 'danger'
   fontSize: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
   padding: 'sm' | 'md' | 'lg' | 'xl'
   isDisabled?: boolean
 }
 const props = withDefaults(defineProps<Props>(), { isDisabled: false })
 
-const kindClass = computed(() => {
-  switch (props.kind) {
+const typeClass = computed(() => {
+  switch (props.type) {
     case 'plain':
       return `${!props.isDisabled && 'hover:bg-gray-200'} border-gray-300`
     case 'danger':
@@ -44,7 +44,7 @@ const paddingClass = computed(() => {
 
 <template>
   <button
-    :class="`rounded-md border ${kindClass} ${fontSizeClass} ${paddingClass} ${
+    :class="`rounded-md border ${typeClass} ${fontSizeClass} ${paddingClass} ${
       props.isDisabled ? 'cursor-not-allowed opacity-50' : ''
     }`"
     :disabled="props.isDisabled">

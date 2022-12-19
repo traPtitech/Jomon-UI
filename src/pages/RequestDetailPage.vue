@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { DateTime } from 'luxon'
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
@@ -37,7 +38,7 @@ const { editMode, changeEditMode } = useRequestDetail()
 const { request } = storeToRefs(requestDetailStore)
 
 const formattedDate = computed(() =>
-  formatDate(request.value?.created_at ?? '')
+  formatDate(request.value?.created_at ?? DateTime.fromISO(''))
 )
 
 await requestDetailStore.fetchRequestDetail(id)
@@ -75,9 +76,7 @@ if (!tagStore.isTagFetched) {
             @change-edit-mode="changeEditMode($event)" />
           <p>申請者：{{ request.created_by }}</p>
           <p>申請日：{{ formattedDate }}</p>
-          <RequestAmount
-            :is-edit-mode="editMode === 'amount'"
-            @change-edit-mode="changeEditMode($event)" />
+          <RequestAmount />
         </div>
       </div>
       <div class="mt-4 flex">

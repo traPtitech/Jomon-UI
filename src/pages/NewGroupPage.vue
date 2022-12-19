@@ -26,7 +26,7 @@ const group = reactive({
   name: '',
   description: '',
   budget: 0,
-  owners: userStore.me?.name ? [userStore.me.name] : [],
+  owners: userStore.me?.id ? [userStore.me.id] : [],
   members: []
 })
 

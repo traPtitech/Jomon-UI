@@ -2,8 +2,9 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import type { Request } from '/@/lib/apis'
+import type { Request } from '/@/lib/apiTypes'
 import apis from '/@/lib/apis'
+import { convertRequest } from '/@/lib/date'
 
 import type { RequestStatus } from '/@/consts/consts'
 
@@ -35,7 +36,6 @@ export const useRequestStore = defineStore('request', () => {
 
   const fetchRequests = async (params: SearchRequestParams = defaultParams) => {
     const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
-    // todo:date型を使うようにすればバリデーションが不要になりそう
     if (
       (params.since && !rule.test(params.since)) ||
       (params.until && !rule.test(params.until))
@@ -44,7 +44,7 @@ export const useRequestStore = defineStore('request', () => {
       return
     }
     try {
-      requests.value = (
+      const response = (
         await apis.getRequests(
           params.sort,
           params.currentStatus as RequestStatus,
@@ -55,6 +55,8 @@ export const useRequestStore = defineStore('request', () => {
           params.group
         )
       ).data
+      requests.value = response.map(request => convertRequest(request))
+      isRequestFetched.value = true
     } catch {
       toast.error('申請の取得に失敗しました')
     }

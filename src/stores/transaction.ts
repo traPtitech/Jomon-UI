@@ -2,15 +2,16 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import type { Transaction } from '/@/lib/apis'
+import type { Transaction } from '/@/lib/apiTypes'
 import apis from '/@/lib/apis'
+import { convertTransaction } from '/@/lib/date'
 
 export interface SearchTransactionParams {
   sort: string
   target: string
   since: string
   until: string
-  tag: string[]
+  tags: string[]
   group: string
   request: string
 }
@@ -18,7 +19,7 @@ export interface SearchTransactionParams {
 export const defaultParams: SearchTransactionParams = {
   sort: 'created_at',
   target: '',
-  tag: [],
+  tags: [],
   since: '',
   until: '',
   group: '',
@@ -32,24 +33,31 @@ export const useTransactionStore = defineStore('transaction', () => {
   const isTransactionFetched = ref(false)
 
   const fetchTransactions = async (
-    tmpParams: SearchTransactionParams = defaultParams
+    params: SearchTransactionParams = defaultParams
   ) => {
-    const params = { ...tmpParams, tag: '' }
-    if (tmpParams.tag.length > 0) {
-      params.tag = tmpParams.tag.join(',')
+    const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
+    if (
+      (params.since && !rule.test(params.since)) ||
+      (params.until && !rule.test(params.until))
+    ) {
+      toast.warning('日付はyyyy-MM-ddの形式で入力してください')
+      return
     }
     try {
-      transactions.value = (
+      const response = (
         await apis.getTransactions(
           params.sort,
           params.target,
           params.since,
           params.until,
-          params.tag,
+          params.tags.join(','),
           params.group,
           params.request
         )
       ).data
+      transactions.value = response.map(transaction =>
+        convertTransaction(transaction)
+      )
       isTransactionFetched.value = true
     } catch {
       toast.error('入出金記録の取得に失敗しました')

@@ -6,8 +6,9 @@ import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useTransactionStore } from '/@/stores/transaction'
 
-import type { Tag, Transaction } from '/@/lib/apis'
+import type { Tag, Transaction as APITransaction } from '/@/lib/apis'
 import apis from '/@/lib/apis'
+import { convertTransaction } from '/@/lib/date'
 
 export type MoneyDirection = 'toTraP' | 'fromTraP'
 
@@ -18,11 +19,14 @@ export const useNewTransaction = (requestId: string) => {
   const tagStore = useTagStore()
 
   const { transactions } = storeToRefs(transactionStore)
-  const { request, targetIds } = storeToRefs(requestDetailStore)
+  const { request, targets } = storeToRefs(requestDetailStore)
+
+  const totalAmount =
+    request.value?.targets.reduce((a, target) => a + target.amount, 0) ?? 0
 
   const transaction = ref({
-    amount: requestId && request.value ? request.value.amount : 0,
-    targets: requestId ? targetIds : [],
+    amount: requestId ? totalAmount : 0,
+    targets: requestId ? targets.value.map(target => target.target) : [],
     request: requestId,
     tags: requestId && request.value ? request.value.tags : [],
     group: requestId && request.value ? request.value.group.id : ''
@@ -45,16 +49,20 @@ export const useNewTransaction = (requestId: string) => {
     }
     const transactionRequest = {
       ...transaction.value,
-      tags: tags.map(tag => tag.id)
+      tags: tags.map(tag => tag.id),
+      group: transaction.value.group !== '' ? transaction.value.group : null
     }
     try {
-      const response: Transaction[] = (
+      const response: APITransaction[] = (
         await apis.postTransaction(transactionRequest)
       ).data
+      const newTransactions = response.map(transaction =>
+        convertTransaction(transaction)
+      )
       if (transactions.value !== undefined) {
-        transactions.value = [...response, ...transactions.value]
+        transactions.value = [...newTransactions, ...transactions.value]
       } else {
-        transactions.value = response
+        transactions.value = newTransactions
       }
     } catch {
       toast.error('入出金記録の作成に失敗しました')

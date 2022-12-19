@@ -25,7 +25,7 @@ const params = reactive<SearchTransactionParams>({
   since: '',
   until: '',
   group: '',
-  tag: [],
+  tags: [],
   request: ''
 })
 
@@ -112,8 +112,7 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
           <InputText
             v-model="params.target"
             class="w-full border-none"
-            placeholder="取引相手"
-            type="text" />
+            placeholder="取引相手" />
           <XMarkIcon
             class="absolute right-1 top-2 h-4 cursor-pointer"
             @click="changeIsTargetSearchMode" />
@@ -128,7 +127,7 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
         @close="'updateTransactions'" />
       <!-- タグ -->
       <InputSelect
-        v-model="params.tag"
+        v-model="params.tags"
         class="!w-3/10"
         is-multiple
         :options="tagStore.tagOptions"

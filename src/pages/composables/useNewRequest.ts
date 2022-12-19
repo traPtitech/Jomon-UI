@@ -1,28 +1,22 @@
+import { DateTime } from 'luxon'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
 import { useRequestStore } from '/@/stores/request'
+import type { RequestRequest } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-import type { Request, Tag } from '/@/lib/apis'
+import type { Request } from '/@/lib/apiTypes'
+import type { Request as APIRequest, Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 export interface FileRequest {
   name: string
   src: string
   type: string
-}
-export interface RequestRequest {
-  created_by: string
-  amount: number
-  title: string
-  content: string
-  targets: string[]
-  tags: Tag[]
-  group: string
 }
 
 export const useNewRequest = () => {
@@ -35,10 +29,9 @@ export const useNewRequest = () => {
   const { requests } = storeToRefs(requestStore)
 
   const request = ref<RequestRequest>({
-    created_by: userStore.me?.name ?? '',
-    amount: 0,
+    created_by: userStore.me?.id ?? '',
     title: '',
-    targets: [],
+    targets: [{ target: '', amount: 0 }],
     content: '',
     tags: [],
     group: ''
@@ -58,6 +51,13 @@ export const useNewRequest = () => {
       toast.warning('タイトル、内容、対象者は必須です')
       return
     }
+    if (
+      request.value.targets.some(target => target.target === '') ||
+      request.value.targets.some(target => target.amount === 0)
+    ) {
+      toast.warning('対象者の選択と金額の入力は必須です')
+      return
+    }
     let tags: Tag[]
     try {
       tags = await tagStore.createTagIfNotExist(request.value.tags)
@@ -67,15 +67,20 @@ export const useNewRequest = () => {
     const requestRequest = {
       ...request.value,
       tags: tags.map(tag => tag.id),
-      group: request.value.group
+      group: request.value.group !== '' ? request.value.group : null
     }
     try {
-      const response: Request = (await apis.postRequest(requestRequest)).data
+      const response: APIRequest = (await apis.postRequest(requestRequest)).data
       const id = response.id
+      const newRequest: Request = {
+        ...response,
+        created_at: DateTime.fromISO(response.created_at),
+        updated_at: DateTime.fromISO(response.updated_at)
+      }
       if (requests.value) {
-        requests.value.unshift(response)
+        requests.value.unshift(newRequest)
       } else {
-        requests.value = [response]
+        requests.value = [newRequest]
       }
       try {
         files.value.forEach((file: FileRequest) => {

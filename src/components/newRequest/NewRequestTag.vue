@@ -2,10 +2,9 @@
 import type { Tag } from '/@/lib/apis'
 
 import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
-import type { RequestRequest } from '/@/pages/composables/useNewRequest'
 
 interface Props {
-  request: RequestRequest
+  tags: Tag[]
 }
 const props = defineProps<Props>()
 const emit = defineEmits<{ (e: 'input', value: Tag[]): void }>()
@@ -17,7 +16,7 @@ const emit = defineEmits<{ (e: 'input', value: Tag[]): void }>()
     <div class="flex">
       <InputSelectTagWithCreation
         class="w-2/3"
-        :model-value="props.request.tags"
+        :model-value="props.tags"
         @update:model-value="emit('input', $event)" />
     </div>
   </div>

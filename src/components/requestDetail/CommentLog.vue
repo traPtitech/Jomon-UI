@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Comment } from '/@/lib/apis'
+import type { Comment } from '/@/lib/apiTypes'
 import { formatDateAndTime } from '/@/lib/date'
 
 import MarkdownIt from '/@/components//shared/MarkdownIt.vue'

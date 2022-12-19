@@ -79,7 +79,7 @@ watch(
     </div>
   </div>
   <PaginationBar
-    v-if="requests"
+    v-if="requests && requests.length > 0"
     class="mt-4"
     :current-page="page"
     path="/requests"

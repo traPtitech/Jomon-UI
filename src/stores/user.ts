@@ -23,7 +23,7 @@ export const useUserStore = defineStore('user', () => {
       users.value?.map(user => {
         return {
           key: user.name,
-          value: user.name
+          value: user.id
         }
       }) ?? []
     )

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { DateTime } from 'luxon'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
@@ -41,11 +42,17 @@ async function putStatus(nextStatus: RequestStatus, comment: string) {
       .data
     request.value.statuses.push({
       created_by: response.created_by,
-      created_at: response.created_at,
+      created_at: DateTime.fromISO(response.created_at),
       status: response.status
     })
+
     if (response.comment !== undefined) {
-      request.value.comments.push(response.comment)
+      const newComment = {
+        ...response.comment,
+        created_at: DateTime.fromISO(response.comment.created_at),
+        updated_at: DateTime.fromISO(response.comment.updated_at)
+      }
+      request.value.comments.push(newComment)
     }
     request.value.status = response.status
     emit('closeModal')

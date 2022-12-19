@@ -17,7 +17,7 @@ export const useGroupDetailStore = defineStore('groupDetail', () => {
   })
   const canEditGroup = (user: User | undefined) => {
     if (!user) return false
-    return user.admin || group.value?.owners.includes(user.name)
+    return user.admin || group.value?.owners.includes(user.id)
   }
 
   const putGroup = async (id: string, willPutGroup: PostGroup) => {
@@ -35,15 +35,16 @@ export const useGroupDetailStore = defineStore('groupDetail', () => {
       editedValue.value = {
         name: nextGroup.name,
         description: nextGroup.description,
-        budget: nextGroup.budget
+        budget: nextGroup.budget ?? 0
       }
+      group.value = nextGroup
       toast.success('グループを修正しました')
     } catch {
       toast.error('グループの更新に失敗しました')
       editedValue.value = {
         name: group.value.name,
         description: group.value.description,
-        budget: group.value.budget
+        budget: group.value.budget ?? 0
       }
     }
   }
@@ -54,7 +55,7 @@ export const useGroupDetailStore = defineStore('groupDetail', () => {
       editedValue.value = {
         name: group.value.name,
         description: group.value.description,
-        budget: group.value.budget
+        budget: group.value.budget ?? 0
       }
     } catch {
       toast.error('グループの取得に失敗しました')

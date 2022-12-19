@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { DateTime } from 'luxon'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
@@ -6,7 +7,8 @@ import { useToast } from 'vue-toastification'
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 
-import type { Tag, Transaction } from '/@/lib/apis'
+import type { Transaction } from '/@/lib/apiTypes'
+import type { Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
 import { toId } from '/@/lib/parsePathParams'
@@ -18,6 +20,14 @@ import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithC
 import InputText from '/@/components/shared/InputText.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { MoneyDirection } from '/@/pages/composables/useNewTransaction'
+
+interface EditedValue {
+  amount: number
+  target: string
+  request: string | null
+  tags: Tag[]
+  group: string
+}
 
 interface Props {
   transaction: Transaction
@@ -46,7 +56,9 @@ const directionOptions = [
   }
 ]
 
-const editedValue = ref({
+const formattedDate = formatDate(props.transaction.created_at)
+
+const editedValue = ref<EditedValue>({
   amount: props.transaction.amount,
   target: props.transaction.target,
   request: props.transaction.request,
@@ -71,11 +83,17 @@ async function handlePutTransaction() {
       moneyDirection.value === 'toTraP'
         ? editedValue.value.amount
         : -editedValue.value.amount,
-    tags: tags.map(tag => tag.id)
+    tags: tags.map(tag => tag.id),
+    group: editedValue.value.group !== '0' ? editedValue.value.group : null
   }
   try {
-    const res = (await apis.putTransactionDetail(id, transaction)).data
-    emit('edited', res)
+    const response = (await apis.putTransactionDetail(id, transaction)).data
+    const nextTransaction = {
+      ...response,
+      created_at: DateTime.fromISO(response.created_at),
+      updated_at: DateTime.fromISO(response.updated_at)
+    }
+    emit('edited', nextTransaction)
   } catch {
     toast.error('入出金記録の修正に失敗しました')
     emit('edited', undefined)
@@ -86,7 +104,8 @@ async function handlePutTransaction() {
 <template>
   <form class="mb-4 space-y-2">
     <div class="flex flex-col">
-      <label>年月日</label><span>{{ formatDate(transaction.created_at) }}</span>
+      <label>年月日</label>
+      <span>{{ formattedDate }}</span>
     </div>
     <div class="flex flex-col">
       <label>取引額</label>

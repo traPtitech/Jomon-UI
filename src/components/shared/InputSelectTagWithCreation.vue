@@ -25,7 +25,7 @@ const value = computed({
   <VueSelect
     v-model="value"
     :close-on-select="false"
-    :create-option="(tag: any) => ({ name: tag, id: '', created_at: '', updated_at: '' })"
+    :create-option="(tag: Tag) => ({ name: tag, id: '', created_at: '', updated_at: '' })"
     label="name"
     multiple
     :options="tagStore.tags"

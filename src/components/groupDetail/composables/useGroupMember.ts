@@ -19,11 +19,11 @@ export const useGroupMember = () => {
       return []
     }
     return users.value
-      .filter(user => !group.value?.members.includes(user.name))
+      .filter(user => !group.value?.members.includes(user.id))
       .map(user => {
         return {
           key: user.name,
-          value: user.name
+          value: user.id
         }
       })
   })

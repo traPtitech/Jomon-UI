@@ -18,57 +18,20 @@ export const transactions = [
                   request: 'c2cd9bd7-a4e9-4dbd-a26a-5dbb063a7ae7',
                   tags: [
                     {
-                      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+                      id: '3fa85f64-5717-4562-b3fc-2c963f66afa5',
                       name: '2020講習会',
-                      description: '2020年度講',
-                      created_at: '2022-02-09T14:03:53.278Z',
-                      updated_at: '2022-02-09T14:03:53.278Z'
-                    },
-                    {
-                      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-                      name: '2020講習会',
-                      description: '2020年度講習会ああああああ',
-                      created_at: '2022-02-09T14:03:53.278Z',
-                      updated_at: '2022-02-09T14:03:53.278Z'
-                    },
-                    {
-                      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-                      name: '2020講習会',
-                      description: '2020年度講習会',
-                      created_at: '2022-02-09T14:03:53.278Z',
-                      updated_at: '2022-02-09T14:03:53.278Z'
-                    },
-                    {
-                      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-                      name: '2020講習会',
-                      description: '2020年度講習会sssssssssssss',
-                      created_at: '2022-02-09T14:03:53.278Z',
-                      updated_at: '2022-02-09T14:03:53.278Z'
+                      created_at: '2022-04-17T05:47:48.187Z',
+                      updated_at: '2022-04-17T05:47:48.187Z'
                     },
                     {
                       id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
                       name: '2021講習会',
-                      description: '2020年度講',
-                      created_at: '2022-02-09T14:03:53.278Z',
-                      updated_at: '2022-02-09T14:03:53.278Z'
-                    },
-                    {
-                      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-                      name: '2021講習会',
-                      description: '2020年度講',
-                      created_at: '2022-02-09T14:03:53.278Z',
-                      updated_at: '2022-02-09T14:03:53.278Z'
-                    },
-                    {
-                      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-                      name: '2021講習会',
-                      description: '2020年度講',
-                      created_at: '2022-02-09T14:03:53.278Z',
-                      updated_at: '2022-02-09T14:03:53.278Z'
+                      created_at: '2022-04-17T05:47:48.187Z',
+                      updated_at: '2022-04-17T05:47:48.187Z'
                     }
                   ],
                   group: {
-                    id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+                    id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
                     name: 'SysAd',
                     description: 'SysAd班',
                     budget: 250000,
@@ -85,57 +48,20 @@ export const transactions = [
                   request: 'c2cd9bd7-a4e9-4dbd-a26a-5dbb063a7ae7',
                   tags: [
                     {
-                      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+                      id: '3fa85f64-5717-4562-b3fc-2c963f66afa5',
                       name: '2020講習会',
-                      description: '2020年度講',
-                      created_at: '2022-02-09T14:03:53.278Z',
-                      updated_at: '2022-02-09T14:03:53.278Z'
-                    },
-                    {
-                      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-                      name: '2020講習会',
-                      description: '2020年度講習会ああああああ',
-                      created_at: '2022-02-09T14:03:53.278Z',
-                      updated_at: '2022-02-09T14:03:53.278Z'
-                    },
-                    {
-                      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-                      name: '2020講習会',
-                      description: '2020年度講習会',
-                      created_at: '2022-02-09T14:03:53.278Z',
-                      updated_at: '2022-02-09T14:03:53.278Z'
-                    },
-                    {
-                      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-                      name: '2020講習会',
-                      description: '2020年度講習会sssssssssssss',
-                      created_at: '2022-02-09T14:03:53.278Z',
-                      updated_at: '2022-02-09T14:03:53.278Z'
+                      created_at: '2022-04-17T05:47:48.187Z',
+                      updated_at: '2022-04-17T05:47:48.187Z'
                     },
                     {
                       id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
                       name: '2021講習会',
-                      description: '2020年度講',
-                      created_at: '2022-02-09T14:03:53.278Z',
-                      updated_at: '2022-02-09T14:03:53.278Z'
-                    },
-                    {
-                      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-                      name: '2021講習会',
-                      description: '2020年度講',
-                      created_at: '2022-02-09T14:03:53.278Z',
-                      updated_at: '2022-02-09T14:03:53.278Z'
-                    },
-                    {
-                      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-                      name: '2021講習会',
-                      description: '2020年度講',
-                      created_at: '2022-02-09T14:03:53.278Z',
-                      updated_at: '2022-02-09T14:03:53.278Z'
+                      created_at: '2022-04-17T05:47:48.187Z',
+                      updated_at: '2022-04-17T05:47:48.187Z'
                     }
                   ],
                   group: {
-                    id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+                    id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
                     name: 'SysAd',
                     description: 'SysAd班',
                     budget: 250000,
@@ -159,16 +85,16 @@ export const transactions = [
         request: 'c2cd9bd7-a4e9-4dbd-a26a-5dbb063a7ae7',
         tags: [
           {
-            id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            id: '3fa85f64-5717-4562-b3fc-2c963f66afa5',
             name: '2020講習会',
-            created_at: '2022-01-25T14:06:32.381Z',
-            updated_at: '2022-01-25T14:06:32.381Z'
+            created_at: '2022-04-17T05:47:48.187Z',
+            updated_at: '2022-04-17T05:47:48.187Z'
           },
           {
-            id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
+            id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
             name: '2021講習会',
-            created_at: '2022-01-27T14:06:32.381Z',
-            updated_at: '2022-01-27T14:06:32.381Z'
+            created_at: '2022-04-17T05:47:48.187Z',
+            updated_at: '2022-04-17T05:47:48.187Z'
           }
         ],
         group: {

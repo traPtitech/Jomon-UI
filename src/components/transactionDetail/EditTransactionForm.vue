@@ -49,7 +49,7 @@ const directionOptions = [
 const editedValue = ref({
   amount: props.transaction.amount,
   target: props.transaction.target,
-  request: props.transaction.request ?? '',
+  request: props.transaction.request,
   tags: props.transaction.tags,
   group: props.transaction.group.id
 })
@@ -65,11 +65,12 @@ async function handlePutTransaction() {
   } catch {
     return
   }
-  if (moneyDirection.value === 'fromTraP') {
-    editedValue.value.amount = -editedValue.value.amount
-  }
   const transaction = {
     ...editedValue.value,
+    amount:
+      moneyDirection.value === 'toTraP'
+        ? editedValue.value.amount
+        : -editedValue.value.amount,
     tags: tags.map(tag => tag.id)
   }
   try {
@@ -78,14 +79,6 @@ async function handlePutTransaction() {
   } catch {
     toast.error('入出金記録の修正に失敗しました')
     emit('edited', undefined)
-  } finally {
-    editedValue.value = {
-      amount: props.transaction.amount,
-      target: props.transaction.target ?? '',
-      request: props.transaction.request,
-      tags: props.transaction.tags,
-      group: props.transaction.group.id
-    }
   }
 }
 </script>

@@ -32,11 +32,11 @@ const { transaction, moneyDirection, postTransaction } =
 const directionOptions = [
   {
     key: 'traPへ入金',
-    value: 'plus'
+    value: 'toTraP'
   },
   {
     key: 'traPから出金',
-    value: 'minus'
+    value: 'fromTraP'
   }
 ]
 

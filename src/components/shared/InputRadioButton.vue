@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 
 interface Props {
-  modelValue: any
+  modelValue: string
   options: Option[]
 }
 interface Option {
@@ -11,7 +11,7 @@ interface Option {
 }
 const props = defineProps<Props>()
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: any): void
+  (e: 'update:modelValue', value: string): void
 }>()
 
 const value = computed({

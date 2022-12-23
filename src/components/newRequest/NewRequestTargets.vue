@@ -71,6 +71,7 @@ function handleAddTarget() {
 function handleRemoveTarget(index: number) {
   if (props.targets.length === 1) {
     toast.warning('払い戻し対象者は1人以上必要です')
+    return
   }
   emit(
     'input',

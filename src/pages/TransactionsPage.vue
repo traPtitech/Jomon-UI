@@ -33,6 +33,7 @@ const sliceTransactionAt = (index: number, n: number) => {
 
 await transactionStore.fetchTransactions({
   ...defaultParams,
+  group: toId(route.query.group),
   request: toId(route.query.requestID)
 })
 

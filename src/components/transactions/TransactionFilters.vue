@@ -2,21 +2,27 @@
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 import { XMarkIcon } from '@heroicons/vue/24/solid'
 import { computed, reactive, ref } from 'vue'
+import { useRoute } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 import { useTransactionStore } from '/@/stores/transaction'
 import type { SearchTransactionParams } from '/@/stores/transaction'
 
+import { toId } from '/@/lib/parseQueryParams'
+
 import InputSelect from '/@/components//shared/InputSelect.vue'
 import InputText from '/@/components/shared/InputText.vue'
 
 import SortOrderButtons from './SortOrderButtons.vue'
 
+const route = useRoute()
+
 const transactionStore = useTransactionStore()
 const groupStore = useGroupStore()
 const tagStore = useTagStore()
 
+const groupId = toId(route.query.group)
 const isFilterByTarget = ref(false)
 
 const params = reactive<SearchTransactionParams>({
@@ -24,7 +30,7 @@ const params = reactive<SearchTransactionParams>({
   target: '',
   since: '',
   until: '',
-  group: '',
+  group: groupId,
   tags: [],
   request: ''
 })

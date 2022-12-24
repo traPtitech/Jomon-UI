@@ -44,11 +44,12 @@ export const useNewTransaction = (requestId: string) => {
     } catch {
       return
     }
-    if (moneyDirection.value === 'fromTraP') {
-      transaction.value.amount = -transaction.value.amount
-    }
     const transactionRequest = {
       ...transaction.value,
+      amount:
+        moneyDirection.value === 'fromTraP'
+          ? -transaction.value.amount
+          : transaction.value.amount,
       tags: tags.map(tag => tag.id),
       group: transaction.value.group !== '' ? transaction.value.group : null
     }

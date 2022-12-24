@@ -10,6 +10,8 @@ import type { Tag, Transaction as APITransaction } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import { convertTransaction } from '/@/lib/date'
 
+export type MoneyDirection = 'toTraP' | 'fromTraP'
+
 export const useNewTransaction = (requestId: string) => {
   const toast = useToast()
   const transactionStore = useTransactionStore()
@@ -29,6 +31,7 @@ export const useNewTransaction = (requestId: string) => {
     tags: requestId && request.value ? request.value.tags : [],
     group: requestId && request.value ? request.value.group.id : ''
   })
+  const moneyDirection = ref<MoneyDirection>('toTraP')
 
   async function postTransaction() {
     if (transaction.value.targets.length === 0) {
@@ -43,6 +46,10 @@ export const useNewTransaction = (requestId: string) => {
     }
     const transactionRequest = {
       ...transaction.value,
+      amount:
+        moneyDirection.value === 'fromTraP'
+          ? -transaction.value.amount
+          : transaction.value.amount,
       tags: tags.map(tag => tag.id),
       group: transaction.value.group !== '' ? transaction.value.group : null
     }
@@ -65,5 +72,5 @@ export const useNewTransaction = (requestId: string) => {
     toast.success('入出金記録の作成に成功しました')
   }
 
-  return { transaction, postTransaction }
+  return { transaction, moneyDirection, postTransaction }
 }

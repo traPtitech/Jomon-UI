@@ -10,6 +10,7 @@ import { useUserStore } from '/@/stores/user'
 import { toId } from '/@/lib/parseQueryParams'
 
 import InputNumber from '/@/components/shared/InputNumber.vue'
+import InputRadioButton from '/@/components/shared/InputRadioButton.vue'
 import InputSelect from '/@/components/shared/InputSelect.vue'
 import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
@@ -25,7 +26,19 @@ const groupStore = useGroupStore()
 const requestDetailStore = useRequestDetailStore()
 
 const { request } = storeToRefs(requestDetailStore)
-const { transaction, postTransaction } = useNewTransaction(requestId)
+const { transaction, moneyDirection, postTransaction } =
+  useNewTransaction(requestId)
+
+const directionOptions = [
+  {
+    key: 'traPへ入金',
+    value: 'toTraP'
+  },
+  {
+    key: 'traPから出金',
+    value: 'fromTraP'
+  }
+]
 
 if (!groupStore.isGroupFetched) {
   await groupStore.fetchGroups()
@@ -60,13 +73,19 @@ if (requestId !== '') {
         </div>
       </div>
       <div class="flex flex-col">
-        <label>払い戻し対象者</label>
+        <label>入出金</label>
+        <InputRadioButton
+          v-model="moneyDirection"
+          :options="directionOptions" />
+      </div>
+      <div class="flex flex-col">
+        <label>取引相手</label>
         <InputSelect
           v-model="transaction.targets"
           class="!w-2/3"
           is-multiple
           :options="userStore.userOptions"
-          placeholder="払い戻し対象者を選択" />
+          placeholder="取引相手を選択" />
       </div>
       <div class="flex flex-col">
         <label>グループ</label>

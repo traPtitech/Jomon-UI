@@ -14,10 +14,12 @@ import { formatDate } from '/@/lib/date'
 import { toId } from '/@/lib/parsePathParams'
 
 import InputNumber from '/@/components/shared/InputNumber.vue'
+import InputRadioButton from '/@/components/shared/InputRadioButton.vue'
 import InputSelect from '/@/components/shared/InputSelect.vue'
 import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
 import InputText from '/@/components/shared/InputText.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import type { MoneyDirection } from '/@/pages/composables/useNewTransaction'
 
 interface EditedValue {
   amount: number
@@ -43,15 +45,27 @@ const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const toast = useToast()
 
+const directionOptions = [
+  {
+    key: 'traPへ入金',
+    value: 'toTraP'
+  },
+  {
+    key: 'traPから出金',
+    value: 'fromTraP'
+  }
+]
+
 const formattedDate = formatDate(props.transaction.created_at)
 
 const editedValue = ref<EditedValue>({
   amount: props.transaction.amount,
   target: props.transaction.target,
-  request: props.transaction.request ?? '',
+  request: props.transaction.request,
   tags: props.transaction.tags,
   group: props.transaction.group.id
 })
+const moneyDirection = ref<MoneyDirection>('toTraP')
 
 async function handlePutTransaction() {
   if (props.transaction === undefined) {
@@ -65,8 +79,10 @@ async function handlePutTransaction() {
   }
   const transaction = {
     ...editedValue.value,
-    request:
-      editedValue.value.request !== '' ? editedValue.value.request : null,
+    amount:
+      moneyDirection.value === 'toTraP'
+        ? editedValue.value.amount
+        : -editedValue.value.amount,
     tags: tags.map(tag => tag.id),
     group: editedValue.value.group !== '0' ? editedValue.value.group : null
   }
@@ -81,42 +97,43 @@ async function handlePutTransaction() {
   } catch {
     toast.error('入出金記録の修正に失敗しました')
     emit('edited', undefined)
-  } finally {
-    editedValue.value = {
-      amount: props.transaction.amount,
-      target: props.transaction.target ?? '',
-      request: props.transaction.request,
-      tags: props.transaction.tags,
-      group: props.transaction.group.id
-    }
   }
 }
 </script>
 
 <template>
   <form class="mb-4 space-y-2">
-    <div>年月日：{{ formattedDate }}</div>
-    <div>
-      取引額：
-      <InputNumber
-        v-model="editedValue.amount"
-        class="mr-1"
-        :min="1"
-        placeholder="金額" />円
+    <div class="flex flex-col">
+      <label>年月日</label>
+      <span>{{ formattedDate }}</span>
     </div>
-    <div>
-      取引相手：
+    <div class="flex flex-col">
+      <label>取引額</label>
+      <div>
+        <InputNumber
+          v-model="editedValue.amount"
+          class="mr-1"
+          :min="1"
+          placeholder="金額" />円
+      </div>
+    </div>
+    <div class="flex flex-col">
+      <label>お金の方向</label>
+      <InputRadioButton v-model="moneyDirection" :options="directionOptions" />
+    </div>
+    <div class="flex flex-col">
+      <label>取引相手</label>
       <InputText v-model="editedValue.target" placeholder="取引相手を入力" />
     </div>
-    <div>
-      取引グループ：
+    <div class="flex flex-col">
+      <label>取引グループ</label>
       <InputSelect
         v-model="editedValue.group"
         :options="groupStore.groupOptions"
         placeholder="グループを選択" />
     </div>
-    <div>
-      タグ：
+    <div class="flex flex-col">
+      <label>タグ</label>
       <InputSelectTagWithCreation
         v-model="editedValue.tags"
         class="w-1/3"

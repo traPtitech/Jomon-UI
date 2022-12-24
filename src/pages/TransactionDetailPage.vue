@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ArrowLongRightIcon } from '@heroicons/vue/24/solid'
 import { DateTime } from 'luxon/src/luxon'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -90,7 +91,7 @@ if (!groupStore.isGroupFetched) {
     <div class="flex items-center pb-4">
       <h1 class="text-3xl">取引記録の詳細</h1>
       <SimpleButton
-        v-if="userStore.isAdmin() && !transaction.request && !isEditMode"
+        v-if="userStore.isAdmin() && transaction.request && !isEditMode"
         class="ml-2"
         font-size="sm"
         padding="sm"
@@ -98,13 +99,36 @@ if (!groupStore.isGroupFetched) {
         編集
       </SimpleButton>
     </div>
-    <ul v-if="!isEditMode" class="mb-4 space-y-2">
-      <li>年月日：{{ formattedDate }}</li>
-      <li>取引額：{{ transaction.amount }}円</li>
-      <li>取引相手：{{ transaction.target }}</li>
-      <li>取引グループ：{{ transaction.group.name }}</li>
-      <li>タグ：<TagsGroup :tags="transaction.tags" /></li>
-    </ul>
+    <div v-if="!isEditMode" class="mb-4 space-y-2">
+      <div>
+        <p class="font-bold">年月日</p>
+        <p>{{ formattedDate }}</p>
+      </div>
+      <div>
+        <p class="font-bold">入出金</p>
+        <div>
+          <p>{{ Math.abs(transaction.amount) }}円</p>
+          <div
+            :class="`flex items-center gap-4 ${
+              transaction.amount < 0
+                ? 'flex-row-reverse justify-end'
+                : 'flex-row'
+            }`">
+            traP
+            <ArrowLongRightIcon class="w-8" />
+            {{ transaction.target }}
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="font-bold">取引グループ</p>
+        <p>{{ transaction.group.name }}</p>
+      </div>
+      <div>
+        <p class="font-bold">タグ</p>
+        <div><TagsGroup :tags="transaction.tags" /></div>
+      </div>
+    </div>
     <EditTransactionForm
       v-else
       :transaction="transaction"

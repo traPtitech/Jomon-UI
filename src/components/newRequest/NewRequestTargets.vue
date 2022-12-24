@@ -71,6 +71,7 @@ function handleAddTarget() {
 function handleRemoveTarget(index: number) {
   if (props.targets.length === 1) {
     toast.warning('払い戻し対象者は1人以上必要です')
+    return
   }
   emit(
     'input',
@@ -113,16 +114,7 @@ function handleRemoveTarget(index: number) {
         </button>
       </li>
     </ul>
-    <div
-      v-if="
-        userOptions
-          .filter(user => !user.used)
-          .map(user => ({
-            key: user.key,
-            value: user.value
-          })).length > 0
-      "
-      class="w-2/3 text-center">
+    <div v-if="userOptions.length > targets.length" class="w-2/3 text-center">
       <button @click="handleAddTarget">
         <PlusCircleIcon class="w-8" />
       </button>

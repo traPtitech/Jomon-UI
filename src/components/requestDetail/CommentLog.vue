@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { useRoute } from 'vue-router'
+
 import type { Comment } from '/@/lib/apiTypes'
 import { formatDateAndTime } from '/@/lib/date'
 
@@ -12,10 +14,13 @@ interface Props {
 const props = defineProps<Props>()
 
 const formattedDateAndTime = formatDateAndTime(props.comment.created_at)
+
+const route = useRoute()
+const hash = route.hash.substring(1)
 </script>
 
 <template>
-  <div class="flex w-full p-2">
+  <div :id="comment.id" class="flex w-full p-2">
     <UserIcon class="w-12" :name="comment.user" />
     <div class="w-full pl-2">
       <div class="flex h-12 items-center justify-between">
@@ -24,7 +29,11 @@ const formattedDateAndTime = formatDateAndTime(props.comment.created_at)
           {{ formattedDateAndTime }}
         </span>
       </div>
-      <MarkdownIt class="border border-zinc-300 p-1" :text="comment.comment" />
+      <MarkdownIt
+        :class="`border border-zinc-300 p-1 ${
+          hash === comment.id && 'border-3 border border-yellow-300'
+        }`"
+        :text="comment.comment" />
     </div>
   </div>
 </template>

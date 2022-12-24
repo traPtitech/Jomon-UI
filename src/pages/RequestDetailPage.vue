@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { DateTime } from 'luxon'
 import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
@@ -51,6 +51,11 @@ if (!userStore.isUserFetched) {
 if (!tagStore.isTagFetched) {
   await tagStore.fetchTags()
 }
+onMounted(() => {
+  if (route.hash !== '') {
+    document.getElementById(route.hash.substring(1))?.scrollIntoView(true)
+  }
+})
 </script>
 
 <template>

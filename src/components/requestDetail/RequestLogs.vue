@@ -55,7 +55,7 @@ const logs = computed(() => {
 </script>
 
 <template>
-  <div v-if="request" class="h-120 overflow-y-scroll p-2">
+  <div v-if="request" class="p-2">
     <RequestFiles />
     <ul>
       <li

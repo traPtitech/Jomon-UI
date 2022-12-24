@@ -44,7 +44,7 @@ const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
       編集
     </SimpleButton>
     <SimpleButton
-      v-else
+      v-else-if="hasAuthority && isEditMode"
       class="ml-2"
       font-size="sm"
       :is-disabled="props.isSending"

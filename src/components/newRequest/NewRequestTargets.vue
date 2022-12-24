@@ -114,16 +114,7 @@ function handleRemoveTarget(index: number) {
         </button>
       </li>
     </ul>
-    <div
-      v-if="
-        userOptions
-          .filter(user => !user.used)
-          .map(user => ({
-            key: user.key,
-            value: user.value
-          })).length > 0
-      "
-      class="w-2/3 text-center">
+    <div v-if="userOptions.length > targets.length" class="w-2/3 text-center">
       <button @click="handleAddTarget">
         <PlusCircleIcon class="w-8" />
       </button>

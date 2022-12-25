@@ -8,7 +8,6 @@ import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
 import type { Transaction } from '/@/lib/apiTypes'
-import type { PostTransactionWithOneTarget } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import { convertTransaction } from '/@/lib/date'
 import { toId } from '/@/lib/parsePathParams'
@@ -29,26 +28,10 @@ const isEditMode = ref(false)
 
 const transaction = ref<Transaction>()
 
-const editedValue = ref<PostTransactionWithOneTarget>({
-  amount: 0,
-  target: '',
-  request: '',
-  tags: [],
-  group: ''
-})
-
 const fetchTransaction = async (id: string) => {
   try {
     const response = (await apis.getTransactionDetail(id)).data
     transaction.value = convertTransaction(response)
-
-    editedValue.value = {
-      amount: response.amount,
-      target: response.target,
-      request: response.request,
-      tags: response.tags.map(tag => tag.id),
-      group: response.group.id
-    }
   } catch {
     toast.error('入出金記録の取得に失敗しました')
   }

@@ -4,11 +4,10 @@ import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
 import { useRequestStore } from '/@/stores/request'
-import type { RequestRequest } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-import type { Request as APIRequest, Tag } from '/@/lib/apis'
+import type { Request as APIRequest, RequestTarget, Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import { convertRequest } from '/@/lib/date'
 
@@ -16,6 +15,15 @@ export interface FileRequest {
   name: string
   src: string
   type: string
+}
+
+interface NewRequest {
+  created_by: string
+  title: string
+  content: string
+  targets: RequestTarget[]
+  tags: Tag[]
+  group: string | null
 }
 
 export const useNewRequest = () => {
@@ -27,13 +35,13 @@ export const useNewRequest = () => {
 
   const { requests } = storeToRefs(requestStore)
 
-  const request = ref<RequestRequest>({
+  const request = ref<NewRequest>({
     created_by: userStore.me?.id ?? '',
     title: '',
     targets: [{ target: '', amount: 0 }],
     content: '',
     tags: [],
-    group: ''
+    group: null
   })
   const files = ref<FileRequest[]>([])
 
@@ -64,13 +72,14 @@ export const useNewRequest = () => {
     } catch {
       return
     }
-    const requestRequest = {
+    const willPostRequest = {
       ...request.value,
       tags: tags.map(tag => tag.id),
-      group: request.value.group !== '' ? request.value.group : null
+      group: request.value.group
     }
     try {
-      const response: APIRequest = (await apis.postRequest(requestRequest)).data
+      const response: APIRequest = (await apis.postRequest(willPostRequest))
+        .data
       const newRequest = convertRequest(response)
       if (requests.value) {
         requests.value.unshift(newRequest)

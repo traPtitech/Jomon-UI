@@ -10,19 +10,19 @@ import { convertTransaction } from '/@/lib/date'
 
 export type MoneyDirection = 'toTraP' | 'fromTraP'
 
-interface EditedValue {
+interface EditedTransaction {
   amount: number
   target: string
   request: string | null
   tags: Tag[]
-  group: string
+  group: string | null
 }
 
 export const useEditTransaction = (transaction: Transaction) => {
   const toast = useToast()
   const tagStore = useTagStore()
 
-  const editedValue = ref<EditedValue>({
+  const editedValue = ref<EditedTransaction>({
     amount: transaction.amount,
     target: transaction.target,
     request: transaction.request,
@@ -40,18 +40,18 @@ export const useEditTransaction = (transaction: Transaction) => {
     } catch {
       return
     }
-    const willSendTransaction = {
+    const willPutTransaction = {
       ...editedValue.value,
       amount:
         moneyDirection.value === 'toTraP'
           ? editedValue.value.amount
           : -editedValue.value.amount,
       tags: tags.map(tag => tag.id),
-      group: editedValue.value.group !== '' ? editedValue.value.group : null
+      group: editedValue.value.group
     }
     try {
       const response = (
-        await apis.putTransactionDetail(transaction.id, willSendTransaction)
+        await apis.putTransactionDetail(transaction.id, willPutTransaction)
       ).data
       const nextTransaction = convertTransaction(response)
       emit('edited', nextTransaction)

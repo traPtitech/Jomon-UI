@@ -12,6 +12,14 @@ import { convertTransaction } from '/@/lib/date'
 
 export type MoneyDirection = 'toTraP' | 'fromTraP'
 
+interface NewTransaction {
+  amount: number
+  targets: string[]
+  request: string | null
+  tags: Tag[]
+  group: string | null
+}
+
 export const useNewTransaction = (requestId: string) => {
   const toast = useToast()
   const transactionStore = useTransactionStore()
@@ -24,7 +32,7 @@ export const useNewTransaction = (requestId: string) => {
   const totalAmount =
     request.value?.targets.reduce((a, target) => a + target.amount, 0) ?? 0
 
-  const transaction = reactive(
+  const transaction = reactive<NewTransaction>(
     requestId !== ''
       ? {
           amount: totalAmount,
@@ -38,12 +46,12 @@ export const useNewTransaction = (requestId: string) => {
           targets: [],
           request: null,
           tags: [],
-          group: ''
+          group: null
         }
   )
   const moneyDirection = ref<MoneyDirection>('toTraP')
 
-  async function postTransaction() {
+  const postTransaction = async () => {
     if (transaction.targets.length === 0) {
       toast.warning('払い戻し対象者は必須です')
       return
@@ -54,18 +62,18 @@ export const useNewTransaction = (requestId: string) => {
     } catch {
       return
     }
-    const transactionRequest = {
+    const willPostTransaction = {
       ...transaction,
       amount:
         moneyDirection.value === 'fromTraP'
           ? -transaction.amount
           : transaction.amount,
       tags: tags.map(tag => tag.id),
-      group: transaction.group !== '' ? transaction.group : null
+      group: transaction.group
     }
     try {
       const response: APITransaction[] = (
-        await apis.postTransaction(transactionRequest)
+        await apis.postTransaction(willPostTransaction)
       ).data
       const newTransactions = response.map(transaction =>
         convertTransaction(transaction)

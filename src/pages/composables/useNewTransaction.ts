@@ -1,5 +1,5 @@
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
 import { useRequestDetailStore } from '/@/stores/requestDetail'
@@ -24,34 +24,44 @@ export const useNewTransaction = (requestId: string) => {
   const totalAmount =
     request.value?.targets.reduce((a, target) => a + target.amount, 0) ?? 0
 
-  const transaction = ref({
-    amount: requestId ? totalAmount : 0,
-    targets: requestId ? targets.value.map(target => target.target) : [],
-    request: requestId,
-    tags: requestId && request.value ? request.value.tags : [],
-    group: requestId && request.value ? request.value.group.id : ''
-  })
+  const transaction = reactive(
+    requestId !== ''
+      ? {
+          amount: totalAmount,
+          targets: targets.value.map(target => target.target),
+          request: requestId,
+          tags: request.value?.tags ?? [],
+          group: request.value?.group.id ?? null
+        }
+      : {
+          amount: 0,
+          targets: [],
+          request: null,
+          tags: [],
+          group: ''
+        }
+  )
   const moneyDirection = ref<MoneyDirection>('toTraP')
 
   async function postTransaction() {
-    if (transaction.value.targets.length === 0) {
+    if (transaction.targets.length === 0) {
       toast.warning('払い戻し対象者は必須です')
       return
     }
     let tags: Tag[]
     try {
-      tags = await tagStore.createTagIfNotExist(transaction.value.tags)
+      tags = await tagStore.createTagIfNotExist(transaction.tags)
     } catch {
       return
     }
     const transactionRequest = {
-      ...transaction.value,
+      ...transaction,
       amount:
         moneyDirection.value === 'fromTraP'
-          ? -transaction.value.amount
-          : transaction.value.amount,
+          ? -transaction.amount
+          : transaction.amount,
       tags: tags.map(tag => tag.id),
-      group: transaction.value.group !== '' ? transaction.value.group : null
+      group: transaction.group !== '' ? transaction.group : null
     }
     try {
       const response: APITransaction[] = (
@@ -60,7 +70,7 @@ export const useNewTransaction = (requestId: string) => {
       const newTransactions = response.map(transaction =>
         convertTransaction(transaction)
       )
-      if (transactions.value !== undefined) {
+      if (transactions.value) {
         transactions.value = [...newTransactions, ...transactions.value]
       } else {
         transactions.value = newTransactions

@@ -48,7 +48,6 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   const fetchRequestDetail = async (id: string) => {
     try {
       const response = (await apis.getRequestDetail(id)).data
-
       request.value = convertRequestDetail(response)
 
       editedValue.value = {
@@ -66,7 +65,6 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   const putRequest = async (id: string, willPutRequest: PostRequest) => {
     try {
       const response = (await apis.putRequestDetail(id, willPutRequest)).data
-
       request.value = convertRequestDetail(response)
 
       toast.success('申請の修正に成功しました')

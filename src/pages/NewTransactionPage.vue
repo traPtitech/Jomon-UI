@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router'
 import { useGroupStore } from '/@/stores/group'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
+import { directionOptions } from '/@/stores/transaction'
 import { useUserStore } from '/@/stores/user'
 
 import { toId } from '/@/lib/parseQueryParams'
@@ -28,17 +29,6 @@ const requestDetailStore = useRequestDetailStore()
 const { request } = storeToRefs(requestDetailStore)
 const { transaction, moneyDirection, postTransaction } =
   useNewTransaction(requestId)
-
-const directionOptions = [
-  {
-    key: 'traPへ入金',
-    value: 'toTraP'
-  },
-  {
-    key: 'traPから出金',
-    value: 'fromTraP'
-  }
-]
 
 if (!groupStore.isGroupFetched) {
   await groupStore.fetchGroups()

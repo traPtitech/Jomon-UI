@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-import { DateTime } from 'luxon'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
+import { directionOptions } from '/@/stores/transaction'
 
 import type { Transaction } from '/@/lib/apiTypes'
 import type { Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
-import { formatDate } from '/@/lib/date'
+import { convertTransaction, formatDate } from '/@/lib/date'
 import { toId } from '/@/lib/parsePathParams'
 
 import InputNumber from '/@/components/shared/InputNumber.vue'
@@ -45,20 +45,9 @@ const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const toast = useToast()
 
-const directionOptions = [
-  {
-    key: 'traPへ入金',
-    value: 'toTraP'
-  },
-  {
-    key: 'traPから出金',
-    value: 'fromTraP'
-  }
-]
-
 const formattedDate = formatDate(props.transaction.created_at)
 
-const editedValue = ref<EditedValue>({
+const editedValue = reactive<EditedValue>({
   amount: props.transaction.amount,
   target: props.transaction.target,
   request: props.transaction.request,
@@ -73,26 +62,22 @@ async function handlePutTransaction() {
   }
   let tags: Tag[]
   try {
-    tags = await tagStore.createTagIfNotExist(editedValue.value.tags)
+    tags = await tagStore.createTagIfNotExist(editedValue.tags)
   } catch {
     return
   }
   const transaction = {
-    ...editedValue.value,
+    ...editedValue,
     amount:
       moneyDirection.value === 'toTraP'
-        ? editedValue.value.amount
-        : -editedValue.value.amount,
+        ? editedValue.amount
+        : -editedValue.amount,
     tags: tags.map(tag => tag.id),
-    group: editedValue.value.group !== '0' ? editedValue.value.group : null
+    group: editedValue.group !== '' ? editedValue.group : null
   }
   try {
     const response = (await apis.putTransactionDetail(id, transaction)).data
-    const nextTransaction = {
-      ...response,
-      created_at: DateTime.fromISO(response.created_at),
-      updated_at: DateTime.fromISO(response.updated_at)
-    }
+    const nextTransaction = convertTransaction(response)
     emit('edited', nextTransaction)
   } catch {
     toast.error('入出金記録の修正に失敗しました')

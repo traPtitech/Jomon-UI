@@ -2,11 +2,10 @@ import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import type { RequestRequest } from '/@/stores/requestDetail'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 
-import type { Tag } from '/@/lib/apis'
+import type { RequestTarget, Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import { convertRequestDetail } from '/@/lib/date'
 
@@ -18,6 +17,15 @@ export type EditMode =
   | 'tags'
   | 'targets'
   | ''
+
+export interface EditedRequest {
+  created_by: string
+  title: string
+  content: string
+  targets: RequestTarget[]
+  tags: Tag[]
+  group: string | null
+}
 
 export const useRequestDetail = () => {
   const requestDetailStore = useRequestDetailStore()
@@ -46,22 +54,21 @@ export const useRequestDetail = () => {
     editMode.value = ''
   }
 
-  const putRequest = async (id: string, willPutRequest: RequestRequest) => {
+  const putRequest = async (id: string, editedRequest: EditedRequest) => {
     let tags: Tag[]
     try {
-      tags = await tagStore.createTagIfNotExist(willPutRequest.tags)
+      tags = await tagStore.createTagIfNotExist(editedRequest.tags)
     } catch {
       return
     }
-    const putRequest = {
-      ...willPutRequest,
+    const willPutRequest = {
+      ...editedRequest,
       tags: tags.map(tag => tag.id),
-      group: willPutRequest.group !== '' ? willPutRequest.group : null
+      group: editedRequest.group
     }
     try {
-      const response = (await apis.putRequestDetail(id, putRequest)).data
+      const response = (await apis.putRequestDetail(id, willPutRequest)).data
       request.value = convertRequestDetail(response)
-
       toast.success('申請を修正しました')
     } catch {
       toast.error('申請の修正に失敗しました')

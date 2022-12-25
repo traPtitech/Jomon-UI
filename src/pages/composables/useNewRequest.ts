@@ -1,22 +1,29 @@
-import { DateTime } from 'luxon'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
 import { useRequestStore } from '/@/stores/request'
-import type { RequestRequest } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-import type { Request } from '/@/lib/apiTypes'
-import type { Request as APIRequest, Tag } from '/@/lib/apis'
+import type { Request as APIRequest, RequestTarget, Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
+import { convertRequest } from '/@/lib/date'
 
 export interface FileRequest {
   name: string
   src: string
   type: string
+}
+
+interface NewRequest {
+  created_by: string
+  title: string
+  content: string
+  targets: RequestTarget[]
+  tags: Tag[]
+  group: string | null
 }
 
 export const useNewRequest = () => {
@@ -28,13 +35,13 @@ export const useNewRequest = () => {
 
   const { requests } = storeToRefs(requestStore)
 
-  const request = ref<RequestRequest>({
+  const request = ref<NewRequest>({
     created_by: userStore.me?.id ?? '',
     title: '',
     targets: [{ target: '', amount: 0 }],
     content: '',
     tags: [],
-    group: ''
+    group: null
   })
   const files = ref<FileRequest[]>([])
 
@@ -48,12 +55,13 @@ export const useNewRequest = () => {
       request.value.content === '' ||
       request.value.targets.length === 0
     ) {
-      toast.warning('タイトル、内容、対象者は必須です')
+      toast.warning('タイトル、詳細、対象者は必須です')
       return
     }
     if (
-      request.value.targets.some(target => target.target === '') ||
-      request.value.targets.some(target => target.amount === 0)
+      request.value.targets.some(
+        target => target.target === '' || target.amount === 0
+      )
     ) {
       toast.warning('対象者の選択と金額の入力は必須です')
       return
@@ -64,19 +72,15 @@ export const useNewRequest = () => {
     } catch {
       return
     }
-    const requestRequest = {
+    const willPostRequest = {
       ...request.value,
       tags: tags.map(tag => tag.id),
-      group: request.value.group !== '' ? request.value.group : null
+      group: request.value.group
     }
     try {
-      const response: APIRequest = (await apis.postRequest(requestRequest)).data
-      const id = response.id
-      const newRequest: Request = {
-        ...response,
-        created_at: DateTime.fromISO(response.created_at),
-        updated_at: DateTime.fromISO(response.updated_at)
-      }
+      const response: APIRequest = (await apis.postRequest(willPostRequest))
+        .data
+      const newRequest = convertRequest(response)
       if (requests.value) {
         requests.value.unshift(newRequest)
       } else {
@@ -84,7 +88,7 @@ export const useNewRequest = () => {
       }
       try {
         files.value.forEach((file: FileRequest) => {
-          postFile(id, file.name, file.src)
+          postFile(response.id, file.name, file.src)
         })
         toast.success('申請を作成しました')
         router.push('/')

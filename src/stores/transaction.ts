@@ -26,6 +26,17 @@ export const defaultParams: SearchTransactionParams = {
   request: ''
 }
 
+export const directionOptions = [
+  {
+    key: 'traPへ入金',
+    value: 'toTraP'
+  },
+  {
+    key: 'traPから出金',
+    value: 'fromTraP'
+  }
+]
+
 export const useTransactionStore = defineStore('transaction', () => {
   const toast = useToast()
 

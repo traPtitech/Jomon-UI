@@ -1,17 +1,9 @@
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import { useToast } from 'vue-toastification'
-
 import { useGroupStore } from '/@/stores/group'
-import { useTagStore } from '/@/stores/tag'
 import { directionOptions } from '/@/stores/transaction'
 
 import type { Transaction } from '/@/lib/apiTypes'
-import type { Tag } from '/@/lib/apis'
-import apis from '/@/lib/apis'
-import { convertTransaction, formatDate } from '/@/lib/date'
-import { toId } from '/@/lib/parsePathParams'
+import { formatDate } from '/@/lib/date'
 
 import InputNumber from '/@/components/shared/InputNumber.vue'
 import InputRadioButton from '/@/components/shared/InputRadioButton.vue'
@@ -19,15 +11,8 @@ import InputSelect from '/@/components/shared/InputSelect.vue'
 import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
 import InputText from '/@/components/shared/InputText.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import type { MoneyDirection } from '/@/pages/composables/useNewTransaction'
 
-interface EditedValue {
-  amount: number
-  target: string
-  request: string | null
-  tags: Tag[]
-  group: string
-}
+import { useEditTransaction } from './composables/useEditTransation'
 
 interface Props {
   transaction: Transaction
@@ -38,52 +23,12 @@ const emit = defineEmits<{
   (e: 'edited', value: Transaction | undefined): void
 }>()
 
-const route = useRoute()
-const id = toId(route.params.id)
-
-const tagStore = useTagStore()
 const groupStore = useGroupStore()
-const toast = useToast()
+const { editedValue, moneyDirection, putTransaction } = useEditTransaction(
+  props.transaction
+)
 
 const formattedDate = formatDate(props.transaction.created_at)
-
-const editedValue = reactive<EditedValue>({
-  amount: props.transaction.amount,
-  target: props.transaction.target,
-  request: props.transaction.request,
-  tags: props.transaction.tags,
-  group: props.transaction.group.id
-})
-const moneyDirection = ref<MoneyDirection>('toTraP')
-
-async function handlePutTransaction() {
-  if (props.transaction === undefined) {
-    return
-  }
-  let tags: Tag[]
-  try {
-    tags = await tagStore.createTagIfNotExist(editedValue.tags)
-  } catch {
-    return
-  }
-  const transaction = {
-    ...editedValue,
-    amount:
-      moneyDirection.value === 'toTraP'
-        ? editedValue.amount
-        : -editedValue.amount,
-    tags: tags.map(tag => tag.id),
-    group: editedValue.group !== '' ? editedValue.group : null
-  }
-  try {
-    const response = (await apis.putTransactionDetail(id, transaction)).data
-    const nextTransaction = convertTransaction(response)
-    emit('edited', nextTransaction)
-  } catch {
-    toast.error('入出金記録の修正に失敗しました')
-    emit('edited', undefined)
-  }
-}
 </script>
 
 <template>
@@ -128,7 +73,7 @@ async function handlePutTransaction() {
       <SimpleButton
         font-size="sm"
         padding="sm"
-        @click.prevent="handlePutTransaction">
+        @click.prevent="putTransaction(emit)">
         完了
       </SimpleButton>
     </div>

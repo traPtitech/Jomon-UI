@@ -73,7 +73,7 @@ watch(
           <span v-else>条件に一致する申請は見つかりませんでした</span>
         </div>
         <TransactionFilters />
-        <ul v-if="transactions" class="mt-2 divide-y">
+        <ul v-if="transactions" class="divide-y">
           <li
             v-for="transaction in sliceTransactionAt(page, 10)"
             :key="transaction.id">

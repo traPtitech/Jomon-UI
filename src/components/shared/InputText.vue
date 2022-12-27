@@ -9,7 +9,6 @@ const props = withDefaults(defineProps<Props>(), {
   required: false
 })
 const emit = defineEmits<{
-  (e: 'input', value: string): void
   (e: 'update:modelValue', modelValue: string): void
 }>()
 
@@ -24,5 +23,5 @@ function handleInput(value: string) {
     :placeholder="props.placeholder"
     :required="props.required"
     :value="props.modelValue"
-    @input="handleInput(($event.target as HTMLInputElement).value)" />
+    @change="handleInput(($event.target as HTMLInputElement).value)" />
 </template>

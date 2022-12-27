@@ -10,6 +10,7 @@ import { useUserStore } from '/@/stores/user'
 
 import { toId } from '/@/lib/parseQueryParams'
 
+import NewTransactionTarget from '/@/components/newTransaction/NewTransactionTarget.vue'
 import InputNumber from '/@/components/shared/InputNumber.vue'
 import InputRadioButton from '/@/components/shared/InputRadioButton.vue'
 import InputSelect from '/@/components/shared/InputSelect.vue'
@@ -68,15 +69,9 @@ if (requestId !== '') {
           v-model="moneyDirection"
           :options="directionOptions" />
       </div>
-      <div class="flex flex-col">
-        <label>取引相手</label>
-        <InputSelect
-          v-model="transaction.targets"
-          class="!w-2/3"
-          is-multiple
-          :options="userStore.userOptions"
-          placeholder="取引相手を選択" />
-      </div>
+      <NewTransactionTarget
+        :targets="transaction.targets"
+        @input="transaction.targets = $event" />
       <div class="flex flex-col">
         <label>グループ</label>
         <InputSelect

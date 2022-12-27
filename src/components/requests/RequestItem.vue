@@ -2,6 +2,8 @@
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
+import { useUserStore } from '/@/stores/user'
+
 import type { Request } from '/@/lib/apiTypes'
 import { formatDate } from '/@/lib/date'
 
@@ -13,6 +15,8 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+
+const userStore = useUserStore()
 
 const formattedDate = formatDate(props.request.created_at)
 
@@ -37,7 +41,7 @@ const totalAmount = computed(
         <span v-if="request.group !== undefined">
           グループ：{{ request.group.name }}
         </span>
-        <span>申請者：{{ request.created_by }}</span>
+        <span>申請者：{{ userStore.userMap[request.created_by] }}</span>
         <span>申請日：{{ formattedDate }}</span>
       </div>
       <div class="text-right text-3xl">{{ totalAmount }}円</div>

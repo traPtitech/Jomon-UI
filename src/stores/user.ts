@@ -29,6 +29,15 @@ export const useUserStore = defineStore('user', () => {
     )
   })
 
+  const userMap = computed(() => {
+    return (
+      users.value?.reduce((acc, user) => {
+        acc[user.id] = user.name
+        return acc
+      }, {} as Record<string, string>) ?? {}
+    )
+  })
+
   const fetchMe = async () => {
     try {
       me.value = (await apis.getMe()).data
@@ -52,6 +61,7 @@ export const useUserStore = defineStore('user', () => {
     userOptions,
     isUserFetched,
     isMeFetched,
+    userMap,
     fetchMe,
     fetchUsers
   }

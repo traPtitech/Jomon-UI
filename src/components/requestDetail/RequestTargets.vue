@@ -25,7 +25,7 @@ const requestDetailStore = useRequestDetailStore()
 const { request, editedValue } = storeToRefs(requestDetailStore)
 
 const formattedTargets = computed(
-  () => request.value?.targets.map(target => target.id).join(', ') ?? ''
+  () => request.value?.targets.map(target => target.target).join(', ') ?? ''
 )
 
 const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)

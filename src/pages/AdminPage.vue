@@ -58,7 +58,7 @@ if (userStore.me && userStore.me.admin) {
       <ul class="flex gap-2">
         <li v-for="admin in adminStore.admins" :key="admin">
           <div class="border-secondary rounded border px-2 text-center">
-            {{ admin }}
+            {{ userStore.userMap[admin] }}
           </div>
         </li>
       </ul>

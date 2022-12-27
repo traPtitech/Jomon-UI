@@ -5,6 +5,7 @@ import { useToast } from 'vue-toastification'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useTransactionStore } from '/@/stores/transaction'
+import { useUserStore } from '/@/stores/user'
 
 import type { Tag, Transaction as APITransaction } from '/@/lib/apis'
 import apis from '/@/lib/apis'
@@ -24,6 +25,7 @@ export const useNewTransaction = (requestId: string) => {
   const toast = useToast()
   const transactionStore = useTransactionStore()
   const requestDetailStore = useRequestDetailStore()
+  const userStore = useUserStore()
   const tagStore = useTagStore()
 
   const { transactions } = storeToRefs(transactionStore)
@@ -36,14 +38,16 @@ export const useNewTransaction = (requestId: string) => {
     requestId !== ''
       ? {
           amount: totalAmount,
-          targets: targets.value.map(target => target.target),
+          targets: targets.value.map(
+            target => userStore.userMap[target.target]
+          ),
           request: requestId,
           tags: request.value?.tags ?? [],
           group: request.value?.group.id ?? null
         }
       : {
           amount: 0,
-          targets: [],
+          targets: [''],
           request: null,
           tags: [],
           group: null
@@ -53,7 +57,7 @@ export const useNewTransaction = (requestId: string) => {
 
   const postTransaction = async () => {
     if (transaction.targets.length === 0) {
-      toast.warning('払い戻し対象者は必須です')
+      toast.warning('取引相手は必須です')
       return
     }
     let tags: Tag[]

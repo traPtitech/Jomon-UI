@@ -79,7 +79,7 @@ onMounted(() => {
           <RequestGroup
             :is-edit-mode="editMode === 'group'"
             @change-edit-mode="changeEditMode($event)" />
-          <p>申請者：{{ request.created_by }}</p>
+          <p>申請者：{{ userStore.userMap[request.created_by] }}</p>
           <p>申請日：{{ formattedDate }}</p>
           <RequestAmount />
         </div>

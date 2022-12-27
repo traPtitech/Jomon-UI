@@ -57,7 +57,7 @@ export const useNewTransaction = (requestId: string) => {
 
   const postTransaction = async () => {
     if (transaction.targets.length === 0) {
-      toast.warning('払い戻し対象者は必須です')
+      toast.warning('取引相手は必須です')
       return
     }
     let tags: Tag[]

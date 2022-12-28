@@ -47,7 +47,8 @@ const paddingClass = computed(() => {
     :class="`rounded-md border ${typeClass} ${fontSizeClass} ${paddingClass} ${
       props.isDisabled ? 'cursor-not-allowed opacity-50' : ''
     }`"
-    :disabled="props.isDisabled">
+    :disabled="props.isDisabled"
+    type="button">
     <slot />
   </button>
 </template>

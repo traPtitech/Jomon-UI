@@ -60,16 +60,22 @@ if (requestId !== '') {
       <div class="flex flex-col">
         <label>金額</label>
         <div>
-          <InputNumber v-model="transaction.amount" class="mr-1" :min="1" />円
+          <InputNumber
+            v-model="transaction.amount"
+            class="mr-1"
+            :disabled="requestId !== ''"
+            :min="1" />円
         </div>
       </div>
       <div class="flex flex-col">
         <label>入出金</label>
         <InputRadioButton
           v-model="moneyDirection"
+          :disabled="requestId !== ''"
           :options="directionOptions" />
       </div>
       <NewTransactionTarget
+        :disabled="requestId !== ''"
         :targets="transaction.targets"
         @input="transaction.targets = $event" />
       <div class="flex flex-col">
@@ -77,12 +83,16 @@ if (requestId !== '') {
         <InputSelect
           v-model="transaction.group"
           class="!w-2/3"
+          :disabled="requestId !== ''"
           :options="groupStore.groupOptions"
           placeholder="グループを選択" />
       </div>
       <div class="flex flex-col">
         <label>タグ</label>
-        <InputSelectTagWithCreation v-model="transaction.tags" class="!w-2/3" />
+        <InputSelectTagWithCreation
+          v-model="transaction.tags"
+          class="!w-2/3"
+          :disabled="requestId !== ''" />
       </div>
       <div class="text-right">
         <SimpleButton

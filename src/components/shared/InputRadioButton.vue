@@ -4,12 +4,15 @@ import { computed } from 'vue'
 interface Props {
   modelValue: string
   options: Option[]
+  disabled?: boolean
 }
 interface Option {
   key: string
   value: string
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  disabled: false
+})
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
 }>()
@@ -23,7 +26,12 @@ const value = computed({
 <template>
   <div class="space-x-4">
     <label v-for="option in options" :key="option.key">
-      <input v-model="value" type="radio" :value="option.value" />
+      <input
+        v-model="value"
+        class="disabled:cursor-not-allowed"
+        :disabled="disabled"
+        type="radio"
+        :value="option.value" />
       {{ option.key }}
     </label>
   </div>

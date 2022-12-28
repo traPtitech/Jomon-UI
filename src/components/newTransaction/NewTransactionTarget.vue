@@ -6,9 +6,12 @@ import InputText from '/@/components/shared/InputText.vue'
 
 interface Props {
   targets: string[]
+  disabled?: boolean
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  disabled: false
+})
 const emit = defineEmits<{ (e: 'input', value: string[]): void }>()
 
 const toast = useToast()
@@ -44,15 +47,16 @@ function handleRemoveTarget(index: number) {
         :key="target"
         class="mb-2 flex w-2/3 items-center gap-4">
         <InputText
+          :disabled="disabled"
           :model-value="target"
           placeholder="取引相手"
           @update:model-value="handleEditTarget(i, $event)" />
-        <button class="flex" @click="handleRemoveTarget(i)">
+        <button v-if="!disabled" class="flex" @click="handleRemoveTarget(i)">
           <MinusCircleIcon class="w-6" />
         </button>
       </li>
     </ul>
-    <div class="w-2/3 text-center">
+    <div v-if="!disabled" class="w-2/3 text-center">
       <button @click="handleAddTarget">
         <PlusCircleIcon class="w-8" />
       </button>

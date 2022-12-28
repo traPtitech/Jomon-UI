@@ -2,10 +2,12 @@
 interface Props {
   modelValue: number
   required?: boolean
+  disabled?: boolean
   placeholder?: string
   min?: number
 }
 const props = withDefaults(defineProps<Props>(), {
+  disabled: false,
   required: false
 })
 const emit = defineEmits<{
@@ -20,7 +22,8 @@ function handleInput(value: string) {
 
 <template>
   <input
-    class="bg-background rounded border border-gray-300 py-1 px-2"
+    class="bg-background rounded border border-gray-300 py-1 px-2 disabled:cursor-not-allowed disabled:bg-gray-200"
+    :disabled="props.disabled"
     :min="props.min"
     :placeholder="props.placeholder"
     :required="props.required"

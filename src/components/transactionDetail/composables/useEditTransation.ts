@@ -63,6 +63,7 @@ export const useEditTransaction = (transaction: Transaction) => {
     }
   }
 
+  //TODO:サーバーで上書きしてもらう
   const updateLinkedRequest = async (
     requestURL: string,
     emit: (e: 'edited', value: Transaction | undefined) => void

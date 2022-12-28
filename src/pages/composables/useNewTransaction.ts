@@ -72,8 +72,7 @@ export const useNewTransaction = (requestId: string) => {
         moneyDirection.value === 'fromTraP'
           ? -transaction.amount
           : transaction.amount,
-      tags: tags.map(tag => tag.id),
-      group: transaction.group
+      tags: tags.map(tag => tag.id)
     }
     try {
       const response: APITransaction[] = (

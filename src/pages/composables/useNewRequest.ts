@@ -74,8 +74,7 @@ export const useNewRequest = () => {
     }
     const willPostRequest = {
       ...request.value,
-      tags: tags.map(tag => tag.id),
-      group: request.value.group
+      tags: tags.map(tag => tag.id)
     }
     try {
       const response: APIRequest = (await apis.postRequest(willPostRequest))

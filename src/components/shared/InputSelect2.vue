@@ -13,13 +13,17 @@ interface Props {
   placeholder?: string
   options: Value[]
   disabled?: boolean
+  taggable?: boolean
+  createOption?: (option: string) => Props['options'][number]['value']
 }
 
 const props = withDefaults(defineProps<Props>(), {
   closeOnSelect: true,
   isMultiple: false,
   placeholder: '',
-  disabled: false
+  disabled: false,
+  taggable: false,
+  createOption: (option: string) => option
 })
 const emit = defineEmits<{
   (e: 'update:modelValue', value: Props['modelValue']): void
@@ -58,12 +62,20 @@ const handleClickOutside = (e: MouseEvent) => {
   }
 }
 
-const searchedOptions = computed(() => (query: string) => {
+const searchedOptions = computed(() => {
   return props.options.filter(option => {
-    const regexp = new RegExp(query, 'i')
+    const regexp = new RegExp(searchQuery.value, 'i')
     return regexp.test(option.key)
   })
 })
+const pushTag = () => {
+  if (searchQuery.value === '' || !props.taggable) return
+  selectValue({
+    key: searchQuery.value,
+    value: props.createOption(searchQuery.value)
+  })
+  searchQuery.value = ''
+}
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
@@ -88,13 +100,12 @@ onUnmounted(() => {
       <input
         v-model="searchQuery"
         class="flex-grow p-1"
-        @focus="isListOpen = true" />
+        @focus="isListOpen = true"
+        @keyup.enter="pushTag" />
     </div>
     <ul v-if="isListOpen" class="rounded-b-lg border border-gray-200 shadow-lg">
       <li
-        v-for="option in searchQuery !== ''
-          ? searchedOptions(searchQuery)
-          : options"
+        v-for="option in searchQuery !== '' ? searchedOptions : options"
         :key="option.key"
         :class="`py-1 ${
           selectedValues.some(value => value.value === option.value) &&

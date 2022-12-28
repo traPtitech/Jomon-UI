@@ -8,15 +8,13 @@ interface Props {
   options: Option[]
   placeholder: string
   isMultiple?: boolean
-  disabled?: boolean
 }
 interface Option {
   key: string
   value: unknown
 }
 const props = withDefaults(defineProps<Props>(), {
-  isMultiple: false,
-  disabled: false
+  isMultiple: false
 })
 const emit = defineEmits<{
   (e: 'update:modelValue', value: Props['modelValue']): void
@@ -33,7 +31,6 @@ const value = computed({
     class="w-70"
     :close-on-select="!props.isMultiple"
     deselect-from-dropdown
-    :disabled="props.disabled"
     label="key"
     :multiple="props.isMultiple"
     :options="props.options"

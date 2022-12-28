@@ -9,11 +9,8 @@ import VueSelect from '/@/components/shared/VueSelect.vue'
 
 interface Props {
   modelValue: Tag[]
-  disabled?: boolean
 }
-const props = withDefaults(defineProps<Props>(), {
-  disabled: false
-})
+const props = defineProps<Props>()
 const emit = defineEmits<{ (e: 'update:modelValue', value: Tag[]): void }>()
 
 const tagStore = useTagStore()
@@ -29,7 +26,6 @@ const value = computed({
     v-model="value"
     :close-on-select="false"
     :create-option="(tag: Tag) => ({ name: tag, id: '', created_at: '', updated_at: '' })"
-    :disabled="disabled"
     label="name"
     multiple
     :options="tagStore.tags"

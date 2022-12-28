@@ -24,15 +24,43 @@ const emit = defineEmits<{
 }>()
 
 const groupStore = useGroupStore()
-const { editedValue, moneyDirection, putTransaction } = useEditTransaction(
-  props.transaction
-)
+const {
+  editedValue,
+  moneyDirection,
+  linkedRequest,
+  putTransaction,
+  updateLinkedRequest,
+  unlinkRequest
+} = useEditTransaction(props.transaction)
 
 const formattedDate = formatDate(props.transaction.created_at)
 </script>
 
 <template>
   <form class="mb-4 space-y-2">
+    <div class="flex flex-col">
+      <label>紐づける申請</label>
+      <div class="flex gap-4">
+        <InputText
+          v-model="linkedRequest"
+          class="w-1/2"
+          placeholder="紐づける申請のURLを入力" />
+        <SimpleButton
+          font-size="sm"
+          padding="sm"
+          type="plain"
+          @click="updateLinkedRequest(linkedRequest, emit)">
+          紐づける申請を更新
+        </SimpleButton>
+        <SimpleButton
+          font-size="sm"
+          padding="sm"
+          type="danger"
+          @click="unlinkRequest(emit)">
+          申請との紐づけを解除
+        </SimpleButton>
+      </div>
+    </div>
     <div class="flex flex-col">
       <label>年月日</label>
       <span>{{ formattedDate }}</span>

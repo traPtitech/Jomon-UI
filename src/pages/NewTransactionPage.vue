@@ -1,14 +1,8 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
-
 import { useGroupStore } from '/@/stores/group'
-import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { directionOptions } from '/@/stores/transaction'
 import { useUserStore } from '/@/stores/user'
-
-import { toId } from '/@/lib/parseQueryParams'
 
 import NewTransactionTarget from '/@/components/newTransaction/NewTransactionTarget.vue'
 import InputNumber from '/@/components/shared/InputNumber.vue'
@@ -19,17 +13,11 @@ import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 import { useNewTransaction } from './composables/useNewTransaction'
 
-const route = useRoute()
-const requestId = toId(route.query.requestID) //requestIDには申請の詳細画面から新規作成ページに移動するときだけIDを渡す
-
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
-const requestDetailStore = useRequestDetailStore()
 
-const { request } = storeToRefs(requestDetailStore)
-const { transaction, moneyDirection, postTransaction } =
-  useNewTransaction(requestId)
+const { transaction, moneyDirection, postTransaction } = useNewTransaction()
 
 if (!groupStore.isGroupFetched) {
   await groupStore.fetchGroups()
@@ -40,9 +28,6 @@ if (!userStore.isUserFetched) {
 if (!tagStore.isTagFetched) {
   await tagStore.fetchTags()
 }
-if (requestId !== '') {
-  await requestDetailStore.fetchRequestDetail(requestId)
-}
 </script>
 
 <template>
@@ -52,11 +37,6 @@ if (requestId !== '') {
       <h1 class="text-center text-3xl">入出金記録の新規作成</h1>
     </div>
     <div class="flex flex-col gap-2">
-      <div>
-        紐づけられている申請：
-        <span v-if="requestId && request">{{ request.title }}</span>
-        <span v-if="!requestId">なし</span>
-      </div>
       <div class="flex flex-col">
         <label>金額</label>
         <div>

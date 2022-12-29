@@ -8,7 +8,6 @@ interface Value {
 
 interface Props {
   modelValue: Props['options'][number]['value']
-  closeOnSelect?: boolean
   isMultiple?: boolean
   placeholder?: string
   options: Value[]
@@ -38,9 +37,7 @@ const selectValue = (selectedOption: Value) => {
   if (
     selectedValues.value.some(value => value.value === selectedOption.value)
   ) {
-    selectedValues.value = selectedValues.value.filter(
-      value => value.value !== selectedOption.value
-    )
+    removeValue(selectedOption)
     return
   }
   //add
@@ -69,11 +66,23 @@ const searchedOptions = computed(() => {
   })
 })
 const pushTag = () => {
-  if (searchQuery.value === '' || !props.taggable) return
-  selectValue({
-    key: searchQuery.value,
-    value: props.createOption(searchQuery.value)
-  })
+  //todo:pushできない場合を場合分けしてエラー出したりUIで分かりやすくしたりする
+  if (
+    searchQuery.value === '' ||
+    !props.taggable ||
+    props.options.some(value => value.key === searchQuery.value) ||
+    selectedValues.value.some(value => value.key === searchQuery.value)
+  ) {
+    return
+  }
+  selectedValues.value = [
+    ...selectedValues.value,
+    {
+      key: searchQuery.value,
+      value: props.createOption(searchQuery.value)
+    }
+  ]
+  emit('update:modelValue', selectedValues.value)
   searchQuery.value = ''
 }
 
@@ -86,30 +95,35 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div ref="inputSelect" :class="`${disabled && 'cursor-not-allowed'}`">
+  <div
+    ref="inputSelect"
+    :class="`relative ${disabled && 'cursor-not-allowed'}`">
     <div
-      class="flex flex gap-1 border border-gray-300 p-1"
-      :class="`${disabled && 'pointer-events-none'}`">
+      class="flex w-full cursor-text gap-1 overflow-x-scroll rounded border border-gray-300 p-1"
+      :class="`${disabled && 'pointer-events-none'}`"
+      @click="isListOpen = true">
       <div
         v-for="selectedValue in selectedValues"
         :key="selectedValue.key"
-        class="rounded border border-gray-200 bg-gray-200 px-1 py-0.5">
+        class="flex items-center rounded border border-gray-200 bg-gray-200 px-1">
         {{ selectedValue.key }}
         <button @click="removeValue(selectedValue)">×</button>
       </div>
       <input
         v-model="searchQuery"
-        class="flex-grow p-1"
-        @focus="isListOpen = true"
+        class="bg-background flex-grow p-1 focus:outline-none"
+        :placeholder="selectedValues.length === 0 ? placeholder : ''"
         @keyup.enter="pushTag" />
     </div>
-    <ul v-if="isListOpen" class="rounded-b-lg border border-gray-200 shadow-lg">
+    <ul
+      v-if="isListOpen"
+      class="absolute z-10 w-full rounded-b-lg border border-gray-200 bg-white shadow-lg">
       <li
         v-for="option in searchQuery !== '' ? searchedOptions : options"
         :key="option.key"
-        :class="`py-1 ${
+        :class="`py-1 last:rounded-b-md hover:bg-gray-100 ${
           selectedValues.some(value => value.value === option.value) &&
-          'bg-gray-200'
+          'bg-gray-200 hover:bg-gray-200'
         }`">
         <button
           class="h-full w-full px-4 text-left"

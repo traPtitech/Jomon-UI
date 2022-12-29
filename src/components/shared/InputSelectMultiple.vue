@@ -8,7 +8,7 @@ interface Value {
 }
 
 interface Props {
-  modelValue: Props['options'][number]['value']
+  modelValue: Props['options'][number]['value'][]
   isMultiple?: boolean
   placeholder?: string
   options: Value[]
@@ -37,26 +37,36 @@ const listRef = ref<HTMLUListElement | null>(null)
 const listItemRefs = ref<HTMLLIElement[] | null>(null)
 const isListOpen = ref(false)
 const searchQuery = ref('')
-const selectedValues = ref<Value[]>([])
+const selectedValues = computed(() => {
+  return props.modelValue
+    .map(value => {
+      const selectedValue = props.options.find(option => option.value === value)
+      if (selectedValue === undefined) {
+        return pushedTags.value.find(tag => tag.value === value)
+      }
+      return selectedValue
+    })
+    .filter((value): value is Value => value !== undefined)
+})
 const focusingListItemIndex = ref(-1)
+const pushedTags = ref<Value[]>([])
 
 const selectValue = (selectedOption: Value) => {
   //remove
-  if (
-    selectedValues.value.some(value => value.value === selectedOption.value)
-  ) {
+  if (props.modelValue.some(value => value === selectedOption.value)) {
     removeValue(selectedOption)
     return
   }
   //add
-  selectedValues.value = [...selectedValues.value, selectedOption]
-  emit('update:modelValue', selectedValues.value)
+  emit('update:modelValue', [...props.modelValue, selectedOption.value])
+  if (inputRef.value === null) return
+  inputRef.value.focus()
 }
 const removeValue = (selectedOption: Value) => {
-  selectedValues.value = selectedValues.value.filter(
-    value => value.value !== selectedOption.value
+  emit(
+    'update:modelValue',
+    props.modelValue.filter(value => value !== selectedOption.value)
   )
-  emit('update:modelValue', selectedValues.value)
 }
 
 const handleClickOutside = (e: MouseEvent) => {
@@ -79,18 +89,23 @@ const pushTag = () => {
     searchQuery.value === '' ||
     !props.taggable ||
     props.options.some(value => value.key === searchQuery.value) ||
-    selectedValues.value.some(value => value.key === searchQuery.value)
+    props.modelValue.some(
+      value => value === props.createOption(searchQuery.value)
+    )
   ) {
     return
   }
-  selectedValues.value = [
-    ...selectedValues.value,
+  pushedTags.value = [
+    ...pushedTags.value,
     {
       key: searchQuery.value,
       value: props.createOption(searchQuery.value)
     }
   ]
-  emit('update:modelValue', selectedValues.value)
+  emit('update:modelValue', [
+    ...props.modelValue,
+    props.createOption(searchQuery.value)
+  ])
   searchQuery.value = ''
 }
 const handleClick = () => {
@@ -104,9 +119,9 @@ const aboveHeightCalc = computed(() => {
   return `-top-${height / 4}`
 })
 const handleKeydown = (e: KeyboardEvent) => {
-  e.preventDefault()
   if (listItemRefs.value === null) return
   if (e.key === 'ArrowDown') {
+    e.preventDefault()
     focusingListItemIndex.value =
       (focusingListItemIndex.value + 1) % listItemRefs.value.length
     const buttonEl = listItemRefs.value[focusingListItemIndex.value]
@@ -122,6 +137,7 @@ const handleKeydown = (e: KeyboardEvent) => {
     }
   }
   if (e.key === 'ArrowUp') {
+    e.preventDefault()
     focusingListItemIndex.value =
       (focusingListItemIndex.value - 1 + listItemRefs.value.length) %
       listItemRefs.value.length
@@ -144,6 +160,7 @@ const handleKeydown = (e: KeyboardEvent) => {
   if (e.key === 'Enter') {
     if (focusingListItemIndex.value === -1) {
       pushTag()
+      return
     }
   }
 }

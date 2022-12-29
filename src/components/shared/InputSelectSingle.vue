@@ -31,7 +31,9 @@ const listRef = ref<HTMLUListElement | null>(null)
 const listItemRefs = ref<HTMLLIElement[] | null>(null)
 const isListOpen = ref(false)
 const searchQuery = ref('')
-const selectedValue = ref<Value>()
+const selectedValue = computed(() =>
+  props.options.find(option => option.value === props.modelValue)
+)
 const focusingListItemIndex = ref(-1)
 
 const selectValue = (selectedOption: Value) => {
@@ -41,12 +43,10 @@ const selectValue = (selectedOption: Value) => {
     return
   }
   //add
-  selectedValue.value = selectedOption
-  emit('update:modelValue', selectedValue.value)
+  emit('update:modelValue', selectedOption.value)
 }
 const removeValue = () => {
-  selectedValue.value = undefined
-  emit('update:modelValue', selectedValue.value)
+  emit('update:modelValue', undefined)
 }
 
 const handleClickOutside = (e: MouseEvent) => {
@@ -109,6 +109,14 @@ const handleKeydown = (e: KeyboardEvent) => {
         left: 0,
         behavior: 'smooth'
       })
+    }
+  }
+  if (e.key === 'Enter') {
+    if (focusingListItemIndex.value === -1) return
+    if (searchQuery.value === '') {
+      selectValue(props.options[focusingListItemIndex.value])
+    } else {
+      selectValue(searchedOptions.value[focusingListItemIndex.value])
     }
   }
 }

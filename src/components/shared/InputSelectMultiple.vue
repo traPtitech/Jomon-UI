@@ -99,14 +99,14 @@ onUnmounted(() => {
     ref="inputSelect"
     :class="`relative ${disabled && 'cursor-not-allowed'}`">
     <div
-      class="flex w-full cursor-text gap-1 overflow-x-scroll rounded border border-gray-300 p-1"
+      class="flex w-full cursor-text gap-1 overflow-x-scroll rounded border border-gray-300 py-1 px-2"
       :class="`${disabled && 'pointer-events-none'}`"
       @click="isListOpen = true">
       <div
         v-for="selectedValue in selectedValues"
         :key="selectedValue.key"
         class="flex items-center rounded border border-gray-200 bg-gray-200 px-1">
-        {{ selectedValue.key }}
+        <span>{{ selectedValue.key }}</span>
         <button @click="removeValue(selectedValue)">×</button>
       </div>
       <input
@@ -117,7 +117,7 @@ onUnmounted(() => {
     </div>
     <ul
       v-if="isListOpen"
-      class="absolute z-10 w-full rounded-b-lg border border-gray-200 bg-white shadow-lg">
+      class="absolute z-10 max-h-40 w-full overflow-y-scroll rounded-b-lg border border-gray-200 bg-white shadow-lg">
       <li
         v-for="option in searchQuery !== '' ? searchedOptions : options"
         :key="option.key"

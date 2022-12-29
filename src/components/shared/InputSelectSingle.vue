@@ -83,7 +83,7 @@ onUnmounted(() => {
     </div>
     <ul
       v-if="isListOpen"
-      class="absolute z-10 w-full rounded-b-lg border border-gray-200 bg-white shadow-lg">
+      class="absolute z-10 max-h-40 w-full overflow-y-scroll rounded-b-lg border border-gray-200 bg-white shadow-lg">
       <li
         v-for="option in searchQuery !== '' ? searchedOptions : options"
         :key="option.key"

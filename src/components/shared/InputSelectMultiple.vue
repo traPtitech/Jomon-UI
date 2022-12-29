@@ -157,8 +157,13 @@ const handleKeydown = (e: KeyboardEvent) => {
   if (e.key === 'Enter') {
     if (focusingListItemIndex.value === -1) {
       pushTag()
-      return
     }
+  }
+}
+const handleInputKeydown = (e: KeyboardEvent) => {
+  handleKeydown(e)
+  if (e.key === 'Enter') {
+    pushTag()
   }
 }
 
@@ -203,7 +208,7 @@ onUnmounted(() => {
         v-model="searchQuery"
         class="bg-background flex-grow pl-1 focus:outline-none"
         :placeholder="selectedValues.length === 0 ? placeholder : ''"
-        @keydown="handleKeydown" />
+        @keydown="handleInputKeydown" />
       <ChevronDownIcon class="h-4 w-4" />
     </div>
     <ul

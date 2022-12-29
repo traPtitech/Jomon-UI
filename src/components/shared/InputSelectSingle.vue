@@ -70,9 +70,9 @@ const handleClick = () => {
   inputRef.value.focus()
 }
 const handleKeydown = (e: KeyboardEvent) => {
-  e.preventDefault()
   if (listItemRefs.value === null) return
   if (e.key === 'ArrowDown') {
+    e.preventDefault()
     focusingListItemIndex.value =
       (focusingListItemIndex.value + 1) % listItemRefs.value.length
     const buttonEl = listItemRefs.value[focusingListItemIndex.value]
@@ -88,6 +88,7 @@ const handleKeydown = (e: KeyboardEvent) => {
     }
   }
   if (e.key === 'ArrowUp') {
+    e.preventDefault()
     focusingListItemIndex.value =
       (focusingListItemIndex.value - 1 + listItemRefs.value.length) %
       listItemRefs.value.length
@@ -105,14 +106,6 @@ const handleKeydown = (e: KeyboardEvent) => {
         left: 0,
         behavior: 'smooth'
       })
-    }
-  }
-  if (e.key === 'Enter') {
-    if (focusingListItemIndex.value === -1) return
-    if (searchQuery.value === '') {
-      selectValue(props.options[focusingListItemIndex.value])
-    } else {
-      selectValue(searchedOptions.value[focusingListItemIndex.value])
     }
   }
 }

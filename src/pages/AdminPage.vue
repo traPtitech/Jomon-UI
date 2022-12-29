@@ -7,6 +7,8 @@ import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
 import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
+import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 import { useAdmin } from './composables/useAdmin'
@@ -47,6 +49,9 @@ if (userStore.me && userStore.me.admin) {
     await tagStore.fetchTags()
   }
 }
+
+const values = ref([{}])
+const value = ref('')
 </script>
 
 <template>
@@ -104,5 +109,36 @@ if (userStore.me && userStore.me.admin) {
         選択したタグを削除
       </SimpleButton>
     </div>
+    <InputSelectMultiple
+      v-model="values"
+      class="w-1/2"
+      :create-option="option => option + 'aaa'"
+      :options="[
+        { key: 'aaa', value: 'bbb' },
+        { key: 'ccc', value: 'ddd' },
+        { key: 'eee', value: 'fff' },
+        { key: 'ggg', value: 'hhh' },
+        { key: 'iii', value: 'jjj' },
+        { key: 'kkk', value: 'lll' },
+        { key: 'mmm', value: 'nnn' },
+        { key: 'ooo', value: 'ppp' }
+      ]"
+      placeholder="選択してください"
+      taggable />
+    <InputSelectSingle
+      v-model="value"
+      class="w-1/2"
+      :options="[
+        { key: 'aaa', value: 'bbb' },
+        { key: 'ccc', value: 'ddd' },
+        { key: 'eee', value: 'fff' },
+        { key: 'ggg', value: 'hhh' },
+        { key: 'iii', value: 'jjj' },
+        { key: 'kkk', value: 'lll' },
+        { key: 'mmm', value: 'nnn' },
+        { key: 'ooo', value: 'ppp' }
+      ]"
+      placeholder="選択してください"
+      taggable />
   </div>
 </template>

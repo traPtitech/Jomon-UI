@@ -22,7 +22,8 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: Props['modelValue']): void
 }>()
 
-const inputSelect = ref()
+const inputSelectRef = ref()
+const inputRef = ref()
 const isListOpen = ref(false)
 const searchQuery = ref('')
 const selectedValue = ref<Value>()
@@ -43,8 +44,8 @@ const removeValue = () => {
 
 const handleClickOutside = (e: MouseEvent) => {
   const target = e.target as HTMLElement
-  if (inputSelect.value === null) return
-  if (!inputSelect.value.contains(target)) {
+  if (inputSelectRef.value === null) return
+  if (!inputSelectRef.value.contains(target)) {
     isListOpen.value = false
   }
 }
@@ -55,6 +56,10 @@ const searchedOptions = computed(() => {
     return regexp.test(option.key)
   })
 })
+const handleClick = () => {
+  isListOpen.value = true
+  inputRef.value.focus()
+}
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
@@ -66,15 +71,18 @@ onUnmounted(() => {
 
 <template>
   <div
-    ref="inputSelect"
+    ref="inputSelectRef"
     :class="`relative ${disabled && 'cursor-not-allowed'}`">
     <div
       class="flex w-full cursor-text gap-1 rounded border border-gray-300 py-1 px-2"
       :class="`${disabled && 'pointer-events-none'}`"
-      @click="isListOpen = true">
+      @click="handleClick">
       <div class="left-2 flex w-full">
-        <span v-if="selectedValue">{{ selectedValue.key }}</span>
+        <span v-if="selectedValue" class="flex items-center">
+          {{ selectedValue.key }}
+        </span>
         <input
+          ref="inputRef"
           v-model="searchQuery"
           class="bg-background flex-grow p-1 focus:outline-none"
           :placeholder="selectedValue === undefined ? placeholder : ''" />
@@ -82,7 +90,7 @@ onUnmounted(() => {
       <button v-if="selectedValue" @click="removeValue">×</button>
     </div>
     <ul
-      v-if="isListOpen"
+      v-if="isListOpen && searchedOptions.length > 0"
       class="absolute z-10 max-h-40 w-full overflow-y-scroll rounded-b-lg border border-gray-200 bg-white shadow-lg">
       <li
         v-for="option in searchQuery !== '' ? searchedOptions : options"

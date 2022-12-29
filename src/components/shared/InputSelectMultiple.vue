@@ -34,9 +34,12 @@ const emit = defineEmits<{
 const inputSelectRef = ref<HTMLDivElement | null>(null)
 const inputRef = ref<HTMLInputElement | null>(null)
 const listRef = ref<HTMLUListElement | null>(null)
+const listItemRefs = ref<HTMLLIElement[] | null>(null)
 const isListOpen = ref(false)
 const searchQuery = ref('')
 const selectedValues = ref<Value[]>([])
+const focusingListItemIndex = ref(-1)
+
 const selectValue = (selectedOption: Value) => {
   //remove
   if (
@@ -100,6 +103,50 @@ const aboveHeightCalc = computed(() => {
   const height = listRef.value.offsetHeight
   return `-top-${height / 4}`
 })
+const handleKeydown = (e: KeyboardEvent) => {
+  e.preventDefault()
+  if (listItemRefs.value === null) return
+  if (e.key === 'ArrowDown') {
+    focusingListItemIndex.value =
+      (focusingListItemIndex.value + 1) % listItemRefs.value.length
+    const buttonEl = listItemRefs.value[focusingListItemIndex.value]
+      .firstChild as HTMLButtonElement
+    buttonEl.focus({ preventScroll: false })
+    if (listRef.value === null) return
+    if (focusingListItemIndex.value > 3) {
+      listRef.value.scrollBy({
+        top: 12,
+        left: 0,
+        behavior: 'smooth'
+      })
+    }
+  }
+  if (e.key === 'ArrowUp') {
+    focusingListItemIndex.value =
+      (focusingListItemIndex.value - 1 + listItemRefs.value.length) %
+      listItemRefs.value.length
+    const buttonEl = listItemRefs.value[focusingListItemIndex.value]
+      .firstChild as HTMLButtonElement
+    buttonEl.focus({ preventScroll: false })
+    if (listRef.value === null) return
+    const length =
+      searchQuery.value !== ''
+        ? searchedOptions.value.length
+        : props.options.length
+    if (focusingListItemIndex.value < length - 3) {
+      listRef.value.scrollBy({
+        top: -12,
+        left: 0,
+        behavior: 'smooth'
+      })
+    }
+  }
+  if (e.key === 'Enter') {
+    if (focusingListItemIndex.value === -1) {
+      pushTag()
+    }
+  }
+}
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
@@ -129,7 +176,7 @@ onUnmounted(() => {
         v-model="searchQuery"
         class="bg-background flex-grow pl-1 focus:outline-none"
         :placeholder="selectedValues.length === 0 ? placeholder : ''"
-        @keyup.enter="pushTag" />
+        @keydown="handleKeydown" />
       <ChevronDownIcon class="h-4 w-4" />
     </div>
     <ul
@@ -140,13 +187,15 @@ onUnmounted(() => {
       <li
         v-for="option in searchQuery !== '' ? searchedOptions : options"
         :key="option.key"
-        :class="`py-1 last:rounded-b-md hover:bg-gray-100 ${
+        ref="listItemRefs"
+        :class="`py-1 last:rounded-b-md focus-within:bg-gray-100 hover:bg-gray-100 ${
           selectedValues.some(value => value.value === option.value) &&
           'bg-gray-200 hover:bg-gray-200'
         }`">
         <button
-          class="h-full w-full px-4 text-left"
-          @click="selectValue(option)">
+          class="h-full w-full px-4 text-left focus:outline-none"
+          @click="selectValue(option)"
+          @keydown="handleKeydown">
           {{ option.key }}
         </button>
       </li>

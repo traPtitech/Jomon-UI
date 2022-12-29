@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ChevronDownIcon } from '@heroicons/vue/24/solid'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 interface Value {
   key: string
@@ -37,6 +37,8 @@ const listRef = ref<HTMLUListElement | null>(null)
 const listItemRefs = ref<HTMLLIElement[] | null>(null)
 const isListOpen = ref(false)
 const searchQuery = ref('')
+const dropdownHeight = ref(0)
+
 const selectedValues = computed(() => {
   return props.modelValue
     .map(value => {
@@ -113,11 +115,6 @@ const handleClick = () => {
   if (inputRef.value === null) return
   inputRef.value.focus()
 }
-const aboveHeightCalc = computed(() => {
-  if (listRef.value === null) return 0
-  const height = listRef.value.offsetHeight
-  return `-top-${height / 4}`
-})
 const handleKeydown = (e: KeyboardEvent) => {
   if (listItemRefs.value === null) return
   if (e.key === 'ArrowDown') {
@@ -165,11 +162,24 @@ const handleKeydown = (e: KeyboardEvent) => {
   }
 }
 
+const updateHeight = () => {
+  if (listRef.value === null) return
+  dropdownHeight.value = listRef.value.offsetHeight / 4
+}
+const resizeObserver = new ResizeObserver(updateHeight)
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
+
+  if (listRef.value === null) return
+  resizeObserver.observe(listRef.value)
+})
+watch([listRef], () => {
+  if (listRef.value === null) return
+  resizeObserver.observe(listRef.value)
 })
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
+  resizeObserver.disconnect()
 })
 </script>
 
@@ -200,12 +210,14 @@ onUnmounted(() => {
       v-if="isListOpen && searchedOptions.length > 0"
       ref="listRef"
       class="absolute z-10 max-h-40 w-full overflow-y-scroll border border-gray-200 bg-white shadow-lg"
-      :class="`${above ? `${aboveHeightCalc} rounded-t-lg` : 'rounded-b-lg'}`">
+      :class="`${
+        above ? `-top-${dropdownHeight} rounded-t-lg` : 'rounded-b-lg'
+      }`">
       <li
         v-for="option in searchQuery !== '' ? searchedOptions : options"
         :key="option.key"
         ref="listItemRefs"
-        :class="`py-1 last:rounded-b-md focus-within:bg-gray-100 hover:bg-gray-100 ${
+        :class="`last:not-first:rounded-b-lg py-1 focus-within:bg-gray-100 hover:bg-gray-100 ${
           selectedValues.some(value => value.value === option.value) &&
           'bg-gray-200 hover:bg-gray-200'
         }`">

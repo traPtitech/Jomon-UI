@@ -15,6 +15,7 @@ interface Props {
   disabled?: boolean
   taggable?: boolean
   createOption?: (option: string) => Props['options'][number]['value']
+  above?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -23,14 +24,16 @@ const props = withDefaults(defineProps<Props>(), {
   placeholder: '',
   disabled: false,
   taggable: false,
-  createOption: (option: string) => option
+  createOption: (option: string) => option,
+  above: false
 })
 const emit = defineEmits<{
   (e: 'update:modelValue', value: Props['modelValue']): void
 }>()
 
-const inputSelectRef = ref()
-const inputRef = ref()
+const inputSelectRef = ref<HTMLDivElement | null>(null)
+const inputRef = ref<HTMLInputElement | null>(null)
+const listRef = ref<HTMLUListElement | null>(null)
 const isListOpen = ref(false)
 const searchQuery = ref('')
 const selectedValues = ref<Value[]>([])
@@ -89,8 +92,14 @@ const pushTag = () => {
 }
 const handleClick = () => {
   isListOpen.value = true
+  if (inputRef.value === null) return
   inputRef.value.focus()
 }
+const aboveHeightCalc = computed(() => {
+  if (listRef.value === null) return 0
+  const height = listRef.value.offsetHeight
+  return `-top-${height / 4}`
+})
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
@@ -125,7 +134,9 @@ onUnmounted(() => {
     </div>
     <ul
       v-if="isListOpen && searchedOptions.length > 0"
-      class="absolute z-10 max-h-40 w-full overflow-y-scroll rounded-b-lg border border-gray-200 bg-white shadow-lg">
+      ref="listRef"
+      class="absolute z-10 max-h-40 w-full overflow-y-scroll border border-gray-200 bg-white shadow-lg"
+      :class="`${above ? `${aboveHeightCalc} rounded-t-lg` : 'rounded-b-lg'}`">
       <li
         v-for="option in searchQuery !== '' ? searchedOptions : options"
         :key="option.key"

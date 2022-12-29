@@ -141,7 +141,7 @@ onUnmounted(() => {
     ref="inputSelectRef"
     :class="`relative ${disabled && 'cursor-not-allowed'}`">
     <div
-      class="flex w-full cursor-text items-center gap-1 rounded border border-gray-300 py-1 pl-2 pr-1"
+      class="flex w-full cursor-text items-center gap-1 rounded border border-gray-300 py-1 pr-1"
       :class="`${disabled && 'pointer-events-none'}`"
       @click="handleClick">
       <div class="relative left-2 flex w-full">

@@ -206,7 +206,7 @@ onUnmounted(() => {
       <input
         ref="inputRef"
         v-model="searchQuery"
-        class="bg-background flex-grow pl-1 focus:outline-none"
+        class="flex-grow bg-transparent pl-1 focus:outline-none"
         :placeholder="selectedValues.length === 0 ? placeholder : ''"
         @focus="isListOpen = true"
         @keydown="handleInputKeydown" />

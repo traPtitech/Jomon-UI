@@ -46,7 +46,6 @@ const selectValue = (selectedOption: Value) => {
   emit('update:modelValue', selectedOption.value)
   if (inputRef.value === null) return
   isListOpen.value = false
-  inputRef.value.focus()
   searchQuery.value = ''
 }
 const removeValue = () => {
@@ -145,14 +144,18 @@ onUnmounted(() => {
       class="flex w-full cursor-text items-center gap-1 rounded border border-gray-300 py-1 pl-2 pr-1"
       :class="`${disabled && 'pointer-events-none'}`"
       @click="handleClick">
-      <div class="left-2 flex w-full">
-        <span v-if="selectedValue" class="flex items-center">
+      <div class="relative left-2 flex w-full">
+        <span
+          v-if="selectedValue"
+          :class="`flex items-center ${
+            isListOpen && 'absolute text-gray-400'
+          }`">
           {{ selectedValue.key }}
         </span>
         <input
           ref="inputRef"
           v-model="searchQuery"
-          class="bg-background flex-grow focus:outline-none"
+          class="flex-grow bg-transparent focus:outline-none"
           :placeholder="selectedValue === undefined ? placeholder : ''"
           @focus="isListOpen = true"
           @keydown="handleKeydown" />

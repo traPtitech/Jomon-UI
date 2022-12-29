@@ -51,7 +51,7 @@ const selectValue = (selectedOption: Value) => {
 }
 const removeValue = (selectedOption: Value) => {
   selectedValues.value = selectedValues.value.filter(
-    value => value !== selectedOption
+    value => value.value !== selectedOption.value
   )
   emit('update:modelValue', selectedValues.value)
 }

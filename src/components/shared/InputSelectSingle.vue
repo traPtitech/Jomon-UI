@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ChevronDownIcon } from '@heroicons/vue/24/solid'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 interface Value {
@@ -74,7 +75,7 @@ onUnmounted(() => {
     ref="inputSelectRef"
     :class="`relative ${disabled && 'cursor-not-allowed'}`">
     <div
-      class="flex w-full cursor-text gap-1 rounded border border-gray-300 py-1 px-2"
+      class="flex w-full cursor-text items-center gap-1 rounded border border-gray-300 py-1 pl-2 pr-1"
       :class="`${disabled && 'pointer-events-none'}`"
       @click="handleClick">
       <div class="left-2 flex w-full">
@@ -84,10 +85,11 @@ onUnmounted(() => {
         <input
           ref="inputRef"
           v-model="searchQuery"
-          class="bg-background flex-grow p-1 focus:outline-none"
+          class="bg-background flex-grow focus:outline-none"
           :placeholder="selectedValue === undefined ? placeholder : ''" />
       </div>
       <button v-if="selectedValue" @click="removeValue">×</button>
+      <ChevronDownIcon class="h-4 w-4" />
     </div>
     <ul
       v-if="isListOpen && searchedOptions.length > 0"

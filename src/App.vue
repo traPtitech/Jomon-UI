@@ -3,6 +3,7 @@ import { onMounted } from 'vue'
 
 import JomonHeader from './components/navigation/JomonHeader.vue'
 import { useUserStore } from './stores/user'
+import './styles/main.css'
 import './styles/toast.css'
 
 const userStore = useUserStore()

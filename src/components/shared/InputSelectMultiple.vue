@@ -9,7 +9,6 @@ interface Value {
 
 interface Props {
   modelValue: Props['options'][number]['value'][]
-  isMultiple?: boolean
   placeholder?: string
   options: Value[]
   disabled?: boolean
@@ -19,8 +18,6 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  closeOnSelect: true,
-  isMultiple: false,
   placeholder: '',
   disabled: false,
   taggable: false,

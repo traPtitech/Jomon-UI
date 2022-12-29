@@ -16,7 +16,6 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  closeOnSelect: true,
   placeholder: '',
   disabled: false,
   above: false
@@ -45,6 +44,10 @@ const selectValue = (selectedOption: Value) => {
   }
   //add
   emit('update:modelValue', selectedOption.value)
+  if (inputRef.value === null) return
+  isListOpen.value = false
+  inputRef.value.focus()
+  searchQuery.value = ''
 }
 const removeValue = () => {
   emit('update:modelValue', undefined)

@@ -74,6 +74,9 @@ const handleClick = () => {
 }
 const handleKeydown = (e: KeyboardEvent) => {
   if (listItemRefs.value === null) return
+  if (e.key === 'Tab') {
+    isListOpen.value = false
+  }
   if (e.key === 'ArrowDown') {
     e.preventDefault()
     focusingListItemIndex.value =
@@ -151,6 +154,7 @@ onUnmounted(() => {
           v-model="searchQuery"
           class="bg-background flex-grow focus:outline-none"
           :placeholder="selectedValue === undefined ? placeholder : ''"
+          @focus="isListOpen = true"
           @keydown="handleKeydown" />
       </div>
       <button v-if="selectedValue" @click="removeValue">×</button>

@@ -114,6 +114,9 @@ const handleClick = () => {
 }
 const handleKeydown = (e: KeyboardEvent) => {
   if (listItemRefs.value === null) return
+  if (e.key === 'Tab') {
+    isListOpen.value = false
+  }
   if (e.key === 'ArrowDown') {
     e.preventDefault()
     focusingListItemIndex.value =
@@ -205,6 +208,7 @@ onUnmounted(() => {
         v-model="searchQuery"
         class="bg-background flex-grow pl-1 focus:outline-none"
         :placeholder="selectedValues.length === 0 ? placeholder : ''"
+        @focus="isListOpen = true"
         @keydown="handleInputKeydown" />
       <ChevronDownIcon class="h-4 w-4" />
     </div>

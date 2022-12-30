@@ -19,6 +19,8 @@ interface Props {
   above?: boolean
   /* [optionsのkey, modelValueのkey] modelValueをselectedValuesに適用するときに使う*/
   uniqKeys?: [string, string]
+  /* デフォルト幅を設定するため */
+  class?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -27,7 +29,8 @@ const props = withDefaults(defineProps<Props>(), {
   taggable: false,
   createOption: (option: string) => option,
   above: false,
-  uniqKeys: () => ['id', 'id']
+  uniqKeys: () => ['id', 'id'],
+  class: ''
 })
 const emit = defineEmits<{
   (e: 'update:modelValue', value: ValueValue[]): void
@@ -233,6 +236,13 @@ const handleInputKeydown = (e: KeyboardEvent) => {
   }
 }
 
+const calcWidth = computed(() => {
+  if (/w-/.test(props.class)) {
+    return props.class
+  }
+  return `${props.class} w-70`
+})
+
 /* ドロップダウンの位置を計算する処理 */
 const updateHeight = () => {
   if (listRef.value === null) return
@@ -258,7 +268,9 @@ onUnmounted(() => {
 <template>
   <div
     ref="inputSelectRef"
-    :class="`relative ${disabled && 'cursor-not-allowed'} min-w-70`">
+    :class="`relative ${
+      disabled && 'cursor-not-allowed'
+    } min-w-70 ${calcWidth}`">
     <div
       class="flex w-full cursor-text items-center rounded border border-gray-300 py-1 pl-1"
       :class="`${disabled && 'pointer-events-none'}`"

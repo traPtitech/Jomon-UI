@@ -82,7 +82,6 @@ function sortByCreatedAt() {
       @close="fetchRequests(params)" />
     <InputSelectMultiple
       v-model="params.tags"
-      class="w-100"
       :options="tagStore.tagIdOptions"
       placeholder="タグ"
       @close="fetchRequests(params)" />

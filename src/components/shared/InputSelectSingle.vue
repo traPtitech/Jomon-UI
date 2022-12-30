@@ -16,13 +16,15 @@ interface Props {
   disabled?: boolean
   above?: boolean
   uniqKeys?: [string, string]
+  class?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   placeholder: '',
   disabled: false,
   above: false,
-  uniqKeys: () => ['id', 'id']
+  uniqKeys: () => ['id', 'id'],
+  class: ''
 })
 const emit = defineEmits<{
   (e: 'update:modelValue', value: ValueValue): void
@@ -141,6 +143,12 @@ const handleKeydown = (e: KeyboardEvent) => {
     }
   }
 }
+const calcWidth = computed(() => {
+  if (/w-/.test(props.class)) {
+    return props.class
+  }
+  return `${props.class} w-70`
+})
 
 const updateHeight = () => {
   if (listRef.value === null) return
@@ -166,7 +174,9 @@ onUnmounted(() => {
 <template>
   <div
     ref="inputSelectRef"
-    :class="`relative ${disabled && 'cursor-not-allowed'} min-w-70`">
+    :class="`relative ${
+      disabled && 'cursor-not-allowed'
+    } min-w-70 ${calcWidth}`">
     <div
       class="flex w-full cursor-text items-center gap-1 rounded border border-gray-300 py-1 pr-1"
       :class="`${disabled && 'pointer-events-none'}`"

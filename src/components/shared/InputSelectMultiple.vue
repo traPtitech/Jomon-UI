@@ -239,12 +239,12 @@ onUnmounted(() => {
         v-for="option in searchQuery !== '' ? searchedOptions : options"
         :key="option.key"
         ref="listItemRefs"
-        :class="`last:not-first:rounded-b-lg py-1 focus-within:bg-gray-100 hover:bg-gray-100 ${
+        :class="`last:not-first:rounded-b-lg focus-within:bg-gray-100 hover:bg-gray-100 ${
           selectedValues.some(value => value.value === option.value) &&
           'bg-gray-200 hover:bg-gray-200'
         }`">
         <button
-          class="h-full w-full px-4 text-left focus:outline-none"
+          class="h-full w-full px-4 py-1 text-left focus:outline-none"
           @click="selectValue(option)"
           @keydown="handleKeydown">
           {{ option.key }}

@@ -10,7 +10,7 @@ import type { Group, PostGroup } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 
 import InputNumber from '/@/components/shared/InputNumber.vue'
-import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
 import InputText from '/@/components/shared/InputText.vue'
 import InputTextarea from '/@/components/shared/InputTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
@@ -106,17 +106,15 @@ if (!userStore.isUserFetched) {
       </div>
       <div class="flex flex-col">
         <label>オーナー</label>
-        <InputSelect
+        <InputSelectMultiple
           v-model="group.owners"
-          is-multiple
           :options="userStore.userOptions"
           placeholder="追加するオーナーを選択" />
       </div>
       <div class="flex flex-col">
         <label>メンバー</label>
-        <InputSelect
+        <InputSelectMultiple
           v-model="group.members"
-          is-multiple
           :options="userStore.userOptions"
           placeholder="追加するメンバーを選択" />
       </div>

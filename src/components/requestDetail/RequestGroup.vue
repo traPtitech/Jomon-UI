@@ -6,7 +6,7 @@ import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 import EditButton from '/@/components/shared/EditButton.vue'
-import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { EditMode } from '/@/pages/composables/useRequestDetail'
 
@@ -44,7 +44,7 @@ const handleComplete = () => {
         @click="emit('changeEditMode', 'group')" />
     </div>
     <div v-else class="flex">
-      <InputSelect
+      <InputSelectSingle
         v-model="editedValue.group"
         class="w-52"
         :options="groupStore.groupOptions"

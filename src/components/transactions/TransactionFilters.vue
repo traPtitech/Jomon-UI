@@ -8,7 +8,8 @@ import { useTagStore } from '/@/stores/tag'
 import { useTransactionStore } from '/@/stores/transaction'
 import type { SearchTransactionParams } from '/@/stores/transaction'
 
-import InputSelect from '/@/components//shared/InputSelect.vue'
+import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
+import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 import InputText from '/@/components/shared/InputText.vue'
 
 import SortOrderButtons from './SortOrderButtons.vue'
@@ -119,18 +120,17 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
         </div>
       </div>
       <!-- グループ -->
-      <InputSelect
+      <InputSelectSingle
         v-model="params.group"
         class="!w-2/10"
         :options="groupStore.groupOptions"
         placeholder="取引グループ"
         @close="'updateTransactions'" />
       <!-- タグ -->
-      <InputSelect
+      <InputSelectMultiple
         v-model="params.tags"
         class="!w-3/10"
-        is-multiple
-        :options="tagStore.tagOptions"
+        :options="tagStore.tagIdOptions"
         placeholder="タグ"
         @close="'updateTransactions'" />
     </div>

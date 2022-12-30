@@ -2,61 +2,89 @@
 import { ChevronDownIcon } from '@heroicons/vue/24/solid'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
+type ValueValue = Record<string, any> | string | null
+
 interface Value {
   key: string
-  value: unknown
+  value: ValueValue
 }
 
 interface Props {
-  modelValue: Props['options'][number]['value']
+  modelValue: ValueValue
   placeholder?: string
   options: Value[]
   disabled?: boolean
-  above?: boolean
+  isDropdownAbove?: boolean
+  uniqKeys?: [string, string]
+  class?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   placeholder: '',
   disabled: false,
-  above: false
+  isDropdownAbove: false,
+  uniqKeys: () => ['id', 'id'],
+  class: ''
 })
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: Props['modelValue']): void
+  (e: 'update:modelValue', value: ValueValue): void
+  (e: 'close'): void
 }>()
 
 const inputSelectRef = ref<HTMLDivElement | null>(null)
 const inputRef = ref<HTMLInputElement | null>(null)
 const listRef = ref<HTMLUListElement | null>(null)
 const listItemRefs = ref<HTMLLIElement[] | null>(null)
-const isListOpen = ref(false)
+const isDropdownOpen = ref(false)
 const searchQuery = ref('')
 const selectedValue = computed(() =>
-  props.options.find(option => option.value === props.modelValue)
+  props.options.find(
+    option =>
+      convertValue(option.value, props.uniqKeys[0]) ===
+      convertValue(props.modelValue, props.uniqKeys[1])
+  )
 )
 const focusingListItemIndex = ref(-1)
 const dropdownHeight = ref(0)
 
+const convertValue = (value: ValueValue, key: string) => {
+  if (typeof value === 'string') {
+    return value
+  }
+  if (value === null) return undefined
+  return value[key]
+}
+
 const selectValue = (selectedOption: Value) => {
   //remove
-  if (selectedValue.value?.value === selectedOption.value) {
-    removeValue()
-    return
+  if (selectedValue.value !== undefined) {
+    if (
+      convertValue(selectedValue.value?.value, props.uniqKeys[0]) ===
+      convertValue(selectedOption.value, props.uniqKeys[1])
+    ) {
+      removeValue()
+      return
+    }
   }
   //add
   emit('update:modelValue', selectedOption.value)
   if (inputRef.value === null) return
-  isListOpen.value = false
+  isDropdownOpen.value = false
+  emit('close')
   searchQuery.value = ''
 }
 const removeValue = () => {
-  emit('update:modelValue', undefined)
+  setTimeout(() => {
+    emit('update:modelValue', '')
+  }, 10)
 }
 
 const handleClickOutside = (e: MouseEvent) => {
   const target = e.target as HTMLElement
   if (inputSelectRef.value === null) return
   if (!inputSelectRef.value.contains(target)) {
-    isListOpen.value = false
+    isDropdownOpen.value = false
+    emit('close')
   }
 }
 
@@ -67,14 +95,15 @@ const searchedOptions = computed(() => {
   })
 })
 const handleClick = () => {
-  isListOpen.value = true
+  isDropdownOpen.value = true
   if (inputRef.value === null) return
   inputRef.value.focus()
 }
 const handleKeydown = (e: KeyboardEvent) => {
   if (listItemRefs.value === null) return
   if (e.key === 'Tab') {
-    isListOpen.value = false
+    isDropdownOpen.value = false
+    emit('close')
   }
   if (e.key === 'ArrowDown') {
     e.preventDefault()
@@ -114,6 +143,12 @@ const handleKeydown = (e: KeyboardEvent) => {
     }
   }
 }
+const calcWidth = computed(() => {
+  if (/w-/.test(props.class)) {
+    return props.class
+  }
+  return `${props.class} w-70`
+})
 
 const updateHeight = () => {
   if (listRef.value === null) return
@@ -139,7 +174,9 @@ onUnmounted(() => {
 <template>
   <div
     ref="inputSelectRef"
-    :class="`relative ${disabled && 'cursor-not-allowed'}`">
+    :class="`relative ${
+      disabled && 'cursor-not-allowed'
+    } min-w-70 ${calcWidth}`">
     <div
       class="flex w-full cursor-text items-center gap-1 rounded border border-gray-300 py-1 pr-1"
       :class="`${disabled && 'pointer-events-none'}`"
@@ -148,7 +185,7 @@ onUnmounted(() => {
         <span
           v-if="selectedValue"
           :class="`flex items-center ${
-            isListOpen && 'absolute text-gray-400'
+            isDropdownOpen && 'absolute text-gray-400'
           }`">
           {{ selectedValue.key }}
         </span>
@@ -157,29 +194,33 @@ onUnmounted(() => {
           v-model="searchQuery"
           class="flex-grow bg-transparent focus:outline-none"
           :placeholder="selectedValue === undefined ? placeholder : ''"
-          @focus="isListOpen = true"
+          @focus="isDropdownOpen = true"
           @keydown="handleKeydown" />
       </div>
       <button v-if="selectedValue" @click="removeValue">×</button>
       <ChevronDownIcon class="h-4 w-4" />
     </div>
     <ul
-      v-if="isListOpen && searchedOptions.length > 0"
+      v-if="isDropdownOpen && searchedOptions.length > 0"
       ref="listRef"
-      class="absolute z-10 max-h-40 w-full overflow-y-scroll border border-gray-200 bg-white shadow-lg"
+      class="absolute z-10 max-h-40 w-full border border-gray-200 bg-white shadow-lg"
       :class="`${
-        above ? `-top-${dropdownHeight} rounded-t-lg` : 'rounded-b-lg'
+        isDropdownAbove ? `-top-${dropdownHeight} rounded-t-lg` : 'rounded-b-lg'
+      } ${
+        ((searchQuery === '' && options.length > 4) ||
+          (searchQuery !== '' && searchedOptions.length > 4)) &&
+        'overflow-y-scroll'
       }`">
       <li
         v-for="option in searchQuery !== '' ? searchedOptions : options"
         :key="option.key"
         ref="listItemRefs"
-        :class="`py-1 last:rounded-b-md focus-within:bg-gray-100 hover:bg-gray-100 ${
+        :class="`last:not-first:rounded-b-md focus-within:bg-gray-100 hover:bg-gray-100 ${
           selectedValue?.value === option.value &&
           'bg-gray-200 hover:bg-gray-200'
         }`">
         <button
-          class="h-full w-full px-4 text-left focus:outline-none"
+          class="h-full w-full px-4 py-1 text-left focus:outline-none"
           @click="selectValue(option)"
           @keydown="handleKeydown">
           {{ option.key }}

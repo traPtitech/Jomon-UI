@@ -6,7 +6,7 @@ import { ref } from 'vue'
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
 
-import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
 
 import { useGroupMember } from './composables/useGroupMember'
@@ -46,10 +46,10 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
       </li>
     </ul>
     <div v-if="hasAuthority" class="flex p-2">
-      <InputSelect
+      <InputSelectMultiple
         v-model="MembersToBeAdded"
         class="mr-2 flex-grow"
-        is-multiple
+        is-dropdown-above
         :options="absentMemberOptions"
         placeholder="追加するメンバーを選択" />
       <button

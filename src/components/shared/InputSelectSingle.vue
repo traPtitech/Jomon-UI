@@ -8,7 +8,7 @@ interface Value {
 }
 
 interface Props {
-  modelValue: Props['options'][number]['value']
+  modelValue: unknown
   placeholder?: string
   options: Value[]
   disabled?: boolean
@@ -21,14 +21,14 @@ const props = withDefaults(defineProps<Props>(), {
   above: false
 })
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: Props['modelValue']): void
+  (e: 'update:modelValue', value: unknown): void
 }>()
 
 const inputSelectRef = ref<HTMLDivElement | null>(null)
 const inputRef = ref<HTMLInputElement | null>(null)
 const listRef = ref<HTMLUListElement | null>(null)
 const listItemRefs = ref<HTMLLIElement[] | null>(null)
-const isListOpen = ref(false)
+const isDropdownOpen = ref(false)
 const searchQuery = ref('')
 const selectedValue = computed(() =>
   props.options.find(option => option.value === props.modelValue)
@@ -45,7 +45,7 @@ const selectValue = (selectedOption: Value) => {
   //add
   emit('update:modelValue', selectedOption.value)
   if (inputRef.value === null) return
-  isListOpen.value = false
+  isDropdownOpen.value = false
   searchQuery.value = ''
 }
 const removeValue = () => {
@@ -56,7 +56,7 @@ const handleClickOutside = (e: MouseEvent) => {
   const target = e.target as HTMLElement
   if (inputSelectRef.value === null) return
   if (!inputSelectRef.value.contains(target)) {
-    isListOpen.value = false
+    isDropdownOpen.value = false
   }
 }
 
@@ -67,14 +67,14 @@ const searchedOptions = computed(() => {
   })
 })
 const handleClick = () => {
-  isListOpen.value = true
+  isDropdownOpen.value = true
   if (inputRef.value === null) return
   inputRef.value.focus()
 }
 const handleKeydown = (e: KeyboardEvent) => {
   if (listItemRefs.value === null) return
   if (e.key === 'Tab') {
-    isListOpen.value = false
+    isDropdownOpen.value = false
   }
   if (e.key === 'ArrowDown') {
     e.preventDefault()
@@ -148,7 +148,7 @@ onUnmounted(() => {
         <span
           v-if="selectedValue"
           :class="`flex items-center ${
-            isListOpen && 'absolute text-gray-400'
+            isDropdownOpen && 'absolute text-gray-400'
           }`">
           {{ selectedValue.key }}
         </span>
@@ -157,14 +157,14 @@ onUnmounted(() => {
           v-model="searchQuery"
           class="flex-grow bg-transparent focus:outline-none"
           :placeholder="selectedValue === undefined ? placeholder : ''"
-          @focus="isListOpen = true"
+          @focus="isDropdownOpen = true"
           @keydown="handleKeydown" />
       </div>
       <button v-if="selectedValue" @click="removeValue">×</button>
       <ChevronDownIcon class="h-4 w-4" />
     </div>
     <ul
-      v-if="isListOpen && searchedOptions.length > 0"
+      v-if="isDropdownOpen && searchedOptions.length > 0"
       ref="listRef"
       class="absolute z-10 max-h-40 w-full overflow-y-scroll border border-gray-200 bg-white shadow-lg"
       :class="`${

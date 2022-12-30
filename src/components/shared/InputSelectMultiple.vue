@@ -4,16 +4,16 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 interface Value {
   key: string
-  value: unknown
+  value: any
 }
 
 interface Props {
-  modelValue: Props['options'][number]['value'][]
+  modelValue: any[]
   placeholder?: string
-  options: Value[]
+  options: Value[] | undefined
   disabled?: boolean
   taggable?: boolean
-  createOption?: (option: string) => Props['options'][number]['value']
+  createOption?: (option: string) => any
   above?: boolean
 }
 
@@ -25,29 +25,35 @@ const props = withDefaults(defineProps<Props>(), {
   above: false
 })
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: Props['modelValue']): void
+  (e: 'update:modelValue', value: any): void
 }>()
 
 const inputSelectRef = ref<HTMLDivElement | null>(null)
 const inputRef = ref<HTMLInputElement | null>(null)
 const listRef = ref<HTMLUListElement | null>(null)
 const listItemRefs = ref<HTMLLIElement[] | null>(null)
-const isListOpen = ref(false)
+const isDropdownOpen = ref(false)
+/* 検索クエリ。タグの作成にも使う */
 const searchQuery = ref('')
+/* ドロップダウンの位置を計算するのに使う */
 const dropdownHeight = ref(0)
 
+/* 実際に表示するoption */
 const selectedValues = computed(() => {
   return props.modelValue
     .map(value => {
-      const selectedValue = props.options.find(option => option.value === value)
+      const selectedValue = props.options?.find(
+        option => option.value === value
+      )
       if (selectedValue === undefined) {
-        return pushedTags.value.find(tag => tag.value === value)
+        return pushedTags.value.find(tag => tag.value.name === value.name)
       }
       return selectedValue
     })
     .filter((value): value is Value => value !== undefined)
 })
 const focusingListItemIndex = ref(-1)
+/* 作成されたタグ。selectedValuesの計算のために別で持っている */
 const pushedTags = ref<Value[]>([])
 
 const selectValue = (selectedOption: Value) => {
@@ -68,26 +74,30 @@ const removeValue = (selectedOption: Value) => {
   )
 }
 
+/* コンポーネント外がクリックされたときの処理 */
 const handleClickOutside = (e: MouseEvent) => {
   const target = e.target as HTMLElement
   if (inputSelectRef.value === null) return
   if (!inputSelectRef.value.contains(target)) {
-    isListOpen.value = false
+    isDropdownOpen.value = false
   }
 }
 
+/* 検索処理 */
 const searchedOptions = computed(() => {
-  return props.options.filter(option => {
-    const regexp = new RegExp(searchQuery.value, 'i')
-    return regexp.test(option.key)
-  })
+  return (
+    props.options?.filter(option => {
+      const regexp = new RegExp(searchQuery.value, 'i')
+      return regexp.test(option.key)
+    }) ?? []
+  )
 })
 const pushTag = () => {
   //todo:pushできない場合を場合分けしてエラー出したりUIで分かりやすくしたりする
   if (
     searchQuery.value === '' ||
     !props.taggable ||
-    props.options.some(value => value.key === searchQuery.value) ||
+    props.options?.some(value => value.key === searchQuery.value) ||
     props.modelValue.some(
       value => value === props.createOption(searchQuery.value)
     )
@@ -108,14 +118,16 @@ const pushTag = () => {
   searchQuery.value = ''
 }
 const handleClick = () => {
-  isListOpen.value = true
+  isDropdownOpen.value = true
   if (inputRef.value === null) return
   inputRef.value.focus()
 }
+
+/* キーボードによる操作の処理 */
 const handleKeydown = (e: KeyboardEvent) => {
   if (listItemRefs.value === null) return
   if (e.key === 'Tab') {
-    isListOpen.value = false
+    isDropdownOpen.value = false
   }
   if (e.key === 'ArrowDown') {
     e.preventDefault()
@@ -145,7 +157,7 @@ const handleKeydown = (e: KeyboardEvent) => {
     const length =
       searchQuery.value !== ''
         ? searchedOptions.value.length
-        : props.options.length
+        : props.options?.length ?? 0
     if (focusingListItemIndex.value < length - 3) {
       listRef.value.scrollBy({
         top: -12,
@@ -167,18 +179,19 @@ const handleInputKeydown = (e: KeyboardEvent) => {
   }
 }
 
+/* ドロップダウンの位置を計算する処理 */
 const updateHeight = () => {
   if (listRef.value === null) return
   dropdownHeight.value = listRef.value.offsetHeight / 4
 }
 const resizeObserver = new ResizeObserver(updateHeight)
-onMounted(() => {
-  document.addEventListener('click', handleClickOutside)
-
+watch([listRef], () => {
   if (listRef.value === null) return
   resizeObserver.observe(listRef.value)
 })
-watch([listRef], () => {
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+
   if (listRef.value === null) return
   resizeObserver.observe(listRef.value)
 })
@@ -208,12 +221,12 @@ onUnmounted(() => {
         v-model="searchQuery"
         class="flex-grow bg-transparent pl-1 focus:outline-none"
         :placeholder="selectedValues.length === 0 ? placeholder : ''"
-        @focus="isListOpen = true"
+        @focus="isDropdownOpen = true"
         @keydown="handleInputKeydown" />
       <ChevronDownIcon class="h-4 w-4" />
     </div>
     <ul
-      v-if="isListOpen && searchedOptions.length > 0"
+      v-if="isDropdownOpen && searchedOptions.length > 0"
       ref="listRef"
       class="absolute z-10 max-h-40 w-full overflow-y-scroll border border-gray-200 bg-white shadow-lg"
       :class="`${

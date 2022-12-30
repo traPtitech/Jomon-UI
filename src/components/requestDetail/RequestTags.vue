@@ -5,6 +5,7 @@ import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 import EditButton from '/@/components/shared/EditButton.vue'
+import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import TagsGroup from '/@/components/shared/TagsGroup.vue'
 import type { EditMode } from '/@/pages/composables/useRequestDetail'

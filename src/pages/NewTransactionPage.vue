@@ -8,6 +8,7 @@ import NewTransactionTarget from '/@/components/newTransaction/NewTransactionTar
 import InputNumber from '/@/components/shared/InputNumber.vue'
 import InputRadioButton from '/@/components/shared/InputRadioButton.vue'
 import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
+import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 import { useNewTransaction } from './composables/useNewTransaction'

@@ -8,6 +8,7 @@ import { formatDate } from '/@/lib/date'
 import InputNumber from '/@/components/shared/InputNumber.vue'
 import InputRadioButton from '/@/components/shared/InputRadioButton.vue'
 import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
+import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
 import InputText from '/@/components/shared/InputText.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
@@ -91,10 +92,7 @@ const formattedDate = formatDate(props.transaction.created_at)
     </div>
     <div class="flex flex-col">
       <label>タグ</label>
-      <InputSelectTagWithCreation
-        v-model="editedValue.tags"
-        class="w-1/3"
-        placeholder="タグを選択" />
+      <InputSelectTagWithCreation v-model="editedValue.tags" class="w-1/3" />
     </div>
     <div class="text-right">
       <SimpleButton

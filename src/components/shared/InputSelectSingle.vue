@@ -47,6 +47,7 @@ const convertValue = (value: any, key: string) => {
   if (typeof value === 'string') {
     return value
   }
+  if (value === undefined || value === null) return undefined
   return value[key]
 }
 

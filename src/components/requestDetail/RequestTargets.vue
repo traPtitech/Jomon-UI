@@ -6,7 +6,7 @@ import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 import EditButton from '/@/components/shared/EditButton.vue'
-import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { EditMode } from '/@/pages/composables/useRequestDetail'
 
@@ -47,9 +47,8 @@ const handleComplete = () => {
     </div>
     <div v-else class="flex items-center">
       払い戻し対象者：
-      <InputSelect
+      <InputSelectMultiple
         v-model="editedValue.targets"
-        is-multiple
         :options="userStore.userOptions"
         placeholder="払い戻し対象者" />
       <SimpleButton

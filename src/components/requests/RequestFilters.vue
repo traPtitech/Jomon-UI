@@ -9,7 +9,8 @@ import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
+import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 import InputText from '/@/components/shared/InputText.vue'
 import { requestStatusOptions } from '/@/consts/consts'
 
@@ -64,24 +65,23 @@ function sortByCreatedAt() {
         placeholder="yyyy-MM-dd"
         @blur="fetchRequests(params)" />
     </div>
-    <InputSelect
+    <InputSelectSingle
       v-model="params.target"
       :options="userStore.userOptions"
       placeholder="申請者"
       @close="fetchRequests(params)" />
-    <InputSelect
+    <InputSelectSingle
       v-model="params.currentStatus"
       :options="requestStatusOptions()"
       placeholder="申請の状態"
       @close="fetchRequests(params)" />
-    <InputSelect
+    <InputSelectSingle
       v-model="params.group"
       :options="groupStore.groupOptions"
       placeholder="グループ"
       @close="fetchRequests(params)" />
-    <InputSelect
+    <InputSelectMultiple
       v-model="params.tags"
-      is-multiple
       :options="tagStore.tagOptions"
       placeholder="タグ"
       @close="fetchRequests(params)" />

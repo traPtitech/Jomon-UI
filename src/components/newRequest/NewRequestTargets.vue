@@ -8,7 +8,7 @@ import { useUserStore } from '/@/stores/user'
 import type { RequestTarget } from '/@/lib/apis'
 
 import InputNumber from '/@/components/shared/InputNumber.vue'
-import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 
 interface Props {
   targets: RequestTarget[]
@@ -88,7 +88,7 @@ function handleRemoveTarget(index: number) {
         v-for="(target, i) in targets"
         :key="target.target"
         class="mb-2 flex w-2/3 items-center gap-4">
-        <InputSelect
+        <InputSelectSingle
           class="!w-1/3 flex-grow"
           :model-value="target.target"
           :options="

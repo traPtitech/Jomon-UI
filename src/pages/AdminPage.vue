@@ -6,7 +6,7 @@ import { useAdminStore } from '/@/stores/admin'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 import { useAdmin } from './composables/useAdmin'
@@ -64,10 +64,9 @@ if (userStore.me && userStore.me.admin) {
       </ul>
     </div>
     <div class="mt-4 flex gap-4">
-      <InputSelect
+      <InputSelectMultiple
         v-model="addList"
         class="!w-1/2"
-        is-multiple
         :options="absentMembers"
         placeholder="追加する管理者を選択" />
       <SimpleButton
@@ -79,10 +78,9 @@ if (userStore.me && userStore.me.admin) {
       </SimpleButton>
     </div>
     <div class="mt-12 flex gap-4">
-      <InputSelect
+      <InputSelectMultiple
         v-model="removeList"
         class="!w-1/2"
-        is-multiple
         :options="adminStore.adminOptions"
         placeholder="削除する管理者を選択" />
       <SimpleButton
@@ -94,10 +92,9 @@ if (userStore.me && userStore.me.admin) {
       </SimpleButton>
     </div>
     <div class="mt-24 flex gap-4">
-      <InputSelect
+      <InputSelectMultiple
         v-model="deleteTagList"
         class="!w-1/2"
-        is-multiple
         :options="tagStore.tagOptions"
         placeholder="削除するタグを選択" />
       <SimpleButton font-size="lg" padding="sm" @click.stop="deleteTags">

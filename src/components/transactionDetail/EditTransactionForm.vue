@@ -7,8 +7,7 @@ import { formatDate } from '/@/lib/date'
 
 import InputNumber from '/@/components/shared/InputNumber.vue'
 import InputRadioButton from '/@/components/shared/InputRadioButton.vue'
-import InputSelect from '/@/components/shared/InputSelect.vue'
-import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
+import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 import InputText from '/@/components/shared/InputText.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
@@ -85,7 +84,7 @@ const formattedDate = formatDate(props.transaction.created_at)
     </div>
     <div class="flex flex-col">
       <label>取引グループ</label>
-      <InputSelect
+      <InputSelectSingle
         v-model="editedValue.group"
         :options="groupStore.groupOptions"
         placeholder="グループを選択" />

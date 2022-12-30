@@ -7,8 +7,7 @@ import { useUserStore } from '/@/stores/user'
 import NewTransactionTarget from '/@/components/newTransaction/NewTransactionTarget.vue'
 import InputNumber from '/@/components/shared/InputNumber.vue'
 import InputRadioButton from '/@/components/shared/InputRadioButton.vue'
-import InputSelect from '/@/components/shared/InputSelect.vue'
-import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
+import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 import { useNewTransaction } from './composables/useNewTransaction'
@@ -54,7 +53,7 @@ if (!tagStore.isTagFetched) {
         @input="transaction.targets = $event" />
       <div class="flex flex-col">
         <label>グループ</label>
-        <InputSelect
+        <InputSelectSingle
           v-model="transaction.group"
           class="!w-2/3"
           :options="groupStore.groupOptions"

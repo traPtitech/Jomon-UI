@@ -87,14 +87,17 @@ const selectValue = (selectedOption: Value) => {
   inputRef.value.focus()
 }
 const removeValue = (selectedOption: Value) => {
-  emit(
-    'update:modelValue',
-    props.modelValue.filter(
-      value =>
-        convertValue(value, props.uniqKeys[1]) !==
-        convertValue(selectedOption.value, props.uniqKeys[0])
+  //handleClickOutsideより先に時刻されてしまい、消してアイテムのNode.containsがfalseになってドロップダウンが閉じてしまうので、setTimeoutで遅らせる
+  setTimeout(() => {
+    emit(
+      'update:modelValue',
+      props.modelValue.filter(
+        value =>
+          convertValue(value, props.uniqKeys[1]) !==
+          convertValue(selectedOption.value, props.uniqKeys[0])
+      )
     )
-  )
+  }, 10)
 }
 
 /* コンポーネント外がクリックされたときの処理 */
@@ -118,10 +121,15 @@ const searchedOptions = computed(() => {
 })
 const pushTag = () => {
   //todo:pushできない場合を場合分けしてエラー出したりUIで分かりやすくしたりする
+  if (searchQuery.value === '' || !props.taggable) {
+    return
+  }
+  //同じ選択肢がある
+  if (props.options?.some(value => value.key === searchQuery.value)) {
+    return
+  }
+  //既に同じタグを作った
   if (
-    searchQuery.value === '' ||
-    !props.taggable ||
-    props.options?.some(value => value.key === searchQuery.value) ||
     props.modelValue.some(
       value =>
         convertValue(value, props.uniqKeys[1]) ===
@@ -158,8 +166,11 @@ const handleKeydown = (e: KeyboardEvent) => {
   }
   if (e.key === 'ArrowDown') {
     e.preventDefault()
-    focusingListItemIndex.value =
-      (focusingListItemIndex.value + 1) % listItemRefs.value.length
+    const length =
+      searchQuery.value !== ''
+        ? searchedOptions.value.length
+        : props.options?.length ?? 0
+    focusingListItemIndex.value = (focusingListItemIndex.value + 1) % length
     const buttonEl = listItemRefs.value[focusingListItemIndex.value]
       .firstChild as HTMLButtonElement
     buttonEl.focus({ preventScroll: false })
@@ -174,17 +185,17 @@ const handleKeydown = (e: KeyboardEvent) => {
   }
   if (e.key === 'ArrowUp') {
     e.preventDefault()
-    focusingListItemIndex.value =
-      (focusingListItemIndex.value - 1 + listItemRefs.value.length) %
-      listItemRefs.value.length
-    const buttonEl = listItemRefs.value[focusingListItemIndex.value]
-      .firstChild as HTMLButtonElement
-    buttonEl.focus({ preventScroll: false })
-    if (listRef.value === null) return
     const length =
       searchQuery.value !== ''
         ? searchedOptions.value.length
         : props.options?.length ?? 0
+    focusingListItemIndex.value =
+      (focusingListItemIndex.value - 1 + length) % length
+    const buttonEl = listItemRefs.value[focusingListItemIndex.value]
+      .firstChild as HTMLButtonElement
+    buttonEl.focus({ preventScroll: false })
+    if (listRef.value === null) return
+
     if (focusingListItemIndex.value < length - 3) {
       listRef.value.scrollBy({
         top: -12,
@@ -233,10 +244,10 @@ onUnmounted(() => {
     ref="inputSelectRef"
     :class="`relative ${disabled && 'cursor-not-allowed'} min-w-70`">
     <div
-      class="flex w-full cursor-text items-center rounded border border-gray-300 py-1"
+      class="flex w-full cursor-text items-center rounded border border-gray-300 py-1 pl-1"
       :class="`${disabled && 'pointer-events-none'}`"
       @click="handleClick">
-      <div class="flex items-center overflow-x-scroll">
+      <div class="flex w-full items-center overflow-x-scroll">
         <div
           v-for="selectedValue in selectedValues"
           :key="selectedValue.key"

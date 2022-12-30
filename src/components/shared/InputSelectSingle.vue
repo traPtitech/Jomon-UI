@@ -2,13 +2,15 @@
 import { ChevronDownIcon } from '@heroicons/vue/24/solid'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
+type ValueValue = Record<string, unknown> | string | null
+
 interface Value {
   key: string
-  value: unknown
+  value: ValueValue
 }
 
 interface Props {
-  modelValue: unknown
+  modelValue: ValueValue
   placeholder?: string
   options: Value[]
   disabled?: boolean
@@ -23,7 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
   uniqKeys: () => ['id', 'id']
 })
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: unknown): void
+  (e: 'update:modelValue', value: ValueValue): void
   (e: 'close'): void
 }>()
 
@@ -43,11 +45,11 @@ const selectedValue = computed(() =>
 const focusingListItemIndex = ref(-1)
 const dropdownHeight = ref(0)
 
-const convertValue = (value: any, key: string) => {
+const convertValue = (value: ValueValue, key: string) => {
   if (typeof value === 'string') {
     return value
   }
-  if (value === undefined || value === null) return undefined
+  if (value === null) return undefined
   return value[key]
 }
 
@@ -71,7 +73,7 @@ const selectValue = (selectedOption: Value) => {
 }
 const removeValue = () => {
   setTimeout(() => {
-    emit('update:modelValue', undefined)
+    emit('update:modelValue', '')
   }, 10)
 }
 

@@ -2,20 +2,22 @@
 import { ChevronDownIcon } from '@heroicons/vue/24/solid'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
+type ValueValue = Record<string, unknown> | string | null
+
 interface Value {
   key: string
-  value: any
+  value: ValueValue
 }
 
 interface Props {
-  modelValue: any[]
+  modelValue: ValueValue[]
   placeholder?: string
   options: Value[] | undefined
   disabled?: boolean
   taggable?: boolean
-  createOption?: (option: string) => any
+  createOption?: (option: string) => ValueValue
   above?: boolean
-  /* [optionsのkey, modelValueのkey] modelValueをselectedValues適用するときに使う*/
+  /* [optionsのkey, modelValueのkey] modelValueをselectedValuesに適用するときに使う*/
   uniqKeys?: [string, string]
 }
 
@@ -28,7 +30,7 @@ const props = withDefaults(defineProps<Props>(), {
   uniqKeys: () => ['id', 'id']
 })
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: any): void
+  (e: 'update:modelValue', value: ValueValue[]): void
   (e: 'close'): void
 }>()
 
@@ -42,10 +44,11 @@ const searchQuery = ref('')
 /* ドロップダウンの位置を計算するのに使う */
 const dropdownHeight = ref(0)
 
-const convertValue = (value: any, key: string) => {
+const convertValue = (value: ValueValue, key: string) => {
   if (typeof value === 'string') {
     return value
   }
+  if (value === null) return undefined
   return value[key]
 }
 
@@ -59,7 +62,11 @@ const selectedValues = computed(() => {
           convertValue(value, props.uniqKeys[1])
       )
       if (selectedValue === undefined) {
-        return pushedTags.value.find(tag => tag.value.name === value.name)
+        return pushedTags.value.find(
+          tag =>
+            convertValue(tag.value, props.uniqKeys[0]) ===
+            convertValue(value, props.uniqKeys[1])
+        )
       }
       return selectedValue
     })

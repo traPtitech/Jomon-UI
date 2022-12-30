@@ -15,6 +15,8 @@ interface Props {
   taggable?: boolean
   createOption?: (option: string) => any
   above?: boolean
+  /* [optionsのkey, modelValueのkey] modelValueをselectedValues適用するときに使う*/
+  uniqKeys?: [string, string]
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -22,7 +24,8 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   taggable: false,
   createOption: (option: string) => option,
-  above: false
+  above: false,
+  uniqKeys: () => ['id', 'id']
 })
 const emit = defineEmits<{
   (e: 'update:modelValue', value: any): void
@@ -39,12 +42,21 @@ const searchQuery = ref('')
 /* ドロップダウンの位置を計算するのに使う */
 const dropdownHeight = ref(0)
 
+const convertValue = (value: any, key: string) => {
+  if (typeof value === 'string') {
+    return value
+  }
+  return value[key]
+}
+
 /* 実際に表示するoption */
 const selectedValues = computed(() => {
   return props.modelValue
     .map(value => {
       const selectedValue = props.options?.find(
-        option => option.value === value
+        option =>
+          convertValue(option.value, props.uniqKeys[0]) ===
+          convertValue(value, props.uniqKeys[1])
       )
       if (selectedValue === undefined) {
         return pushedTags.value.find(tag => tag.value.name === value.name)
@@ -59,7 +71,13 @@ const pushedTags = ref<Value[]>([])
 
 const selectValue = (selectedOption: Value) => {
   //remove
-  if (props.modelValue.some(value => value === selectedOption.value)) {
+  if (
+    props.modelValue.some(
+      value =>
+        convertValue(value, props.uniqKeys[1]) ===
+        convertValue(selectedOption.value, props.uniqKeys[0])
+    )
+  ) {
     removeValue(selectedOption)
     return
   }
@@ -71,7 +89,11 @@ const selectValue = (selectedOption: Value) => {
 const removeValue = (selectedOption: Value) => {
   emit(
     'update:modelValue',
-    props.modelValue.filter(value => value !== selectedOption.value)
+    props.modelValue.filter(
+      value =>
+        convertValue(value, props.uniqKeys[1]) !==
+        convertValue(selectedOption.value, props.uniqKeys[0])
+    )
   )
 }
 
@@ -101,7 +123,9 @@ const pushTag = () => {
     !props.taggable ||
     props.options?.some(value => value.key === searchQuery.value) ||
     props.modelValue.some(
-      value => value === props.createOption(searchQuery.value)
+      value =>
+        convertValue(value, props.uniqKeys[1]) ===
+        convertValue(props.createOption(searchQuery.value), props.uniqKeys[0])
     )
   ) {
     return

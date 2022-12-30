@@ -130,7 +130,7 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
       <InputSelectMultiple
         v-model="params.tags"
         class="!w-3/10"
-        :options="tagStore.tagOptions"
+        :options="tagStore.tagIdOptions"
         placeholder="タグ"
         @close="'updateTransactions'" />
     </div>

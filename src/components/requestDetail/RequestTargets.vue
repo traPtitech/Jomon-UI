@@ -50,7 +50,8 @@ const handleComplete = () => {
       <InputSelectMultiple
         v-model="editedValue.targets"
         :options="userStore.userOptions"
-        placeholder="払い戻し対象者" />
+        placeholder="払い戻し対象者"
+        uniq-key="target" />
       <SimpleButton
         class="ml-2"
         font-size="sm"

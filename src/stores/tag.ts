@@ -16,6 +16,16 @@ export const useTagStore = defineStore('tag', () => {
       tags.value?.map(tag => {
         return {
           key: tag.name,
+          value: tag
+        }
+      }) ?? []
+    )
+  })
+  const tagIdOptions = computed(() => {
+    return (
+      tags.value?.map(tag => {
+        return {
+          key: tag.name,
           value: tag.id
         }
       }) ?? []
@@ -73,6 +83,7 @@ export const useTagStore = defineStore('tag', () => {
     tags,
     isTagFetched,
     tagOptions,
+    tagIdOptions,
     fetchTags,
     createTagIfNotExist,
     deleteTag

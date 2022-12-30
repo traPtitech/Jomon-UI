@@ -13,12 +13,14 @@ interface Props {
   options: Value[]
   disabled?: boolean
   above?: boolean
+  uniqKeys?: [string, string]
 }
 
 const props = withDefaults(defineProps<Props>(), {
   placeholder: '',
   disabled: false,
-  above: false
+  above: false,
+  uniqKeys: () => ['id', 'id']
 })
 const emit = defineEmits<{
   (e: 'update:modelValue', value: unknown): void
@@ -32,16 +34,32 @@ const listItemRefs = ref<HTMLLIElement[] | null>(null)
 const isDropdownOpen = ref(false)
 const searchQuery = ref('')
 const selectedValue = computed(() =>
-  props.options.find(option => option.value === props.modelValue)
+  props.options.find(
+    option =>
+      convertValue(option.value, props.uniqKeys[0]) ===
+      convertValue(props.modelValue, props.uniqKeys[1])
+  )
 )
 const focusingListItemIndex = ref(-1)
 const dropdownHeight = ref(0)
 
+const convertValue = (value: any, key: string) => {
+  if (typeof value === 'string') {
+    return value
+  }
+  return value[key]
+}
+
 const selectValue = (selectedOption: Value) => {
   //remove
-  if (selectedValue.value?.value === selectedOption.value) {
-    removeValue()
-    return
+  if (selectedValue.value !== undefined) {
+    if (
+      convertValue(selectedValue.value?.value, props.uniqKeys[0]) ===
+      convertValue(selectedOption.value, props.uniqKeys[1])
+    ) {
+      removeValue()
+      return
+    }
   }
   //add
   emit('update:modelValue', selectedOption.value)

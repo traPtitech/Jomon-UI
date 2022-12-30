@@ -95,7 +95,7 @@ if (userStore.me && userStore.me.admin) {
       <InputSelectMultiple
         v-model="deleteTagList"
         class="!w-1/2"
-        :options="tagStore.tagOptions"
+        :options="tagStore.tagIdOptions"
         placeholder="削除するタグを選択" />
       <SimpleButton font-size="lg" padding="sm" @click.stop="deleteTags">
         選択したタグを削除

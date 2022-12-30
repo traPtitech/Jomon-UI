@@ -143,7 +143,7 @@ onUnmounted(() => {
 <template>
   <div
     ref="inputSelectRef"
-    :class="`relative ${disabled && 'cursor-not-allowed'}`">
+    :class="`relative ${disabled && 'cursor-not-allowed'} min-w-70`">
     <div
       class="flex w-full cursor-text items-center gap-1 rounded border border-gray-300 py-1 pr-1"
       :class="`${disabled && 'pointer-events-none'}`"
@@ -170,9 +170,13 @@ onUnmounted(() => {
     <ul
       v-if="isDropdownOpen && searchedOptions.length > 0"
       ref="listRef"
-      class="absolute z-10 max-h-40 w-full overflow-y-scroll border border-gray-200 bg-white shadow-lg"
+      class="absolute z-10 max-h-40 w-full border border-gray-200 bg-white shadow-lg"
       :class="`${
         above ? `-top-${dropdownHeight} rounded-t-lg` : 'rounded-b-lg'
+      } ${
+        ((searchQuery === '' && options.length > 4) ||
+          (searchQuery !== '' && searchedOptions.length > 4)) &&
+        'overflow-y-scroll'
       }`">
       <li
         v-for="option in searchQuery !== '' ? searchedOptions : options"

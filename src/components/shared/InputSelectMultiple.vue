@@ -207,26 +207,28 @@ onUnmounted(() => {
 <template>
   <div
     ref="inputSelectRef"
-    :class="`relative ${disabled && 'cursor-not-allowed'}`">
+    :class="`relative ${disabled && 'cursor-not-allowed'} min-w-70`">
     <div
-      class="flex w-full cursor-text items-center gap-1 overflow-x-scroll rounded border border-gray-300 p-1"
+      class="flex w-full cursor-text items-center rounded border border-gray-300 py-1"
       :class="`${disabled && 'pointer-events-none'}`"
       @click="handleClick">
-      <div
-        v-for="selectedValue in selectedValues"
-        :key="selectedValue.key"
-        class="flex items-center rounded border border-gray-200 bg-gray-200 px-1">
-        <span>{{ selectedValue.key }}</span>
-        <button @click="removeValue(selectedValue)">×</button>
+      <div class="flex items-center overflow-x-scroll">
+        <div
+          v-for="selectedValue in selectedValues"
+          :key="selectedValue.key"
+          class="ml-1 flex items-center rounded border border-gray-200 bg-gray-200 px-1">
+          <span class="whitespace-nowrap">{{ selectedValue.key }}</span>
+          <button @click="removeValue(selectedValue)">×</button>
+        </div>
+        <input
+          ref="inputRef"
+          v-model="searchQuery"
+          class="flex-grow bg-transparent pl-1 focus:outline-none"
+          :placeholder="selectedValues.length === 0 ? placeholder : ''"
+          @focus="isDropdownOpen = true"
+          @keydown="handleInputKeydown" />
       </div>
-      <input
-        ref="inputRef"
-        v-model="searchQuery"
-        class="flex-grow bg-transparent pl-1 focus:outline-none"
-        :placeholder="selectedValues.length === 0 ? placeholder : ''"
-        @focus="isDropdownOpen = true"
-        @keydown="handleInputKeydown" />
-      <ChevronDownIcon class="h-4 w-4" />
+      <ChevronDownIcon class="min-w-4 mx-1 h-4" />
     </div>
     <ul
       v-if="isDropdownOpen && searchedOptions.length > 0"

@@ -120,7 +120,6 @@ const searchedOptions = computed(() => {
   )
 })
 const pushTag = () => {
-  //todo:pushできない場合を場合分けしてエラー出したりUIで分かりやすくしたりする
   if (searchQuery.value === '' || !props.taggable) {
     return
   }
@@ -158,14 +157,15 @@ const handleClick = () => {
 }
 
 /* キーボードによる操作の処理 */
-const handleKeydown = (e: KeyboardEvent) => {
-  if (listItemRefs.value === null) return
+const handleKeydown = (e: KeyboardEvent, option: Value) => {
   if (e.key === 'Tab') {
     isDropdownOpen.value = false
     emit('close')
   }
   if (e.key === 'ArrowDown') {
     e.preventDefault()
+    if (searchQuery.value !== '') return
+    if (listItemRefs.value === null) return
     const length =
       searchQuery.value !== ''
         ? searchedOptions.value.length
@@ -185,6 +185,8 @@ const handleKeydown = (e: KeyboardEvent) => {
   }
   if (e.key === 'ArrowUp') {
     e.preventDefault()
+    if (searchQuery.value !== '') return
+    if (listItemRefs.value === null) return
     const length =
       searchQuery.value !== ''
         ? searchedOptions.value.length
@@ -205,15 +207,22 @@ const handleKeydown = (e: KeyboardEvent) => {
     }
   }
   if (e.key === 'Enter') {
+    e.preventDefault()
     if (focusingListItemIndex.value === -1) {
       pushTag()
+    } else {
+      selectValue(option)
     }
   }
 }
 const handleInputKeydown = (e: KeyboardEvent) => {
-  handleKeydown(e)
+  if (listItemRefs.value === null) return
+
   if (e.key === 'Enter') {
+    e.preventDefault()
     pushTag()
+  } else {
+    handleKeydown(e, {} as Value)
   }
 }
 
@@ -246,14 +255,14 @@ onUnmounted(() => {
     <div
       class="flex w-full cursor-text items-center rounded border border-gray-300 py-1 pl-1"
       :class="`${disabled && 'pointer-events-none'}`"
-      @click="handleClick">
+      @click.prevent="handleClick">
       <div class="flex w-full items-center overflow-x-scroll">
         <div
           v-for="selectedValue in selectedValues"
           :key="selectedValue.key"
           class="ml-1 flex items-center rounded border border-gray-200 bg-gray-200 px-1">
           <span class="whitespace-nowrap">{{ selectedValue.key }}</span>
-          <button @click="removeValue(selectedValue)">×</button>
+          <button type="button" @click="removeValue(selectedValue)">×</button>
         </div>
         <input
           ref="inputRef"
@@ -282,8 +291,9 @@ onUnmounted(() => {
         }`">
         <button
           class="h-full w-full px-4 py-1 text-left focus:outline-none"
+          type="button"
           @click="selectValue(option)"
-          @keydown="handleKeydown">
+          @keydown="handleKeydown($event, option)">
           {{ option.key }}
         </button>
       </li>

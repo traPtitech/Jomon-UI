@@ -70,7 +70,9 @@ const selectValue = (selectedOption: Value) => {
   searchQuery.value = ''
 }
 const removeValue = () => {
-  emit('update:modelValue', undefined)
+  setTimeout(() => {
+    emit('update:modelValue', undefined)
+  }, 10)
 }
 
 const handleClickOutside = (e: MouseEvent) => {

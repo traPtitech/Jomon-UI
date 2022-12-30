@@ -26,5 +26,6 @@ const value = computed({
     :create-option="(tag: string) => ({ name: tag, id: '', created_at: '', updated_at: '' })"
     :options="tagStore.tagOptions"
     placeholder="タグを選択"
-    taggable />
+    taggable
+    :uniq-keys="['name', 'name']" />
 </template>

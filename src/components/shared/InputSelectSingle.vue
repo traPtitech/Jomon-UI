@@ -22,6 +22,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 const emit = defineEmits<{
   (e: 'update:modelValue', value: unknown): void
+  (e: 'close'): void
 }>()
 
 const inputSelectRef = ref<HTMLDivElement | null>(null)
@@ -46,6 +47,7 @@ const selectValue = (selectedOption: Value) => {
   emit('update:modelValue', selectedOption.value)
   if (inputRef.value === null) return
   isDropdownOpen.value = false
+  emit('close')
   searchQuery.value = ''
 }
 const removeValue = () => {
@@ -57,6 +59,7 @@ const handleClickOutside = (e: MouseEvent) => {
   if (inputSelectRef.value === null) return
   if (!inputSelectRef.value.contains(target)) {
     isDropdownOpen.value = false
+    emit('close')
   }
 }
 
@@ -75,6 +78,7 @@ const handleKeydown = (e: KeyboardEvent) => {
   if (listItemRefs.value === null) return
   if (e.key === 'Tab') {
     isDropdownOpen.value = false
+    emit('close')
   }
   if (e.key === 'ArrowDown') {
     e.preventDefault()

@@ -2,7 +2,7 @@
 import { ChevronDownIcon } from '@heroicons/vue/24/solid'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
-type ValueValue = Record<string, unknown> | string | null
+type ValueValue = Record<string, any> | string | null
 
 interface Value {
   key: string

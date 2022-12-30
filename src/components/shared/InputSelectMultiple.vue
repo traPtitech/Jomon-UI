@@ -16,7 +16,7 @@ interface Props {
   disabled?: boolean
   taggable?: boolean
   createOption?: (option: string) => ValueValue
-  above?: boolean
+  isDropdownAbove?: boolean
   /* [optionsのkey, modelValueのkey] modelValueをselectedValuesに適用するときに使う*/
   uniqKeys?: [string, string]
   /* デフォルト幅を設定するため */
@@ -28,7 +28,7 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   taggable: false,
   createOption: (option: string) => option,
-  above: false,
+  isDropdownAbove: false,
   uniqKeys: () => ['id', 'id'],
   class: ''
 })
@@ -298,7 +298,7 @@ onUnmounted(() => {
       ref="listRef"
       class="absolute z-10 max-h-40 w-full overflow-y-scroll border border-gray-200 bg-white shadow-lg"
       :class="`${
-        above ? `-top-${dropdownHeight} rounded-t-lg` : 'rounded-b-lg'
+        isDropdownAbove ? `-top-${dropdownHeight} rounded-t-lg` : 'rounded-b-lg'
       }`">
       <li
         v-for="option in searchQuery !== '' ? searchedOptions : options"

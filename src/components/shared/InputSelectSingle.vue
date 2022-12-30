@@ -14,7 +14,7 @@ interface Props {
   placeholder?: string
   options: Value[]
   disabled?: boolean
-  above?: boolean
+  isDropdownAbove?: boolean
   uniqKeys?: [string, string]
   class?: string
 }
@@ -22,7 +22,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   placeholder: '',
   disabled: false,
-  above: false,
+  isDropdownAbove: false,
   uniqKeys: () => ['id', 'id'],
   class: ''
 })
@@ -205,7 +205,7 @@ onUnmounted(() => {
       ref="listRef"
       class="absolute z-10 max-h-40 w-full border border-gray-200 bg-white shadow-lg"
       :class="`${
-        above ? `-top-${dropdownHeight} rounded-t-lg` : 'rounded-b-lg'
+        isDropdownAbove ? `-top-${dropdownHeight} rounded-t-lg` : 'rounded-b-lg'
       } ${
         ((searchQuery === '' && options.length > 4) ||
           (searchQuery !== '' && searchedOptions.length > 4)) &&

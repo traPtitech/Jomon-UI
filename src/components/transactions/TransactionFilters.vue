@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 import { XMarkIcon } from '@heroicons/vue/24/solid'
-import { computed, reactive, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { computed, ref } from 'vue'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 import { useTransactionStore } from '/@/stores/transaction'
-import type { SearchTransactionParams } from '/@/stores/transaction'
 
 import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
 import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
@@ -20,19 +20,12 @@ const tagStore = useTagStore()
 
 const isFilterByTarget = ref(false)
 
-const params = reactive<SearchTransactionParams>({
-  sort: 'created_at',
-  target: '',
-  since: '',
-  until: '',
-  group: '',
-  tags: [],
-  request: ''
-})
+const { fetchTransactions } = transactionStore
+const { filterParams } = storeToRefs(transactionStore)
 
 function changeIsTargetSearchMode() {
   if (isFilterByTarget.value) {
-    params.target = ''
+    filterParams.value.target = ''
     isFilterByTarget.value = false
   } else {
     isFilterByTarget.value = true
@@ -40,38 +33,38 @@ function changeIsTargetSearchMode() {
 }
 function sort(sortKind: 'created_at' | 'amount') {
   if (sortKind === 'created_at') {
-    if (params.sort === 'created_at') {
-      params.sort = '-created_at'
-    } else if (params.sort === '-created_at') {
-      params.sort = ''
+    if (filterParams.value.sort === 'created_at') {
+      filterParams.value.sort = '-created_at'
+    } else if (filterParams.value.sort === '-created_at') {
+      filterParams.value.sort = ''
     } else {
-      params.sort = 'created_at'
+      filterParams.value.sort = 'created_at'
     }
   } else {
-    if (params.sort === 'amount') {
-      params.sort = '-amount'
-    } else if (params.sort === '-amount') {
-      params.sort = ''
+    if (filterParams.value.sort === 'amount') {
+      filterParams.value.sort = '-amount'
+    } else if (filterParams.value.sort === '-amount') {
+      filterParams.value.sort = ''
     } else {
-      params.sort = 'amount'
+      filterParams.value.sort = 'amount'
     }
   }
-  transactionStore.fetchTransactions(params)
+  fetchTransactions(filterParams.value)
 }
 
 const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
   if (sortKind === 'created_at') {
-    if (params.sort === 'created_at') {
+    if (filterParams.value.sort === 'created_at') {
       return 'asc'
-    } else if (params.sort === '-created_at') {
+    } else if (filterParams.value.sort === '-created_at') {
       return 'desc'
     } else {
       return 'none'
     }
   } else {
-    if (params.sort === 'amount') {
+    if (filterParams.value.sort === 'amount') {
       return 'asc'
-    } else if (params.sort === '-amount') {
+    } else if (filterParams.value.sort === '-amount') {
       return 'desc'
     } else {
       return 'none'
@@ -111,7 +104,7 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
         </div>
         <div v-else class="relative w-full">
           <InputText
-            v-model="params.target"
+            v-model="filterParams.target"
             class="w-full border-none"
             placeholder="取引相手" />
           <XMarkIcon
@@ -121,14 +114,14 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
       </div>
       <!-- グループ -->
       <InputSelectSingle
-        v-model="params.group"
+        v-model="filterParams.group"
         class="!w-2/10"
         :options="groupStore.groupOptions"
         placeholder="取引グループ"
         @close="'updateTransactions'" />
       <!-- タグ -->
       <InputSelectMultiple
-        v-model="params.tags"
+        v-model="filterParams.tags"
         class="!w-3/10"
         :options="tagStore.tagIdOptions"
         placeholder="タグ"

@@ -119,7 +119,11 @@ if (!userStore.isUserFetched) {
           placeholder="追加するメンバーを選択" />
       </div>
       <div>
-        <SimpleButton class="ml-auto mt-8 block" font-size="xl" padding="md">
+        <SimpleButton
+          class="ml-auto mt-8 block"
+          font-size="xl"
+          padding="md"
+          @click="handlePostGroup">
           グループを作成する
         </SimpleButton>
       </div>

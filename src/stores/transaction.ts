@@ -6,7 +6,7 @@ import type { Transaction } from '/@/lib/apiTypes'
 import apis from '/@/lib/apis'
 import { convertTransaction } from '/@/lib/date'
 
-export interface SearchTransactionParams {
+interface SearchTransactionParams {
   sort: string
   target: string
   since: string
@@ -43,6 +43,16 @@ export const useTransactionStore = defineStore('transaction', () => {
   const transactions = ref<Transaction[]>()
   const isTransactionFetched = ref(false)
 
+  const filterParams = ref<SearchTransactionParams>({
+    sort: 'created_at',
+    target: '',
+    since: '',
+    until: '',
+    group: '',
+    tags: [],
+    request: ''
+  })
+
   const fetchTransactions = async (
     params: SearchTransactionParams = defaultParams
   ) => {
@@ -77,6 +87,7 @@ export const useTransactionStore = defineStore('transaction', () => {
   return {
     transactions,
     isTransactionFetched,
+    filterParams,
     fetchTransactions
   }
 })

@@ -8,7 +8,7 @@ import { convertRequest } from '/@/lib/date'
 
 import type { RequestStatus } from '/@/consts/consts'
 
-export interface SearchRequestParams {
+interface SearchRequestParams {
   sort: string
   currentStatus: string
   target: string
@@ -33,6 +33,16 @@ export const useRequestStore = defineStore('request', () => {
 
   const requests = ref<Request[]>()
   const isRequestFetched = ref(false)
+
+  const filterParams = ref<SearchRequestParams>({
+    sort: 'created_at',
+    currentStatus: '',
+    target: '',
+    since: '',
+    until: '',
+    tags: [],
+    group: ''
+  })
 
   const fetchRequests = async (params: SearchRequestParams = defaultParams) => {
     const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
@@ -61,5 +71,5 @@ export const useRequestStore = defineStore('request', () => {
       toast.error('申請の取得に失敗しました')
     }
   }
-  return { requests, isRequestFetched, fetchRequests }
+  return { requests, isRequestFetched, filterParams, fetchRequests }
 })

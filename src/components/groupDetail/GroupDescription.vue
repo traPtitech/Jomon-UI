@@ -63,6 +63,7 @@ const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
           font-size="sm"
           :is-disabled="props.isSending"
           padding="sm"
+          type="success"
           @click="emit('settle')">
           完了
         </SimpleButton>

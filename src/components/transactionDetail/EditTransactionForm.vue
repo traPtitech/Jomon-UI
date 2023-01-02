@@ -99,7 +99,11 @@ const formattedDate = formatDate(props.transaction.created_at)
       <SimpleButton font-size="sm" padding="sm" @click="emit('cancel')">
         キャンセル
       </SimpleButton>
-      <SimpleButton font-size="sm" padding="sm" @click="settle(emit)">
+      <SimpleButton
+        font-size="sm"
+        padding="sm"
+        type="success"
+        @click="settle(emit)">
         完了
       </SimpleButton>
     </div>

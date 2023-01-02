@@ -20,7 +20,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const emit = defineEmits<{
-  (e: 'settle', value: Transaction): void
+  (e: 'finishEditing', value: Transaction): void
   (e: 'cancel'): void
 }>()
 
@@ -29,7 +29,7 @@ const {
   editedValue,
   moneyDirection,
   linkedRequest,
-  settle,
+  finishEditing,
   updateLinkedRequest,
   unlinkRequest
 } = useEditTransaction(props.transaction)
@@ -103,7 +103,7 @@ const formattedDate = formatDate(props.transaction.created_at)
         font-size="sm"
         padding="sm"
         type="success"
-        @click="settle(emit)">
+        @click="finishEditing(emit)">
         完了
       </SimpleButton>
     </div>

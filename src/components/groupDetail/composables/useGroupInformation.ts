@@ -24,7 +24,7 @@ export const useGroupInformation = () => {
     }
   }
 
-  const settle = async () => {
+  const finishEditing = async () => {
     isSending.value = true
     try {
       const value = {
@@ -40,5 +40,5 @@ export const useGroupInformation = () => {
     isSending.value = false
   }
 
-  return { isSending, editMode, changeEditMode, settle }
+  return { isSending, editMode, changeEditMode, finishEditing }
 }

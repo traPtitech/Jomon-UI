@@ -25,7 +25,8 @@ const groupDetailStore = useGroupDetailStore()
 
 const { group } = storeToRefs(groupDetailStore)
 
-const { isSending, editMode, changeEditMode, settle } = useGroupInformation()
+const { isSending, editMode, changeEditMode, finishEditing } =
+  useGroupInformation()
 
 const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
 const { isDeleting, deleteGroup } = useDeleteGroup()
@@ -44,7 +45,7 @@ if (!userStore.isUserFetched) {
         :is-edit-mode="editMode === 'name'"
         :is-sending="isSending"
         @change-edit-mode="changeEditMode($event)"
-        @settle="settle" />
+        @finish-editing="finishEditing" />
     </div>
     <div class="mt-4 flex h-full">
       <div class="flex-grow">
@@ -52,13 +53,13 @@ if (!userStore.isUserFetched) {
           :is-edit-mode="editMode === 'description'"
           :is-sending="isSending"
           @change-edit-mode="changeEditMode($event)"
-          @settle="settle" />
+          @finish-editing="finishEditing" />
         <GroupBudget
           class="mt-4 h-8"
           :is-edit-mode="editMode === 'budget'"
           :is-sending="isSending"
           @change-edit-mode="changeEditMode($event)"
-          @settle="settle" />
+          @finish-editing="finishEditing" />
         <RouterLink
           class="mt-4 flex w-fit items-center"
           :to="`/transactions?group=${group.id}`">

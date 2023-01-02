@@ -14,20 +14,25 @@ export const useGroupInformation = () => {
 
   const editMode = ref<EditMode>('')
 
-  const changeEditMode = async (mode: EditMode) => {
+  const changeEditMode = (mode: EditMode) => {
     if (mode !== '') {
       editMode.value = mode
     } else {
-      isSending.value = true
-      const value = {
-        name: editedValue.value.name,
-        description: editedValue.value.description,
-        budget: Number(editedValue.value.budget)
-      }
-      await groupDetailStore.putGroup(group.value?.id ?? '', value)
       editMode.value = ''
-      isSending.value = false
     }
   }
-  return { isSending, editMode, changeEditMode }
+
+  const settle = async () => {
+    isSending.value = true
+    const value = {
+      name: editedValue.value.name,
+      description: editedValue.value.description,
+      budget: editedValue.value.budget
+    }
+    await groupDetailStore.putGroup(group.value?.id ?? '', value)
+    isSending.value = false
+    changeEditMode('')
+  }
+
+  return { isSending, editMode, changeEditMode, settle }
 }

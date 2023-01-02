@@ -20,7 +20,8 @@ interface Props {
 
 const props = defineProps<Props>()
 const emit = defineEmits<{
-  (e: 'edited', value: Transaction | undefined): void
+  (e: 'settle', value: Transaction): void
+  (e: 'cancel'): void
 }>()
 
 const groupStore = useGroupStore()
@@ -28,7 +29,7 @@ const {
   editedValue,
   moneyDirection,
   linkedRequest,
-  putTransaction,
+  settle,
   updateLinkedRequest,
   unlinkRequest
 } = useEditTransaction(props.transaction)
@@ -94,11 +95,11 @@ const formattedDate = formatDate(props.transaction.created_at)
       <label>タグ</label>
       <InputSelectTagWithCreation v-model="editedValue.tags" class="w-1/3" />
     </div>
-    <div class="text-right">
-      <SimpleButton
-        font-size="sm"
-        padding="sm"
-        @click.prevent="putTransaction(emit)">
+    <div class="flex items-center justify-end gap-4">
+      <SimpleButton font-size="sm" padding="sm" @click="emit('cancel')">
+        キャンセル
+      </SimpleButton>
+      <SimpleButton font-size="sm" padding="sm" @click="settle(emit)">
         完了
       </SimpleButton>
     </div>

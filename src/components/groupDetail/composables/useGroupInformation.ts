@@ -1,5 +1,6 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
+import { useToast } from 'vue-toastification'
 
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 
@@ -7,6 +8,7 @@ export type EditMode = 'name' | 'description' | 'budget' | ''
 
 export const useGroupInformation = () => {
   const groupDetailStore = useGroupDetailStore()
+  const toast = useToast()
 
   const { group, editedValue } = storeToRefs(groupDetailStore)
 
@@ -24,14 +26,18 @@ export const useGroupInformation = () => {
 
   const settle = async () => {
     isSending.value = true
-    const value = {
-      name: editedValue.value.name,
-      description: editedValue.value.description,
-      budget: editedValue.value.budget
+    try {
+      const value = {
+        name: editedValue.value.name,
+        description: editedValue.value.description,
+        budget: editedValue.value.budget
+      }
+      await groupDetailStore.putGroup(group.value?.id ?? '', value)
+      changeEditMode('')
+    } catch {
+      toast.error('グループ情報の更新に失敗しました')
     }
-    await groupDetailStore.putGroup(group.value?.id ?? '', value)
     isSending.value = false
-    changeEditMode('')
   }
 
   return { isSending, editMode, changeEditMode, settle }

@@ -34,9 +34,7 @@ export const useEditTransaction = (transaction: Transaction) => {
     `https://jomon.trap.jp/requests/${transaction.request}` ?? ''
   )
 
-  const putTransaction = async (
-    emit: (e: 'edited', value: Transaction | undefined) => void
-  ) => {
+  const settle = async (emit: (e: 'settle', value: Transaction) => void) => {
     let tags: Tag[]
     try {
       tags = await tagStore.createTagIfNotExist(editedValue.value.tags)
@@ -56,17 +54,16 @@ export const useEditTransaction = (transaction: Transaction) => {
         await apis.putTransactionDetail(transaction.id, willPutTransaction)
       ).data
       const nextTransaction = convertTransaction(response)
-      emit('edited', nextTransaction)
+      emit('settle', nextTransaction)
     } catch {
       toast.error('入出金記録の修正に失敗しました')
-      emit('edited', undefined)
     }
   }
 
   //TODO:サーバーで上書きしてもらう
   const updateLinkedRequest = async (
     requestURL: string,
-    emit: (e: 'edited', value: Transaction | undefined) => void
+    emit: (e: 'settle', value: Transaction) => void
   ) => {
     const requestID = requestURL.split('/').pop() ?? ''
     try {
@@ -100,15 +97,14 @@ export const useEditTransaction = (transaction: Transaction) => {
         })
       ).data
       const nextTransaction = convertTransaction(response)
-      emit('edited', nextTransaction)
+      emit('settle', nextTransaction)
     } catch {
       toast.error('紐づいている申請の更新に失敗しました')
-      emit('edited', undefined)
     }
   }
 
   const unlinkRequest = async (
-    emit: (e: 'edited', value: Transaction | undefined) => void
+    emit: (e: 'settle', value: Transaction) => void
   ) => {
     const result = confirm('本当に申請との紐づけを解除しますか？')
     if (!result) return
@@ -127,10 +123,9 @@ export const useEditTransaction = (transaction: Transaction) => {
         })
       ).data
       const nextTransaction = convertTransaction(response)
-      emit('edited', nextTransaction)
+      emit('settle', nextTransaction)
     } catch {
       toast.error('紐づけの解除に失敗しました')
-      emit('edited', undefined)
     }
   }
 
@@ -138,7 +133,7 @@ export const useEditTransaction = (transaction: Transaction) => {
     editedValue,
     moneyDirection,
     linkedRequest,
-    putTransaction,
+    settle,
     updateLinkedRequest,
     unlinkRequest
   }

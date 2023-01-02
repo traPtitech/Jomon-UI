@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 
 interface Props {
-  type?: 'plain' | 'danger'
+  type?: 'plain' | 'danger' | 'success'
   fontSize: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
   padding: 'sm' | 'md' | 'lg' | 'xl'
   isDisabled?: boolean
@@ -17,6 +17,10 @@ const typeClass = computed(() => {
       return `${
         !props.isDisabled && 'hover:bg-red-300'
       } bg-red-500 border-red-300 text-white`
+    case 'success':
+      return `${
+        !props.isDisabled && 'hover:bg-green-300'
+      } bg-green-500 border-green-300 text-white`
     default:
       return `${!props.isDisabled && 'hover:bg-gray-200'} border-gray-300`
   }

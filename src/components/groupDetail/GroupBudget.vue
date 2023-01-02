@@ -17,6 +17,7 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits<{
   (e: 'changeEditMode', value: EditMode): void
+  (e: 'settle'): void
 }>()
 
 const userStore = useUserStore()
@@ -47,7 +48,16 @@ const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
       font-size="sm"
       :is-disabled="props.isSending"
       padding="sm"
-      @click.stop="emit('changeEditMode', '')">
+      @click="emit('changeEditMode', '')">
+      キャンセル
+    </SimpleButton>
+    <SimpleButton
+      class="ml-2"
+      font-size="sm"
+      :is-disabled="props.isSending"
+      padding="sm"
+      type="success"
+      @click="emit('settle')">
       完了
     </SimpleButton>
   </div>

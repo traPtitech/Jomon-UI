@@ -37,10 +37,7 @@ const fetchTransaction = async (id: string) => {
   }
 }
 
-function handleEditTransaction(editedTransaction: Transaction | undefined) {
-  if (editedTransaction === undefined) {
-    return
-  }
+function finishEditing(editedTransaction: Transaction) {
   transaction.value = editedTransaction
   isEditMode.value = false
 }
@@ -76,7 +73,8 @@ if (!groupStore.isGroupFetched) {
     <EditTransactionForm
       v-else
       :transaction="transaction"
-      @edited="handleEditTransaction" />
+      @cancel="isEditMode = false"
+      @finish-editing="finishEditing($event)" />
     <RouterLink class="w-fit" :to="`/requests/${transaction.request}`">
       <SimpleButton font-size="md" padding="sm">
         紐づいている申請へ移動

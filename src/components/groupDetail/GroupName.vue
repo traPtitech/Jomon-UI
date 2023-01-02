@@ -16,6 +16,7 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits<{
   (e: 'changeEditMode', value: EditMode): void
+  (e: 'finishEditing'): void
 }>()
 
 const userStore = useUserStore()
@@ -43,14 +44,24 @@ const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
       @click="emit('changeEditMode', 'name')">
       編集
     </SimpleButton>
-    <SimpleButton
-      v-else-if="hasAuthority && isEditMode"
-      class="ml-2"
-      font-size="sm"
-      :is-disabled="props.isSending"
-      padding="sm"
-      @click.stop="emit('changeEditMode', '')">
-      完了
-    </SimpleButton>
+    <template v-else-if="hasAuthority && isEditMode">
+      <SimpleButton
+        class="ml-2"
+        font-size="sm"
+        :is-disabled="props.isSending"
+        padding="sm"
+        @click="emit('changeEditMode', '')">
+        キャンセル
+      </SimpleButton>
+      <SimpleButton
+        class="ml-2"
+        font-size="sm"
+        :is-disabled="props.isSending"
+        padding="sm"
+        type="success"
+        @click="emit('finishEditing')">
+        完了
+      </SimpleButton>
+    </template>
   </div>
 </template>

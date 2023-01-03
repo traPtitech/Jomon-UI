@@ -44,6 +44,7 @@ const formattedDate = formatDate(props.transaction.created_at)
       <div class="flex gap-4">
         <InputText
           v-model="linkedRequest"
+          auto-focus
           class="w-1/2"
           placeholder="紐づける申請のURLを入力" />
         <SimpleButton

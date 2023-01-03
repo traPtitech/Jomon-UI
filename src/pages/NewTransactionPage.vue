@@ -36,11 +36,15 @@ if (!tagStore.isTagFetched) {
     <div class="pb-8">
       <h1 class="text-center text-3xl">入出金記録の新規作成</h1>
     </div>
-    <div class="flex flex-col gap-2">
+    <form class="flex flex-col gap-2">
       <div class="flex flex-col">
         <label>金額</label>
         <div>
-          <InputNumber v-model="transaction.amount" class="mr-1" :min="1" />円
+          <InputNumber
+            v-model="transaction.amount"
+            auto-focus
+            class="mr-1"
+            :min="1" />円
         </div>
       </div>
       <div class="flex flex-col">
@@ -73,6 +77,6 @@ if (!tagStore.isTagFetched) {
           入出金記録を作成する
         </SimpleButton>
       </div>
-    </div>
+    </form>
   </div>
 </template>

@@ -84,6 +84,7 @@ if (!userStore.isUserFetched) {
         <label>グループ名</label>
         <InputText
           v-model="group.name"
+          auto-focus
           placeholder="グループ名を入力"
           required />
       </div>

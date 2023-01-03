@@ -75,7 +75,7 @@ async function putStatus(nextStatus: RequestStatus, comment: string) {
         <StatusChip class="mx-1" has-text :status="props.nextStatus" />
         へ変更します
       </div>
-      <MarkdownTextarea v-model="comment" placeholder="コメント" />
+      <MarkdownTextarea v-model="comment" auto-focus placeholder="コメント" />
       <div class="mt-4 text-center">
         <SimpleButton
           class="mb-4 w-60"

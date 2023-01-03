@@ -40,6 +40,7 @@ const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
     予算：
     <InputNumber
       v-model="editedValue.budget"
+      auto-focus
       class="mr-1 w-24"
       :min="1"
       placeholder="金額" />円

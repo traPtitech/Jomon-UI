@@ -45,9 +45,10 @@ async function putStatus(nextStatus: RequestStatus, comment: string) {
       request.value.comments.push(convertRequestComment(response.comment))
     }
     request.value.status = response.status
+    toast.success('申請の状態を変更しました')
     emit('closeModal')
   } catch {
-    toast.error('状態の変更に失敗しました')
+    toast.error('申請の状態の変更に失敗しました')
   }
 }
 </script>

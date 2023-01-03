@@ -33,12 +33,15 @@ const deleteTags = async () => {
     toast.warning('削除するタグを選択してください')
     return
   }
+  isSending.value = true
   try {
     const deleteTagPromiseList = deleteTagList.value.map(tag => deleteTag(tag))
     await Promise.all(deleteTagPromiseList)
+    toast.success('タグを削除しました')
   } catch {
     toast.error('タグの削除に失敗しました')
   }
+  isSending.value = false
 }
 
 if (me.value?.admin) {
@@ -75,8 +78,8 @@ if (me.value?.admin) {
         :options="absentMembers"
         placeholder="追加する管理者を選択" />
       <SimpleButton
+        :disabled="isSending"
         font-size="lg"
-        :is-disabled="isSending"
         padding="sm"
         @click.stop="addAdmins(addList)">
         選択した管理者を追加
@@ -89,8 +92,8 @@ if (me.value?.admin) {
         :options="adminOptions"
         placeholder="削除する管理者を選択" />
       <SimpleButton
+        :disabled="isSending"
         font-size="lg"
-        :is-disabled="isSending"
         padding="sm"
         @click.stop="removeAdmins(removeList)">
         選択した管理者を削除
@@ -102,7 +105,11 @@ if (me.value?.admin) {
         class="!w-1/2"
         :options="tagIdOptions"
         placeholder="削除するタグを選択" />
-      <SimpleButton font-size="lg" padding="sm" @click.stop="deleteTags">
+      <SimpleButton
+        :disabled="isSending"
+        font-size="lg"
+        padding="sm"
+        @click.stop="deleteTags">
         選択したタグを削除
       </SimpleButton>
     </div>

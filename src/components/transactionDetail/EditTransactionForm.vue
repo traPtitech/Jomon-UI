@@ -28,6 +28,7 @@ const emit = defineEmits<{
 
 const groupStore = useGroupStore()
 const {
+  isSending,
   editedValue,
   moneyDirection,
   linkedRequest,
@@ -51,13 +52,15 @@ const formattedDate = formatDate(props.transaction.created_at)
           class="w-1/2"
           placeholder="紐づける申請のURLを入力" />
         <SimpleButton
+          :disabled="isSending"
           font-size="sm"
           padding="sm"
-          type="plain"
+          type="success"
           @click="updateLinkedRequest(linkedRequest, emit)">
           紐づける申請を更新
         </SimpleButton>
         <SimpleButton
+          :disabled="isSending"
           font-size="sm"
           padding="sm"
           type="danger"
@@ -104,6 +107,7 @@ const formattedDate = formatDate(props.transaction.created_at)
         キャンセル
       </SimpleButton>
       <SimpleButton
+        :disabled="isSending"
         font-size="sm"
         padding="sm"
         type="success"

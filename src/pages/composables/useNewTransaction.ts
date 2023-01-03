@@ -27,6 +27,8 @@ export const useNewTransaction = () => {
   const { createTagIfNotExist } = tagStore
   const { transactions } = storeToRefs(transactionStore)
 
+  const isSending = ref(false)
+
   const transaction = reactive<NewTransaction>({
     amount: 0,
     targets: [''],
@@ -41,10 +43,13 @@ export const useNewTransaction = () => {
       toast.warning('取引相手は必須です')
       return
     }
+    isSending.value = true
     let tags: Tag[]
     try {
       tags = await createTagIfNotExist(transaction.tags)
     } catch {
+      toast.error('新規タグの作成に失敗しました')
+      isSending.value = false
       return
     }
     const willPostTransaction = {
@@ -67,16 +72,17 @@ export const useNewTransaction = () => {
       } else {
         transactions.value = newTransactions
       }
+      toast.success('入出金記録を作成しました')
     } catch {
       toast.error('入出金記録の作成に失敗しました')
-      return
     }
-    toast.success('入出金記録の作成に成功しました')
+    isSending.value = false
   }
 
   const postTransactionFromRequest = async (request: RequestDetail) => {
     const result = confirm('この申請に紐づけて入出金記録を作成しますか？')
     if (!result) return
+    isSending.value = true
     const promises: ReturnType<typeof apis.postTransaction>[] =
       request.targets.map(target => {
         const willPostTransaction = {
@@ -98,13 +104,15 @@ export const useNewTransaction = () => {
       } else {
         transactions.value = newTransactions
       }
+      toast.success('入出金記録を作成しました')
     } catch {
       toast.error('入出金記録の作成に失敗しました')
-      return
     }
+    isSending.value = false
   }
 
   return {
+    isSending,
     transaction,
     moneyDirection,
     postTransaction,

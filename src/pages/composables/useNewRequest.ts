@@ -36,6 +36,8 @@ export const useNewRequest = () => {
   const { me } = storeToRefs(userStore)
   const { requests } = storeToRefs(requestStore)
 
+  const isSending = ref(false)
+
   const request = ref<NewRequest>({
     created_by: me.value?.id ?? '',
     title: '',
@@ -67,16 +69,21 @@ export const useNewRequest = () => {
       toast.warning('対象者の選択と金額の入力は必須です')
       return
     }
+    isSending.value = true
+
     let tags: Tag[]
     try {
       tags = await createTagIfNotExist(request.value.tags)
     } catch {
+      toast.error('新規タグの作成に失敗しました')
+      isSending.value = false
       return
     }
     const willPostRequest = {
       ...request.value,
       tags: tags.map(tag => tag.id)
     }
+
     try {
       const response: APIRequest = (await apis.postRequest(willPostRequest))
         .data
@@ -98,6 +105,7 @@ export const useNewRequest = () => {
     } catch {
       toast.error('申請の作成に失敗しました')
     }
+    isSending.value = false
   }
-  return { request, files, postRequest }
+  return { isSending, request, files, postRequest }
 }

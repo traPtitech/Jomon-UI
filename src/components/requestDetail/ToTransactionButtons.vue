@@ -10,7 +10,7 @@ import { useNewTransaction } from '/@/pages/composables/useNewTransaction'
 
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
-const { postTransactionFromRequest } = useNewTransaction()
+const { isSending, postTransactionFromRequest } = useNewTransaction()
 
 const { request } = storeToRefs(requestDetailStore)
 const { isAdmin } = storeToRefs(userStore)
@@ -21,6 +21,7 @@ const { isAdmin } = storeToRefs(userStore)
     <SimpleButton
       v-if="isAdmin"
       class="w-full"
+      :disabled="isSending"
       font-size="md"
       padding="sm"
       @click="request && postTransactionFromRequest(request)">

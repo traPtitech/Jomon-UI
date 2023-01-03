@@ -25,6 +25,8 @@ export const useNewGroup = () => {
   const { me } = storeToRefs(userStore)
   const { groups } = storeToRefs(groupStore)
 
+  const isSending = ref(false)
+
   const group = ref<NewGroup>({
     name: '',
     description: '',
@@ -35,7 +37,7 @@ export const useNewGroup = () => {
 
   const postGroup = async (e: Event) => {
     if (group.value.owners.length === 0) {
-      toast.warning('オーナーは必須です')
+      toast.warning('グループオーナーは必須です')
       return
     }
     const willPostGroup = {
@@ -43,6 +45,7 @@ export const useNewGroup = () => {
       description: group.value.description,
       budget: group.value.budget
     }
+    isSending.value = true
     try {
       const response: APIGroup = (await apis.postGroup(willPostGroup)).data
       if (groups.value !== undefined) {
@@ -63,6 +66,7 @@ export const useNewGroup = () => {
     } catch {
       toast.error('グループの作成に失敗しました')
     }
+    isSending.value = false
   }
-  return { group, postGroup }
+  return { isSending, group, postGroup }
 }

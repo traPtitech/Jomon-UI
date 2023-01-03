@@ -51,15 +51,14 @@ const hasAuthority = canEditGroup(me.value)
       <SimpleButton
         class="ml-2"
         font-size="sm"
-        :is-disabled="props.isSending"
         padding="sm"
         @click="emit('changeEditMode', '')">
         キャンセル
       </SimpleButton>
       <SimpleButton
         class="ml-2"
+        :disabled="props.isSending"
         font-size="sm"
-        :is-disabled="props.isSending"
         padding="sm"
         type="success"
         @click="emit('finishEditing')">

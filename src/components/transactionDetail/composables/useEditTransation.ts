@@ -23,6 +23,8 @@ export const useEditTransaction = (transaction: Transaction) => {
   const tagStore = useTagStore()
   const { createTagIfNotExist } = tagStore
 
+  const isSending = ref(false)
+
   const editedValue = ref<EditedTransaction>({
     amount: transaction.amount,
     target: transaction.target,
@@ -38,10 +40,13 @@ export const useEditTransaction = (transaction: Transaction) => {
   const finishEditing = async (
     emit: (e: 'finishEditing', value: Transaction) => void
   ) => {
+    isSending.value = true
     let tags: Tag[]
     try {
       tags = await createTagIfNotExist(editedValue.value.tags)
     } catch {
+      toast.error('新規タグの作成に失敗しました')
+      isSending.value = false
       return
     }
     const willPutTransaction = {
@@ -57,10 +62,12 @@ export const useEditTransaction = (transaction: Transaction) => {
         await apis.putTransactionDetail(transaction.id, willPutTransaction)
       ).data
       const nextTransaction = convertTransaction(response)
+      toast.success('入出金記録を更新しました')
       emit('finishEditing', nextTransaction)
     } catch {
       toast.error('入出金記録の修正に失敗しました')
     }
+    isSending.value = false
   }
 
   //TODO:サーバーで上書きしてもらう
@@ -85,6 +92,7 @@ export const useEditTransaction = (transaction: Transaction) => {
       '紐づけている申請を変更すると、入出金記録の情報が新たに紐づける申請の情報で上書きされます。よろしいですか？'
     )
     if (!result) return
+    isSending.value = true
     try {
       const willPutTransaction = {
         amount: transaction.amount,
@@ -100,10 +108,12 @@ export const useEditTransaction = (transaction: Transaction) => {
         })
       ).data
       const nextTransaction = convertTransaction(response)
+      toast.success('紐づいている申請を更新しました')
       emit('finishEditing', nextTransaction)
     } catch {
       toast.error('紐づいている申請の更新に失敗しました')
     }
+    isSending.value = false
   }
 
   const unlinkRequest = async (
@@ -111,6 +121,7 @@ export const useEditTransaction = (transaction: Transaction) => {
   ) => {
     const result = confirm('本当に申請との紐づけを解除しますか？')
     if (!result) return
+    isSending.value = true
     try {
       const willPutTransaction = {
         amount: transaction.amount,
@@ -126,13 +137,16 @@ export const useEditTransaction = (transaction: Transaction) => {
         })
       ).data
       const nextTransaction = convertTransaction(response)
+      toast.success('紐づけを解除しました')
       emit('finishEditing', nextTransaction)
     } catch {
       toast.error('紐づけの解除に失敗しました')
     }
+    isSending.value = false
   }
 
   return {
+    isSending,
     editedValue,
     moneyDirection,
     linkedRequest,

@@ -34,6 +34,7 @@ export const useRequestDetail = () => {
   const { createTagIfNotExist } = tagStore
   const { request, editedValue } = storeToRefs(requestDetailStore)
 
+  const isSending = ref(false)
   const editMode = ref<EditMode>('')
 
   const changeEditMode = async (kind: EditMode) => {
@@ -49,17 +50,21 @@ export const useRequestDetail = () => {
     }
     if (request.value !== undefined) {
       await putRequest(request.value.id, editedValue.value)
+      toast.success('申請を更新しました')
     } else {
-      toast.error('申請の修正に失敗しました')
+      toast.error('申請の更新に失敗しました')
     }
     editMode.value = ''
   }
 
   const putRequest = async (id: string, editedRequest: EditedRequest) => {
+    isSending.value = true
     let tags: Tag[]
     try {
       tags = await createTagIfNotExist(editedRequest.tags)
     } catch {
+      toast.error('新規タグの作成に失敗しました')
+      isSending.value = false
       return
     }
     const willPutRequest = {
@@ -69,12 +74,14 @@ export const useRequestDetail = () => {
     try {
       const response = (await apis.putRequestDetail(id, willPutRequest)).data
       request.value = convertRequestDetail(response)
-      toast.success('申請を修正しました')
+      toast.success('申請を更新しました')
     } catch {
-      toast.error('申請の修正に失敗しました')
+      toast.error('申請の更新に失敗しました')
     }
+    isSending.value = false
   }
   return {
+    isSending,
     editMode,
     changeEditMode
   }

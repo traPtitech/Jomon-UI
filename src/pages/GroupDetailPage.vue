@@ -74,8 +74,8 @@ if (!isUserFetched.value) {
           <SimpleButton
             v-if="hasAuthority"
             class="mr-8"
+            :disabled="isDeleting"
             font-size="sm"
-            :is-disabled="isDeleting"
             padding="sm"
             type="danger"
             @click="deleteGroup(group?.id ?? '')">

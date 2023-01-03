@@ -28,8 +28,8 @@ export const useNewComment = (requestId: string) => {
         })
       ).data
       comment.value = ''
-      toast.success('コメントを送信しました')
       request.value?.comments.push(convertRequestComment(response))
+      toast.success('コメントを送信しました')
     } catch {
       toast.error('コメントの送信に失敗しました')
     }

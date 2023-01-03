@@ -37,7 +37,7 @@ export const useNewGroup = () => {
 
   const postGroup = async (e: Event) => {
     if (group.value.owners.length === 0) {
-      toast.warning('オーナーは必須です')
+      toast.warning('グループオーナーは必須です')
       return
     }
     const willPostGroup = {

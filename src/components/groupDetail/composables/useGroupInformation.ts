@@ -34,6 +34,7 @@ export const useGroupInformation = () => {
       }
       await putGroup(group.value?.id ?? '', value)
       changeEditMode('')
+      toast.success('グループ情報を更新しました')
     } catch {
       toast.error('グループ情報の更新に失敗しました')
     }

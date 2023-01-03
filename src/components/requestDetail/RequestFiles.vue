@@ -31,6 +31,7 @@ async function removeFile(id: string) {
   try {
     await apis.deleteFile(id)
     files.value = files.value.filter(file => file.id !== id)
+    toast.success('ファイルを削除しました')
   } catch {
     toast.error('ファイルの削除に失敗しました')
   }

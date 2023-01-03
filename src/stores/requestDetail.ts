@@ -60,7 +60,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
       const response = (await apis.putRequestDetail(id, willPutRequest)).data
       request.value = convertRequestDetail(response)
 
-      toast.success('申請の修正に成功しました')
+      toast.success('申請を修正しました')
     } catch {
       toast.error('申請の修正に失敗しました')
     }

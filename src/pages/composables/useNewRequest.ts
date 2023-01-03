@@ -75,6 +75,7 @@ export const useNewRequest = () => {
     try {
       tags = await createTagIfNotExist(request.value.tags)
     } catch {
+      toast.error('新規タグの作成に失敗しました')
       isSending.value = false
       return
     }

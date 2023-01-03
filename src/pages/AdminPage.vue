@@ -37,6 +37,7 @@ const deleteTags = async () => {
   try {
     const deleteTagPromiseList = deleteTagList.value.map(tag => deleteTag(tag))
     await Promise.all(deleteTagPromiseList)
+    toast.success('タグを削除しました')
   } catch {
     toast.error('タグの削除に失敗しました')
   }

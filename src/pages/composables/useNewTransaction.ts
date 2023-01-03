@@ -48,6 +48,7 @@ export const useNewTransaction = () => {
     try {
       tags = await createTagIfNotExist(transaction.tags)
     } catch {
+      toast.error('新規タグの作成に失敗しました')
       isSending.value = false
       return
     }
@@ -71,7 +72,7 @@ export const useNewTransaction = () => {
       } else {
         transactions.value = newTransactions
       }
-      toast.success('入出金記録の作成に成功しました')
+      toast.success('入出金記録を作成しました')
     } catch {
       toast.error('入出金記録の作成に失敗しました')
     }
@@ -103,7 +104,7 @@ export const useNewTransaction = () => {
       } else {
         transactions.value = newTransactions
       }
-      toast.success('入出金記録の作成に成功しました')
+      toast.success('入出金記録を作成しました')
     } catch {
       toast.error('入出金記録の作成に失敗しました')
     }

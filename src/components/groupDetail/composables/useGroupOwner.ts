@@ -42,7 +42,7 @@ export const useGroupOwner = () => {
         owners: [...group.value.owners, ...ownersToBeAdded]
       }
       group.value = nextGroup
-      toast.success('オーナーを追加しました')
+      toast.success('グループオーナーを追加しました')
     } catch {
       toast.error('グループオーナーの追加に失敗しました')
     }
@@ -60,7 +60,7 @@ export const useGroupOwner = () => {
         owners: group.value.owners.filter(owner => owner !== id)
       }
       group.value = nextGroup
-      toast.success('オーナーを削除しました')
+      toast.success('グループオーナーを削除しました')
     } catch {
       toast.error('グループオーナーの削除に失敗しました')
     }

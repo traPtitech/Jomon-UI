@@ -45,6 +45,7 @@ export const useEditTransaction = (transaction: Transaction) => {
     try {
       tags = await createTagIfNotExist(editedValue.value.tags)
     } catch {
+      toast.error('新規タグの作成に失敗しました')
       isSending.value = false
       return
     }
@@ -61,6 +62,7 @@ export const useEditTransaction = (transaction: Transaction) => {
         await apis.putTransactionDetail(transaction.id, willPutTransaction)
       ).data
       const nextTransaction = convertTransaction(response)
+      toast.success('入出金記録を更新しました')
       emit('finishEditing', nextTransaction)
     } catch {
       toast.error('入出金記録の修正に失敗しました')
@@ -106,6 +108,7 @@ export const useEditTransaction = (transaction: Transaction) => {
         })
       ).data
       const nextTransaction = convertTransaction(response)
+      toast.success('紐づいている申請を更新しました')
       emit('finishEditing', nextTransaction)
     } catch {
       toast.error('紐づいている申請の更新に失敗しました')
@@ -134,6 +137,7 @@ export const useEditTransaction = (transaction: Transaction) => {
         })
       ).data
       const nextTransaction = convertTransaction(response)
+      toast.success('紐づけを解除しました')
       emit('finishEditing', nextTransaction)
     } catch {
       toast.error('紐づけの解除に失敗しました')

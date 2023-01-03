@@ -22,10 +22,12 @@ const emit = defineEmits<{
 const userStore = useUserStore()
 const groupStore = useGroupStore()
 const requestDetailStore = useRequestDetailStore()
-
+const { isRequestCreater } = requestDetailStore
+const { groupOptions } = storeToRefs(groupStore)
 const { request, editedValue } = storeToRefs(requestDetailStore)
+const { me } = storeToRefs(userStore)
 
-const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
+const hasAuthority = isRequestCreater(me.value)
 
 const handleComplete = () => {
   emit('changeEditMode', '')
@@ -47,7 +49,7 @@ const handleComplete = () => {
       <InputSelectSingle
         v-model="editedValue.group"
         class="w-52"
-        :options="groupStore.groupOptions"
+        :options="groupOptions"
         placeholder="グループ" />
       <SimpleButton
         class="ml-2"

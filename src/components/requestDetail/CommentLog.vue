@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 
 import { useUserStore } from '/@/stores/user'
@@ -18,6 +19,7 @@ const props = defineProps<Props>()
 const formattedDateAndTime = formatDateAndTime(props.comment.created_at)
 
 const userStore = useUserStore()
+const { userMap } = storeToRefs(userStore)
 
 const route = useRoute()
 const hash = route.hash.substring(1)
@@ -25,10 +27,10 @@ const hash = route.hash.substring(1)
 
 <template>
   <div :id="comment.id" class="flex w-full p-2">
-    <UserIcon class="w-12" :name="userStore.userMap[comment.user]" />
+    <UserIcon class="w-12" :name="userMap[comment.user]" />
     <div class="w-full pl-2">
       <div class="flex h-12 items-center justify-between">
-        {{ userStore.userMap[comment.user] }}がコメントしました。
+        {{ userMap[comment.user] }}がコメントしました。
         <span>
           {{ formattedDateAndTime }}
         </span>

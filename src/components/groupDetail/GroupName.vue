@@ -21,9 +21,11 @@ const emit = defineEmits<{
 
 const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
+const { canEditGroup } = groupDetailStore
 const { group, editedValue } = storeToRefs(groupDetailStore)
+const { me } = storeToRefs(userStore)
 
-const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
+const hasAuthority = canEditGroup(me.value)
 </script>
 
 <template>

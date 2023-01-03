@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
@@ -23,6 +24,12 @@ const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const toast = useToast()
+const { isUserFetched, isAdmin } = storeToRefs(userStore)
+const { isTagFetched } = storeToRefs(tagStore)
+const { isGroupFetched } = storeToRefs(groupStore)
+const { fetchUsers } = userStore
+const { fetchTags } = tagStore
+const { fetchGroups } = groupStore
 
 const isEditMode = ref(false)
 
@@ -43,14 +50,14 @@ function finishEditing(editedTransaction: Transaction) {
 }
 
 await fetchTransaction(id)
-if (!userStore.isUserFetched) {
-  await userStore.fetchUsers()
+if (!isUserFetched.value) {
+  await fetchUsers()
 }
-if (!tagStore.isTagFetched) {
-  await tagStore.fetchTags()
+if (!isTagFetched.value) {
+  await fetchTags()
 }
-if (!groupStore.isGroupFetched) {
-  await groupStore.fetchGroups()
+if (!isGroupFetched.value) {
+  await fetchGroups()
 }
 </script>
 
@@ -61,7 +68,7 @@ if (!groupStore.isGroupFetched) {
     <div class="flex items-center pb-4">
       <h1 class="text-3xl">入出金記録の詳細</h1>
       <SimpleButton
-        v-if="userStore.isAdmin() && transaction.request && !isEditMode"
+        v-if="isAdmin && transaction.request && !isEditMode"
         class="ml-2"
         font-size="sm"
         padding="sm"

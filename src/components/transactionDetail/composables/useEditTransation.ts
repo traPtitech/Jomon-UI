@@ -21,6 +21,7 @@ interface EditedTransaction {
 export const useEditTransaction = (transaction: Transaction) => {
   const toast = useToast()
   const tagStore = useTagStore()
+  const { createTagIfNotExist } = tagStore
 
   const editedValue = ref<EditedTransaction>({
     amount: transaction.amount,
@@ -39,7 +40,7 @@ export const useEditTransaction = (transaction: Transaction) => {
   ) => {
     let tags: Tag[]
     try {
-      tags = await tagStore.createTagIfNotExist(editedValue.value.tags)
+      tags = await createTagIfNotExist(editedValue.value.tags)
     } catch {
       return
     }

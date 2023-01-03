@@ -22,6 +22,8 @@ const isFilterByTarget = ref(false)
 
 const { fetchTransactions } = transactionStore
 const { filterParams } = storeToRefs(transactionStore)
+const { groupOptions } = storeToRefs(groupStore)
+const { tagIdOptions } = storeToRefs(tagStore)
 
 function changeIsTargetSearchMode() {
   if (isFilterByTarget.value) {
@@ -116,14 +118,14 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
       <InputSelectSingle
         v-model="filterParams.group"
         class="!w-2/10"
-        :options="groupStore.groupOptions"
+        :options="groupOptions"
         placeholder="取引グループ"
         @close="'updateTransactions'" />
       <!-- タグ -->
       <InputSelectMultiple
         v-model="filterParams.tags"
         class="!w-3/10"
-        :options="tagStore.tagIdOptions"
+        :options="tagIdOptions"
         placeholder="タグ"
         @close="'updateTransactions'" />
     </div>

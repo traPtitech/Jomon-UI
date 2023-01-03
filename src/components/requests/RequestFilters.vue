@@ -19,6 +19,9 @@ const groupStore = useGroupStore()
 
 const { fetchRequests } = requestStore
 const { requests, filterParams } = storeToRefs(requestStore)
+const { userOptions } = storeToRefs(userStore)
+const { tagIdOptions } = storeToRefs(tagStore)
+const { groupOptions } = storeToRefs(groupStore)
 
 function sortByCreatedAt() {
   if (filterParams.value.sort === 'created_at') {
@@ -55,7 +58,7 @@ function sortByCreatedAt() {
     </div>
     <InputSelectSingle
       v-model="filterParams.target"
-      :options="userStore.userOptions"
+      :options="userOptions"
       placeholder="申請者"
       @close="fetchRequests(filterParams)" />
     <InputSelectSingle
@@ -65,12 +68,12 @@ function sortByCreatedAt() {
       @close="fetchRequests(filterParams)" />
     <InputSelectSingle
       v-model="filterParams.group"
-      :options="groupStore.groupOptions"
+      :options="groupOptions"
       placeholder="グループ"
       @close="fetchRequests(filterParams)" />
     <InputSelectMultiple
       v-model="filterParams.tags"
-      :options="tagStore.tagIdOptions"
+      :options="tagIdOptions"
       placeholder="タグ"
       @close="fetchRequests(filterParams)" />
   </div>

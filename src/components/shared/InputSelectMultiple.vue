@@ -12,7 +12,7 @@ interface Value {
 interface Props {
   modelValue: ValueValue[]
   placeholder?: string
-  options: Value[] | undefined
+  options: Value[]
   disabled?: boolean
   taggable?: boolean
   createOption?: (option: string) => ValueValue
@@ -275,7 +275,7 @@ onUnmounted(() => {
       class="flex w-full cursor-text items-center rounded border border-gray-300 py-1 pl-1"
       :class="`${disabled && 'pointer-events-none'}`"
       @click.prevent="handleClick">
-      <div class="flex w-full items-center overflow-x-scroll">
+      <div class="flex w-full items-center overflow-x-auto">
         <div
           v-for="selectedValue in selectedValues"
           :key="selectedValue.key"
@@ -296,17 +296,24 @@ onUnmounted(() => {
     <ul
       v-if="isDropdownOpen && searchedOptions.length > 0"
       ref="listRef"
-      class="absolute z-10 max-h-40 w-full overflow-y-scroll border border-gray-200 bg-white shadow-lg"
+      class="absolute z-10 max-h-40 w-full border border-gray-200 bg-white shadow-lg"
       :class="`${
         isDropdownAbove ? `-top-${dropdownHeight} rounded-t-lg` : 'rounded-b-lg'
+      } ${
+        ((searchQuery === '' && options.length > 4) ||
+          (searchQuery !== '' && searchedOptions.length > 4)) &&
+        'overflow-y-scroll'
       }`">
       <li
         v-for="option in searchQuery !== '' ? searchedOptions : options"
         :key="option.key"
         ref="listItemRefs"
-        :class="`last:not-first:rounded-b-lg focus-within:bg-gray-100 hover:bg-gray-100 ${
-          selectedValues.some(value => value.value === option.value) &&
-          'bg-gray-200 hover:bg-gray-200'
+        :class="`last:not-first:rounded-b-md focus-within:bg-gray-100 hover:bg-gray-100 ${
+          selectedValues.some(
+            value =>
+              convertValue(value.value, uniqKeys[1]) ===
+              convertValue(option.value, uniqKeys[0])
+          ) && 'bg-gray-200 hover:bg-gray-200'
         }`">
         <button
           class="h-full w-full px-4 py-1 text-left focus:outline-none"

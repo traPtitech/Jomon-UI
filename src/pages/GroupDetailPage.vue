@@ -24,16 +24,20 @@ const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
 
 const { group } = storeToRefs(groupDetailStore)
+const { canEditGroup, fetchGroup } = groupDetailStore
+const { fetchUsers } = userStore
+const { me } = storeToRefs(userStore)
+const { isUserFetched } = storeToRefs(userStore)
 
 const { isSending, editMode, changeEditMode, finishEditing } =
   useGroupInformation()
 
-const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
+const hasAuthority = canEditGroup(me.value)
 const { isDeleting, deleteGroup } = useDeleteGroup()
 
-await groupDetailStore.fetchGroup(id)
-if (!userStore.isUserFetched) {
-  await userStore.fetchUsers()
+await fetchGroup(id)
+if (!isUserFetched.value) {
+  await fetchUsers()
 }
 </script>
 

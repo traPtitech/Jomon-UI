@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { PlusCircleIcon, MinusCircleIcon } from '@heroicons/vue/24/solid'
+import { storeToRefs } from 'pinia'
 import { useToast } from 'vue-toastification'
 
 import { useUserStore } from '/@/stores/user'
@@ -18,6 +19,7 @@ const emit = defineEmits<{ (e: 'input', value: RequestTarget[]): void }>()
 
 const userStore = useUserStore()
 const toast = useToast()
+const { userOptions } = storeToRefs(userStore)
 
 function handleEditTarget(index: number, value: unknown) {
   if (typeof value === 'string') {
@@ -69,7 +71,7 @@ function handleRemoveTarget(index: number) {
         <InputSelectSingle
           class="!w-1/3 flex-grow"
           :model-value="target.target"
-          :options="userStore.userOptions"
+          :options="userOptions"
           placeholder="払い戻し対象者を選択"
           @update:model-value="handleEditTarget(i, $event)" />
         <div>
@@ -85,9 +87,7 @@ function handleRemoveTarget(index: number) {
         </button>
       </li>
     </ul>
-    <div
-      v-if="userStore.userOptions.length > targets.length"
-      class="w-2/3 text-center">
+    <div v-if="userOptions.length > targets.length" class="w-2/3 text-center">
       <button @click="handleAddTarget">
         <PlusCircleIcon class="w-8" />
       </button>

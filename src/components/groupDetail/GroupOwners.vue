@@ -13,10 +13,12 @@ import { useGroupOwner } from './composables/useGroupOwner'
 
 const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
+const { canEditGroup } = groupDetailStore
 const { group } = storeToRefs(groupDetailStore)
+const { me } = storeToRefs(userStore)
 
 const OwnersToBeAdded = ref<string[]>([])
-const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
+const hasAuthority = canEditGroup(me.value)
 const { absentOwnerOptions, isSending, addOwners, removeOwner } =
   useGroupOwner()
 </script>

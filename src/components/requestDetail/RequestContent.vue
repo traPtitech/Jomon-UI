@@ -20,10 +20,11 @@ const emit = defineEmits<{
 
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
-
+const { isRequestCreater } = requestDetailStore
 const { request, editedValue } = storeToRefs(requestDetailStore)
+const { me } = storeToRefs(userStore)
 
-const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
+const hasAuthority = isRequestCreater(me.value)
 </script>
 
 <template>

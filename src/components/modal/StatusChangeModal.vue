@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { DateTime } from 'luxon'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
@@ -7,6 +6,7 @@ import { useToast } from 'vue-toastification'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
 import apis from '/@/lib/apis'
+import { convertRequestComment, convertRequestStatus } from '/@/lib/date'
 
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
@@ -40,19 +40,9 @@ async function putStatus(nextStatus: RequestStatus, comment: string) {
     }
     const response = (await apis.putStatus(request.value.id, statusRequest))
       .data
-    request.value.statuses.push({
-      created_by: response.created_by,
-      created_at: DateTime.fromISO(response.created_at),
-      status: response.status
-    })
-
+    request.value.statuses.push(convertRequestStatus(response))
     if (response.comment !== undefined) {
-      const newComment = {
-        ...response.comment,
-        created_at: DateTime.fromISO(response.comment.created_at),
-        updated_at: DateTime.fromISO(response.comment.updated_at)
-      }
-      request.value.comments.push(newComment)
+      request.value.comments.push(convertRequestComment(response.comment))
     }
     request.value.status = response.status
     emit('closeModal')

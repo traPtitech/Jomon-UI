@@ -21,14 +21,15 @@ const emit = defineEmits<{
 
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
-
+const { isRequestCreater } = requestDetailStore
 const { request, editedValue } = storeToRefs(requestDetailStore)
+const { me, userOptions } = storeToRefs(userStore)
 
 const formattedTargets = computed(
   () => request.value?.targets.map(target => target.target).join(', ') ?? ''
 )
 
-const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
+const hasAuthority = isRequestCreater(me.value)
 
 const handleComplete = () => {
   emit('changeEditMode', '')
@@ -49,7 +50,7 @@ const handleComplete = () => {
       払い戻し対象者：
       <InputSelectMultiple
         v-model="editedValue.targets"
-        :options="userStore.userOptions"
+        :options="userOptions"
         placeholder="払い戻し対象者"
         uniq-key="target" />
       <SimpleButton

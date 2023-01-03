@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
+
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 import { directionOptions } from '/@/stores/transaction'
@@ -16,22 +18,28 @@ import { useNewTransaction } from './composables/useNewTransaction'
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
+const { fetchUsers } = userStore
+const { fetchTags } = tagStore
+const { fetchGroups } = groupStore
+const { isUserFetched, isAdmin } = storeToRefs(userStore)
+const { isTagFetched } = storeToRefs(tagStore)
+const { isGroupFetched, groupOptions } = storeToRefs(groupStore)
 
 const { transaction, moneyDirection, postTransaction } = useNewTransaction()
 
-if (!groupStore.isGroupFetched) {
-  await groupStore.fetchGroups()
+if (!isGroupFetched.value) {
+  await fetchGroups()
 }
-if (!userStore.isUserFetched) {
-  await userStore.fetchUsers()
+if (!isUserFetched.value) {
+  await fetchUsers()
 }
-if (!tagStore.isTagFetched) {
-  await tagStore.fetchTags()
+if (!isTagFetched.value) {
+  await fetchTags()
 }
 </script>
 
 <template>
-  <div v-if="!userStore.isAdmin()">権限がありません。</div>
+  <div v-if="!isAdmin">権限がありません。</div>
   <div class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
     <div class="pb-8">
       <h1 class="text-center text-3xl">入出金記録の新規作成</h1>
@@ -61,7 +69,7 @@ if (!tagStore.isTagFetched) {
         <InputSelectSingle
           v-model="transaction.group"
           class="!w-2/3"
-          :options="groupStore.groupOptions"
+          :options="groupOptions"
           placeholder="グループを選択" />
       </div>
       <div class="flex flex-col">

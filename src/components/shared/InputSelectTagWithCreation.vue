@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
 import { useTagStore } from '/@/stores/tag'
@@ -14,6 +15,8 @@ const props = defineProps<Props>()
 const emit = defineEmits<{ (e: 'update:modelValue', value: Tag[]): void }>()
 
 const tagStore = useTagStore()
+const { tagOptions } = storeToRefs(tagStore)
+
 const value = computed({
   get: () => props.modelValue,
   set: v => emit('update:modelValue', v)
@@ -24,7 +27,7 @@ const value = computed({
   <InputSelectMultiple
     v-model="value"
     :create-option="(tag: string) => ({ name: tag, id: '', created_at: '', updated_at: '' })"
-    :options="tagStore.tagOptions"
+    :options="tagOptions"
     placeholder="タグを選択"
     taggable
     :uniq-keys="['name', 'name']" />

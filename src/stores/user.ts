@@ -13,10 +13,10 @@ export const useUserStore = defineStore('user', () => {
   const isUserFetched = ref(false)
   const isMeFetched = ref(false)
 
-  const isAdmin = () => {
+  const isAdmin = computed(() => {
     if (!me.value) return false
     return me.value.admin
-  }
+  })
 
   const userOptions = computed(() => {
     return (

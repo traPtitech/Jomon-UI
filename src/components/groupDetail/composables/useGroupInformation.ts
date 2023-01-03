@@ -9,7 +9,7 @@ export type EditMode = 'name' | 'description' | 'budget' | ''
 export const useGroupInformation = () => {
   const groupDetailStore = useGroupDetailStore()
   const toast = useToast()
-
+  const { putGroup } = groupDetailStore
   const { group, editedValue } = storeToRefs(groupDetailStore)
 
   const isSending = ref(false)
@@ -32,7 +32,7 @@ export const useGroupInformation = () => {
         description: editedValue.value.description,
         budget: editedValue.value.budget
       }
-      await groupDetailStore.putGroup(group.value?.id ?? '', value)
+      await putGroup(group.value?.id ?? '', value)
       changeEditMode('')
     } catch {
       toast.error('グループ情報の更新に失敗しました')

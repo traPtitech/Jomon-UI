@@ -32,11 +32,12 @@ export const useNewRequest = () => {
   const requestStore = useRequestStore()
   const userStore = useUserStore()
   const tagStore = useTagStore()
-
+  const { createTagIfNotExist } = tagStore
+  const { me } = storeToRefs(userStore)
   const { requests } = storeToRefs(requestStore)
 
   const request = ref<NewRequest>({
-    created_by: userStore.me?.id ?? '',
+    created_by: me.value?.id ?? '',
     title: '',
     targets: [{ target: '', amount: 0 }],
     content: '',
@@ -68,7 +69,7 @@ export const useNewRequest = () => {
     }
     let tags: Tag[]
     try {
-      tags = await tagStore.createTagIfNotExist(request.value.tags)
+      tags = await createTagIfNotExist(request.value.tags)
     } catch {
       return
     }

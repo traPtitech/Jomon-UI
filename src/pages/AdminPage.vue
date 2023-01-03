@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
@@ -15,6 +16,12 @@ const adminStore = useAdminStore()
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const toast = useToast()
+const { isAdminFetched, admins, adminOptions } = storeToRefs(adminStore)
+const { me, isUserFetched, isAdmin, userMap } = storeToRefs(userStore)
+const { isTagFetched, tagIdOptions } = storeToRefs(tagStore)
+const { deleteTag, fetchTags } = tagStore
+const { fetchUsers } = userStore
+const { fetchAdmins } = adminStore
 
 const addList = ref<string[]>([])
 const removeList = ref<string[]>([])
@@ -27,38 +34,36 @@ const deleteTags = async () => {
     return
   }
   try {
-    const deleteTagPromiseList = deleteTagList.value.map(tag =>
-      tagStore.deleteTag(tag)
-    )
+    const deleteTagPromiseList = deleteTagList.value.map(tag => deleteTag(tag))
     await Promise.all(deleteTagPromiseList)
   } catch {
     toast.error('タグの削除に失敗しました')
   }
 }
 
-if (userStore.me && userStore.me.admin) {
-  if (!adminStore.isAdminFetched) {
-    await adminStore.fetchAdmins()
+if (me.value?.admin) {
+  if (!isAdminFetched.value) {
+    await fetchAdmins()
   }
-  if (!userStore.isUserFetched) {
-    await userStore.fetchUsers()
+  if (!isUserFetched.value) {
+    await fetchUsers()
   }
-  if (!tagStore.isTagFetched) {
-    await tagStore.fetchTags()
+  if (!isTagFetched.value) {
+    await fetchTags()
   }
 }
 </script>
 
 <template>
-  <div v-if="!userStore.isAdmin()" class="p-2">権限がありません。</div>
+  <div v-if="!isAdmin" class="p-2">権限がありません。</div>
   <div v-else class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
     <h1 class="pb-8 text-center text-3xl">管理ページ</h1>
     <div class="flex items-center">
       管理者：
       <ul class="flex gap-2">
-        <li v-for="admin in adminStore.admins" :key="admin">
+        <li v-for="admin in admins" :key="admin">
           <div class="border-secondary rounded border px-2 text-center">
-            {{ userStore.userMap[admin] }}
+            {{ userMap[admin] }}
           </div>
         </li>
       </ul>
@@ -81,7 +86,7 @@ if (userStore.me && userStore.me.admin) {
       <InputSelectMultiple
         v-model="removeList"
         class="!w-1/2"
-        :options="adminStore.adminOptions"
+        :options="adminOptions"
         placeholder="削除する管理者を選択" />
       <SimpleButton
         font-size="lg"
@@ -95,7 +100,7 @@ if (userStore.me && userStore.me.admin) {
       <InputSelectMultiple
         v-model="deleteTagList"
         class="!w-1/2"
-        :options="tagStore.tagIdOptions"
+        :options="tagIdOptions"
         placeholder="削除するタグを選択" />
       <SimpleButton font-size="lg" padding="sm" @click.stop="deleteTags">
         選択したタグを削除

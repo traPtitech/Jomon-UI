@@ -13,12 +13,13 @@ const requestDetailStore = useRequestDetailStore()
 const { postTransactionFromRequest } = useNewTransaction()
 
 const { request } = storeToRefs(requestDetailStore)
+const { isAdmin } = storeToRefs(userStore)
 </script>
 
 <template>
   <div class="px-1/6 flex flex-col items-center gap-4 py-8">
     <SimpleButton
-      v-if="userStore.isAdmin()"
+      v-if="isAdmin"
       class="w-full"
       font-size="md"
       padding="sm"

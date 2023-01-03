@@ -24,7 +24,7 @@ export const useNewTransaction = () => {
   const toast = useToast()
   const transactionStore = useTransactionStore()
   const tagStore = useTagStore()
-
+  const { createTagIfNotExist } = tagStore
   const { transactions } = storeToRefs(transactionStore)
 
   const transaction = reactive<NewTransaction>({
@@ -43,7 +43,7 @@ export const useNewTransaction = () => {
     }
     let tags: Tag[]
     try {
-      tags = await tagStore.createTagIfNotExist(transaction.tags)
+      tags = await createTagIfNotExist(transaction.tags)
     } catch {
       return
     }

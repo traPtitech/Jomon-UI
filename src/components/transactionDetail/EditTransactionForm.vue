@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
+
 import { useGroupStore } from '/@/stores/group'
 import { directionOptions } from '/@/stores/transaction'
 
@@ -33,6 +35,7 @@ const {
   updateLinkedRequest,
   unlinkRequest
 } = useEditTransaction(props.transaction)
+const { groupOptions } = storeToRefs(groupStore)
 
 const formattedDate = formatDate(props.transaction.created_at)
 </script>
@@ -88,7 +91,7 @@ const formattedDate = formatDate(props.transaction.created_at)
       <label>取引グループ</label>
       <InputSelectSingle
         v-model="editedValue.group"
-        :options="groupStore.groupOptions"
+        :options="groupOptions"
         placeholder="グループを選択" />
     </div>
     <div class="flex flex-col">

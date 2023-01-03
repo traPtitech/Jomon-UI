@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 
 import { useUserStore } from '/@/stores/user'
@@ -6,6 +7,7 @@ import { useUserStore } from '/@/stores/user'
 import HeaderButton from './HeaderButton.vue'
 
 const userStore = useUserStore()
+const { isAdmin } = storeToRefs(userStore)
 
 const route = useRoute()
 </script>
@@ -25,7 +27,7 @@ const route = useRoute()
       path="/groups"
       text="グループ一覧" />
     <HeaderButton
-      v-if="userStore.isAdmin()"
+      v-if="isAdmin"
       :is-here="route.path === '/admins'"
       path="/admins"
       text="管理ページ" />

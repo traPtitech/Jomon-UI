@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
@@ -9,6 +9,7 @@ import apis from '/@/lib/apis'
 export const useAdminStore = defineStore('admin', () => {
   const toast = useToast()
   const userStore = useUserStore()
+  const { userMap } = storeToRefs(userStore)
 
   const admins = ref<string[]>()
   const isAdminFetched = ref(false)
@@ -17,7 +18,7 @@ export const useAdminStore = defineStore('admin', () => {
     return (
       admins.value?.map(admin => {
         return {
-          key: userStore.userMap[admin],
+          key: userMap.value[admin],
           value: admin
         }
       }) ?? []

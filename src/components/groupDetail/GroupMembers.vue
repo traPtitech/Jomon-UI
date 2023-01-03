@@ -13,11 +13,12 @@ import { useGroupMember } from './composables/useGroupMember'
 
 const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
-
+const { canEditGroup } = groupDetailStore
 const { group } = storeToRefs(groupDetailStore)
+const { me } = storeToRefs(userStore)
 
 const MembersToBeAdded = ref<string[]>([])
-const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
+const hasAuthority = canEditGroup(me.value)
 const { absentMemberOptions, isSending, addMembers, removeMember } =
   useGroupMember()
 </script>

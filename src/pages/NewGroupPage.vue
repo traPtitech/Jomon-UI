@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
@@ -19,6 +20,9 @@ const router = useRouter()
 
 const userStore = useUserStore()
 const groupStore = useGroupStore()
+const { fetchUsers } = userStore
+const { me, isUserFetched, userOptions } = storeToRefs(userStore)
+const { groups } = storeToRefs(groupStore)
 
 const toast = useToast()
 
@@ -26,17 +30,17 @@ const group = reactive({
   name: '',
   description: '',
   budget: 0,
-  owners: userStore.me?.id ? [userStore.me.id] : [],
+  owners: me.value?.id ? [me.value.id] : [],
   members: []
 })
 
 const postGroup = async (group: PostGroup) => {
   try {
     const res = (await apis.postGroup(group)).data
-    if (groupStore.groups !== undefined) {
-      groupStore.groups.unshift(res)
+    if (groups.value !== undefined) {
+      groups.value.unshift(res)
     } else {
-      groupStore.groups = [res]
+      groups.value = [res]
     }
     return res
   } catch {
@@ -69,8 +73,8 @@ const handlePostGroup = async (e: Event) => {
   }
 }
 
-if (!userStore.isUserFetched) {
-  await userStore.fetchUsers()
+if (!isUserFetched.value) {
+  await fetchUsers()
 }
 </script>
 
@@ -108,14 +112,14 @@ if (!userStore.isUserFetched) {
         <label>オーナー</label>
         <InputSelectMultiple
           v-model="group.owners"
-          :options="userStore.userOptions"
+          :options="userOptions"
           placeholder="追加するオーナーを選択" />
       </div>
       <div class="flex flex-col">
         <label>メンバー</label>
         <InputSelectMultiple
           v-model="group.members"
-          :options="userStore.userOptions"
+          :options="userOptions"
           placeholder="追加するメンバーを選択" />
       </div>
       <div>

@@ -31,7 +31,8 @@ export const useRequestDetail = () => {
   const requestDetailStore = useRequestDetailStore()
   const toast = useToast()
   const tagStore = useTagStore()
-  const { request } = storeToRefs(requestDetailStore)
+  const { createTagIfNotExist } = tagStore
+  const { request, editedValue } = storeToRefs(requestDetailStore)
 
   const editMode = ref<EditMode>('')
 
@@ -47,7 +48,7 @@ export const useRequestDetail = () => {
       if (!result) return
     }
     if (request.value !== undefined) {
-      await putRequest(request.value.id, requestDetailStore.editedValue)
+      await putRequest(request.value.id, editedValue.value)
     } else {
       toast.error('申請の修正に失敗しました')
     }
@@ -57,7 +58,7 @@ export const useRequestDetail = () => {
   const putRequest = async (id: string, editedRequest: EditedRequest) => {
     let tags: Tag[]
     try {
-      tags = await tagStore.createTagIfNotExist(editedRequest.tags)
+      tags = await createTagIfNotExist(editedRequest.tags)
     } catch {
       return
     }

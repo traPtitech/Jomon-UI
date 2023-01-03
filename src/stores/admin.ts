@@ -2,10 +2,13 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
+import { useUserStore } from '/@/stores/user'
+
 import apis from '/@/lib/apis'
 
 export const useAdminStore = defineStore('admin', () => {
   const toast = useToast()
+  const userStore = useUserStore()
 
   const admins = ref<string[]>()
   const isAdminFetched = ref(false)
@@ -14,7 +17,7 @@ export const useAdminStore = defineStore('admin', () => {
     return (
       admins.value?.map(admin => {
         return {
-          key: admin,
+          key: userStore.userMap[admin],
           value: admin
         }
       }) ?? []

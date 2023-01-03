@@ -15,7 +15,7 @@ const userStore = useUserStore()
 const { fetchUsers } = userStore
 const { isUserFetched, userOptions } = storeToRefs(userStore)
 
-const { group, postGroup } = useNewGroup()
+const { isSending, group, postGroup } = useNewGroup()
 
 if (!isUserFetched.value) {
   await fetchUsers()
@@ -70,6 +70,7 @@ if (!isUserFetched.value) {
       <div>
         <SimpleButton
           class="ml-auto mt-8 block"
+          :disabled="isSending"
           font-size="xl"
           padding="md"
           @click="postGroup">

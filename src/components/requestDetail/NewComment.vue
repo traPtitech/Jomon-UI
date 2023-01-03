@@ -18,8 +18,8 @@ const { comment, isSending, submit } = useNewComment(request.value?.id ?? '')
     <div class="mt-1">
       <SimpleButton
         class="ml-auto"
+        :disabled="isSending"
         font-size="md"
-        :is-disabled="isSending"
         padding="sm"
         @click.prevent="submit">
         コメントする

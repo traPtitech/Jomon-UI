@@ -25,7 +25,8 @@ const { isUserFetched, isAdmin } = storeToRefs(userStore)
 const { isTagFetched } = storeToRefs(tagStore)
 const { isGroupFetched, groupOptions } = storeToRefs(groupStore)
 
-const { transaction, moneyDirection, postTransaction } = useNewTransaction()
+const { isSending, transaction, moneyDirection, postTransaction } =
+  useNewTransaction()
 
 if (!isGroupFetched.value) {
   await fetchGroups()
@@ -79,6 +80,7 @@ if (!isTagFetched.value) {
       <div class="text-right">
         <SimpleButton
           class="mb-4 w-64"
+          :disabled="isSending"
           font-size="xl"
           padding="sm"
           @click.stop="postTransaction">

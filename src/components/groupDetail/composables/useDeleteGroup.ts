@@ -33,9 +33,8 @@ export const useDeleteGroup = () => {
       toast.success('グループを削除しました')
     } catch {
       toast.error('グループの削除に失敗しました')
-    } finally {
-      isDeleting.value = false
     }
+    isDeleting.value = false
   }
   return { isDeleting, deleteGroup }
 }

@@ -45,9 +45,8 @@ export const useGroupOwner = () => {
       toast.success('オーナーを追加しました')
     } catch {
       toast.error('グループオーナーの追加に失敗しました')
-    } finally {
-      isSending.value = false
     }
+    isSending.value = false
   }
   const removeOwner = async (id: string) => {
     if (group.value === undefined) {
@@ -64,9 +63,8 @@ export const useGroupOwner = () => {
       toast.success('オーナーを削除しました')
     } catch {
       toast.error('グループオーナーの削除に失敗しました')
-    } finally {
-      isSending.value = false
     }
+    isSending.value = false
   }
   return { absentOwnerOptions, isSending, addOwners, removeOwner }
 }

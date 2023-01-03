@@ -40,7 +40,7 @@ const { absentOwnerOptions, isSending, addOwners, removeOwner } =
         <button
           v-if="hasAuthority"
           class="flex items-center rounded-full p-1 hover:bg-gray-300"
-          :is-disabled="isSending"
+          :disabled="isSending"
           @click="removeOwner(owner)">
           <MinusIcon class="w-6" />
         </button>
@@ -54,7 +54,7 @@ const { absentOwnerOptions, isSending, addOwners, removeOwner } =
         placeholder="追加するオーナーを選択" />
       <button
         class="flex items-center rounded-full p-1 hover:bg-gray-300"
-        :is-disabled="isSending"
+        :disabled="isSending"
         @click="addOwners(OwnersToBeAdded)">
         <PlusIcon class="w-6" />
       </button>

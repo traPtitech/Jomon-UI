@@ -26,7 +26,7 @@ const { fetchTags } = tagStore
 const { fetchGroups } = groupStore
 const { fetchUsers } = userStore
 
-const { request, files, postRequest } = useNewRequest()
+const { isSending, request, files, postRequest } = useNewRequest()
 
 if (!isTagFetched.value) {
   fetchTags()
@@ -80,6 +80,7 @@ if (!isUserFetched.value) {
       <div class="text-right">
         <SimpleButton
           class="mb-4"
+          :disabled="isSending"
           font-size="xl"
           padding="md"
           @click.stop="postRequest">

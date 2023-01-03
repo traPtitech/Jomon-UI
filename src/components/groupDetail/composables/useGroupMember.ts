@@ -45,9 +45,8 @@ export const useGroupMember = () => {
       toast.success('メンバーを追加しました')
     } catch {
       toast.error('グループメンバーの追加に失敗しました')
-    } finally {
-      isSending.value = false
     }
+    isSending.value = false
   }
   const removeMember = async (id: string) => {
     if (group.value === undefined) {
@@ -64,9 +63,8 @@ export const useGroupMember = () => {
       toast.success('メンバーを削除しました')
     } catch {
       toast.error('グループメンバーの削除に失敗しました')
-    } finally {
-      isSending.value = false
     }
+    isSending.value = false
   }
   return { absentMemberOptions, isSending, addMembers, removeMember }
 }

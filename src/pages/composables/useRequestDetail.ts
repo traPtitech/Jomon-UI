@@ -34,6 +34,7 @@ export const useRequestDetail = () => {
   const { createTagIfNotExist } = tagStore
   const { request, editedValue } = storeToRefs(requestDetailStore)
 
+  const isSending = ref(false)
   const editMode = ref<EditMode>('')
 
   const changeEditMode = async (kind: EditMode) => {
@@ -56,10 +57,12 @@ export const useRequestDetail = () => {
   }
 
   const putRequest = async (id: string, editedRequest: EditedRequest) => {
+    isSending.value = true
     let tags: Tag[]
     try {
       tags = await createTagIfNotExist(editedRequest.tags)
     } catch {
+      isSending.value = false
       return
     }
     const willPutRequest = {
@@ -73,8 +76,10 @@ export const useRequestDetail = () => {
     } catch {
       toast.error('申請の修正に失敗しました')
     }
+    isSending.value = false
   }
   return {
+    isSending,
     editMode,
     changeEditMode
   }

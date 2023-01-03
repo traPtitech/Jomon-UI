@@ -34,17 +34,26 @@ export const convertRequest = (request: APIRequest): Request => {
   }
 }
 
+export const convertRequestComment = (comment: APIComment): Comment => {
+  return {
+    ...comment,
+    created_at: DateTime.fromISO(comment.created_at),
+    updated_at: DateTime.fromISO(comment.updated_at)
+  }
+}
+export const convertRequestStatus = (status: APIStatus): Status => {
+  return {
+    created_by: status.created_by,
+    created_at: DateTime.fromISO(status.created_at),
+    status: status.status
+  }
+}
+
 export const convertRequestDetail = (
   requestDetail: APIRequestDetail
 ): RequestDetail => {
   const comments: Comment[] = requestDetail.comments.map(
-    (comment: APIComment) => {
-      return {
-        ...comment,
-        created_at: DateTime.fromISO(comment.created_at),
-        updated_at: DateTime.fromISO(comment.updated_at)
-      }
-    }
+    (comment: APIComment) => convertRequestComment(comment)
   )
   const statuses: Status[] = requestDetail.statuses.map((status: APIStatus) => {
     return {

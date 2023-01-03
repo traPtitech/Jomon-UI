@@ -47,6 +47,7 @@ const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
     <div v-else class="flex w-full">
       <InputTextarea
         v-model="editedValue.description"
+        auto-focus
         class="w-4/5"
         placeholder="詳細" />
       <div class="flex items-end">

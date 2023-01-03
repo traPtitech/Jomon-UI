@@ -34,6 +34,7 @@ const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
     <InputText
       v-else
       v-model="editedValue.name"
+      auto-focus
       class="flex-grow"
       placeholder="グループ名" />
     <SimpleButton

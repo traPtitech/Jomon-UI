@@ -55,7 +55,7 @@ const formattedDate = formatDate(props.transaction.created_at)
           :disabled="isSending"
           font-size="sm"
           padding="sm"
-          type="plain"
+          type="success"
           @click="updateLinkedRequest(linkedRequest, emit)">
           紐づける申請を更新
         </SimpleButton>

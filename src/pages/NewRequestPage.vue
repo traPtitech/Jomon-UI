@@ -32,11 +32,11 @@ if (!userStore.isUserFetched) {
 </script>
 
 <template>
-  <div class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
+  <di class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
     <div class="pb-8">
       <h1 class="text-center text-3xl">申請の新規作成</h1>
     </div>
-    <div class="flex flex-col gap-2">
+    <form class="flex flex-col gap-2">
       <div class="flex flex-col">
         申請者
         <span class="text-xl">{{ userStore.me?.name }}</span>
@@ -45,6 +45,7 @@ if (!userStore.isUserFetched) {
         <label>タイトル</label>
         <InputText
           v-model="request.title"
+          auto-focus
           class="h-8"
           placeholder="タイトルを入力" />
       </div>
@@ -77,6 +78,6 @@ if (!userStore.isUserFetched) {
           申請を作成する
         </SimpleButton>
       </div>
-    </div>
-  </div>
+    </form>
+  </di>
 </template>

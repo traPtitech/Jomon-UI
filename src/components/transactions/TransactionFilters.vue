@@ -23,6 +23,7 @@ const groupStore = useGroupStore()
 const tagStore = useTagStore()
 
 const groupId = toId(route.query.group)
+const requestId = toId(route.query.request)
 const isFilterByTarget = ref(false)
 
 const params = reactive<SearchTransactionParams>({
@@ -32,7 +33,7 @@ const params = reactive<SearchTransactionParams>({
   until: '',
   group: groupId,
   tags: [],
-  request: ''
+  request: requestId
 })
 
 function changeIsTargetSearchMode() {

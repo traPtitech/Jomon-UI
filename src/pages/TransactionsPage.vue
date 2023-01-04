@@ -5,10 +5,10 @@ import { RouterLink, useRoute } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
-import { useTransactionStore, defaultParams } from '/@/stores/transaction'
+import { useTransactionStore } from '/@/stores/transaction'
 import { useUserStore } from '/@/stores/user'
 
-import { toId, toPage } from '/@/lib/parseQueryParams'
+import { toPage } from '/@/lib/parseQueryParams'
 
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
@@ -36,11 +36,7 @@ const sliceTransactionAt = (index: number, n: number) => {
   return transactions.value?.slice(start, end)
 }
 
-await fetchTransactions({
-  ...defaultParams,
-  group: toId(route.query.group),
-  request: toId(route.query.requestID)
-})
+await fetchTransactions()
 if (!isGroupFetched.value) {
   await fetchGroups()
 }

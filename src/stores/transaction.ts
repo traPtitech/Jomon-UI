@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
 import type { Transaction } from '/@/lib/apiTypes'
 import apis from '/@/lib/apis'
 import { convertTransaction } from '/@/lib/date'
+import { toId } from '/@/lib/parseQueryParams'
 
 interface SearchTransactionParams {
   sort: string
@@ -39,10 +41,13 @@ export const directionOptions = [
 
 export const useTransactionStore = defineStore('transaction', () => {
   const toast = useToast()
+  const route = useRoute()
 
   const transactions = ref<Transaction[]>()
   const isTransactionFetched = ref(false)
 
+  const groupId = computed(() => toId(route.query.group))
+  const requestId = computed(() => toId(route.query.request))
   const filterParams = ref<SearchTransactionParams>({
     sort: 'created_at',
     target: '',
@@ -52,14 +57,22 @@ export const useTransactionStore = defineStore('transaction', () => {
     tags: [],
     request: ''
   })
+  watch([groupId, requestId], () => {
+    filterParams.value.group = groupId.value
+    filterParams.value.request = requestId.value
+  })
+  // watch(requestId, () => {
+  //   filterParams.value.request = requestId.value
+  // })
+  // watch(groupId, () => {
+  //   filterParams.value.group = groupId.value
+  // })
 
-  const fetchTransactions = async (
-    params: SearchTransactionParams = defaultParams
-  ) => {
+  const fetchTransactions = async () => {
     const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
     if (
-      (params.since && !rule.test(params.since)) ||
-      (params.until && !rule.test(params.until))
+      (filterParams.value.since && !rule.test(filterParams.value.since)) ||
+      (filterParams.value.until && !rule.test(filterParams.value.until))
     ) {
       toast.warning('日付はyyyy-MM-ddの形式で入力してください')
       return
@@ -67,13 +80,13 @@ export const useTransactionStore = defineStore('transaction', () => {
     try {
       const response = (
         await apis.getTransactions(
-          params.sort,
-          params.target,
-          params.since,
-          params.until,
-          params.tags.join(','),
-          params.group,
-          params.request
+          filterParams.value.sort,
+          filterParams.value.target,
+          filterParams.value.since,
+          filterParams.value.until,
+          filterParams.value.tags.join(','),
+          filterParams.value.group,
+          filterParams.value.request
         )
       ).data
       transactions.value = response.map(transaction =>

@@ -18,16 +18,6 @@ interface SearchRequestParams {
   group: string
 }
 
-const defaultParams: SearchRequestParams = {
-  sort: 'created_at',
-  currentStatus: '',
-  target: '',
-  since: '',
-  until: '',
-  tags: [],
-  group: ''
-}
-
 export const useRequestStore = defineStore('request', () => {
   const toast = useToast()
 
@@ -44,11 +34,11 @@ export const useRequestStore = defineStore('request', () => {
     group: ''
   })
 
-  const fetchRequests = async (params: SearchRequestParams = defaultParams) => {
+  const fetchRequests = async () => {
     const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
     if (
-      (params.since && !rule.test(params.since)) ||
-      (params.until && !rule.test(params.until))
+      (filterParams.value.since && !rule.test(filterParams.value.since)) ||
+      (filterParams.value.until && !rule.test(filterParams.value.until))
     ) {
       toast.warning('日付はyyyy-MM-ddの形式で入力してください')
       return
@@ -56,13 +46,13 @@ export const useRequestStore = defineStore('request', () => {
     try {
       const response = (
         await apis.getRequests(
-          params.sort,
-          params.currentStatus as RequestStatus,
-          params.target,
-          params.since,
-          params.until,
-          params.tags.join(','),
-          params.group
+          filterParams.value.sort,
+          filterParams.value.currentStatus as RequestStatus,
+          filterParams.value.target,
+          filterParams.value.since,
+          filterParams.value.until,
+          filterParams.value.tags.join(','),
+          filterParams.value.group
         )
       ).data
       requests.value = response.map(request => convertRequest(request))

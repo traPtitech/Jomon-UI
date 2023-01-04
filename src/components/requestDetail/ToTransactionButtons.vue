@@ -27,7 +27,7 @@ const { isAdmin } = storeToRefs(userStore)
       @click="request && postTransactionFromRequest(request)">
       この申請から入出金記録を作成する
     </SimpleButton>
-    <RouterLink class="w-full" :to="`/transactions?requestID=${request?.id}`">
+    <RouterLink class="w-full" :to="`/transactions?request=${request?.id}`">
       <SimpleButton class="w-full" font-size="md" padding="sm">
         この申請の入出金記録へ移動
       </SimpleButton>

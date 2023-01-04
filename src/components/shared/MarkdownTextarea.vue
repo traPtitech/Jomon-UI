@@ -12,7 +12,7 @@ interface Props {
   placeholder?: string
   modelValue: string
   templates?: readonly { name: string; value: string }[]
-  autoFocus: boolean
+  autoFocus?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {

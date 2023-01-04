@@ -8,6 +8,8 @@ import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 import { useTransactionStore } from '/@/stores/transaction'
 
+import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
+import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 import InputText from '/@/components/shared/InputText.vue'
 
 import SortOrderButtons from './SortOrderButtons.vue'
@@ -49,7 +51,7 @@ function sort(sortKind: 'created_at' | 'amount') {
       filterParams.value.sort = 'amount'
     }
   }
-  fetchTransactions(filterParams.value)
+  fetchTransactions()
 }
 
 const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {

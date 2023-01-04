@@ -22,26 +22,33 @@ const requestStore = useRequestStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const userStore = useUserStore()
-
 const { requests } = storeToRefs(requestStore)
+const { isRequestFetched } = storeToRefs(requestStore)
+const { isTagFetched } = storeToRefs(tagStore)
+const { isGroupFetched } = storeToRefs(groupStore)
+const { isUserFetched } = storeToRefs(userStore)
+const { fetchRequests } = requestStore
+const { fetchTags } = tagStore
+const { fetchGroups } = groupStore
+const { fetchUsers } = userStore
 
 const sliceRequestsAt = (index: number, n: number) => {
   const start = (index - 1) * n
   const end = index * n
-  return requestStore.requests?.slice(start, end) ?? []
+  return requests.value?.slice(start, end) ?? []
 }
 
-if (!requestStore.isRequestFetched) {
-  requestStore.fetchRequests()
+if (!isRequestFetched.value) {
+  fetchRequests()
 }
-if (!tagStore.isTagFetched) {
-  tagStore.fetchTags()
+if (!isTagFetched.value) {
+  fetchTags()
 }
-if (!groupStore.isGroupFetched) {
-  groupStore.fetchGroups()
+if (!isGroupFetched.value) {
+  fetchGroups()
 }
-if (!userStore.isUserFetched) {
-  userStore.fetchUsers()
+if (!isUserFetched.value) {
+  fetchUsers()
 }
 
 watch(

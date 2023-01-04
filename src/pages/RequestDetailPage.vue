@@ -33,6 +33,13 @@ const requestDetailStore = useRequestDetailStore()
 const userStore = useUserStore()
 const groupStore = useGroupStore()
 const tagStore = useTagStore()
+const { fetchRequestDetail } = requestDetailStore
+const { fetchGroups } = groupStore
+const { fetchUsers } = userStore
+const { fetchTags } = tagStore
+const { isUserFetched, userMap } = storeToRefs(userStore)
+const { isGroupFetched } = storeToRefs(groupStore)
+const { isTagFetched } = storeToRefs(tagStore)
 
 const { editMode, changeEditMode } = useRequestDetail()
 const { request } = storeToRefs(requestDetailStore)
@@ -41,15 +48,15 @@ const formattedDate = computed(() =>
   formatDate(request.value?.created_at ?? DateTime.fromISO(''))
 )
 
-await requestDetailStore.fetchRequestDetail(id)
-if (!groupStore.isGroupFetched) {
-  await groupStore.fetchGroups()
+await fetchRequestDetail(id)
+if (!isGroupFetched.value) {
+  await fetchGroups()
 }
-if (!userStore.isUserFetched) {
-  await userStore.fetchUsers()
+if (!isUserFetched.value) {
+  await fetchUsers()
 }
-if (!tagStore.isTagFetched) {
-  await tagStore.fetchTags()
+if (!isTagFetched.value) {
+  await fetchTags()
 }
 onMounted(() => {
   if (route.hash !== '') {
@@ -79,7 +86,7 @@ onMounted(() => {
           <RequestGroup
             :is-edit-mode="editMode === 'group'"
             @change-edit-mode="changeEditMode($event)" />
-          <p>申請者：{{ request.created_by }}</p>
+          <p>申請者：{{ userMap[request.created_by] }}</p>
           <p>申請日：{{ formattedDate }}</p>
           <RequestAmount />
         </div>

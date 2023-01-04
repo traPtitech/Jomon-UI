@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 
 import { useUserStore } from '/@/stores/user'
@@ -6,6 +7,7 @@ import { useUserStore } from '/@/stores/user'
 import HeaderButton from './HeaderButton.vue'
 
 const userStore = useUserStore()
+const { isAdmin } = storeToRefs(userStore)
 
 const route = useRoute()
 </script>
@@ -13,20 +15,20 @@ const route = useRoute()
 <template>
   <nav class="mx-2 flex flex-col gap-2 md:flex-row md:items-center">
     <HeaderButton
-      :is-here="route.fullPath === '/requests'"
+      :is-here="route.path === '/requests'"
       path="/requests"
       text="申請一覧" />
     <HeaderButton
-      :is-here="route.fullPath === '/transactions'"
+      :is-here="route.path === '/transactions'"
       path="/transactions"
       text="入出金記録一覧" />
     <HeaderButton
-      :is-here="route.fullPath === '/groups'"
+      :is-here="route.path === '/groups'"
       path="/groups"
       text="グループ一覧" />
     <HeaderButton
-      v-if="userStore.isAdmin()"
-      :is-here="route.fullPath === '/admins'"
+      v-if="isAdmin"
+      :is-here="route.path === '/admins'"
       path="/admins"
       text="管理ページ" />
   </nav>

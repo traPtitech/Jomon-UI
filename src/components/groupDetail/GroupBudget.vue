@@ -17,14 +17,17 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits<{
   (e: 'changeEditMode', value: EditMode): void
+  (e: 'finishEditing'): void
 }>()
 
 const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
 
 const { group, editedValue } = storeToRefs(groupDetailStore)
+const { canEditGroup } = groupDetailStore
+const { me } = storeToRefs(userStore)
 
-const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
+const hasAuthority = canEditGroup(me.value)
 </script>
 
 <template>
@@ -39,15 +42,24 @@ const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
     予算：
     <InputNumber
       v-model="editedValue.budget"
+      auto-focus
       class="mr-1 w-24"
       :min="1"
       placeholder="金額" />円
     <SimpleButton
       class="ml-2"
       font-size="sm"
-      :is-disabled="props.isSending"
       padding="sm"
-      @click.stop="emit('changeEditMode', '')">
+      @click="emit('changeEditMode', '')">
+      キャンセル
+    </SimpleButton>
+    <SimpleButton
+      class="ml-2"
+      :disabled="props.isSending"
+      font-size="sm"
+      padding="sm"
+      type="success"
+      @click="emit('finishEditing')">
       完了
     </SimpleButton>
   </div>

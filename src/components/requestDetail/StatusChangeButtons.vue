@@ -13,24 +13,23 @@ import type { RequestStatus } from '/@/consts/consts'
 
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
+const { isRequestCreater } = requestDetailStore
+const { me, isAdmin } = storeToRefs(userStore)
 
 const { request } = storeToRefs(requestDetailStore)
 
 const nextStatus = ref<RequestStatus>()
-const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
+const hasAuthority = isRequestCreater(me.value)
 const { shouldShowModal, openModal, closeModal } = useModal()
 
 const showToSubmitted =
   (hasAuthority && request.value?.status === 'fix_required') ||
-  (userStore.isAdmin() &&
+  (isAdmin.value &&
     (request.value?.status === 'fix_required' ||
       request.value?.status === 'accepted'))
-const showToRequired =
-  userStore.isAdmin() && request.value?.status === 'submitted'
-const showToAccepted =
-  userStore.isAdmin() && request.value?.status === 'submitted'
-const showToRejected =
-  userStore.isAdmin() && request.value?.status === 'submitted'
+const showToRequired = isAdmin.value && request.value?.status === 'submitted'
+const showToAccepted = isAdmin.value && request.value?.status === 'submitted'
+const showToRejected = isAdmin.value && request.value?.status === 'submitted'
 
 function handleOpenModal(status: RequestStatus) {
   nextStatus.value = status

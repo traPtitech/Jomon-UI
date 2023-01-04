@@ -16,6 +16,16 @@ export const useTagStore = defineStore('tag', () => {
       tags.value?.map(tag => {
         return {
           key: tag.name,
+          value: tag
+        }
+      }) ?? []
+    )
+  })
+  const tagIdOptions = computed(() => {
+    return (
+      tags.value?.map(tag => {
+        return {
+          key: tag.name,
           value: tag.id
         }
       }) ?? []
@@ -53,7 +63,6 @@ export const useTagStore = defineStore('tag', () => {
       }
       alreadyExists.push(...created)
     } catch {
-      toast.error('新規タグの作成に失敗しました')
       throw new Error('新規タグの作成に失敗しました')
     }
 
@@ -73,6 +82,7 @@ export const useTagStore = defineStore('tag', () => {
     tags,
     isTagFetched,
     tagOptions,
+    tagIdOptions,
     fetchTags,
     createTagIfNotExist,
     deleteTag

@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 
-import InputSelect from './InputSelect.vue'
+import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
+
 import InputTextarea from './InputTextarea.vue'
 import MarkdownIt from './MarkdownIt.vue'
 
@@ -11,9 +12,13 @@ interface Props {
   placeholder?: string
   modelValue: string
   templates?: readonly { name: string; value: string }[]
+  autoFocus: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), { placeholder: '' })
+const props = withDefaults(defineProps<Props>(), {
+  placeholder: '',
+  autoFocus: false
+})
 const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>()
 
 const currentTab = ref<TabType>('input')
@@ -59,18 +64,19 @@ function changeCurrentTab(tab: TabType) {
         @click.prevent="changeCurrentTab('preview')">
         プレビュー
       </button>
-      <InputSelect
+      <InputSelectSingle
         v-if="props.templates !== undefined"
         v-model="selectedTemplate"
         class="m-1 ml-auto inline-block w-1/3"
         :options="templateOptions"
         placeholder="テンプレートを選択"
         @option:selected="setTemplate(selectedTemplate)">
-      </InputSelect>
+      </InputSelectSingle>
     </div>
     <div>
       <InputTextarea
         v-if="currentTab === 'input'"
+        :auto-focus="autoFocus"
         class="min-h-40 w-full"
         :model-value="modelValue"
         :placeholder="placeholder"

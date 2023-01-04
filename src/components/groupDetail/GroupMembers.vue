@@ -6,18 +6,19 @@ import { ref } from 'vue'
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
 
-import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
 
 import { useGroupMember } from './composables/useGroupMember'
 
 const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
-
+const { canEditGroup } = groupDetailStore
 const { group } = storeToRefs(groupDetailStore)
+const { me } = storeToRefs(userStore)
 
 const MembersToBeAdded = ref<string[]>([])
-const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
+const hasAuthority = canEditGroup(me.value)
 const { absentMemberOptions, isSending, addMembers, removeMember } =
   useGroupMember()
 </script>
@@ -39,22 +40,22 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
         <button
           v-if="hasAuthority"
           class="flex items-center rounded-full p-1 hover:bg-gray-300"
-          :is-disabled="isSending"
+          :disabled="isSending"
           @click="removeMember(member)">
           <MinusIcon class="w-6" />
         </button>
       </li>
     </ul>
     <div v-if="hasAuthority" class="flex p-2">
-      <InputSelect
+      <InputSelectMultiple
         v-model="MembersToBeAdded"
         class="mr-2 flex-grow"
-        is-multiple
+        is-dropdown-above
         :options="absentMemberOptions"
         placeholder="追加するメンバーを選択" />
       <button
         class="flex items-center rounded-full p-1 hover:bg-gray-300"
-        :is-disabled="isSending"
+        :disabled="isSending"
         @click="addMembers(MembersToBeAdded)">
         <PlusIcon class="w-6" />
       </button>

@@ -6,7 +6,7 @@ import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 import EditButton from '/@/components/shared/EditButton.vue'
-import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { EditMode } from '/@/pages/composables/useRequestDetail'
 
@@ -21,14 +21,15 @@ const emit = defineEmits<{
 
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
-
+const { isRequestCreater } = requestDetailStore
 const { request, editedValue } = storeToRefs(requestDetailStore)
+const { me, userOptions } = storeToRefs(userStore)
 
 const formattedTargets = computed(
-  () => request.value?.targets.map(target => target.id).join(', ') ?? ''
+  () => request.value?.targets.map(target => target.target).join(', ') ?? ''
 )
 
-const hasAuthority = requestDetailStore.isRequestCreater(userStore.me)
+const hasAuthority = isRequestCreater(me.value)
 
 const handleComplete = () => {
   emit('changeEditMode', '')
@@ -47,11 +48,11 @@ const handleComplete = () => {
     </div>
     <div v-else class="flex items-center">
       払い戻し対象者：
-      <InputSelect
+      <InputSelectMultiple
         v-model="editedValue.targets"
-        is-multiple
-        :options="userStore.userOptions"
-        placeholder="払い戻し対象者" />
+        :options="userOptions"
+        placeholder="払い戻し対象者"
+        uniq-key="target" />
       <SimpleButton
         class="ml-2"
         font-size="sm"

@@ -3,18 +3,11 @@ import { computed, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
 import type { RequestDetail } from '/@/lib/apiTypes'
-import type { PostRequest, User, Tag, RequestTarget } from '/@/lib/apis'
+import type { PostRequest, User, RequestTarget } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import { convertRequestDetail } from '/@/lib/date'
 
-export interface RequestRequest {
-  created_by: string
-  title: string
-  content: string
-  targets: RequestTarget[]
-  tags: Tag[]
-  group: string
-}
+import type { EditedRequest } from '/@/pages/composables/useRequestDetail'
 
 export const useRequestDetailStore = defineStore('requestDetail', () => {
   const toast = useToast()
@@ -32,13 +25,13 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   })
 
   const editMode = ref('')
-  const editedValue = ref<RequestRequest>({
+  const editedValue = ref<EditedRequest>({
     created_by: '',
     title: '',
     content: '',
     targets: [],
     tags: [],
-    group: ''
+    group: null
   })
   const isRequestCreater = (user: User | undefined) => {
     if (!user || request.value === undefined) return false
@@ -48,7 +41,6 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   const fetchRequestDetail = async (id: string) => {
     try {
       const response = (await apis.getRequestDetail(id)).data
-
       request.value = convertRequestDetail(response)
 
       editedValue.value = {
@@ -66,10 +58,9 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   const putRequest = async (id: string, willPutRequest: PostRequest) => {
     try {
       const response = (await apis.putRequestDetail(id, willPutRequest)).data
-
       request.value = convertRequestDetail(response)
 
-      toast.success('申請の修正に成功しました')
+      toast.success('申請を修正しました')
     } catch {
       toast.error('申請の修正に失敗しました')
     }

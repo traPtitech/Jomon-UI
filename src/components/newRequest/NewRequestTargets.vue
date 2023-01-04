@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { PlusCircleIcon, MinusCircleIcon } from '@heroicons/vue/24/solid'
-import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useToast } from 'vue-toastification'
 
 import { useUserStore } from '/@/stores/user'
@@ -8,7 +8,7 @@ import { useUserStore } from '/@/stores/user'
 import type { RequestTarget } from '/@/lib/apis'
 
 import InputNumber from '/@/components/shared/InputNumber.vue'
-import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 
 interface Props {
   targets: RequestTarget[]
@@ -19,14 +19,7 @@ const emit = defineEmits<{ (e: 'input', value: RequestTarget[]): void }>()
 
 const userStore = useUserStore()
 const toast = useToast()
-
-const userOptions = computed(() =>
-  userStore.userOptions.map(user => ({
-    ...user,
-    used: false
-  }))
-)
-//todo:userOptionsNotUsedをtemplate内ではなくてここに書く。computedだとなぜか上手くいかなかった
+const { userOptions } = storeToRefs(userStore)
 
 function handleEditTarget(index: number, value: unknown) {
   if (typeof value === 'string') {
@@ -38,19 +31,6 @@ function handleEditTarget(index: number, value: unknown) {
       'input',
       props.targets.map((target, i) => (i === index ? requestTarget : target))
     )
-    // 既に選択されているユーザーを選択できないようにする
-    userOptions.value.forEach(user => {
-      if (
-        props.targets
-          .map((target, i) => (i === index ? requestTarget : target))
-          .some(target => target.target === user.value)
-      ) {
-        user.used = true
-      } else {
-        user.used = false
-      }
-    })
-    return
   }
   if (typeof value === 'number') {
     const requestTarget = {
@@ -88,17 +68,10 @@ function handleRemoveTarget(index: number) {
         v-for="(target, i) in targets"
         :key="target.target"
         class="mb-2 flex w-2/3 items-center gap-4">
-        <InputSelect
+        <InputSelectSingle
           class="!w-1/3 flex-grow"
           :model-value="target.target"
-          :options="
-            userOptions
-              .filter(user => !user.used)
-              .map(user => ({
-                key: user.key,
-                value: user.value
-              }))
-          "
+          :options="userOptions"
           placeholder="払い戻し対象者を選択"
           @update:model-value="handleEditTarget(i, $event)" />
         <div>

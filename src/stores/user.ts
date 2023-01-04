@@ -13,10 +13,10 @@ export const useUserStore = defineStore('user', () => {
   const isUserFetched = ref(false)
   const isMeFetched = ref(false)
 
-  const isAdmin = () => {
+  const isAdmin = computed(() => {
     if (!me.value) return false
     return me.value.admin
-  }
+  })
 
   const userOptions = computed(() => {
     return (
@@ -26,6 +26,15 @@ export const useUserStore = defineStore('user', () => {
           value: user.id
         }
       }) ?? []
+    )
+  })
+
+  const userMap = computed(() => {
+    return (
+      users.value?.reduce((acc, user) => {
+        acc[user.id] = user.name
+        return acc
+      }, {} as Record<string, string>) ?? {}
     )
   })
 
@@ -52,6 +61,7 @@ export const useUserStore = defineStore('user', () => {
     userOptions,
     isUserFetched,
     isMeFetched,
+    userMap,
     fetchMe,
     fetchUsers
   }

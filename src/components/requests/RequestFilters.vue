@@ -1,15 +1,14 @@
 <script lang="ts" setup>
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
 import { storeToRefs } from 'pinia'
-import { reactive } from 'vue'
 
 import { useGroupStore } from '/@/stores/group'
-import type { SearchRequestParams } from '/@/stores/request'
 import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
+import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 import InputText from '/@/components/shared/InputText.vue'
 import { requestStatusOptions } from '/@/consts/consts'
 
@@ -19,25 +18,18 @@ const tagStore = useTagStore()
 const groupStore = useGroupStore()
 
 const { fetchRequests } = requestStore
-const { requests } = storeToRefs(requestStore)
-
-const params = reactive<SearchRequestParams>({
-  sort: 'created_at',
-  currentStatus: '',
-  target: '',
-  since: '',
-  until: '',
-  tags: [],
-  group: ''
-})
+const { requests, filterParams } = storeToRefs(requestStore)
+const { userOptions } = storeToRefs(userStore)
+const { tagIdOptions } = storeToRefs(tagStore)
+const { groupOptions } = storeToRefs(groupStore)
 
 function sortByCreatedAt() {
-  if (params.sort === 'created_at') {
-    params.sort = '-created_at'
+  if (filterParams.value.sort === 'created_at') {
+    filterParams.value.sort = '-created_at'
   } else {
-    params.sort = 'created_at'
+    filterParams.value.sort = 'created_at'
   }
-  fetchRequests(params)
+  fetchRequests(filterParams.value)
 }
 </script>
 
@@ -45,46 +37,45 @@ function sortByCreatedAt() {
   <div class="flex justify-around">
     <button
       class="flex items-center justify-center rounded border border-gray-300 p-1"
-      :class="params.sort === 'created_at' ? '' : 'bg-gray-200'"
+      :class="filterParams.sort === 'created_at' ? '' : 'bg-gray-200'"
       @click="sortByCreatedAt">
       日付順
-      <ChevronDownIcon v-if="params.sort === 'created_at'" class="w-4" />
-      <ChevronUpIcon v-if="params.sort === '-created_at'" class="w-4" />
+      <ChevronDownIcon v-if="filterParams.sort === 'created_at'" class="w-4" />
+      <ChevronUpIcon v-if="filterParams.sort === '-created_at'" class="w-4" />
     </button>
     <div>
       <InputText
-        v-model="params.since"
+        v-model="filterParams.since"
         class="w-28"
         placeholder="yyyy-MM-dd"
-        @blur="fetchRequests(params)" />
+        @blur="fetchRequests(filterParams)" />
       ～
       <InputText
-        v-model="params.until"
+        v-model="filterParams.until"
         class="w-28"
         placeholder="yyyy-MM-dd"
-        @blur="fetchRequests(params)" />
+        @blur="fetchRequests(filterParams)" />
     </div>
-    <InputSelect
-      v-model="params.target"
-      :options="userStore.userOptions"
+    <InputSelectSingle
+      v-model="filterParams.target"
+      :options="userOptions"
       placeholder="申請者"
-      @close="fetchRequests(params)" />
-    <InputSelect
-      v-model="params.currentStatus"
+      @close="fetchRequests(filterParams)" />
+    <InputSelectSingle
+      v-model="filterParams.currentStatus"
       :options="requestStatusOptions()"
       placeholder="申請の状態"
-      @close="fetchRequests(params)" />
-    <InputSelect
-      v-model="params.group"
-      :options="groupStore.groupOptions"
+      @close="fetchRequests(filterParams)" />
+    <InputSelectSingle
+      v-model="filterParams.group"
+      :options="groupOptions"
       placeholder="グループ"
-      @close="fetchRequests(params)" />
-    <InputSelect
-      v-model="params.tags"
-      is-multiple
-      :options="tagStore.tagOptions"
+      @close="fetchRequests(filterParams)" />
+    <InputSelectMultiple
+      v-model="filterParams.tags"
+      :options="tagIdOptions"
       placeholder="タグ"
-      @close="fetchRequests(params)" />
+      @close="fetchRequests(filterParams)" />
   </div>
   <span v-if="requests && requests.length !== 0" class="ml-1/8">
     {{ requests.length }}件取得しました

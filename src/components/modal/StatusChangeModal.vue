@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { DateTime } from 'luxon'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
@@ -7,6 +6,7 @@ import { useToast } from 'vue-toastification'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
 import apis from '/@/lib/apis'
+import { convertRequestComment, convertRequestStatus } from '/@/lib/date'
 
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
@@ -40,24 +40,15 @@ async function putStatus(nextStatus: RequestStatus, comment: string) {
     }
     const response = (await apis.putStatus(request.value.id, statusRequest))
       .data
-    request.value.statuses.push({
-      created_by: response.created_by,
-      created_at: DateTime.fromISO(response.created_at),
-      status: response.status
-    })
-
+    request.value.statuses.push(convertRequestStatus(response))
     if (response.comment !== undefined) {
-      const newComment = {
-        ...response.comment,
-        created_at: DateTime.fromISO(response.comment.created_at),
-        updated_at: DateTime.fromISO(response.comment.updated_at)
-      }
-      request.value.comments.push(newComment)
+      request.value.comments.push(convertRequestComment(response.comment))
     }
     request.value.status = response.status
+    toast.success('申請の状態を変更しました')
     emit('closeModal')
   } catch {
-    toast.error('状態の変更に失敗しました')
+    toast.error('申請の状態の変更に失敗しました')
   }
 }
 </script>
@@ -75,7 +66,7 @@ async function putStatus(nextStatus: RequestStatus, comment: string) {
         <StatusChip class="mx-1" has-text :status="props.nextStatus" />
         へ変更します
       </div>
-      <MarkdownTextarea v-model="comment" placeholder="コメント" />
+      <MarkdownTextarea v-model="comment" auto-focus placeholder="コメント" />
       <div class="mt-4 text-center">
         <SimpleButton
           class="mb-4 w-60"

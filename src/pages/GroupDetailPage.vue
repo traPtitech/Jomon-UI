@@ -24,15 +24,20 @@ const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
 
 const { group } = storeToRefs(groupDetailStore)
+const { canEditGroup, fetchGroup } = groupDetailStore
+const { fetchUsers } = userStore
+const { me } = storeToRefs(userStore)
+const { isUserFetched } = storeToRefs(userStore)
 
-const { isSending, editMode, changeEditMode } = useGroupInformation()
+const { isSending, editMode, changeEditMode, finishEditing } =
+  useGroupInformation()
 
-const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
+const hasAuthority = canEditGroup(me.value)
 const { isDeleting, deleteGroup } = useDeleteGroup()
 
-await groupDetailStore.fetchGroup(id)
-if (!userStore.isUserFetched) {
-  await userStore.fetchUsers()
+await fetchGroup(id)
+if (!isUserFetched.value) {
+  await fetchUsers()
 }
 </script>
 
@@ -43,19 +48,22 @@ if (!userStore.isUserFetched) {
         class="flex-grow"
         :is-edit-mode="editMode === 'name'"
         :is-sending="isSending"
-        @change-edit-mode="changeEditMode($event)" />
+        @change-edit-mode="changeEditMode($event)"
+        @finish-editing="finishEditing" />
     </div>
     <div class="mt-4 flex h-full">
       <div class="flex-grow">
         <GroupDescription
           :is-edit-mode="editMode === 'description'"
           :is-sending="isSending"
-          @change-edit-mode="changeEditMode($event)" />
+          @change-edit-mode="changeEditMode($event)"
+          @finish-editing="finishEditing" />
         <GroupBudget
           class="mt-4 h-8"
           :is-edit-mode="editMode === 'budget'"
           :is-sending="isSending"
-          @change-edit-mode="changeEditMode($event)" />
+          @change-edit-mode="changeEditMode($event)"
+          @finish-editing="finishEditing" />
         <RouterLink
           class="mt-4 flex w-fit items-center"
           :to="`/transactions?group=${group.id}`">
@@ -66,11 +74,11 @@ if (!userStore.isUserFetched) {
           <SimpleButton
             v-if="hasAuthority"
             class="mr-8"
+            :disabled="isDeleting"
             font-size="sm"
-            :is-disabled="isDeleting"
             padding="sm"
             type="danger"
-            @click.stop="deleteGroup(group?.id ?? '')">
+            @click="deleteGroup(group?.id ?? '')">
             グループを削除
           </SimpleButton>
         </div>

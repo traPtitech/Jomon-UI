@@ -1,83 +1,70 @@
 <script lang="ts" setup>
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 import { XMarkIcon } from '@heroicons/vue/24/solid'
-import { computed, reactive, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { computed, ref } from 'vue'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 import { useTransactionStore } from '/@/stores/transaction'
-import type { SearchTransactionParams } from '/@/stores/transaction'
 
-import { toId } from '/@/lib/parseQueryParams'
-
-import InputSelect from '/@/components//shared/InputSelect.vue'
 import InputText from '/@/components/shared/InputText.vue'
 
 import SortOrderButtons from './SortOrderButtons.vue'
-
-const route = useRoute()
 
 const transactionStore = useTransactionStore()
 const groupStore = useGroupStore()
 const tagStore = useTagStore()
 
-const groupId = toId(route.query.group)
-const requestId = toId(route.query.request)
-const isFilterByTarget = ref(false)
+const shouldShowFilterByTarget = ref(false)
 
-const params = reactive<SearchTransactionParams>({
-  sort: 'created_at',
-  target: '',
-  since: '',
-  until: '',
-  group: groupId,
-  tags: [],
-  request: requestId
-})
+const { fetchTransactions } = transactionStore
+const { filterParams } = storeToRefs(transactionStore)
+const { groupOptions } = storeToRefs(groupStore)
+const { tagIdOptions } = storeToRefs(tagStore)
 
 function changeIsTargetSearchMode() {
-  if (isFilterByTarget.value) {
-    params.target = ''
-    isFilterByTarget.value = false
+  if (shouldShowFilterByTarget.value) {
+    filterParams.value.target = ''
+    shouldShowFilterByTarget.value = false
   } else {
-    isFilterByTarget.value = true
+    shouldShowFilterByTarget.value = true
   }
 }
 function sort(sortKind: 'created_at' | 'amount') {
   if (sortKind === 'created_at') {
-    if (params.sort === 'created_at') {
-      params.sort = '-created_at'
-    } else if (params.sort === '-created_at') {
-      params.sort = ''
+    if (filterParams.value.sort === 'created_at') {
+      filterParams.value.sort = '-created_at'
+    } else if (filterParams.value.sort === '-created_at') {
+      filterParams.value.sort = ''
     } else {
-      params.sort = 'created_at'
+      filterParams.value.sort = 'created_at'
     }
   } else {
-    if (params.sort === 'amount') {
-      params.sort = '-amount'
-    } else if (params.sort === '-amount') {
-      params.sort = ''
+    if (filterParams.value.sort === 'amount') {
+      filterParams.value.sort = '-amount'
+    } else if (filterParams.value.sort === '-amount') {
+      filterParams.value.sort = ''
     } else {
-      params.sort = 'amount'
+      filterParams.value.sort = 'amount'
     }
   }
-  transactionStore.fetchTransactions(params)
+  fetchTransactions(filterParams.value)
 }
 
 const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
   if (sortKind === 'created_at') {
-    if (params.sort === 'created_at') {
+    if (filterParams.value.sort === 'created_at') {
       return 'asc'
-    } else if (params.sort === '-created_at') {
+    } else if (filterParams.value.sort === '-created_at') {
       return 'desc'
     } else {
       return 'none'
     }
   } else {
-    if (params.sort === 'amount') {
+    if (filterParams.value.sort === 'amount') {
       return 'asc'
-    } else if (params.sort === '-amount') {
+    } else if (filterParams.value.sort === '-amount') {
       return 'desc'
     } else {
       return 'none'
@@ -107,7 +94,7 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
       </button>
       <!-- 取引相手 -->
       <div class="w-4/20 flex h-full w-full items-center">
-        <div v-if="!isFilterByTarget" class="w-full">
+        <div v-if="!shouldShowFilterByTarget" class="w-full">
           <button
             class="flex w-full items-center justify-between"
             @click="changeIsTargetSearchMode">
@@ -117,7 +104,7 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
         </div>
         <div v-else class="relative w-full">
           <InputText
-            v-model="params.target"
+            v-model="filterParams.target"
             class="w-full border-none"
             placeholder="取引相手" />
           <XMarkIcon
@@ -126,18 +113,17 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
         </div>
       </div>
       <!-- グループ -->
-      <InputSelect
-        v-model="params.group"
+      <InputSelectSingle
+        v-model="filterParams.group"
         class="!w-2/10"
-        :options="groupStore.groupOptions"
+        :options="groupOptions"
         placeholder="取引グループ"
         @close="'updateTransactions'" />
       <!-- タグ -->
-      <InputSelect
-        v-model="params.tags"
+      <InputSelectMultiple
+        v-model="filterParams.tags"
         class="!w-3/10"
-        is-multiple
-        :options="tagStore.tagOptions"
+        :options="tagIdOptions"
         placeholder="タグ"
         @close="'updateTransactions'" />
     </div>

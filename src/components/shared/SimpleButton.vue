@@ -2,23 +2,27 @@
 import { computed } from 'vue'
 
 interface Props {
-  type?: 'plain' | 'danger'
+  type?: 'plain' | 'danger' | 'success'
   fontSize: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
   padding: 'sm' | 'md' | 'lg' | 'xl'
-  isDisabled?: boolean
+  disabled?: boolean
 }
-const props = withDefaults(defineProps<Props>(), { isDisabled: false })
+const props = withDefaults(defineProps<Props>(), { disabled: false })
 
 const typeClass = computed(() => {
   switch (props.type) {
     case 'plain':
-      return `${!props.isDisabled && 'hover:bg-gray-200'} border-gray-300`
+      return `${!props.disabled && 'hover:bg-gray-200'} border-gray-300`
     case 'danger':
       return `${
-        !props.isDisabled && 'hover:bg-red-300'
+        !props.disabled && 'hover:bg-red-300'
       } bg-red-500 border-red-300 text-white`
+    case 'success':
+      return `${
+        !props.disabled && 'hover:bg-green-300'
+      } bg-green-500 border-green-300 text-white`
     default:
-      return `${!props.isDisabled && 'hover:bg-gray-200'} border-gray-300`
+      return `${!props.disabled && 'hover:bg-gray-200'} border-gray-300`
   }
 })
 const fontSizeClass = computed(() => {
@@ -45,9 +49,10 @@ const paddingClass = computed(() => {
 <template>
   <button
     :class="`rounded-md border ${typeClass} ${fontSizeClass} ${paddingClass} ${
-      props.isDisabled ? 'cursor-not-allowed opacity-50' : ''
+      props.disabled ? 'cursor-not-allowed opacity-50' : ''
     }`"
-    :disabled="props.isDisabled">
+    :disabled="props.disabled"
+    type="button">
     <slot />
   </button>
 </template>

@@ -17,17 +17,18 @@ const page = ref(toPage(route.query.page))
 
 const groupStore = useGroupStore()
 const userStore = useUserStore()
-
-const { groups } = storeToRefs(groupStore)
+const { fetchGroups } = groupStore
+const { groups, isGroupFetched } = storeToRefs(groupStore)
+const { isAdmin } = storeToRefs(userStore)
 
 const sliceGroupsAt = (index: number, n: number) => {
   const start = (index - 1) * n
   const end = index * n
-  return groupStore.groups?.slice(start, end) ?? []
+  return groups.value?.slice(start, end) ?? []
 }
 
-if (!groupStore.isGroupFetched) {
-  groupStore.fetchGroups()
+if (!isGroupFetched.value) {
+  fetchGroups()
 }
 
 watch(
@@ -43,7 +44,7 @@ watch(
     <div class="min-w-160 mx-auto flex w-2/3 flex-col">
       <div class="relative flex w-full items-center justify-center py-8">
         <h1 class="text-center text-3xl">グループ一覧</h1>
-        <div v-if="userStore.isAdmin()" class="absolute right-0">
+        <div v-if="isAdmin" class="absolute right-0">
           <RouterLink to="/groups/new">
             <SimpleButton font-size="lg" padding="md">
               グループの新規作成

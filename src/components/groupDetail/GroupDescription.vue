@@ -16,13 +16,16 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits<{
   (e: 'changeEditMode', value: EditMode): void
+  (e: 'finishEditing'): void
 }>()
 
 const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
 const { group, editedValue } = storeToRefs(groupDetailStore)
+const { canEditGroup } = groupDetailStore
+const { me } = storeToRefs(userStore)
 
-const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
+const hasAuthority = canEditGroup(me.value)
 </script>
 
 <template>
@@ -46,15 +49,24 @@ const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
     <div v-else class="flex w-full">
       <InputTextarea
         v-model="editedValue.description"
+        auto-focus
         class="w-4/5"
         placeholder="詳細" />
       <div class="flex items-end">
         <SimpleButton
           class="ml-2"
           font-size="sm"
-          :is-disabled="props.isSending"
           padding="sm"
-          @click.stop="emit('changeEditMode', '')">
+          @click="emit('changeEditMode', '')">
+          キャンセル
+        </SimpleButton>
+        <SimpleButton
+          class="ml-2"
+          :disabled="props.isSending"
+          font-size="sm"
+          padding="sm"
+          type="success"
+          @click="emit('finishEditing')">
           完了
         </SimpleButton>
       </div>

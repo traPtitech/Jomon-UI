@@ -1,33 +1,20 @@
 <script lang="ts" setup>
-import { DateTime } from 'luxon'
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
-import { useToast } from 'vue-toastification'
+import { storeToRefs } from 'pinia'
 
 import { useGroupStore } from '/@/stores/group'
-import { useTagStore } from '/@/stores/tag'
+import { directionOptions } from '/@/stores/transaction'
 
 import type { Transaction } from '/@/lib/apiTypes'
-import type { Tag } from '/@/lib/apis'
-import apis from '/@/lib/apis'
 import { formatDate } from '/@/lib/date'
-import { toId } from '/@/lib/parsePathParams'
 
 import InputNumber from '/@/components/shared/InputNumber.vue'
 import InputRadioButton from '/@/components/shared/InputRadioButton.vue'
-import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
 import InputText from '/@/components/shared/InputText.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import type { MoneyDirection } from '/@/pages/composables/useNewTransaction'
 
-interface EditedValue {
-  amount: number
-  target: string
-  request: string | null
-  tags: Tag[]
-  group: string
-}
+import { useEditTransaction } from './composables/useEditTransation'
 
 interface Props {
   transaction: Transaction
@@ -35,74 +22,53 @@ interface Props {
 
 const props = defineProps<Props>()
 const emit = defineEmits<{
-  (e: 'edited', value: Transaction | undefined): void
+  (e: 'finishEditing', value: Transaction): void
+  (e: 'cancel'): void
 }>()
 
-const route = useRoute()
-const id = toId(route.params.id)
-
-const tagStore = useTagStore()
 const groupStore = useGroupStore()
-const toast = useToast()
-
-const directionOptions = [
-  {
-    key: 'traPへ入金',
-    value: 'toTraP'
-  },
-  {
-    key: 'traPから出金',
-    value: 'fromTraP'
-  }
-]
+const {
+  isSending,
+  editedValue,
+  moneyDirection,
+  linkedRequest,
+  finishEditing,
+  updateLinkedRequest,
+  unlinkRequest
+} = useEditTransaction(props.transaction)
+const { groupOptions } = storeToRefs(groupStore)
 
 const formattedDate = formatDate(props.transaction.created_at)
-
-const editedValue = ref<EditedValue>({
-  amount: props.transaction.amount,
-  target: props.transaction.target,
-  request: props.transaction.request,
-  tags: props.transaction.tags,
-  group: props.transaction.group.id
-})
-const moneyDirection = ref<MoneyDirection>('toTraP')
-
-async function handlePutTransaction() {
-  if (props.transaction === undefined) {
-    return
-  }
-  let tags: Tag[]
-  try {
-    tags = await tagStore.createTagIfNotExist(editedValue.value.tags)
-  } catch {
-    return
-  }
-  const transaction = {
-    ...editedValue.value,
-    amount:
-      moneyDirection.value === 'toTraP'
-        ? editedValue.value.amount
-        : -editedValue.value.amount,
-    tags: tags.map(tag => tag.id),
-    group: editedValue.value.group !== '0' ? editedValue.value.group : null
-  }
-  try {
-    const response = (await apis.putTransactionDetail(id, transaction)).data
-    const nextTransaction = {
-      ...response,
-      created_at: DateTime.fromISO(response.created_at),
-      updated_at: DateTime.fromISO(response.updated_at)
-    }
-    emit('edited', nextTransaction)
-  } catch {
-    toast.error('入出金記録の修正に失敗しました')
-    emit('edited', undefined)
-  }
-}
 </script>
 
 <template>
   <form class="mb-4 space-y-2">
+    <div class="flex flex-col">
+      <label>紐づける申請</label>
+      <div class="flex gap-4">
+        <InputText
+          v-model="linkedRequest"
+          auto-focus
+          class="w-1/2"
+          placeholder="紐づける申請のURLを入力" />
+        <SimpleButton
+          :disabled="isSending"
+          font-size="sm"
+          padding="sm"
+          type="success"
+          @click="updateLinkedRequest(linkedRequest, emit)">
+          紐づける申請を更新
+        </SimpleButton>
+        <SimpleButton
+          :disabled="isSending"
+          font-size="sm"
+          padding="sm"
+          type="danger"
+          @click="unlinkRequest(emit)">
+          申請との紐づけを解除
+        </SimpleButton>
+      </div>
+    </div>
     <div class="flex flex-col">
       <label>年月日</label>
       <span>{{ formattedDate }}</span>
@@ -127,23 +93,25 @@ async function handlePutTransaction() {
     </div>
     <div class="flex flex-col">
       <label>取引グループ</label>
-      <InputSelect
+      <InputSelectSingle
         v-model="editedValue.group"
-        :options="groupStore.groupOptions"
+        :options="groupOptions"
         placeholder="グループを選択" />
     </div>
     <div class="flex flex-col">
       <label>タグ</label>
-      <InputSelectTagWithCreation
-        v-model="editedValue.tags"
-        class="w-1/3"
-        placeholder="タグを選択" />
+      <InputSelectTagWithCreation v-model="editedValue.tags" class="w-1/3" />
     </div>
-    <div class="text-right">
+    <div class="flex items-center justify-end gap-4">
+      <SimpleButton font-size="sm" padding="sm" @click="emit('cancel')">
+        キャンセル
+      </SimpleButton>
       <SimpleButton
+        :disabled="isSending"
         font-size="sm"
         padding="sm"
-        @click.prevent="handlePutTransaction">
+        type="success"
+        @click="finishEditing(emit)">
         完了
       </SimpleButton>
     </div>

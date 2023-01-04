@@ -2,11 +2,10 @@ import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import type { RequestRequest } from '/@/stores/requestDetail'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 
-import type { Tag } from '/@/lib/apis'
+import type { RequestTarget, Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import { convertRequestDetail } from '/@/lib/date'
 
@@ -19,12 +18,23 @@ export type EditMode =
   | 'targets'
   | ''
 
+export interface EditedRequest {
+  created_by: string
+  title: string
+  content: string
+  targets: RequestTarget[]
+  tags: Tag[]
+  group: string | null
+}
+
 export const useRequestDetail = () => {
   const requestDetailStore = useRequestDetailStore()
   const toast = useToast()
   const tagStore = useTagStore()
-  const { request } = storeToRefs(requestDetailStore)
+  const { createTagIfNotExist } = tagStore
+  const { request, editedValue } = storeToRefs(requestDetailStore)
 
+  const isSending = ref(false)
   const editMode = ref<EditMode>('')
 
   const changeEditMode = async (kind: EditMode) => {
@@ -39,35 +49,39 @@ export const useRequestDetail = () => {
       if (!result) return
     }
     if (request.value !== undefined) {
-      await putRequest(request.value.id, requestDetailStore.editedValue)
+      await putRequest(request.value.id, editedValue.value)
+      toast.success('申請を更新しました')
     } else {
-      toast.error('申請の修正に失敗しました')
+      toast.error('申請の更新に失敗しました')
     }
     editMode.value = ''
   }
 
-  const putRequest = async (id: string, willPutRequest: RequestRequest) => {
+  const putRequest = async (id: string, editedRequest: EditedRequest) => {
+    isSending.value = true
     let tags: Tag[]
     try {
-      tags = await tagStore.createTagIfNotExist(willPutRequest.tags)
+      tags = await createTagIfNotExist(editedRequest.tags)
     } catch {
+      toast.error('新規タグの作成に失敗しました')
+      isSending.value = false
       return
     }
-    const putRequest = {
-      ...willPutRequest,
-      tags: tags.map(tag => tag.id),
-      group: willPutRequest.group !== '' ? willPutRequest.group : null
+    const willPutRequest = {
+      ...editedRequest,
+      tags: tags.map(tag => tag.id)
     }
     try {
-      const response = (await apis.putRequestDetail(id, putRequest)).data
+      const response = (await apis.putRequestDetail(id, willPutRequest)).data
       request.value = convertRequestDetail(response)
-
-      toast.success('申請を修正しました')
+      toast.success('申請を更新しました')
     } catch {
-      toast.error('申請の修正に失敗しました')
+      toast.error('申請の更新に失敗しました')
     }
+    isSending.value = false
   }
   return {
+    isSending,
     editMode,
     changeEditMode
   }

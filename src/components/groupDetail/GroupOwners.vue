@@ -6,17 +6,19 @@ import { ref } from 'vue'
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
 
-import InputSelect from '/@/components/shared/InputSelect.vue'
+import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
 
 import { useGroupOwner } from './composables/useGroupOwner'
 
 const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
+const { canEditGroup } = groupDetailStore
 const { group } = storeToRefs(groupDetailStore)
+const { me } = storeToRefs(userStore)
 
 const OwnersToBeAdded = ref<string[]>([])
-const hasAuthority = groupDetailStore.canEditGroup(userStore.me)
+const hasAuthority = canEditGroup(me.value)
 const { absentOwnerOptions, isSending, addOwners, removeOwner } =
   useGroupOwner()
 </script>
@@ -31,30 +33,28 @@ const { absentOwnerOptions, isSending, addOwners, removeOwner } =
         v-for="owner in group.owners"
         :key="owner"
         class="not-first:mt-2 flex items-center justify-between">
-        <div class="items-cente flex">
+        <div class="flex items-center">
           <UserIcon class="w-12" :name="owner" />
           <p class="mx-1 break-all">{{ owner }}</p>
         </div>
         <button
           v-if="hasAuthority"
           class="flex items-center rounded-full p-1 hover:bg-gray-300"
-          :is-disabled="isSending"
+          :disabled="isSending"
           @click="removeOwner(owner)">
           <MinusIcon class="w-6" />
         </button>
       </li>
     </ul>
     <div v-if="hasAuthority" class="flex p-2">
-      <!--todo:https://vue-select.org/guide/positioning.html#default-->
-      <InputSelect
+      <InputSelectMultiple
         v-model="OwnersToBeAdded"
         class="mr-2 flex-grow"
-        is-multiple
         :options="absentOwnerOptions"
         placeholder="追加するオーナーを選択" />
       <button
         class="flex items-center rounded-full p-1 hover:bg-gray-300"
-        :is-disabled="isSending"
+        :disabled="isSending"
         @click="addOwners(OwnersToBeAdded)">
         <PlusIcon class="w-6" />
       </button>

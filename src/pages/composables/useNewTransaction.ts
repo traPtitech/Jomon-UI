@@ -1,76 +1,121 @@
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useTransactionStore } from '/@/stores/transaction'
 
+import type { RequestDetail } from '/@/lib/apiTypes'
 import type { Tag, Transaction as APITransaction } from '/@/lib/apis'
 import apis from '/@/lib/apis'
 import { convertTransaction } from '/@/lib/date'
 
 export type MoneyDirection = 'toTraP' | 'fromTraP'
 
-export const useNewTransaction = (requestId: string) => {
+interface NewTransaction {
+  amount: number
+  targets: string[]
+  request: string | null
+  tags: Tag[]
+  group: string | null
+}
+
+export const useNewTransaction = () => {
   const toast = useToast()
   const transactionStore = useTransactionStore()
-  const requestDetailStore = useRequestDetailStore()
   const tagStore = useTagStore()
-
+  const { createTagIfNotExist } = tagStore
   const { transactions } = storeToRefs(transactionStore)
-  const { request, targets } = storeToRefs(requestDetailStore)
 
-  const totalAmount =
-    request.value?.targets.reduce((a, target) => a + target.amount, 0) ?? 0
+  const isSending = ref(false)
 
-  const transaction = ref({
-    amount: requestId ? totalAmount : 0,
-    targets: requestId ? targets.value.map(target => target.target) : [],
-    request: requestId,
-    tags: requestId && request.value ? request.value.tags : [],
-    group: requestId && request.value ? request.value.group.id : ''
+  const transaction = reactive<NewTransaction>({
+    amount: 0,
+    targets: [''],
+    request: null,
+    tags: [],
+    group: null
   })
   const moneyDirection = ref<MoneyDirection>('toTraP')
 
-  async function postTransaction() {
-    if (transaction.value.targets.length === 0) {
-      toast.warning('払い戻し対象者は必須です')
+  const postTransaction = async () => {
+    if (transaction.targets.length === 0) {
+      toast.warning('取引相手は必須です')
       return
     }
+    isSending.value = true
     let tags: Tag[]
     try {
-      tags = await tagStore.createTagIfNotExist(transaction.value.tags)
+      tags = await createTagIfNotExist(transaction.tags)
     } catch {
+      toast.error('新規タグの作成に失敗しました')
+      isSending.value = false
       return
     }
-    const transactionRequest = {
-      ...transaction.value,
+    const willPostTransaction = {
+      ...transaction,
       amount:
         moneyDirection.value === 'fromTraP'
-          ? -transaction.value.amount
-          : transaction.value.amount,
-      tags: tags.map(tag => tag.id),
-      group: transaction.value.group !== '' ? transaction.value.group : null
+          ? -transaction.amount
+          : transaction.amount,
+      tags: tags.map(tag => tag.id)
     }
     try {
       const response: APITransaction[] = (
-        await apis.postTransaction(transactionRequest)
+        await apis.postTransaction(willPostTransaction)
       ).data
       const newTransactions = response.map(transaction =>
         convertTransaction(transaction)
       )
-      if (transactions.value !== undefined) {
+      if (transactions.value) {
         transactions.value = [...newTransactions, ...transactions.value]
       } else {
         transactions.value = newTransactions
       }
+      toast.success('入出金記録を作成しました')
     } catch {
       toast.error('入出金記録の作成に失敗しました')
-      return
     }
-    toast.success('入出金記録の作成に成功しました')
+    isSending.value = false
   }
 
-  return { transaction, moneyDirection, postTransaction }
+  const postTransactionFromRequest = async (request: RequestDetail) => {
+    const result = confirm('この申請に紐づけて入出金記録を作成しますか？')
+    if (!result) return
+    isSending.value = true
+    const promises: ReturnType<typeof apis.postTransaction>[] =
+      request.targets.map(target => {
+        const willPostTransaction = {
+          amount: target.amount,
+          targets: [target.target],
+          tags: request.tags.map(tag => tag.id),
+          group: request.group.id,
+          request: request.id
+        }
+        return apis.postTransaction(willPostTransaction)
+      })
+    try {
+      const response = (await Promise.all(promises)).map(res => res.data)
+      const newTransactions = response.map(transactions =>
+        convertTransaction(transactions[0])
+      )
+      if (transactions.value) {
+        transactions.value = [...newTransactions, ...transactions.value]
+      } else {
+        transactions.value = newTransactions
+      }
+      toast.success('入出金記録を作成しました')
+    } catch {
+      toast.error('入出金記録の作成に失敗しました')
+    }
+    isSending.value = false
+  }
+
+  return {
+    isSending,
+    transaction,
+    moneyDirection,
+    postTransaction,
+    postTransactionFromRequest
+  }
 }

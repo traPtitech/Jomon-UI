@@ -61,12 +61,6 @@ export const useTransactionStore = defineStore('transaction', () => {
     filterParams.value.group = groupId.value
     filterParams.value.request = requestId.value
   })
-  // watch(requestId, () => {
-  //   filterParams.value.request = requestId.value
-  // })
-  // watch(groupId, () => {
-  //   filterParams.value.group = groupId.value
-  // })
 
   const fetchTransactions = async () => {
     const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/

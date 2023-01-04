@@ -29,7 +29,7 @@ function sortByCreatedAt() {
   } else {
     filterParams.value.sort = 'created_at'
   }
-  fetchRequests(filterParams.value)
+  fetchRequests()
 }
 </script>
 
@@ -48,34 +48,34 @@ function sortByCreatedAt() {
         v-model="filterParams.since"
         class="w-28"
         placeholder="yyyy-MM-dd"
-        @blur="fetchRequests(filterParams)" />
+        @blur="fetchRequests" />
       ～
       <InputText
         v-model="filterParams.until"
         class="w-28"
         placeholder="yyyy-MM-dd"
-        @blur="fetchRequests(filterParams)" />
+        @blur="fetchRequests" />
     </div>
     <InputSelectSingle
       v-model="filterParams.target"
       :options="userOptions"
       placeholder="申請者"
-      @close="fetchRequests(filterParams)" />
+      @close="fetchRequests" />
     <InputSelectSingle
       v-model="filterParams.currentStatus"
       :options="requestStatusOptions()"
       placeholder="申請の状態"
-      @close="fetchRequests(filterParams)" />
+      @close="fetchRequests" />
     <InputSelectSingle
       v-model="filterParams.group"
       :options="groupOptions"
       placeholder="グループ"
-      @close="fetchRequests(filterParams)" />
+      @close="fetchRequests" />
     <InputSelectMultiple
       v-model="filterParams.tags"
       :options="tagIdOptions"
       placeholder="タグ"
-      @close="fetchRequests(filterParams)" />
+      @close="fetchRequests" />
   </div>
   <span v-if="requests && requests.length !== 0" class="ml-1/8">
     {{ requests.length }}件取得しました

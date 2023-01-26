@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useUserStore } from '/@/stores/user'
@@ -22,7 +23,7 @@ const userStore = useUserStore()
 const { userMap } = storeToRefs(userStore)
 
 const route = useRoute()
-const hash = route.hash.substring(1)
+const hash = computed(() => route.hash.substring(1))
 </script>
 
 <template>

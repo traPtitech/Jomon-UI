@@ -40,9 +40,7 @@ const totalAmount = computed(
     </div>
     <div>
       <div class="flex gap-4">
-        <span v-if="request.group !== undefined">
-          グループ：{{ request.group.name }}
-        </span>
+        <span v-if="request.group"> グループ：{{ request.group.name }} </span>
         <span>申請者：{{ userMap[request.created_by] }}</span>
         <span>申請日：{{ formattedDate }}</span>
       </div>

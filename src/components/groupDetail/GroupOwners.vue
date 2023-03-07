@@ -14,6 +14,7 @@ import { useGroupOwner } from './composables/useGroupOwner'
 const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
 const { canEditGroup } = groupDetailStore
+const { userMap } = userStore
 const { group } = storeToRefs(groupDetailStore)
 const { me } = storeToRefs(userStore)
 
@@ -34,8 +35,8 @@ const { absentOwnerOptions, isSending, addOwners, removeOwner } =
         :key="owner"
         class="not-first:mt-2 flex items-center justify-between">
         <div class="flex items-center">
-          <UserIcon class="w-12" :name="owner" />
-          <p class="mx-1 break-all">{{ owner }}</p>
+          <UserIcon class="w-12" :name="userMap[owner]" />
+          <p class="mx-1 break-all">{{ userMap[owner] }}</p>
         </div>
         <button
           v-if="hasAuthority"

@@ -37,7 +37,7 @@ const formattedDate = computed(() => formatDate(props.transaction.created_at))
     </div>
     <div>
       <p class="font-bold">取引グループ</p>
-      <p>{{ transaction.group.name }}</p>
+      <p>{{ transaction.group ? transaction.group.name : 'なし' }}</p>
     </div>
     <div>
       <p class="font-bold">タグ</p>

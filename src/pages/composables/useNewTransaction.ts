@@ -89,7 +89,7 @@ export const useNewTransaction = () => {
           amount: target.amount,
           targets: [target.target],
           tags: request.tags.map(tag => tag.id),
-          group: request.group.id,
+          group: request.group?.id ?? null,
           request: request.id
         }
         return apis.postTransaction(willPostTransaction)

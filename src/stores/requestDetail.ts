@@ -49,7 +49,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
         content: request.value.content,
         targets: targets.value,
         tags: request.value.tags,
-        group: request.value.group.id
+        group: request.value.group?.id ?? null
       }
     } catch {
       toast.error('申請の取得に失敗しました')

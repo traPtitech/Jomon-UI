@@ -31,7 +31,9 @@ const formattedDate = formatDate(props.transaction.created_at)
         {{ props.transaction.target }}
       </div>
       <div class="w-2/10 truncate">
-        {{ props.transaction.group.description }}
+        {{
+          props.transaction.group ? props.transaction.group.description : 'なし'
+        }}
       </div>
       <div class="w-3/10">
         <TagsGroup :limit="3" :tags="props.transaction.tags" />

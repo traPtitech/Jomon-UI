@@ -14,6 +14,7 @@ import { useGroupMember } from './composables/useGroupMember'
 const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
 const { canEditGroup } = groupDetailStore
+const { userMap } = userStore
 const { group } = storeToRefs(groupDetailStore)
 const { me } = storeToRefs(userStore)
 
@@ -34,8 +35,8 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
         :key="member"
         class="not-first:mt-2 flex items-center justify-between">
         <div class="flex items-center">
-          <UserIcon class="w-12" :name="member" />
-          <p class="mx-1 break-all">{{ member }}</p>
+          <UserIcon class="w-12" :name="userMap[member]" />
+          <p class="mx-1 break-all">{{ userMap[member] }}</p>
         </div>
         <button
           v-if="hasAuthority"

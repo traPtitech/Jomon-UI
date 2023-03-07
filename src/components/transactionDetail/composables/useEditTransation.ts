@@ -30,7 +30,7 @@ export const useEditTransaction = (transaction: Transaction) => {
     target: transaction.target,
     request: transaction.request,
     tags: transaction.tags,
-    group: transaction.group.id
+    group: transaction.group?.id ?? null
   })
   const moneyDirection = ref<MoneyDirection>('toTraP')
   const linkedRequest = ref(
@@ -99,7 +99,7 @@ export const useEditTransaction = (transaction: Transaction) => {
         target: transaction.target,
         request: transaction.request,
         tags: transaction.tags.map(tag => tag.id),
-        group: transaction.group.id
+        group: transaction.group?.id ?? null
       }
       const response = (
         await apis.putTransactionDetail(transaction.id, {
@@ -128,7 +128,7 @@ export const useEditTransaction = (transaction: Transaction) => {
         target: transaction.target,
         request: transaction.request,
         tags: transaction.tags.map(tag => tag.id),
-        group: transaction.group.id
+        group: transaction.group?.id ?? null
       }
       const response = (
         await apis.putTransactionDetail(transaction.id, {

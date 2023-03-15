@@ -26,7 +26,7 @@ export const useDeleteGroup = () => {
       await apis.deleteGroup(id)
       if (groups.value !== undefined) {
         groups.value = groups.value.filter(group => group.id !== id)
-        router.push('/group')
+        router.push('/groups')
       } else {
         throw new Error('group does not exist')
       }

@@ -226,12 +226,11 @@ const handleKeydown = (e: KeyboardEvent, option: Value) => {
   }
 }
 const handleInputKeydown = (e: KeyboardEvent) => {
-  if (listItemRefs.value === null) return
-
   if (e.key === 'Enter') {
     e.preventDefault()
     pushTag()
   } else {
+    if (listItemRefs.value === null) return
     handleKeydown(e, {} as Value)
   }
 }

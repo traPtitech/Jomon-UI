@@ -19,7 +19,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
       return []
     }
     return request.value.targets.map(target => ({
-      target: target.id,
+      target: target.target,
       amount: target.amount
     }))
   })

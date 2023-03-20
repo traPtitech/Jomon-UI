@@ -50,7 +50,6 @@ export const useRequestDetail = () => {
     }
     if (request.value !== undefined) {
       await putRequest(request.value.id, editedValue.value)
-      toast.success('申請を更新しました')
     } else {
       toast.error('申請の更新に失敗しました')
     }

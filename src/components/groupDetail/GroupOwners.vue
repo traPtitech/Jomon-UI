@@ -14,9 +14,8 @@ import { useGroupOwner } from './composables/useGroupOwner'
 const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
 const { canEditGroup } = groupDetailStore
-const { userMap } = userStore
 const { group } = storeToRefs(groupDetailStore)
-const { me } = storeToRefs(userStore)
+const { me, userMap } = storeToRefs(userStore)
 
 const OwnersToBeAdded = ref<string[]>([])
 const hasAuthority = canEditGroup(me.value)

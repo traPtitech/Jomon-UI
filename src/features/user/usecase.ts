@@ -4,7 +4,7 @@ import { useUserStore } from '/@/stores/user'
 
 import { useUserRepository } from '/@/features/user/repository'
 
-export const useFetchUsers = async () => {
+export const useFetchUsersUsecase = async () => {
   const repository = useUserRepository()
   const { users, isUserFetched } = storeToRefs(useUserStore())
 
@@ -16,7 +16,7 @@ export const useFetchUsers = async () => {
   }
 }
 
-export const useFetchMe = async () => {
+export const useFetchMeUsecase = async () => {
   const repository = useUserRepository()
   const { me, isMeFetched } = storeToRefs(useUserStore())
 

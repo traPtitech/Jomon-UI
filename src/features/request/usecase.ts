@@ -7,7 +7,7 @@ import type { RequestSeed } from '/@/features/request/model'
 import { useRequestRepository } from '/@/features/request/repository'
 import type { RequestStatusUnion } from '/@/features/requestStatus/model'
 
-export const fetchRequests = async () => {
+export const useFetchRequestsUsecase = async () => {
   const repository = useRequestRepository()
   const { requests, isRequestFetched } = storeToRefs(useRequestStore())
 
@@ -21,7 +21,7 @@ export const fetchRequests = async () => {
   }
 }
 
-export const fetchRequest = async (id: string) => {
+export const useFetchRequestUsecase = async (id: string) => {
   const repository = useRequestRepository()
   const { request } = storeToRefs(useRequestDetailStore())
 
@@ -32,19 +32,24 @@ export const fetchRequest = async (id: string) => {
   }
 }
 
-export const createRequest = async (request: RequestSeed) => {
+export const createRequestUsecase = async (request: RequestSeed) => {
   const repository = useRequestRepository()
   const { requests } = storeToRefs(useRequestStore())
 
   try {
     const res = await repository.createRequest(request)
     requests.value.unshift(res)
+
+    return res
   } catch {
     throw new Error('申請の作成に失敗しました')
   }
 }
 
-export const editRequest = async (id: string, requestSeed: RequestSeed) => {
+export const editRequestUsecase = async (
+  id: string,
+  requestSeed: RequestSeed
+) => {
   const repository = useRequestRepository()
   const { request } = storeToRefs(useRequestDetailStore())
   if (!request.value) return
@@ -57,7 +62,7 @@ export const editRequest = async (id: string, requestSeed: RequestSeed) => {
   }
 }
 
-export const createComment = async (id: string, comment: string) => {
+export const createCommentUsecase = async (id: string, comment: string) => {
   const repository = useRequestRepository()
   const { request } = storeToRefs(useRequestDetailStore())
   if (!request.value) return
@@ -70,7 +75,7 @@ export const createComment = async (id: string, comment: string) => {
   }
 }
 
-export const changeStatus = async (
+export const changeStatusUsecase = async (
   id: string,
   status: RequestStatusUnion,
   comment: string

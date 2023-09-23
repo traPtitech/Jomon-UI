@@ -4,9 +4,8 @@ import { computed } from 'vue'
 
 import { useTagStore } from '/@/stores/tag'
 
-import type { Tag } from '/@/lib/apis'
-
 import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
+import type { Tag } from '/@/features/tag/model'
 
 interface Props {
   modelValue: Tag[]

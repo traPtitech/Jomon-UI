@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 
-import { useFetchMe } from '/@/features/user/usecase'
+import { useFetchMeUsecase } from '/@/features/user/usecase'
 
 import JomonHeader from './components/navigation/JomonHeader.vue'
 import './styles/main.css'
 import './styles/toast.css'
 
 onMounted(async () => {
-  await useFetchMe()
+  await useFetchMeUsecase()
 })
 </script>
 

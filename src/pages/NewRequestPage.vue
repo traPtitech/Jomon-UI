@@ -13,6 +13,9 @@ import InputText from '/@/components/shared/InputText.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { requestTemplates } from '/@/consts/consts'
+import { useFetchGroupsUsecase } from '/@/features/group/usecase'
+import { useFetchTagsUsecase } from '/@/features/tag/usecase'
+import { useFetchUsersUsecase } from '/@/features/user/usecase'
 
 import { useNewRequest } from './composables/useNewRequest'
 
@@ -22,20 +25,17 @@ const groupStore = useGroupStore()
 const { isTagFetched } = storeToRefs(tagStore)
 const { isGroupFetched, groupOptions } = storeToRefs(groupStore)
 const { isUserFetched, me } = storeToRefs(userStore)
-const { fetchTags } = tagStore
-const { fetchGroups } = groupStore
-const { fetchUsers } = userStore
 
 const { isSending, request, files, postRequest } = useNewRequest()
 
 if (!isTagFetched.value) {
-  fetchTags()
+  useFetchTagsUsecase()
 }
 if (!isGroupFetched.value) {
-  fetchGroups()
+  useFetchGroupsUsecase()
 }
 if (!isUserFetched.value) {
-  fetchUsers()
+  useFetchUsersUsecase()
 }
 </script>
 

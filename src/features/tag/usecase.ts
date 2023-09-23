@@ -6,7 +6,7 @@ import { useTagRepository } from '/@/features/tag/repository'
 
 import type { Tag } from './model'
 
-export const useFetchTags = async () => {
+export const useFetchTagsUsecase = async () => {
   const repository = useTagRepository()
   const { tags, isTagFetched } = storeToRefs(useTagStore())
 
@@ -19,7 +19,9 @@ export const useFetchTags = async () => {
 }
 
 // TODO: composablesでまとめる&空文字じゃなくてnullで判定する
-export const createTagIfNotExist = async (containNewTags: Tag[]) => {
+export const createTagIfNotExistUsecase = async (
+  containNewTags: Tag[]
+): Promise<Tag[]> => {
   const repository = useTagRepository()
   const { tags } = storeToRefs(useTagStore())
 
@@ -46,7 +48,7 @@ export const createTagIfNotExist = async (containNewTags: Tag[]) => {
   return alreadyExists
 }
 
-export const deleteTags = async (ids: string[]) => {
+export const deleteTagsUsecase = async (ids: string[]) => {
   const repository = useTagRepository()
   const { tags } = storeToRefs(useTagStore())
 

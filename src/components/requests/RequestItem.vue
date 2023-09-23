@@ -5,11 +5,11 @@ import { RouterLink } from 'vue-router'
 
 import { useUserStore } from '/@/stores/user'
 
-import type { Request } from '/@/lib/apiTypes'
 import { formatDate } from '/@/lib/date'
 
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import TagsGroup from '/@/components/shared/TagsGroup.vue'
+import type { Request } from '/@/features/request/model'
 
 interface Props {
   request: Request
@@ -20,7 +20,7 @@ const props = defineProps<Props>()
 const userStore = useUserStore()
 const { userMap } = storeToRefs(userStore)
 
-const formattedDate = formatDate(props.request.created_at)
+const formattedDate = formatDate(props.request.createdAt)
 
 const totalAmount = computed(
   () => props.request.targets.reduce((a, target) => a + target.amount, 0) ?? 0

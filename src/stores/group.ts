@@ -1,41 +1,23 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { useToast } from 'vue-toastification'
 
-import type { Group } from '/@/lib/apis'
-import apis from '/@/lib/apis'
+import type { Group } from '/@/features/group/model'
 
 export const useGroupStore = defineStore('group', () => {
-  const toast = useToast()
-
-  const groups = ref<Group[]>()
+  const groups = ref<Group[]>([])
 
   const isGroupFetched = ref(false)
 
-  const groupOptions = computed(() => {
-    return (
-      groups.value?.map(group => {
-        return {
-          key: group.name,
-          value: group.id
-        }
-      }) ?? []
-    )
-  })
-
-  const fetchGroups = async () => {
-    try {
-      groups.value = (await apis.getGroups()).data
-      isGroupFetched.value = true
-    } catch {
-      toast.error('グループの取得に失敗しました')
-    }
-  }
+  const groupOptions = computed(() =>
+    groups.value.map(group => ({
+      key: group.name,
+      value: group.id
+    }))
+  )
 
   return {
     groups,
     groupOptions,
-    isGroupFetched,
-    fetchGroups
+    isGroupFetched
   }
 })

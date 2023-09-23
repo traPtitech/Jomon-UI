@@ -7,6 +7,8 @@ import { useUserStore } from '/@/stores/user'
 
 import apis from '/@/lib/apis'
 
+import { addGroupOwnersUsecase } from '/@/features/group/usecase'
+
 export const useGroupOwner = () => {
   const groupDetailStore = useGroupDetailStore()
   const toast = useToast()
@@ -20,31 +22,26 @@ export const useGroupOwner = () => {
     }
     return users.value
       .filter(user => !group.value?.owners.includes(user.id))
-      .map(user => {
-        return {
-          key: user.name,
-          value: user.id
-        }
-      })
+      .map(user => ({
+        key: user.name,
+        value: user.id
+      }))
   })
 
   const isSending = ref(false)
 
   const addOwners = async (ownersToBeAdded: string[]) => {
-    if (ownersToBeAdded.length === 0 || group.value === undefined) {
+    if (group.value === undefined) {
       return
     }
     try {
       isSending.value = true
-      await apis.postGroupOwners(group.value.id, ownersToBeAdded)
-      const nextGroup = {
-        ...group.value,
-        owners: [...group.value.owners, ...ownersToBeAdded]
-      }
-      group.value = nextGroup
+      await addGroupOwnersUsecase(group.value.id, ownersToBeAdded)
       toast.success('グループオーナーを追加しました')
-    } catch {
-      toast.error('グループオーナーの追加に失敗しました')
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message)
+      }
     }
     isSending.value = false
   }
@@ -55,14 +52,11 @@ export const useGroupOwner = () => {
     try {
       isSending.value = true
       await apis.deleteGroupOwners(group.value.id, [id])
-      const nextGroup = {
-        ...group.value,
-        owners: group.value.owners.filter(owner => owner !== id)
-      }
-      group.value = nextGroup
       toast.success('グループオーナーを削除しました')
-    } catch {
-      toast.error('グループオーナーの削除に失敗しました')
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message)
+      }
     }
     isSending.value = false
   }

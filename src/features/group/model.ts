@@ -16,7 +16,7 @@ export interface GroupDetail extends Group {
 export interface GroupSeed {
   name: string
   description: string
-  budget: number | null
+  budget: number
 }
 
 export interface GroupSeedWithMemberAndOwners extends GroupSeed {

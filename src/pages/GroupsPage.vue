@@ -11,24 +11,24 @@ import { toPage } from '/@/lib/parseQueryParams'
 import GroupItem from '/@/components/groups/GroupItem.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import { useFetchGroupsUsecase } from '/@/features/group/usecase'
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))
 
-const groupStore = useGroupStore()
 const userStore = useUserStore()
-const { fetchGroups } = groupStore
+const groupStore = useGroupStore()
 const { groups, isGroupFetched } = storeToRefs(groupStore)
 const { isAdmin } = storeToRefs(userStore)
 
 const sliceGroupsAt = (index: number, n: number) => {
   const start = (index - 1) * n
   const end = index * n
-  return groups.value?.slice(start, end) ?? []
+  return groups.value.slice(start, end) ?? []
 }
 
 if (!isGroupFetched.value) {
-  fetchGroups()
+  await useFetchGroupsUsecase()
 }
 
 watch(
@@ -67,7 +67,7 @@ watch(
         </ul>
       </div>
       <PaginationBar
-        v-if="groups && groups.length > 0"
+        v-if="groups.length > 0"
         class="mt-4"
         :current-page="page"
         path="/groups"

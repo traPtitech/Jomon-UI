@@ -17,7 +17,7 @@ const { canEditGroup } = groupDetailStore
 const { group } = storeToRefs(groupDetailStore)
 const { me, userMap } = storeToRefs(userStore)
 
-const MembersToBeAdded = ref<string[]>([])
+const membersToBeAdded = ref<string[]>([])
 const hasAuthority = canEditGroup(me.value)
 const { absentMemberOptions, isSending, addMembers, removeMember } =
   useGroupMember()
@@ -48,15 +48,15 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
     </ul>
     <div v-if="hasAuthority" class="flex p-2">
       <InputSelectMultiple
-        v-model="MembersToBeAdded"
+        v-model="membersToBeAdded"
         class="mr-2 flex-grow"
         is-dropdown-above
         :options="absentMemberOptions"
         placeholder="追加するメンバーを選択" />
       <button
         class="flex items-center rounded-full p-1 hover:bg-gray-300"
-        :disabled="isSending"
-        @click="addMembers(MembersToBeAdded)">
+        :disabled="membersToBeAdded.length === 0 || isSending"
+        @click="addMembers(membersToBeAdded)">
         <PlusIcon class="w-6" />
       </button>
     </div>

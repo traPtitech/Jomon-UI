@@ -16,6 +16,8 @@ import GroupOwners from '/@/components/groupDetail/GroupOwners.vue'
 import { useDeleteGroup } from '/@/components/groupDetail/composables/useDeleteGroup'
 import { useGroupInformation } from '/@/components/groupDetail/composables/useGroupInformation'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import { useFetchGroup } from '/@/features/group/usecase'
+import { useFetchUsers } from '/@/features/user/usecase'
 
 const route = useRoute()
 const id = toId(route.params.id)
@@ -24,8 +26,7 @@ const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
 
 const { group } = storeToRefs(groupDetailStore)
-const { canEditGroup, fetchGroup } = groupDetailStore
-const { fetchUsers } = userStore
+const { canEditGroup } = groupDetailStore
 const { me } = storeToRefs(userStore)
 const { isUserFetched } = storeToRefs(userStore)
 
@@ -35,9 +36,9 @@ const { isSending, editMode, changeEditMode, finishEditing } =
 const hasAuthority = canEditGroup(me.value)
 const { isDeleting, deleteGroup } = useDeleteGroup()
 
-await fetchGroup(id)
+await useFetchGroup(id)
 if (!isUserFetched.value) {
-  await fetchUsers()
+  await useFetchUsers()
 }
 </script>
 

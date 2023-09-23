@@ -3,10 +3,13 @@ import { storeToRefs } from 'pinia'
 import { useGroupStore } from '/@/stores/group'
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 
-import type { GroupSeedWithMemberAndOwners } from '/@/features/group/model'
+import type {
+  GroupSeed,
+  GroupSeedWithMemberAndOwners
+} from '/@/features/group/model'
 import { useGroupRepository } from '/@/features/group/repository'
 
-export const fetchGroups = async () => {
+export const useFetchGroupsUsecase = async () => {
   const repository = useGroupRepository()
   const { groups, isGroupFetched } = storeToRefs(useGroupStore())
 
@@ -20,18 +23,25 @@ export const fetchGroups = async () => {
   }
 }
 
-export const fetchGroup = async (id: string) => {
+export const useFetchGroup = async (id: string) => {
   const repository = useGroupRepository()
-  const { group } = storeToRefs(useGroupDetailStore())
+  const { group, editedValue } = storeToRefs(useGroupDetailStore())
 
   try {
     group.value = await repository.fetchGroup(id)
+    editedValue.value = {
+      name: group.value.name,
+      description: group.value.description,
+      budget: group.value.budget
+    }
   } catch {
     throw new Error('グループの取得に失敗しました')
   }
 }
 
-export const createGroup = async (group: GroupSeedWithMemberAndOwners) => {
+export const createGroupUsecase = async (
+  group: GroupSeedWithMemberAndOwners
+) => {
   const repository = useGroupRepository()
   const { groups } = storeToRefs(useGroupStore())
 
@@ -45,8 +55,8 @@ export const createGroup = async (group: GroupSeedWithMemberAndOwners) => {
 
     try {
       await Promise.all([
-        postGroupMembers(res.id, group.members),
-        postGroupOwners(res.id, group.owners)
+        addGroupMembersUsecase(res.id, group.members),
+        addGroupOwnersUsecase(res.id, group.owners)
       ])
     } catch {
       throw new Error('グループの作成に失敗しました')
@@ -56,10 +66,7 @@ export const createGroup = async (group: GroupSeedWithMemberAndOwners) => {
   }
 }
 
-export const editGroup = async (
-  id: string,
-  groupSeed: GroupSeedWithMemberAndOwners
-) => {
+export const editGroupUsecase = async (id: string, groupSeed: GroupSeed) => {
   const repository = useGroupRepository()
   const { group, editedValue } = storeToRefs(useGroupDetailStore())
   if (!group.value) return
@@ -81,7 +88,7 @@ export const editGroup = async (
   }
 }
 
-export const deleteGroup = async (id: string) => {
+export const deleteGroupUsecase = async (id: string) => {
   const repository = useGroupRepository()
   const { groups } = storeToRefs(useGroupStore())
 
@@ -93,7 +100,7 @@ export const deleteGroup = async (id: string) => {
   }
 }
 
-export const postGroupMembers = async (id: string, members: string[]) => {
+export const addGroupMembersUsecase = async (id: string, members: string[]) => {
   const repository = useGroupRepository()
   const { group } = storeToRefs(useGroupDetailStore())
   if (!group.value) return
@@ -102,14 +109,17 @@ export const postGroupMembers = async (id: string, members: string[]) => {
     const res = await repository.postGroupMembers(id, members)
     group.value = {
       ...group.value,
-      members: res
+      members: [...group.value.members, ...res]
     }
   } catch {
     throw new Error('グループメンバーの追加に失敗しました')
   }
 }
 
-export const deleteGroupMembers = async (id: string, members: string[]) => {
+export const removeGroupMembersUsecase = async (
+  id: string,
+  members: string[]
+) => {
   const repository = useGroupRepository()
   const { group } = storeToRefs(useGroupDetailStore())
   if (!group.value) return
@@ -125,7 +135,7 @@ export const deleteGroupMembers = async (id: string, members: string[]) => {
   }
 }
 
-export const postGroupOwners = async (id: string, owners: string[]) => {
+export const addGroupOwnersUsecase = async (id: string, owners: string[]) => {
   const repository = useGroupRepository()
   const { group } = storeToRefs(useGroupDetailStore())
   if (!group.value) return
@@ -134,14 +144,17 @@ export const postGroupOwners = async (id: string, owners: string[]) => {
     const res = await repository.postGroupOwners(id, owners)
     group.value = {
       ...group.value,
-      owners: res
+      owners: [...group.value.owners, ...res]
     }
   } catch {
     throw new Error('グループオーナーの追加に失敗しました')
   }
 }
 
-export const deleteGroupOwners = async (id: string, owners: string[]) => {
+export const removeGroupOwnersUsecase = async (
+  id: string,
+  owners: string[]
+) => {
   const repository = useGroupRepository()
   const { group } = storeToRefs(useGroupDetailStore())
   if (!group.value) return

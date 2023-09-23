@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-import type { User } from '/@/lib/apis'
-
 import type { GroupDetail } from '/@/features/group/model'
+import type { User } from '/@/features/user/model'
 
 export const useGroupDetailStore = defineStore('groupDetail', () => {
   const group = ref<GroupDetail>()

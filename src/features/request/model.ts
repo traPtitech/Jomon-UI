@@ -23,6 +23,16 @@ export interface Request {
   createdAt: DateTime
 }
 
+export interface RequestQuerySeed {
+  sort: string
+  currentStatus: RequestStatusUnion | ''
+  target: string
+  since: string
+  until: string
+  tags: string[]
+  group: string
+}
+
 export interface RequestDetail extends Request {
   files: string[]
   comments: RequestComment[]

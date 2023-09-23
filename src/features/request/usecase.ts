@@ -9,10 +9,12 @@ import type { RequestStatusUnion } from '/@/features/requestStatus/model'
 
 export const useFetchRequestsUsecase = async () => {
   const repository = useRequestRepository()
-  const { requests, isRequestFetched } = storeToRefs(useRequestStore())
+  const { requests, isRequestFetched, filterParams } = storeToRefs(
+    useRequestStore()
+  )
 
   try {
-    requests.value = await repository.fetchRequests()
+    requests.value = await repository.fetchRequests(filterParams.value)
     isRequestFetched.value = true
   } catch {
     throw new Error('申請一覧の取得に失敗しました')

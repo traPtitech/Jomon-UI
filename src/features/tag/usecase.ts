@@ -10,8 +10,6 @@ export const useFetchTags = async () => {
   const repository = useTagRepository()
   const { tags, isTagFetched } = storeToRefs(useTagStore())
 
-  if (isTagFetched.value) return
-
   try {
     tags.value = await repository.fetchTags()
     isTagFetched.value = true
@@ -48,14 +46,14 @@ export const createTagIfNotExist = async (containNewTags: Tag[]) => {
   return alreadyExists
 }
 
-export const deleteTag = async (id: string) => {
+export const deleteTags = async (ids: string[]) => {
   const repository = useTagRepository()
   const { tags } = storeToRefs(useTagStore())
 
   try {
-    await repository.deleteTag(id)
-    tags.value = tags.value.filter(tag => tag.id !== id)
-    // TODO: 使う側で出すtoast.success('タグを削除しました')
+    const promises = ids.map(repository.deleteTag)
+    await Promise.all(promises)
+    tags.value = tags.value.filter(tag => !ids.includes(tag.id))
   } catch {
     throw new Error('タグの削除に失敗しました')
   }

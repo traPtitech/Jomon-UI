@@ -9,6 +9,9 @@ import { useUserStore } from '/@/stores/user'
 
 import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import { useFetchAdmins } from '/@/features/admin/usecase'
+import { deleteTags, useFetchTags } from '/@/features/tag/usecase'
+import { useFetchUsers } from '/@/features/user/usecase'
 
 import { useAdmin } from './composables/useAdmin'
 
@@ -16,27 +19,20 @@ const adminStore = useAdminStore()
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const toast = useToast()
+
 const { isAdminFetched, admins, adminOptions } = storeToRefs(adminStore)
 const { me, isUserFetched, isAdmin, userMap } = storeToRefs(userStore)
 const { isTagFetched, tagIdOptions } = storeToRefs(tagStore)
-const { deleteTag, fetchTags } = tagStore
-const { fetchUsers } = userStore
-const { fetchAdmins } = adminStore
 
 const addList = ref<string[]>([])
 const removeList = ref<string[]>([])
 const deleteTagList = ref<string[]>([])
 const { absentMembers, isSending, addAdmins, removeAdmins } = useAdmin()
 
-const deleteTags = async () => {
-  if (deleteTagList.value.length === 0) {
-    toast.warning('削除するタグを選択してください')
-    return
-  }
+const handleDeleteTags = async () => {
   isSending.value = true
   try {
-    const deleteTagPromiseList = deleteTagList.value.map(tag => deleteTag(tag))
-    await Promise.all(deleteTagPromiseList)
+    await deleteTags(deleteTagList.value)
     toast.success('タグを削除しました')
   } catch {
     toast.error('タグの削除に失敗しました')
@@ -46,13 +42,13 @@ const deleteTags = async () => {
 
 if (me.value?.admin) {
   if (!isAdminFetched.value) {
-    await fetchAdmins()
+    await useFetchAdmins()
   }
   if (!isUserFetched.value) {
-    await fetchUsers()
+    await useFetchUsers()
   }
   if (!isTagFetched.value) {
-    await fetchTags()
+    await useFetchTags()
   }
 }
 </script>
@@ -106,10 +102,10 @@ if (me.value?.admin) {
         :options="tagIdOptions"
         placeholder="削除するタグを選択" />
       <SimpleButton
-        :disabled="isSending"
+        :disabled="deleteTagList.length === 0 || isSending"
         font-size="lg"
         padding="sm"
-        @click.stop="deleteTags">
+        @click.stop="handleDeleteTags">
         選択したタグを削除
       </SimpleButton>
     </div>

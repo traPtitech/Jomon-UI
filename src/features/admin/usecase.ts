@@ -4,11 +4,9 @@ import { useAdminStore } from '/@/stores/admin'
 
 import { useAdminRepository } from '/@/features/admin/repository'
 
-export const useFetchTags = async () => {
+export const useFetchAdmins = async () => {
   const repository = useAdminRepository()
   const { admins, isAdminFetched } = storeToRefs(useAdminStore())
-
-  if (isAdminFetched.value) return
 
   try {
     admins.value = await repository.fetchAdmins()

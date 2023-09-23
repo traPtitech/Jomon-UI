@@ -8,8 +8,6 @@ export const useFetchUsers = async () => {
   const repository = useUserRepository()
   const { users, isUserFetched } = storeToRefs(useUserStore())
 
-  if (isUserFetched.value) return
-
   try {
     users.value = await repository.fetchUsers()
     isUserFetched.value = true

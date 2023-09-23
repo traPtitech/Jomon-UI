@@ -1,15 +1,11 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { useToast } from 'vue-toastification'
 
-import type { User } from '/@/lib/apis'
-import apis from '/@/lib/apis'
+import type { User } from '/@/features/user/model'
 
 export const useUserStore = defineStore('user', () => {
-  const toast = useToast()
-
   const me = ref<User>()
-  const users = ref<User[]>()
+  const users = ref<User[]>([])
   const isUserFetched = ref(false)
   const isMeFetched = ref(false)
 
@@ -18,41 +14,22 @@ export const useUserStore = defineStore('user', () => {
     return me.value.admin
   })
 
-  const userOptions = computed(() => {
-    return (
-      users.value?.map(user => {
-        return {
-          key: user.name,
-          value: user.id
-        }
-      }) ?? []
-    )
-  })
+  const userOptions = computed(() =>
+    users.value.map(user => {
+      return {
+        key: user.name,
+        value: user.id
+      }
+    })
+  )
 
-  const userMap = computed(() => {
-    return (
+  const userMap = computed(
+    () =>
       users.value?.reduce((acc, user) => {
         acc[user.id] = user.name
         return acc
       }, {} as Record<string, string>) ?? {}
-    )
-  })
-
-  const fetchMe = async () => {
-    try {
-      me.value = (await apis.getMe()).data
-    } catch {
-      toast.error('ユーザーの取得に失敗しました')
-    }
-  }
-  const fetchUsers = async () => {
-    try {
-      users.value = (await apis.getUsers()).data
-      isUserFetched.value = true
-    } catch {
-      toast.error('ユーザーの取得に失敗しました')
-    }
-  }
+  )
 
   return {
     me,
@@ -61,8 +38,6 @@ export const useUserStore = defineStore('user', () => {
     userOptions,
     isUserFetched,
     isMeFetched,
-    userMap,
-    fetchMe,
-    fetchUsers
+    userMap
   }
 })

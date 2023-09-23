@@ -22,12 +22,12 @@ const emit = defineEmits<{
 const userStore = useUserStore()
 const groupStore = useGroupStore()
 const requestDetailStore = useRequestDetailStore()
-const { isRequestCreater } = requestDetailStore
+const { isRequestCreator } = requestDetailStore
 const { groupOptions } = storeToRefs(groupStore)
 const { request, editedValue } = storeToRefs(requestDetailStore)
 const { me } = storeToRefs(userStore)
 
-const hasAuthority = isRequestCreater(me.value)
+const hasAuthority = isRequestCreator(me.value)
 
 const handleComplete = () => {
   emit('changeEditMode', '')

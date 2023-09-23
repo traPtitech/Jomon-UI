@@ -2,11 +2,9 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import type { Request } from '/@/lib/apiTypes'
 import apis from '/@/lib/apis'
-import { convertRequest } from '/@/lib/date'
 
-import type { RequestStatus } from '/@/consts/consts'
+import type { Request } from '/@/features/request/model'
 
 interface SearchRequestParams {
   sort: string
@@ -57,7 +55,7 @@ export const useRequestStore = defineStore('request', () => {
       const response = (
         await apis.getRequests(
           params.sort,
-          params.currentStatus as RequestStatus,
+          params.currentStatus,
           params.target,
           params.since,
           params.until,

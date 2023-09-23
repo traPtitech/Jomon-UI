@@ -34,7 +34,7 @@ const createRequestRepository = () => ({
     return convertRequestDetailFromData(data)
   },
 
-  createRequest: async (request: RequestSeed): Promise<Request> => {
+  createRequest: async (request: RequestSeed): Promise<RequestDetail> => {
     const requestData = {
       title: request.title,
       content: request.content,
@@ -45,10 +45,13 @@ const createRequestRepository = () => ({
     }
     const { data } = await apis.postRequest(requestData)
 
-    return convertRequestFromData(data)
+    return convertRequestDetailFromData(data)
   },
 
-  editRequest: async (id: string, request: RequestSeed): Promise<Request> => {
+  editRequest: async (
+    id: string,
+    request: RequestSeed
+  ): Promise<RequestDetail> => {
     const requestData = {
       title: request.title,
       content: request.content,
@@ -59,7 +62,7 @@ const createRequestRepository = () => ({
     }
     const { data } = await apis.putRequestDetail(id, requestData)
 
-    return convertRequestFromData(data)
+    return convertRequestDetailFromData(data)
   },
 
   createComment: async (

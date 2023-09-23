@@ -17,7 +17,7 @@ import { useDeleteGroup } from '/@/components/groupDetail/composables/useDeleteG
 import { useGroupInformation } from '/@/components/groupDetail/composables/useGroupInformation'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { useFetchGroup } from '/@/features/group/usecase'
-import { useFetchUsers } from '/@/features/user/usecase'
+import { useFetchUsersUsecase } from '/@/features/user/usecase'
 
 const route = useRoute()
 const id = toId(route.params.id)
@@ -38,7 +38,7 @@ const { isDeleting, deleteGroup } = useDeleteGroup()
 
 await useFetchGroup(id)
 if (!isUserFetched.value) {
-  await useFetchUsers()
+  await useFetchUsersUsecase()
 }
 </script>
 

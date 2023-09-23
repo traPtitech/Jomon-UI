@@ -23,6 +23,10 @@ import RequestTitle from '/@/components/requestDetail/RequestTitle.vue'
 import StatusChangeButtons from '/@/components/requestDetail/StatusChangeButtons.vue'
 import ToTransactionButtons from '/@/components/requestDetail/ToTransactionButtons.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
+import { useFetchGroupsUsecase } from '/@/features/group/usecase'
+import { useFetchRequestUsecase } from '/@/features/request/usecase'
+import { useFetchTagsUsecase } from '/@/features/tag/usecase'
+import { useFetchUsersUsecase } from '/@/features/user/usecase'
 
 import { useRequestDetail } from './composables/useRequestDetail'
 
@@ -33,10 +37,6 @@ const requestDetailStore = useRequestDetailStore()
 const userStore = useUserStore()
 const groupStore = useGroupStore()
 const tagStore = useTagStore()
-const { fetchRequestDetail } = requestDetailStore
-const { fetchGroups } = groupStore
-const { fetchUsers } = userStore
-const { fetchTags } = tagStore
 const { isUserFetched, userMap } = storeToRefs(userStore)
 const { isGroupFetched } = storeToRefs(groupStore)
 const { isTagFetched } = storeToRefs(tagStore)
@@ -45,18 +45,18 @@ const { editMode, changeEditMode } = useRequestDetail()
 const { request } = storeToRefs(requestDetailStore)
 
 const formattedDate = computed(() =>
-  formatDate(request.value?.created_at ?? DateTime.fromISO(''))
+  formatDate(request.value?.createdAt ?? DateTime.fromISO(''))
 )
 
-await fetchRequestDetail(id)
+await useFetchRequestUsecase(id)
 if (!isGroupFetched.value) {
-  await fetchGroups()
+  await useFetchGroupsUsecase()
 }
 if (!isUserFetched.value) {
-  await fetchUsers()
+  await useFetchUsersUsecase()
 }
 if (!isTagFetched.value) {
-  await fetchTags()
+  await useFetchTagsUsecase()
 }
 onMounted(() => {
   if (route.hash !== '') {

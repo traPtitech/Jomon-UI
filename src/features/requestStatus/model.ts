@@ -2,9 +2,12 @@ import type { DateTime } from 'luxon'
 
 import type { StatusEnum } from '/@/lib/apis'
 
+import type { RequestComment } from '/@/features/requestComment/model'
+
 export interface RequestStatus {
   createdBy: string
   status: RequestStatusUnion
+  comment?: RequestComment
   createdAt: DateTime
 }
 

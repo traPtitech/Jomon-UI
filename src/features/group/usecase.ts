@@ -13,8 +13,6 @@ export const useFetchGroupsUsecase = async () => {
   const repository = useGroupRepository()
   const { groups, isGroupFetched } = storeToRefs(useGroupStore())
 
-  if (isGroupFetched.value) return
-
   try {
     groups.value = await repository.fetchGroups()
     isGroupFetched.value = true

@@ -12,7 +12,7 @@ import StatusChangeLog from './StatusChangeLog.vue'
 type LogType = 'comment' | 'statusChange'
 
 interface Log {
-  created_at: DateTime
+  createdAt: DateTime
   type: LogType
   index: number
 }
@@ -29,7 +29,7 @@ const logs = computed(() => {
     request.value?.comments
       .map(
         (comment, i): Log => ({
-          created_at: comment.created_at,
+          createdAt: comment.createdAt,
           type: 'comment',
           index: i
         })
@@ -37,7 +37,7 @@ const logs = computed(() => {
       .concat(
         request.value.statuses.map(
           (status, i): Log => ({
-            created_at: status.created_at,
+            createdAt: status.createdAt,
             type: 'statusChange',
             index: i
           })
@@ -45,8 +45,8 @@ const logs = computed(() => {
       ) ?? []
   //created_atでソート
   array = array.sort(function (a, b) {
-    if (a.created_at > b.created_at) return 1
-    if (b.created_at > a.created_at) return -1
+    if (a.createdAt > b.createdAt) return 1
+    if (b.createdAt > a.createdAt) return -1
     return 0
   })
   return array
@@ -58,10 +58,7 @@ const logs = computed(() => {
   <div v-if="request" class="h-120 overflow-y-scroll p-2">
     <RequestFiles />
     <ul>
-      <li
-        v-for="log in logs"
-        :key="log.created_at.toISO()"
-        class="vertical-bar">
+      <li v-for="log in logs" :key="log.createdAt.toISO()" class="vertical-bar">
         <CommentLog
           v-if="log.type === 'comment'"
           :comment="request.comments[log.index]" />

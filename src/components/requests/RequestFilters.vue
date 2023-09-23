@@ -10,7 +10,7 @@ import { useUserStore } from '/@/stores/user'
 import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
 import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 import InputText from '/@/components/shared/InputText.vue'
-import { requestStatusOptions } from '/@/consts/consts'
+import { requestStatusOptions } from '/@/features/requestStatus/model'
 
 const requestStore = useRequestStore()
 const userStore = useUserStore()

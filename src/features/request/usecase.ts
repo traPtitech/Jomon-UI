@@ -11,8 +11,6 @@ export const useFetchRequestsUsecase = async () => {
   const repository = useRequestRepository()
   const { requests, isRequestFetched } = storeToRefs(useRequestStore())
 
-  if (isRequestFetched.value) return
-
   try {
     requests.value = await repository.fetchRequests()
     isRequestFetched.value = true
@@ -86,7 +84,11 @@ export const changeStatusUsecase = async (
 
   try {
     const res = await repository.editStatus(id, status, comment)
-    request.value.status = res
+    request.value.status = res.status
+    request.value.statuses.push(res)
+    if (res.comment !== undefined) {
+      request.value.comments.push(res.comment)
+    }
   } catch {
     throw new Error('ステータスの変更に失敗しました')
   }

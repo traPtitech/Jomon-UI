@@ -67,7 +67,11 @@ export const useNewRequest = () => {
     }
 
     try {
-      const res = await createRequestUsecase(request.value)
+      const requestSeedWithNewTags = {
+        ...request.value,
+        tags
+      }
+      const res = await createRequestUsecase(requestSeedWithNewTags)
       try {
         const promises = files.value.map((file: FileRequest) => {
           apis.postFile(file.src, file.name, res.id)

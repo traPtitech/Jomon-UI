@@ -11,7 +11,7 @@ import InputText from '/@/components/shared/InputText.vue'
 import InputTextarea from '/@/components/shared/InputTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { createGroupUsecase } from '/@/features/group/usecase'
-import { useFetchUsers } from '/@/features/user/usecase'
+import { useFetchUsersUsecase } from '/@/features/user/usecase'
 
 import { useNewGroup } from './composables/useNewGroup'
 
@@ -36,7 +36,7 @@ const handleCreateGroup = async () => {
 }
 
 if (!isUserFetched.value) {
-  await useFetchUsers()
+  await useFetchUsersUsecase()
 }
 </script>
 

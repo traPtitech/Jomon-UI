@@ -31,7 +31,7 @@ const defaultParams: SearchRequestParams = {
 export const useRequestStore = defineStore('request', () => {
   const toast = useToast()
 
-  const requests = ref<Request[]>()
+  const requests = ref<Request[]>([])
   const isRequestFetched = ref(false)
 
   const filterParams = ref<SearchRequestParams>({

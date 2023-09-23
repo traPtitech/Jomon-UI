@@ -3,12 +3,7 @@ import { storeToRefs } from 'pinia'
 import { useGroupStore } from '/@/stores/group'
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 
-import apis from '/@/lib/apis'
-
-import type {
-  Group,
-  GroupSeedWithMemberAndOwners
-} from '/@/features/group/model'
+import type { GroupSeedWithMemberAndOwners } from '/@/features/group/model'
 import { useGroupRepository } from '/@/features/group/repository'
 
 export const fetchGroups = async () => {
@@ -45,13 +40,13 @@ export const createGroup = async (group: GroupSeedWithMemberAndOwners) => {
   }
 
   try {
-    const res: Group = await repository.createGroup(group)
+    const res = await repository.createGroup(group)
     groups.value.unshift(res)
 
     try {
       await Promise.all([
-        apis.postGroupMembers(res.id, group.members),
-        apis.postGroupOwners(res.id, group.owners)
+        postGroupMembers(res.id, group.members),
+        postGroupOwners(res.id, group.owners)
       ])
     } catch {
       throw new Error('グループの作成に失敗しました')

@@ -4,7 +4,7 @@ import { useAdminStore } from '/@/stores/admin'
 
 import { useAdminRepository } from '/@/features/admin/repository'
 
-export const useFetchAdmins = async () => {
+export const useFetchAdminsUsecase = async () => {
   const repository = useAdminRepository()
   const { admins, isAdminFetched } = storeToRefs(useAdminStore())
 
@@ -16,7 +16,7 @@ export const useFetchAdmins = async () => {
   }
 }
 
-export const addAdmins = async (adminsSeed: string[]) => {
+export const addAdminsUsecase = async (adminsSeed: string[]) => {
   const repository = useAdminRepository()
   const { admins } = storeToRefs(useAdminStore())
 
@@ -28,7 +28,7 @@ export const addAdmins = async (adminsSeed: string[]) => {
   }
 }
 
-export const removeAdmins = async (adminsSeed: string[]) => {
+export const removeAdminsUsecase = async (adminsSeed: string[]) => {
   const repository = useAdminRepository()
   const { admins } = storeToRefs(useAdminStore())
 

@@ -9,7 +9,7 @@ import { useUserStore } from '/@/stores/user'
 
 import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import { useFetchAdmins } from '/@/features/admin/usecase'
+import { useFetchAdminsUsecase } from '/@/features/admin/usecase'
 import { deleteTags, useFetchTags } from '/@/features/tag/usecase'
 import { useFetchUsers } from '/@/features/user/usecase'
 
@@ -34,15 +34,17 @@ const handleDeleteTags = async () => {
   try {
     await deleteTags(deleteTagList.value)
     toast.success('タグを削除しました')
-  } catch {
-    toast.error('タグの削除に失敗しました')
+  } catch (e) {
+    if (e instanceof Error) {
+      toast.error(e.message)
+    }
   }
   isSending.value = false
 }
 
 if (me.value?.admin) {
   if (!isAdminFetched.value) {
-    await useFetchAdmins()
+    await useFetchAdminsUsecase()
   }
   if (!isUserFetched.value) {
     await useFetchUsers()

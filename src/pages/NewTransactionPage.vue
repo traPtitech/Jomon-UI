@@ -12,15 +12,15 @@ import InputRadioButton from '/@/components/shared/InputRadioButton.vue'
 import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import { useFetchGroupsUsecase } from '/@/features/group/usecase'
+import { useFetchTagsUsecase } from '/@/features/tag/usecase'
+import { useFetchUsersUsecase } from '/@/features/user/usecase'
 
 import { useNewTransaction } from './composables/useNewTransaction'
 
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
-const { fetchUsers } = userStore
-const { fetchTags } = tagStore
-const { fetchGroups } = groupStore
 const { isUserFetched, isAdmin } = storeToRefs(userStore)
 const { isTagFetched } = storeToRefs(tagStore)
 const { isGroupFetched, groupOptions } = storeToRefs(groupStore)
@@ -29,13 +29,13 @@ const { isSending, transaction, moneyDirection, postTransaction } =
   useNewTransaction()
 
 if (!isGroupFetched.value) {
-  await fetchGroups()
+  await useFetchGroupsUsecase()
 }
 if (!isUserFetched.value) {
-  await fetchUsers()
+  await useFetchUsersUsecase()
 }
 if (!isTagFetched.value) {
-  await fetchTags()
+  await useFetchTagsUsecase()
 }
 </script>
 

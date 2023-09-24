@@ -2,20 +2,21 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
-import { useToast } from 'vue-toastification'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-import type { Transaction } from '/@/lib/apiTypes'
-import apis from '/@/lib/apis'
-import { convertTransaction } from '/@/lib/date'
 import { toId } from '/@/lib/parsePathParams'
 
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import EditTransactionForm from '/@/components/transactionDetail/EditTransactionForm.vue'
 import TransactionDetail from '/@/components/transactionDetail/TransactionDetail.vue'
+import { useFetchGroupsUsecase } from '/@/features/group/usecase'
+import { useFetchTagsUsecase } from '/@/features/tag/usecase'
+import type { Transaction } from '/@/features/transaction/model'
+import { useFetchTransactionUsecase } from '/@/features/transaction/usecase'
+import { useFetchUsersUsecase } from '/@/features/user/usecase'
 
 const route = useRoute()
 const id = toId(route.params.id)
@@ -23,41 +24,29 @@ const id = toId(route.params.id)
 const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
-const toast = useToast()
+
 const { isUserFetched, isAdmin } = storeToRefs(userStore)
 const { isTagFetched } = storeToRefs(tagStore)
 const { isGroupFetched } = storeToRefs(groupStore)
-const { fetchUsers } = userStore
-const { fetchTags } = tagStore
-const { fetchGroups } = groupStore
 
 const isEditMode = ref(false)
 
 const transaction = ref<Transaction>()
-
-const fetchTransaction = async (id: string) => {
-  try {
-    const response = (await apis.getTransactionDetail(id)).data
-    transaction.value = convertTransaction(response)
-  } catch {
-    toast.error('入出金記録の取得に失敗しました')
-  }
-}
 
 function finishEditing(editedTransaction: Transaction) {
   transaction.value = editedTransaction
   isEditMode.value = false
 }
 
-await fetchTransaction(id)
+await useFetchTransactionUsecase(id)
 if (!isUserFetched.value) {
-  await fetchUsers()
+  await useFetchUsersUsecase()
 }
 if (!isTagFetched.value) {
-  await fetchTags()
+  await useFetchTagsUsecase()
 }
 if (!isGroupFetched.value) {
-  await fetchGroups()
+  await useFetchGroupsUsecase()
 }
 </script>
 

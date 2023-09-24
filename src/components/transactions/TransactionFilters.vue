@@ -11,6 +11,7 @@ import { useTransactionStore } from '/@/stores/transaction'
 import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
 import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 import InputText from '/@/components/shared/InputText.vue'
+import { useFetchTransactionsUsecase } from '/@/features/transaction/usecase'
 
 import SortOrderButtons from './SortOrderButtons.vue'
 
@@ -20,7 +21,6 @@ const tagStore = useTagStore()
 
 const isFilterByTarget = ref(false)
 
-const { fetchTransactions } = transactionStore
 const { filterParams } = storeToRefs(transactionStore)
 const { groupOptions } = storeToRefs(groupStore)
 const { tagIdOptions } = storeToRefs(tagStore)
@@ -51,7 +51,7 @@ function sort(sortKind: 'created_at' | 'amount') {
       filterParams.value.sort = 'amount'
     }
   }
-  fetchTransactions(filterParams.value)
+  useFetchTransactionsUsecase()
 }
 
 const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {

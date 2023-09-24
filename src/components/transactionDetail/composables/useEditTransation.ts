@@ -1,31 +1,24 @@
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import { useTagStore } from '/@/stores/tag'
-
-import type { Transaction } from '/@/lib/apiTypes'
-import type { Tag } from '/@/lib/apis'
 import apis from '/@/lib/apis'
-import { convertTransaction } from '/@/lib/date'
+
+import type { Tag } from '/@/features/tag/model'
+import { createTagIfNotExistUsecase } from '/@/features/tag/usecase'
+import type {
+  Transaction,
+  TransactionEditSeed
+} from '/@/features/transaction/model'
+import { editTransactionUsecase } from '/@/features/transaction/usecase'
 
 export type MoneyDirection = 'toTraP' | 'fromTraP'
 
-interface EditedTransaction {
-  amount: number
-  target: string
-  request: string | null
-  tags: Tag[]
-  group: string | null
-}
-
 export const useEditTransaction = (transaction: Transaction) => {
   const toast = useToast()
-  const tagStore = useTagStore()
-  const { createTagIfNotExist } = tagStore
 
   const isSending = ref(false)
 
-  const editedValue = ref<EditedTransaction>({
+  const editedValue = ref<TransactionEditSeed>({
     amount: transaction.amount,
     target: transaction.target,
     request: transaction.request,
@@ -43,7 +36,7 @@ export const useEditTransaction = (transaction: Transaction) => {
     isSending.value = true
     let tags: Tag[]
     try {
-      tags = await createTagIfNotExist(editedValue.value.tags)
+      tags = await createTagIfNotExistUsecase(editedValue.value.tags)
     } catch {
       toast.error('新規タグの作成に失敗しました')
       isSending.value = false
@@ -55,15 +48,15 @@ export const useEditTransaction = (transaction: Transaction) => {
         moneyDirection.value === 'toTraP'
           ? editedValue.value.amount
           : -editedValue.value.amount,
-      tags: tags.map(tag => tag.id)
+      tags
     }
     try {
-      const response = (
-        await apis.putTransactionDetail(transaction.id, willPutTransaction)
-      ).data
-      const nextTransaction = convertTransaction(response)
+      const res = await editTransactionUsecase(
+        transaction.id,
+        willPutTransaction
+      )
       toast.success('入出金記録を更新しました')
-      emit('finishEditing', nextTransaction)
+      emit('finishEditing', res)
     } catch {
       toast.error('入出金記録の修正に失敗しました')
     }
@@ -95,21 +88,15 @@ export const useEditTransaction = (transaction: Transaction) => {
     isSending.value = true
     try {
       const willPutTransaction = {
-        amount: transaction.amount,
-        target: transaction.target,
-        request: transaction.request,
-        tags: transaction.tags.map(tag => tag.id),
+        ...transaction,
         group: transaction.group?.id ?? null
       }
-      const response = (
-        await apis.putTransactionDetail(transaction.id, {
-          ...willPutTransaction,
-          request: requestID
-        })
-      ).data
-      const nextTransaction = convertTransaction(response)
+      const res = await editTransactionUsecase(transaction.id, {
+        ...willPutTransaction,
+        request: requestID
+      })
       toast.success('紐づいている申請を更新しました')
-      emit('finishEditing', nextTransaction)
+      emit('finishEditing', res)
     } catch {
       toast.error('紐づいている申請の更新に失敗しました')
     }
@@ -124,21 +111,15 @@ export const useEditTransaction = (transaction: Transaction) => {
     isSending.value = true
     try {
       const willPutTransaction = {
-        amount: transaction.amount,
-        target: transaction.target,
-        request: transaction.request,
-        tags: transaction.tags.map(tag => tag.id),
+        ...transaction,
         group: transaction.group?.id ?? null
       }
-      const response = (
-        await apis.putTransactionDetail(transaction.id, {
-          ...willPutTransaction,
-          request: null
-        })
-      ).data
-      const nextTransaction = convertTransaction(response)
+      const res = await editTransactionUsecase(transaction.id, {
+        ...willPutTransaction,
+        request: null
+      })
       toast.success('紐づけを解除しました')
-      emit('finishEditing', nextTransaction)
+      emit('finishEditing', res)
     } catch {
       toast.error('紐づけの解除に失敗しました')
     }

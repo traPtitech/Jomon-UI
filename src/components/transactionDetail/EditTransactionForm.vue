@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
 
 import { useGroupStore } from '/@/stores/group'
 import { directionOptions } from '/@/stores/transaction'
 
-import type { Transaction } from '/@/lib/apiTypes'
 import { formatDate } from '/@/lib/date'
 
 import InputNumber from '/@/components/shared/InputNumber.vue'
@@ -13,6 +13,7 @@ import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
 import InputText from '/@/components/shared/InputText.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import type { Transaction } from '/@/features/transaction/model'
 
 import { useEditTransaction } from './composables/useEditTransation'
 
@@ -38,7 +39,7 @@ const {
 } = useEditTransaction(props.transaction)
 const { groupOptions } = storeToRefs(groupStore)
 
-const formattedDate = formatDate(props.transaction.created_at)
+const formattedDate = computed(() => formatDate(props.transaction.createdAt))
 </script>
 
 <template>

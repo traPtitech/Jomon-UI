@@ -2,39 +2,22 @@
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
 import { storeToRefs } from 'pinia'
-import { useToast } from 'vue-toastification'
 
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
-import apis from '/@/lib/apis'
 import { isImageByName } from '/@/lib/checkFileType'
 
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 import { useRequestFile } from './composables/useRequestFile'
 
-const toast = useToast()
 const requestDetailStore = useRequestDetailStore()
 
 const { request } = storeToRefs(requestDetailStore)
 
-const { files, fetchFiles } = useRequestFile()
+const { files, fetchFiles, removeFile } = useRequestFile()
 const downloadLink = (file: string) => {
   return URL.createObjectURL(new Blob([file]))
-}
-
-async function removeFile(id: string) {
-  const result = confirm('この画像を削除しますか？')
-  if (!result) {
-    return
-  }
-  try {
-    await apis.deleteFile(id)
-    files.value = files.value.filter(file => file.id !== id)
-    toast.success('ファイルを削除しました')
-  } catch {
-    toast.error('ファイルの削除に失敗しました')
-  }
 }
 
 await fetchFiles(request.value?.files ?? [])

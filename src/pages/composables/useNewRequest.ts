@@ -5,18 +5,12 @@ import { useToast } from 'vue-toastification'
 
 import { useUserStore } from '/@/stores/user'
 
-import apis from '/@/lib/apis'
-
+import type { FileSeed } from '/@/features/file/model'
+import { createFilesUsecase } from '/@/features/file/usecase'
 import type { RequestSeed } from '/@/features/request/model'
 import { createRequestUsecase } from '/@/features/request/usecase'
 import type { Tag } from '/@/features/tag/model'
 import { createTagIfNotExistUsecase } from '/@/features/tag/usecase'
-
-export interface FileRequest {
-  name: string
-  src: string
-  type: string
-}
 
 export const useNewRequest = () => {
   const toast = useToast()
@@ -34,7 +28,7 @@ export const useNewRequest = () => {
     tags: [],
     group: null
   })
-  const files = ref<FileRequest[]>([])
+  const files = ref<FileSeed[]>([])
 
   const postRequest = async () => {
     if (
@@ -73,10 +67,7 @@ export const useNewRequest = () => {
       }
       const res = await createRequestUsecase(requestSeedWithNewTags)
       try {
-        const promises = files.value.map((file: FileRequest) => {
-          apis.postFile(file.src, file.name, res.id)
-        })
-        await Promise.all(promises)
+        await createFilesUsecase(res.id, files.value)
         toast.success('申請を作成しました')
         router.push('/')
       } catch (e) {

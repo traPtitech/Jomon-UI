@@ -1,14 +1,11 @@
-import type { AxiosResponse } from 'axios'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import apis, { type FileMeta } from '/@/lib/apis'
-
-export interface File {
-  id: string
-  file: string
-  name: string
-}
+import type { File } from '/@/features/file/model'
+import {
+  deleteFileUsecase,
+  useFetchFileWithMetasUsecase
+} from '/@/features/file/usecase'
 
 export const useRequestFile = () => {
   const toast = useToast()
@@ -16,23 +13,26 @@ export const useRequestFile = () => {
   const files = ref<File[]>([])
 
   const fetchFiles = async (ids: string[]) => {
-    const filePromises: Promise<AxiosResponse<string>>[] = []
-    const fileMetaPromises: Promise<AxiosResponse<FileMeta>>[] = []
     try {
-      ids.forEach(async id => {
-        filePromises.push(apis.getFile(id))
-        fileMetaPromises.push(apis.getFileMeta(id))
-      })
-      const fileList = await Promise.all(filePromises)
-      const fileMetaList = await Promise.all(fileMetaPromises)
-      files.value = fileList.map((file, index) => ({
-        id: fileMetaList[index].data.id,
-        file: file.data,
-        name: fileMetaList[index].data.name
-      }))
+      files.value = await useFetchFileWithMetasUsecase(ids)
     } catch {
       toast.error('ファイルの取得に失敗しました')
     }
   }
-  return { files, fetchFiles }
+
+  const removeFile = async (id: string) => {
+    const result = confirm('この画像を削除しますか？')
+    if (!result) {
+      return
+    }
+    try {
+      await deleteFileUsecase(id)
+      files.value = files.value.filter(file => file.id !== id)
+      toast.success('ファイルを削除しました')
+    } catch {
+      toast.error('ファイルの削除に失敗しました')
+    }
+  }
+
+  return { files, fetchFiles, removeFile }
 }

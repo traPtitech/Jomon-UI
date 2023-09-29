@@ -4,12 +4,6 @@ import {
   convertRequestDetailFromData,
   convertRequestFromData
 } from '/@/features/request/converter'
-import type {
-  Request,
-  RequestDetail,
-  RequestQuerySeed,
-  RequestSeed
-} from '/@/features/request/model'
 import { convertRequestCommentFromData } from '/@/features/requestComment/converter'
 import type { RequestComment } from '/@/features/requestComment/model'
 import { convertRequestStatusFromData } from '/@/features/requestStatus/converter'
@@ -17,6 +11,13 @@ import type {
   RequestStatusDetail,
   RequestStatus
 } from '/@/features/requestStatus/model'
+
+import type {
+  Request,
+  RequestDetail,
+  RequestQuerySeed,
+  RequestSeed
+} from './model'
 
 export const useRequestRepository = () => {
   return createRequestRepository()

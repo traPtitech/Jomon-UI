@@ -6,7 +6,8 @@ import type {
   TransactionCreateSeed,
   TransactionEditSeed
 } from '/@/features/transaction/model'
-import { useTransactionRepository } from '/@/features/transaction/repository'
+
+import { useTransactionRepository } from './repository'
 
 export const useFetchTransactionsUsecase = async () => {
   const repository = useTransactionRepository()

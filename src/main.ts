@@ -6,15 +6,13 @@ import type { PluginOptions } from 'vue-toastification'
 import Toast, { POSITION } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 
+import { initMock } from '/@/lib/msw'
+
 import App from './App.vue'
-import { worker } from './mocks/browser'
 import router from './router'
 
-if (process.env.NODE_ENV === 'development') {
-  worker.start({
-    onUnhandledRequest: 'bypass'
-  })
-}
+initMock()
+
 const app = createApp(App)
 
 const options: PluginOptions = {

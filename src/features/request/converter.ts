@@ -6,10 +6,11 @@ import type {
 } from '/@/lib/apis'
 
 import { convertGroupFromData } from '/@/features/group/converter'
-import type { Request, RequestDetail } from '/@/features/request/model'
 import { convertRequestCommentFromData } from '/@/features/requestComment/converter'
 import { convertRequestStatusFromData } from '/@/features/requestStatus/converter'
 import { convertRequestTargetFromData } from '/@/features/requestTarget/converter'
+
+import type { Request, RequestDetail } from './model'
 
 export const convertRequestFromData = (request: RequestData): Request => ({
   id: request.id,

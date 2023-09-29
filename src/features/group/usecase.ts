@@ -3,11 +3,8 @@ import { storeToRefs } from 'pinia'
 import { useGroupStore } from '/@/stores/group'
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 
-import type {
-  GroupSeed,
-  GroupSeedWithMemberAndOwners
-} from '/@/features/group/model'
-import { useGroupRepository } from '/@/features/group/repository'
+import type { GroupSeed, GroupSeedWithMemberAndOwners } from './model'
+import { useGroupRepository } from './repository'
 
 export const useFetchGroupsUsecase = async () => {
   const repository = useGroupRepository()

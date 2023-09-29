@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 
 import type { Status as RequestStatusData } from '/@/lib/apis'
 
-import type { RequestStatusDetail } from '/@/features/requestStatus/model'
+import type { RequestStatusDetail } from './model'
 
 export const convertRequestStatusFromData = (
   status: RequestStatusData

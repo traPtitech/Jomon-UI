@@ -1,5 +1,5 @@
-import clubBudgetRequestTemplate from '/@/md/clubBudgetRequest.md?raw'
-import travelingExpenseRequestTemplate from '/@/md/travelingExpenseRequest.md?raw'
+import clubBudgetRequestTemplate from './clubBudgetRequest.md?raw'
+import travelingExpenseRequestTemplate from './travelingExpenseRequest.md?raw'
 
 export const requestTemplates = [
   { name: '部費利用申請', value: clubBudgetRequestTemplate },

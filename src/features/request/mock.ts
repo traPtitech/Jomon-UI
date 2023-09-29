@@ -9,10 +9,16 @@ import type {
 } from '/@/lib/apis'
 
 import { mockGroup } from '/@/features/group/mock'
-import { mockRequestComment } from '/@/features/requestComment/mock'
-import { mockRequestStatus } from '/@/features/requestStatus/mock'
-import { mockRequestTarget } from '/@/features/requestTarget/mock'
-import { mockTag } from '/@/features/tag/mock'
+import {
+  mockRequestComment,
+  mockRequestComments
+} from '/@/features/requestComment/mock'
+import {
+  mockRequestStatus,
+  mockRequestStatuses
+} from '/@/features/requestStatus/mock'
+import { mockRequestTargets } from '/@/features/requestTarget/mock'
+import { mockTags } from '/@/features/tag/mock'
 
 const mockRequest: Request = {
   id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -24,21 +30,24 @@ const mockRequest: Request = {
   content: `# aaaaa
 - aaa
   - bbb`,
-  targets: [mockRequestTarget],
-  tags: [mockTag],
+  targets: mockRequestTargets,
+  tags: mockTags,
   group: mockGroup
 }
 
 const mockRequestDetail: RequestDetail = {
   ...mockRequest,
-  comments: [mockRequestComment],
-  statuses: [mockRequestStatus],
+  comments: mockRequestComments,
+  statuses: mockRequestStatuses,
   files: ['3fa85f64-5717-4562-b3fc-2c963f66afa6']
 }
 
 export const requestHandlers = [
   rest.get('/api/requests', (_req, res, ctx) => {
-    return res(ctx.status(200), ctx.json<Request[]>([mockRequest]))
+    return res(
+      ctx.status(200),
+      ctx.json<Request[]>(Array(50).fill(mockRequest))
+    )
   }),
   rest.get('/api/requests/:id', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json<RequestDetail>(mockRequestDetail))

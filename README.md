@@ -21,3 +21,27 @@
 npm install
 npm run dev
 ```
+
+## featuresディレクトリについて
+各featureについて、ディレクトリを設けています。
+参考: https://zenn.dev/knowledgework/articles/91a3dd575f99a2
+selectorは現状storeに置くことで済ませています
+
+- model
+  - featureに関連する型を定義します
+- repository
+  - openapiから生成されたapiを用いた通信と、後述のconverterを用いたデータの変換をします
+- usecase
+  - 実際に使うときの処理です
+- converter
+  - openapiから生成されたサーバーの型とフロントで扱う型の相互変換をします
+  - 今はseedからseedDataへの変換はここに書かずにrepositoryで直接書いてしまっています
+- mock
+  - mswで使うためのmockデータとmock handlerを定義します
+
+データの型の流れ
+- GET
+  - 生成された型→(converter)→modelの型
+- POST, PUT
+  - modelのseed型→(repositoryで変換)→openapiの型
+

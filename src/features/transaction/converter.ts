@@ -3,7 +3,8 @@ import { DateTime } from 'luxon'
 import type { Transaction as TransactionData } from '/@/lib/apis'
 
 import { convertGroupFromData } from '/@/features/group/converter'
-import type { Transaction } from '/@/features/transaction/model'
+
+import type { Transaction } from './model'
 
 export const convertTransactionFromData = (
   transaction: TransactionData

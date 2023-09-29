@@ -1,6 +1,5 @@
-import { convertFileAndMeta } from '/@/features/file/converter'
-import type { FileSeed, File } from '/@/features/file/model'
-
+import { convertFileAndMeta } from './converter'
+import type { FileSeed, File } from './model'
 import { useFileRepository } from './repository'
 
 export const useFetchFilesUsecase = async (fileIds: string[]) => {

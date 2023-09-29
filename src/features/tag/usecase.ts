@@ -2,9 +2,8 @@ import { storeToRefs } from 'pinia'
 
 import { useTagStore } from '/@/stores/tag'
 
-import { useTagRepository } from '/@/features/tag/repository'
-
 import type { Tag } from './model'
+import { useTagRepository } from './repository'
 
 export const useFetchTagsUsecase = async () => {
   const repository = useTagRepository()

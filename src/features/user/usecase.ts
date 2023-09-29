@@ -2,7 +2,7 @@ import { storeToRefs } from 'pinia'
 
 import { useUserStore } from '/@/stores/user'
 
-import { useUserRepository } from '/@/features/user/repository'
+import { useUserRepository } from './repository'
 
 export const useFetchUsersUsecase = async () => {
   const repository = useUserRepository()

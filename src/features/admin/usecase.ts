@@ -2,7 +2,7 @@ import { storeToRefs } from 'pinia'
 
 import { useAdminStore } from '/@/stores/admin'
 
-import { useAdminRepository } from '/@/features/admin/repository'
+import { useAdminRepository } from './repository'
 
 export const useFetchAdminsUsecase = async () => {
   const repository = useAdminRepository()

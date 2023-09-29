@@ -5,7 +5,7 @@ import type {
   GroupDetail as GroupDetailData
 } from '/@/lib/apis'
 
-import type { Group, GroupDetail } from '/@/features/group/model'
+import type { Group, GroupDetail } from './model'
 
 export const convertGroupFromData = (group: GroupData): Group => ({
   id: group.id,

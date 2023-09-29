@@ -31,14 +31,13 @@ const { isGroupFetched } = storeToRefs(groupStore)
 
 const isEditMode = ref(false)
 
-const transaction = ref<Transaction>()
+const transaction = ref<Transaction>(await useFetchTransactionUsecase(id)) //TODO: この書き方いいのかな
 
 function finishEditing(editedTransaction: Transaction) {
   transaction.value = editedTransaction
   isEditMode.value = false
 }
 
-await useFetchTransactionUsecase(id)
 if (!isUserFetched.value) {
   await useFetchUsersUsecase()
 }

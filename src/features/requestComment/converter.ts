@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 
 import type { Comment as CommentData } from '/@/lib/apis'
 
-import type { RequestComment } from '/@/features/requestComment/model'
+import type { RequestComment } from './model'
 
 export const convertRequestCommentFromData = (
   comment: CommentData

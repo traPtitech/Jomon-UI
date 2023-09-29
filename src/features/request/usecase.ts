@@ -3,9 +3,10 @@ import { storeToRefs } from 'pinia'
 import { useRequestStore } from '/@/stores/request'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
-import type { RequestSeed } from '/@/features/request/model'
-import { useRequestRepository } from '/@/features/request/repository'
 import type { RequestStatus } from '/@/features/requestStatus/model'
+
+import type { RequestSeed } from './model'
+import { useRequestRepository } from './repository'
 
 export const useFetchRequestsUsecase = async () => {
   const repository = useRequestRepository()

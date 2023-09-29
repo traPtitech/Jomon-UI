@@ -1,10 +1,7 @@
 import apis from '/@/lib/apis'
 
-import {
-  convertGroupDetailFromData,
-  convertGroupFromData
-} from '/@/features/group/converter'
-import type { Group, GroupDetail, GroupSeed } from '/@/features/group/model'
+import { convertGroupDetailFromData, convertGroupFromData } from './converter'
+import type { Group, GroupDetail, GroupSeed } from './model'
 
 export const useGroupRepository = () => {
   return createGroupRepository()

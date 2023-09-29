@@ -90,4 +90,3 @@ if (!isUserFetched.value) {
     </form>
   </div>
 </template>
-../templates/consts

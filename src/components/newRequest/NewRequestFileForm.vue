@@ -5,14 +5,14 @@ import { ref } from 'vue'
 
 import { isImageByType } from '/@/lib/checkFileType'
 
-import type { FileRequest } from '/@/pages/composables/useNewRequest'
+import type { FileSeed } from '/@/features/file/model'
 
 interface Props {
-  files: FileRequest[]
+  files: FileSeed[]
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits<{ (e: 'input', value: FileRequest[]): void }>()
+const emit = defineEmits<{ (e: 'input', value: FileSeed[]): void }>()
 
 const inputRef = ref()
 
@@ -20,8 +20,7 @@ function handleFileChange(e: Event) {
   if (!(e.target instanceof HTMLInputElement) || !e.target.files) {
     return
   }
-  for (let i = 0; i < e.target.files.length; i++) {
-    const file = e.target.files[i]
+  Array.from(e.target.files).forEach(file => {
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = () => {
@@ -30,7 +29,7 @@ function handleFileChange(e: Event) {
         { name: file.name, src: reader.result as string, type: file.type }
       ])
     }
-  }
+  })
   if (inputRef.value) {
     inputRef.value.value = null
   }

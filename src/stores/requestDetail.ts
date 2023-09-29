@@ -1,17 +1,11 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { useToast } from 'vue-toastification'
 
-import type { RequestDetail } from '/@/lib/apiTypes'
-import type { PostRequest, User, RequestTarget } from '/@/lib/apis'
-import apis from '/@/lib/apis'
-import { convertRequestDetail } from '/@/lib/date'
-
-import type { EditedRequest } from '/@/pages/composables/useRequestDetail'
+import type { RequestDetail, RequestSeed } from '/@/features/request/model'
+import type { RequestTarget } from '/@/features/requestTarget/model'
+import type { User } from '/@/features/user/model'
 
 export const useRequestDetailStore = defineStore('requestDetail', () => {
-  const toast = useToast()
-
   const request = ref<RequestDetail>()
 
   const targets = computed((): RequestTarget[] => {
@@ -25,54 +19,25 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
   })
 
   const editMode = ref('')
-  const editedValue = ref<EditedRequest>({
-    created_by: '',
+  const editedValue = ref<RequestSeed>({
+    createdBy: '',
     title: '',
     content: '',
     targets: [],
     tags: [],
     group: null
   })
-  const isRequestCreater = (user: User | undefined) => {
+
+  const isRequestCreator = computed(() => (user: User | undefined) => {
     if (!user || request.value === undefined) return false
     return user.id === request.value.created_by
-  }
-
-  const fetchRequestDetail = async (id: string) => {
-    try {
-      const response = (await apis.getRequestDetail(id)).data
-      request.value = convertRequestDetail(response)
-
-      editedValue.value = {
-        created_by: request.value.created_by,
-        title: request.value.title,
-        content: request.value.content,
-        targets: targets.value,
-        tags: request.value.tags,
-        group: request.value.group?.id ?? null
-      }
-    } catch {
-      toast.error('申請の取得に失敗しました')
-    }
-  }
-  const putRequest = async (id: string, willPutRequest: PostRequest) => {
-    try {
-      const response = (await apis.putRequestDetail(id, willPutRequest)).data
-      request.value = convertRequestDetail(response)
-
-      toast.success('申請を修正しました')
-    } catch {
-      toast.error('申請の修正に失敗しました')
-    }
-  }
+  })
 
   return {
     request,
     targets,
     editMode,
     editedValue,
-    isRequestCreater,
-    fetchRequestDetail,
-    putRequest
+    isRequestCreator
   }
 })

@@ -1,15 +1,17 @@
 <script lang="ts" setup>
-import type { Transaction } from '/@/lib/apiTypes'
+import { computed } from 'vue'
+
 import { formatDate } from '/@/lib/date'
 
 import TagsGroup from '/@/components/shared/TagsGroup.vue'
+import type { Transaction } from '/@/features/transaction/model'
 
 interface Props {
   transaction: Transaction
 }
 const props = defineProps<Props>()
 
-const formattedDate = formatDate(props.transaction.created_at)
+const formattedDate = computed(() => formatDate(props.transaction.createdAt))
 </script>
 
 <template>

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import type { Tag } from '/@/lib/apis'
-
 import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
+import type { Tag } from '/@/features/tag/model'
 
 interface Props {
   tags: Tag[]

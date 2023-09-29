@@ -14,6 +14,10 @@ import RequestFilters from '/@/components/requests/RequestFilters.vue'
 import RequestItem from '/@/components/requests/RequestItem.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import { useFetchGroupsUsecase } from '/@/features/group/usecase'
+import { useFetchRequestsUsecase } from '/@/features/request/usecase'
+import { useFetchTagsUsecase } from '/@/features/tag/usecase'
+import { useFetchUsersUsecase } from '/@/features/user/usecase'
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))
@@ -27,10 +31,6 @@ const { isRequestFetched } = storeToRefs(requestStore)
 const { isTagFetched } = storeToRefs(tagStore)
 const { isGroupFetched } = storeToRefs(groupStore)
 const { isUserFetched } = storeToRefs(userStore)
-const { fetchRequests } = requestStore
-const { fetchTags } = tagStore
-const { fetchGroups } = groupStore
-const { fetchUsers } = userStore
 
 const sliceRequestsAt = (index: number, n: number) => {
   const start = (index - 1) * n
@@ -39,16 +39,16 @@ const sliceRequestsAt = (index: number, n: number) => {
 }
 
 if (!isRequestFetched.value) {
-  fetchRequests()
+  useFetchRequestsUsecase()
 }
 if (!isTagFetched.value) {
-  fetchTags()
+  useFetchTagsUsecase()
 }
 if (!isGroupFetched.value) {
-  fetchGroups()
+  useFetchGroupsUsecase()
 }
 if (!isUserFetched.value) {
-  fetchUsers()
+  useFetchUsersUsecase()
 }
 
 watch(
@@ -86,7 +86,7 @@ watch(
     </div>
   </div>
   <PaginationBar
-    v-if="requests && requests.length > 0"
+    v-if="requests.length > 0"
     class="mt-4"
     :current-page="page"
     path="/requests"

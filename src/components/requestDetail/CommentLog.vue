@@ -5,19 +5,19 @@ import { useRoute } from 'vue-router'
 
 import { useUserStore } from '/@/stores/user'
 
-import type { Comment } from '/@/lib/apiTypes'
 import { formatDateAndTime } from '/@/lib/date'
 
 import MarkdownIt from '/@/components//shared/MarkdownIt.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
+import type { RequestComment } from '/@/features/requestComment/model'
 
 interface Props {
-  comment: Comment
+  comment: RequestComment
 }
 
 const props = defineProps<Props>()
 
-const formattedDateAndTime = formatDateAndTime(props.comment.created_at)
+const formattedDateAndTime = formatDateAndTime(props.comment.createdAt)
 
 const userStore = useUserStore()
 const { userMap } = storeToRefs(userStore)

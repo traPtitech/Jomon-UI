@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Group } from '/@/lib/apis'
+import type { Group } from '/@/features/group/model'
 
 interface Props {
   group: Group

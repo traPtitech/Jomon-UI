@@ -5,15 +5,18 @@ import { RouterLink, useRoute } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
-import { useTransactionStore, defaultParams } from '/@/stores/transaction'
+import { useTransactionStore } from '/@/stores/transaction'
 import { useUserStore } from '/@/stores/user'
 
-import { toId, toPage } from '/@/lib/parseQueryParams'
+import { toPage } from '/@/lib/parseQueryParams'
 
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import TransactionFilters from '/@/components/transactions/TransactionFilters.vue'
 import TransactionItem from '/@/components/transactions/TransactionItem.vue'
+import { useFetchGroupsUsecase } from '/@/features/group/usecase'
+import { useFetchTagsUsecase } from '/@/features/tag/usecase'
+import { useFetchTransactionsUsecase } from '/@/features/transaction/usecase'
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))
@@ -23,9 +26,6 @@ const userStore = useUserStore()
 const tagStore = useTagStore()
 const groupStore = useGroupStore()
 const { transactions } = storeToRefs(transactionStore)
-const { fetchTransactions } = transactionStore
-const { fetchTags } = tagStore
-const { fetchGroups } = groupStore
 const { isGroupFetched } = storeToRefs(groupStore)
 const { isTagFetched } = storeToRefs(tagStore)
 const { isAdmin } = storeToRefs(userStore)
@@ -36,15 +36,13 @@ const sliceTransactionAt = (index: number, n: number) => {
   return transactions.value?.slice(start, end)
 }
 
-await fetchTransactions({
-  ...defaultParams,
-  request: toId(route.query.requestID)
-})
+//TODO:  `request: toId(route.query.requestID)`でフィルターする
+await useFetchTransactionsUsecase()
 if (!isGroupFetched.value) {
-  await fetchGroups()
+  await useFetchGroupsUsecase()
 }
 if (!isTagFetched.value) {
-  await fetchTags()
+  await useFetchTagsUsecase()
 }
 
 watch(

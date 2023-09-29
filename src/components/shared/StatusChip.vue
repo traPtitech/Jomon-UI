@@ -8,7 +8,7 @@ import {
 } from '@heroicons/vue/24/solid'
 import { computed } from 'vue'
 
-import type { RequestStatus } from '/@/consts/consts'
+import type { RequestStatus } from '/@/features/requestStatus/model'
 
 interface Props {
   status: RequestStatus

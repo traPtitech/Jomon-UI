@@ -3,11 +3,11 @@ import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
 import { useRequestDetailStore } from '/@/stores/requestDetail'
-import { useTagStore } from '/@/stores/tag'
 
-import type { RequestTarget, Tag } from '/@/lib/apis'
-import apis from '/@/lib/apis'
-import { convertRequestDetail } from '/@/lib/date'
+import type { RequestSeed } from '/@/features/request/model'
+import { editRequestUsecase } from '/@/features/request/usecase'
+import type { Tag } from '/@/features/tag/model'
+import { createTagIfNotExistUsecase } from '/@/features/tag/usecase'
 
 export type EditMode =
   | 'title'
@@ -18,20 +18,9 @@ export type EditMode =
   | 'targets'
   | ''
 
-export interface EditedRequest {
-  created_by: string
-  title: string
-  content: string
-  targets: RequestTarget[]
-  tags: Tag[]
-  group: string | null
-}
-
 export const useRequestDetail = () => {
   const requestDetailStore = useRequestDetailStore()
   const toast = useToast()
-  const tagStore = useTagStore()
-  const { createTagIfNotExist } = tagStore
   const { request, editedValue } = storeToRefs(requestDetailStore)
 
   const isSending = ref(false)
@@ -56,29 +45,31 @@ export const useRequestDetail = () => {
     editMode.value = ''
   }
 
-  const putRequest = async (id: string, editedRequest: EditedRequest) => {
+  const putRequest = async (id: string, requestSeed: RequestSeed) => {
     isSending.value = true
     let tags: Tag[]
     try {
-      tags = await createTagIfNotExist(editedRequest.tags)
+      tags = await createTagIfNotExistUsecase(requestSeed.tags)
     } catch {
       toast.error('新規タグの作成に失敗しました')
       isSending.value = false
       return
     }
-    const willPutRequest = {
-      ...editedRequest,
-      tags: tags.map(tag => tag.id)
-    }
     try {
-      const response = (await apis.putRequestDetail(id, willPutRequest)).data
-      request.value = convertRequestDetail(response)
+      const requestSeedWithNewTags = {
+        ...requestSeed,
+        tags
+      }
+      await editRequestUsecase(id, requestSeedWithNewTags)
       toast.success('申請を更新しました')
-    } catch {
-      toast.error('申請の更新に失敗しました')
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message)
+      }
     }
     isSending.value = false
   }
+
   return {
     isSending,
     editMode,

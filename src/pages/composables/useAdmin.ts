@@ -5,7 +5,10 @@ import { useToast } from 'vue-toastification'
 import { useAdminStore } from '/@/stores/admin'
 import { useUserStore } from '/@/stores/user'
 
-import apis from '/@/lib/apis'
+import {
+  addAdminsUsecase,
+  removeAdminsUsecase
+} from '/@/features/admin/usecase'
 
 export const useAdmin = () => {
   const { users } = storeToRefs(useUserStore())
@@ -13,18 +16,15 @@ export const useAdmin = () => {
   const toast = useToast()
 
   const absentMembers = computed(() => {
-    if (users.value !== undefined && admins !== undefined) {
-      return users.value
-        .filter(user => !admins.value?.includes(user.id))
-        .map(user => {
-          return {
-            key: user.name,
-            value: user.id
-          }
-        })
-    } else {
+    if (users.value === undefined || admins === undefined) {
       return []
     }
+    return users.value
+      .filter(user => !admins.value?.includes(user.id))
+      .map(user => ({
+        key: user.name,
+        value: user.id
+      }))
   })
 
   const isSending = ref(false)
@@ -39,19 +39,16 @@ export const useAdmin = () => {
     }
     try {
       isSending.value = true
-      await apis.postAdmins(adminsToBeAdded)
-      if (admins.value !== undefined) {
-        admins.value.push(...adminsToBeAdded)
-      } else {
-        admins.value = adminsToBeAdded
-      }
+      await addAdminsUsecase(adminsToBeAdded)
       toast.success('管理者を追加しました')
-    } catch {
-      toast.error('管理者の追加に失敗しました')
-    } finally {
-      isSending.value = false
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message)
+      }
     }
+    isSending.value = false
   }
+
   const removeAdmins = async (adminsToBeRemoved: string[]) => {
     if (adminsToBeRemoved.length === 0) {
       toast.warning('1人以上選択してください')
@@ -62,20 +59,14 @@ export const useAdmin = () => {
     }
     try {
       isSending.value = true
-      await apis.deleteAdmins(adminsToBeRemoved)
-      if (admins.value !== undefined) {
-        admins.value = admins.value.filter(
-          id => !adminsToBeRemoved.includes(id)
-        )
-      } else {
-        throw new Error('admins is empty')
-      }
+      await removeAdminsUsecase(adminsToBeRemoved)
       toast.success('管理者を削除しました')
-    } catch {
-      toast.error('管理者の削除に失敗しました')
-    } finally {
-      isSending.value = false
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message)
+      }
     }
+    isSending.value = false
   }
   return { absentMembers, isSending, addAdmins, removeAdmins }
 }

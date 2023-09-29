@@ -1,16 +1,10 @@
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import { useRequestDetailStore } from '/@/stores/requestDetail'
-
-import apis from '/@/lib/apis'
-import { convertRequestComment } from '/@/lib/date'
+import { createCommentUsecase } from '/@/features/request/usecase'
 
 export const useNewComment = (requestId: string) => {
-  const requestDetailStore = useRequestDetailStore()
   const toast = useToast()
-  const { request } = storeToRefs(requestDetailStore)
 
   const comment = ref('')
   const isSending = ref(false)
@@ -22,16 +16,13 @@ export const useNewComment = (requestId: string) => {
     }
     try {
       isSending.value = true
-      const response = (
-        await apis.postComment(requestId, {
-          comment: comment.value
-        })
-      ).data
+      await createCommentUsecase(requestId, comment.value)
       comment.value = ''
-      request.value?.comments.push(convertRequestComment(response))
       toast.success('コメントを送信しました')
-    } catch {
-      toast.error('コメントの送信に失敗しました')
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message)
+      }
     }
     isSending.value = false
   }

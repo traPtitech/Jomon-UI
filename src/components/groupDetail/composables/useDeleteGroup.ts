@@ -1,19 +1,13 @@
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
-import { useGroupStore } from '/@/stores/group'
-
-import apis from '/@/lib/apis'
+import { deleteGroupUsecase } from '/@/features/group/usecase'
 
 export const useDeleteGroup = () => {
   const router = useRouter()
 
-  const groupStore = useGroupStore()
   const toast = useToast()
-
-  const { groups } = storeToRefs(groupStore)
 
   const isDeleting = ref(false)
 
@@ -23,16 +17,13 @@ export const useDeleteGroup = () => {
     }
     try {
       isDeleting.value = true
-      await apis.deleteGroup(id)
-      if (groups.value !== undefined) {
-        groups.value = groups.value.filter(group => group.id !== id)
-        router.push('/groups')
-      } else {
-        throw new Error('group does not exist')
-      }
+      await deleteGroupUsecase(id)
       toast.success('グループを削除しました')
-    } catch {
-      toast.error('グループの削除に失敗しました')
+      router.push('/groups')
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e)
+      }
     }
     isDeleting.value = false
   }

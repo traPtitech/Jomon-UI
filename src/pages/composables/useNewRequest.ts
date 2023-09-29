@@ -3,54 +3,32 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
-import { useRequestStore } from '/@/stores/request'
-import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-import type { Request as APIRequest, RequestTarget, Tag } from '/@/lib/apis'
-import apis from '/@/lib/apis'
-import { convertRequest } from '/@/lib/date'
-
-export interface FileRequest {
-  name: string
-  src: string
-  type: string
-}
-
-interface NewRequest {
-  created_by: string
-  title: string
-  content: string
-  targets: RequestTarget[]
-  tags: Tag[]
-  group: string | null
-}
+import type { FileSeed } from '/@/features/file/model'
+import { createFilesUsecase } from '/@/features/file/usecase'
+import type { RequestSeed } from '/@/features/request/model'
+import { createRequestUsecase } from '/@/features/request/usecase'
+import type { Tag } from '/@/features/tag/model'
+import { createTagIfNotExistUsecase } from '/@/features/tag/usecase'
 
 export const useNewRequest = () => {
   const toast = useToast()
   const router = useRouter()
-  const requestStore = useRequestStore()
   const userStore = useUserStore()
-  const tagStore = useTagStore()
-  const { createTagIfNotExist } = tagStore
   const { me } = storeToRefs(userStore)
-  const { requests } = storeToRefs(requestStore)
 
   const isSending = ref(false)
 
-  const request = ref<NewRequest>({
-    created_by: me.value?.id ?? '',
+  const request = ref<RequestSeed>({
+    createdBy: me.value?.id ?? '',
     title: '',
     targets: [{ target: '', amount: 0 }],
     content: '',
     tags: [],
     group: null
   })
-  const files = ref<FileRequest[]>([])
-
-  const postFile = async (requestId: string, name: string, file: string) => {
-    await apis.postFile(file, name, requestId)
-  }
+  const files = ref<FileSeed[]>([])
 
   const postRequest = async () => {
     if (
@@ -73,37 +51,34 @@ export const useNewRequest = () => {
 
     let tags: Tag[]
     try {
-      tags = await createTagIfNotExist(request.value.tags)
-    } catch {
-      toast.error('新規タグの作成に失敗しました')
+      tags = await createTagIfNotExistUsecase(request.value.tags)
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error('新規タグの作成に失敗しました')
+      }
       isSending.value = false
       return
     }
-    const willPostRequest = {
-      ...request.value,
-      tags: tags.map(tag => tag.id)
-    }
 
     try {
-      const response: APIRequest = (await apis.postRequest(willPostRequest))
-        .data
-      const newRequest = convertRequest(response)
-      if (requests.value) {
-        requests.value.unshift(newRequest)
-      } else {
-        requests.value = [newRequest]
+      const requestSeedWithNewTags = {
+        ...request.value,
+        tags
       }
+      const res = await createRequestUsecase(requestSeedWithNewTags)
       try {
-        files.value.forEach((file: FileRequest) => {
-          postFile(response.id, file.name, file.src)
-        })
+        await createFilesUsecase(res.id, files.value)
         toast.success('申請を作成しました')
         router.push('/')
-      } catch {
-        toast.error('申請の作成に失敗しました')
+      } catch (e) {
+        if (e instanceof Error) {
+          toast.error(e.message)
+        }
       }
-    } catch {
-      toast.error('申請の作成に失敗しました')
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message)
+      }
     }
     isSending.value = false
   }

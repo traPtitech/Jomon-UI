@@ -1,16 +1,14 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 
+import { useFetchMeUsecase } from '/@/features/user/usecase'
+
 import JomonHeader from './components/navigation/JomonHeader.vue'
-import { useUserStore } from './stores/user'
 import './styles/main.css'
 import './styles/toast.css'
 
-const userStore = useUserStore()
-const { fetchMe } = userStore
-
 onMounted(async () => {
-  await fetchMe()
+  await useFetchMeUsecase()
 })
 </script>
 

@@ -5,13 +5,11 @@ import { useToast } from 'vue-toastification'
 
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
-import apis from '/@/lib/apis'
-import { convertRequestComment, convertRequestStatus } from '/@/lib/date'
-
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
-import type { RequestStatus } from '/@/consts/consts'
+import { changeStatusUsecase } from '/@/features/request/usecase'
+import type { RequestStatus } from '/@/features/requestStatus/model'
 
 interface Props {
   nextStatus: RequestStatus
@@ -30,25 +28,17 @@ const { request } = storeToRefs(requestDetailStore)
 const comment = ref('')
 
 async function putStatus(nextStatus: RequestStatus, comment: string) {
-  const statusRequest = {
-    status: nextStatus,
-    comment: comment
-  }
   try {
     if (request.value === undefined) {
       throw new Error('request is undefined')
     }
-    const response = (await apis.putStatus(request.value.id, statusRequest))
-      .data
-    request.value.statuses.push(convertRequestStatus(response))
-    if (response.comment !== undefined) {
-      request.value.comments.push(convertRequestComment(response.comment))
-    }
-    request.value.status = response.status
+    await changeStatusUsecase(request.value.id, nextStatus, comment)
     toast.success('申請の状態を変更しました')
     emit('closeModal')
-  } catch {
-    toast.error('申請の状態の変更に失敗しました')
+  } catch (e) {
+    if (e instanceof Error) {
+      toast.error(e.message)
+    }
   }
 }
 </script>

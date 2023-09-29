@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
 
 import { useUserStore } from '/@/stores/user'
 
@@ -8,17 +10,33 @@ import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
 import InputText from '/@/components/shared/InputText.vue'
 import InputTextarea from '/@/components/shared/InputTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import { createGroupUsecase } from '/@/features/group/usecase'
+import { useFetchUsersUsecase } from '/@/features/user/usecase'
 
 import { useNewGroup } from './composables/useNewGroup'
 
+const toast = useToast()
+const router = useRouter()
+
 const userStore = useUserStore()
-const { fetchUsers } = userStore
 const { isUserFetched, userOptions } = storeToRefs(userStore)
 
-const { isSending, group, postGroup } = useNewGroup()
+const { isSending, group } = useNewGroup()
+
+const handleCreateGroup = async () => {
+  try {
+    await createGroupUsecase(group.value)
+    toast.success('グループを作成しました')
+    router.push('/groups')
+  } catch (e) {
+    if (e instanceof Error) {
+      toast.error(e.message)
+    }
+  }
+}
 
 if (!isUserFetched.value) {
-  await fetchUsers()
+  await useFetchUsersUsecase()
 }
 </script>
 
@@ -73,7 +91,7 @@ if (!isUserFetched.value) {
           :disabled="isSending"
           font-size="xl"
           padding="md"
-          @click="postGroup">
+          @click="handleCreateGroup">
           グループを作成する
         </SimpleButton>
       </div>

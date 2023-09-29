@@ -5,7 +5,10 @@ import { useToast } from 'vue-toastification'
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
 
-import apis from '/@/lib/apis'
+import {
+  addGroupMembersUsecase,
+  removeGroupMembersUsecase
+} from '/@/features/group/usecase'
 
 export const useGroupMember = () => {
   const groupDetailStore = useGroupDetailStore()
@@ -20,49 +23,42 @@ export const useGroupMember = () => {
     }
     return users.value
       .filter(user => !group.value?.members.includes(user.id))
-      .map(user => {
-        return {
-          key: user.name,
-          value: user.id
-        }
-      })
+      .map(user => ({
+        key: user.name,
+        value: user.id
+      }))
   })
 
   const isSending = ref(false)
 
   const addMembers = async (membersToBeAdded: string[]) => {
-    if (membersToBeAdded.length === 0 || group.value === undefined) {
+    if (group.value === undefined) {
       return
     }
     try {
       isSending.value = true
-      await apis.postGroupMembers(group.value.id, membersToBeAdded)
-      const nextGroup = {
-        ...group.value,
-        members: [...group.value.members, ...membersToBeAdded]
-      }
-      group.value = nextGroup
+      await addGroupMembersUsecase(group.value.id, membersToBeAdded)
       toast.success('グループメンバーを追加しました')
-    } catch {
-      toast.error('グループメンバーの追加に失敗しました')
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message)
+      }
     }
     isSending.value = false
   }
+
   const removeMember = async (id: string) => {
     if (group.value === undefined) {
       return
     }
     try {
       isSending.value = true
-      await apis.deleteGroupMembers(group.value.id, [id])
-      const nextGroup = {
-        ...group.value,
-        members: group.value.members.filter(member => member !== id)
-      }
-      group.value = nextGroup
+      await removeGroupMembersUsecase(group.value.id, [id])
       toast.success('グループメンバーを削除しました')
-    } catch {
-      toast.error('グループメンバーの削除に失敗しました')
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message)
+      }
     }
     isSending.value = false
   }

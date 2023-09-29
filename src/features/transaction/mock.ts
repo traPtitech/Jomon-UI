@@ -28,7 +28,7 @@ export const transactionHandlers = [
   }),
   rest.post('/api/transactions', async (req, res, ctx) => {
     // NOTE: tagsの変換が必要なため、reqBodyが使っていない
-    return res(ctx.status(200), ctx.json<Transaction>(mockTransaction))
+    return res(ctx.status(200), ctx.json<Transaction[]>([mockTransaction]))
   }),
   rest.put('/api/transactions/:id', async (req, res, ctx) => {
     // NOTE: tagsの変換が必要なため、reqBodyが使っていない

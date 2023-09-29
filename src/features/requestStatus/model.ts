@@ -4,14 +4,14 @@ import type { StatusEnum } from '/@/lib/apis'
 
 import type { RequestComment } from '/@/features/requestComment/model'
 
-export interface RequestStatus {
+export interface RequestStatusDetail {
   createdBy: string
-  status: RequestStatusUnion
+  status: RequestStatus
   comment?: RequestComment
   createdAt: DateTime
 }
 
-const requestStatuses: { state: RequestStatusUnion; jpn: string }[] = [
+const requestStatuses: { state: RequestStatus; jpn: string }[] = [
   { state: 'submitted', jpn: '承認待ち' },
   { state: 'rejected', jpn: '却下' },
   { state: 'fix_required', jpn: '要修正' },
@@ -25,4 +25,4 @@ export const requestStatusOptions = () =>
     value: requestStatus.state
   }))
 
-export type RequestStatusUnion = typeof StatusEnum[keyof typeof StatusEnum]
+export type RequestStatus = typeof StatusEnum[keyof typeof StatusEnum]

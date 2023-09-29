@@ -5,7 +5,7 @@ import { useRequestDetailStore } from '/@/stores/requestDetail'
 
 import type { RequestSeed } from '/@/features/request/model'
 import { useRequestRepository } from '/@/features/request/repository'
-import type { RequestStatusUnion } from '/@/features/requestStatus/model'
+import type { RequestStatus } from '/@/features/requestStatus/model'
 
 export const useFetchRequestsUsecase = async () => {
   const repository = useRequestRepository()
@@ -77,7 +77,7 @@ export const createCommentUsecase = async (id: string, comment: string) => {
 
 export const changeStatusUsecase = async (
   id: string,
-  status: RequestStatusUnion,
+  status: RequestStatus,
   comment: string
 ) => {
   const repository = useRequestRepository()

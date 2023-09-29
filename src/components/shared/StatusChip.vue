@@ -8,10 +8,10 @@ import {
 } from '@heroicons/vue/24/solid'
 import { computed } from 'vue'
 
-import type { RequestStatusUnion } from '/@/features/requestStatus/model'
+import type { RequestStatus } from '/@/features/requestStatus/model'
 
 interface Props {
-  status: RequestStatusUnion
+  status: RequestStatus
   hasText?: boolean
 }
 
@@ -19,7 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
   hasText: false
 })
 
-const statusToJpn = computed(() => (status: RequestStatusUnion) => {
+const statusToJpn = computed(() => (status: RequestStatus) => {
   switch (status) {
     case 'submitted':
       return '承認待ち'
@@ -36,7 +36,7 @@ const statusToJpn = computed(() => (status: RequestStatusUnion) => {
   }
 })
 
-const backgroundColor = computed(() => (status: RequestStatusUnion) => {
+const backgroundColor = computed(() => (status: RequestStatus) => {
   switch (status) {
     case 'submitted':
       return 'bg-yellow-400'

@@ -9,7 +9,7 @@ import ModalWrapper from '/@/components/modal/ModalWrapper.vue'
 import StatusChangeModal from '/@/components/modal/StatusChangeModal.vue'
 import { useModal } from '/@/components/modal/composables/useModal'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import type { RequestStatusUnion } from '/@/features/requestStatus/model'
+import type { RequestStatus } from '/@/features/requestStatus/model'
 
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
@@ -18,7 +18,7 @@ const { me, isAdmin } = storeToRefs(userStore)
 
 const { request } = storeToRefs(requestDetailStore)
 
-const nextStatus = ref<RequestStatusUnion>()
+const nextStatus = ref<RequestStatus>()
 const hasAuthority = isRequestCreator(me.value)
 const { shouldShowModal, openModal, closeModal } = useModal()
 
@@ -31,7 +31,7 @@ const showToRequired = isAdmin.value && request.value?.status === 'submitted'
 const showToAccepted = isAdmin.value && request.value?.status === 'submitted'
 const showToRejected = isAdmin.value && request.value?.status === 'submitted'
 
-function handleOpenModal(status: RequestStatusUnion) {
+function handleOpenModal(status: RequestStatus) {
   nextStatus.value = status
   openModal()
 }

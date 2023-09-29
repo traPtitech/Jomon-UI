@@ -9,10 +9,10 @@ import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import { changeStatusUsecase } from '/@/features/request/usecase'
-import type { RequestStatusUnion } from '/@/features/requestStatus/model'
+import type { RequestStatus } from '/@/features/requestStatus/model'
 
 interface Props {
-  nextStatus: RequestStatusUnion
+  nextStatus: RequestStatus
 }
 
 const props = defineProps<Props>()
@@ -27,7 +27,7 @@ const { request } = storeToRefs(requestDetailStore)
 
 const comment = ref('')
 
-async function putStatus(nextStatus: RequestStatusUnion, comment: string) {
+async function putStatus(nextStatus: RequestStatus, comment: string) {
   try {
     if (request.value === undefined) {
       throw new Error('request is undefined')

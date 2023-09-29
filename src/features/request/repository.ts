@@ -14,8 +14,8 @@ import { convertRequestCommentFromData } from '/@/features/requestComment/conver
 import type { RequestComment } from '/@/features/requestComment/model'
 import { convertRequestStatusFromData } from '/@/features/requestStatus/converter'
 import type {
-  RequestStatus,
-  RequestStatusUnion
+  RequestStatusDetail,
+  RequestStatus
 } from '/@/features/requestStatus/model'
 
 export const useRequestRepository = () => {
@@ -96,9 +96,9 @@ const createRequestRepository = () => ({
 
   editStatus: async (
     id: string,
-    status: RequestStatusUnion,
+    status: RequestStatus,
     comment: string
-  ): Promise<RequestStatus> => {
+  ): Promise<RequestStatusDetail> => {
     const statusData = {
       status,
       comment

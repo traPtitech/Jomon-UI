@@ -5,15 +5,15 @@ import type { RequestTarget } from '/@/lib/apis'
 import type { Group } from '/@/features/group/model'
 import type { RequestComment } from '/@/features/requestComment/model'
 import type {
-  RequestStatus,
-  RequestStatusUnion
+  RequestStatusDetail,
+  RequestStatus
 } from '/@/features/requestStatus/model'
 import type { RequestTargetDetail } from '/@/features/requestTarget/model'
 import type { Tag } from '/@/features/tag/model'
 
 export interface Request {
   id: string
-  status: RequestStatusUnion
+  status: RequestStatus
   created_by: string
   title: string
   content: string
@@ -25,7 +25,7 @@ export interface Request {
 
 export interface RequestQuerySeed {
   sort: string
-  currentStatus: RequestStatusUnion | ''
+  currentStatus: RequestStatus | ''
   target: string
   since: string
   until: string
@@ -36,7 +36,7 @@ export interface RequestQuerySeed {
 export interface RequestDetail extends Request {
   files: string[]
   comments: RequestComment[]
-  statuses: RequestStatus[]
+  statuses: RequestStatusDetail[]
 }
 
 export interface RequestSeed {

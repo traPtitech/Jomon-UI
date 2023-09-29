@@ -5,14 +5,14 @@ import { computed } from 'vue'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
 import type { RequestComment } from '/@/features/requestComment/model'
-import type { RequestStatus } from '/@/features/requestStatus/model'
+import type { RequestStatusDetail } from '/@/features/requestStatus/model'
 
 import CommentLog from './CommentLog.vue'
 import RequestFiles from './RequestFiles.vue'
 import StatusChangeLog from './StatusChangeLog.vue'
 
 type CommentWithType = RequestComment & { type: 'comment' }
-type StatusWithType = RequestStatus & { type: 'statusChange' }
+type StatusWithType = RequestStatusDetail & { type: 'statusChange' }
 
 type Log = CommentWithType | StatusWithType
 

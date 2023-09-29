@@ -1,56 +1,40 @@
 <script lang="ts" setup>
-import type { DateTime } from 'luxon'
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
+import type { RequestComment } from '/@/features/requestComment/model'
+import type { RequestStatus } from '/@/features/requestStatus/model'
+
 import CommentLog from './CommentLog.vue'
 import RequestFiles from './RequestFiles.vue'
 import StatusChangeLog from './StatusChangeLog.vue'
 
-type LogType = 'comment' | 'statusChange'
+type CommentWithType = RequestComment & { type: 'comment' }
+type StatusWithType = RequestStatus & { type: 'statusChange' }
 
-interface Log {
-  createdAt: DateTime
-  type: LogType
-  index: number
-}
+type Log = CommentWithType | StatusWithType
 
 const requestDetailStore = useRequestDetailStore()
 
 const { request } = storeToRefs(requestDetailStore)
 
-const logs = computed(() => {
-  //2つの配列(commentsとstatuses)の中身の型が違うので1つにまとめ、ソートして表示ができない
-  let array = new Array<Log>()
-  //2つの配列からcreated_at、種類、インデックスだけ取り出して1つの配列にまとめる
-  array =
-    request.value?.comments
-      .map(
-        (comment, i): Log => ({
-          createdAt: comment.createdAt,
-          type: 'comment',
-          index: i
-        })
-      )
-      .concat(
-        request.value.statuses.map(
-          (status, i): Log => ({
-            createdAt: status.createdAt,
-            type: 'statusChange',
-            index: i
-          })
-        )
-      ) ?? []
-  //created_atでソート
-  array = array.sort(function (a, b) {
-    if (a.createdAt > b.createdAt) return 1
-    if (b.createdAt > a.createdAt) return -1
-    return 0
-  })
-  return array
-  //その後この配列のtypeで配列を選び、indexでindexを選ぶことで2つの配列をいい感じに並べ替えられる
+const logs = computed((): Log[] => {
+  const comments: CommentWithType[] =
+    request.value?.comments.map(comment => ({
+      ...comment,
+      type: 'comment'
+    })) ?? []
+  const statuses: StatusWithType[] =
+    request.value?.statuses.map(status => ({
+      ...status,
+      type: 'statusChange'
+    })) ?? []
+
+  const logs = [...comments, ...statuses]
+
+  return logs.sort((a, b) => a.createdAt.toMillis() - b.createdAt.toMillis())
 })
 </script>
 
@@ -59,12 +43,8 @@ const logs = computed(() => {
     <RequestFiles />
     <ul>
       <li v-for="log in logs" :key="log.createdAt.toISO()" class="vertical-bar">
-        <CommentLog
-          v-if="log.type === 'comment'"
-          :comment="request.comments[log.index]" />
-        <StatusChangeLog
-          v-if="log.type === 'statusChange'"
-          :log="request.statuses[log.index]" />
+        <CommentLog v-if="log.type === 'comment'" :comment="log" />
+        <StatusChangeLog v-if="log.type === 'statusChange'" :log="log" />
       </li>
     </ul>
   </div>

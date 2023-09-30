@@ -1,4 +1,5 @@
 import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
 import type { RequestDetail } from '/@/features/request/model'
@@ -11,6 +12,7 @@ export type MoneyDirection = 'toTraP' | 'fromTraP'
 
 export const useNewTransaction = () => {
   const toast = useToast()
+  const router = useRouter()
 
   const isSending = ref(false)
 
@@ -76,6 +78,7 @@ export const useNewTransaction = () => {
       toast.error('入出金記録の作成に失敗しました')
     }
     isSending.value = false
+    router.push('/transactions')
   }
 
   return {

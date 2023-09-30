@@ -50,8 +50,8 @@ export const createGroupUsecase = async (
 
     try {
       await Promise.all([
-        addGroupMembersUsecase(res.id, group.members),
-        addGroupOwnersUsecase(res.id, group.owners)
+        await repository.postGroupMembers(res.id, group.members),
+        await repository.postGroupOwners(res.id, group.owners)
       ])
     } catch {
       throw new Error('グループの作成に失敗しました')

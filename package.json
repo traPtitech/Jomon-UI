@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@heroicons/vue": "^2.0.12",
-    "@openapitools/openapi-generator-cli": "^2.5.2",
+    "@openapitools/openapi-generator-cli": "^2.7.0",
     "@trivago/prettier-plugin-sort-imports": "^3.3.0",
     "@types/luxon": "^3.0.1",
     "@types/markdown-it": "^12.2.3",

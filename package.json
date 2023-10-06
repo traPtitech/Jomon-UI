@@ -24,7 +24,7 @@
     "vue-toastification": "^2.0.0-rc.5"
   },
   "devDependencies": {
-    "@heroicons/vue": "^2.0.12",
+    "@heroicons/vue": "^2.0.18",
     "@openapitools/openapi-generator-cli": "^2.5.2",
     "@trivago/prettier-plugin-sort-imports": "^3.3.0",
     "@types/luxon": "^3.0.1",

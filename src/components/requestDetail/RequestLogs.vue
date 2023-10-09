@@ -42,7 +42,10 @@ const logs = computed((): Log[] => {
   <div v-if="request" class="h-120 overflow-y-scroll p-2">
     <RequestFiles />
     <ul>
-      <li v-for="log in logs" :key="log.createdAt.toISO()" class="vertical-bar">
+      <li
+        v-for="(log, i) in logs"
+        :key="log.createdAt.toISO() ?? i"
+        class="vertical-bar">
         <CommentLog v-if="log.type === 'comment'" :comment="log" />
         <StatusChangeLog v-if="log.type === 'statusChange'" :log="log" />
       </li>

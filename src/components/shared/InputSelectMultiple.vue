@@ -2,6 +2,7 @@
 import { ChevronDownIcon } from '@heroicons/vue/24/solid'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ValueValue = Record<string, any> | string | null
 
 interface Value {

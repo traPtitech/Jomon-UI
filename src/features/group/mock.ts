@@ -1,4 +1,4 @@
-import { rest } from 'msw'
+import { HttpResponse, type PathParams, http } from 'msw'
 
 import type { Group, GroupDetail } from '/@/lib/apis'
 
@@ -29,54 +29,60 @@ const mockGroupDetail: GroupDetail = {
 }
 
 export const groupHandlers = [
-  rest.get('/api/groups', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(mockGroups))
+  http.get('/api/groups', () => {
+    return HttpResponse.json(mockGroups)
   }),
-  rest.get('/api/groups/:id', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json<GroupDetail>({
-        ...mockGroupDetail,
-        id: req.params.id as string
-      })
-    )
+  http.get('/api/groups/:id', ({ params }) => {
+    const res: GroupDetail = {
+      ...mockGroupDetail,
+      id: params.id as string
+    }
+    return HttpResponse.json(res)
   }),
-  rest.post('/api/groups', async (req, res, ctx) => {
-    const reqBody: GroupSeed = await req.json()
-    return res(
-      ctx.status(200),
-      ctx.json<GroupDetail>({
+  http.post<PathParams, GroupSeed, GroupDetail>(
+    '/api/groups',
+    async ({ request }) => {
+      const reqBody: GroupSeed = await request.json()
+      const res: GroupDetail = {
         ...mockGroupDetail,
         ...reqBody
-      })
-    )
-  }),
-  rest.put('/api/groups/:id', async (req, res, ctx) => {
-    const reqBody: GroupSeed = await req.json()
-    return res(
-      ctx.status(200),
-      ctx.json<GroupDetail>({
+      }
+      return HttpResponse.json(res)
+    }
+  ),
+  http.put<PathParams, GroupSeed, GroupDetail>(
+    '/api/groups/:id',
+    async ({ request, params }) => {
+      const reqBody: GroupSeed = await request.json()
+      const res: GroupDetail = {
         ...mockGroupDetail,
-        id: req.params.id as string,
+        id: params.id as string,
         ...reqBody
-      })
-    )
+      }
+      return HttpResponse.json(res)
+    }
+  ),
+  http.delete('/api/groups/:id', () => {
+    return HttpResponse.json(null)
   }),
-  rest.delete('/api/groups/:id', (req, res, ctx) => {
-    return res(ctx.status(200))
+  http.post<PathParams, string[], string[]>(
+    '/api/groups/:id/members',
+    async ({ request }) => {
+      const reqBody: string[] = await request.json()
+      return HttpResponse.json(reqBody)
+    }
+  ),
+  http.post<PathParams, string[], string[]>(
+    '/api/groups/:id/owners',
+    async ({ request }) => {
+      const reqBody: string[] = await request.json()
+      return HttpResponse.json(reqBody)
+    }
+  ),
+  http.delete('/api/groups/:id/members', () => {
+    return HttpResponse.json(null)
   }),
-  rest.post('/api/groups/:id/members', async (req, res, ctx) => {
-    const reqBody: string[] = await req.json()
-    return res(ctx.status(200), ctx.json<string[]>(reqBody))
-  }),
-  rest.post('/api/groups/:id/owners', async (req, res, ctx) => {
-    const reqBody: string[] = await req.json()
-    return res(ctx.status(200), ctx.json<string[]>(reqBody))
-  }),
-  rest.delete('/api/groups/:id/members', (req, res, ctx) => {
-    return res(ctx.status(200))
-  }),
-  rest.delete('/api/groups/:id/owners', (req, res, ctx) => {
-    return res(ctx.status(200))
+  http.delete('/api/groups/:id/owners', () => {
+    return HttpResponse.json(null)
   })
 ]

@@ -1,8 +1,6 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 
-import apis from '/@/lib/apis'
-
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/requests' },
   {
@@ -42,15 +40,6 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes
-})
-
-router.beforeEach(async (to, from, next) => {
-  try {
-    await apis.getMe()
-  } catch {
-    document.location = 'https://jomon-dev.trapti.tech/api/auth/genpkce'
-  }
-  next()
 })
 
 export default router

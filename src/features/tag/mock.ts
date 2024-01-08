@@ -1,4 +1,4 @@
-import { rest } from 'msw'
+import { HttpResponse, type PathParams, http } from 'msw'
 
 import type { Tag } from '/@/lib/apis'
 
@@ -31,14 +31,16 @@ export const mockTags: Tag[] = [
 ]
 
 export const tagHandlers = [
-  rest.get('/api/tags', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json<Tag[]>(mockTags))
+  http.get('/api/tags', () => {
+    const res: Tag[] = mockTags
+
+    return HttpResponse.json(res)
   }),
-  rest.post('/api/tags', async (req, res, ctx) => {
-    const reqBody: Tag = await req.json()
-    return res(ctx.status(200), ctx.json<Tag>(reqBody))
+  http.post<PathParams, Tag, Tag>('/api/tags', async ({ request }) => {
+    const reqBody: Tag = await request.json()
+    return HttpResponse.json(reqBody)
   }),
-  rest.delete('/api/tags/:id', (req, res, ctx) => {
-    return res(ctx.status(200))
+  http.delete('/api/tags/:id', () => {
+    return HttpResponse.json(null)
   })
 ]

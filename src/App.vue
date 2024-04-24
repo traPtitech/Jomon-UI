@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted , watch } from 'vue'
+import { onMounted, watch } from 'vue'
 
 import { useFetchMeUsecase } from '/@/features/user/usecase'
 

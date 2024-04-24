@@ -25,4 +25,4 @@ export const requestStatusOptions = () =>
     value: requestStatus.state
   }))
 
-export type RequestStatus = typeof StatusEnum[keyof typeof StatusEnum]
+export type RequestStatus = (typeof StatusEnum)[keyof typeof StatusEnum]

@@ -25,7 +25,9 @@ const value = computed({
 <template>
   <InputSelectMultiple
     v-model="value"
-    :create-option="(tag: string) => ({ name: tag, id: '', created_at: '', updated_at: '' })"
+    :create-option="
+      (tag: string) => ({ name: tag, id: '', created_at: '', updated_at: '' })
+    "
     :options="tagOptions"
     placeholder="タグを選択"
     taggable

@@ -17,12 +17,5 @@
   "proseWrap": "preserve",
   "htmlWhitespaceSensitivity": "css",
   "vueIndentScriptAndStyle": false,
-  "endOfLine": "auto",
-  "importOrder": [
-    "^/@/stores/(.*)$",
-    "^/@/lib/(.*)$",
-    "^/@/(.*)",
-    "^[./]"
-  ],
-  "importOrderSeparation": true
+  "endOfLine": "auto"
 }

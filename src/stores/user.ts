@@ -25,10 +25,13 @@ export const useUserStore = defineStore('user', () => {
 
   const userMap = computed(
     () =>
-      users.value?.reduce((acc, user) => {
-        acc[user.id] = user.name
-        return acc
-      }, {} as Record<string, string>) ?? {}
+      users.value?.reduce(
+        (acc, user) => {
+          acc[user.id] = user.name
+          return acc
+        },
+        {} as Record<string, string>
+      ) ?? {}
   )
 
   return {

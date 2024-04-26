@@ -13,17 +13,16 @@ const { comment, isSending, submit } = useNewComment(request.value?.id ?? '')
 </script>
 
 <template>
-  <form class="mx-4 w-full">
-    <MarkdownTextarea v-model="comment" placeholder="コメント" />
-    <div class="mt-1">
+  <div class="w-full">
+    <MarkdownTextarea v-model="comment">
       <SimpleButton
-        class="ml-auto"
         :disabled="isSending"
         font-size="md"
         padding="sm"
-        @click.prevent="submit">
+        type="success"
+        @click="submit">
         コメントする
       </SimpleButton>
-    </div>
-  </form>
+    </MarkdownTextarea>
+  </div>
 </template>

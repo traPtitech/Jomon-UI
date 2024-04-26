@@ -9,6 +9,7 @@ import type { RequestStatusDetail } from '/@/features/requestStatus/model'
 
 import CommentLog from './CommentLog.vue'
 import StatusChangeLog from './StatusChangeLog.vue'
+import NewComment from './NewComment.vue'
 
 type CommentWithType = RequestComment & { type: 'comment' }
 type StatusWithType = RequestStatusDetail & { type: 'statusChange' }

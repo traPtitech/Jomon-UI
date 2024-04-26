@@ -8,7 +8,6 @@ import type { RequestComment } from '/@/features/requestComment/model'
 import type { RequestStatusDetail } from '/@/features/requestStatus/model'
 
 import CommentLog from './CommentLog.vue'
-import RequestFiles from './RequestFiles.vue'
 import StatusChangeLog from './StatusChangeLog.vue'
 
 type CommentWithType = RequestComment & { type: 'comment' }
@@ -39,15 +38,14 @@ const logs = computed((): Log[] => {
 </script>
 
 <template>
-  <div v-if="request" class="h-120 overflow-y-scroll p-2">
-    <RequestFiles />
+  <div v-if="request">
     <ul>
       <li
         v-for="(log, i) in logs"
         :key="log.createdAt.toISO() ?? i"
         class="vertical-bar">
         <CommentLog v-if="log.type === 'comment'" :comment="log" />
-        <StatusChangeLog v-if="log.type === 'statusChange'" :log="log" />
+        <StatusChangeLog v-else-if="log.type === 'statusChange'" :log="log" />
       </li>
     </ul>
     <NewComment />

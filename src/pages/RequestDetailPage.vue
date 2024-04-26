@@ -68,7 +68,7 @@ onMounted(() => {
       </div>
     </div>
     <div class="h-0.25 bg-[#e5e7eb]" />
-    <div class="flex justify-between">
+    <div class="flex justify-between gap-20">
       <RequestLogs class="basis-2/3" />
       <RequestSidebar class="basis-1/3" />
     </div>

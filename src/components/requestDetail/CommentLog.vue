@@ -11,11 +11,9 @@ import MarkdownIt from '/@/components//shared/MarkdownIt.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
 import type { RequestComment } from '/@/features/requestComment/model'
 
-interface Props {
+const props = defineProps<{
   comment: RequestComment
-}
-
-const props = defineProps<Props>()
+}>()
 
 const formattedDateAndTime = formatDateAndTime(props.comment.createdAt)
 
@@ -27,19 +25,19 @@ const hash = computed(() => route.hash.substring(1))
 </script>
 
 <template>
-  <div :id="comment.id" class="flex w-full p-2">
-    <UserIcon class="w-12" :name="userMap[comment.user]" />
-    <div class="w-full pl-2">
-      <div class="flex h-12 items-center justify-between">
-        {{ userMap[comment.user] }}がコメントしました。
-        <span>
-          {{ formattedDateAndTime }}
-        </span>
+  <div :id="comment.id" class="w-full flex flex-col gap-3">
+    <div class="flex w-full items-center">
+      <div class="flex items-center gap-4 flex-1">
+        <UserIcon class="w-12" :name="userMap[comment.user]" />
+        <span>{{ userMap[comment.user] }}がコメントしました。</span>
       </div>
+      <time class="text-gray-400" :datetime="comment.createdAt.toISO() ?? ''">
+        {{ formattedDateAndTime }}
+      </time>
+    </div>
+    <div class="ml-15">
       <MarkdownIt
-        :class="`border border-zinc-300 p-1 ${
-          hash === comment.id && 'border-3 border border-yellow-300'
-        }`"
+        class="border border-zinc-300 px-4 py-3 rounded-lg"
         :text="comment.comment" />
     </div>
   </div>

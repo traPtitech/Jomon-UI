@@ -56,7 +56,7 @@ const backgroundColor = computed(() => (status: RequestStatus) => {
 
 <template>
   <div
-    :class="`inline flex items-center rounded-full p-2 text-white ${backgroundColor(
+    :class="`inline flex items-center rounded-3xl px-3 py-2 gap-2 text-white ${backgroundColor(
       status
     )}`"
     :title="statusToJpn(status)">

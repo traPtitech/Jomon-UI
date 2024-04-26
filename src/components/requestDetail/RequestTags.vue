@@ -24,7 +24,7 @@ const defaultTags = computed(() =>
 )
 
 const isEditMode = ref(false)
-const editedTags = ref<Tag[]>(request.value?.tags ? request.value.tags : [])
+const editedTags = ref<Tag[]>(defaultTags.value)
 const toggleEditTags = () => {
   if (isEditMode.value) {
     editedTags.value = defaultTags.value

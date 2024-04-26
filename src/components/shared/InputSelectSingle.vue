@@ -82,7 +82,7 @@ const removeValue = () => {
 
 const handleClickOutside = (e: MouseEvent) => {
   const target = e.target as HTMLElement
-  if (inputSelectRef.value === null) return
+  if (inputSelectRef.value === null || !isDropdownOpen.value) return
   if (!inputSelectRef.value.contains(target)) {
     isDropdownOpen.value = false
     emit('close')

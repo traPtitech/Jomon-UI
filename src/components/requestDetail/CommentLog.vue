@@ -29,7 +29,10 @@ const hash = computed(() => route.hash.substring(1))
     <div class="flex w-full items-center">
       <div class="flex items-center gap-4 flex-1">
         <UserIcon class="w-12" :name="userMap[comment.user]" />
-        <span>{{ userMap[comment.user] }}がコメントしました。</span>
+        <div>
+          <span class="font-bold">{{ userMap[comment.user] }}</span>
+          がコメントしました。
+        </div>
       </div>
       <time class="text-gray-400" :datetime="comment.createdAt.toISO() ?? ''">
         {{ formattedDateAndTime }}

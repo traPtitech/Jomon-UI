@@ -25,7 +25,10 @@ const formattedDateAndTime = formatDateAndTime(props.log.createdAt)
     <div class="flex items-center gap-4 flex-1">
       <UserIcon class="w-12" :name="userMap[log.createdBy]" />
       <div class="flex items-center gap-2">
-        <span>{{ userMap[log.createdBy] }} が申請の状態を</span>
+        <span>
+          <span class="font-bold">{{ userMap[log.createdBy] }}</span>
+          が申請の状態を
+        </span>
         <StatusChip has-text :status="log.status" />
         <span>にしました。</span>
       </div>

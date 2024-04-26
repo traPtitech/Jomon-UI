@@ -19,7 +19,7 @@ const hasAuthority = isRequestCreator(me.value)
 <template>
   <div class="flex flex-col gap-2">
     <div class="flex items-center justify-between">
-      <div>払い戻し対象者</div>
+      <div class="text-sm font-bold">払い戻し対象者</div>
       <EditButton v-if="hasAuthority" />
     </div>
     <div class="flex flex-col gap-2">

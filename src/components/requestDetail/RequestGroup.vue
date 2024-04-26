@@ -23,7 +23,7 @@ const groupName = computed(() =>
 <template>
   <div class="flex flex-col gap-1">
     <div class="flex items-center justify-between">
-      <div>グループ</div>
+      <div class="text-sm font-bold">グループ</div>
       <EditButton v-if="hasAuthority" />
     </div>
     <div>

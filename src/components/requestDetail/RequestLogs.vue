@@ -50,6 +50,7 @@ const logs = computed((): Log[] => {
         <StatusChangeLog v-if="log.type === 'statusChange'" :log="log" />
       </li>
     </ul>
+    <NewComment />
   </div>
 </template>
 

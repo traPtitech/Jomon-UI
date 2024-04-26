@@ -14,7 +14,7 @@ const totalAmount = computed(
 </script>
 
 <template>
-  <div v-if="request" class="flex items-center">
-    <span class="text-2xl">金額：{{ totalAmount }}円</span>
+  <div>
+    <span class="text-3xl font-bold">{{ totalAmount }}円</span>
   </div>
 </template>

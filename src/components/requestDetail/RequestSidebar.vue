@@ -5,7 +5,7 @@ import RequestTargets from '/@/components/requestDetail/RequestTargets.vue'
 </script>
 
 <template>
-  <div class="px-12 flex flex-col gap-8">
+  <div class="px-4 flex flex-col gap-8">
     <div class="flex flex-col gap-3">
       <RequestGroup />
       <RequestTags />

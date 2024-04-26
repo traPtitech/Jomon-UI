@@ -30,7 +30,7 @@ export const useRequestDetailStore = defineStore('requestDetail', () => {
 
   const isRequestCreator = computed(() => (user: User | undefined) => {
     if (!user || request.value === undefined) return false
-    return user.id === request.value.created_by
+    return user.id === request.value.createdBy
   })
 
   return {

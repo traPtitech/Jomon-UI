@@ -31,7 +31,7 @@ const hash = computed(() => route.hash.substring(1))
         <UserIcon class="w-12" :name="userMap[comment.user]" />
         <div>
           <span class="font-bold">{{ userMap[comment.user] }}</span>
-          がコメントしました。
+          がコメントしました
         </div>
       </div>
       <time class="text-gray-400" :datetime="comment.createdAt.toISO() ?? ''">

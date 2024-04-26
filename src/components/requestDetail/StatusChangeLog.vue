@@ -30,7 +30,7 @@ const formattedDateAndTime = formatDateAndTime(props.log.createdAt)
           が申請の状態を
         </span>
         <StatusChip has-text :status="log.status" />
-        <span>にしました。</span>
+        <span>にしました</span>
       </div>
     </div>
     <div class="text-gray-400">

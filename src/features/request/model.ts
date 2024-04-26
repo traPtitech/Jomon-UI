@@ -15,7 +15,7 @@ import type { Tag } from '/@/features/tag/model'
 export interface Request {
   id: string
   status: RequestStatus
-  created_by: string
+  createdBy: string
   title: string
   content: string
   targets: RequestTargetDetail[]

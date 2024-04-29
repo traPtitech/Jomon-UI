@@ -35,7 +35,7 @@ const handleUpdateTags = async () => {
   if (!request.value) return
   await editRequestUsecase(request.value.id, {
     ...request.value,
-    group: request.value.group?.id ?? null, // TODO: デフォルトの値をどこかに置いておく
+    group: request.value.group?.id ?? null, // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
     tags: editedTags.value
   })
   isEditMode.value = false

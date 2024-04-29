@@ -1,13 +1,11 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 
-import StatusChip from '/@/components/shared/StatusChip.vue'
 import type { RequestDetail } from '/@/features/request/model'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import InputText from '/@/components/shared/InputText.vue'
 import { editRequestUsecase } from '/@/features/request/usecase'
-import { useStatusOptions } from '/@/features/requestStatus/composables'
-import FloatingMenu from '/@/components/shared/FloatingMenu.vue'
+import RequestStatusChange from '/@/components/requestDetail/RequestStatusChange.vue'
 
 const props = defineProps<{
   request: RequestDetail
@@ -30,9 +28,6 @@ const handleUpdateTitle = async () => {
   })
   isEditMode.value = false
 }
-
-const showMenu = ref(false)
-const { statusOptions } = useStatusOptions(props.request)
 </script>
 
 <template>
@@ -48,19 +43,7 @@ const { statusOptions } = useStatusOptions(props.request)
       </SimpleButton>
     </div>
     <div class="flex items-center justify-between">
-      <div class="relative">
-        <StatusChip
-          has-menu
-          has-text
-          :status="request.status"
-          @click.stop="showMenu = true" />
-        <FloatingMenu
-          v-if="showMenu"
-          class="absolute top-12 left-0 w-40"
-          :current-value="request.status"
-          :options="statusOptions"
-          @close-menu="showMenu = false" />
-      </div>
+      <RequestStatusChange :request="request" />
       <div class="text-3xl font-bold">{{ totalAmount }}円</div>
     </div>
   </div>

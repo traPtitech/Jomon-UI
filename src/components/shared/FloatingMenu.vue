@@ -1,29 +1,21 @@
-<script setup lang="ts">
-import type { RequestStatus } from '/@/features/requestStatus/model'
+<script setup lang="ts" generic="T extends string">
 import { onMounted, onUnmounted, ref } from 'vue'
-import { useModal } from '/@/components/modal/composables/useModal'
-import ModalWrapper from '/@/components/modal/ModalWrapper.vue'
-import StatusChangeModal from '/@/components/modal/StatusChangeModal.vue'
 
 defineProps<{
-  options: { key: string; value: RequestStatus }[]
-  currentValue: RequestStatus
+  options: { key: string; value: T }[]
+  currentValue: T
 }>()
 
 const emit = defineEmits<{
   (e: 'closeMenu'): void
+  (e: 'selectOption', value: T): void
 }>()
 
-const handleSelectOption = (status: RequestStatus) => {
-  // TODO: emitして一般化
-  nextStatus.value = status
-  openModal()
+const handleSelectOption = (value: T) => {
+  emit('selectOption', value)
 }
 
 const containerRef = ref<HTMLDivElement | null>(null)
-
-const nextStatus = ref<RequestStatus>()
-const { shouldShowModal, openModal, closeModal } = useModal()
 
 const callback = () => {
   emit('closeMenu')
@@ -52,11 +44,5 @@ onUnmounted(() => {
         {{ option.key }}
       </button>
     </div>
-    <ModalWrapper v-if="shouldShowModal" @close-modal="closeModal">
-      <StatusChangeModal
-        v-if="nextStatus"
-        :next-status="nextStatus"
-        @close-modal="closeModal" />
-    </ModalWrapper>
   </div>
 </template>

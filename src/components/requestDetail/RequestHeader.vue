@@ -50,6 +50,7 @@ const { statusOptions } = useStatusOptions(props.request)
     <div class="flex items-center justify-between">
       <div class="relative">
         <StatusChip
+          has-menu
           has-text
           :status="request.status"
           @click.stop="showMenu = true" />

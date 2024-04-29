@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
@@ -10,32 +10,31 @@ import TagsGroup from '/@/components/shared/TagsGroup.vue'
 import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
 import type { Tag } from '/@/features/tag/model'
 import { editRequestUsecase } from '/@/features/request/usecase'
+import type { RequestDetail } from '/@/features/request/model'
+
+const props = defineProps<{
+  request: RequestDetail
+}>()
 
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
 const { isRequestCreator } = requestDetailStore
-const { request } = storeToRefs(requestDetailStore)
 const { me } = storeToRefs(userStore)
 
 const hasAuthority = isRequestCreator(me.value)
 
-const defaultTags = computed(() =>
-  request.value?.tags ? request.value.tags : []
-)
-
 const isEditMode = ref(false)
-const editedTags = ref<Tag[]>(defaultTags.value)
+const editedTags = ref<Tag[]>(props.request.tags)
 const toggleEditTags = () => {
   if (isEditMode.value) {
-    editedTags.value = defaultTags.value
+    editedTags.value = props.request.tags
   }
   isEditMode.value = !isEditMode.value
 }
 const handleUpdateTags = async () => {
-  if (!request.value) return
-  await editRequestUsecase(request.value.id, {
-    ...request.value,
-    group: request.value.group?.id ?? null, // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
+  await editRequestUsecase(props.request.id, {
+    ...props.request,
+    group: props.request.group?.id ?? null, // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
     tags: editedTags.value
   })
   isEditMode.value = false

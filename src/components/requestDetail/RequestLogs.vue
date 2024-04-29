@@ -1,8 +1,5 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
-
-import { useRequestDetailStore } from '/@/stores/requestDetail'
 
 import type { RequestComment } from '/@/features/requestComment/model'
 import type { RequestStatusDetail } from '/@/features/requestStatus/model'
@@ -11,24 +8,25 @@ import CommentLog from './CommentLog.vue'
 import StatusChangeLog from './StatusChangeLog.vue'
 import NewComment from './NewComment.vue'
 import RequestContent from '/@/components/requestDetail/RequestContent.vue'
+import type { RequestDetail } from '/@/features/request/model'
+
+const props = defineProps<{
+  request: RequestDetail
+}>()
 
 type CommentWithType = RequestComment & { type: 'comment' }
 type StatusWithType = RequestStatusDetail & { type: 'statusChange' }
 
 type Log = CommentWithType | StatusWithType
 
-const requestDetailStore = useRequestDetailStore()
-
-const { request } = storeToRefs(requestDetailStore)
-
 const logs = computed((): Log[] => {
   const comments: CommentWithType[] =
-    request.value?.comments.map(comment => ({
+    props.request.comments.map(comment => ({
       ...comment,
       type: 'comment'
     })) ?? []
   const statuses: StatusWithType[] =
-    request.value?.statuses.map(status => ({
+    props.request?.statuses.map(status => ({
       ...status,
       type: 'statusChange'
     })) ?? []
@@ -53,7 +51,7 @@ const logs = computed((): Log[] => {
         <StatusChangeLog v-else-if="log.type === 'statusChange'" :log="log" />
       </li>
     </ul>
-    <NewComment />
+    <NewComment :request="request" />
   </div>
 </template>
 

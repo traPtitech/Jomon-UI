@@ -9,22 +9,26 @@ import { computed, ref } from 'vue'
 import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 import { useGroupStore } from '/@/stores/group'
 import { editRequestUsecase } from '/@/features/request/usecase'
+import type { RequestDetail } from '/@/features/request/model'
+
+const props = defineProps<{
+  request: RequestDetail
+}>()
 
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
 const groupStore = useGroupStore()
 const { isRequestCreator } = requestDetailStore
-const { request } = storeToRefs(requestDetailStore)
 const { me } = storeToRefs(userStore)
 const { groupOptions } = storeToRefs(groupStore)
 
 const hasAuthority = isRequestCreator(me.value)
 
 const defaultGroup = computed(() =>
-  request.value?.group ? request.value.group.id : null
+  props.request.group ? props.request.group.id : null
 )
 const groupName = computed(() =>
-  request.value?.group ? request.value.group.name : 'なし'
+  props.request.group ? props.request.group.name : 'なし'
 )
 
 const isEditMode = ref(false)
@@ -36,9 +40,8 @@ const toggleEditGroup = () => {
   isEditMode.value = !isEditMode.value
 }
 const handleUpdateGroup = async () => {
-  if (!request.value) return
-  await editRequestUsecase(request.value.id, {
-    ...request.value,
+  await editRequestUsecase(props.request.id, {
+    ...props.request,
     group: editedGroup.value
   })
   isEditMode.value = false

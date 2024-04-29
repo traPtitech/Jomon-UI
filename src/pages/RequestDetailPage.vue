@@ -4,7 +4,6 @@ import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
-import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
@@ -21,7 +20,6 @@ import RequestHeader from '/@/components/requestDetail/RequestHeader.vue'
 const route = useRoute()
 const id = toId(route.params.id)
 
-const requestDetailStore = useRequestDetailStore()
 const userStore = useUserStore()
 const groupStore = useGroupStore()
 const tagStore = useTagStore()
@@ -29,9 +27,8 @@ const { isUserFetched } = storeToRefs(userStore)
 const { isGroupFetched } = storeToRefs(groupStore)
 const { isTagFetched } = storeToRefs(tagStore)
 
-const { request } = storeToRefs(requestDetailStore)
+const request = await useFetchRequestUsecase(id)
 
-await useFetchRequestUsecase(id)
 if (!isGroupFetched.value) {
   await useFetchGroupsUsecase()
 }
@@ -56,8 +53,8 @@ onMounted(() => {
     <RequestHeader :request="request" />
     <div class="h-0.25 bg-[#e5e7eb]" />
     <div class="flex justify-between gap-20">
-      <RequestLogs class="basis-2/3" />
-      <RequestSidebar class="basis-1/3" />
+      <RequestLogs class="basis-2/3" :request="request" />
+      <RequestSidebar class="basis-1/3" :request="request" />
     </div>
   </div>
 </template>

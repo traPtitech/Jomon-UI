@@ -25,10 +25,9 @@ export const useFetchRequestsUsecase = async () => {
 
 export const useFetchRequestUsecase = async (id: string) => {
   const repository = useRequestRepository()
-  const { request } = storeToRefs(useRequestDetailStore())
 
   try {
-    request.value = await repository.fetchRequest(id)
+    return await repository.fetchRequest(id)
   } catch {
     throw new Error('申請の取得に失敗しました')
   }

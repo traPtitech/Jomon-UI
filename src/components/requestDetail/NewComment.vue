@@ -1,15 +1,14 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-
-import { useRequestDetailStore } from '/@/stores/requestDetail'
-
 import { useNewComment } from '/@/components/requestDetail/composables/useNewComment'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import type { RequestDetail } from '/@/features/request/model'
 
-const requestDetailStore = useRequestDetailStore()
-const { request } = storeToRefs(requestDetailStore)
-const { comment, isSending, submit } = useNewComment(request.value?.id ?? '')
+const props = defineProps<{
+  request: RequestDetail
+}>()
+
+const { comment, isSending, submit } = useNewComment(props.request.id)
 </script>
 
 <template>

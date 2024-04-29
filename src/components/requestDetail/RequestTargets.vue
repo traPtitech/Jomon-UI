@@ -10,27 +10,30 @@ import RequestTarget from '/@/components/requestDetail/RequestTarget.vue'
 import type { RequestTargetDetail } from '/@/features/requestTarget/model'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { editRequestUsecase } from '/@/features/request/usecase'
+import type { RequestDetail } from '/@/features/request/model'
+
+const props = defineProps<{
+  request: RequestDetail
+}>()
 
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
 const { isRequestCreator } = requestDetailStore
-const { request } = storeToRefs(requestDetailStore)
 const { me } = storeToRefs(userStore)
 
 const hasAuthority = isRequestCreator(me.value)
 
 const isEditMode = ref(false)
-const editedTargets = ref<RequestTargetDetail[]>(request.value?.targets ?? [])
+const editedTargets = ref<RequestTargetDetail[]>(props.request.targets)
 const toggleEditTargets = () => {
-  editedTargets.value = request.value?.targets ?? []
+  editedTargets.value = props.request.targets
   isEditMode.value = !isEditMode.value
 }
 
 const handleUpdateTargets = async () => {
-  if (!request.value) return
-  await editRequestUsecase(request.value.id, {
-    ...request.value,
-    group: request.value.group?.id ?? null, // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
+  await editRequestUsecase(props.request.id, {
+    ...props.request,
+    group: props.request.group?.id ?? null, // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
     targets: editedTargets.value
   })
   isEditMode.value = false

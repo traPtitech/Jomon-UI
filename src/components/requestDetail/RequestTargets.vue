@@ -8,6 +8,8 @@ import EditButton from '/@/components/shared/EditButton.vue'
 import { ref } from 'vue'
 import RequestTarget from '/@/components/requestDetail/RequestTarget.vue'
 import type { RequestTargetDetail } from '/@/features/requestTarget/model'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import { editRequestUsecase } from '/@/features/request/usecase'
 
 const userStore = useUserStore()
 const requestDetailStore = useRequestDetailStore()
@@ -20,7 +22,18 @@ const hasAuthority = isRequestCreator(me.value)
 const isEditMode = ref(false)
 const editedTargets = ref<RequestTargetDetail[]>(request.value?.targets ?? [])
 const toggleEditTargets = () => {
+  editedTargets.value = request.value?.targets ?? []
   isEditMode.value = !isEditMode.value
+}
+
+const handleUpdateTargets = async () => {
+  if (!request.value) return
+  await editRequestUsecase(request.value.id, {
+    ...request.value,
+    group: request.value.group?.id ?? null, // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
+    targets: editedTargets.value
+  })
+  isEditMode.value = false
 }
 </script>
 
@@ -28,10 +41,18 @@ const toggleEditTargets = () => {
   <div class="flex flex-col gap-2">
     <div class="flex items-center justify-between">
       <div class="text-sm font-bold">払い戻し対象者</div>
-      <EditButton
-        v-if="hasAuthority"
-        :is-edit-mode="isEditMode"
-        @click="toggleEditTargets" />
+      <div class="flex items-center gap-2">
+        <SimpleButton
+          v-if="isEditMode"
+          padding="sm"
+          @click="handleUpdateTargets">
+          完了
+        </SimpleButton>
+        <EditButton
+          v-if="hasAuthority"
+          :is-edit-mode="isEditMode"
+          @click="toggleEditTargets" />
+      </div>
     </div>
     <div v-if="request" class="flex flex-col gap-2">
       <RequestTarget

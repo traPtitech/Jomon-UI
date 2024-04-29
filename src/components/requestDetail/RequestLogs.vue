@@ -10,6 +10,7 @@ import type { RequestStatusDetail } from '/@/features/requestStatus/model'
 import CommentLog from './CommentLog.vue'
 import StatusChangeLog from './StatusChangeLog.vue'
 import NewComment from './NewComment.vue'
+import RequestContent from '/@/components/requestDetail/RequestContent.vue'
 
 type CommentWithType = RequestComment & { type: 'comment' }
 type StatusWithType = RequestStatusDetail & { type: 'statusChange' }
@@ -41,8 +42,11 @@ const logs = computed((): Log[] => {
 <template>
   <div v-if="request">
     <ul>
+      <li class="vertical-bar">
+        <RequestContent :request="request" />
+      </li>
       <li
-        v-for="(log, i) in logs"
+        v-for="(log, i) in logs.slice(1)"
         :key="log.createdAt.toISO() ?? i"
         class="vertical-bar">
         <CommentLog v-if="log.type === 'comment'" :comment="log" />

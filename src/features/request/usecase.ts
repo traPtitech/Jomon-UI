@@ -7,6 +7,7 @@ import type { RequestStatus } from '/@/features/requestStatus/model'
 
 import type { RequestSeed } from './model'
 import { useRequestRepository } from './repository'
+import { createTagIfNotExistUsecase } from '/@/features/tag/usecase'
 
 export const useFetchRequestsUsecase = async () => {
   const repository = useRequestRepository()
@@ -49,13 +50,18 @@ export const createRequestUsecase = async (request: RequestSeed) => {
 
 export const editRequestUsecase = async (
   id: string,
-  requestSeed: RequestSeed
+  _requestSeed: RequestSeed
 ) => {
   const repository = useRequestRepository()
   const { request } = storeToRefs(useRequestDetailStore())
   if (!request.value) return
 
   try {
+    const tags = await createTagIfNotExistUsecase(_requestSeed.tags)
+    const requestSeed = {
+      ..._requestSeed,
+      tags
+    }
     const res = await repository.editRequest(id, requestSeed)
     request.value = res
   } catch {

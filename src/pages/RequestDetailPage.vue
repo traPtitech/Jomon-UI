@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { computed, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
@@ -12,12 +12,11 @@ import { toId } from '/@/lib/parseQueryParams'
 
 import RequestLogs from '/@/components/requestDetail/RequestLogs.vue'
 import RequestSidebar from '/@/components/requestDetail/RequestSidebar.vue'
-import StatusChip from '/@/components/shared/StatusChip.vue'
 import { useFetchGroupsUsecase } from '/@/features/group/usecase'
 import { useFetchRequestUsecase } from '/@/features/request/usecase'
 import { useFetchTagsUsecase } from '/@/features/tag/usecase'
 import { useFetchUsersUsecase } from '/@/features/user/usecase'
-
+import RequestHeader from '/@/components/requestDetail/RequestHeader.vue'
 
 const route = useRoute()
 const id = toId(route.params.id)
@@ -32,10 +31,6 @@ const { isTagFetched } = storeToRefs(tagStore)
 
 const { request } = storeToRefs(requestDetailStore)
 
-const totalAmount = computed(
-  () => request.value?.targets.reduce((a, target) => a + target.amount, 0) ?? 0
-)
-
 await useFetchRequestUsecase(id)
 if (!isGroupFetched.value) {
   await useFetchGroupsUsecase()
@@ -46,6 +41,7 @@ if (!isUserFetched.value) {
 if (!isTagFetched.value) {
   await useFetchTagsUsecase()
 }
+
 onMounted(() => {
   if (route.hash !== '') {
     document.getElementById(route.hash.substring(1))?.scrollIntoView(true)
@@ -57,16 +53,7 @@ onMounted(() => {
   <div
     v-if="request !== undefined"
     class="mx-auto w-4/5 pt-5 flex flex-col gap-5">
-    <div class="flex flex-col gap-4">
-      <div class="flex gap-2">
-        <h1 class="flex-1 text-2xl">{{ request.title }}</h1>
-        <div>...</div>
-      </div>
-      <div class="flex items-center justify-between">
-        <StatusChip has-text :status="request.status" />
-        <div class="text-3xl font-bold">{{ totalAmount }}円</div>
-      </div>
-    </div>
+    <RequestHeader :request="request" />
     <div class="h-0.25 bg-[#e5e7eb]" />
     <div class="flex justify-between gap-20">
       <RequestLogs class="basis-2/3" />

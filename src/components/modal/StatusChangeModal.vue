@@ -27,7 +27,7 @@ const { request } = storeToRefs(requestDetailStore)
 
 const comment = ref('')
 
-async function putStatus(nextStatus: RequestStatus, comment: string) {
+const putStatus = async (nextStatus: RequestStatus, comment: string) => {
   try {
     if (request.value === undefined) {
       throw new Error('request is undefined')

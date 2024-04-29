@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 
-import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 import EditButton from '/@/components/shared/EditButton.vue'
@@ -11,17 +10,17 @@ import type { RequestTargetDetail } from '/@/features/requestTarget/model'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { editRequestUsecase } from '/@/features/request/usecase'
 import type { RequestDetail } from '/@/features/request/model'
+import { useRequest } from '/@/features/request/composables'
 
 const props = defineProps<{
   request: RequestDetail
 }>()
 
 const userStore = useUserStore()
-const requestDetailStore = useRequestDetailStore()
-const { isRequestCreator } = requestDetailStore
+const { isRequestCreator } = useRequest(props.request)
 const { me } = storeToRefs(userStore)
 
-const hasAuthority = isRequestCreator(me.value)
+const hasAuthority = isRequestCreator.value(me.value)
 
 const isEditMode = ref(false)
 const editedTargets = ref<RequestTargetDetail[]>(props.request.targets)
@@ -59,7 +58,7 @@ const handleUpdateTargets = async () => {
     </div>
     <div v-if="request" class="flex flex-col gap-2">
       <RequestTarget
-        v-for="(target, i) in request?.targets"
+        v-for="(target, i) in request.targets"
         :key="target.id"
         v-model:targetModel="editedTargets[i]"
         :is-edit-mode="isEditMode"

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 
-import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 import EditButton from '/@/components/shared/EditButton.vue'
@@ -10,19 +9,19 @@ import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 import { useGroupStore } from '/@/stores/group'
 import { editRequestUsecase } from '/@/features/request/usecase'
 import type { RequestDetail } from '/@/features/request/model'
+import { useRequest } from '/@/features/request/composables'
 
 const props = defineProps<{
   request: RequestDetail
 }>()
 
 const userStore = useUserStore()
-const requestDetailStore = useRequestDetailStore()
 const groupStore = useGroupStore()
-const { isRequestCreator } = requestDetailStore
+const { isRequestCreator } = useRequest(props.request)
 const { me } = storeToRefs(userStore)
 const { groupOptions } = storeToRefs(groupStore)
 
-const hasAuthority = isRequestCreator(me.value)
+const hasAuthority = isRequestCreator.value(me.value)
 
 const defaultGroup = computed(() =>
   props.request.group ? props.request.group.id : null

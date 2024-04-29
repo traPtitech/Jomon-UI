@@ -1,18 +1,17 @@
 import type { RequestStatus } from '/@/features/requestStatus/model'
 
 import { storeToRefs } from 'pinia'
-import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 import type { RequestDetail } from '/@/features/request/model'
 import { computed } from 'vue'
+import { useRequest } from '/@/features/request/composables'
 
 export const useStatusOptions = (request: RequestDetail) => {
   const userStore = useUserStore()
-  const requestDetailStore = useRequestDetailStore()
-  const { isRequestCreator } = requestDetailStore
+  const { isRequestCreator } = useRequest(request)
 
   const { me, isAdmin } = storeToRefs(userStore)
-  const hasAuthority = isRequestCreator(me.value)
+  const hasAuthority = isRequestCreator.value(me.value)
 
   const showToSubmitted =
     (hasAuthority && request.status === 'fix_required') ||
@@ -36,5 +35,5 @@ export const useStatusOptions = (request: RequestDetail) => {
       .map(option => ({ value: option.value, key: option.key }))
   )
 
-  return { statusOptions: showStatusOptions.value }
+  return { statusOptions: showStatusOptions }
 }

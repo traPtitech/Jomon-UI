@@ -2,7 +2,6 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
-import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 import EditButton from '/@/components/shared/EditButton.vue'
@@ -11,17 +10,17 @@ import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithC
 import type { Tag } from '/@/features/tag/model'
 import { editRequestUsecase } from '/@/features/request/usecase'
 import type { RequestDetail } from '/@/features/request/model'
+import { useRequest } from '/@/features/request/composables'
 
 const props = defineProps<{
   request: RequestDetail
 }>()
 
 const userStore = useUserStore()
-const requestDetailStore = useRequestDetailStore()
-const { isRequestCreator } = requestDetailStore
+const { isRequestCreator } = useRequest(props.request)
 const { me } = storeToRefs(userStore)
 
-const hasAuthority = isRequestCreator(me.value)
+const hasAuthority = isRequestCreator.value(me.value)
 
 const isEditMode = ref(false)
 const editedTags = ref<Tag[]>(props.request.tags)

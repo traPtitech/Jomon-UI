@@ -44,6 +44,7 @@ const { statusOptions } = useStatusOptions(props.request)
       <StatusChangeModal
         v-if="nextStatus"
         :next-status="nextStatus"
+        :request="request"
         @close-modal="closeModal" />
     </ModalWrapper>
   </div>

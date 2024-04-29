@@ -52,7 +52,7 @@ onMounted(() => {
 <template>
   <div
     v-if="request !== undefined"
-    class="mx-auto w-4/5 pt-5 flex flex-col gap-5">
+    class="mx-auto w-4/5 pt-5 pb-20 flex flex-col gap-5">
     <RequestHeader :request="request" />
     <div class="h-0.25 bg-[#e5e7eb]" />
     <div class="flex justify-between gap-20">

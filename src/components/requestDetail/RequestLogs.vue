@@ -60,7 +60,7 @@ const logs = computed((): Log[] => {
   content: '';
   display: inline-block;
   width: 4px;
-  height: 36px;
+  height: 24px;
   background-color: #d4d4d8;
   margin-left: 70px;
   margin-top: 8px;

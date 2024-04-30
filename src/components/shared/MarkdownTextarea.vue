@@ -49,13 +49,13 @@ function changeCurrentTab(tab: TabType) {
 <template>
   <div class="flex flex-col rounded border border-gray-300">
     <div
-      class="flex items-center justify-between rounded-t bg-gray-200 px-4 pt-3">
+      class="flex items-center justify-between rounded-t bg-gray-100 px-4 pt-3">
       <div class="flex items-center">
         <button
           :class="`rounded-t py-2 px-6 ${
             currentTab === 'input'
-              ? 'bg-white border-t border-x border-gray-300'
-              : 'bg-gray-200'
+              ? 'bg-background border-t border-x border-gray-300'
+              : 'bg-gray-100'
           }`"
           @click="changeCurrentTab('input')">
           入力
@@ -63,8 +63,8 @@ function changeCurrentTab(tab: TabType) {
         <button
           :class="`rounded-t py-2 px-6 ${
             currentTab === 'preview'
-              ? 'bg-white border-t border-x border-gray-300'
-              : 'bg-gray-200'
+              ? 'bg-background border-t border-x border-gray-300'
+              : 'bg-gray-100'
           }`"
           @click="changeCurrentTab('preview')">
           プレビュー
@@ -83,13 +83,13 @@ function changeCurrentTab(tab: TabType) {
       <InputTextarea
         v-if="currentTab === 'input'"
         :auto-focus="autoFocus"
-        class="min-h-40 w-full bg-gray-200"
+        class="min-h-40 w-full"
         :model-value="modelValue"
         :placeholder="placeholder"
         @update:model-value="emit('update:modelValue', $event)" />
       <MarkdownIt
         v-if="currentTab === 'preview'"
-        class="min-h-40 w-full overflow-y-scroll rounded bg-gray-200 border border-gray-300 px-3 py-2"
+        class="min-h-40 w-full overflow-y-scroll rounded border border-gray-300 px-3 py-2"
         :text="modelValue" />
       <div class="flex justify-end pt-3">
         <slot />

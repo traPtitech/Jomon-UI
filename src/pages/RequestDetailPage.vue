@@ -12,10 +12,10 @@ import { toId } from '/@/lib/parseQueryParams'
 import RequestLogs from '/@/components/requestDetail/RequestLogs.vue'
 import RequestSidebar from '/@/components/requestDetail/RequestSidebar.vue'
 import { useFetchGroupsUsecase } from '/@/features/group/usecase'
-import { useFetchRequestUsecase } from '/@/features/request/usecase'
 import { useFetchTagsUsecase } from '/@/features/tag/usecase'
 import { useFetchUsersUsecase } from '/@/features/user/usecase'
 import RequestHeader from '/@/components/requestDetail/RequestHeader.vue'
+import { useRequestDetailStore } from '/@/stores/requestDetail'
 
 const route = useRoute()
 const id = toId(route.params.id)
@@ -23,11 +23,13 @@ const id = toId(route.params.id)
 const userStore = useUserStore()
 const groupStore = useGroupStore()
 const tagStore = useTagStore()
+const requestDetailStore = useRequestDetailStore()
 const { isUserFetched } = storeToRefs(userStore)
 const { isGroupFetched } = storeToRefs(groupStore)
 const { isTagFetched } = storeToRefs(tagStore)
+const { useRequest } = requestDetailStore
 
-const request = await useFetchRequestUsecase(id)
+const request = await useRequest(id)
 
 if (!isGroupFetched.value) {
   await useFetchGroupsUsecase()

@@ -9,14 +9,12 @@
  */
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires, no-undef
-import typescriptEslintEslintRecommended, {
-  overrides as _overrides
-} from '@/node_modules/@typescript-eslint/eslint-plugin/dist/configs/eslint-recommended'
+const typescriptEslintEslintRecommended = require('./node_modules/@typescript-eslint/eslint-plugin/dist/configs/eslint-recommended')
 
 // eslint-disable-next-line no-undef
-export default {
+module.exports = {
   ...typescriptEslintEslintRecommended,
-  overrides: _overrides.map(override => {
+  overrides: typescriptEslintEslintRecommended.overrides.map(override => {
     if (override.files.includes('*.ts')) {
       return { ...override, files: [...override.files, '*.vue'] }
     }

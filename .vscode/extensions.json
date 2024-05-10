@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "vue.volar",
+    "github.vscode-pull-request-github",
+    "esbenp.prettier-vscode",
+  ],
+  "unwantedRecommendations": ["octref.vetur"]
+}

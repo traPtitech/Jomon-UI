@@ -5,6 +5,8 @@ import path from 'path'
 import { addApis } from './add-apis'
 import { addTsIgnoreToImports } from './add-ts-ignore-to-imports'
 
+import { fileURLToPath } from 'url'
+
 const SWAGGER_PATH =
   'https://raw.githubusercontent.com/traPtitech/Jomon/v2/docs/swagger.yaml'
 const GENERATED_DIR = 'src/lib/apis/generated'
@@ -19,6 +21,10 @@ const generateCmd = [
   '-o',
   GENERATED_DIR
 ]
+
+const __filename = fileURLToPath(import.meta.url)
+
+const __dirname = path.dirname(__filename)
 
 ;(async () => {
   await fs.mkdir(path.resolve(__dirname, '../', GENERATED_DIR), {

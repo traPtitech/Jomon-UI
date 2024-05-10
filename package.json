@@ -1,6 +1,7 @@
 {
   "name": "jomon-ui",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "serve": "vite preview",

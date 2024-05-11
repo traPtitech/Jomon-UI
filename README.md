@@ -15,16 +15,17 @@
 
 - Prerequisites
   - JVM for OpenAPI Generator
-  - node 16.x
+  - node 20.x
 
-```
+```sh
 npm install
 npm run dev
 ```
 
 ## featuresディレクトリについて
+
 各featureについて、ディレクトリを設けています。
-参考: https://zenn.dev/knowledgework/articles/91a3dd575f99a2
+参考: <https://zenn.dev/knowledgework/articles/91a3dd575f99a2>
 selectorは現状storeに置くことで済ませています
 
 - model
@@ -40,8 +41,8 @@ selectorは現状storeに置くことで済ませています
   - mswで使うためのmockデータとmock handlerを定義します
 
 データの型の流れ
+
 - GET
   - 生成された型→(converter)→modelの型
 - POST, PUT
   - modelのseed型→(repositoryで変換)→openapiの型
-

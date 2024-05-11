@@ -1,4 +1,4 @@
-import { rest } from 'msw'
+import { http, HttpResponse, type PathParams } from 'msw'
 
 import type {
   PostComment,
@@ -43,53 +43,56 @@ const mockRequestDetail: RequestDetail = {
 }
 
 export const requestHandlers = [
-  rest.get('/api/requests', (_req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json<Request[]>(Array(50).fill(mockRequest))
-    )
+  http.get('/api/requests', () => {
+    const res: Request[] = Array(50).fill(mockRequest)
+    const data = JSON.stringify(res)
+
+    return new Response(data, {
+      status: 200
+    })
   }),
-  rest.get('/api/requests/:id', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json<RequestDetail>(mockRequestDetail))
+  http.get('/api/requests/:id', () => {
+    const res: RequestDetail = mockRequestDetail
+    return HttpResponse.json(res)
   }),
-  rest.post('/api/requests', async (req, res, ctx) => {
-    const reqBody: Request = await req.json()
-    return res(
-      ctx.status(200),
-      ctx.json<RequestDetail>({
+  http.post<PathParams, Request, RequestDetail>(
+    '/api/requests',
+    async ({ request }) => {
+      const reqBody: Request = await request.json()
+      const res: RequestDetail = {
         ...mockRequestDetail,
         ...reqBody
-      })
-    )
-  }),
-  rest.put('/api/requests/:id', async (req, res, ctx) => {
+      }
+
+      return HttpResponse.json(res)
+    }
+  ),
+  http.put('/api/requests/:id', async ({ params }) => {
     // tagsの変換が必要なため、reqBodyを使っていない
-    return res(
-      ctx.status(200),
-      ctx.json<RequestDetail>({
-        ...mockRequestDetail,
-        id: req.params.id as string
-      })
-    )
+    const res: RequestDetail = {
+      ...mockRequestDetail,
+      id: params.id as string // FIXME: 変換処理書く
+    }
+
+    return HttpResponse.json(res)
   }),
-  rest.post('/api/requests/:id/comments', async (req, res, ctx) => {
-    const reqBody: PostComment = await req.json()
-    return res(
-      ctx.status(200),
-      ctx.json<Comment>({
+  http.post<PathParams, PostComment, Comment>(
+    '/api/requests/:id/comments',
+    async ({ request, params }) => {
+      const reqBody: PostComment = await request.json()
+      const res: Comment = {
         ...mockRequestComment,
-        id: req.params.id as string,
+        id: params.id as string,
         ...reqBody
-      })
-    )
-  }),
-  rest.put('/api/requests/:id/status', async (req, res, ctx) => {
+      }
+
+      return HttpResponse.json(res)
+    }
+  ),
+  http.put('/api/requests/:id/status', async () => {
     // NOTE: commentの変換が必要なため、reqBodyを使っていない
-    return res(
-      ctx.status(200),
-      ctx.json<StatusDetail>({
-        ...mockRequestStatus
-      })
-    )
+    const res: StatusDetail = mockRequestStatus
+
+    return HttpResponse.json(res)
   })
 ]

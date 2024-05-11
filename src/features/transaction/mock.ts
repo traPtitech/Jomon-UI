@@ -1,4 +1,4 @@
-import { rest } from 'msw'
+import { HttpResponse, http } from 'msw'
 
 import type { Transaction } from '/@/lib/apis'
 
@@ -17,24 +17,28 @@ const mockTransaction: Transaction = {
 }
 
 export const transactionHandlers = [
-  rest.get('/api/transactions', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json<Transaction[]>(Array(50).fill(mockTransaction))
-    )
+  http.get('/api/transactions', () => {
+    const res: Transaction[] = Array(50).fill(mockTransaction)
+
+    return HttpResponse.json(res)
   }),
-  rest.get('/api/transactions/:id', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json<Transaction>(mockTransaction))
+  http.get('/api/transactions/:id', () => {
+    const res: Transaction = mockTransaction
+    return HttpResponse.json(res)
   }),
-  rest.post('/api/transactions', async (req, res, ctx) => {
-    // NOTE: tagsの変換が必要なため、reqBodyが使っていない
-    return res(ctx.status(200), ctx.json<Transaction[]>([mockTransaction]))
+  http.post('/api/transactions', async () => {
+    // NOTE: tagsの変換が必要なため、reqBodyを使っていない
+    const res: Transaction[] = [mockTransaction]
+
+    return HttpResponse.json(res)
   }),
-  rest.put('/api/transactions/:id', async (req, res, ctx) => {
-    // NOTE: tagsの変換が必要なため、reqBodyが使っていない
-    return res(ctx.status(200), ctx.json<Transaction>(mockTransaction))
+  http.put('/api/transactions/:id', async () => {
+    // NOTE: tagsの変換が必要なため、reqBodyを使っていない
+    const res: Transaction[] = [mockTransaction]
+
+    return HttpResponse.json(res)
   }),
-  rest.delete('/api/transactions/:id', (req, res, ctx) => {
-    return res(ctx.status(200))
+  http.delete('/api/transactions/:id', () => {
+    return HttpResponse.json(null)
   })
 ]

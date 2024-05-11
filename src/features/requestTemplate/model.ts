@@ -7,4 +7,4 @@ export const requestTemplates = [
 ] as const
 
 const requestTemplateNames = requestTemplates.map(v => v.name)
-export type RequestTemplate = typeof requestTemplateNames[number]
+export type RequestTemplate = (typeof requestTemplateNames)[number]

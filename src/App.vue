@@ -1,15 +1,30 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue'
+import { onMounted, watch } from 'vue'
 
 import { useFetchMeUsecase } from '/@/features/user/usecase'
 
 import JomonHeader from './components/navigation/JomonHeader.vue'
 import './styles/main.css'
+import './styles/scrollbar.css'
 import './styles/toast.css'
+import { useRoute } from 'vue-router'
 
 onMounted(async () => {
   await useFetchMeUsecase()
 })
+
+const route = useRoute()
+
+watch(
+  () => route.fullPath,
+  async () => {
+    try {
+      await useFetchMeUsecase()
+    } catch {
+      document.location = 'https://jomon-dev.trapti.tech/api/auth/genpkce'
+    }
+  }
+)
 </script>
 
 <template>

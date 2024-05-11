@@ -9,7 +9,7 @@
   },
   "extends": [
     "eslint:recommended",
-    "./eslint-vue-ts-recommended.js",
+    "./eslint-vue-ts-recommended.cjs",
     "plugin:@typescript-eslint/recommended",
     "plugin:vue/vue3-recommended",
     "prettier"

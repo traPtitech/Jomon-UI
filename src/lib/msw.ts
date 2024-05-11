@@ -1,4 +1,4 @@
-import { setupWorker } from 'msw'
+import { setupWorker } from 'msw/browser'
 
 import { adminHandlers } from '/@/features/admin/mock'
 import { fileHandlers } from '/@/features/file/mock'

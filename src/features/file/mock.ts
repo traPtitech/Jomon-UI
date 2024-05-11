@@ -1,4 +1,4 @@
-import { rest } from 'msw'
+import { HttpResponse, http } from 'msw'
 
 import type { FileMeta } from '/@/lib/apis'
 
@@ -14,19 +14,15 @@ const mockFileMeta: FileMeta = {
 }
 
 export const fileHandlers = [
-  rest.get('/api/files/:id', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.text(mockFile))
+  http.get('/api/files/:id', () => {
+    return HttpResponse.text(mockFile)
   }),
-  rest.get('/api/files/:id/meta', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json<FileMeta>({ ...mockFileMeta, id: req.params.id as string })
-    )
+  http.get('/api/files/:id/meta', ({ params }) => {
+    const res: FileMeta = { ...mockFileMeta, id: params.id as string }
+
+    return HttpResponse.json(res)
   }),
-  rest.post('/api/files', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({ id: '3fa85f64-5717-4562-b3fc-2c963f66afa6' })
-    )
+  http.post('/api/files', () => {
+    return HttpResponse.json({ id: '3fa85f64-5717-4562-b3fc-2c963f66afa6' })
   })
 ]

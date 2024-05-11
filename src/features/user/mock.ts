@@ -1,4 +1,4 @@
-import { rest } from 'msw'
+import { HttpResponse, http } from 'msw'
 
 import type { User } from '/@/lib/apis'
 
@@ -34,10 +34,12 @@ const mockUsers: User[] = [
 ]
 
 export const userHandlers = [
-  rest.get('/api/users', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json<User[]>(mockUsers))
+  http.get('/api/users', () => {
+    const res: User[] = mockUsers
+    return HttpResponse.json(res)
   }),
-  rest.get('/api/users/me', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json<User>(mockUser))
+  http.get('/api/users/me', () => {
+    const res: User = mockUser
+    return HttpResponse.json(res)
   })
 ]

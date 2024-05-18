@@ -47,9 +47,10 @@ if (!isTagFetched.value) {
     </div>
     <form class="flex flex-col gap-6">
       <div class="flex flex-col gap-3">
-        <label class="text-xl">金額</label>
+        <label class="text-xl" for="amount">金額</label>
         <div>
           <InputNumber
+            id="amount"
             v-model="transaction.amount"
             auto-focus
             class="mr-2"
@@ -66,20 +67,20 @@ if (!isTagFetched.value) {
         :targets="transaction.targets"
         @input="transaction.targets = $event" />
       <div class="flex flex-col gap-3">
-        <label class="text-xl">グループ</label>
+        <label class="text-xl" for="group">グループ</label>
         <InputSelectSingle
+          id="group"
           v-model="transaction.group"
           class="w-full"
           :options="groupOptions"
           placeholder="グループを選択" />
       </div>
       <div class="flex flex-col gap-3">
-        <label class="text-xl">タグ</label>
-        <InputSelectTagWithCreation v-model="transaction.tags" class="" />
+        <label class="text-xl" for="tag">タグ</label>
+        <InputSelectTagWithCreation id="tag" v-model="transaction.tags" />
       </div>
       <div class="text-right">
         <SimpleButton
-          class="!px-5"
           :disabled="isSending"
           font-size="md"
           padding="md"

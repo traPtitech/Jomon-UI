@@ -17,6 +17,7 @@ interface Props {
   disabled?: boolean
   isDropdownAbove?: boolean
   uniqKeys?: [string, string]
+  id?: string
   class?: string
 }
 
@@ -191,6 +192,7 @@ onUnmounted(() => {
           {{ selectedValue.key }}
         </span>
         <input
+          :id="props.id"
           ref="inputRef"
           v-model="searchQuery"
           class="flex-grow bg-transparent focus:outline-none"

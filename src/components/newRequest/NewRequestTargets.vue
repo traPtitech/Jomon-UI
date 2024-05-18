@@ -83,7 +83,7 @@ function handleRemoveTarget(index: number) {
             @update:model-value="handleEditTarget(i, $event)" />円
         </div>
         <button class="flex" @click="handleRemoveTarget(i)">
-          <TrashIcon class="w-6 text-rose-500" />
+          <TrashIcon class="w-6 text-red-400" />
         </button>
       </li>
     </ul>

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { storeToRefs } from 'pinia'
-import { useToast } from 'vue-toastification'
 
 import { useUserStore } from '/@/stores/user'
 
@@ -18,7 +17,6 @@ const props = defineProps<Props>()
 const emit = defineEmits<{ (e: 'input', value: RequestTarget[]): void }>()
 
 const userStore = useUserStore()
-const toast = useToast()
 const { userOptions } = storeToRefs(userStore)
 
 function handleEditTarget(index: number, value: unknown) {
@@ -49,10 +47,6 @@ function handleAddTarget() {
   emit('input', [...props.targets, { target: '', amount: 0 }])
 }
 function handleRemoveTarget(index: number) {
-  if (props.targets.length === 1) {
-    toast.warning('払い戻し対象者は1人以上必要です')
-    return
-  }
   emit(
     'input',
     props.targets.filter((_, i) => i !== index)
@@ -62,13 +56,14 @@ function handleRemoveTarget(index: number) {
 
 <template>
   <div class="flex flex-col gap-3">
-    <label>払い戻し対象者</label>
+    <label class="text-xl" for="target">払い戻し対象者</label>
     <ul class="flex flex-col gap-2">
       <li
         v-for="(target, i) in targets"
         :key="target.target"
         class="flex items-center gap-3">
         <InputSelectSingle
+          id="target"
           class="flex-grow"
           :model-value="target.target"
           :options="userOptions"
@@ -82,7 +77,10 @@ function handleRemoveTarget(index: number) {
             placeholder="金額"
             @update:model-value="handleEditTarget(i, $event)" />円
         </div>
-        <button class="flex" @click="handleRemoveTarget(i)">
+        <button
+          v-if="targets.length > 1"
+          class="flex"
+          @click="handleRemoveTarget(i)">
           <TrashIcon class="w-6 text-red-400" />
         </button>
       </li>

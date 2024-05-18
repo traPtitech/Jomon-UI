@@ -25,6 +25,7 @@ const value = computed({
 <template>
   <InputSelectMultiple
     v-model="value"
+    class="w-full"
     :create-option="
       (tag: string) => ({ name: tag, id: '', created_at: '', updated_at: '' })
     "

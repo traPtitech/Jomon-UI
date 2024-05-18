@@ -41,23 +41,23 @@ if (!isTagFetched.value) {
 
 <template>
   <div v-if="!isAdmin">権限がありません。</div>
-  <div class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
-    <div class="pb-8">
-      <h1 class="text-center text-3xl">入出金記録の新規作成</h1>
+  <div class="min-w-160 mx-auto mb-5 flex w-2/3 flex-col px-12 pt-8">
+    <div class="pb-6">
+      <h1 class="text-2xl">入出金記録の新規作成</h1>
     </div>
-    <form class="flex flex-col gap-2">
-      <div class="flex flex-col">
-        <label>金額</label>
+    <form class="flex flex-col gap-6">
+      <div class="flex flex-col gap-3">
+        <label class="text-xl">金額</label>
         <div>
           <InputNumber
             v-model="transaction.amount"
             auto-focus
-            class="mr-1"
+            class="mr-2"
             :min="1" />円
         </div>
       </div>
-      <div class="flex flex-col">
-        <label>入出金</label>
+      <div class="flex flex-col gap-3">
+        <label class="text-xl">入出金の方向</label>
         <InputRadioButton
           v-model="moneyDirection"
           :options="directionOptions" />
@@ -65,26 +65,26 @@ if (!isTagFetched.value) {
       <NewTransactionTarget
         :targets="transaction.targets"
         @input="transaction.targets = $event" />
-      <div class="flex flex-col">
-        <label>グループ</label>
+      <div class="flex flex-col gap-3">
+        <label class="text-xl">グループ</label>
         <InputSelectSingle
           v-model="transaction.group"
-          class="!w-2/3"
+          class="w-full"
           :options="groupOptions"
           placeholder="グループを選択" />
       </div>
-      <div class="flex flex-col">
-        <label>タグ</label>
-        <InputSelectTagWithCreation v-model="transaction.tags" class="!w-2/3" />
+      <div class="flex flex-col gap-3">
+        <label class="text-xl">タグ</label>
+        <InputSelectTagWithCreation v-model="transaction.tags" class="" />
       </div>
       <div class="text-right">
         <SimpleButton
-          class="mb-4 w-64"
+          class="!px-5"
           :disabled="isSending"
-          font-size="xl"
-          padding="sm"
+          font-size="md"
+          padding="md"
           @click.stop="postTransaction">
-          入出金記録を作成する
+          入出金記録を作成
         </SimpleButton>
       </div>
     </form>

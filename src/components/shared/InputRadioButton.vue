@@ -21,9 +21,9 @@ const value = computed({
 </script>
 
 <template>
-  <div class="space-x-4">
-    <label v-for="option in options" :key="option.key">
-      <input v-model="value" type="radio" :value="option.value" />
+  <div class="flex flex-col gap-1">
+    <label v-for="option in options" :key="option.key" class="text-base">
+      <input v-model="value" class="mr-1" type="radio" :value="option.value" />
       {{ option.key }}
     </label>
   </div>

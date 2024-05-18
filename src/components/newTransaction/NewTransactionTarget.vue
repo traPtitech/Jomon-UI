@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { PlusCircleIcon, MinusCircleIcon } from '@heroicons/vue/24/solid'
 import { useToast } from 'vue-toastification'
 
 import InputText from '/@/components/shared/InputText.vue'
+import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
 interface Props {
   targets: string[]
@@ -36,25 +36,29 @@ function handleRemoveTarget(index: number) {
 </script>
 
 <template>
-  <div class="flex flex-col">
-    <label>取引相手</label>
-    <ul>
+  <div class="flex flex-col gap-3">
+    <label class="text-xl">取引相手</label>
+    <ul class="flex flex-col gap-2">
       <li
         v-for="(target, i) in targets"
         :key="target"
-        class="mb-2 flex w-2/3 items-center gap-4">
+        class="flex items-center gap-3">
         <InputText
+          class="flex-grow"
           :model-value="target"
           placeholder="取引相手"
           @update:model-value="handleEditTarget(i, $event)" />
         <button class="flex" @click="handleRemoveTarget(i)">
-          <MinusCircleIcon class="w-6" />
+          <TrashIcon class="w-6 text-red-400" />
         </button>
       </li>
     </ul>
-    <div class="w-2/3 text-center">
-      <button @click="handleAddTarget">
-        <PlusCircleIcon class="w-8" />
+    <div class="ml-3">
+      <button
+        class="flex items-center p-2 border rounded"
+        @click="handleAddTarget">
+        <PlusIcon class="w-5 mr-2" />
+        取引相手を追加
       </button>
     </div>
   </div>

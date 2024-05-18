@@ -10,6 +10,7 @@ interface Props {
   modelValue: string
   templates?: readonly { name: string; value: string }[]
   autoFocus?: boolean
+  id?: string
 }
 const props = withDefaults(defineProps<Props>(), {
   placeholder: '',
@@ -68,6 +69,7 @@ function changeCurrentTab(tab: TabType) {
     <div>
       <InputTextarea
         v-if="currentTab === 'input'"
+        :id="props.id"
         :auto-focus="autoFocus"
         class="min-h-40 w-full"
         :model-value="modelValue"

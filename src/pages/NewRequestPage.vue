@@ -46,20 +46,21 @@ if (!isUserFetched.value) {
     </div>
     <form class="flex flex-col gap-6">
       <div class="flex flex-col gap-3">
-        申請者
-        <span class="text-xl">{{ me?.name }}</span>
+        <label class="text-xl">申請者</label>
+        <span>{{ me?.name }}</span>
       </div>
       <div class="flex flex-col gap-3">
-        <label>タイトル</label>
+        <label class="text-xl" for="title">タイトル</label>
         <InputText
+          id="title"
           v-model="request.title"
           auto-focus
-          class=""
           placeholder="タイトルを入力" />
       </div>
       <div class="flex flex-col gap-3">
-        <label>詳細</label>
+        <label class="text-xl" for="details">詳細</label>
         <MarkdownTextarea
+          id="details"
           v-model="request.content"
           placeholder=""
           :templates="requestTemplates" />
@@ -68,8 +69,9 @@ if (!isUserFetched.value) {
         :targets="request.targets"
         @input="request.targets = $event" />
       <div class="flex flex-col gap-3">
-        <label>グループ</label>
+        <label class="text-xl" for="group">グループ</label>
         <InputSelectSingle
+          id="group"
           v-model="request.group"
           class="w-full"
           :options="groupOptions"
@@ -79,7 +81,6 @@ if (!isUserFetched.value) {
       <NewRequestFileForm :files="files" @input="files = $event" />
       <div class="text-right">
         <SimpleButton
-          class="!px-5"
           :disabled="isSending"
           font-size="base"
           padding="md"

@@ -45,8 +45,13 @@ function removeFile(index: number) {
 
 <template>
   <div class="flex flex-col gap-3">
-    <label>画像</label>
-    <input ref="inputRef" multiple type="file" @change="handleFileChange" />
+    <label class="text-xl" for="image">画像</label>
+    <input
+      id="image"
+      ref="inputRef"
+      multiple
+      type="file"
+      @change="handleFileChange" />
   </div>
   <div>
     <div v-if="files.length === 0">画像プレビュー</div>

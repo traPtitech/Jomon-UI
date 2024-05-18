@@ -53,10 +53,10 @@ function changeCurrentTab(tab: TabType) {
       class="px-5 py-3 box-border border-x border-b border-zinc-300 rounded-b">
       <InputTextarea
         v-if="currentTab === 'input'"
-        :auto-focus="autoFocus"
+        :auto-focus="props.autoFocus"
         class="min-h-40 w-full"
-        :model-value="modelValue"
-        :placeholder="placeholder"
+        :model-value="props.modelValue"
+        :placeholder="props.placeholder"
         @update:model-value="emit('update:modelValue', $event)" />
       <MarkdownIt
         v-if="currentTab === 'preview'"

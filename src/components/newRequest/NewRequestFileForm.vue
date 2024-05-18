@@ -44,7 +44,7 @@ function removeFile(index: number) {
 </script>
 
 <template>
-  <div class="flex flex-col">
+  <div class="flex flex-col gap-3">
     <label>画像</label>
     <input ref="inputRef" multiple type="file" @change="handleFileChange" />
   </div>

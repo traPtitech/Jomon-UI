@@ -40,24 +40,24 @@ if (!isUserFetched.value) {
 </script>
 
 <template>
-  <div class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
+  <div class="min-w-147 mx-50 mt-8 mb-30 flex flex-col">
     <div class="pb-8">
-      <h1 class="text-center text-3xl">申請の新規作成</h1>
+      <h1 class="text-2xl">申請の新規作成</h1>
     </div>
-    <form class="flex flex-col gap-2">
-      <div class="flex flex-col">
+    <form class="flex flex-col gap-6">
+      <div class="flex flex-col gap-3">
         申請者
         <span class="text-xl">{{ me?.name }}</span>
       </div>
-      <div class="flex flex-col">
+      <div class="flex flex-col gap-3">
         <label>タイトル</label>
         <InputText
           v-model="request.title"
           auto-focus
-          class="h-8"
+          class=""
           placeholder="タイトルを入力" />
       </div>
-      <div class="flex flex-col">
+      <div class="flex flex-col gap-3">
         <label>詳細</label>
         <MarkdownTextarea
           v-model="request.content"
@@ -67,11 +67,11 @@ if (!isUserFetched.value) {
       <NewRequestTargets
         :targets="request.targets"
         @input="request.targets = $event" />
-      <div class="flex flex-col">
+      <div class="flex flex-col gap-3">
         <label>グループ</label>
         <InputSelectSingle
           v-model="request.group"
-          class="!w-2/3"
+          class="w-full"
           :options="groupOptions"
           placeholder="グループを選択" />
       </div>
@@ -79,12 +79,12 @@ if (!isUserFetched.value) {
       <NewRequestFileForm :files="files" @input="files = $event" />
       <div class="text-right">
         <SimpleButton
-          class="mb-4"
+          class="!px-5"
           :disabled="isSending"
-          font-size="xl"
+          font-size="base"
           padding="md"
           @click.stop="postRequest">
-          申請を作成する
+          申請を作成
         </SimpleButton>
       </div>
     </form>

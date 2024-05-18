@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { PlusCircleIcon, MinusCircleIcon } from '@heroicons/vue/24/solid'
+import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { storeToRefs } from 'pinia'
 import { useToast } from 'vue-toastification'
 
@@ -61,35 +61,38 @@ function handleRemoveTarget(index: number) {
 </script>
 
 <template>
-  <div class="flex flex-col">
+  <div class="flex flex-col gap-3">
     <label>払い戻し対象者</label>
-    <ul>
+    <ul class="flex flex-col gap-2">
       <li
         v-for="(target, i) in targets"
         :key="target.target"
-        class="mb-2 flex w-2/3 items-center gap-4">
+        class="flex items-center gap-3">
         <InputSelectSingle
-          class="!w-1/3 flex-grow"
+          class="flex-grow"
           :model-value="target.target"
           :options="userOptions"
           placeholder="払い戻し対象者を選択"
           @update:model-value="handleEditTarget(i, $event)" />
         <div>
           <InputNumber
-            class="mr-1"
+            class="mr-2"
             :min="1"
             :model-value="target.amount"
             placeholder="金額"
             @update:model-value="handleEditTarget(i, $event)" />円
         </div>
         <button class="flex" @click="handleRemoveTarget(i)">
-          <MinusCircleIcon class="w-6" />
+          <TrashIcon class="w-6 text-rose-500" />
         </button>
       </li>
     </ul>
-    <div v-if="userOptions.length > targets.length" class="w-2/3 text-center">
-      <button @click="handleAddTarget">
-        <PlusCircleIcon class="w-8" />
+    <div v-if="userOptions.length > targets.length" class="ml-3">
+      <button
+        class="flex items-center p-2 border rounded text-base"
+        @click="handleAddTarget">
+        <PlusIcon class="w-5 mr-2" />
+        払い戻し対象者を追加
       </button>
     </div>
   </div>

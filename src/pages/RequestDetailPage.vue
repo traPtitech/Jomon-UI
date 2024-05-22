@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
@@ -40,12 +39,6 @@ if (!isUserFetched.value) {
 if (!isTagFetched.value) {
   await useFetchTagsUsecase()
 }
-
-onMounted(() => {
-  if (route.hash !== '') {
-    document.getElementById(route.hash.substring(1))?.scrollIntoView(true)
-  }
-})
 </script>
 
 <template>

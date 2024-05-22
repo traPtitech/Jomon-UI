@@ -1,7 +1,5 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
 
 import { useUserStore } from '/@/stores/user'
 
@@ -19,9 +17,6 @@ const formattedDateAndTime = formatDateAndTime(props.comment.createdAt)
 
 const userStore = useUserStore()
 const { userMap } = storeToRefs(userStore)
-
-const route = useRoute()
-const hash = computed(() => route.hash.substring(1))
 </script>
 
 <template>

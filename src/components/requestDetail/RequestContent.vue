@@ -13,6 +13,7 @@ import { editRequestUsecase } from '/@/features/request/usecase'
 import EditButton from '/@/components/shared/EditButton.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps<{
   request: RequestDetail
@@ -22,6 +23,7 @@ const formattedDateAndTime = formatDateAndTime(props.request.createdAt)
 
 const userStore = useUserStore()
 const { userMap } = storeToRefs(userStore)
+const toast = useToast()
 
 const isEditMode = ref(false)
 const editedContent = ref(props.request.content)
@@ -32,12 +34,16 @@ const toggleEditContent = () => {
   isEditMode.value = !isEditMode.value
 }
 const handleUpdateContent = async () => {
-  if (!props.request) return
-  await editRequestUsecase(props.request.id, {
-    ...props.request,
-    group: props.request.group?.id ?? null, // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
-    content: editedContent.value
-  })
+  try {
+    await editRequestUsecase(props.request.id, {
+      ...props.request,
+      group: props.request.group?.id ?? null, // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
+      content: editedContent.value
+    })
+    toast.success('更新しました')
+  } catch {
+    toast.error('更新に失敗しました')
+  }
   isEditMode.value = false
 }
 </script>

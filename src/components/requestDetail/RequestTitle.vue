@@ -6,10 +6,13 @@ import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import InputText from '/@/components/shared/InputText.vue'
 import { editRequestUsecase } from '/@/features/request/usecase'
 import EditButton from '/@/components/shared/EditButton.vue'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps<{
   request: RequestDetail
 }>()
+
+const toast = useToast()
 
 const isEditMode = ref(false)
 const editedTitle = ref(props.request.title)
@@ -20,11 +23,16 @@ const toggleEditTitle = () => {
   isEditMode.value = !isEditMode.value
 }
 const handleUpdateTitle = async () => {
-  await editRequestUsecase(props.request.id, {
-    ...props.request,
-    group: props.request.group?.id ?? null,
-    title: editedTitle.value
-  })
+  try {
+    await editRequestUsecase(props.request.id, {
+      ...props.request,
+      group: props.request.group?.id ?? null,
+      title: editedTitle.value
+    })
+    toast.success('更新しました')
+  } catch {
+    toast.error('更新に失敗しました')
+  }
   isEditMode.value = false
 }
 </script>

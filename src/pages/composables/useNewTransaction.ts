@@ -8,12 +8,16 @@ import { createTagIfNotExistUsecase } from '/@/features/tag/usecase'
 import type { TransactionCreateSeed } from '/@/features/transaction/model'
 import { createTransactionUsecase } from '/@/features/transaction/usecase'
 import type { RequestTarget } from '/@/features/requestTarget/model'
+import { storeToRefs } from 'pinia'
+import { useUserStore } from '/@/stores/user'
 
 export type MoneyDirection = 'toTraP' | 'fromTraP'
 
 export const useNewTransaction = () => {
   const toast = useToast()
   const router = useRouter()
+  const userStore = useUserStore()
+  const { userMap } = storeToRefs(userStore)
 
   const isSending = ref(false)
 
@@ -62,7 +66,9 @@ export const useNewTransaction = () => {
     target: RequestTarget
   ) => {
     const result = confirm(
-      `この申請に紐づけて@${target.target}の入出金記録を作成しますか？`
+      `この申請に紐づけて@${
+        userMap.value[target.target]
+      }の入出金記録を作成しますか？`
     )
     if (!result) return
     isSending.value = true

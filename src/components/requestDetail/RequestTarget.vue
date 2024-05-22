@@ -17,6 +17,7 @@ import type { RequestDetail } from '/@/features/request/model'
 
 import { useNewTransaction } from '/@/pages/composables/useNewTransaction'
 import { computed } from 'vue'
+import { editRequestUsecase } from '/@/features/request/usecase'
 
 const props = defineProps<{
   request: RequestDetail
@@ -42,8 +43,23 @@ const targetModel = defineModel<RequestTarget>('targetModel', {
   required: true
 })
 
-const handleRemoveTarget = () => {
-  console.log('remove')
+const handleRemoveTarget = async () => {
+  const result = confirm('本当に削除しますか？')
+  if (!result) {
+    return
+  }
+
+  try {
+    await editRequestUsecase(props.request.id, {
+      ...props.request,
+      group: props.request.group?.id ?? null,
+      targets: props.request.targets.filter(
+        target => target.target !== props.target.target
+      )
+    })
+  } catch {
+    alert('削除に失敗しました')
+  }
 }
 </script>
 

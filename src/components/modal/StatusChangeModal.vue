@@ -26,10 +26,8 @@ const putStatus = async (nextStatus: RequestStatus, comment: string) => {
     await changeStatusUsecase(props.request.id, nextStatus, comment)
     toast.success('申請の状態を変更しました')
     emit('closeModal')
-  } catch (e) {
-    if (e instanceof Error) {
-      toast.error(e.message)
-    }
+  } catch {
+    toast.error('変更に失敗しました')
   }
 }
 </script>

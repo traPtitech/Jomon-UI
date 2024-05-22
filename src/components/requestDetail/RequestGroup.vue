@@ -10,6 +10,7 @@ import { useGroupStore } from '/@/stores/group'
 import { editRequestUsecase } from '/@/features/request/usecase'
 import type { RequestDetail } from '/@/features/request/model'
 import { useRequest } from '/@/features/request/composables'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps<{
   request: RequestDetail
@@ -20,6 +21,7 @@ const groupStore = useGroupStore()
 const { isRequestCreator } = useRequest(props.request)
 const { me } = storeToRefs(userStore)
 const { groupOptions } = storeToRefs(groupStore)
+const toast = useToast()
 
 const hasAuthority = isRequestCreator.value(me.value)
 
@@ -39,10 +41,15 @@ const toggleEditGroup = () => {
   isEditMode.value = !isEditMode.value
 }
 const handleUpdateGroup = async () => {
-  await editRequestUsecase(props.request.id, {
-    ...props.request,
-    group: editedGroup.value
-  })
+  try {
+    await editRequestUsecase(props.request.id, {
+      ...props.request,
+      group: editedGroup.value
+    })
+    toast.success('更新しました')
+  } catch {
+    toast.error('更新に失敗しました')
+  }
   isEditMode.value = false
 }
 </script>

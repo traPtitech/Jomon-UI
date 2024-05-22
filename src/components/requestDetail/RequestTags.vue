@@ -11,6 +11,7 @@ import type { Tag } from '/@/features/tag/model'
 import { editRequestUsecase } from '/@/features/request/usecase'
 import type { RequestDetail } from '/@/features/request/model'
 import { useRequest } from '/@/features/request/composables'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps<{
   request: RequestDetail
@@ -19,6 +20,7 @@ const props = defineProps<{
 const userStore = useUserStore()
 const { isRequestCreator } = useRequest(props.request)
 const { me } = storeToRefs(userStore)
+const toast = useToast()
 
 const hasAuthority = isRequestCreator.value(me.value)
 
@@ -31,11 +33,16 @@ const toggleEditTags = () => {
   isEditMode.value = !isEditMode.value
 }
 const handleUpdateTags = async () => {
-  await editRequestUsecase(props.request.id, {
-    ...props.request,
-    group: props.request.group?.id ?? null, // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
-    tags: editedTags.value
-  })
+  try {
+    await editRequestUsecase(props.request.id, {
+      ...props.request,
+      group: props.request.group?.id ?? null, // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
+      tags: editedTags.value
+    })
+    toast.success('更新しました')
+  } catch {
+    toast.error('更新に失敗しました')
+  }
   isEditMode.value = false
 }
 </script>

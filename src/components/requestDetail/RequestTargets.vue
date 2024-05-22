@@ -32,6 +32,10 @@ const toggleEditTargets = () => {
 }
 
 const handleUpdateTargets = async () => {
+  if (editedTargets.value.some(target => target.target === null)) {
+    toast.error('払い戻し対象者を選択してください')
+    return
+  }
   try {
     await editRequestUsecase(props.request.id, {
       ...props.request,

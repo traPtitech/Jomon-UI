@@ -76,7 +76,7 @@ const selectValue = (selectedOption: Value) => {
 }
 const removeValue = () => {
   setTimeout(() => {
-    emit('update:modelValue', '')
+    emit('update:modelValue', null)
   }, 10)
 }
 

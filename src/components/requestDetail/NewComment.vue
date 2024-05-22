@@ -17,7 +17,7 @@ const { comment, isSending, submit } = useNewComment(props.request.id)
       <SimpleButton
         :disabled="isSending"
         font-size="md"
-        padding="sm"
+        padding="md"
         type="success"
         @click="submit">
         コメントする

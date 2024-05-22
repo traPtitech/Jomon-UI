@@ -27,7 +27,7 @@ const props = defineProps<{
 
 const { isSending, postTransactionFromRequest } = useNewTransaction()
 const userStore = useUserStore()
-const { userMap, userOptions } = storeToRefs(userStore)
+const { userMap, userOptions, isAdmin } = storeToRefs(userStore)
 
 const targets = computed(() =>
   props.request.targets.map(target => target.target)
@@ -84,7 +84,7 @@ const handleRemoveTarget = async () => {
         </RouterLink>
       </div>
       <button
-        v-else
+        v-else-if="isAdmin"
         class="text-blue-500"
         :disabled="isSending"
         @click="postTransactionFromRequest(request, target)">

@@ -7,15 +7,23 @@ import InputText from '/@/components/shared/InputText.vue'
 import { editRequestUsecase } from '/@/features/request/usecase'
 import EditButton from '/@/components/shared/EditButton.vue'
 import { useToast } from 'vue-toastification'
+import { useUserStore } from '/@/stores/user'
+import { useRequest } from '/@/features/request/composables'
+import { storeToRefs } from 'pinia'
 
 const props = defineProps<{
   request: RequestDetail
 }>()
 
+const userStore = useUserStore()
+const { isRequestCreator } = useRequest(props.request)
+const { me } = storeToRefs(userStore)
 const toast = useToast()
 
+const hasAuthority = isRequestCreator.value(me.value)
 const isEditMode = ref(false)
 const editedTitle = ref(props.request.title)
+
 const toggleEditTitle = () => {
   if (isEditMode.value) {
     editedTitle.value = props.request.title
@@ -44,6 +52,9 @@ const handleUpdateTitle = async () => {
     <SimpleButton v-if="isEditMode" padding="sm" @click="handleUpdateTitle">
       完了
     </SimpleButton>
-    <EditButton :is-edit-mode="isEditMode" @click="toggleEditTitle" />
+    <EditButton
+      v-if="hasAuthority"
+      :is-edit-mode="isEditMode"
+      @click="toggleEditTitle" />
   </div>
 </template>

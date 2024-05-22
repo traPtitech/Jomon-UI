@@ -29,7 +29,7 @@ const { statusOptions } = useStatusOptions(props.request)
 <template>
   <div class="relative">
     <StatusChip
-      has-menu
+      :has-menu="statusOptions.length !== 0"
       has-text
       :status="request.status"
       @click.stop="showMenu = true" />

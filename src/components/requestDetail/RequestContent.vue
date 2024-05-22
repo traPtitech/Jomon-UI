@@ -14,6 +14,7 @@ import EditButton from '/@/components/shared/EditButton.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { useToast } from 'vue-toastification'
+import { useRequest } from '/@/features/request/composables'
 
 const props = defineProps<{
   request: RequestDetail
@@ -24,7 +25,10 @@ const formattedDateAndTime = formatDateAndTime(props.request.createdAt)
 const userStore = useUserStore()
 const { userMap } = storeToRefs(userStore)
 const toast = useToast()
+const { isRequestCreator } = useRequest(props.request)
+const { me } = storeToRefs(userStore)
 
+const hasAuthority = isRequestCreator.value(me.value)
 const isEditMode = ref(false)
 const editedContent = ref(props.request.content)
 const toggleEditContent = () => {
@@ -72,7 +76,10 @@ const handleUpdateContent = async () => {
         v-model="editedContent"
         auto-focus
         class="flex-1" />
-      <EditButton :is-edit-mode="isEditMode" @click="toggleEditContent" />
+      <EditButton
+        v-if="hasAuthority"
+        :is-edit-mode="isEditMode"
+        @click="toggleEditContent" />
     </div>
     <div class="flex justify-end">
       <SimpleButton v-if="isEditMode" padding="sm" @click="handleUpdateContent">

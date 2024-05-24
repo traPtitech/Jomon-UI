@@ -63,7 +63,7 @@ function handleRemoveTarget(index: number) {
         :key="target.target"
         class="flex items-center gap-3">
         <InputSelectSingle
-          id="target"
+          :id="i === targets.length - 1 ? 'target' : undefined"
           class="flex-grow"
           :model-value="target.target"
           :options="userOptions"

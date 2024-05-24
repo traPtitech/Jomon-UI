@@ -46,8 +46,8 @@ if (!isTagFetched.value) {
       <h1 class="text-2xl">入出金記録の新規作成</h1>
     </div>
     <form class="flex flex-col gap-6">
-      <div class="flex flex-col gap-3">
-        <label class="text-xl" for="amount">金額</label>
+      <div class="flex flex-col gap-2">
+        <label class="text-sm" for="amount">金額</label>
         <div>
           <InputNumber
             id="amount"
@@ -57,8 +57,8 @@ if (!isTagFetched.value) {
             :min="1" />円
         </div>
       </div>
-      <div class="flex flex-col gap-3">
-        <label class="text-xl">入出金の方向</label>
+      <div class="flex flex-col gap-2">
+        <label class="text-sm">入出金の方向</label>
         <InputRadioButton
           v-model="moneyDirection"
           :options="directionOptions" />
@@ -66,8 +66,8 @@ if (!isTagFetched.value) {
       <NewTransactionTarget
         :targets="transaction.targets"
         @input="transaction.targets = $event" />
-      <div class="flex flex-col gap-3">
-        <label class="text-xl" for="group">グループ</label>
+      <div class="flex flex-col gap-2">
+        <label class="text-sm" for="group">グループ</label>
         <InputSelectSingle
           id="group"
           v-model="transaction.group"
@@ -75,8 +75,8 @@ if (!isTagFetched.value) {
           :options="groupOptions"
           placeholder="グループを選択" />
       </div>
-      <div class="flex flex-col gap-3">
-        <label class="text-xl" for="tag">タグ</label>
+      <div class="flex flex-col gap-2">
+        <label class="text-sm" for="tag">タグ</label>
         <InputSelectTagWithCreation id="tag" v-model="transaction.tags" />
       </div>
       <div class="text-right">

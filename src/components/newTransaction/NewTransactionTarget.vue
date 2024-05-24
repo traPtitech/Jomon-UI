@@ -28,8 +28,8 @@ function handleRemoveTarget(index: number) {
 </script>
 
 <template>
-  <div class="flex flex-col gap-3">
-    <label class="text-xl" for="target">取引相手</label>
+  <div class="flex flex-col gap-2">
+    <label class="text-sm" for="target">取引相手</label>
     <ul class="flex flex-col gap-2">
       <li
         v-for="(target, i) in targets"

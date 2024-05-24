@@ -29,7 +29,7 @@ function handleRemoveTarget(index: number) {
 
 <template>
   <div class="flex flex-col gap-2">
-    <label class="text-sm" for="target">取引相手</label>
+    <label class="text-sm font-medium" for="target">取引相手</label>
     <ul class="flex flex-col gap-2">
       <li
         v-for="(target, i) in targets"

@@ -36,7 +36,7 @@ function handleRemoveTarget(index: number) {
         :key="target"
         class="flex items-center gap-3">
         <InputText
-          id="target"
+          :id="i === targets.length - 1 && 'target'"
           class="flex-grow"
           :model-value="target"
           placeholder="取引相手"

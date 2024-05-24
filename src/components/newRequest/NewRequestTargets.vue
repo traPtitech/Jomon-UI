@@ -55,8 +55,8 @@ function handleRemoveTarget(index: number) {
 </script>
 
 <template>
-  <div class="flex flex-col gap-3">
-    <label class="text-xl" for="target">払い戻し対象者</label>
+  <div class="flex flex-col gap-2">
+    <label class="text-sm font-medium" for="target">払い戻し対象者</label>
     <ul class="flex flex-col gap-2">
       <li
         v-for="(target, i) in targets"

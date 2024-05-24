@@ -10,8 +10,8 @@ const emit = defineEmits<{ (e: 'input', value: Tag[]): void }>()
 </script>
 
 <template>
-  <div class="flex flex-col gap-3">
-    <label class="text-xl" for="tag">タグ</label>
+  <div class="flex flex-col gap-2">
+    <label class="text-sm font-medium" for="tag">タグ</label>
     <InputSelectTagWithCreation
       id="tag"
       class="w-full"

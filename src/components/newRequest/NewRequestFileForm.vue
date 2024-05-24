@@ -44,8 +44,8 @@ function removeFile(index: number) {
 </script>
 
 <template>
-  <div class="flex flex-col gap-3">
-    <label class="text-xl" for="image">画像</label>
+  <div class="flex flex-col gap-2">
+    <label class="text-sm font-medium" for="image">画像</label>
     <input
       id="image"
       ref="inputRef"
@@ -54,7 +54,9 @@ function removeFile(index: number) {
       @change="handleFileChange" />
   </div>
   <div>
-    <div v-if="files.length === 0">画像プレビュー</div>
+    <div v-if="files.length === 0" class="text-sm font-medium">
+      画像プレビュー
+    </div>
     <div v-if="files.length !== 0" class="flex flex-wrap">
       <div
         v-for="(file, index) in files"

@@ -45,20 +45,20 @@ if (!isUserFetched.value) {
       <h1 class="text-2xl">申請の新規作成</h1>
     </div>
     <form class="flex flex-col gap-6">
-      <div class="flex flex-col gap-3">
-        <label class="text-xl">申請者</label>
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium">申請者</label>
         <span>{{ me?.name }}</span>
       </div>
-      <div class="flex flex-col gap-3">
-        <label class="text-xl" for="title">タイトル</label>
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium" for="title">タイトル</label>
         <InputText
           id="title"
           v-model="request.title"
           auto-focus
           placeholder="タイトルを入力" />
       </div>
-      <div class="flex flex-col gap-3">
-        <label class="text-xl" for="details">詳細</label>
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium" for="details">詳細</label>
         <MarkdownTextarea
           id="details"
           v-model="request.content"
@@ -68,8 +68,8 @@ if (!isUserFetched.value) {
       <NewRequestTargets
         :targets="request.targets"
         @input="request.targets = $event" />
-      <div class="flex flex-col gap-3">
-        <label class="text-xl" for="group">グループ</label>
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium" for="group">グループ</label>
         <InputSelectSingle
           id="group"
           v-model="request.group"

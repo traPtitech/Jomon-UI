@@ -40,26 +40,27 @@ if (!isUserFetched.value) {
 </script>
 
 <template>
-  <div class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
+  <div class="min-w-147 mx-50 mt-8 mb-30 flex flex-col">
     <div class="pb-8">
-      <h1 class="text-center text-3xl">申請の新規作成</h1>
+      <h1 class="text-2xl">申請の新規作成</h1>
     </div>
-    <form class="flex flex-col gap-2">
-      <div class="flex flex-col">
-        申請者
-        <span class="text-xl">{{ me?.name }}</span>
+    <form class="flex flex-col gap-6">
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium">申請者</label>
+        <span>{{ me?.name }}</span>
       </div>
-      <div class="flex flex-col">
-        <label>タイトル</label>
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium" for="title">タイトル</label>
         <InputText
+          id="title"
           v-model="request.title"
           auto-focus
-          class="h-8"
           placeholder="タイトルを入力" />
       </div>
-      <div class="flex flex-col">
-        <label>詳細</label>
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium" for="details">詳細</label>
         <MarkdownTextarea
+          id="details"
           v-model="request.content"
           placeholder=""
           :templates="requestTemplates" />
@@ -67,11 +68,12 @@ if (!isUserFetched.value) {
       <NewRequestTargets
         :targets="request.targets"
         @input="request.targets = $event" />
-      <div class="flex flex-col">
-        <label>グループ</label>
+      <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium" for="group">グループ</label>
         <InputSelectSingle
+          id="group"
           v-model="request.group"
-          class="!w-2/3"
+          class="w-full"
           :options="groupOptions"
           placeholder="グループを選択" />
       </div>
@@ -79,12 +81,11 @@ if (!isUserFetched.value) {
       <NewRequestFileForm :files="files" @input="files = $event" />
       <div class="text-right">
         <SimpleButton
-          class="mb-4"
           :disabled="isSending"
-          font-size="xl"
+          font-size="base"
           padding="md"
           @click.stop="postRequest">
-          申請を作成する
+          申請を作成
         </SimpleButton>
       </div>
     </form>

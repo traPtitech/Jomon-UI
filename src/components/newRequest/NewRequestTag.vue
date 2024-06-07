@@ -10,13 +10,12 @@ const emit = defineEmits<{ (e: 'input', value: Tag[]): void }>()
 </script>
 
 <template>
-  <div class="flex flex-col">
-    <label>タグ</label>
-    <div class="flex">
-      <InputSelectTagWithCreation
-        class="w-2/3"
-        :model-value="props.tags"
-        @update:model-value="emit('input', $event)" />
-    </div>
+  <div class="flex flex-col gap-2">
+    <label class="text-sm font-medium" for="tag">タグ</label>
+    <InputSelectTagWithCreation
+      id="tag"
+      class="w-full"
+      :model-value="props.tags"
+      @update:model-value="emit('input', $event)" />
   </div>
 </template>

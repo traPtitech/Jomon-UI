@@ -6,6 +6,7 @@ interface Props {
   required?: boolean
   placeholder?: string
   autoFocus?: boolean
+  id?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -33,6 +34,7 @@ onMounted(() => {
 
 <template>
   <textarea
+    :id="props.id"
     ref="textareaRef"
     class="bg-background min-h-32 rounded border border-gray-300 px-1"
     :placeholder="props.placeholder"

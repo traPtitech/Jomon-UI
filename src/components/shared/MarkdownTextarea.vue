@@ -1,29 +1,24 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-
 import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
-
 import InputTextarea from './InputTextarea.vue'
 import MarkdownIt from './MarkdownIt.vue'
 
 type TabType = 'input' | 'preview'
-
 interface Props {
   placeholder?: string
   modelValue: string
   templates?: readonly { name: string; value: string }[]
   autoFocus?: boolean
+  id?: string
 }
-
 const props = withDefaults(defineProps<Props>(), {
   placeholder: '',
   autoFocus: false
 })
 const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>()
-
 const currentTab = ref<TabType>('input')
 const selectedTemplate = ref('')
-
 const templateOptions = computed(() => {
   return (
     props.templates?.map(template => {
@@ -34,14 +29,12 @@ const templateOptions = computed(() => {
     }) ?? []
   )
 })
-
 function setTemplate(template: string) {
   const foundTemplate = props.templates?.find(t => t.name === template)
   if (foundTemplate !== undefined) {
     emit('update:modelValue', foundTemplate.value)
   }
 }
-
 function changeCurrentTab(tab: TabType) {
   currentTab.value = tab
 }
@@ -76,6 +69,7 @@ function changeCurrentTab(tab: TabType) {
     <div>
       <InputTextarea
         v-if="currentTab === 'input'"
+        :id="props.id"
         :auto-focus="autoFocus"
         class="min-h-40 w-full"
         :model-value="modelValue"

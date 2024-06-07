@@ -71,7 +71,7 @@ if (!isGroupFetched.value) {
       @cancel="isEditMode = false"
       @finish-editing="finishEditing($event)" />
     <RouterLink class="w-fit" :to="`/requests/${transaction.request}`">
-      <SimpleButton font-size="md" padding="sm">
+      <SimpleButton font-size="base" padding="sm">
         紐づいている申請へ移動
       </SimpleButton>
     </RouterLink>

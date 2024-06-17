@@ -60,13 +60,13 @@ watch(
 
 <template>
   <div class="mx-50 my-8 flex flex-col gap-7">
-    <div class="min-w-160 mx-auto flex flex-col">
-      <div class="relative flex w-full items-center justify-center">
+    <div class="min-w-160 flex flex-col">
+      <div class="relative flex w-full items-center justify-start gap-7">
         <h1 class="text-center text-3xl">申請一覧</h1>
-        <div class="absolute right-0">
+        <div>
           <RouterLink to="/requests/new">
             <SimpleButton font-size="lg" padding="md">
-              申請の新規作成
+              申請を作成
             </SimpleButton>
           </RouterLink>
         </div>

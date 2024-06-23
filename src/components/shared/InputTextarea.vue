@@ -34,7 +34,7 @@ onMounted(() => {
 <template>
   <textarea
     ref="textareaRef"
-    class="bg-background min-h-32 rounded border border-gray-300 px-1"
+    class="bg-background min-h-32 rounded border border-gray-300 px-3 py-2"
     :placeholder="props.placeholder"
     :required="required"
     :value="props.modelValue"

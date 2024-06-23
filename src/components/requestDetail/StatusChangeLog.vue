@@ -21,13 +21,19 @@ const formattedDateAndTime = formatDateAndTime(props.log.createdAt)
 </script>
 
 <template>
-  <div class="w-5/7 flex items-center pl-12">
-    <UserIcon class="mr-2 w-12" :name="userMap[log.createdBy]" />
-    {{ userMap[log.createdBy] }}
-    が申請の状態を
-    <StatusChip class="mx-2" has-text :status="log.status" />
-    にしました。
-    <div class="ml-auto">
+  <div class="w-full flex items-center">
+    <div class="flex items-center gap-4 flex-1">
+      <UserIcon class="w-12" :name="userMap[log.createdBy]" />
+      <div class="flex items-center gap-2">
+        <span>
+          <span class="font-bold">{{ userMap[log.createdBy] }}</span>
+          が申請の状態を
+        </span>
+        <StatusChip has-text :status="log.status" />
+        <span>にしました</span>
+      </div>
+    </div>
+    <div class="text-gray-400">
       {{ formattedDateAndTime }}
     </div>
   </div>

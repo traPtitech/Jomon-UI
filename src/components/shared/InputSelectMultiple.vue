@@ -20,6 +20,7 @@ interface Props {
   isDropdownAbove?: boolean
   /* [optionsのkey, modelValueのkey] modelValueをselectedValuesに適用するときに使う*/
   uniqKeys?: [string, string]
+  id?: string
   /* デフォルト幅を設定するため */
   class?: string
 }
@@ -284,6 +285,7 @@ onUnmounted(() => {
           <button type="button" @click="removeValue(selectedValue)">×</button>
         </div>
         <input
+          :id="props.id"
           ref="inputRef"
           v-model="searchQuery"
           class="flex-grow bg-transparent pl-1 focus:outline-none"

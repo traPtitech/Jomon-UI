@@ -9,6 +9,7 @@ import type { Tag } from '/@/features/tag/model'
 
 interface Props {
   modelValue: Tag[]
+  id?: string
 }
 const props = defineProps<Props>()
 const emit = defineEmits<{ (e: 'update:modelValue', value: Tag[]): void }>()
@@ -24,7 +25,9 @@ const value = computed({
 
 <template>
   <InputSelectMultiple
+    :id="props.id"
     v-model="value"
+    class="w-full"
     :create-option="
       (tag: string) => ({ name: tag, id: '', created_at: '', updated_at: '' })
     "

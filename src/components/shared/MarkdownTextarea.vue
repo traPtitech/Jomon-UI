@@ -10,16 +10,15 @@ type TabType = 'input' | 'preview'
 
 interface Props {
   placeholder?: string
-  modelValue: string
   templates?: readonly { name: string; value: string }[]
   autoFocus?: boolean
 }
 
+const model = defineModel<string>({ required: true })
 const props = withDefaults(defineProps<Props>(), {
   placeholder: '',
   autoFocus: false
 })
-const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>()
 
 const currentTab = ref<TabType>('input')
 const selectedTemplate = ref('')
@@ -34,10 +33,14 @@ const templateOptions = computed(
     }) ?? []
 )
 
-function setTemplate(template: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- FIXME: InputSelectSingleを直す
+function setTemplate(template: Record<string, any> | string | null) {
+  if (typeof template !== 'string') {
+    return
+  }
   const foundTemplate = props.templates?.find(t => t.name === template)
   if (foundTemplate !== undefined) {
-    emit('update:modelValue', foundTemplate.value)
+    model.value = foundTemplate.value
   }
 }
 
@@ -72,11 +75,11 @@ function changeCurrentTab(tab: TabType) {
       </div>
       <InputSelectSingle
         v-if="props.templates !== undefined"
-        v-model="selectedTemplate"
         class="inline-block"
+        :model-value="selectedTemplate"
         :options="templateOptions"
         placeholder="テンプレートを選択"
-        @option:selected="setTemplate(selectedTemplate)">
+        @update:model-value="setTemplate($event)">
       </InputSelectSingle>
     </div>
     <div class="px-5 py-3">
@@ -84,13 +87,13 @@ function changeCurrentTab(tab: TabType) {
         v-if="currentTab === 'input'"
         :auto-focus="autoFocus"
         class="min-h-40 w-full"
-        :model-value="modelValue"
+        :model-value="model"
         :placeholder="placeholder"
-        @update:model-value="emit('update:modelValue', $event)" />
+        @update:model-value="model = $event" />
       <MarkdownIt
         v-if="currentTab === 'preview'"
         class="min-h-40 w-full overflow-y-scroll rounded border border-gray-300 px-3 py-2"
-        :text="modelValue" />
+        :text="model" />
       <div class="flex justify-end pt-3">
         <slot />
       </div>

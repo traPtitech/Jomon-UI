@@ -28,7 +28,7 @@ const totalAmount = computed(
 </script>
 
 <template>
-  <RouterLink class="flex p-2" :to="'/requests/' + request.id">
+  <RouterLink class="flex px-6 py-4" :to="'/requests/' + request.id">
     <div class="mx-2 flex items-center justify-center">
       <StatusChip :status="request.status" />
     </div>

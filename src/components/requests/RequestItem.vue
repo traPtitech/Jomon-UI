@@ -41,8 +41,8 @@ const totalAmount = computed(
     </div>
     <div>
       <div class="flex gap-4">
-        <UserIcon class="max-w-8" :name="userMap[request.created_by]" />
-        <span>{{ userMap[request.created_by] }}</span>
+        <UserIcon class="max-w-8" :name="userMap[request.createdBy]" />
+        <span>{{ userMap[request.createdBy] }}</span>
         <span v-if="request.group"> {{ request.group.name }} </span>
         <span>{{ formattedDate }}</span>
       </div>

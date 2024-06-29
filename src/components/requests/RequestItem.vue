@@ -10,6 +10,7 @@ import { formatDate } from '/@/lib/date'
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import TagsGroup from '/@/components/shared/TagsGroup.vue'
 import type { Request } from '/@/features/request/model'
+import UserIcon from '/@/components/shared/UserIcon.vue'
 
 interface Props {
   request: Request
@@ -40,6 +41,7 @@ const totalAmount = computed(
     </div>
     <div>
       <div class="flex gap-4">
+        <UserIcon class="max-w-8" :name="userMap[request.created_by]" />
         <span>{{ userMap[request.created_by] }}</span>
         <span v-if="request.group"> {{ request.group.name }} </span>
         <span>{{ formattedDate }}</span>

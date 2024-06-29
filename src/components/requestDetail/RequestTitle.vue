@@ -1,56 +1,60 @@
 <script lang="ts" setup>
+import { ref } from 'vue'
+
+import type { RequestDetail } from '/@/features/request/model'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import InputText from '/@/components/shared/InputText.vue'
+import { editRequestUsecase } from '/@/features/request/usecase'
+import EditButton from '/@/components/shared/EditButton.vue'
+import { useToast } from 'vue-toastification'
+import { useUserStore } from '/@/stores/user'
+import { useRequest } from '/@/features/request/composables'
 import { storeToRefs } from 'pinia'
 
-import { useRequestDetailStore } from '/@/stores/requestDetail'
-import { useUserStore } from '/@/stores/user'
-
-import InputText from '/@/components/shared/InputText.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import type { EditMode } from '/@/pages/composables/useRequestDetail'
-
-interface Props {
-  isEditMode: boolean
-}
-
-const props = defineProps<Props>()
-const emit = defineEmits<{
-  (e: 'changeEditMode', value: EditMode): void
+const props = defineProps<{
+  request: RequestDetail
 }>()
 
 const userStore = useUserStore()
-const requestDetailStore = useRequestDetailStore()
-const { isRequestCreator } = requestDetailStore
-const { request, editedValue } = storeToRefs(requestDetailStore)
+const { isRequestCreator } = useRequest(props.request)
 const { me } = storeToRefs(userStore)
+const toast = useToast()
 
-const hasAuthority = isRequestCreator(me.value)
+const hasAuthority = isRequestCreator.value(me.value)
+const isEditMode = ref(false)
+const editedTitle = ref(props.request.title)
+
+const toggleEditTitle = () => {
+  if (isEditMode.value) {
+    editedTitle.value = props.request.title
+  }
+  isEditMode.value = !isEditMode.value
+}
+const handleUpdateTitle = async () => {
+  try {
+    await editRequestUsecase(props.request.id, {
+      ...props.request,
+      group: props.request.group?.id ?? null,
+      title: editedTitle.value
+    })
+    toast.success('更新しました')
+  } catch {
+    toast.error('更新に失敗しました')
+  }
+  isEditMode.value = false
+}
 </script>
 
 <template>
-  <div v-if="!props.isEditMode && request" class="flex flex-grow">
-    <h1 class="flex-grow text-3xl">
-      {{ request.title }}
-    </h1>
-    <SimpleButton
-      v-if="hasAuthority"
-      class="ml-2"
-      font-size="sm"
-      padding="sm"
-      @click="emit('changeEditMode', 'title')">
-      編集
-    </SimpleButton>
-  </div>
-  <div v-else class="flex flex-grow">
-    <InputText
-      v-model="editedValue.title"
-      class="flex-grow"
-      placeholder="タイトル" />
-    <SimpleButton
-      class="ml-2"
-      font-size="sm"
-      padding="sm"
-      @click.stop="emit('changeEditMode', '')">
+  <div class="flex gap-2">
+    <h1 v-if="!isEditMode" class="text-2xl">{{ request.title }}</h1>
+    <InputText v-else v-model="editedTitle" auto-focus class="flex-1" />
+    <SimpleButton v-if="isEditMode" padding="sm" @click="handleUpdateTitle">
       完了
     </SimpleButton>
+    <EditButton
+      v-if="hasAuthority"
+      :is-edit-mode="isEditMode"
+      @click="toggleEditTitle" />
   </div>
 </template>

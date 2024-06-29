@@ -2,26 +2,22 @@
 import { ref, onMounted } from 'vue'
 
 interface Props {
-  modelValue: number
   required?: boolean
   placeholder?: string
   min?: number
   autoFocus?: boolean
 }
+const model = defineModel<number>({ required: true })
 const props = withDefaults(defineProps<Props>(), {
   required: false,
   placeholder: '',
   min: 0,
   autoFocus: false
 })
-const emit = defineEmits<{
-  (e: 'input', value: number): void
-  (e: 'update:modelValue', modelValue: number): void
-}>()
 const inputRef = ref<HTMLInputElement | null>(null)
 
 function handleInput(value: string) {
-  emit('update:modelValue', Number(value))
+  model.value = Number(value)
 }
 
 onMounted(() => {
@@ -40,6 +36,6 @@ onMounted(() => {
     :placeholder="props.placeholder"
     :required="props.required"
     type="number"
-    :value="props.modelValue"
+    :value="model"
     @input="handleInput(($event.target as HTMLInputElement).value)" />
 </template>

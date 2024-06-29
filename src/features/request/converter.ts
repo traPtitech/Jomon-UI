@@ -15,7 +15,7 @@ import type { Request, RequestDetail } from './model'
 export const convertRequestFromData = (request: RequestData): Request => ({
   id: request.id,
   status: request.status,
-  created_by: request.created_by,
+  createdBy: request.created_by,
   title: request.title,
   content: request.content,
   targets: request.targets.map(convertRequestTargetFromData),
@@ -29,7 +29,7 @@ export const convertRequestDetailFromData = (
 ): RequestDetail => ({
   id: request.id,
   status: request.status,
-  created_by: request.created_by,
+  createdBy: request.created_by,
   title: request.title,
   content: request.content,
   targets: request.targets.map(convertRequestTargetFromData),

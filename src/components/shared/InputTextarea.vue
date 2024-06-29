@@ -2,25 +2,22 @@
 import { ref, onMounted } from 'vue'
 
 interface Props {
-  modelValue: string
   required?: boolean
   placeholder?: string
   autoFocus?: boolean
 }
 
+const model = defineModel<string>({ required: true })
 const props = withDefaults(defineProps<Props>(), {
   required: false,
   placeholder: '',
   autoFocus: false
 })
-const emit = defineEmits<{
-  (e: 'update:modelValue', modelValue: string): void
-}>()
 
 const textareaRef = ref<HTMLTextAreaElement | null>(null)
 
 function handleInput(value: string) {
-  emit('update:modelValue', value)
+  model.value = value
 }
 
 onMounted(() => {
@@ -34,9 +31,9 @@ onMounted(() => {
 <template>
   <textarea
     ref="textareaRef"
-    class="bg-background min-h-32 rounded border border-gray-300 px-1"
+    class="bg-background min-h-32 rounded border border-gray-300 px-3 py-2"
     :placeholder="props.placeholder"
     :required="required"
-    :value="props.modelValue"
+    :value="model"
     @input="handleInput(($event.target as HTMLTextAreaElement).value)" />
 </template>

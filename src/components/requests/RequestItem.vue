@@ -39,7 +39,7 @@ const totalAmount = computed(
         <TagsGroup :tags="request.tags" />
       </div>
     </div>
-    <div>
+    <div class="flex flex-col gap-2">
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-1">
           <UserIcon class="h-5 p-0" :name="userMap[request.createdBy]" />

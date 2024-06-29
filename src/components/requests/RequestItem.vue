@@ -46,7 +46,9 @@ const totalAmount = computed(
         <span v-if="request.group"> {{ request.group.name }} </span>
         <span>{{ formattedDate }}</span>
       </div>
-      <div class="text-right text-3xl">{{ totalAmount }}円</div>
+      <div class="text-right font-bold font-sans text-2xl">
+        {{ totalAmount }}円
+      </div>
     </div>
   </RouterLink>
 </template>

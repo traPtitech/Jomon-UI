@@ -10,6 +10,7 @@ import { formatDate } from '/@/lib/date'
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import TagsGroup from '/@/components/shared/TagsGroup.vue'
 import type { Request } from '/@/features/request/model'
+import UserIcon from '/@/components/shared/UserIcon.vue'
 
 interface Props {
   request: Request
@@ -28,7 +29,7 @@ const totalAmount = computed(
 </script>
 
 <template>
-  <RouterLink class="flex p-2" :to="'/requests/' + request.id">
+  <RouterLink class="flex px-6 py-4" :to="'/requests/' + request.id">
     <div class="mx-2 flex items-center justify-center">
       <StatusChip :status="request.status" />
     </div>
@@ -38,13 +39,18 @@ const totalAmount = computed(
         <TagsGroup :tags="request.tags" />
       </div>
     </div>
-    <div>
-      <div class="flex gap-4">
-        <span v-if="request.group"> グループ：{{ request.group.name }} </span>
-        <span>申請者：{{ userMap[request.createdBy] }}</span>
-        <span>申請日：{{ formattedDate }}</span>
+    <div class="flex flex-col gap-2">
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-1">
+          <UserIcon class="h-5 p-0" :name="userMap[request.createdBy]" />
+          <span>{{ userMap[request.createdBy] }}</span>
+        </div>
+        <span v-if="request.group"> {{ request.group.name }} </span>
+        <span>{{ formattedDate }}</span>
       </div>
-      <div class="text-right text-3xl">{{ totalAmount }}円</div>
+      <div class="text-right font-bold font-sans text-2xl">
+        {{ totalAmount }}円
+      </div>
     </div>
   </RouterLink>
 </template>

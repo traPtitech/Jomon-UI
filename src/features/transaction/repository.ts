@@ -29,6 +29,8 @@ const createTransactionRepository = () => ({
       querySeed.target,
       querySeed.since,
       querySeed.until,
+      100,
+      0,
       querySeed.tags.join(','),
       querySeed.group,
       querySeed.request

@@ -1,68 +1,80 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
 
-import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 import EditButton from '/@/components/shared/EditButton.vue'
-import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
+import { ref } from 'vue'
+import RequestTarget from '/@/components/requestDetail/RequestTarget.vue'
+import type { RequestTargetDetail } from '/@/features/requestTarget/model'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import type { EditMode } from '/@/pages/composables/useRequestDetail'
+import { editRequestUsecase } from '/@/features/request/usecase'
+import type { RequestDetail } from '/@/features/request/model'
+import { useRequest } from '/@/features/request/composables'
+import { useToast } from 'vue-toastification'
 
-interface Props {
-  isEditMode: boolean
-}
-
-const props = defineProps<Props>()
-const emit = defineEmits<{
-  (e: 'changeEditMode', value: EditMode): void
+const props = defineProps<{
+  request: RequestDetail
 }>()
 
 const userStore = useUserStore()
-const requestDetailStore = useRequestDetailStore()
-const { isRequestCreator } = requestDetailStore
-const { request, editedValue } = storeToRefs(requestDetailStore)
-const { me, userOptions, userMap } = storeToRefs(userStore)
+const { isRequestCreator } = useRequest(props.request)
+const { me } = storeToRefs(userStore)
+const toast = useToast()
 
-const formattedTargets = computed(
-  () =>
-    request.value?.targets
-      .map(target => userMap.value[target.target])
-      .join(', ') ?? ''
-)
+const hasAuthority = isRequestCreator.value(me.value)
 
-const hasAuthority = isRequestCreator(me.value)
+const isEditMode = ref(false)
+const editedTargets = ref<RequestTargetDetail[]>(props.request.targets)
+const toggleEditTargets = () => {
+  editedTargets.value = props.request.targets
+  isEditMode.value = !isEditMode.value
+}
 
-const handleComplete = () => {
-  emit('changeEditMode', '')
+const handleUpdateTargets = async () => {
+  if (editedTargets.value.some(target => target.target === null)) {
+    toast.error('払い戻し対象者を選択してください')
+    return
+  }
+  try {
+    await editRequestUsecase(props.request.id, {
+      ...props.request,
+      group: props.request.group?.id ?? null, // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
+      targets: editedTargets.value
+    })
+    toast.success('更新しました')
+  } catch {
+    toast.error('更新に失敗しました')
+  }
+  isEditMode.value = false
 }
 </script>
 
 <template>
-  <div>
-    <div v-if="!props.isEditMode">
-      払い戻し対象者：
-      {{ formattedTargets }}
-      <EditButton
-        v-if="hasAuthority"
-        class="ml-1"
-        @click="emit('changeEditMode', 'targets')" />
+  <div class="flex flex-col gap-2">
+    <div class="flex items-center justify-between">
+      <div class="text-sm font-bold">払い戻し対象者</div>
+      <div class="flex items-center gap-2">
+        <SimpleButton
+          v-if="isEditMode"
+          padding="sm"
+          @click="handleUpdateTargets">
+          完了
+        </SimpleButton>
+        <EditButton
+          v-if="hasAuthority"
+          :is-edit-mode="isEditMode"
+          @click="toggleEditTargets" />
+      </div>
     </div>
-    <div v-else class="flex items-center">
-      払い戻し対象者：
-      <InputSelectMultiple
-        v-model="editedValue.targets"
-        :options="userOptions"
-        placeholder="払い戻し対象者"
-        uniq-key="target" />
-      <SimpleButton
-        class="ml-2"
-        font-size="sm"
-        padding="sm"
-        @click.stop="handleComplete">
-        完了
-      </SimpleButton>
+    <div v-if="request" class="flex flex-col gap-2">
+      <RequestTarget
+        v-for="(target, i) in request.targets"
+        :key="target.id"
+        v-model:targetModel="editedTargets[i]"
+        :is-edit-mode="isEditMode"
+        :request="request"
+        :target="target" />
     </div>
   </div>
 </template>

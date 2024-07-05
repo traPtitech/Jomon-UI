@@ -1,63 +1,76 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 
-import { useGroupStore } from '/@/stores/group'
-import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
 
 import EditButton from '/@/components/shared/EditButton.vue'
+import { computed, ref } from 'vue'
 import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import type { EditMode } from '/@/pages/composables/useRequestDetail'
+import { useGroupStore } from '/@/stores/group'
+import { editRequestUsecase } from '/@/features/request/usecase'
+import type { RequestDetail } from '/@/features/request/model'
+import { useRequest } from '/@/features/request/composables'
+import { useToast } from 'vue-toastification'
 
-interface Props {
-  isEditMode: boolean
-}
-
-const props = defineProps<Props>()
-const emit = defineEmits<{
-  (e: 'changeEditMode', value: EditMode): void
+const props = defineProps<{
+  request: RequestDetail
 }>()
 
 const userStore = useUserStore()
 const groupStore = useGroupStore()
-const requestDetailStore = useRequestDetailStore()
-const { isRequestCreator } = requestDetailStore
-const { groupOptions } = storeToRefs(groupStore)
-const { request, editedValue } = storeToRefs(requestDetailStore)
+const { isRequestCreator } = useRequest(props.request)
 const { me } = storeToRefs(userStore)
+const { groupOptions } = storeToRefs(groupStore)
+const toast = useToast()
 
-const hasAuthority = isRequestCreator(me.value)
+const hasAuthority = isRequestCreator.value(me.value)
 
-const handleComplete = () => {
-  emit('changeEditMode', '')
+const defaultGroup = computed(() =>
+  props.request.group ? props.request.group.id : null
+)
+const groupName = computed(() =>
+  props.request.group ? props.request.group.name : 'なし'
+)
+
+const isEditMode = ref(false)
+const editedGroup = ref<string | null>(defaultGroup.value)
+const toggleEditGroup = () => {
+  if (isEditMode.value) {
+    editedGroup.value = defaultGroup.value
+  }
+  isEditMode.value = !isEditMode.value
+}
+const handleUpdateGroup = async () => {
+  try {
+    await editRequestUsecase(props.request.id, {
+      ...props.request,
+      group: editedGroup.value
+    })
+    toast.success('更新しました')
+  } catch {
+    toast.error('更新に失敗しました')
+  }
+  isEditMode.value = false
 }
 </script>
 
 <template>
-  <div class="flex items-center">
-    グループ：
-    <div v-if="!props.isEditMode && request">
-      <span v-if="!request.group">なし</span>
-      <span v-else>{{ request.group.name }}</span>
+  <div class="flex flex-col gap-1">
+    <div class="flex items-center justify-between">
+      <div class="text-sm font-bold">グループ</div>
       <EditButton
         v-if="hasAuthority"
-        class="ml-1"
-        @click="emit('changeEditMode', 'group')" />
+        :is-edit-mode="isEditMode"
+        @click="toggleEditGroup" />
     </div>
-    <div v-else class="flex">
-      <InputSelectSingle
-        v-model="editedValue.group"
-        class="w-52"
-        :options="groupOptions"
-        placeholder="グループ" />
-      <SimpleButton
-        class="ml-2"
-        font-size="sm"
-        padding="sm"
-        @click.stop="handleComplete">
-        完了
-      </SimpleButton>
+    <div>
+      <span v-if="!isEditMode">{{ groupName }}</span>
+      <div v-else>
+        <InputSelectSingle
+          v-model="editedGroup"
+          :options="groupOptions"
+          @close="handleUpdateGroup" />
+      </div>
     </div>
   </div>
 </template>

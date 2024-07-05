@@ -7,7 +7,12 @@ interface Props {
   padding: 'sm' | 'md' | 'lg' | 'xl'
   disabled?: boolean
 }
-const props = withDefaults(defineProps<Props>(), { disabled: false })
+const props = withDefaults(defineProps<Props>(), {
+  type: 'plain',
+  disabled: false,
+  fontSize: 'base',
+  padding: 'md'
+})
 
 const typeClass = computed(() => {
   switch (props.type) {

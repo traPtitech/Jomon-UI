@@ -7,32 +7,38 @@ import MarkdownIt from './MarkdownIt.vue'
 type TabType = 'input' | 'preview'
 interface Props {
   placeholder?: string
-  modelValue: string
   templates?: readonly { name: string; value: string }[]
   autoFocus?: boolean
   id?: string
 }
+
+const model = defineModel<string>({ required: true })
 const props = withDefaults(defineProps<Props>(), {
   placeholder: '',
   autoFocus: false
 })
-const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>()
+
 const currentTab = ref<TabType>('input')
 const selectedTemplate = ref('')
-const templateOptions = computed(() => {
-  return (
+
+const templateOptions = computed(
+  () =>
     props.templates?.map(template => {
       return {
         key: template.name,
         value: template.name
       }
     }) ?? []
-  )
-})
-function setTemplate(template: string) {
+)
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- FIXME: InputSelectSingleを直す
+function setTemplate(template: Record<string, any> | string | null) {
+  if (typeof template !== 'string') {
+    return
+  }
   const foundTemplate = props.templates?.find(t => t.name === template)
   if (foundTemplate !== undefined) {
-    emit('update:modelValue', foundTemplate.value)
+    model.value = foundTemplate.value
   }
 }
 function changeCurrentTab(tab: TabType) {
@@ -41,44 +47,54 @@ function changeCurrentTab(tab: TabType) {
 </script>
 
 <template>
-  <div>
-    <div class="flex gap-2">
-      <button
-        :class="`w-20 rounded-t py-1 ${
-          currentTab === 'input' ? 'bg-gray-400 text-white' : 'bg-gray-200'
-        }`"
-        @click.prevent="changeCurrentTab('input')">
-        入力
-      </button>
-      <button
-        :class="`w-20 rounded-t py-1 ${
-          currentTab === 'preview' ? 'bg-gray-400 text-white' : 'bg-gray-200'
-        }`"
-        @click.prevent="changeCurrentTab('preview')">
-        プレビュー
-      </button>
+  <div class="flex flex-col rounded border border-gray-300">
+    <div
+      class="flex items-center justify-between rounded-t bg-gray-100 px-4 pt-3">
+      <div class="flex items-center">
+        <button
+          :class="`rounded-t py-2 px-6 ${
+            currentTab === 'input'
+              ? 'bg-background border-t border-x border-gray-300'
+              : 'bg-gray-100'
+          }`"
+          @click="changeCurrentTab('input')">
+          入力
+        </button>
+        <button
+          :class="`rounded-t py-2 px-6 ${
+            currentTab === 'preview'
+              ? 'bg-background border-t border-x border-gray-300'
+              : 'bg-gray-100'
+          }`"
+          @click="changeCurrentTab('preview')">
+          プレビュー
+        </button>
+      </div>
       <InputSelectSingle
         v-if="props.templates !== undefined"
-        v-model="selectedTemplate"
-        class="m-1 ml-auto inline-block w-1/3"
+        class="inline-block"
+        :model-value="selectedTemplate"
         :options="templateOptions"
         placeholder="テンプレートを選択"
-        @option:selected="setTemplate(selectedTemplate)">
+        @update:model-value="setTemplate($event)">
       </InputSelectSingle>
     </div>
-    <div>
+    <div class="px-5 py-3">
       <InputTextarea
         v-if="currentTab === 'input'"
         :id="props.id"
         :auto-focus="autoFocus"
         class="min-h-40 w-full"
-        :model-value="modelValue"
+        :model-value="model"
         :placeholder="placeholder"
-        @update:model-value="emit('update:modelValue', $event)" />
+        @update:model-value="model = $event" />
       <MarkdownIt
         v-if="currentTab === 'preview'"
-        class="min-h-40 w-full overflow-y-scroll border border-gray-500 px-1"
-        :text="modelValue" />
+        class="min-h-40 w-full overflow-y-scroll rounded border border-gray-300 px-3 py-2"
+        :text="model" />
+      <div class="flex justify-end pt-3">
+        <slot />
+      </div>
     </div>
   </div>
 </template>

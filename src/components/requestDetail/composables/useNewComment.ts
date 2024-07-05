@@ -20,9 +20,7 @@ export const useNewComment = (requestId: string) => {
       comment.value = ''
       toast.success('コメントを送信しました')
     } catch (e) {
-      if (e instanceof Error) {
-        toast.error(e.message)
-      }
+      toast.error('送信に失敗しました')
     }
     isSending.value = false
   }

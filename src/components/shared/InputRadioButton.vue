@@ -1,29 +1,22 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
-
 interface Props {
-  modelValue: string
   options: Option[]
 }
 interface Option {
   key: string
   value: string
 }
+const model = defineModel<string>({ required: true })
 const props = defineProps<Props>()
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void
-}>()
-
-const value = computed({
-  get: () => props.modelValue,
-  set: v => emit('update:modelValue', v)
-})
 </script>
 
 <template>
-  <div class="flex flex-col gap-1">
-    <label v-for="option in options" :key="option.key" class="cursor-pointer">
-      <input v-model="value" class="mr-1" type="radio" :value="option.value" />
+  <div class="space-x-4">
+    <label
+      v-for="option in props.options"
+      :key="option.key"
+      class="cursor-pointer">
+      <input v-model="model" type="radio" :value="option.value" />
       {{ option.key }}
     </label>
   </div>

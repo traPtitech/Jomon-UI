@@ -4,7 +4,8 @@ import {
   CloudArrowUpIcon,
   ExclamationTriangleIcon,
   XCircleIcon,
-  CheckCircleIcon
+  CheckCircleIcon,
+  ChevronDownIcon
 } from '@heroicons/vue/24/solid'
 import { computed } from 'vue'
 
@@ -13,10 +14,12 @@ import type { RequestStatus } from '/@/features/requestStatus/model'
 interface Props {
   status: RequestStatus
   hasText?: boolean
+  hasMenu?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  hasText: false
+  hasText: false,
+  hasMenu: false
 })
 
 const statusToJpn = computed(() => (status: RequestStatus) => {
@@ -56,9 +59,9 @@ const backgroundColor = computed(() => (status: RequestStatus) => {
 
 <template>
   <div
-    :class="`inline flex items-center rounded-full p-2 text-white ${backgroundColor(
+    :class="`inline flex items-center rounded-3xl px-3 py-2 gap-2 text-white ${backgroundColor(
       status
-    )}`"
+    )}${hasMenu ? ' cursor-pointer' : ''}`"
     :title="statusToJpn(status)">
     <CheckCircleIcon v-if="status === 'accepted'" class="w-6" />
     <ExclamationTriangleIcon v-else-if="status === 'submitted'" class="w-6" />
@@ -69,5 +72,8 @@ const backgroundColor = computed(() => (status: RequestStatus) => {
     <span v-if="props.hasText">
       {{ statusToJpn(status) }}
     </span>
+    <div v-if="hasMenu">
+      <ChevronDownIcon class="w-4" />
+    </div>
   </div>
 </template>

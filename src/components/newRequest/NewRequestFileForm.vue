@@ -69,6 +69,7 @@ function removeFile(index: number) {
           :src="file.src" />
         <DocumentIcon v-else class="h-32" />
         <button
+          aria-label="ファイルを削除"
           class="absolute top-0 right-0 h-6 w-6"
           @click="removeFile(index)">
           <XCircleIcon />

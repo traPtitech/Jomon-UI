@@ -11,10 +11,27 @@ export default defineConfig({
   theme: {
     extend: {
       colors: {
-        primary: colors.dark[500],
-        secondary: colors.gray[400],
-        secondaryHover: colors.gray[600],
-        background: colors.zinc[50]
+        primary: colors.gray[50],
+        secondary: colors.gray[300],
+        tertiary: colors.gray[200],
+        'text-primary': colors.dark[500],
+        'text-secondary': colors.gray[400],
+        'text-inverse': colors.gray[50],
+        hover: colors.gray[100],
+        'hover-secondary': colors.gray[200],
+
+        success: colors.blue[500],
+        selected: colors.blue[200],
+        error: colors.red[500],
+        'error-secondary': colors.red[300],
+        accent: colors.green[500],
+        'accent-secondary': colors.green[300],
+
+        'status-submitted': colors.yellow[400],
+        'status-fix-required': colors.red[400],
+        'status-accepted': colors.green[400],
+        'status-completed': colors.gray[400],
+        'status-rejected': colors.gray[400]
       },
       width: {
         fit: 'fit-content'

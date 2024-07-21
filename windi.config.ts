@@ -17,14 +17,14 @@ export default defineConfig({
         'text-primary': colors.dark[500],
         'text-secondary': colors.gray[400],
         'text-inverse': colors.gray[50],
-        hover: colors.gray[100],
+        'hover-primary': colors.gray[100],
         'hover-secondary': colors.gray[200],
 
         success: colors.blue[500],
         selected: colors.blue[200],
-        error: colors.red[500],
+        'error-primary': colors.red[500],
         'error-secondary': colors.red[300],
-        accent: colors.green[500],
+        'accent-primary': colors.green[500],
         'accent-secondary': colors.green[300],
 
         'status-submitted': colors.yellow[400],

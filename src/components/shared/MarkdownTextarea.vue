@@ -51,13 +51,14 @@ function changeCurrentTab(tab: TabType) {
 
 <template>
   <div class="flex flex-col rounded border border-secondary">
-    <div class="flex items-center justify-between rounded-t bg-hover px-4 pt-3">
+    <div
+      class="flex items-center justify-between rounded-t bg-hover-primary px-4 pt-3">
       <div class="flex items-center">
         <button
           :class="`rounded-t py-2 px-6 ${
             currentTab === 'input'
               ? 'bg-primary border-t border-x border-secondary'
-              : 'bg-hover'
+              : 'bg-hover-primary'
           }`"
           @click="changeCurrentTab('input')">
           入力
@@ -66,7 +67,7 @@ function changeCurrentTab(tab: TabType) {
           :class="`rounded-t py-2 px-6 ${
             currentTab === 'preview'
               ? 'bg-primary border-t border-x border-secondary'
-              : 'bg-hover'
+              : 'bg-hover-primary'
           }`"
           @click="changeCurrentTab('preview')">
           プレビュー

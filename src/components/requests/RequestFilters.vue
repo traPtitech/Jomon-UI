@@ -36,8 +36,8 @@ function sortByCreatedAt() {
 <template>
   <div class="flex justify-around">
     <button
-      class="flex items-center justify-center rounded border border-gray-300 p-1"
-      :class="filterParams.sort === 'created_at' ? '' : 'bg-gray-200'"
+      class="flex items-center justify-center rounded border border-secondary p-1"
+      :class="filterParams.sort === 'created_at' ? '' : 'bg-hover-secondary'"
       @click="sortByCreatedAt">
       日付順
       <ChevronDownIcon v-if="filterParams.sort === 'created_at'" class="w-4" />

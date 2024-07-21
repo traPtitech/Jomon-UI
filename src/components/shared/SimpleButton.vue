@@ -17,17 +17,17 @@ const props = withDefaults(defineProps<Props>(), {
 const typeClass = computed(() => {
   switch (props.type) {
     case 'plain':
-      return `${!props.disabled && 'hover:bg-gray-200'} border-gray-300`
+      return `${!props.disabled && 'hover:bg-hover-secondary'} border-secondary`
     case 'danger':
       return `${
-        !props.disabled && 'hover:bg-red-300'
-      } bg-red-500 border-red-300 text-white`
+        !props.disabled && 'hover:bg-error-secondary'
+      } bg-error border-error-secondary text-white`
     case 'success':
       return `${
-        !props.disabled && 'hover:bg-green-300'
-      } bg-green-500 border-green-300 text-white`
+        !props.disabled && 'hover:bg-accent-secondary'
+      } bg-accent border-accent-secondary text-white`
     default:
-      return `${!props.disabled && 'hover:bg-gray-200'} border-gray-300`
+      return `${!props.disabled && 'hover:bg-hover-secondary'} border-secondary`
   }
 })
 const fontSizeClass = computed(() => {

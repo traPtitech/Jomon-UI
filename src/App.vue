@@ -29,7 +29,7 @@ watch(
 
 <template>
   <JomonHeader />
-  <main class="text-primary bg-background h-screen overflow-y-scroll pt-12">
+  <main class="text-text-primary bg-primary h-screen overflow-y-scroll pt-12">
     <router-view v-slot="{ Component }">
       <template v-if="Component">
         <suspense>

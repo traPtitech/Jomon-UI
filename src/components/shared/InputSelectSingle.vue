@@ -179,14 +179,14 @@ onUnmounted(() => {
       disabled && 'cursor-not-allowed'
     } min-w-70 ${calcWidth}`">
     <div
-      class="flex w-full cursor-text items-center gap-1 rounded border border-gray-300 py-1 pr-1"
+      class="flex w-full cursor-text items-center gap-1 rounded border border-secondary py-1 pr-1"
       :class="`${disabled && 'pointer-events-none'}`"
       @click="handleClick">
       <div class="relative left-2 flex w-full">
         <span
           v-if="selectedValue"
           :class="`flex items-center ${
-            isDropdownOpen && 'absolute text-gray-400'
+            isDropdownOpen && 'absolute text-text-secondary'
           }`">
           {{ selectedValue.key }}
         </span>
@@ -204,7 +204,7 @@ onUnmounted(() => {
     <ul
       v-if="isDropdownOpen && searchedOptions.length > 0"
       ref="listRef"
-      class="absolute z-10 max-h-40 w-full border border-gray-200 bg-white shadow-lg"
+      class="absolute z-10 max-h-40 w-full border border-tertirary bg-white shadow-lg"
       :class="`${
         isDropdownAbove ? `-top-${dropdownHeight} rounded-t-lg` : 'rounded-b-lg'
       } ${
@@ -216,9 +216,9 @@ onUnmounted(() => {
         v-for="option in searchQuery !== '' ? searchedOptions : options"
         :key="option.key"
         ref="listItemRefs"
-        :class="`last:not-first:rounded-b-md focus-within:bg-gray-100 hover:bg-gray-100 ${
+        :class="`last:not-first:rounded-b-md focus-within:bg-hover hover:bg-hover ${
           selectedValue?.value === option.value &&
-          'bg-gray-200 hover:bg-gray-200'
+          'bg-hover-secondary hover:bg-hover-secondary'
         }`">
         <button
           class="h-full w-full px-4 py-1 text-left focus:outline-none"

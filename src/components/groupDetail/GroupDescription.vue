@@ -32,7 +32,7 @@ const hasAuthority = canEditGroup(me.value)
   <div v-if="group">
     <p>詳細</p>
     <div v-if="!isEditMode" class="flex w-full">
-      <p class="h-32 w-4/5 rounded border border-gray-300 pl-1">
+      <p class="h-32 w-4/5 rounded border border-secondary pl-1">
         {{ group.description }}
       </p>
       <div class="flex items-end">

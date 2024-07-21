@@ -12,7 +12,7 @@ const props = defineProps<Props>()
   <router-link :class="props.isHere ? 'cursor-default' : ''" :to="props.path">
     <div
       class="rounded-3xl p-2"
-      :class="props.isHere ? 'bg-zinc-200' : 'hover:bg-zinc-200'">
+      :class="props.isHere ? 'bg-hover-secondary' : 'hover:bg-hover-secondary'">
       <span>{{ props.text }}</span>
     </div>
   </router-link>

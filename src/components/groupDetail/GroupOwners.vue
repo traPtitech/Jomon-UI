@@ -26,8 +26,8 @@ const { absentOwnerOptions, isSending, addOwners, removeOwner } =
 <template>
   <div
     v-if="group"
-    class="relative flex h-2/5 flex-col justify-between border border-gray-300">
-    <p class="bg-background absolute -top-3 left-2 px-2">グループオーナー</p>
+    class="relative flex h-2/5 flex-col justify-between border border-secondary">
+    <p class="bg-primary absolute -top-3 left-2 px-2">グループオーナー</p>
     <ul class="h-full p-4">
       <li
         v-for="owner in group.owners"
@@ -39,7 +39,7 @@ const { absentOwnerOptions, isSending, addOwners, removeOwner } =
         </div>
         <button
           v-if="hasAuthority"
-          class="flex items-center rounded-full p-1 hover:bg-gray-300"
+          class="flex items-center rounded-full p-1 hover:bg-secondary"
           :disabled="isSending"
           @click="removeOwner(owner)">
           <MinusIcon class="w-6" />
@@ -53,7 +53,7 @@ const { absentOwnerOptions, isSending, addOwners, removeOwner } =
         :options="absentOwnerOptions"
         placeholder="追加するオーナーを選択" />
       <button
-        class="flex items-center rounded-full p-1 hover:bg-gray-300"
+        class="flex items-center rounded-full p-1 hover:bg-secondary"
         :disabled="ownersToBeAdded.length === 0 || isSending"
         @click="addOwners(ownersToBeAdded)">
         <PlusIcon class="w-6" />

@@ -85,7 +85,7 @@ const handleRemoveTarget = async () => {
       </div>
       <button
         v-else-if="isAdmin"
-        class="text-blue-500"
+        class="text-success"
         :disabled="isSending"
         @click="postTransactionFromRequest(request, target)">
         入出金記録を作成
@@ -101,7 +101,7 @@ const handleRemoveTarget = async () => {
     </div>
     <div>
       <button @click="handleRemoveTarget">
-        <TrashIcon class="w-6 text-red-500 cursor-pointer" />
+        <TrashIcon class="w-6 text-error cursor-pointer" />
       </button>
     </div>
   </div>

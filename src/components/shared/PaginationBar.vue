@@ -28,8 +28,8 @@ const left = computed(
     props.totalPages <= 11
       ? sequence(1, props.totalPages) // P1
       : props.currentPage <= 6
-      ? sequence(1, 8) // P2
-      : sequence(1, 2) // P3, P4
+        ? sequence(1, 8) // P2
+        : sequence(1, 2) // P3, P4
 )
 // totalPages > 11 のとき、表示される
 const center = computed(
@@ -37,8 +37,8 @@ const center = computed(
     props.currentPage <= 6
       ? sequence(props.totalPages - 1, props.totalPages) // P2
       : props.currentPage <= props.totalPages - 6
-      ? sequence(props.currentPage - 2, props.currentPage + 2) // P3
-      : sequence(props.totalPages - 7, props.totalPages) // P4
+        ? sequence(props.currentPage - 2, props.currentPage + 2) // P3
+        : sequence(props.totalPages - 7, props.totalPages) // P4
 )
 // totalPages > 11 && 6 < currentPage <= totalPages - 6 のとき、表示される
 const right = computed(
@@ -51,7 +51,7 @@ const right = computed(
     <div class="mx-auto flex h-full w-min justify-center ring-0">
       <!-- Prev -->
       <router-link
-        class="w-18 mr-4 flex items-center justify-center rounded hover:bg-gray-200"
+        class="w-18 mr-4 flex items-center justify-center rounded hover:bg-hover-secondary"
         :class="currentPage === 1 ? 'invisible' : ''"
         :to="`${path}?page=${currentPage - 1}`">
         <ChevronLeftIcon class="w-4" />Prev
@@ -98,7 +98,7 @@ const right = computed(
 
       <!-- Next -->
       <router-link
-        class="w-18 ml-4 flex items-center justify-center rounded hover:bg-gray-200"
+        class="w-18 ml-4 flex items-center justify-center rounded hover:bg-hover-secondary"
         :class="currentPage === totalPages ? 'invisible' : ''"
         :to="`${path}?page=${currentPage + 1}`">
         Next<ChevronRightIcon class="w-4" />

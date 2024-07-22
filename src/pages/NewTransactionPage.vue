@@ -82,7 +82,7 @@ if (!isTagFetched.value) {
       <div class="text-right">
         <SimpleButton
           :disabled="isSending"
-          font-size="md"
+          font-size="base"
           padding="md"
           @click.stop="postTransaction">
           入出金記録を作成

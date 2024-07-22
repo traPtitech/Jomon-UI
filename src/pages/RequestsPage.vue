@@ -79,7 +79,7 @@ watch(
         <li
           v-for="request in sliceRequestsAt(page, 7)"
           :key="request.id"
-          class="hover:bg-zinc-100 first:hover:rounded-t-xl last:hover:rounded-b-xl">
+          class="hover:bg-hover-secondary first:hover:rounded-t-xl last:hover:rounded-b-xl">
           <RequestItem :request="request" />
         </li>
       </ul>

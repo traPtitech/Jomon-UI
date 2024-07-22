@@ -26,8 +26,10 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
 <template>
   <div
     v-if="group"
-    class="relative flex h-2/5 flex-col justify-between border border-gray-300">
-    <p class="bg-background absolute -top-3 left-2 px-2">グループメンバー</p>
+    class="relative flex h-2/5 flex-col justify-between border border-surface-secondary">
+    <p class="bg-surface-primary absolute -top-3 left-2 px-2">
+      グループメンバー
+    </p>
     <ul class="h-full p-4">
       <li
         v-for="member in group.members"
@@ -39,7 +41,7 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
         </div>
         <button
           v-if="hasAuthority"
-          class="flex items-center rounded-full p-1 hover:bg-gray-300"
+          class="flex items-center rounded-full p-1 hover:bg-surface-secondary"
           :disabled="isSending"
           @click="removeMember(member)">
           <MinusIcon class="w-6" />
@@ -54,7 +56,7 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
         :options="absentMemberOptions"
         placeholder="追加するメンバーを選択" />
       <button
-        class="flex items-center rounded-full p-1 hover:bg-gray-300"
+        class="flex items-center rounded-full p-1 hover:bg-surface-secondary"
         :disabled="membersToBeAdded.length === 0 || isSending"
         @click="addMembers(membersToBeAdded)">
         <PlusIcon class="w-6" />

@@ -17,14 +17,16 @@ const formattedDate = computed(() => formatDate(props.transaction.createdAt))
 <template>
   <router-link :to="`transactions/${transaction.id}`">
     <div
-      class="children:px-2 relative flex h-12 items-center px-4 hover:bg-gray-100">
+      class="children:px-2 relative flex h-12 items-center px-4 hover:bg-hover-secondary">
       <div class="w-3/20">
         {{ formattedDate }}
       </div>
       <div class="w-3/20 text-right">
         <span
           :class="` ${
-            props.transaction.amount > 0 ? 'text-blue-400' : 'text-red-400'
+            props.transaction.amount > 0
+              ? 'text-blue-500'
+              : 'text-error-primary'
           }`">
           {{ props.transaction.amount }}円
         </span>

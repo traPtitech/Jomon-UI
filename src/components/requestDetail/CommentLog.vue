@@ -29,13 +29,15 @@ const { userMap } = storeToRefs(userStore)
           がコメントしました
         </div>
       </div>
-      <time class="text-gray-400" :datetime="comment.createdAt.toISO() ?? ''">
+      <time
+        class="text-text-secondary"
+        :datetime="comment.createdAt.toISO() ?? ''">
         {{ formattedDateAndTime }}
       </time>
     </div>
     <div class="ml-15">
       <MarkdownIt
-        class="border border-zinc-300 px-4 py-3 rounded-lg"
+        class="border border-surface-secondary px-4 py-3 rounded-lg"
         :text="comment.comment" />
     </div>
   </div>

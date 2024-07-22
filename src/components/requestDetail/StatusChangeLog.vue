@@ -33,7 +33,7 @@ const formattedDateAndTime = formatDateAndTime(props.log.createdAt)
         <span>にしました</span>
       </div>
     </div>
-    <div class="text-gray-400">
+    <div class="text-text-secondary">
       {{ formattedDateAndTime }}
     </div>
   </div>

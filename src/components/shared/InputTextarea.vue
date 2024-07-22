@@ -33,7 +33,7 @@ onMounted(() => {
   <textarea
     :id="props.id"
     ref="textareaRef"
-    class="bg-background min-h-32 rounded border border-gray-300 px-3 py-2"
+    class="bg-surface-primary min-h-32 rounded border border-surface-secondary px-3 py-2"
     :placeholder="props.placeholder"
     :required="required"
     :value="model"

@@ -31,16 +31,27 @@ function handleRemoveTarget(index: number) {
   <div class="flex flex-col gap-2">
     <label class="text-sm font-medium" for="target">取引相手</label>
     <ul class="flex flex-col gap-2">
-      <li v-for="(target, i) in targets" :key="target" class="flex items-center gap-3">
-        <InputText class="flex-grow" :model-value="target" placeholder="取引相手"
+      <li
+        v-for="(target, i) in targets"
+        :key="target"
+        class="flex items-center gap-3">
+        <InputText
+          class="flex-grow"
+          :model-value="target"
+          placeholder="取引相手"
           @update:model-value="handleEditTarget(i, $event)" />
-        <button v-if="props.targets.length > 1" class="flex" @click="handleRemoveTarget(i)">
-          <TrashIcon class="w-6 text-red-400" />
+        <button
+          v-if="props.targets.length > 1"
+          class="flex"
+          @click="handleRemoveTarget(i)">
+          <TrashIcon class="w-6 text-error-primary" />
         </button>
       </li>
     </ul>
     <div class="ml-3">
-      <button class="flex items-center p-2 border rounded" @click="handleAddTarget">
+      <button
+        class="flex items-center p-2 border rounded"
+        @click="handleAddTarget">
         <PlusIcon class="w-5 mr-2" />
         取引相手を追加
       </button>

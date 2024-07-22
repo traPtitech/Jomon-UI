@@ -81,7 +81,7 @@ function handleRemoveTarget(index: number) {
           aria-label="払い戻し対象者を削除"
           class="flex"
           @click="handleRemoveTarget(i)">
-          <TrashIcon class="w-6 text-red-400" />
+          <TrashIcon class="w-6 text-error-primary" />
         </button>
       </li>
     </ul>

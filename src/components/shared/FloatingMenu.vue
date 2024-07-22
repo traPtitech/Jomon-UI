@@ -37,7 +37,7 @@ onUnmounted(() => {
     <div
       v-for="option in options"
       :key="option.value"
-      class="hover:bg-hover-secondary rounded p-1">
+      class="hover:bg-hover-primary rounded p-1">
       <button
         class="w-full h-full text-left"
         @click="handleSelectOption(option.value)">

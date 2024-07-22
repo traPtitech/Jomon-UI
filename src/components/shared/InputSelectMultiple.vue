@@ -279,7 +279,7 @@ onUnmounted(() => {
         <div
           v-for="selectedValue in selectedValues"
           :key="selectedValue.key"
-          class="ml-1 flex items-center rounded border border-tertirary bg-hover-secondary px-1">
+          class="ml-1 flex items-center rounded border border-tertirary bg-hover-primary px-1">
           <span class="whitespace-nowrap">{{ selectedValue.key }}</span>
           <button type="button" @click="removeValue(selectedValue)">×</button>
         </div>
@@ -308,12 +308,12 @@ onUnmounted(() => {
         v-for="option in searchQuery !== '' ? searchedOptions : options"
         :key="option.key"
         ref="listItemRefs"
-        :class="`last:not-first:rounded-b-md focus-within:bg-hover-primary hover:bg-hover-primary ${
+        :class="`last:not-first:rounded-b-md focus-within:bg-hover-secondary hover:bg-hover-secondary ${
           selectedValues.some(
             value =>
               convertValue(value.value, uniqKeys[1]) ===
               convertValue(option.value, uniqKeys[0])
-          ) && 'bg-hover-secondary hover:bg-hover-secondary'
+          ) && 'bg-hover-primary hover:bg-hover-primary'
         }`">
         <button
           class="h-full w-full px-4 py-1 text-left focus:outline-none"

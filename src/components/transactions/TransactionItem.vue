@@ -17,7 +17,7 @@ const formattedDate = computed(() => formatDate(props.transaction.createdAt))
 <template>
   <router-link :to="`transactions/${transaction.id}`">
     <div
-      class="children:px-2 relative flex h-12 items-center px-4 hover:bg-hover">
+      class="children:px-2 relative flex h-12 items-center px-4 hover:bg-hover-secondary">
       <div class="w-3/20">
         {{ formattedDate }}
       </div>

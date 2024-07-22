@@ -17,8 +17,8 @@ export default defineConfig({
         'text-primary': colors.dark[500],
         'text-secondary': colors.gray[400],
         'text-inverse': colors.gray[50],
-        'hover-primary': colors.gray[100],
-        'hover-secondary': colors.gray[200],
+        'hover-primary': colors.gray[200],
+        'hover-secondary': colors.gray[100],
 
         success: colors.blue[500],
         selected: colors.blue[200],

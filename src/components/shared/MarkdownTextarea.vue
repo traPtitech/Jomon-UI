@@ -1,17 +1,15 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-
 import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
-
 import InputTextarea from './InputTextarea.vue'
 import MarkdownIt from './MarkdownIt.vue'
 
 type TabType = 'input' | 'preview'
-
 interface Props {
   placeholder?: string
   templates?: readonly { name: string; value: string }[]
   autoFocus?: boolean
+  id?: string
 }
 
 const model = defineModel<string>({ required: true })
@@ -43,7 +41,6 @@ function setTemplate(template: Record<string, any> | string | null) {
     model.value = foundTemplate.value
   }
 }
-
 function changeCurrentTab(tab: TabType) {
   currentTab.value = tab
 }
@@ -85,6 +82,7 @@ function changeCurrentTab(tab: TabType) {
     <div class="px-5 py-3">
       <InputTextarea
         v-if="currentTab === 'input'"
+        :id="props.id"
         :auto-focus="autoFocus"
         class="min-h-40 w-full"
         :model-value="model"

@@ -5,6 +5,7 @@ interface Props {
   required?: boolean
   placeholder?: string
   autoFocus?: boolean
+  id?: string
 }
 
 const model = defineModel<string>({ required: true })
@@ -30,6 +31,7 @@ onMounted(() => {
 
 <template>
   <textarea
+    :id="props.id"
     ref="textareaRef"
     class="bg-background min-h-32 rounded border border-gray-300 px-3 py-2"
     :placeholder="props.placeholder"

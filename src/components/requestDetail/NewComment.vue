@@ -16,7 +16,7 @@ const { comment, isSending, submit } = useNewComment(props.request.id)
     <MarkdownTextarea v-model="comment">
       <SimpleButton
         :disabled="isSending"
-        font-size="md"
+        font-size="base"
         padding="md"
         type="success"
         @click="submit">

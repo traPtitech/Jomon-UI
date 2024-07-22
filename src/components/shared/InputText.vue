@@ -30,7 +30,7 @@ onMounted(() => {
 <template>
   <input
     ref="inputRef"
-    class="bg-white rounded border border-secondary py-1 px-2"
+    class="bg-white rounded border border-surface-secondary py-1 px-2"
     :placeholder="props.placeholder"
     :required="props.required"
     :value="model"

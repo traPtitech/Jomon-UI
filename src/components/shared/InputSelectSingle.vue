@@ -179,7 +179,7 @@ onUnmounted(() => {
       disabled && 'cursor-not-allowed'
     } min-w-70 ${calcWidth}`">
     <div
-      class="flex w-full cursor-text items-center gap-1 rounded border border-secondary py-1 pr-1"
+      class="flex w-full cursor-text items-center gap-1 rounded border border-surface-secondary py-1 pr-1"
       :class="`${disabled && 'pointer-events-none'}`"
       @click="handleClick">
       <div class="relative left-2 flex w-full">
@@ -204,7 +204,7 @@ onUnmounted(() => {
     <ul
       v-if="isDropdownOpen && searchedOptions.length > 0"
       ref="listRef"
-      class="absolute z-10 max-h-40 w-full border border-tertirary bg-white shadow-lg"
+      class="absolute z-10 max-h-40 w-full border border-surface-tertiary bg-white shadow-lg"
       :class="`${
         isDropdownAbove ? `-top-${dropdownHeight} rounded-t-lg` : 'rounded-b-lg'
       } ${

@@ -272,14 +272,14 @@ onUnmounted(() => {
       disabled && 'cursor-not-allowed'
     } min-w-70 ${calcWidth}`">
     <div
-      class="flex w-full cursor-text items-center rounded border border-secondary py-1 pl-1"
+      class="flex w-full cursor-text items-center rounded border border-surface-secondary py-1 pl-1"
       :class="`${disabled && 'pointer-events-none'}`"
       @click.prevent="handleClick">
       <div class="flex w-full items-center overflow-x-auto">
         <div
           v-for="selectedValue in selectedValues"
           :key="selectedValue.key"
-          class="ml-1 flex items-center rounded border border-tertirary bg-hover-primary px-1">
+          class="ml-1 flex items-center rounded border border-surface-tertiary bg-surface-tertiary px-1">
           <span class="whitespace-nowrap">{{ selectedValue.key }}</span>
           <button type="button" @click="removeValue(selectedValue)">×</button>
         </div>
@@ -296,7 +296,7 @@ onUnmounted(() => {
     <ul
       v-if="isDropdownOpen && searchedOptions.length > 0"
       ref="listRef"
-      class="absolute z-10 max-h-40 w-full border border-tertirary bg-white shadow-lg"
+      class="absolute z-10 max-h-40 w-full border border-surface-tertiary bg-white shadow-lg"
       :class="`${
         isDropdownAbove ? `-top-${dropdownHeight} rounded-t-lg` : 'rounded-b-lg'
       } ${

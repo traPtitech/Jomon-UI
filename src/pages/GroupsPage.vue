@@ -55,7 +55,7 @@ watch(
 
       <div class="min-h-128">
         <div
-          class="flex items-center justify-around bg-tertiary px-4 pt-2 pb-2">
+          class="flex items-center justify-around bg-surface-tertiary px-4 pt-2 pb-2">
           <div class="w-1/5">グループ名</div>
           <div class="w-3/5">詳細</div>
           <div class="w-1/5">予算</div>

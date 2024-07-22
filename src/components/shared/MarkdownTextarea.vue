@@ -50,14 +50,14 @@ function changeCurrentTab(tab: TabType) {
 </script>
 
 <template>
-  <div class="flex flex-col rounded border border-secondary">
+  <div class="flex flex-col rounded border border-surface-secondary">
     <div
       class="flex items-center justify-between rounded-t bg-hover-secondary px-4 pt-3">
       <div class="flex items-center">
         <button
           :class="`rounded-t py-2 px-6 ${
             currentTab === 'input'
-              ? 'bg-primary border-t border-x border-secondary'
+              ? 'bg-surface-primary border-t border-x border-surface-secondary'
               : 'bg-hover-secondary'
           }`"
           @click="changeCurrentTab('input')">
@@ -66,7 +66,7 @@ function changeCurrentTab(tab: TabType) {
         <button
           :class="`rounded-t py-2 px-6 ${
             currentTab === 'preview'
-              ? 'bg-primary border-t border-x border-secondary'
+              ? 'bg-surface-primary border-t border-x border-surface-secondary'
               : 'bg-hover-secondary'
           }`"
           @click="changeCurrentTab('preview')">
@@ -92,7 +92,7 @@ function changeCurrentTab(tab: TabType) {
         @update:model-value="model = $event" />
       <MarkdownIt
         v-if="currentTab === 'preview'"
-        class="min-h-40 w-full overflow-y-scroll rounded border border-secondary px-3 py-2"
+        class="min-h-40 w-full overflow-y-scroll rounded border border-surface-secondary px-3 py-2"
         :text="model" />
       <div class="flex justify-end pt-3">
         <slot />

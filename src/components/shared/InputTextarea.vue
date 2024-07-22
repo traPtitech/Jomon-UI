@@ -31,7 +31,7 @@ onMounted(() => {
 <template>
   <textarea
     ref="textareaRef"
-    class="bg-primary min-h-32 rounded border border-secondary px-3 py-2"
+    class="bg-surface-primary min-h-32 rounded border border-surface-secondary px-3 py-2"
     :placeholder="props.placeholder"
     :required="required"
     :value="model"

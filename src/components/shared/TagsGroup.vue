@@ -17,7 +17,7 @@ const tagToolTip = props.tags.map(tag => tag.name).join(', ')
     <div
       v-for="tag in slicedTags"
       :key="tag.id"
-      class="border-secondary rounded border p-0.5">
+      class="border-surface-secondary rounded border p-0.5">
       {{ tag.name }}
     </div>
     <span v-if="limit !== 0 && tags.length > limit"> ...</span>

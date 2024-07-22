@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<Props>(), {
 const typeClass = computed(() => {
   switch (props.type) {
     case 'plain':
-      return `${!props.disabled && 'hover:bg-hover-primary'} border-secondary`
+      return `${!props.disabled && 'hover:bg-hover-primary'} border-surface-secondary`
     case 'danger':
       return `${
         !props.disabled && 'hover:bg-error-secondary'
@@ -27,7 +27,7 @@ const typeClass = computed(() => {
         !props.disabled && 'hover:bg-accent-secondary'
       } bg-accent border-accent-secondary text-white`
     default:
-      return `${!props.disabled && 'hover:bg-hover-primary'} border-secondary`
+      return `${!props.disabled && 'hover:bg-hover-primary'} border-surface-secondary`
   }
 })
 const fontSizeClass = computed(() => {

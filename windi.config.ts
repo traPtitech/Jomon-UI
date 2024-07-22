@@ -11,14 +11,13 @@ export default defineConfig({
   theme: {
     extend: {
       colors: {
-        primary: colors.gray[50],
-        secondary: colors.gray[300],
-        tertiary: colors.gray[200],
-        'text-primary': colors.dark[500],
-        'text-secondary': colors.gray[400],
-        'text-inverse': colors.gray[50],
+        'surface-primary': colors.gray[50],
+        'surface-secondary': colors.gray[300],
+        'surface-tertiary': colors.gray[200],
         'hover-primary': colors.gray[200],
         'hover-secondary': colors.gray[100],
+        'text-primary': colors.dark[500],
+        'text-secondary': colors.gray[400],
 
         success: colors.blue[500],
         selected: colors.blue[200],

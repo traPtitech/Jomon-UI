@@ -37,7 +37,7 @@ const { userMap } = storeToRefs(userStore)
     </div>
     <div class="ml-15">
       <MarkdownIt
-        class="border border-secondary px-4 py-3 rounded-lg"
+        class="border border-surface-secondary px-4 py-3 rounded-lg"
         :text="comment.comment" />
     </div>
   </div>

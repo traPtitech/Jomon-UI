@@ -36,7 +36,7 @@ function sortByCreatedAt() {
 <template>
   <div class="flex justify-around">
     <button
-      class="flex items-center justify-center rounded border border-secondary p-1"
+      class="flex items-center justify-center rounded border border-surface-secondary p-1"
       :class="filterParams.sort === 'created_at' ? '' : 'bg-hover-primary'"
       @click="sortByCreatedAt">
       日付順

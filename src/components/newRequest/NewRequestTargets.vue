@@ -63,7 +63,6 @@ function handleRemoveTarget(index: number) {
         :key="target.target"
         class="flex items-center gap-3">
         <InputSelectSingle
-          :id="i === targets.length - 1 ? 'target' : undefined"
           class="flex-grow"
           :model-value="target.target"
           :options="userOptions"
@@ -79,7 +78,7 @@ function handleRemoveTarget(index: number) {
         </div>
         <button
           v-if="targets.length > 1"
-          aria-label="ターゲットを削除"
+          aria-label="払い戻し対象者を削除"
           class="flex"
           @click="handleRemoveTarget(i)">
           <TrashIcon class="w-6 text-red-400" />

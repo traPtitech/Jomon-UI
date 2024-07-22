@@ -12,7 +12,10 @@ const props = defineProps<Props>()
 
 <template>
   <div class="space-x-4">
-    <label v-for="option in props.options" :key="option.key">
+    <label
+      v-for="option in props.options"
+      :key="option.key"
+      class="cursor-pointer">
       <input v-model="model" type="radio" :value="option.value" />
       {{ option.key }}
     </label>

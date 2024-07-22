@@ -1,8 +1,6 @@
 <script lang="ts" setup>
-import { PlusCircleIcon, MinusCircleIcon } from '@heroicons/vue/24/solid'
-import { useToast } from 'vue-toastification'
-
 import InputText from '/@/components/shared/InputText.vue'
+import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
 interface Props {
   targets: string[]
@@ -10,8 +8,6 @@ interface Props {
 
 const props = defineProps<Props>()
 const emit = defineEmits<{ (e: 'input', value: string[]): void }>()
-
-const toast = useToast()
 
 function handleEditTarget(index: number, value: string) {
   emit(
@@ -24,10 +20,6 @@ function handleAddTarget() {
   emit('input', [...props.targets, ''])
 }
 function handleRemoveTarget(index: number) {
-  if (props.targets.length === 1) {
-    toast.warning('取引相手は1人以上必要です')
-    return
-  }
   emit(
     'input',
     props.targets.filter((_, i) => i !== index)
@@ -36,25 +28,21 @@ function handleRemoveTarget(index: number) {
 </script>
 
 <template>
-  <div class="flex flex-col">
-    <label>取引相手</label>
-    <ul>
-      <li
-        v-for="(target, i) in targets"
-        :key="target"
-        class="mb-2 flex w-2/3 items-center gap-4">
-        <InputText
-          :model-value="target"
-          placeholder="取引相手"
+  <div class="flex flex-col gap-2">
+    <label class="text-sm font-medium" for="target">取引相手</label>
+    <ul class="flex flex-col gap-2">
+      <li v-for="(target, i) in targets" :key="target" class="flex items-center gap-3">
+        <InputText class="flex-grow" :model-value="target" placeholder="取引相手"
           @update:model-value="handleEditTarget(i, $event)" />
-        <button class="flex" @click="handleRemoveTarget(i)">
-          <MinusCircleIcon class="w-6" />
+        <button v-if="props.targets.length > 1" class="flex" @click="handleRemoveTarget(i)">
+          <TrashIcon class="w-6 text-red-400" />
         </button>
       </li>
     </ul>
-    <div class="w-2/3 text-center">
-      <button @click="handleAddTarget">
-        <PlusCircleIcon class="w-8" />
+    <div class="ml-3">
+      <button class="flex items-center p-2 border rounded" @click="handleAddTarget">
+        <PlusIcon class="w-5 mr-2" />
+        取引相手を追加
       </button>
     </div>
   </div>

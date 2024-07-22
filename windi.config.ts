@@ -16,7 +16,7 @@ export default defineConfig({
         'surface-tertiary': colors.gray[200],
         'hover-primary': colors.gray[200],
         'hover-secondary': colors.gray[100],
-        'text-primary': colors.dark[500],
+        'text-primary': colors.dark[200],
         'text-secondary': colors.gray[400],
 
         success: colors.blue[500],

@@ -24,7 +24,9 @@ const formattedDate = computed(() => formatDate(props.transaction.createdAt))
       <div class="w-3/20 text-right">
         <span
           :class="` ${
-            props.transaction.amount > 0 ? 'text-success' : 'text-error-primary'
+            props.transaction.amount > 0
+              ? 'text-blue-500'
+              : 'text-error-primary'
           }`">
           {{ props.transaction.amount }}円
         </span>

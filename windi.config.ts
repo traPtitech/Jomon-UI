@@ -19,8 +19,6 @@ export default defineConfig({
         'text-primary': colors.dark[200],
         'text-secondary': colors.gray[400],
 
-        success: colors.blue[500],
-        selected: colors.blue[200],
         'error-primary': colors.red[500],
         'error-secondary': colors.red[300],
         'accent-primary': colors.green[500],

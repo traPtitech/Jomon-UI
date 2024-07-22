@@ -12,7 +12,7 @@ const props = defineProps<Props>()
   <router-link
     class="block flex w-10 items-center justify-center rounded"
     :class="
-      props.isSelected ? 'cursor-default bg-selected' : 'hover:bg-hover-primary'
+      props.isSelected ? 'cursor-default bg-blue-200' : 'hover:bg-hover-primary'
     "
     :to="`${props.path}?page=${props.page}`">
     <span>{{ props.page }}</span>

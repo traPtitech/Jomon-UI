@@ -101,7 +101,7 @@ const handleRemoveTarget = async () => {
     </div>
     <div>
       <button @click="handleRemoveTarget">
-        <TrashIcon class="w-6 text-error cursor-pointer" />
+        <TrashIcon class="w-6 text-error-primary cursor-pointer" />
       </button>
     </div>
   </div>

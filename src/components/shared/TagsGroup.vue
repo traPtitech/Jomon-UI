@@ -13,11 +13,11 @@ const tagToolTip = props.tags.map(tag => tag.name).join(', ')
 </script>
 
 <template>
-  <div class="flex items-center gap-2" :title="tagToolTip">
+  <div :title="tagToolTip">
     <div
       v-for="tag in slicedTags"
       :key="tag.id"
-      class="border-dark-600 rounded border p-0.5">
+      class="inline-block border-dark-600 rounded border p-0.5 mr-1.5 mb-1.5">
       {{ tag.name }}
     </div>
     <span v-if="limit !== 0 && tags.length > limit"> ...</span>

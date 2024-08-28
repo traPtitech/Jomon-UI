@@ -20,11 +20,9 @@ const userStore = useUserStore()
 const tagStore = useTagStore()
 const toast = useToast()
 
-const { isAdminFetched, adminOptions } = storeToRefs(adminStore)
+const { isAdminFetched, admins, adminOptions } = storeToRefs(adminStore)
 const { me, isUserFetched, isAdmin, userMap } = storeToRefs(userStore)
 const { isTagFetched, tagIdOptions } = storeToRefs(tagStore)
-
-const admins = ['test', 'mehm']
 
 const addList = ref<string[]>([])
 const removeList = ref<string[]>([])
@@ -63,10 +61,10 @@ if (me.value?.admin) {
     <h1 class="text-2xl">管理</h1>
     <div class="mt-6">
       <label class="text-base font-medium">管理者</label>
-      <ul class="flex gap-2 mt-3">
+      <ul class="flex gap-3 mt-3">
         <li v-for="admin in admins" :key="admin">
-          <div class="border-surface-secondary rounded border px-2 text-center">
-            {{ admin }}
+          <div class="border-text-primary rounded border px-2 text-center">
+            {{ userMap[admin] }}
           </div>
         </li>
       </ul>

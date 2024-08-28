@@ -6,6 +6,7 @@ interface Props {
   placeholder?: string
   min?: number
   autoFocus?: boolean
+  id?: string
 }
 const model = defineModel<number>({ required: true })
 const props = withDefaults(defineProps<Props>(), {
@@ -30,8 +31,9 @@ onMounted(() => {
 
 <template>
   <input
+    :id="props.id"
     ref="inputRef"
-    class="bg-background rounded border border-gray-300 py-1 px-2"
+    class="bg-surface-primary rounded border border-surface-secondary py-1 px-2"
     :min="props.min"
     :placeholder="props.placeholder"
     :required="props.required"

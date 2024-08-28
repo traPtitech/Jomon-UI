@@ -63,7 +63,7 @@ if (me.value?.admin) {
       管理者：
       <ul class="flex gap-2">
         <li v-for="admin in admins" :key="admin">
-          <div class="border-secondary rounded border px-2 text-center">
+          <div class="border-surface-secondary rounded border px-2 text-center">
             {{ userMap[admin] }}
           </div>
         </li>

@@ -44,12 +44,19 @@ function removeFile(index: number) {
 </script>
 
 <template>
-  <div class="flex flex-col">
-    <label>画像</label>
-    <input ref="inputRef" multiple type="file" @change="handleFileChange" />
+  <div class="flex flex-col gap-2">
+    <label class="text-sm font-medium" for="image">画像</label>
+    <input
+      id="image"
+      ref="inputRef"
+      multiple
+      type="file"
+      @change="handleFileChange" />
   </div>
   <div>
-    <div v-if="files.length === 0">画像プレビュー</div>
+    <div v-if="files.length === 0" class="text-sm font-medium">
+      画像プレビュー
+    </div>
     <div v-if="files.length !== 0" class="flex flex-wrap">
       <div
         v-for="(file, index) in files"
@@ -62,6 +69,7 @@ function removeFile(index: number) {
           :src="file.src" />
         <DocumentIcon v-else class="h-32" />
         <button
+          aria-label="ファイルを削除"
           class="absolute top-0 right-0 h-6 w-6"
           @click="removeFile(index)">
           <XCircleIcon />

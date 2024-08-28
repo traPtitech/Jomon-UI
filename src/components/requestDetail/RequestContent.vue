@@ -62,14 +62,16 @@ const handleUpdateContent = async () => {
           がこの申請を作成しました
         </div>
       </div>
-      <time class="text-gray-400" :datetime="request.createdAt.toISO() ?? ''">
+      <time
+        class="text-text-secondary"
+        :datetime="request.createdAt.toISO() ?? ''">
         {{ formattedDateAndTime }}
       </time>
     </div>
     <div class="ml-15 flex items-start gap-2">
       <MarkdownIt
         v-if="!isEditMode"
-        class="border border-zinc-300 px-4 py-3 rounded-lg flex-1"
+        class="border border-surface-secondary px-4 py-3 rounded-lg flex-1"
         :text="request.content" />
       <MarkdownTextarea
         v-else

@@ -20,6 +20,7 @@ interface Props {
   isDropdownAbove?: boolean
   /* [optionsのkey, modelValueのkey] modelValueをselectedValuesに適用するときに使う*/
   uniqKeys?: [string, string]
+  id?: string
   /* デフォルト幅を設定するため */
   class?: string
 }
@@ -272,18 +273,19 @@ onUnmounted(() => {
       disabled && 'cursor-not-allowed'
     } min-w-70 ${calcWidth}`">
     <div
-      class="flex w-full cursor-text items-center rounded border border-gray-300 py-1 pl-1"
+      class="flex w-full cursor-text items-center rounded border border-surface-secondary py-1 pl-1"
       :class="`${disabled && 'pointer-events-none'}`"
       @click.prevent="handleClick">
       <div class="flex w-full items-center overflow-x-auto">
         <div
           v-for="selectedValue in selectedValues"
           :key="selectedValue.key"
-          class="ml-1 flex items-center rounded border border-gray-200 bg-gray-200 px-1">
+          class="ml-1 flex items-center rounded border border-surface-tertiary bg-surface-tertiary px-1">
           <span class="whitespace-nowrap">{{ selectedValue.key }}</span>
           <button type="button" @click="removeValue(selectedValue)">×</button>
         </div>
         <input
+          :id="props.id"
           ref="inputRef"
           v-model="searchQuery"
           class="flex-grow bg-transparent pl-1 focus:outline-none"
@@ -296,7 +298,7 @@ onUnmounted(() => {
     <ul
       v-if="isDropdownOpen && searchedOptions.length > 0"
       ref="listRef"
-      class="absolute z-10 max-h-40 w-full border border-gray-200 bg-white shadow-lg"
+      class="absolute z-10 max-h-40 w-full border border-surface-tertiary bg-white shadow-lg"
       :class="`${
         isDropdownAbove ? `-top-${dropdownHeight} rounded-t-lg` : 'rounded-b-lg'
       } ${
@@ -308,12 +310,12 @@ onUnmounted(() => {
         v-for="option in searchQuery !== '' ? searchedOptions : options"
         :key="option.key"
         ref="listItemRefs"
-        :class="`last:not-first:rounded-b-md focus-within:bg-gray-100 hover:bg-gray-100 ${
+        :class="`last:not-first:rounded-b-md focus-within:bg-hover-secondary hover:bg-hover-secondary ${
           selectedValues.some(
             value =>
               convertValue(value.value, uniqKeys[1]) ===
               convertValue(option.value, uniqKeys[0])
-          ) && 'bg-gray-200 hover:bg-gray-200'
+          ) && 'bg-hover-primary hover:bg-hover-primary'
         }`">
         <button
           class="h-full w-full px-4 py-1 text-left focus:outline-none"

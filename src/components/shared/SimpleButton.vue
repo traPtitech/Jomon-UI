@@ -3,31 +3,31 @@ import { computed } from 'vue'
 
 interface Props {
   type?: 'plain' | 'danger' | 'success'
-  fontSize?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
-  padding?: 'sm' | 'md' | 'lg' | 'xl'
+  fontSize: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
+  padding: 'sm' | 'md' | 'lg' | 'xl'
   disabled?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
   type: 'plain',
   disabled: false,
-  fontSize: 'md',
+  fontSize: 'base',
   padding: 'md'
 })
 
 const typeClass = computed(() => {
   switch (props.type) {
     case 'plain':
-      return `${!props.disabled && 'hover:bg-gray-200'} border-gray-300`
+      return `${!props.disabled && 'hover:bg-hover-primary'} border-surface-secondary`
     case 'danger':
       return `${
-        !props.disabled && 'hover:bg-red-300'
-      } bg-red-500 border-red-300 text-white`
+        !props.disabled && 'hover:bg-error-secondary'
+      } bg-error-primary border-error-secondary text-white`
     case 'success':
       return `${
-        !props.disabled && 'hover:bg-green-300'
-      } bg-green-500 border-green-300 text-white`
+        !props.disabled && 'hover:bg-accent-secondary'
+      } bg-accent-primary border-accent-secondary text-white`
     default:
-      return `${!props.disabled && 'hover:bg-gray-200'} border-gray-300`
+      return `${!props.disabled && 'hover:bg-hover-primary'} border-surface-secondary`
   }
 })
 const fontSizeClass = computed(() => {

@@ -42,17 +42,17 @@ const statusToJpn = computed(() => (status: RequestStatus) => {
 const backgroundColor = computed(() => (status: RequestStatus) => {
   switch (status) {
     case 'submitted':
-      return 'bg-yellow-400'
+      return 'bg-status-submitted'
     case 'fix_required':
-      return 'bg-red-400'
+      return 'bg-status-fix-required'
     case 'accepted':
-      return 'bg-green-400'
+      return 'bg-status-accepted'
     case 'completed':
-      return 'bg-gray-400'
+      return 'bg-status-completed'
     case 'rejected':
-      return 'bg-gray-400'
+      return 'bg-status-rejected'
     default:
-      return 'bg-gray-400'
+      return 'bg-status-rejected'
   }
 })
 </script>

@@ -52,25 +52,22 @@ watch(
         </div>
       </div>
 
-      <div class="min-h-128">
-        <div class="grid grid-cols-[2fr_3fr_3fr] divide-y my-7">
-          <div
-            class="grid grid-cols-[subgrid] col-span-3 bg-surface-tertiary px-6 py-4">
-            <div>グループ名</div>
-            <div>詳細</div>
-            <div>予算</div>
-          </div>
-
-          <RouterLink
-            v-for="group in sliceGroupsAt(page, 10)"
-            :key="group.id"
-            class="grid grid-cols-[subgrid] col-span-3 hover:bg-hover-secondary px-6 py-4"
-            :to="`/groups/${group.id}`">
-            <div>{{ group.name }}</div>
-            <div class="truncate">{{ group.description }}</div>
-            <div>{{ group.budget }}</div>
-          </RouterLink>
+      <div class="grid grid-cols-[2fr_3fr_3fr] divide-y my-7">
+        <div
+          class="grid grid-cols-[subgrid] col-span-3 bg-surface-tertiary px-6 py-4">
+          <div>グループ名</div>
+          <div>詳細</div>
+          <div>予算</div>
         </div>
+        <RouterLink
+          v-for="group in sliceGroupsAt(page, 10)"
+          :key="group.id"
+          class="grid grid-cols-[subgrid] col-span-3 hover:bg-hover-secondary px-6 py-4"
+          :to="`/groups/${group.id}`">
+          <div>{{ group.name }}</div>
+          <div class="truncate">{{ group.description }}</div>
+          <div>{{ group.budget }}</div>
+        </RouterLink>
       </div>
       <PaginationBar
         v-if="groups.length > 0"

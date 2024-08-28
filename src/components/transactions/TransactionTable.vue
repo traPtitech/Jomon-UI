@@ -18,7 +18,7 @@ const sliceTransactionAt = (index: number, n: number) => {
 </script>
 
 <template>
-  <div class="grid grid-cols-[1fr_100px_1fr_1fr_2fr_50px]">
+  <div class="grid grid-cols-[1fr_100px_1fr_1fr_2fr_50px] divide-y">
     <div
       class="grid grid-cols-[subgrid] col-span-6 bg-surface-tertiary px-6 py-4">
       <div>年 月 日</div>
@@ -46,7 +46,7 @@ const sliceTransactionAt = (index: number, n: number) => {
         <TagsGroup :limit="3" :tags="transaction.tags" />
       </div>
       <div>
-        <PencilIcon></PencilIcon>
+        <PencilIcon class="w-6" />
       </div>
     </router-link>
   </div>

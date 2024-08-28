@@ -59,7 +59,7 @@ watch(
 </script>
 
 <template>
-  <div class="max-w-260 mx-auto my-8 flex flex-col gap-7">
+  <div class="max-w-260 mx-auto p-8 flex flex-col gap-7">
     <div class="min-w-160 flex flex-col">
       <div class="relative flex w-full items-center justify-start gap-7">
         <h1 class="text-center text-3xl">申請一覧</h1>

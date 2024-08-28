@@ -40,6 +40,7 @@ onUnmounted(() => {
       class="hover:bg-hover-primary rounded p-1">
       <button
         class="w-full h-full text-left"
+        type="button"
         @click="handleSelectOption(option.value)">
         {{ option.key }}
       </button>

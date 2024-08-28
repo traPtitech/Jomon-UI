@@ -71,6 +71,7 @@ function removeFile(index: number) {
         <button
           aria-label="ファイルを削除"
           class="absolute top-0 right-0 h-6 w-6"
+          type="button"
           @click="removeFile(index)">
           <XCircleIcon />
         </button>

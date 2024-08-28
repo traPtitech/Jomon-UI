@@ -44,6 +44,7 @@ function handleRemoveTarget(index: number) {
         <button
           v-if="props.targets.length > 1"
           class="flex"
+          type="button"
           @click="handleRemoveTarget(i)">
           <TrashIcon class="w-6 text-error-primary" />
         </button>

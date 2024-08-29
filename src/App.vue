@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, watch } from 'vue'
+import { watch } from 'vue'
 
 import { useFetchMeUsecase } from '/@/features/user/usecase'
 
@@ -8,10 +8,6 @@ import './styles/main.css'
 import './styles/scrollbar.css'
 import './styles/toast.css'
 import { useRoute } from 'vue-router'
-
-onMounted(async () => {
-  await useFetchMeUsecase()
-})
 
 const route = useRoute()
 

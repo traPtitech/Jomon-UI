@@ -53,7 +53,7 @@ const paddingClass = computed(() => {
 
 <template>
   <button
-    :class="`rounded-md border ${typeClass} ${fontSizeClass} ${paddingClass} ${
+    :class="`flex items-center rounded-md border ${typeClass} ${fontSizeClass} ${paddingClass} ${
       props.disabled ? 'cursor-not-allowed opacity-50' : ''
     }`"
     :disabled="props.disabled"

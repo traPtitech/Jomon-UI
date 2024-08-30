@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import InputText from '/@/components/shared/InputText.vue'
 import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
@@ -49,12 +50,10 @@ function handleRemoveTarget(index: number) {
       </li>
     </ul>
     <div class="ml-3">
-      <button
-        class="flex items-center p-2 border rounded"
-        @click="handleAddTarget">
+      <SimpleButton font-size="base" padding="sm" @click="handleAddTarget">
         <PlusIcon class="w-5 mr-2" />
         取引相手を追加
-      </button>
+      </SimpleButton>
     </div>
   </div>
 </template>

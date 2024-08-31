@@ -81,6 +81,7 @@ function handleRemoveTarget(index: number) {
           v-if="targets.length > 1"
           aria-label="払い戻し対象者を削除"
           class="flex"
+          type="button"
           @click="handleRemoveTarget(i)">
           <TrashIcon class="w-6 text-error-primary" />
         </button>

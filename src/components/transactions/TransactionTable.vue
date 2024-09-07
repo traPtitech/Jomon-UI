@@ -18,19 +18,20 @@ const sliceTransactionAt = (index: number, n: number) => {
 </script>
 
 <template>
-  <div class="grid grid-cols-[1fr_100px_1fr_1fr_2fr_50px] divide-y">
+  <div
+    class="grid grid-cols-[repeat(minmax(100px,1fr),4)_2fr_50px] divide-y w-full overflow-x-scroll">
     <div
-      class="grid grid-cols-[subgrid] col-span-6 bg-surface-tertiary px-6 py-4">
+      class="grid grid-cols-[subgrid] col-span-6 bg-surface-tertiary gap-x-[1vw] pl-[1vw] py-4">
       <div>年 月 日</div>
       <div>取引額</div>
       <div>取引相手</div>
-      <div>取引グループ</div>
+      <div class="whitespace-nowrap">取引グループ</div>
       <div>タグ</div>
     </div>
     <router-link
       v-for="transaction in sliceTransactionAt(props.page, 10)"
       :key="transaction.id"
-      class="grid grid-cols-[subgrid] col-span-6 hover:bg-hover-secondary px-6 py-4"
+      class="grid grid-cols-[subgrid] col-span-6 hover:bg-hover-secondary gap-x-[1vw] pl-[1vw] py-4"
       :to="`transactions/${transaction.id}`">
       <div>
         {{ formatDate(transaction.createdAt) }}
@@ -42,12 +43,8 @@ const sliceTransactionAt = (index: number, n: number) => {
       <div class="truncate">
         {{ transaction.group ? transaction.group.description : 'なし' }}
       </div>
-      <div>
-        <TagsGroup :limit="3" :tags="transaction.tags" />
-      </div>
-      <div>
-        <PencilIcon class="w-6" />
-      </div>
+      <TagsGroup :limit="3" :tags="transaction.tags" />
+      <PencilIcon class="w-6" />
     </router-link>
   </div>
 </template>

@@ -77,7 +77,7 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
 
 <template>
   <div class="divider">
-    <div class="children:px-2 flex h-8 px-4">
+    <div class="[&>*]:px-2 flex h-8 px-4">
       <!-- 年月日 -->
       <!-- todo:多分since,untilでの検索をつける -->
       <button

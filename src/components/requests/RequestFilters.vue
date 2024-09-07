@@ -77,8 +77,8 @@ function sortByCreatedAt() {
       placeholder="タグ"
       @close="useFetchRequestsUsecase" />
   </div>
-  <span v-if="requests && requests.length !== 0" class="ml-1/8">
+  <span v-if="requests && requests.length !== 0" class="ml-1/6">
     {{ requests.length }}件取得しました
   </span>
-  <span v-else class="ml-1/8"> 条件に一致する申請は見つかりませんでした </span>
+  <span v-else class="ml-1/6"> 条件に一致する申請は見つかりませんでした </span>
 </template>

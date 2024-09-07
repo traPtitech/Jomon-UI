@@ -55,7 +55,7 @@ watch(
 
 <template>
   <div>
-    <div class="min-w-160 mx-auto flex w-2/3 flex-col">
+    <div class="min-w-[640px] mx-auto flex w-2/3 flex-col">
       <div class="relative flex w-full items-center justify-center pt-8 pb-4">
         <h1 class="text-center text-3xl">入出金記録</h1>
         <div v-if="isAdmin" class="absolute right-0">
@@ -66,7 +66,7 @@ watch(
           </RouterLink>
         </div>
       </div>
-      <div class="min-h-128">
+      <div class="min-h-[512px]">
         <div class="mb-2">
           <span v-if="transactions && transactions.length !== 0">
             {{ transactions?.length }}件取得しました

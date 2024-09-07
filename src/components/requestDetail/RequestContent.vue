@@ -68,7 +68,7 @@ const handleUpdateContent = async () => {
         {{ formattedDateAndTime }}
       </time>
     </div>
-    <div class="ml-15 flex items-start gap-2">
+    <div class="ml-16 flex items-start gap-2">
       <MarkdownIt
         v-if="!isEditMode"
         class="border border-surface-secondary px-4 py-3 rounded-lg flex-1"

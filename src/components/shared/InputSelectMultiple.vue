@@ -181,7 +181,7 @@ const handleKeydown = (e: KeyboardEvent, option: Value) => {
     const length =
       searchQuery.value !== ''
         ? searchedOptions.value.length
-        : props.options?.length ?? 0
+        : (props.options?.length ?? 0)
     focusingListItemIndex.value = (focusingListItemIndex.value + 1) % length
     const buttonEl = listItemRefs.value[focusingListItemIndex.value]
       .firstChild as HTMLButtonElement
@@ -202,7 +202,7 @@ const handleKeydown = (e: KeyboardEvent, option: Value) => {
     const length =
       searchQuery.value !== ''
         ? searchedOptions.value.length
-        : props.options?.length ?? 0
+        : (props.options?.length ?? 0)
     focusingListItemIndex.value =
       (focusingListItemIndex.value - 1 + length) % length
     const buttonEl = listItemRefs.value[focusingListItemIndex.value]
@@ -241,7 +241,7 @@ const calcWidth = computed(() => {
   if (/w-/.test(props.class)) {
     return props.class
   }
-  return `${props.class} w-70`
+  return `${props.class}`
 })
 
 /* ドロップダウンの位置を計算する処理 */

@@ -56,7 +56,7 @@ if (me.value?.admin) {
 </script>
 
 <template>
-  <div v-if="isAdmin" class="p-2">権限がありません。</div>
+  <div v-if="!isAdmin" class="p-2">権限がありません。</div>
   <div v-else class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
     <h1 class="text-2xl">管理</h1>
     <div class="mt-6">
@@ -72,11 +72,12 @@ if (me.value?.admin) {
     <div class="mt-4">
       <label class="text-base font-medium">管理者の操作</label>
       <div class="flex gap-3 mt-3">
-        <InputSelectMultiple
-          v-model="addList"
-          class="!w-2/3"
-          :options="absentMembers"
-          placeholder="追加する管理者を選択" />
+        <div class="flex-grow">
+          <InputSelectMultiple
+            v-model="addList"
+            :options="absentMembers"
+            placeholder="追加する管理者を選択" />
+        </div>
         <SimpleButton
           :disabled="isSending"
           font-size="lg"
@@ -86,11 +87,12 @@ if (me.value?.admin) {
         </SimpleButton>
       </div>
       <div class="flex gap-3 mt-3">
-        <InputSelectMultiple
-          v-model="removeList"
-          class="!w-2/3"
-          :options="adminOptions"
-          placeholder="削除する管理者を選択" />
+        <div class="flex-grow">
+          <InputSelectMultiple
+            v-model="removeList"
+            :options="adminOptions"
+            placeholder="削除する管理者を選択" />
+        </div>
         <SimpleButton
           :disabled="isSending"
           font-size="lg"
@@ -103,11 +105,12 @@ if (me.value?.admin) {
     <div class="mt-6">
       <label class="text-base font-medium">その他の操作</label>
       <div class="flex gap-3 mt-3">
-        <InputSelectMultiple
-          v-model="deleteTagList"
-          class="!w-2/3"
-          :options="tagIdOptions"
-          placeholder="削除するタグを選択" />
+        <div class="flex-grow">
+          <InputSelectMultiple
+            v-model="deleteTagList"
+            :options="tagIdOptions"
+            placeholder="削除するタグを選択" />
+        </div>
         <SimpleButton
           :disabled="deleteTagList.length === 0 || isSending"
           font-size="lg"

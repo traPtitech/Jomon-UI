@@ -16,14 +16,6 @@ const createTransactionRepository = () => ({
   fetchTransactions: async (
     querySeed: TransactionQuerySeed
   ): Promise<Transaction[]> => {
-    const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
-    if (
-      (querySeed.since && !rule.test(querySeed.since)) ||
-      (querySeed.until && !rule.test(querySeed.until))
-    ) {
-      throw new Error('日付はyyyy-MM-ddの形式で入力してください')
-    }
-
     const { data } = await apis.getTransactions(
       querySeed.sort,
       querySeed.target,

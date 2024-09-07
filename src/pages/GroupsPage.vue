@@ -40,13 +40,13 @@ watch(
 
 <template>
   <div>
-    <div class="min-w-160 mx-auto flex w-2/3 my-8 flex-col">
+    <div class="min-w-96 mx-auto flex w-2/3 my-8 flex-col">
       <div class="relative flex w-full items-center">
         <h1 class="text-2xl">グループ一覧</h1>
         <div v-if="isAdmin" class="ml-4">
           <RouterLink to="/groups/new">
             <SimpleButton font-size="lg" padding="md">
-              グループの新規作成
+              グループを作成
             </SimpleButton>
           </RouterLink>
         </div>

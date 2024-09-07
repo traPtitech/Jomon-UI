@@ -57,6 +57,7 @@ function changeCurrentTab(tab: TabType) {
               ? 'bg-surface-primary border-t border-x border-surface-secondary'
               : 'bg-hover-secondary'
           }`"
+          type="button"
           @click="changeCurrentTab('input')">
           入力
         </button>
@@ -66,6 +67,7 @@ function changeCurrentTab(tab: TabType) {
               ? 'bg-surface-primary border-t border-x border-surface-secondary'
               : 'bg-hover-secondary'
           }`"
+          type="button"
           @click="changeCurrentTab('preview')">
           プレビュー
         </button>

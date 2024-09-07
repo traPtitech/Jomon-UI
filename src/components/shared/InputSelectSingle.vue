@@ -200,7 +200,7 @@ onUnmounted(() => {
           @focus="isDropdownOpen = true"
           @keydown="handleKeydown" />
       </div>
-      <button v-if="selectedValue" @click="removeValue">×</button>
+      <button v-if="selectedValue" type="button" @click="removeValue">×</button>
       <ChevronDownIcon class="h-4 w-4" />
     </div>
     <ul
@@ -224,6 +224,7 @@ onUnmounted(() => {
         }`">
         <button
           class="h-full w-full px-4 py-1 text-left focus:outline-none"
+          type="button"
           @click="selectValue(option)"
           @keydown="handleKeydown">
           {{ option.key }}

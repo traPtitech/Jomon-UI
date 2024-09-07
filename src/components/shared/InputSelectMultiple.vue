@@ -241,7 +241,7 @@ const calcWidth = computed(() => {
   if (/w-/.test(props.class)) {
     return props.class
   }
-  return `${props.class}`
+  return `${props.class} w-70`
 })
 
 /* ドロップダウンの位置を計算する処理 */

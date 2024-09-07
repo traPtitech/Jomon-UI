@@ -72,12 +72,11 @@ if (me.value?.admin) {
     <div class="mt-4">
       <label class="text-base font-medium">管理者の操作</label>
       <div class="flex gap-3 mt-3">
-        <div class="flex-grow">
-          <InputSelectMultiple
-            v-model="addList"
-            :options="absentMembers"
-            placeholder="追加する管理者を選択" />
-        </div>
+        <InputSelectMultiple
+          v-model="addList"
+          class="flex-grow"
+          :options="absentMembers"
+          placeholder="追加する管理者を選択" />
         <SimpleButton
           :disabled="isSending"
           font-size="lg"
@@ -87,12 +86,11 @@ if (me.value?.admin) {
         </SimpleButton>
       </div>
       <div class="flex gap-3 mt-3">
-        <div class="flex-grow">
-          <InputSelectMultiple
-            v-model="removeList"
-            :options="adminOptions"
-            placeholder="削除する管理者を選択" />
-        </div>
+        <InputSelectMultiple
+          v-model="removeList"
+          class="flex-grow"
+          :options="adminOptions"
+          placeholder="削除する管理者を選択" />
         <SimpleButton
           :disabled="isSending"
           font-size="lg"
@@ -105,12 +103,11 @@ if (me.value?.admin) {
     <div class="mt-6">
       <label class="text-base font-medium">その他の操作</label>
       <div class="flex gap-3 mt-3">
-        <div class="flex-grow">
-          <InputSelectMultiple
-            v-model="deleteTagList"
-            :options="tagIdOptions"
-            placeholder="削除するタグを選択" />
-        </div>
+        <InputSelectMultiple
+          v-model="deleteTagList"
+          class="flex-grow"
+          :options="tagIdOptions"
+          placeholder="削除するタグを選択" />
         <SimpleButton
           :disabled="deleteTagList.length === 0 || isSending"
           font-size="lg"

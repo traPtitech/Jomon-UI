@@ -19,7 +19,7 @@ const sliceTransactionAt = (index: number, n: number) => {
 
 <template>
   <div
-    class="grid grid-cols-[repeat(minmax(100px,1fr),4)_2fr_50px] divide-y w-full overflow-x-scroll">
+    class="grid grid-cols-[repeat(4,minmax(100px,1fr))_2fr_50px] divide-y w-full overflow-x-scroll">
     <div
       class="grid grid-cols-[subgrid] col-span-6 bg-surface-tertiary gap-x-[1vw] pl-[1vw] py-4">
       <div>年 月 日</div>

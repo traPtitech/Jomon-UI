@@ -8,6 +8,7 @@ import type { RequestTarget } from '/@/lib/apis'
 
 import InputNumber from '/@/components/shared/InputNumber.vue'
 import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 interface Props {
   targets: RequestTarget[]
@@ -80,18 +81,17 @@ function handleRemoveTarget(index: number) {
           v-if="targets.length > 1"
           aria-label="払い戻し対象者を削除"
           class="flex"
+          type="button"
           @click="handleRemoveTarget(i)">
           <TrashIcon class="w-6 text-error-primary" />
         </button>
       </li>
     </ul>
     <div v-if="userOptions.length > targets.length" class="ml-3">
-      <button
-        class="flex items-center p-2 border rounded text-base"
-        @click="handleAddTarget">
+      <SimpleButton font-size="base" padding="sm" @click="handleAddTarget">
         <PlusIcon class="w-5 mr-2" />
         払い戻し対象者を追加
-      </button>
+      </SimpleButton>
     </div>
   </div>
 </template>

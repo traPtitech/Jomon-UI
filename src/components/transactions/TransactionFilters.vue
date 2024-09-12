@@ -77,11 +77,11 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
 
 <template>
   <div class="divider">
-    <div class="children:px-2 flex h-8 px-4">
+    <div class="[&>*]:px-2 flex h-8 px-4">
       <!-- 年月日 -->
       <!-- todo:多分since,untilでの検索をつける -->
       <button
-        class="w-3/20 flex items-center justify-between"
+        class="w-1/6 flex items-center justify-between"
         @click="sort('created_at')">
         <span>年 月 日</span>
         <SortOrderButtons :sort="sortOption('created_at')" />
@@ -89,13 +89,13 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
       <!-- 取引額 -->
       <!-- todo:多分範囲で検索にする -->
       <button
-        class="w-3/20 flex items-center justify-between"
+        class="w-1/6 flex items-center justify-between"
         @click="sort('amount')">
         <span>取引額</span>
         <SortOrderButtons :sort="sortOption('amount')" />
       </button>
       <!-- 取引相手 -->
-      <div class="w-4/20 flex h-full w-full items-center">
+      <div class="w-1/6 flex h-full items-center">
         <div v-if="!isFilterByTarget" class="w-full">
           <button
             class="flex w-full items-center justify-between"
@@ -117,14 +117,14 @@ const sortOption = computed(() => (sortKind: 'created_at' | 'amount') => {
       <!-- グループ -->
       <InputSelectSingle
         v-model="filterParams.group"
-        class="!w-2/10"
+        class="!w-1/4"
         :options="groupOptions"
         placeholder="取引グループ"
         @close="'updateTransactions'" />
       <!-- タグ -->
       <InputSelectMultiple
         v-model="filterParams.tags"
-        class="!w-3/10"
+        class="!w-1/4"
         :options="tagIdOptions"
         placeholder="タグ"
         @close="'updateTransactions'" />

@@ -51,7 +51,7 @@ const right = computed(
     <div class="mx-auto flex h-full w-min justify-center ring-0">
       <!-- Prev -->
       <router-link
-        class="w-18 mr-4 flex items-center justify-center rounded hover:bg-hover-primary"
+        class="w-16 mr-4 flex items-center justify-center rounded hover:bg-hover-primary"
         :class="currentPage === 1 ? 'invisible' : ''"
         :to="`${path}?page=${currentPage - 1}`">
         <ChevronLeftIcon class="w-4" />Prev
@@ -98,7 +98,7 @@ const right = computed(
 
       <!-- Next -->
       <router-link
-        class="w-18 ml-4 flex items-center justify-center rounded hover:bg-hover-primary"
+        class="w-16 ml-4 flex items-center justify-center rounded hover:bg-hover-primary"
         :class="currentPage === totalPages ? 'invisible' : ''"
         :to="`${path}?page=${currentPage + 1}`">
         Next<ChevronRightIcon class="w-4" />

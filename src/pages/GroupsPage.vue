@@ -40,7 +40,7 @@ watch(
 
 <template>
   <div>
-    <div class="min-w-96 mx-auto flex w-2/3 my-8 flex-col">
+    <div class="min-w-[384px] mx-auto flex w-2/3 my-8 flex-col">
       <div class="relative flex w-full items-center">
         <h1 class="text-2xl">グループ一覧</h1>
         <div v-if="isAdmin" class="ml-4">

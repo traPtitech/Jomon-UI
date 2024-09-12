@@ -25,14 +25,6 @@ export const useRequestRepository = () => {
 
 const createRequestRepository = () => ({
   fetchRequests: async (querySeed: RequestQuerySeed): Promise<Request[]> => {
-    const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
-    if (
-      (querySeed.since && !rule.test(querySeed.since)) ||
-      (querySeed.until && !rule.test(querySeed.until))
-    ) {
-      throw new Error('日付はyyyy-MM-ddの形式で入力してください')
-    }
-
     const { data } = await apis.getRequests(
       querySeed.sort,
       querySeed.currentStatus !== '' ? querySeed.currentStatus : undefined,

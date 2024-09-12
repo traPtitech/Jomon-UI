@@ -11,9 +11,16 @@ import { createTagIfNotExistUsecase } from '/@/features/tag/usecase'
 
 export const useFetchRequestsUsecase = async () => {
   const repository = useRequestRepository()
-  const { requests, isRequestFetched, filterParams } = storeToRefs(
-    useRequestStore()
-  )
+  const { requests, isRequestFetched, filterParams } =
+    storeToRefs(useRequestStore())
+
+  const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
+  if (
+    (filterParams.value.since && !rule.test(filterParams.value.since)) ||
+    (filterParams.value.until && !rule.test(filterParams.value.until))
+  ) {
+    throw new Error('日付はyyyy-MM-ddの形式で入力してください')
+  }
 
   try {
     requests.value = await repository.fetchRequests(filterParams.value)

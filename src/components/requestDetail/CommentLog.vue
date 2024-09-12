@@ -35,7 +35,7 @@ const { userMap } = storeToRefs(userStore)
         {{ formattedDateAndTime }}
       </time>
     </div>
-    <div class="ml-15">
+    <div class="ml-16">
       <MarkdownIt
         class="border border-surface-secondary px-4 py-3 rounded-lg"
         :text="comment.comment" />

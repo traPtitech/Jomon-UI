@@ -60,7 +60,7 @@ watch(
 </script>
 
 <template>
-  <div class="min-w-160 mx-auto flex w-2/3 flex-col px-12 pt-8">
+  <div class="min-w-[640px] mx-auto flex w-2/3 flex-col px-12 pt-8">
     <div class="relative flex w-full items-center justify-center pb-8">
       <h1 class="text-center text-3xl">申請一覧</h1>
       <div class="absolute right-0">
@@ -73,7 +73,7 @@ watch(
     </div>
   </div>
   <RequestFilters />
-  <div class="min-h-120">
+  <div class="min-h-[480px]">
     <div class="mx-auto mt-4 w-3/4 rounded-xl shadow">
       <ul>
         <li

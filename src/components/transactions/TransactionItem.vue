@@ -17,11 +17,11 @@ const formattedDate = computed(() => formatDate(props.transaction.createdAt))
 <template>
   <router-link :to="`transactions/${transaction.id}`">
     <div
-      class="children:px-2 relative flex h-12 items-center px-4 hover:bg-hover-secondary">
-      <div class="w-3/20">
+      class="[&>*]:px-2 relative flex h-12 items-center px-4 hover:bg-hover-secondary">
+      <div class="w-1/6">
         {{ formattedDate }}
       </div>
-      <div class="w-3/20 text-right">
+      <div class="w-1/12 text-right">
         <span
           :class="` ${
             props.transaction.amount > 0
@@ -31,15 +31,15 @@ const formattedDate = computed(() => formatDate(props.transaction.createdAt))
           {{ props.transaction.amount }}円
         </span>
       </div>
-      <div class="w-4/20">
+      <div class="w-1/6">
         {{ props.transaction.target }}
       </div>
-      <div class="w-2/10 truncate">
+      <div class="w-1/6 truncate">
         {{
           props.transaction.group ? props.transaction.group.description : 'なし'
         }}
       </div>
-      <div class="w-3/10">
+      <div class="w-5/12">
         <TagsGroup :limit="3" :tags="props.transaction.tags" />
       </div>
     </div>

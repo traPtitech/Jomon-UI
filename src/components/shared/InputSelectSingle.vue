@@ -149,7 +149,7 @@ const calcWidth = computed(() => {
   if (/w-/.test(props.class)) {
     return props.class
   }
-  return `${props.class} w-70`
+  return `${props.class} w-72`
 })
 
 const updateHeight = () => {
@@ -178,7 +178,7 @@ onUnmounted(() => {
     ref="inputSelectRef"
     :class="`relative ${
       disabled && 'cursor-not-allowed'
-    } min-w-70 ${calcWidth}`">
+    } min-w-72 ${calcWidth}`">
     <div
       class="flex w-full cursor-text items-center gap-1 rounded border border-surface-secondary py-1 pr-1"
       :class="`${disabled && 'pointer-events-none'}`"

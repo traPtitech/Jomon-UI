@@ -40,6 +40,7 @@ await fetchFiles(request.value?.files ?? [])
           <!--画像の色によっては見えづらい(新規作成画面も)-->
           <button
             class="absolute top-0 right-0 h-8 w-8"
+            type="button"
             @click="removeFile(file.id)">
             <XCircleIcon />
           </button>

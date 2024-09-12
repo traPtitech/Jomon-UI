@@ -40,7 +40,7 @@ if (!isUserFetched.value) {
 </script>
 
 <template>
-  <div class="min-w-147 mx-50 mt-8 mb-30 flex flex-col">
+  <div class="min-w-[640px] w-2/3 mx-auto mt-8 mb-32 flex flex-col">
     <div class="pb-8">
       <h1 class="text-2xl">申請の新規作成</h1>
     </div>

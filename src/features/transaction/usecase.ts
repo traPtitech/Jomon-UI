@@ -15,6 +15,14 @@ export const useFetchTransactionsUsecase = async () => {
     useTransactionStore()
   )
 
+  const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
+  if (
+    (filterParams.value.since && !rule.test(filterParams.value.since)) ||
+    (filterParams.value.until && !rule.test(filterParams.value.until))
+  ) {
+    throw new Error('日付はyyyy-MM-ddの形式で入力してください')
+  }
+
   try {
     transactions.value = await repository.fetchTransactions(filterParams.value)
     isTransactionFetched.value = true

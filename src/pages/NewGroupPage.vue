@@ -2,17 +2,14 @@
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
-
 import { useUserStore } from '/@/stores/user'
-
 import InputNumber from '/@/components/shared/InputNumber.vue'
 import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
 import InputText from '/@/components/shared/InputText.vue'
-import InputTextarea from '/@/components/shared/InputTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import { createGroupUsecase } from '/@/features/group/usecase'
 import { useFetchUsersUsecase } from '/@/features/user/usecase'
-
 import { useNewGroup } from './composables/useNewGroup'
 
 const toast = useToast()
@@ -41,49 +38,52 @@ if (!isUserFetched.value) {
 </script>
 
 <template>
-  <div class="min-w-[640px] mx-auto flex w-2/3 flex-col">
-    <div class="py-8">
-      <h1 class="text-center text-3xl">グループの新規作成</h1>
+  <div class="min-w-96 mx-auto mt-8 mb-5 flex w-2/3 flex-col">
+    <div class="mb-6">
+      <h1 class="text-2xl">グループの新規作成</h1>
     </div>
-    <form class="flex flex-col gap-2">
-      <div class="flex flex-col">
-        <label>グループ名</label>
+    <form class="flex flex-col gap-6">
+      <div class="flex flex-col gap-3">
+        <label class="font-medium">グループ名</label>
         <InputText
           v-model="group.name"
           auto-focus
           placeholder="グループ名を入力"
           required />
       </div>
-      <div class="flex flex-col">
-        <label>詳細</label>
-        <InputTextarea
+      <div class="flex flex-col gap-3">
+        <label class="font-medium" for="details">説明</label>
+        <MarkdownTextarea
+          id="details"
           v-model="group.description"
-          placeholder="詳細を入力"
+          placeholder=""
           required />
       </div>
-      <div class="flex flex-col">
-        <label>予算</label>
+      <div class="flex flex-col gap-3">
+        <label class="font-medium">予算</label>
         <div>
           <InputNumber
             v-model="group.budget"
-            class="mr-1 w-2/5"
+            class="mr-2"
             :min="1"
             required />円
         </div>
       </div>
-      <div class="flex flex-col">
-        <label>オーナー</label>
+      <div class="flex flex-col gap-3">
+        <label class="font-medium">オーナー</label>
         <InputSelectMultiple
           v-model="group.owners"
+          class="w-full"
           :options="userOptions"
-          placeholder="追加するオーナーを選択" />
+          placeholder="オーナーを選択" />
       </div>
-      <div class="flex flex-col">
-        <label>メンバー</label>
+      <div class="flex flex-col gap-3">
+        <label class="font-medium">メンバー</label>
         <InputSelectMultiple
           v-model="group.members"
+          class="w-full"
           :options="userOptions"
-          placeholder="追加するメンバーを選択" />
+          placeholder="メンバーを選択" />
       </div>
       <div>
         <SimpleButton
@@ -92,7 +92,7 @@ if (!isUserFetched.value) {
           font-size="xl"
           padding="md"
           @click="handleCreateGroup">
-          グループを作成する
+          グループを作成
         </SimpleButton>
       </div>
     </form>

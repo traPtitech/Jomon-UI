@@ -30,7 +30,7 @@ const hasAuthority = canEditGroup(me.value)
 
 <template>
   <div v-if="group" class="flex items-center gap-3">
-    <h1 v-if="!isEditMode" class="flex-grow text-2xl">
+    <h1 v-if="!props.isEditMode" class="flex-grow text-2xl">
       {{ group.name }}
     </h1>
     <InputText
@@ -41,9 +41,11 @@ const hasAuthority = canEditGroup(me.value)
       placeholder="グループ名" />
     <EditButton
       v-if="hasAuthority"
-      :is-edit-mode="isEditMode"
+      :is-edit-mode="props.isEditMode"
       @click="
-        isEditMode ? emit('finishEditing') : emit('changeEditMode', 'name')
+        props.isEditMode
+          ? emit('finishEditing')
+          : emit('changeEditMode', 'name')
       " />
   </div>
 </template>

@@ -181,7 +181,7 @@ const handleKeydown = (e: KeyboardEvent, option: Value) => {
     const length =
       searchQuery.value !== ''
         ? searchedOptions.value.length
-        : props.options?.length ?? 0
+        : (props.options?.length ?? 0)
     focusingListItemIndex.value = (focusingListItemIndex.value + 1) % length
     const buttonEl = listItemRefs.value[focusingListItemIndex.value]
       .firstChild as HTMLButtonElement
@@ -202,7 +202,7 @@ const handleKeydown = (e: KeyboardEvent, option: Value) => {
     const length =
       searchQuery.value !== ''
         ? searchedOptions.value.length
-        : props.options?.length ?? 0
+        : (props.options?.length ?? 0)
     focusingListItemIndex.value =
       (focusingListItemIndex.value - 1 + length) % length
     const buttonEl = listItemRefs.value[focusingListItemIndex.value]
@@ -269,14 +269,12 @@ onUnmounted(() => {
 <template>
   <div
     ref="inputSelectRef"
-    :class="`relative ${
-      disabled && 'cursor-not-allowed'
-    } min-w-72 ${calcWidth}`">
+    :class="`relative ${disabled && 'cursor-not-allowed'} ${calcWidth}`">
     <div
-      class="flex w-full cursor-text items-center rounded border border-surface-secondary py-1 pl-1"
+      class="flex cursor-text items-center rounded border border-surface-secondary py-1 pl-1"
       :class="`${disabled && 'pointer-events-none'}`"
       @click.prevent="handleClick">
-      <div class="flex w-full items-center overflow-x-auto">
+      <div class="flex items-center overflow-x-auto">
         <div
           v-for="selectedValue in selectedValues"
           :key="selectedValue.key"

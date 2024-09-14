@@ -43,7 +43,7 @@ watch(
     <div class="min-w-[384px] mx-auto flex w-2/3 my-8 flex-col">
       <div class="relative flex w-full items-center">
         <h1 class="text-2xl">グループ一覧</h1>
-        <div v-if="isAdmin" class="ml-4">
+        <div v-if="isAdmin" class="ml-7">
           <RouterLink to="/groups/new">
             <SimpleButton font-size="lg" padding="md">
               グループを作成

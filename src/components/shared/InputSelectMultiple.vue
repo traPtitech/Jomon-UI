@@ -75,7 +75,7 @@ const selectedValues = computed(() => {
       }
       return selectedValue
     })
-    .filter((value): value is Value => value !== undefined)
+    .filter(value => value !== undefined)
 })
 const focusingListItemIndex = ref(-1)
 /* 作成されたタグ。selectedValuesの計算のために別で持っている */

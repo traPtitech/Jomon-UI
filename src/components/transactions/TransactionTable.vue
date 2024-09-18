@@ -1,8 +1,8 @@
 <script lang="ts" setup>
+import EditButton from '/@/components/shared/EditButton.vue'
 import TagsGroup from '/@/components/shared/TagsGroup.vue'
 import type { Transaction } from '/@/features/transaction/model'
 import { formatDate } from '/@/lib/date'
-import { PencilIcon } from '@heroicons/vue/24/solid'
 
 interface Props {
   page: number
@@ -19,9 +19,9 @@ const sliceTransactionAt = (index: number, n: number) => {
 
 <template>
   <div
-    class="grid grid-cols-[repeat(4,minmax(100px,1fr))_2fr_50px] divide-y w-full overflow-x-scroll">
+    class="hidden md:grid grid-cols-[minmax(120px,1fr)_70px_repeat(2,minmax(120px,1fr))_3fr_50px] divide-y w-full overflow-x-scroll">
     <div
-      class="grid grid-cols-subgrid col-span-6 bg-surface-tertiary gap-x-[1vw] pl-[1vw] py-4">
+      class="grid grid-cols-subgrid col-span-6 bg-surface-tertiary gap-x-2 px-6 py-4">
       <div>年 月 日</div>
       <div>取引額</div>
       <div>取引相手</div>
@@ -31,7 +31,7 @@ const sliceTransactionAt = (index: number, n: number) => {
     <router-link
       v-for="transaction in sliceTransactionAt(props.page, 10)"
       :key="transaction.id"
-      class="grid grid-cols-subgrid col-span-6 hover:bg-hover-secondary gap-x-[1vw] pl-[1vw] py-4"
+      class="grid grid-cols-subgrid col-span-6 hover:bg-hover-secondary gap-x-4 px-6 py-4"
       :to="`transactions/${transaction.id}`">
       <div>
         {{ formatDate(transaction.createdAt) }}
@@ -44,7 +44,39 @@ const sliceTransactionAt = (index: number, n: number) => {
         {{ transaction.group ? transaction.group.description : 'なし' }}
       </div>
       <TagsGroup :limit="3" :tags="transaction.tags" />
-      <PencilIcon class="w-6" />
+      <div class="text-right">
+        <EditButton class="w-6" />
+      </div>
+    </router-link>
+  </div>
+  <div class="md:hidden divide-y w-full overflow-x-scroll">
+    <router-link
+      v-for="transaction in sliceTransactionAt(props.page, 10)"
+      :key="transaction.id"
+      class="flex flex-col gap-y-2 hover:bg-hover-secondary px-6 py-4"
+      :to="`transactions/${transaction.id}`">
+      <div class="flex gap-4">
+        <div class="truncate mr-auto">
+          {{ transaction.group ? transaction.group.description : 'なし' }}
+        </div>
+        <div class="text-right">{{ transaction.amount }}円</div>
+      </div>
+      <div class="flex gap-4">
+        <div class="mr-auto">
+          {{ transaction.target }}
+        </div>
+        <div class="text-right">
+          {{ formatDate(transaction.createdAt) }}
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="w-auto mr-auto">
+          <TagsGroup :limit="3" :tags="transaction.tags" />
+        </div>
+        <div class="flex justify-end items-end">
+          <EditButton class="w-4" />
+        </div>
+      </div>
     </router-link>
   </div>
 </template>

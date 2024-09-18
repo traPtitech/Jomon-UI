@@ -44,9 +44,9 @@ const handleOpenDrawer = () => {
         <a
           href="https://wiki.trap.jp/teams/SysAd/dev/Jomon"
           rel="noreferrer noopener"
-          target="_blank"
-          >ヘルプ</a
-        >
+          target="_blank">
+          ヘルプ
+        </a>
         <UserIcon v-if="me !== undefined" :name="me.name" />
       </div>
     </div>

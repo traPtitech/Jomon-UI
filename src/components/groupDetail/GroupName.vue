@@ -7,6 +7,7 @@ import { useUserStore } from '/@/stores/user'
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import InputText from '/@/components/shared/InputText.vue'
 import EditButton from '/@/components/shared/EditButton.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 interface Props {
   isEditMode: boolean
@@ -39,12 +40,15 @@ const hasAuthority = canEditGroup(me.value)
       auto-focus
       class="flex-grow"
       placeholder="グループ名" />
+    <SimpleButton v-if="isEditMode" padding="sm" @click="emit('finishEditing')">
+      完了
+    </SimpleButton>
     <EditButton
       v-if="hasAuthority"
       :is-edit-mode="props.isEditMode"
       @click="
         props.isEditMode
-          ? emit('finishEditing')
+          ? emit('changeEditMode', '')
           : emit('changeEditMode', 'name')
       " />
   </div>

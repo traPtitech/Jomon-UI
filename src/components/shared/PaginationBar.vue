@@ -18,7 +18,6 @@ const props = defineProps<Props>()
 
 type PaginationType = number | '...'
 
-// 常に表示される
 const pages = computed(() => {
   const current = props.currentPage
   const last = props.totalPages
@@ -65,6 +64,7 @@ const pages = computed(() => {
         <ChevronLeftIcon class="w-4" />Prev
       </router-link>
 
+      <!-- Pagination -->
       <div class="hidden lg:flex gap-1">
         <div v-for="page in pages[0]" :key="page" class="flex">
           <PageLink

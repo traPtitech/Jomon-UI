@@ -43,11 +43,11 @@ const pages = computed(() => {
 
   return [
     mergePages(
-      [1, 2],
+      [1, 2].filter(page => 1 <= page && page <= last),
       [current - 2, current - 1, current, current + 1, current + 2].filter(
         page => 1 <= page && page <= last
       ),
-      [last - 1, last]
+      [last - 1, last].filter(page => 1 <= page && page <= last)
     ),
     mergePages([1], [current], [last])
   ]

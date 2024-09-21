@@ -49,7 +49,11 @@ const handleUpdateTitle = async () => {
   <div class="flex gap-2">
     <h1 v-if="!isEditMode" class="text-2xl">{{ request.title }}</h1>
     <InputText v-else v-model="editedTitle" auto-focus class="flex-1" />
-    <SimpleButton v-if="isEditMode" padding="sm" @click="handleUpdateTitle">
+    <SimpleButton
+      v-if="isEditMode"
+      font-size="base"
+      padding="sm"
+      @click="handleUpdateTitle">
       完了
     </SimpleButton>
     <EditButton

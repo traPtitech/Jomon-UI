@@ -30,11 +30,11 @@ const pages = computed(() => {
     const leftOverlap = Math.max(...left) - Math.min(...center)
     const rightOverlap = Math.max(...center) - Math.min(...right)
     const leftMerge: PaginationType[] =
-      leftOverlap >= 0
+      leftOverlap >= -1
         ? [...left, ...center.slice(leftOverlap + 1)]
         : [...left, '...', ...center]
     const bothMerge: PaginationType[] =
-      rightOverlap >= 0
+      rightOverlap >= -1
         ? [...leftMerge, ...right.slice(rightOverlap + 1)]
         : [...leftMerge, '...', ...right]
     return bothMerge

@@ -45,7 +45,7 @@ const sliceTransactionAt = (index: number, n: number) => {
       </div>
       <TagsGroup :limit="3" :tags="transaction.tags" />
       <div class="text-right">
-        <EditButton class="w-6" />
+        <EditButton class="w-6" is-edit-mode />
       </div>
     </router-link>
   </div>
@@ -74,7 +74,7 @@ const sliceTransactionAt = (index: number, n: number) => {
           <TagsGroup :limit="3" :tags="transaction.tags" />
         </div>
         <div class="flex justify-end items-end">
-          <EditButton class="w-4" />
+          <EditButton class="w-4" is-edit-mode />
         </div>
       </div>
     </router-link>

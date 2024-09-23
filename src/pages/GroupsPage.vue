@@ -41,7 +41,7 @@ watch(
 
 <template>
   <div>
-    <div class="min-w-160 mx-auto flex w-2/3 flex-col">
+    <div class="min-w-[640px] mx-auto flex w-2/3 flex-col">
       <div class="relative flex w-full items-center justify-center py-8">
         <h1 class="text-center text-3xl">グループ一覧</h1>
         <div v-if="isAdmin" class="absolute right-0">
@@ -53,7 +53,7 @@ watch(
         </div>
       </div>
 
-      <div class="min-h-128">
+      <div class="min-h-[512px]">
         <div
           class="flex items-center justify-around bg-surface-tertiary px-4 pt-2 pb-2">
           <div class="w-1/5">グループ名</div>

@@ -1,13 +1,29 @@
 version: 2
 updates:
   - package-ecosystem: npm
-    directory: "/"
+    directory: '/'
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 20
+    groups:
+      types:
+        patterns:
+          - '@types/*'
+      formatter:
+        patterns:
+          - '*eslint*'
+          - '*prettier*'
+      patches:
+        update-types:
+          - 'patch'
+    versioning-strategy: increase
+    target-branch: 'main'
+    labels:
+      - 'dependencies'
+    reviewers:
+      - reiroop
+  - package-ecosystem: github-actions
+    directory: '/'
     schedule:
       interval: monthly
     open-pull-requests-limit: 10
-    versioning-strategy: increase
-    target-branch: "main"
-    labels:
-      - "dependencies"
-    reviewers:
-      - reiroop

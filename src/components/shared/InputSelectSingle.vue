@@ -149,7 +149,7 @@ const calcWidth = computed(() => {
   if (/w-/.test(props.class)) {
     return props.class
   }
-  return `${props.class} w-70`
+  return `${props.class} w-72`
 })
 
 const updateHeight = () => {
@@ -178,7 +178,7 @@ onUnmounted(() => {
     ref="inputSelectRef"
     :class="`relative ${
       disabled && 'cursor-not-allowed'
-    } min-w-70 ${calcWidth}`">
+    } min-w-72 ${calcWidth}`">
     <div
       class="flex w-full cursor-text items-center gap-1 rounded border border-surface-secondary py-1 pr-1"
       :class="`${disabled && 'pointer-events-none'}`"
@@ -200,7 +200,7 @@ onUnmounted(() => {
           @focus="isDropdownOpen = true"
           @keydown="handleKeydown" />
       </div>
-      <button v-if="selectedValue" @click="removeValue">×</button>
+      <button v-if="selectedValue" type="button" @click="removeValue">×</button>
       <ChevronDownIcon class="h-4 w-4" />
     </div>
     <ul
@@ -224,6 +224,7 @@ onUnmounted(() => {
         }`">
         <button
           class="h-full w-full px-4 py-1 text-left focus:outline-none"
+          type="button"
           @click="selectValue(option)"
           @keydown="handleKeydown">
           {{ option.key }}

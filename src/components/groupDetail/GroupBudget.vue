@@ -36,6 +36,7 @@ const hasAuthority = canEditGroup(me.value)
     <EditButton
       v-if="hasAuthority"
       class="ml-1"
+      :is-edit-mode="props.isEditMode"
       @click="emit('changeEditMode', 'budget')" />
   </div>
   <div v-else class="flex items-center">

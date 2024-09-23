@@ -68,7 +68,7 @@ const handleUpdateContent = async () => {
         {{ formattedDateAndTime }}
       </time>
     </div>
-    <div class="ml-15 flex items-start gap-2">
+    <div class="ml-16 flex items-start gap-2">
       <MarkdownIt
         v-if="!isEditMode"
         class="border border-surface-secondary px-4 py-3 rounded-lg flex-1"
@@ -84,7 +84,11 @@ const handleUpdateContent = async () => {
         @click="toggleEditContent" />
     </div>
     <div class="flex justify-end">
-      <SimpleButton v-if="isEditMode" padding="sm" @click="handleUpdateContent">
+      <SimpleButton
+        v-if="isEditMode"
+        font-size="base"
+        padding="sm"
+        @click="handleUpdateContent">
         完了
       </SimpleButton>
     </div>

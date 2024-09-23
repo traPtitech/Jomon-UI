@@ -57,6 +57,7 @@ const handleUpdateTargets = async () => {
       <div class="flex items-center gap-2">
         <SimpleButton
           v-if="isEditMode"
+          font-size="base"
           padding="sm"
           @click="handleUpdateTargets">
           完了

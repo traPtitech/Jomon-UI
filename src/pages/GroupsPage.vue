@@ -41,7 +41,7 @@ watch(
 <template>
   <div>
     <div class="mx-auto flex md:w-2/3 w-5/6 my-8 flex-col">
-      <div class="relative flex flex-wrap gap-7 w-full items-center">
+      <div class="relative flex flex-wrap gap-x-7 gap-y-2 w-full items-center">
         <h1 class="text-2xl">グループ一覧</h1>
         <div v-if="isAdmin">
           <RouterLink to="/groups/new">

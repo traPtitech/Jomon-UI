@@ -40,10 +40,10 @@ watch(
 
 <template>
   <div>
-    <div class="mx-auto flex w-2/3 my-8 flex-col">
-      <div class="relative flex w-full items-center">
+    <div class="mx-auto flex md:w-2/3 w-5/6 my-8 flex-col">
+      <div class="relative flex flex-wrap gap-7 w-full items-center">
         <h1 class="text-2xl">グループ一覧</h1>
-        <div v-if="isAdmin" class="ml-7">
+        <div v-if="isAdmin">
           <RouterLink to="/groups/new">
             <SimpleButton font-size="lg" padding="md">
               グループを作成
@@ -54,7 +54,7 @@ watch(
 
       <div class="grid grid-cols-[2fr_3fr_2fr] divide-y my-7">
         <div
-          class="grid grid-cols-subgrid col-span-3 bg-surface-tertiary gap-x-2 px-6 py-4">
+          class="grid grid-cols-subgrid col-span-3 bg-surface-tertiary gap-x-2 px-6 py-4 whitespace-nowrap">
           <div>グループ名</div>
           <div>詳細</div>
           <div>予算</div>

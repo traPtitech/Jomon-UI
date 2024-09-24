@@ -6,6 +6,7 @@ import { useUserStore } from '/@/stores/user'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import InputText from '/@/components/shared/InputText.vue'
+import EditButton from '/@/components/shared/EditButton.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 interface Props {
@@ -29,8 +30,8 @@ const hasAuthority = canEditGroup(me.value)
 </script>
 
 <template>
-  <div v-if="group" class="flex items-center">
-    <h1 v-if="!isEditMode" class="flex-grow text-3xl">
+  <div v-if="group" class="flex items-center gap-3">
+    <h1 v-if="!props.isEditMode" class="flex-grow text-2xl">
       {{ group.name }}
     </h1>
     <InputText
@@ -40,30 +41,19 @@ const hasAuthority = canEditGroup(me.value)
       class="flex-grow"
       placeholder="グループ名" />
     <SimpleButton
-      v-if="hasAuthority && !isEditMode"
-      class="ml-2"
-      font-size="sm"
+      v-if="isEditMode"
+      font-size="base"
       padding="sm"
-      @click="emit('changeEditMode', 'name')">
-      編集
+      @click="emit('finishEditing')">
+      完了
     </SimpleButton>
-    <template v-else-if="hasAuthority && isEditMode">
-      <SimpleButton
-        class="ml-2"
-        font-size="sm"
-        padding="sm"
-        @click="emit('changeEditMode', '')">
-        キャンセル
-      </SimpleButton>
-      <SimpleButton
-        class="ml-2"
-        :disabled="props.isSending"
-        font-size="sm"
-        padding="sm"
-        type="success"
-        @click="emit('finishEditing')">
-        完了
-      </SimpleButton>
-    </template>
+    <EditButton
+      v-if="hasAuthority"
+      :is-edit-mode="props.isEditMode"
+      @click="
+        props.isEditMode
+          ? emit('changeEditMode', '')
+          : emit('changeEditMode', 'name')
+      " />
   </div>
 </template>

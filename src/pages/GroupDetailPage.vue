@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
 import { storeToRefs } from 'pinia'
 import { RouterLink, useRoute } from 'vue-router'
 
@@ -13,11 +12,10 @@ import GroupDescription from '/@/components/groupDetail/GroupDescription.vue'
 import GroupMembers from '/@/components/groupDetail/GroupMembers.vue'
 import GroupName from '/@/components/groupDetail/GroupName.vue'
 import GroupOwners from '/@/components/groupDetail/GroupOwners.vue'
-import { useDeleteGroup } from '/@/components/groupDetail/composables/useDeleteGroup'
 import { useGroupInformation } from '/@/components/groupDetail/composables/useGroupInformation'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { useFetchGroup } from '/@/features/group/usecase'
 import { useFetchUsersUsecase } from '/@/features/user/usecase'
+import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
 
 const route = useRoute()
 const id = toId(route.params.id)
@@ -26,15 +24,10 @@ const userStore = useUserStore()
 const groupDetailStore = useGroupDetailStore()
 
 const { group } = storeToRefs(groupDetailStore)
-const { canEditGroup } = groupDetailStore
-const { me } = storeToRefs(userStore)
 const { isUserFetched } = storeToRefs(userStore)
 
 const { isSending, editMode, changeEditMode, finishEditing } =
   useGroupInformation()
-
-const hasAuthority = canEditGroup(me.value)
-const { isDeleting, deleteGroup } = useDeleteGroup()
 
 await useFetchGroup(id)
 if (!isUserFetched.value) {
@@ -43,8 +36,8 @@ if (!isUserFetched.value) {
 </script>
 
 <template>
-  <div v-if="group !== undefined" class="min-w-96 mx-auto h-full w-4/5 pt-4">
-    <div class="flex h-12 justify-between">
+  <div v-if="group !== undefined" class="mx-auto w-4/5 mt-5 mb-5">
+    <div class="flex">
       <GroupName
         class="flex-grow"
         :is-edit-mode="editMode === 'name'"
@@ -52,7 +45,7 @@ if (!isUserFetched.value) {
         @change-edit-mode="changeEditMode($event)"
         @finish-editing="finishEditing" />
     </div>
-    <div class="mt-4 flex h-full">
+    <div class="mt-6 flex h-full gap-10 flex-col md:flex-row">
       <div class="flex-grow">
         <GroupDescription
           :is-edit-mode="editMode === 'description'"
@@ -60,7 +53,7 @@ if (!isUserFetched.value) {
           @change-edit-mode="changeEditMode($event)"
           @finish-editing="finishEditing" />
         <GroupBudget
-          class="mt-4 h-8"
+          class="mt-6"
           :is-edit-mode="editMode === 'budget'"
           :is-sending="isSending"
           @change-edit-mode="changeEditMode($event)"
@@ -71,20 +64,8 @@ if (!isUserFetched.value) {
           このグループの入出金記録へ
           <ArrowTopRightOnSquareIcon class="ml-1 w-6" />
         </RouterLink>
-        <div class="text-right">
-          <SimpleButton
-            v-if="hasAuthority"
-            class="mr-8"
-            :disabled="isDeleting"
-            font-size="sm"
-            padding="sm"
-            type="danger"
-            @click="deleteGroup(group?.id ?? '')">
-            グループを削除
-          </SimpleButton>
-        </div>
       </div>
-      <div class="flex w-1/4 flex-col gap-8">
+      <div class="flex w-full md:w-1/3 flex-col gap-10">
         <GroupOwners />
         <GroupMembers />
       </div>

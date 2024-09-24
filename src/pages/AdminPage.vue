@@ -57,7 +57,7 @@ if (me.value?.admin) {
 
 <template>
   <div v-if="!isAdmin" class="p-2">権限がありません。</div>
-  <div v-else class="min-w-[640px] mx-auto flex w-2/3 flex-col px-12 pt-8">
+  <div v-else class="mx-auto flex w-2/3 flex-col px-12 pt-8">
     <h1 class="text-2xl">管理</h1>
     <div class="mt-6">
       <label class="text-base font-medium">管理者</label>
@@ -71,10 +71,10 @@ if (me.value?.admin) {
     </div>
     <div class="mt-4">
       <label class="text-base font-medium">管理者の操作</label>
-      <div class="flex gap-3 mt-3">
+      <div class="flex flex-wrap gap-3 mt-3">
         <InputSelectMultiple
           v-model="addList"
-          class="flex-grow"
+          class="flex-grow w-auto"
           :options="absentMembers"
           placeholder="追加する管理者を選択" />
         <SimpleButton
@@ -85,10 +85,10 @@ if (me.value?.admin) {
           選択した管理者を追加
         </SimpleButton>
       </div>
-      <div class="flex gap-3 mt-3">
+      <div class="flex flex-wrap gap-3 mt-3">
         <InputSelectMultiple
           v-model="removeList"
-          class="flex-grow"
+          class="flex-grow w-auto"
           :options="adminOptions"
           placeholder="削除する管理者を選択" />
         <SimpleButton
@@ -102,10 +102,10 @@ if (me.value?.admin) {
     </div>
     <div class="mt-6">
       <label class="text-base font-medium">その他の操作</label>
-      <div class="flex gap-3 mt-3">
+      <div class="flex flex-wrap gap-3 mt-3">
         <InputSelectMultiple
           v-model="deleteTagList"
-          class="flex-grow"
+          class="flex-grow w-auto"
           :options="tagIdOptions"
           placeholder="削除するタグを選択" />
         <SimpleButton

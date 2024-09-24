@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
@@ -12,8 +12,7 @@ import { toPage } from '/@/lib/parseQueryParams'
 
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import TransactionFilters from '/@/components/transactions/TransactionFilters.vue'
-import TransactionItem from '/@/components/transactions/TransactionItem.vue'
+import TransactionTable from '/@/components/transactions/TransactionTable.vue'
 import { useFetchGroupsUsecase } from '/@/features/group/usecase'
 import { useFetchTagsUsecase } from '/@/features/tag/usecase'
 import { useFetchTransactionsUsecase } from '/@/features/transaction/usecase'
@@ -29,12 +28,6 @@ const { transactions } = storeToRefs(transactionStore)
 const { isGroupFetched } = storeToRefs(groupStore)
 const { isTagFetched } = storeToRefs(tagStore)
 const { isAdmin } = storeToRefs(userStore)
-
-const sliceTransactionAt = (index: number, n: number) => {
-  const start = (index - 1) * n
-  const end = index * n
-  return transactions.value?.slice(start, end)
-}
 
 //TODO:  `request: toId(route.query.requestID)`でフィルターする
 await useFetchTransactionsUsecase()
@@ -55,33 +48,25 @@ watch(
 
 <template>
   <div>
-    <div class="min-w-[640px] mx-auto flex w-2/3 flex-col">
-      <div class="relative flex w-full items-center justify-center pt-8 pb-4">
-        <h1 class="text-center text-3xl">入出金記録</h1>
-        <div v-if="isAdmin" class="absolute right-0">
+    <div class="mx-auto my-8 flex w-2/3 flex-col">
+      <div class="relative flex w-full items-center mb-7">
+        <h1 class="text-center text-2xl">入出金記録一覧</h1>
+        <div v-if="isAdmin" class="ml-7">
           <RouterLink to="/transactions/new">
             <SimpleButton font-size="lg" padding="md">
-              新規入出金記録作成
+              入出金記録を作成
             </SimpleButton>
           </RouterLink>
         </div>
       </div>
-      <div class="min-h-[512px]">
-        <div class="mb-2">
-          <span v-if="transactions && transactions.length !== 0">
-            {{ transactions?.length }}件取得しました
-          </span>
-          <span v-else>条件に一致する申請は見つかりませんでした</span>
-        </div>
-        <TransactionFilters />
-        <ul v-if="transactions" class="mt-2 divide-y">
-          <li
-            v-for="transaction in sliceTransactionAt(page, 10)"
-            :key="transaction.id">
-            <TransactionItem :transaction="transaction" />
-          </li>
-        </ul>
+      <div class="min-h-128">
+        <!-- TODO: ソートボタン, 各カラムの検索フィルター -->
+        <TransactionTable
+          v-if="transactions"
+          :page="page"
+          :transactions="transactions" />
         <div v-else>loading...</div>
+
         <PaginationBar
           v-if="transactions && transactions.length > 0"
           class="my-4"

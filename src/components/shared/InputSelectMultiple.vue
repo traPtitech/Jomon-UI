@@ -75,7 +75,7 @@ const selectedValues = computed(() => {
       }
       return selectedValue
     })
-    .filter((value): value is Value => value !== undefined)
+    .filter(value => value !== undefined)
 })
 const focusingListItemIndex = ref(-1)
 /* 作成されたタグ。selectedValuesの計算のために別で持っている */
@@ -269,14 +269,12 @@ onUnmounted(() => {
 <template>
   <div
     ref="inputSelectRef"
-    :class="`relative ${
-      disabled && 'cursor-not-allowed'
-    } min-w-72 ${calcWidth}`">
+    :class="`relative ${disabled && 'cursor-not-allowed'} ${calcWidth}`">
     <div
-      class="flex w-full cursor-text items-center rounded border border-surface-secondary py-1 pl-1"
+      class="flex cursor-text items-center rounded border border-surface-secondary py-1 pl-1"
       :class="`${disabled && 'pointer-events-none'}`"
       @click.prevent="handleClick">
-      <div class="flex w-full items-center overflow-x-auto">
+      <div class="flex items-center overflow-x-auto">
         <div
           v-for="selectedValue in selectedValues"
           :key="selectedValue.key"

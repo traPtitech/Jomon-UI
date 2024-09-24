@@ -8,17 +8,17 @@ categories:
     labels:
       - 'bug'
   - title: '🧰 Maintenance'
-    labels: 
+    labels:
       - 'chore'
       - 'dependencies'
   - title: '📖 Documentation'
-    labels: 
+    labels:
       - 'docs'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 template: |
   ## What's New
   $CHANGES
-  
+
   ## Contributors
   $CONTRIBUTORS
 autolabeler:

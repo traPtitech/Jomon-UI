@@ -27,7 +27,9 @@ export const useEditTransaction = (transaction: Transaction) => {
   })
   const moneyDirection = ref<MoneyDirection>('toTraP')
   const linkedRequest = ref(
-    `https://jomon.trap.jp/requests/${transaction.request}` ?? ''
+    transaction.request
+      ? `https://jomon.trap.jp/requests/${transaction.request}`
+      : ''
   )
 
   const finishEditing = async (

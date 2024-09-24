@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
 
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
@@ -15,6 +15,7 @@ import GroupOwners from '/@/components/groupDetail/GroupOwners.vue'
 import { useGroupInformation } from '/@/components/groupDetail/composables/useGroupInformation'
 import { useFetchGroup } from '/@/features/group/usecase'
 import { useFetchUsersUsecase } from '/@/features/user/usecase'
+import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
 
 const route = useRoute()
 const id = toId(route.params.id)
@@ -57,6 +58,12 @@ if (!isUserFetched.value) {
           :is-sending="isSending"
           @change-edit-mode="changeEditMode($event)"
           @finish-editing="finishEditing" />
+        <RouterLink
+          class="mt-4 flex w-fit items-center"
+          :to="`/transactions?group=${group.id}`">
+          このグループの入出金記録へ
+          <ArrowTopRightOnSquareIcon class="ml-1 w-6" />
+        </RouterLink>
       </div>
       <div class="flex w-full md:w-1/3 flex-col gap-10">
         <GroupOwners />

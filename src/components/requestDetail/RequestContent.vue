@@ -84,7 +84,11 @@ const handleUpdateContent = async () => {
         @click="toggleEditContent" />
     </div>
     <div class="flex justify-end">
-      <SimpleButton v-if="isEditMode" padding="sm" @click="handleUpdateContent">
+      <SimpleButton
+        v-if="isEditMode"
+        font-size="base"
+        padding="sm"
+        @click="handleUpdateContent">
         完了
       </SimpleButton>
     </div>

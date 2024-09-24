@@ -75,7 +75,7 @@ const selectedValues = computed(() => {
       }
       return selectedValue
     })
-    .filter((value): value is Value => value !== undefined)
+    .filter(value => value !== undefined)
 })
 const focusingListItemIndex = ref(-1)
 /* 作成されたタグ。selectedValuesの計算のために別で持っている */
@@ -181,7 +181,7 @@ const handleKeydown = (e: KeyboardEvent, option: Value) => {
     const length =
       searchQuery.value !== ''
         ? searchedOptions.value.length
-        : props.options?.length ?? 0
+        : (props.options?.length ?? 0)
     focusingListItemIndex.value = (focusingListItemIndex.value + 1) % length
     const buttonEl = listItemRefs.value[focusingListItemIndex.value]
       .firstChild as HTMLButtonElement
@@ -202,7 +202,7 @@ const handleKeydown = (e: KeyboardEvent, option: Value) => {
     const length =
       searchQuery.value !== ''
         ? searchedOptions.value.length
-        : props.options?.length ?? 0
+        : (props.options?.length ?? 0)
     focusingListItemIndex.value =
       (focusingListItemIndex.value - 1 + length) % length
     const buttonEl = listItemRefs.value[focusingListItemIndex.value]

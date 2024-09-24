@@ -33,7 +33,7 @@ onMounted(() => {
   <input
     :id="props.id"
     ref="inputRef"
-    class="bg-surface-primary rounded border border-surface-secondary py-1 px-2"
+    class="bg-surface-primary rounded border border-surface-secondary py-1 px-2 w-full"
     :min="props.min"
     :placeholder="props.placeholder"
     :required="props.required"

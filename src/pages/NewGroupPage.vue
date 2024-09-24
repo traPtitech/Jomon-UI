@@ -38,7 +38,7 @@ if (!isUserFetched.value) {
 </script>
 
 <template>
-  <div class="min-w-96 mx-auto mt-8 mb-5 flex w-2/3 flex-col">
+  <div class="mx-auto mt-8 mb-5 flex w-2/3 flex-col">
     <div class="mb-6">
       <h1 class="text-2xl">グループの新規作成</h1>
     </div>
@@ -61,7 +61,7 @@ if (!isUserFetched.value) {
       </div>
       <div class="flex flex-col gap-3">
         <label class="font-medium">予算</label>
-        <div>
+        <div class="flex w-1/2">
           <InputNumber
             v-model="group.budget"
             class="mr-2"

@@ -286,12 +286,12 @@ onUnmounted(() => {
           :id="props.id"
           ref="inputRef"
           v-model="searchQuery"
-          class="flex-grow bg-transparent pl-1 focus:outline-none"
+          class="bg-transparent pl-1 focus:outline-none"
           :placeholder="selectedValues.length === 0 ? placeholder : ''"
           @focus="isDropdownOpen = true"
           @keydown="handleInputKeydown" />
       </div>
-      <ChevronDownIcon class="min-w-4 mx-1 h-4" />
+      <ChevronDownIcon class="min-w-4 ml-auto mx-1 h-4" />
     </div>
     <ul
       v-if="isDropdownOpen && searchedOptions.length > 0"

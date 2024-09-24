@@ -57,59 +57,65 @@ if (me.value?.admin) {
 
 <template>
   <div v-if="!isAdmin" class="p-2">権限がありません。</div>
-  <div v-else class="min-w-[640px] mx-auto flex w-2/3 flex-col px-12 pt-8">
-    <h1 class="pb-8 text-center text-3xl">管理ページ</h1>
-    <div class="flex items-center">
-      管理者：
-      <ul class="flex gap-2">
+  <div v-else class="mx-auto flex w-2/3 flex-col px-12 pt-8">
+    <h1 class="text-2xl">管理</h1>
+    <div class="mt-6">
+      <label class="text-base font-medium">管理者</label>
+      <ul class="flex gap-3 mt-3">
         <li v-for="admin in admins" :key="admin">
-          <div class="border-surface-secondary rounded border px-2 text-center">
+          <div class="border-text-primary rounded border px-2 text-center">
             {{ userMap[admin] }}
           </div>
         </li>
       </ul>
     </div>
-    <div class="mt-4 flex gap-4">
-      <InputSelectMultiple
-        v-model="addList"
-        class="!w-1/2"
-        :options="absentMembers"
-        placeholder="追加する管理者を選択" />
-      <SimpleButton
-        :disabled="isSending"
-        font-size="lg"
-        padding="sm"
-        @click.stop="addAdmins(addList)">
-        選択した管理者を追加
-      </SimpleButton>
+    <div class="mt-4">
+      <label class="text-base font-medium">管理者の操作</label>
+      <div class="flex flex-wrap gap-3 mt-3">
+        <InputSelectMultiple
+          v-model="addList"
+          class="flex-grow w-auto"
+          :options="absentMembers"
+          placeholder="追加する管理者を選択" />
+        <SimpleButton
+          :disabled="isSending"
+          font-size="lg"
+          padding="sm"
+          @click.stop="addAdmins(addList)">
+          選択した管理者を追加
+        </SimpleButton>
+      </div>
+      <div class="flex flex-wrap gap-3 mt-3">
+        <InputSelectMultiple
+          v-model="removeList"
+          class="flex-grow w-auto"
+          :options="adminOptions"
+          placeholder="削除する管理者を選択" />
+        <SimpleButton
+          :disabled="isSending"
+          font-size="lg"
+          padding="sm"
+          @click.stop="removeAdmins(removeList)">
+          選択した管理者を削除
+        </SimpleButton>
+      </div>
     </div>
-    <div class="mt-12 flex gap-4">
-      <InputSelectMultiple
-        v-model="removeList"
-        class="!w-1/2"
-        :options="adminOptions"
-        placeholder="削除する管理者を選択" />
-      <SimpleButton
-        :disabled="isSending"
-        font-size="lg"
-        padding="sm"
-        @click.stop="removeAdmins(removeList)">
-        選択した管理者を削除
-      </SimpleButton>
-    </div>
-    <div class="mt-24 flex gap-4">
-      <InputSelectMultiple
-        v-model="deleteTagList"
-        class="!w-1/2"
-        :options="tagIdOptions"
-        placeholder="削除するタグを選択" />
-      <SimpleButton
-        :disabled="deleteTagList.length === 0 || isSending"
-        font-size="lg"
-        padding="sm"
-        @click.stop="handleDeleteTags">
-        選択したタグを削除
-      </SimpleButton>
+    <div class="mt-6">
+      <label class="text-base font-medium">その他の操作</label>
+      <div class="flex flex-wrap gap-3 mt-3">
+        <InputSelectMultiple
+          v-model="deleteTagList"
+          class="flex-grow w-auto"
+          :options="tagIdOptions"
+          placeholder="削除するタグを選択" />
+        <SimpleButton
+          :disabled="deleteTagList.length === 0 || isSending"
+          font-size="lg"
+          padding="sm"
+          @click.stop="handleDeleteTags">
+          選択したタグを削除
+        </SimpleButton>
+      </div>
     </div>
   </div>
 </template>

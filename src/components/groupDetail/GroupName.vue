@@ -40,7 +40,11 @@ const hasAuthority = canEditGroup(me.value)
       auto-focus
       class="flex-grow"
       placeholder="グループ名" />
-    <SimpleButton v-if="isEditMode" padding="sm" @click="emit('finishEditing')">
+    <SimpleButton
+      v-if="isEditMode"
+      font-size="base"
+      padding="sm"
+      @click="emit('finishEditing')">
       完了
     </SimpleButton>
     <EditButton

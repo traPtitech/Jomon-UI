@@ -176,9 +176,7 @@ onUnmounted(() => {
 <template>
   <div
     ref="inputSelectRef"
-    :class="`relative ${
-      disabled && 'cursor-not-allowed'
-    } min-w-72 ${calcWidth}`">
+    :class="`relative ${disabled && 'cursor-not-allowed'}  ${calcWidth}`">
     <div
       class="flex w-full cursor-text items-center gap-1 rounded border border-surface-secondary py-1 pr-1"
       :class="`${disabled && 'pointer-events-none'}`"

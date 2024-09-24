@@ -8,7 +8,6 @@ import { useUserStore } from '/@/stores/user'
 
 import { toPage } from '/@/lib/parseQueryParams'
 
-import GroupItem from '/@/components/groups/GroupItem.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { useFetchGroupsUsecase } from '/@/features/group/usecase'
@@ -41,34 +40,37 @@ watch(
 
 <template>
   <div>
-    <div class="min-w-[640px] mx-auto flex w-2/3 flex-col">
-      <div class="relative flex w-full items-center justify-center py-8">
-        <h1 class="text-center text-3xl">グループ一覧</h1>
-        <div v-if="isAdmin" class="absolute right-0">
+    <div class="mx-auto flex md:w-2/3 w-5/6 my-8 flex-col">
+      <div class="relative flex flex-wrap gap-x-7 gap-y-2 w-full items-center">
+        <h1 class="text-2xl">グループ一覧</h1>
+        <div v-if="isAdmin">
           <RouterLink to="/groups/new">
             <SimpleButton font-size="lg" padding="md">
-              グループの新規作成
+              グループを作成
             </SimpleButton>
           </RouterLink>
         </div>
       </div>
 
-      <div class="min-h-[512px]">
+      <div class="grid grid-cols-[2fr_3fr_2fr] divide-y my-7">
         <div
-          class="flex items-center justify-around bg-surface-tertiary px-4 pt-2 pb-2">
-          <div class="w-1/5">グループ名</div>
-          <div class="w-3/5">詳細</div>
-          <div class="w-1/5">予算</div>
+          class="grid grid-cols-subgrid col-span-3 bg-surface-tertiary gap-x-2 px-6 py-4 whitespace-nowrap">
+          <div>グループ名</div>
+          <div>詳細</div>
+          <div>予算</div>
         </div>
-        <ul class="divide-y">
-          <li v-for="group in sliceGroupsAt(page, 10)" :key="group.id">
-            <GroupItem :group="group" />
-          </li>
-        </ul>
+        <RouterLink
+          v-for="group in sliceGroupsAt(page, 10)"
+          :key="group.id"
+          class="grid grid-cols-subgrid col-span-3 hover:bg-hover-secondary gap-x-2 px-6 py-4"
+          :to="`/groups/${group.id}`">
+          <div>{{ group.name }}</div>
+          <div class="truncate">{{ group.description }}</div>
+          <div>{{ group.budget }}</div>
+        </RouterLink>
       </div>
       <PaginationBar
         v-if="groups.length > 0"
-        class="mt-4"
         :current-page="page"
         path="/groups"
         :total-pages="Math.ceil(groups.length / 10)" />

@@ -12,38 +12,45 @@ interface Props {
 
 const props = defineProps<Props>()
 
-// sequence(3, 7) => [3, 4, 5, 6, 7]
-const sequence = (start: number, end: number) => {
-  return [...Array(end - start + 1).keys()].map(i => i + start)
-}
+// P1: 1 2 ... p-2 p-1 p p+1 p+2 ... last-1 last
+// P2: 1 ... p ... last
+// P3:
 
-// P1: 001 002 003 004 005 006 007 008 009 010 011   -   left
-// P2: 001 002 003 004 005 006 007 008 ... 099 100   -   left ... center
-// P3: 001 002 ... 048 049 050 051 052 ... 099 100   -   left ... center ... right
-// P4: 001 002 ... 093 094 095 096 097 098 099 100   -   left ... center
+type PaginationType = number | '...'
 
-// 常に表示される
-const left = computed(
-  () =>
-    props.totalPages <= 11
-      ? sequence(1, props.totalPages) // P1
-      : props.currentPage <= 6
-        ? sequence(1, 8) // P2
-        : sequence(1, 2) // P3, P4
-)
-// totalPages > 11 のとき、表示される
-const center = computed(
-  () =>
-    props.currentPage <= 6
-      ? sequence(props.totalPages - 1, props.totalPages) // P2
-      : props.currentPage <= props.totalPages - 6
-        ? sequence(props.currentPage - 2, props.currentPage + 2) // P3
-        : sequence(props.totalPages - 7, props.totalPages) // P4
-)
-// totalPages > 11 && 6 < currentPage <= totalPages - 6 のとき、表示される
-const right = computed(
-  () => sequence(props.totalPages - 1, props.totalPages) // P3
-)
+const pages = computed(() => {
+  const current = props.currentPage
+  const last = props.totalPages
+
+  const mergePages = (
+    left: number[],
+    center: number[],
+    right: number[]
+  ): PaginationType[] => {
+    const leftOverlap = Math.max(...left) - Math.min(...center)
+    const rightOverlap = Math.max(...center) - Math.min(...right)
+    const leftMerge: PaginationType[] =
+      leftOverlap >= -1
+        ? [...left, ...center.slice(leftOverlap + 1)]
+        : [...left, '...', ...center]
+    const bothMerge: PaginationType[] =
+      rightOverlap >= -1
+        ? [...leftMerge, ...right.slice(rightOverlap + 1)]
+        : [...leftMerge, '...', ...right]
+    return bothMerge
+  }
+
+  return [
+    mergePages(
+      [1, 2].filter(page => 1 <= page && page <= last),
+      [current - 2, current - 1, current, current + 1, current + 2].filter(
+        page => 1 <= page && page <= last
+      ),
+      [last - 1, last].filter(page => 1 <= page && page <= last)
+    ),
+    mergePages([1], [current], [last])
+  ]
+})
 </script>
 
 <template>
@@ -57,43 +64,28 @@ const right = computed(
         <ChevronLeftIcon class="w-4" />Prev
       </router-link>
 
-      <!-- Left -->
-      <div class="flex">
-        <PageLink
-          v-for="page in left"
-          :key="page"
-          class="not-last:mr-1"
-          :is-selected="page === currentPage"
-          :page="page"
-          :path="path" />
+      <!-- Pagination -->
+      <div class="hidden lg:flex gap-1">
+        <div v-for="page in pages[0]" :key="page" class="flex">
+          <PageLink
+            v-if="typeof page === 'number'"
+            class="h-full"
+            :is-selected="page === currentPage"
+            :page="page"
+            :path="path" />
+          <span v-else class="w-10 self-end pb-2">...</span>
+        </div>
       </div>
-
-      <!-- Center -->
-      <div v-if="totalPages > 11" class="flex">
-        <span class="w-10 self-end pb-2">...</span>
-        <PageLink
-          v-for="page in center"
-          :key="page"
-          class="not-last:mr-1"
-          :is-selected="page === currentPage"
-          :page="page"
-          :path="path" />
-      </div>
-
-      <!-- Right -->
-      <div
-        v-if="
-          totalPages > 11 && 6 < currentPage && currentPage <= totalPages - 6
-        "
-        class="flex">
-        <span class="w-10 self-end pb-2">...</span>
-        <PageLink
-          v-for="page in right"
-          :key="page"
-          class="not-last:mr-1"
-          :is-selected="page === currentPage"
-          :page="page"
-          :path="path" />
+      <div class="hidden md:max-lg:flex gap-1">
+        <div v-for="page in pages[1]" :key="page" class="flex">
+          <PageLink
+            v-if="typeof page === 'number'"
+            class="h-full"
+            :is-selected="page === currentPage"
+            :page="page"
+            :path="path" />
+          <span v-else class="w-10 self-end pb-2">...</span>
+        </div>
       </div>
 
       <!-- Next -->

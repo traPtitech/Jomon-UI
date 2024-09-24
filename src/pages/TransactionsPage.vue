@@ -48,7 +48,7 @@ watch(
 
 <template>
   <div>
-    <div class="min-w-[384px] mx-auto my-8 flex w-2/3 flex-col">
+    <div class="mx-auto my-8 flex w-2/3 flex-col">
       <div class="relative flex w-full items-center mb-7">
         <h1 class="text-center text-2xl">入出金記録一覧</h1>
         <div v-if="isAdmin" class="ml-7">

@@ -44,7 +44,7 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-unused-imports": "^4.1.4",
     "eslint-plugin-vue": "^9.27.0",
-    "esno": "^4.7.0",
+    "esno": "^4.8.0",
     "execa": "^9.4.0",
     "msw": "2.4.9",
     "postcss": "^8.4.47",

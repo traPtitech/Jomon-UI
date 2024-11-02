@@ -26,6 +26,9 @@ export default [
       parserOptions: {
         parser: tseslint.parser
       }
+    },
+    rules: {
+      'vue/require-default-prop': 'off'
     }
   },
   eslintConfigPrettier

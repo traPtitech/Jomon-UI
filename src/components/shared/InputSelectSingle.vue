@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import { ChevronDownIcon } from '@heroicons/vue/24/solid';
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
-
+import { ChevronDownIcon } from '@heroicons/vue/24/solid'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 type ValueValue = Record<string, unknown> | string | null
 

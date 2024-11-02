@@ -11,12 +11,14 @@ const compat = new FlatCompat()
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  { files: ['**/*.{js,mjs,cjs,ts,vue}'] },
+  {
+    ignores: ['**/dist/**']
+  },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   ...pluginVue.configs['flat/essential'],
   {
-    files: ['**/*.vue'],
+    files: ['**/*.{js,mjs,cjs,ts,vue}'],
     plugins: {
       import: importPlugin,
       'unused-imports': unusedImports

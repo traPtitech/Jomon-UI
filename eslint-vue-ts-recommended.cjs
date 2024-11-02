@@ -8,7 +8,7 @@
  * 参考: https://zenn.dev/the_red/articles/5162f9dbbafca3
  */
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires, no-undef
+// eslint-disable-next-line no-undef
 const typescriptEslintEslintRecommended = require('./node_modules/@typescript-eslint/eslint-plugin/dist/configs/eslint-recommended')
 
 // eslint-disable-next-line no-undef

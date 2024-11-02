@@ -13,7 +13,9 @@ export default [
     files: ['**/*.{js,mjs,cjs,ts,vue}']
   },
   {
-    languageOptions: { globals: globals.browser }
+    languageOptions: {
+      globals: globals.browser
+    }
   },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
@@ -21,7 +23,9 @@ export default [
   {
     files: ['**/*.vue'],
     languageOptions: {
-      parserOptions: { parser: tseslint.parser }
+      parserOptions: {
+        parser: tseslint.parser
+      }
     }
   },
   eslintConfigPrettier

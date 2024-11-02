@@ -10,7 +10,7 @@ import tseslint from 'typescript-eslint'
 const compat = new FlatCompat()
 
 /** @type {import('eslint').Linter.Config[]} */
-export default [
+export default tseslint.config(
   {
     ignores: ['**/dist/**']
   },
@@ -87,4 +87,4 @@ export default [
     'plugin:vue/vue3-recommended',
     'prettier'
   )
-]
+)

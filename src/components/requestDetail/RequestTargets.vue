@@ -72,7 +72,7 @@ const handleUpdateTargets = async () => {
       <RequestTarget
         v-for="(target, i) in request.targets"
         :key="target.id"
-        v-model:targetModel="editedTargets[i]"
+        v-model:target-model="editedTargets[i]"
         :is-edit-mode="isEditMode"
         :request="request"
         :target="target" />

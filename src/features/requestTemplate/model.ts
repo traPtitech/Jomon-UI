@@ -6,5 +6,4 @@ export const requestTemplates = [
   { name: '交通費申請', value: travelingExpenseRequestTemplate }
 ] as const
 
-const requestTemplateNames = requestTemplates.map(v => v.name)
-export type RequestTemplate = (typeof requestTemplateNames)[number]
+export type RequestTemplate = (typeof requestTemplates)[number]['name']

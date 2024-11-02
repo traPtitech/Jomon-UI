@@ -83,7 +83,6 @@ export default [
     }
   },
   ...compat.extends(
-    './eslint-vue-ts-recommended.cjs',
     'plugin:@typescript-eslint/recommended',
     'plugin:vue/vue3-recommended',
     'prettier'

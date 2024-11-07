@@ -19,7 +19,7 @@
     "axios": "^1.7.7",
     "luxon": "^3.5.0",
     "markdown-it": "^14.1.0",
-    "pinia": "^2.2.5",
+    "pinia": "^2.2.6",
     "vue": "^3.5.10",
     "vue-router": "^4.4.5",
     "vue-toastification": "^2.0.0-rc.5"
@@ -48,7 +48,7 @@
     "esno": "^4.8.0",
     "execa": "^9.5.1",
     "globals": "^15.11.0",
-    "msw": "^2.6.0",
+    "msw": "^2.6.1",
     "postcss": "^8.4.47",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.8",

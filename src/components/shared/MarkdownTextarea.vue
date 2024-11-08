@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
-import InputTextarea from './InputTextarea.vue'
-import MarkdownIt from './MarkdownIt.vue'
-import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
+import { computed, ref } from 'vue';
+import InputTextarea from './InputTextarea.vue';
+import MarkdownIt from './MarkdownIt.vue';
+import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue';
 
 type TabType = 'input' | 'preview'
 interface Props {
@@ -31,7 +31,8 @@ const templateOptions = computed(
     }) ?? []
 )
 
-function setTemplate(template: Record<string, unknown> | string | null) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- FIXME: InputSelectSingleを直す
+function setTemplate(template: Record<string, any> | string | null) {
   if (typeof template !== 'string') {
     return
   }

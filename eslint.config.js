@@ -7,7 +7,7 @@ import tseslint from 'typescript-eslint'
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {
-    ignores: ['**/dist/**']
+    ignores: ['**/dist/**', 'public/mockServiceWorker.js']
   },
   {
     files: ['**/*.{js,mjs,cjs,ts,vue}']

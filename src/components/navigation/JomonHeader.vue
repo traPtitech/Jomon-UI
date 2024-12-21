@@ -42,7 +42,7 @@ const handleOpenDrawer = () => {
       <PageNavigations class="invisible md:visible" />
       <div class="flex items-center gap-2">
         <a
-          href="https://wiki.trap.jp/teams/SysAd/dev/Jomon"
+          href="https://wiki.trap.jp/services/Jomon"
           rel="noreferrer noopener"
           target="_blank">
           ヘルプ

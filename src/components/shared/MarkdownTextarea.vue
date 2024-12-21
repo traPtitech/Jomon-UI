@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
-import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
-import InputTextarea from './InputTextarea.vue'
-import MarkdownIt from './MarkdownIt.vue'
+import { computed, ref } from 'vue';
+import InputTextarea from './InputTextarea.vue';
+import MarkdownIt from './MarkdownIt.vue';
+import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue';
 
 type TabType = 'input' | 'preview'
 interface Props {

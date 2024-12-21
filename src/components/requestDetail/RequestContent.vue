@@ -173,8 +173,8 @@ const handleFileUpload = async () => {
     <div class="flex justify-end">
       <SimpleButton
         v-if="isEditMode"
+        font-size="base"
         padding="sm"
-        fontSize="base"
         @click="handleUpdateContent">
         完了
       </SimpleButton>

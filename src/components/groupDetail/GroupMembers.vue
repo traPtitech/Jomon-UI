@@ -24,43 +24,41 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
 </script>
 
 <template>
-  <div
-    v-if="group"
-    class="relative flex h-2/5 flex-col justify-between border border-surface-secondary">
-    <p class="bg-surface-primary absolute -top-3 left-2 px-2">
-      グループメンバー
-    </p>
-    <ul class="h-full p-4">
-      <li
-        v-for="member in group.members"
-        :key="member"
-        class="not-first:mt-2 flex items-center justify-between">
-        <div class="flex items-center">
-          <UserIcon class="w-12" :name="userMap[member]" />
-          <p class="mx-1 break-all">{{ userMap[member] }}</p>
-        </div>
+  <div v-if="group" class="relative flex flex-col justify-between">
+    <p class="text-xl">グループメンバー</p>
+    <div class="mt-3 border border-surface-secondary">
+      <ul class="flex flex-col gap-2 px-4 py-3 overflow-y-auto max-h-[50dvh]">
+        <li
+          v-for="member in group.members"
+          :key="member"
+          class="flex items-center justify-between">
+          <div class="flex items-center">
+            <UserIcon class="w-12" :name="userMap[member]" />
+            <p class="mx-1 break-all">{{ userMap[member] }}</p>
+          </div>
+          <button
+            v-if="hasAuthority"
+            class="flex items-center rounded-full p-1 hover:bg-surface-secondary"
+            :disabled="isSending"
+            @click="removeMember(member)">
+            <MinusIcon class="w-6" />
+          </button>
+        </li>
+      </ul>
+      <div v-if="hasAuthority" class="flex p-2 gap-2 w-full">
+        <InputSelectMultiple
+          v-model="membersToBeAdded"
+          class="flex-grow w-1"
+          is-dropdown-above
+          :options="absentMemberOptions"
+          placeholder="追加するメンバーを選択" />
         <button
-          v-if="hasAuthority"
           class="flex items-center rounded-full p-1 hover:bg-surface-secondary"
-          :disabled="isSending"
-          @click="removeMember(member)">
-          <MinusIcon class="w-6" />
+          :disabled="membersToBeAdded.length === 0 || isSending"
+          @click="addMembers(membersToBeAdded)">
+          <PlusIcon class="w-6" />
         </button>
-      </li>
-    </ul>
-    <div v-if="hasAuthority" class="flex p-2">
-      <InputSelectMultiple
-        v-model="membersToBeAdded"
-        class="mr-2 flex-grow"
-        is-dropdown-above
-        :options="absentMemberOptions"
-        placeholder="追加するメンバーを選択" />
-      <button
-        class="flex items-center rounded-full p-1 hover:bg-surface-secondary"
-        :disabled="membersToBeAdded.length === 0 || isSending"
-        @click="addMembers(membersToBeAdded)">
-        <PlusIcon class="w-6" />
-      </button>
+      </div>
     </div>
   </div>
 </template>

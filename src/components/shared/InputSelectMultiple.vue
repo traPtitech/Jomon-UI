@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { ChevronDownIcon } from '@heroicons/vue/24/solid'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { ChevronDownIcon } from '@heroicons/vue/24/solid';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ValueValue = Record<string, any> | string | null
@@ -181,7 +182,7 @@ const handleKeydown = (e: KeyboardEvent, option: Value) => {
     const length =
       searchQuery.value !== ''
         ? searchedOptions.value.length
-        : props.options?.length ?? 0
+        : (props.options?.length ?? 0)
     focusingListItemIndex.value = (focusingListItemIndex.value + 1) % length
     const buttonEl = listItemRefs.value[focusingListItemIndex.value]
       .firstChild as HTMLButtonElement
@@ -202,7 +203,7 @@ const handleKeydown = (e: KeyboardEvent, option: Value) => {
     const length =
       searchQuery.value !== ''
         ? searchedOptions.value.length
-        : props.options?.length ?? 0
+        : (props.options?.length ?? 0)
     focusingListItemIndex.value =
       (focusingListItemIndex.value - 1 + length) % length
     const buttonEl = listItemRefs.value[focusingListItemIndex.value]
@@ -269,14 +270,12 @@ onUnmounted(() => {
 <template>
   <div
     ref="inputSelectRef"
-    :class="`relative ${
-      disabled && 'cursor-not-allowed'
-    } min-w-72 ${calcWidth}`">
+    :class="`relative ${disabled && 'cursor-not-allowed'} ${calcWidth}`">
     <div
-      class="flex w-full cursor-text items-center rounded border border-surface-secondary py-1 pl-1"
+      class="flex cursor-text items-center rounded border border-surface-secondary py-1 pl-1"
       :class="`${disabled && 'pointer-events-none'}`"
       @click.prevent="handleClick">
-      <div class="flex w-full items-center overflow-x-auto">
+      <div class="flex items-center overflow-x-auto">
         <div
           v-for="selectedValue in selectedValues"
           :key="selectedValue.key"
@@ -288,12 +287,12 @@ onUnmounted(() => {
           :id="props.id"
           ref="inputRef"
           v-model="searchQuery"
-          class="flex-grow bg-transparent pl-1 focus:outline-none"
+          class="bg-transparent pl-1 focus:outline-none"
           :placeholder="selectedValues.length === 0 ? placeholder : ''"
           @focus="isDropdownOpen = true"
           @keydown="handleInputKeydown" />
       </div>
-      <ChevronDownIcon class="min-w-4 mx-1 h-4" />
+      <ChevronDownIcon class="min-w-4 ml-auto mx-1 h-4" />
     </div>
     <ul
       v-if="isDropdownOpen && searchedOptions.length > 0"

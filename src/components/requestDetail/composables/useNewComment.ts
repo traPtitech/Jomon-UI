@@ -19,7 +19,7 @@ export const useNewComment = (requestId: string) => {
       await createCommentUsecase(requestId, comment.value)
       comment.value = ''
       toast.success('コメントを送信しました')
-    } catch (e) {
+    } catch {
       toast.error('送信に失敗しました')
     }
     isSending.value = false

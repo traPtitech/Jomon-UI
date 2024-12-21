@@ -5,16 +5,16 @@ import { useUserStore } from '/@/stores/user'
 
 import { formatDateAndTime } from '/@/lib/date'
 
-import MarkdownIt from '/@/components//shared/MarkdownIt.vue'
-import UserIcon from '/@/components/shared/UserIcon.vue'
-import type { RequestDetail } from '/@/features/request/model'
 import { ref } from 'vue'
-import { editRequestUsecase } from '/@/features/request/usecase'
+import { useToast } from 'vue-toastification'
+import MarkdownIt from '/@/components//shared/MarkdownIt.vue'
 import EditButton from '/@/components/shared/EditButton.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import { useToast } from 'vue-toastification'
+import UserIcon from '/@/components/shared/UserIcon.vue'
 import { useRequest } from '/@/features/request/composables'
+import type { RequestDetail } from '/@/features/request/model'
+import { editRequestUsecase } from '/@/features/request/usecase'
 
 const props = defineProps<{
   request: RequestDetail
@@ -54,26 +54,31 @@ const handleUpdateContent = async () => {
 const files = [
   {
     name: 'oisu-.png',
+    type: 'imagea',
     url: 'https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1024&h=1280&q=80',
     alt: 'tailwind sample'
   },
   {
     name: 'oisu-.png',
+    type: 'image',
     url: 'https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1024&h=1280&q=80',
     alt: 'tailwind sample'
   },
   {
     name: 'oisu-.png',
+    type: 'image',
     url: 'https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1024&h=1280&q=80',
     alt: 'tailwind sample'
   },
   {
     name: 'oisu-.png',
+    type: 'image',
     url: 'https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1024&h=1280&q=80',
     alt: 'tailwind sample'
   },
   {
     name: 'oisu-.png',
+    type: 'image',
     url: 'https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1024&h=1280&q=80',
     alt: 'tailwind sample'
   }
@@ -111,27 +116,32 @@ const handleFileUpload = async () => {
         <div class="m-3 overflow-auto">
           <div class="flex gap-3">
             <div v-for="file in files" :key="file.name">
-              <div
-                class="bg-surface-secondary w-32 overflow-hidden rounded"
-                :model-value="file.name">
-                <img
-                  :alt="file.alt"
-                  class="object-cover h-36 w-full"
-                  :src="file.url" />
-              </div>
+              <a :href="file.url" :download="file.name">
+                <div
+                  class="bg-surface-secondary h-36 w-32 overflow-hidden rounded"
+                  :model-value="file.name">
+                  <img
+                    v-if="file.type === 'image'"
+                    :alt="file.alt"
+                    class="object-cover w-full"
+                    :src="file.url" />
+                </div>
+              </a>
               <p class="mt-2 text-center">{{ file.name }}</p>
             </div>
           </div>
           <div class="flex gap-3 mt-3">
             <div v-for="file in files" :key="file.name">
-              <div
-                class="bg-surface-secondary w-96 overflow-hidden rounded"
-                :model-value="file.name">
-                <img
-                  :alt="file.alt"
-                  class="object-cover h-60 w-full"
-                  :src="file.url" />
-              </div>
+              <a :href="file.url" :download="file.name">
+                <div
+                  class="bg-surface-secondary h-60 w-96 overflow-hidden rounded"
+                  :model-value="file.name">
+                  <img
+                    :alt="file.alt"
+                    class="object-cover w-full"
+                    :src="file.url" />
+                </div>
+              </a>
               <p class="mt-2">{{ file.name }}</p>
             </div>
           </div>
@@ -160,7 +170,11 @@ const handleFileUpload = async () => {
         @click="toggleEditContent" />
     </div>
     <div class="flex justify-end">
-      <SimpleButton v-if="isEditMode" padding="sm" @click="handleUpdateContent">
+      <SimpleButton
+        v-if="isEditMode"
+        padding="sm"
+        fontSize="base"
+        @click="handleUpdateContent">
         完了
       </SimpleButton>
     </div>

@@ -57,6 +57,7 @@ const handleUpdateTargets = async () => {
       <div class="flex items-center gap-2">
         <SimpleButton
           v-if="isEditMode"
+          font-size="base"
           padding="sm"
           @click="handleUpdateTargets">
           完了
@@ -71,7 +72,7 @@ const handleUpdateTargets = async () => {
       <RequestTarget
         v-for="(target, i) in request.targets"
         :key="target.id"
-        v-model:targetModel="editedTargets[i]"
+        v-model:target-model="editedTargets[i]"
         :is-edit-mode="isEditMode"
         :request="request"
         :target="target" />

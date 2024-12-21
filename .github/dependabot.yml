@@ -8,17 +8,22 @@ updates:
     groups:
       types:
         patterns:
-          - '@types/*'
+          - "@types/*"
       formatter:
         patterns:
-          - '*eslint*'
-          - '*prettier*'
+          - "*eslint*"
+          - "*prettier*"
       patches:
         update-types:
-          - 'patch'
+          - "patch"
     versioning-strategy: increase
     target-branch: "main"
     labels:
       - "dependencies"
     reviewers:
       - reiroop
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 10

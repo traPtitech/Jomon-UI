@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { ChevronDownIcon } from '@heroicons/vue/24/solid'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { ChevronDownIcon } from '@heroicons/vue/24/solid';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ValueValue = Record<string, any> | string | null
@@ -176,9 +176,7 @@ onUnmounted(() => {
 <template>
   <div
     ref="inputSelectRef"
-    :class="`relative ${
-      disabled && 'cursor-not-allowed'
-    } min-w-72 ${calcWidth}`">
+    :class="`relative ${disabled && 'cursor-not-allowed'}  ${calcWidth}`">
     <div
       class="flex w-full cursor-text items-center gap-1 rounded border border-surface-secondary py-1 pr-1"
       :class="`${disabled && 'pointer-events-none'}`"

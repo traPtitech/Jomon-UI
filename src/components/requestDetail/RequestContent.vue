@@ -83,35 +83,35 @@ const handleFileUpload = async () => {
         <MarkdownIt :text="request.content" />
         <div class="m-3 overflow-auto">
           <div class="flex gap-3">
-            <div v-for="file in request.files" :key="file.name">
-              <a :href="file.url" :download="file.name">
+            <div v-for="file in request.files" :key="file">
+              <a :href="'/files/' + file" :download="file">
                 <div
                   class="bg-surface-secondary h-36 w-32 overflow-hidden rounded"
-                  :model-value="file.name">
+                  :model-value="file">
                   <img
-                    v-if="file.type === 'image'"
-                    :alt="file.alt"
+                    v-if="file === 'image'"
+                    :alt="file"
                     class="object-cover w-full"
-                    :src="file.url" />
+                    :src="'/files/' + file" />
                 </div>
               </a>
-              <p class="mt-2 text-center">{{ file.name }}</p>
+              <p class="mt-2 text-center">{{ file }}</p>
             </div>
           </div>
           <div class="flex gap-3 mt-3">
-            <div v-for="file in request.files" :key="file.name">
-              <a :href="file.url" :download="file.name">
+            <div v-for="file in request.files" :key="file">
+              <a :href="'/files/' + file" :download="file">
                 <div
                   class="bg-surface-secondary h-60 w-96 overflow-hidden rounded"
-                  :model-value="file.name">
+                  :model-value="file">
                   <img
-                    v-if="file.type === 'image'"
-                    :alt="file.alt"
+                    v-if="file === 'image'"
+                    :alt="file"
                     class="object-cover w-full"
-                    :src="file.url" />
+                    :src="'/files/' + file" />
                 </div>
               </a>
-              <p class="mt-2">{{ file.name }}</p>
+              <p class="mt-2">{{ file }}</p>
             </div>
           </div>
         </div>

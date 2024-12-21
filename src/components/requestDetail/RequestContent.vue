@@ -51,38 +51,6 @@ const handleUpdateContent = async () => {
   isEditMode.value = false
 }
 
-const files = [
-  {
-    name: 'oisu-.pdf',
-    type: 'pdf',
-    url: 'https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1024&h=1280&q=80',
-    alt: 'tailwind sample'
-  },
-  {
-    name: 'oisu-.png',
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1024&h=1280&q=80',
-    alt: 'tailwind sample'
-  },
-  {
-    name: 'oisu-.png',
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1024&h=1280&q=80',
-    alt: 'tailwind sample'
-  },
-  {
-    name: 'oisu-.png',
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1024&h=1280&q=80',
-    alt: 'tailwind sample'
-  },
-  {
-    name: 'oisu-.png',
-    type: 'image',
-    url: 'https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1024&h=1280&q=80',
-    alt: 'tailwind sample'
-  }
-]
 const handleFileUpload = async () => {
   try {
     toast.success('ファイルを追加しました')
@@ -115,7 +83,7 @@ const handleFileUpload = async () => {
         <MarkdownIt :text="request.content" />
         <div class="m-3 overflow-auto">
           <div class="flex gap-3">
-            <div v-for="file in files" :key="file.name">
+            <div v-for="file in request.files" :key="file.name">
               <a :href="file.url" :download="file.name">
                 <div
                   class="bg-surface-secondary h-36 w-32 overflow-hidden rounded"
@@ -131,7 +99,7 @@ const handleFileUpload = async () => {
             </div>
           </div>
           <div class="flex gap-3 mt-3">
-            <div v-for="file in files" :key="file.name">
+            <div v-for="file in request.files" :key="file.name">
               <a :href="file.url" :download="file.name">
                 <div
                   class="bg-surface-secondary h-60 w-96 overflow-hidden rounded"

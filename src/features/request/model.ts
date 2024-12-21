@@ -35,9 +35,16 @@ export interface RequestQuerySeed {
 }
 
 export interface RequestDetail extends Request {
-  files: string[]
+  files: File[]
   comments: RequestComment[]
   statuses: RequestStatusDetail[]
+}
+
+interface File {
+  name: string
+  type: string
+  url: string
+  alt: string
 }
 
 export interface RequestSeed {

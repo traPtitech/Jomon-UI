@@ -53,8 +53,8 @@ const handleUpdateContent = async () => {
 
 const files = [
   {
-    name: 'oisu-.png',
-    type: 'imagea',
+    name: 'oisu-.pdf',
+    type: 'pdf',
     url: 'https://images.unsplash.com/photo-1554629947-334ff61d85dc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1024&h=1280&q=80',
     alt: 'tailwind sample'
   },
@@ -137,6 +137,7 @@ const handleFileUpload = async () => {
                   class="bg-surface-secondary h-60 w-96 overflow-hidden rounded"
                   :model-value="file.name">
                   <img
+                    v-if="file.type === 'image'"
                     :alt="file.alt"
                     class="object-cover w-full"
                     :src="file.url" />

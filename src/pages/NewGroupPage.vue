@@ -2,14 +2,14 @@
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
-import { useUserStore } from '/@/stores/user'
 import InputNumber from '/@/components/shared/InputNumber.vue'
 import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
 import InputText from '/@/components/shared/InputText.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
+import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { createGroupUsecase } from '/@/features/group/usecase'
 import { useFetchUsersUsecase } from '/@/features/user/usecase'
+import { useUserStore } from '/@/stores/user'
 import { useNewGroup } from './composables/useNewGroup'
 
 const toast = useToast()
@@ -38,7 +38,6 @@ if (!isUserFetched.value) {
 </script>
 
 <template>
-  <div class="mx-auto mt-8 mb-5 flex w-2/3 flex-col">
     <div class="mb-6">
       <h1 class="text-2xl">グループの新規作成</h1>
     </div>
@@ -96,5 +95,4 @@ if (!isUserFetched.value) {
         </SimpleButton>
       </div>
     </form>
-  </div>
 </template>

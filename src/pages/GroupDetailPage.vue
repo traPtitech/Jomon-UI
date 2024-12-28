@@ -7,6 +7,7 @@ import { useUserStore } from '/@/stores/user'
 
 import { toId } from '/@/lib/parsePathParams'
 
+import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
 import GroupBudget from '/@/components/groupDetail/GroupBudget.vue'
 import GroupDescription from '/@/components/groupDetail/GroupDescription.vue'
 import GroupMembers from '/@/components/groupDetail/GroupMembers.vue'
@@ -15,7 +16,6 @@ import GroupOwners from '/@/components/groupDetail/GroupOwners.vue'
 import { useGroupInformation } from '/@/components/groupDetail/composables/useGroupInformation'
 import { useFetchGroup } from '/@/features/group/usecase'
 import { useFetchUsersUsecase } from '/@/features/user/usecase'
-import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
 
 const route = useRoute()
 const id = toId(route.params.id)
@@ -36,7 +36,7 @@ if (!isUserFetched.value) {
 </script>
 
 <template>
-  <div v-if="group !== undefined" class="mx-auto w-4/5 mt-5 mb-5">
+  <div v-if="group !== undefined">
     <div class="flex">
       <GroupName
         class="flex-grow"

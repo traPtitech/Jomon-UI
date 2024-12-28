@@ -57,7 +57,7 @@ if (me.value?.admin) {
 
 <template>
   <div v-if="!isAdmin" class="p-2">権限がありません。</div>
-  <div v-else class="mx-auto flex w-2/3 flex-col px-12 pt-8">
+  <div v-else>
     <h1 class="text-2xl">管理</h1>
     <div class="mt-6">
       <label class="text-base font-medium">管理者</label>

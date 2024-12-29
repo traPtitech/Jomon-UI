@@ -2,17 +2,14 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
-
-import { useAdminStore } from '/@/stores/admin'
-import { useTagStore } from '/@/stores/tag'
-import { useUserStore } from '/@/stores/user'
-
 import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { useFetchAdminsUsecase } from '/@/features/admin/usecase'
 import { deleteTagsUsecase, useFetchTagsUsecase } from '/@/features/tag/usecase'
 import { useFetchUsersUsecase } from '/@/features/user/usecase'
-
+import { useAdminStore } from '/@/stores/admin'
+import { useTagStore } from '/@/stores/tag'
+import { useUserStore } from '/@/stores/user'
 import { useAdmin } from './composables/useAdmin'
 
 const adminStore = useAdminStore()

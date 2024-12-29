@@ -25,7 +25,7 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
 
 <template>
   <div v-if="group" class="relative flex flex-col gap-3 justify-between">
-    <p class="text-xl">グループメンバー</p>
+    <h2 class="text-xl">グループメンバー</h2>
     <div class="border border-surface-secondary">
       <ul class="flex flex-col gap-2 px-4 py-3 overflow-y-auto max-h-[50dvh]">
         <li

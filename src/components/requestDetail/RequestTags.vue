@@ -50,7 +50,7 @@ const handleUpdateTags = async () => {
 <template>
   <div class="flex flex-col gap-1">
     <div class="flex items-center justify-between">
-      <div class="text-sm font-bold">タグ</div>
+      <h2 class="text-sm font-bold">タグ</h2>
       <EditButton
         v-if="hasAuthority"
         :is-edit-mode="isEditMode"

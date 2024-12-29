@@ -53,7 +53,7 @@ const handleUpdateTargets = async () => {
 <template>
   <div class="flex flex-col gap-2">
     <div class="flex items-center justify-between">
-      <div class="text-sm font-bold">払い戻し対象者</div>
+      <h2 class="text-sm font-bold">払い戻し対象者</h2>
       <div class="flex items-center gap-2">
         <SimpleButton
           v-if="isEditMode"

@@ -36,7 +36,7 @@ if (!isUserFetched.value) {
 </script>
 
 <template>
-  <div v-if="group !== undefined">
+  <div v-if="group !== undefined" class="flex flex-col gap-6">
     <div class="flex">
       <GroupName
         class="flex-grow"
@@ -45,27 +45,26 @@ if (!isUserFetched.value) {
         @change-edit-mode="changeEditMode($event)"
         @finish-editing="finishEditing" />
     </div>
-    <div class="mt-6 flex h-full gap-10 flex-col md:flex-row">
-      <div class="flex-grow">
+    <div class="flex h-full gap-16 flex-col md:flex-row">
+      <div class="flex-grow flex flex-col gap-6">
         <GroupDescription
           :is-edit-mode="editMode === 'description'"
           :is-sending="isSending"
           @change-edit-mode="changeEditMode($event)"
           @finish-editing="finishEditing" />
         <GroupBudget
-          class="mt-6"
           :is-edit-mode="editMode === 'budget'"
           :is-sending="isSending"
           @change-edit-mode="changeEditMode($event)"
           @finish-editing="finishEditing" />
         <RouterLink
-          class="mt-4 flex w-fit items-center"
+          class="flex w-fit items-center"
           :to="`/transactions?group=${group.id}`">
           このグループの入出金記録へ
           <ArrowTopRightOnSquareIcon class="ml-1 w-6" />
         </RouterLink>
       </div>
-      <div class="flex w-full md:w-1/3 flex-col gap-10">
+      <div class="flex w-full md:w-1/3 flex-col gap-16">
         <GroupOwners />
         <GroupMembers />
       </div>

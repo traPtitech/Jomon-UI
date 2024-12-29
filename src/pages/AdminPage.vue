@@ -56,12 +56,14 @@ if (me.value?.admin) {
 </script>
 
 <template>
-  <div v-if="!isAdmin" class="p-2">権限がありません。</div>
-  <div v-else>
-    <h1 class="text-2xl">管理</h1>
-    <div class="mt-6">
-      <label class="text-base font-medium">管理者</label>
-      <ul class="flex gap-3 mt-3">
+  <div v-if="!isAdmin" class="p-2" role="alert" aria-live="assertive">
+    権限がありません。
+  </div>
+  <div v-else class="flex flex-col gap-6">
+    <h1 class="text-2xl" tabindex="0">管理</h1>
+    <div class="flex flex-col gap-3">
+      <h2 id="admin-list" class="text-base font-medium" tabindex="0">管理者</h2>
+      <ul class="flex gap-3" aria-labelledby="admin-list">
         <li v-for="admin in admins" :key="admin">
           <div class="border-text-primary rounded border px-2 text-center">
             {{ userMap[admin] }}
@@ -69,9 +71,11 @@ if (me.value?.admin) {
         </li>
       </ul>
     </div>
-    <div class="mt-4">
-      <label class="text-base font-medium">管理者の操作</label>
-      <div class="flex flex-wrap gap-3 mt-3">
+    <div class="flex flex-col gap-3">
+      <label for="add-admin" class="text-base font-medium" tabindex="0">
+        管理者の操作
+      </label>
+      <div class="flex flex-wrap gap-3">
         <InputSelectMultiple
           v-model="addList"
           class="flex-grow w-auto"
@@ -85,7 +89,7 @@ if (me.value?.admin) {
           選択した管理者を追加
         </SimpleButton>
       </div>
-      <div class="flex flex-wrap gap-3 mt-3">
+      <div class="flex flex-wrap gap-3">
         <InputSelectMultiple
           v-model="removeList"
           class="flex-grow w-auto"
@@ -100,9 +104,9 @@ if (me.value?.admin) {
         </SimpleButton>
       </div>
     </div>
-    <div class="mt-6">
+    <div class="flex flex-col gap-3">
       <label class="text-base font-medium">その他の操作</label>
-      <div class="flex flex-wrap gap-3 mt-3">
+      <div class="flex flex-wrap gap-3">
         <InputSelectMultiple
           v-model="deleteTagList"
           class="flex-grow w-auto"

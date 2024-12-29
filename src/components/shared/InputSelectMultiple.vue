@@ -172,8 +172,8 @@ const openDropdown = () => {
 const handleKeydown = (e: KeyboardEvent, option: Value) => {
   switch (e.key) {
     case 'Tab':
-    isDropdownOpen.value = false
-    emit('close')
+      isDropdownOpen.value = false
+      emit('close')
       break
     case 'Enter':
       e.preventDefault()
@@ -184,30 +184,30 @@ const handleKeydown = (e: KeyboardEvent, option: Value) => {
       }
       break
     case 'ArrowDown':
-    e.preventDefault()
-    if (searchQuery.value !== '') return
+      e.preventDefault()
+      if (searchQuery.value !== '') return
       navigateList('down')
-    if (listRef.value === null) return
-    if (focusingListItemIndex.value > 3) {
-      listRef.value.scrollBy({
-        top: 12,
-        left: 0,
-        behavior: 'smooth'
-      })
-    }
+      if (listRef.value === null) return
+      if (focusingListItemIndex.value > 3) {
+        listRef.value.scrollBy({
+          top: 12,
+          left: 0,
+          behavior: 'smooth'
+        })
+      }
       break
     case 'ArrowUp':
-    e.preventDefault()
-    if (searchQuery.value !== '') return
+      e.preventDefault()
+      if (searchQuery.value !== '') return
       navigateList('up')
-    if (listRef.value === null) return
-    if (focusingListItemIndex.value < length - 3) {
-      listRef.value.scrollBy({
-        top: -12,
-        left: 0,
-        behavior: 'smooth'
-      })
-    }
+      if (listRef.value === null) return
+      if (focusingListItemIndex.value < length - 3) {
+        listRef.value.scrollBy({
+          top: -12,
+          left: 0,
+          behavior: 'smooth'
+        })
+      }
       break
   }
 }
@@ -260,11 +260,15 @@ onUnmounted(() => {
 <template>
   <div
     ref="inputSelectRef"
-    :class="`relative ${disabled && 'cursor-not-allowed'} ${calcWidth}`">
+    :class="`relative ${disabled && 'cursor-not-allowed'}`">
     <div
-      class="flex cursor-text items-center rounded border border-surface-secondary py-1 pl-1"
+      role="button"
+      tabindex="0"
+      class="flex cursor-text items-center w-full py-1 pl-1 rounded border border-surface-secondary"
       :class="`${disabled && 'pointer-events-none'}`"
-      @click.prevent="handleClick">
+      @click.prevent="openDropdown"
+      @keydown.enter.prevent="openDropdown"
+      @keydown.space.prevent="openDropdown">
       <div class="flex items-center overflow-x-auto">
         <div
           v-for="selectedValue in selectedValues"

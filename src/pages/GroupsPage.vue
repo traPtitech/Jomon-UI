@@ -39,7 +39,8 @@ watch(
 </script>
 
 <template>
-  <div class="relative flex flex-wrap mb-8 gap-x-7 gap-y-2 w-full items-center">
+  <div class="flex flex-col gap-7">
+    <div class="relative flex flex-wrap gap-x-7 gap-y-2 w-full items-center">
     <h1 class="text-2xl">グループ一覧</h1>
     <div v-if="isAdmin">
       <RouterLink to="/groups/new">
@@ -72,4 +73,5 @@ watch(
     :current-page="page"
     path="/groups"
     :total-pages="Math.ceil(groups.length / 10)" />
+  </div>
 </template>

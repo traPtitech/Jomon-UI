@@ -74,7 +74,7 @@ watch(
   </div>
   <RequestFilters />
   <div class="min-h-[480px]">
-    <div class="mx-auto mt-4 w-3/4 rounded-xl shadow">
+    <div class="mx-auto mt-4 w-3/4 rounded-xl shadow-sm">
       <ul>
         <li
           v-for="request in sliceRequestsAt(page, 7)"

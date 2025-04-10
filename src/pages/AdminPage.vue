@@ -63,7 +63,7 @@ if (me.value?.admin) {
       <label class="text-base font-medium">管理者</label>
       <ul class="flex gap-3 mt-3">
         <li v-for="admin in admins" :key="admin">
-          <div class="border-text-primary rounded border px-2 text-center">
+          <div class="border-text-primary rounded-sm border px-2 text-center">
             {{ userMap[admin] }}
           </div>
         </li>
@@ -74,7 +74,7 @@ if (me.value?.admin) {
       <div class="flex flex-wrap gap-3 mt-3">
         <InputSelectMultiple
           v-model="addList"
-          class="flex-grow w-auto"
+          class="grow w-auto"
           :options="absentMembers"
           placeholder="追加する管理者を選択" />
         <SimpleButton
@@ -88,7 +88,7 @@ if (me.value?.admin) {
       <div class="flex flex-wrap gap-3 mt-3">
         <InputSelectMultiple
           v-model="removeList"
-          class="flex-grow w-auto"
+          class="grow w-auto"
           :options="adminOptions"
           placeholder="削除する管理者を選択" />
         <SimpleButton
@@ -105,7 +105,7 @@ if (me.value?.admin) {
       <div class="flex flex-wrap gap-3 mt-3">
         <InputSelectMultiple
           v-model="deleteTagList"
-          class="flex-grow w-auto"
+          class="grow w-auto"
           :options="tagIdOptions"
           placeholder="削除するタグを選択" />
         <SimpleButton

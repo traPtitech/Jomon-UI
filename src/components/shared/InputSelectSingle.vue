@@ -178,7 +178,7 @@ onUnmounted(() => {
     ref="inputSelectRef"
     :class="`relative ${disabled && 'cursor-not-allowed'}  ${calcWidth}`">
     <div
-      class="flex w-full cursor-text items-center gap-1 rounded border border-surface-secondary py-1 pr-1"
+      class="flex w-full cursor-text items-center gap-1 rounded-sm border border-surface-secondary py-1 pr-1"
       :class="`${disabled && 'pointer-events-none'}`"
       @click="handleClick">
       <div class="relative left-2 flex w-full">
@@ -193,7 +193,7 @@ onUnmounted(() => {
           :id="props.id"
           ref="inputRef"
           v-model="searchQuery"
-          class="flex-grow bg-transparent focus:outline-none"
+          class="grow bg-transparent focus:outline-hidden"
           :placeholder="selectedValue === undefined ? placeholder : ''"
           @focus="isDropdownOpen = true"
           @keydown="handleKeydown" />
@@ -221,7 +221,7 @@ onUnmounted(() => {
           'bg-hover-primary hover:bg-hover-primary'
         }`">
         <button
-          class="h-full w-full px-4 py-1 text-left focus:outline-none"
+          class="h-full w-full px-4 py-1 text-left focus:outline-hidden"
           type="button"
           @click="selectValue(option)"
           @keydown="handleKeydown">

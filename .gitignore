@@ -7,7 +7,5 @@ debug.log
 
 .eslintcache
 
-src/lib/apis/generated
-
 .vscode/*
 !.vscode/extensions.json

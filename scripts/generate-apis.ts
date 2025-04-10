@@ -40,4 +40,13 @@ const __dirname = path.dirname(__filename)
 
   // importsNotUsedAsValuesでエラーが起きるのですべてのimportに@ts-ignoreを付与する
   await addTsIgnoreToImports(GENERATED_DIR)
+
+  // 生成されたファイルにPrettierを適用する
+  const prettierP = execa('npx', [
+    'prettier',
+    '--write',
+    `${GENERATED_DIR}/**/*.ts`
+  ])
+  prettierP.stdout?.pipe(process.stdout)
+  await prettierP
 })()

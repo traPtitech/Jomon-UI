@@ -3,8 +3,8 @@ import { computed } from 'vue'
 
 interface Props {
   type?: 'plain' | 'danger' | 'success'
-  fontSize: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
-  padding: 'sm' | 'md' | 'lg' | 'xl'
+  fontSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
+  padding?: 'sm' | 'md' | 'lg' | 'xl'
   disabled?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {

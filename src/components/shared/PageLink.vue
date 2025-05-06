@@ -10,7 +10,7 @@ const props = defineProps<Props>()
 
 <template>
   <router-link
-    class="flex w-10 items-center justify-center rounded"
+    class="flex w-10 items-center justify-center rounded-sm"
     :class="
       props.isSelected ? 'cursor-default bg-blue-200' : 'hover:bg-hover-primary'
     "

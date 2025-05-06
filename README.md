@@ -15,7 +15,7 @@
 
 - Prerequisites
   - JVM for OpenAPI Generator
-  - node 20.x
+  - node 22.x
 
 ```sh
 npm install

@@ -48,7 +48,7 @@ const { absentOwnerOptions, isSending, addOwners, removeOwner } =
       <div v-if="hasAuthority" class="flex p-2 gap-2">
         <InputSelectMultiple
           v-model="ownersToBeAdded"
-          class="flex-grow w-1"
+          class="grow w-1"
           :options="absentOwnerOptions"
           placeholder="追加するオーナーを選択" />
         <button

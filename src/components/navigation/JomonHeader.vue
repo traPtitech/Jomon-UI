@@ -30,7 +30,7 @@ const handleOpenDrawer = () => {
 
 <template>
   <header
-    class="fixed flex h-12 w-full items-center bg-white pl-2 shadow"
+    class="fixed flex h-12 w-full items-center bg-white pl-2 shadow-sm"
     :class="shouldShowModal ? 'z-30' : 'z-10'">
     <button class="flex items-center md:hidden" @click="handleOpenDrawer">
       <Bars3Icon class="h-8 w-8" />
@@ -40,7 +40,15 @@ const handleOpenDrawer = () => {
     </RouterLink>
     <div class="flex h-full flex-1 justify-between px-2">
       <PageNavigations class="invisible md:visible" />
-      <UserIcon v-if="me !== undefined" :name="me.name" />
+      <div class="flex items-center gap-2">
+        <a
+          href="https://wiki.trap.jp/services/Jomon"
+          rel="noreferrer noopener"
+          target="_blank">
+          ヘルプ
+        </a>
+        <UserIcon v-if="me !== undefined" :name="me.name" />
+      </div>
     </div>
   </header>
   <!--遷移時にドロワーを閉じるようにするためにドロワーコンポーネント内でwrapperを使うことになりそう？-->

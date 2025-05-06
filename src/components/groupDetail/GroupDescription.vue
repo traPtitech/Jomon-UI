@@ -11,7 +11,7 @@ const { group } = storeToRefs(groupDetailStore)
   <div v-if="group">
     <p class="text-xl">詳細</p>
     <div class="flex w-full mt-3">
-      <p class="min-h-32 w-full rounded border border-surface-secondary p-2">
+      <p class="min-h-32 w-full rounded-sm border border-surface-secondary p-2">
         {{ group.description }}
       </p>
     </div>

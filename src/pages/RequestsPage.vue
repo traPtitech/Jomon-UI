@@ -72,17 +72,18 @@ watch(
         </div>
       </div>
     </div>
-    <div class="min-h-120">
-      <div class="mx-auto rounded-xl shadow">
-        <ul>
-          <li
-            v-for="request in sliceRequestsAt(page, 7)"
-            :key="request.id"
-            class="hover:bg-hover-secondary">
-            <RequestItem :request="request" />
-          </li>
-        </ul>
-      </div>
+  </div>
+  <RequestFilters />
+  <div class="min-h-[480px]">
+    <div class="mx-auto mt-4 w-3/4 rounded-xl shadow-sm">
+      <ul>
+        <li
+          v-for="request in sliceRequestsAt(page, 7)"
+          :key="request.id"
+          class="hover:bg-hover-secondary first:hover:rounded-t-xl last:hover:rounded-b-xl">
+          <RequestItem :request="request" />
+        </li>
+      </ul>
     </div>
     <PaginationBar
       v-if="requests.length > 0"

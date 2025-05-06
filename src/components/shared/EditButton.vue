@@ -3,7 +3,7 @@ import { PencilIcon, XMarkIcon } from '@heroicons/vue/24/solid'
 
 withDefaults(
   defineProps<{
-    isEditMode: boolean
+    isEditMode?: boolean
   }>(),
   {
     isEditMode: false

@@ -9,8 +9,8 @@ import { formatDate } from '/@/lib/date'
 
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import TagsGroup from '/@/components/shared/TagsGroup.vue'
-import type { Request } from '/@/features/request/model'
 import UserIcon from '/@/components/shared/UserIcon.vue'
+import type { Request } from '/@/features/request/model'
 
 interface Props {
   request: Request
@@ -29,14 +29,18 @@ const totalAmount = computed(
 </script>
 
 <template>
-  <RouterLink class="flex px-3 sm:px-6 py-4 gap-2 sm:gap-5" :to="'/requests/' + request.id">
+  <RouterLink
+    class="flex px-3 sm:px-6 py-4 gap-2 sm:gap-5"
+    :to="'/requests/' + request.id">
     <div class="flex items-start justify-center">
       <StatusChip :status="request.status" />
     </div>
-    <div class="grow">
-      <span class="text-xl">{{ request.title }}</span>
-      <div class="mt-2">
-        <TagsGroup :tags="request.tags" />
+    <div class="flex flex-grow flex-wrap">
+      <div class="flex-grow">
+        <span class="text-xl">{{ request.title }}</span>
+        <div class="mt-2">
+          <TagsGroup :tags="request.tags" />
+        </div>
       </div>
       <div class="flex flex-col gap-2">
         <div class="flex items-center justify-end gap-x-4 flex-wrap">

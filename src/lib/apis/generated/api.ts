@@ -335,6 +335,12 @@ export interface PostTag {
 export interface PostTransaction {
     /**
      * 
+     * @type {string}
+     * @memberof PostTransaction
+     */
+    'title'?: string;
+    /**
+     * 
      * @type {number}
      * @memberof PostTransaction
      */
@@ -370,6 +376,12 @@ export interface PostTransaction {
  * @interface PostTransactionWithOneTarget
  */
 export interface PostTransactionWithOneTarget {
+    /**
+     * 
+     * @type {string}
+     * @memberof PostTransactionWithOneTarget
+     */
+    'title'?: string;
     /**
      * 
      * @type {number}
@@ -824,6 +836,12 @@ export interface Transaction {
      * @memberof Transaction
      */
     'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Transaction
+     */
+    'title'?: string;
     /**
      * 
      * @type {number}

@@ -48,7 +48,7 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
       <div v-if="hasAuthority" class="flex p-2 gap-2 w-full">
         <InputSelectMultiple
           v-model="membersToBeAdded"
-          class="flex-grow w-1"
+          class="grow w-1"
           is-dropdown-above
           :options="absentMemberOptions"
           placeholder="追加するメンバーを選択" />

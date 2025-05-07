@@ -39,14 +39,14 @@ if (!isUserFetched.value) {
   <div v-if="group !== undefined" class="flex flex-col gap-6">
     <div class="flex">
       <GroupName
-        class="flex-grow"
+        class="grow"
         :is-edit-mode="editMode === 'name'"
         :is-sending="isSending"
         @change-edit-mode="changeEditMode($event)"
         @finish-editing="finishEditing" />
     </div>
     <div class="flex h-full gap-16 flex-col md:flex-row">
-      <div class="flex-grow flex flex-col gap-6">
+      <div class="grow flex flex-col gap-6">
         <GroupDescription
           :is-edit-mode="editMode === 'description'"
           :is-sending="isSending"

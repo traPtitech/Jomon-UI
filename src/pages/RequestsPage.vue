@@ -59,10 +59,10 @@ watch(
 </script>
 
 <template>
-  <div class="max-w-6xl mx-auto p-3 sm:p-8 flex flex-col gap-7">
+  <div class="max-w-6xl mx-auto px-3 sm:px-8 flex flex-col gap-7">
     <div class="flex flex-col">
       <div class="relative flex w-full items-center justify-start gap-7">
-        <h1 class="text-center text-3xl">申請一覧</h1>
+        <h1 class="text-center text-2xl">申請一覧</h1>
         <div>
           <RouterLink to="/requests/new">
             <SimpleButton font-size="lg" padding="md">

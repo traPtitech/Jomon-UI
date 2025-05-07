@@ -51,7 +51,7 @@ watch(
       </div>
     </div>
 
-    <div class="grid grid-cols-[2fr_3fr_2fr] divide-y my-7">
+    <div class="grid grid-cols-[2fr_3fr_2fr] divide-y">
       <div
         class="grid grid-cols-subgrid col-span-3 bg-surface-tertiary gap-x-2 px-6 py-4 whitespace-nowrap">
         <div>グループ名</div>

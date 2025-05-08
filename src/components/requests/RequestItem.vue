@@ -36,11 +36,9 @@ const totalAmount = computed(
       <StatusChip :status="request.status" />
     </div>
     <div class="flex flex-grow flex-wrap">
-      <div class="flex-grow">
+      <div class="flex-grow flex flex-col gap-2">
         <span class="text-xl">{{ request.title }}</span>
-        <div class="mt-2">
-          <TagsGroup :tags="request.tags" />
-        </div>
+        <TagsGroup :tags="request.tags" />
       </div>
       <div class="flex flex-col gap-2">
         <div class="flex items-center justify-end gap-x-4 flex-wrap">

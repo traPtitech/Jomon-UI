@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
-import InputTextarea from './InputTextarea.vue';
-import MarkdownIt from './MarkdownIt.vue';
-import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue';
+import { computed, ref } from 'vue'
+import InputTextarea from './InputTextarea.vue'
+import MarkdownIt from './MarkdownIt.vue'
+import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 
 type TabType = 'input' | 'preview'
 interface Props {
@@ -47,7 +47,7 @@ function changeCurrentTab(tab: TabType) {
 </script>
 
 <template>
-  <div class="flex flex-col rounded border border-surface-secondary">
+  <div class="flex flex-col rounded-sm border border-surface-secondary">
     <div
       class="flex items-center justify-between rounded-t bg-hover-secondary px-4 pt-3">
       <div class="flex items-center">
@@ -92,7 +92,7 @@ function changeCurrentTab(tab: TabType) {
         @update:model-value="model = $event" />
       <MarkdownIt
         v-if="currentTab === 'preview'"
-        class="min-h-40 w-full overflow-y-scroll rounded border border-surface-secondary px-3 py-2"
+        class="min-h-40 w-full overflow-y-scroll rounded-sm border border-surface-secondary px-3 py-2"
         :text="model" />
       <div class="flex justify-end pt-3">
         <slot />

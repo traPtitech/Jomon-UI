@@ -30,7 +30,7 @@ const handleOpenDrawer = () => {
 
 <template>
   <header
-    class="fixed flex h-12 w-full items-center bg-white pl-2 shadow"
+    class="fixed flex h-12 w-full items-center bg-white pl-2 shadow-sm"
     :class="shouldShowModal ? 'z-30' : 'z-10'">
     <button class="flex items-center md:hidden" @click="handleOpenDrawer">
       <Bars3Icon class="h-8 w-8" />

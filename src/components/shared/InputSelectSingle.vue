@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-import { ChevronDownIcon } from '@heroicons/vue/24/solid';
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { ChevronDownIcon } from '@heroicons/vue/24/solid'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type ValueValue = Record<string, any> | string | null
+type ValueValue = Record<string, unknown> | string | null
 
 interface Value {
   key: string
@@ -174,7 +173,7 @@ onUnmounted(() => {
     <div
       role="button"
       tabindex="0"
-      class="flex w-full cursor-text items-center gap-1 rounded border border-surface-secondary py-1 pr-1"
+      class="flex w-full cursor-text items-center gap-1 rounded-sm border border-surface-secondary py-1 pr-1"
       :class="`${disabled && 'pointer-events-none'}`"
       @click="openDropdown"
       @keydown.enter="openDropdown"
@@ -191,7 +190,7 @@ onUnmounted(() => {
           :id="props.id"
           ref="inputRef"
           v-model="searchQuery"
-          class="flex-grow bg-transparent focus:outline-none"
+          class="grow bg-transparent focus:outline-hidden"
           :placeholder="selectedValue === undefined ? placeholder : ''"
           @focus="isDropdownOpen = true"
           @keydown="handleKeydown" />
@@ -219,7 +218,7 @@ onUnmounted(() => {
           'bg-hover-primary hover:bg-hover-primary'
         }`">
         <button
-          class="h-full w-full px-4 py-1 text-left focus:outline-none"
+          class="h-full w-full px-4 py-1 text-left focus:outline-hidden"
           type="button"
           @click="selectValue(option)"
           @keydown="handleKeydown">

@@ -15,7 +15,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits<{ (e: 'input', value: RequestTarget[]): void }>()
+const emit = defineEmits<(e: 'input', value: RequestTarget[]) => void>()
 
 const userStore = useUserStore()
 const { userOptions } = storeToRefs(userStore)
@@ -64,7 +64,7 @@ function handleRemoveTarget(index: number) {
         :key="target.target"
         class="flex items-center gap-3">
         <InputSelectSingle
-          class="flex-grow"
+          class="grow"
           :model-value="target.target"
           :options="userOptions"
           placeholder="払い戻し対象者を選択"

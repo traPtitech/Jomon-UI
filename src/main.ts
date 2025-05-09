@@ -35,4 +35,6 @@ const options: PluginOptions = {
   hideProgressBar: true
 }
 
-setup().then((app) => app.use(router).use(createPinia()).use(Toast, options).mount('#app'))
+setup().then(app =>
+  app.use(router).use(createPinia()).use(Toast, options).mount('#app')
+)

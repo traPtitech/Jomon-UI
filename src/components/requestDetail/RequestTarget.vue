@@ -66,7 +66,7 @@ const handleRemoveTarget = async () => {
 <template>
   <div
     v-if="!props.isEditMode"
-    class="grid grid-cols-[3fr,1fr,2fr] items-center">
+    class="grid grid-cols-[3fr_1fr_2fr] items-center">
     <div class="flex items-center gap-1">
       <UserIcon class="w-10" :name="userMap[target.target]" />
       <div class="break-all">{{ userMap[target.target] }}</div>

@@ -5,8 +5,8 @@ import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
-import InputText from '/@/components/shared/InputText.vue'
 import EditButton from '/@/components/shared/EditButton.vue'
+import InputText from '/@/components/shared/InputText.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 interface Props {
@@ -31,14 +31,14 @@ const hasAuthority = canEditGroup(me.value)
 
 <template>
   <div v-if="group" class="flex items-center gap-3">
-    <h1 v-if="!props.isEditMode" class="flex-grow text-2xl">
+    <h1 v-if="!props.isEditMode" class="grow text-2xl">
       {{ group.name }}
     </h1>
     <InputText
       v-else
       v-model="editedValue.name"
       auto-focus
-      class="flex-grow"
+      class="grow"
       placeholder="グループ名" />
     <SimpleButton
       v-if="isEditMode"

@@ -24,9 +24,9 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
 </script>
 
 <template>
-  <div v-if="group" class="relative flex flex-col justify-between">
-    <p class="text-xl">グループメンバー</p>
-    <div class="mt-3 border border-surface-secondary">
+  <div v-if="group" class="relative flex flex-col gap-3 justify-between">
+    <h2 class="text-xl">グループメンバー</h2>
+    <div class="border border-surface-secondary">
       <ul class="flex flex-col gap-2 px-4 py-3 overflow-y-auto max-h-[50dvh]">
         <li
           v-for="member in group.members"
@@ -48,7 +48,7 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
       <div v-if="hasAuthority" class="flex p-2 gap-2 w-full">
         <InputSelectMultiple
           v-model="membersToBeAdded"
-          class="flex-grow w-1"
+          class="grow w-1"
           is-dropdown-above
           :options="absentMemberOptions"
           placeholder="追加するメンバーを選択" />

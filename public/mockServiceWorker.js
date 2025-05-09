@@ -8,8 +8,8 @@
  * - Please do NOT serve this file on production.
  */
 
-const PACKAGE_VERSION = '2.6.6'
-const INTEGRITY_CHECKSUM = 'ca7800994cc8bfb5eb961e037c877074'
+const PACKAGE_VERSION = '2.7.5'
+const INTEGRITY_CHECKSUM = '00729d72e3b82faf54ca8b9621dbb96f'
 const IS_MOCKED_RESPONSE = Symbol('isMockedResponse')
 const activeClientIds = new Set()
 
@@ -35,13 +35,13 @@ self.addEventListener('message', async function (event) {
   }
 
   const allClients = await self.clients.matchAll({
-    type: 'window',
+    type: 'window'
   })
 
   switch (event.data) {
     case 'KEEPALIVE_REQUEST': {
       sendToClient(client, {
-        type: 'KEEPALIVE_RESPONSE',
+        type: 'KEEPALIVE_RESPONSE'
       })
       break
     }
@@ -51,8 +51,8 @@ self.addEventListener('message', async function (event) {
         type: 'INTEGRITY_CHECK_RESPONSE',
         payload: {
           packageVersion: PACKAGE_VERSION,
-          checksum: INTEGRITY_CHECKSUM,
-        },
+          checksum: INTEGRITY_CHECKSUM
+        }
       })
       break
     }
@@ -65,9 +65,9 @@ self.addEventListener('message', async function (event) {
         payload: {
           client: {
             id: client.id,
-            frameType: client.frameType,
-          },
-        },
+            frameType: client.frameType
+          }
+        }
       })
       break
     }
@@ -80,7 +80,7 @@ self.addEventListener('message', async function (event) {
     case 'CLIENT_CLOSED': {
       activeClientIds.delete(clientId)
 
-      const remainingClients = allClients.filter((client) => {
+      const remainingClients = allClients.filter(client => {
         return client.id !== clientId
       })
 
@@ -142,10 +142,10 @@ async function handleRequest(event, requestId) {
             status: responseClone.status,
             statusText: responseClone.statusText,
             body: responseClone.body,
-            headers: Object.fromEntries(responseClone.headers.entries()),
-          },
+            headers: Object.fromEntries(responseClone.headers.entries())
+          }
         },
-        [responseClone.body],
+        [responseClone.body]
       )
     })()
   }
@@ -169,15 +169,15 @@ async function resolveMainClient(event) {
   }
 
   const allClients = await self.clients.matchAll({
-    type: 'window',
+    type: 'window'
   })
 
   return allClients
-    .filter((client) => {
+    .filter(client => {
       // Get only those clients that are currently visible.
       return client.visibilityState === 'visible'
     })
-    .find((client) => {
+    .find(client => {
       // Find the client ID that's recorded in the
       // set of clients that have registered the worker.
       return activeClientIds.has(client.id)
@@ -199,7 +199,17 @@ async function getResponse(event, client, requestId) {
     // Remove the "accept" header value that marked this request as passthrough.
     // This prevents request alteration and also keeps it compliant with the
     // user-defined CORS policies.
-    headers.delete('accept', 'msw/passthrough')
+    const acceptHeader = headers.get('accept')
+    if (acceptHeader) {
+      const values = acceptHeader.split(',').map(value => value.trim())
+      const filteredValues = values.filter(value => value !== 'msw/passthrough')
+
+      if (filteredValues.length > 0) {
+        headers.set('accept', filteredValues.join(', '))
+      } else {
+        headers.delete('accept')
+      }
+    }
 
     return fetch(requestClone, { headers })
   }
@@ -237,10 +247,10 @@ async function getResponse(event, client, requestId) {
         referrer: request.referrer,
         referrerPolicy: request.referrerPolicy,
         body: requestBuffer,
-        keepalive: request.keepalive,
-      },
+        keepalive: request.keepalive
+      }
     },
-    [requestBuffer],
+    [requestBuffer]
   )
 
   switch (clientMessage.type) {
@@ -260,7 +270,7 @@ function sendToClient(client, message, transferrables = []) {
   return new Promise((resolve, reject) => {
     const channel = new MessageChannel()
 
-    channel.port1.onmessage = (event) => {
+    channel.port1.onmessage = event => {
       if (event.data && event.data.error) {
         return reject(event.data.error)
       }
@@ -270,7 +280,7 @@ function sendToClient(client, message, transferrables = []) {
 
     client.postMessage(
       message,
-      [channel.port2].concat(transferrables.filter(Boolean)),
+      [channel.port2].concat(transferrables.filter(Boolean))
     )
   })
 }
@@ -288,7 +298,7 @@ async function respondWithMock(response) {
 
   Reflect.defineProperty(mockedResponse, IS_MOCKED_RESPONSE, {
     value: true,
-    enumerable: true,
+    enumerable: true
   })
 
   return mockedResponse

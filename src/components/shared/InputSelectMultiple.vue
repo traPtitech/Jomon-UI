@@ -271,14 +271,14 @@ onUnmounted(() => {
     ref="inputSelectRef"
     :class="`relative ${disabled && 'cursor-not-allowed'} ${calcWidth}`">
     <div
-      class="flex cursor-text items-center rounded border border-surface-secondary py-1 pl-1"
+      class="flex cursor-text items-center rounded-sm border border-surface-secondary py-1 pl-1"
       :class="`${disabled && 'pointer-events-none'}`"
       @click.prevent="handleClick">
       <div class="flex items-center overflow-x-auto">
         <div
           v-for="selectedValue in selectedValues"
           :key="selectedValue.key"
-          class="ml-1 flex items-center rounded border border-surface-tertiary bg-surface-tertiary px-1">
+          class="ml-1 flex items-center rounded-sm border border-surface-tertiary bg-surface-tertiary px-1">
           <span class="whitespace-nowrap">{{ selectedValue.key }}</span>
           <button type="button" @click="removeValue(selectedValue)">×</button>
         </div>
@@ -286,7 +286,7 @@ onUnmounted(() => {
           :id="props.id"
           ref="inputRef"
           v-model="searchQuery"
-          class="bg-transparent pl-1 focus:outline-none"
+          class="bg-transparent pl-1 focus:outline-hidden"
           :placeholder="selectedValues.length === 0 ? placeholder : ''"
           @focus="isDropdownOpen = true"
           @keydown="handleInputKeydown" />
@@ -316,7 +316,7 @@ onUnmounted(() => {
           ) && 'bg-hover-primary hover:bg-hover-primary'
         }`">
         <button
-          class="h-full w-full px-4 py-1 text-left focus:outline-none"
+          class="h-full w-full px-4 py-1 text-left focus:outline-hidden"
           type="button"
           @click="selectValue(option)"
           @keydown="handleKeydown($event, option)">

@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import {
-  HandThumbUpIcon,
+  CheckCircleIcon,
+  ChevronDownIcon,
   CloudArrowUpIcon,
   ExclamationTriangleIcon,
-  XCircleIcon,
-  CheckCircleIcon,
-  ChevronDownIcon
+  HandThumbUpIcon,
+  XCircleIcon
 } from '@heroicons/vue/24/solid'
 import { computed } from 'vue'
 
@@ -59,7 +59,7 @@ const backgroundColor = computed(() => (status: RequestStatus) => {
 
 <template>
   <div
-    :class="`inline flex items-center rounded-3xl px-3 py-2 gap-2 text-white ${backgroundColor(
+    :class="`flex items-center rounded-3xl px-2 py-2 gap-2 text-white ${backgroundColor(
       status
     )}${hasMenu ? ' cursor-pointer' : ''}`"
     :title="statusToJpn(status)">

@@ -43,38 +43,46 @@ if (!isUserFetched.value) {
   </div>
   <form class="flex flex-col gap-6">
     <div class="flex flex-col gap-3">
-      <label class="font-medium">グループ名</label>
+      <label class="font-medium" for="group-name">グループ名</label>
       <InputText
+        id="group-name"
         v-model="group.name"
         auto-focus
         placeholder="グループ名を入力"
         required />
     </div>
     <div class="flex flex-col gap-3">
-      <label class="font-medium" for="details">説明</label>
+      <label class="font-medium" for="group-description">説明</label>
       <MarkdownTextarea
-        id="details"
+        id="group-description"
         v-model="group.description"
         placeholder=""
         required />
     </div>
     <div class="flex flex-col gap-3">
-      <label class="font-medium">予算</label>
+      <label class="font-medium" for="group-budget">予算</label>
       <div class="flex w-1/2">
-        <InputNumber v-model="group.budget" class="mr-2" :min="1" required />円
+        <InputNumber
+          id="group-budget"
+          v-model="group.budget"
+          class="mr-2"
+          :min="1"
+          required />円
       </div>
     </div>
     <div class="flex flex-col gap-3">
-      <label class="font-medium">オーナー</label>
+      <label class="font-medium" for="group-owner">オーナー</label>
       <InputSelectMultiple
+        id="group-owner"
         v-model="group.owners"
         class="w-full"
         :options="userOptions"
         placeholder="オーナーを選択" />
     </div>
     <div class="flex flex-col gap-3">
-      <label class="font-medium">メンバー</label>
+      <label class="font-medium" for="group-member">メンバー</label>
       <InputSelectMultiple
+        id="group-member"
         v-model="group.members"
         class="w-full"
         :options="userOptions"

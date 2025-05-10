@@ -74,7 +74,9 @@ if (me.value?.admin) {
       </label>
       <div class="flex flex-wrap gap-3">
         <InputSelectMultiple
+          id="add-admin"
           v-model="addList"
+          aria-labelledby="manipulate-admin"
           class="grow w-auto"
           :options="absentMembers"
           placeholder="追加する管理者を選択" />
@@ -88,8 +90,10 @@ if (me.value?.admin) {
       </div>
       <div class="flex flex-wrap gap-3">
         <InputSelectMultiple
+          id="delete-admin"
           v-model="removeList"
           class="grow w-auto"
+          aria-labelledby="manipulate-admin"
           :options="adminOptions"
           placeholder="削除する管理者を選択" />
         <SimpleButton
@@ -102,9 +106,10 @@ if (me.value?.admin) {
       </div>
     </div>
     <div class="flex flex-col gap-3">
-      <label class="text-base font-medium">その他の操作</label>
+      <label class="text-base font-medium" for="delete-tag">その他の操作</label>
       <div class="flex flex-wrap gap-3">
         <InputSelectMultiple
+          id="delete-tag"
           v-model="deleteTagList"
           class="grow w-auto"
           :options="tagIdOptions"

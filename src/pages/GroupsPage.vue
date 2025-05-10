@@ -11,6 +11,7 @@ import { toPage } from '/@/lib/parseQueryParams'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { useFetchGroupsUsecase } from '/@/features/group/usecase'
+import GroupTable from '../components/groups/GroupTable.vue'
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))
@@ -19,12 +20,6 @@ const userStore = useUserStore()
 const groupStore = useGroupStore()
 const { groups, isGroupFetched } = storeToRefs(groupStore)
 const { isAdmin } = storeToRefs(userStore)
-
-const sliceGroupsAt = (index: number, n: number) => {
-  const start = (index - 1) * n
-  const end = index * n
-  return groups.value.slice(start, end) ?? []
-}
 
 if (!isGroupFetched.value) {
   await useFetchGroupsUsecase()
@@ -51,23 +46,8 @@ watch(
       </div>
     </div>
 
-    <div class="grid grid-cols-[2fr_3fr_2fr] divide-y">
-      <div
-        class="grid grid-cols-subgrid col-span-3 bg-surface-tertiary gap-x-2 px-6 py-4 whitespace-nowrap">
-        <div>グループ名</div>
-        <div>詳細</div>
-        <div>予算</div>
-      </div>
-      <RouterLink
-        v-for="group in sliceGroupsAt(page, 10)"
-        :key="group.id"
-        class="grid grid-cols-subgrid col-span-3 hover:bg-hover-secondary gap-x-2 px-6 py-4"
-        :to="`/groups/${group.id}`">
-        <div>{{ group.name }}</div>
-        <div class="truncate">{{ group.description }}</div>
-        <div>{{ group.budget }}</div>
-      </RouterLink>
-    </div>
+    <GroupTable :page="page" :groups="groups" />
+
     <PaginationBar
       v-if="groups.length > 0"
       :current-page="page"

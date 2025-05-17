@@ -32,10 +32,15 @@ const handleOpenDrawer = () => {
   <header
     class="fixed flex h-12 w-full items-center bg-white pl-2 shadow-sm"
     :class="shouldShowModal ? 'z-30' : 'z-10'">
-    <button class="flex items-center md:hidden" @click="handleOpenDrawer">
-      <Bars3Icon class="h-8 w-8" />
+    <button 
+      class="flex items-center md:hidden" 
+      @click="handleOpenDrawer"
+      aria-label="メニューを開く"
+      :aria-expanded="shouldShowModal"
+      aria-controls="side-drawer">
+      <Bars3Icon class="h-8 w-8" aria-hidden="true" />
     </button>
-    <RouterLink to="/">
+    <RouterLink to="/" aria-label="ホーム" tabindex="0">
       <JomonLogo />
     </RouterLink>
     <div class="flex h-full flex-1 justify-between px-2">
@@ -44,7 +49,8 @@ const handleOpenDrawer = () => {
         <a
           href="https://wiki.trap.jp/services/Jomon"
           rel="noreferrer noopener"
-          target="_blank">
+          target="_blank"
+          tabindex="0">
           ヘルプ
         </a>
         <UserIcon v-if="me !== undefined" :name="me.name" />
@@ -54,6 +60,6 @@ const handleOpenDrawer = () => {
   <!--遷移時にドロワーを閉じるようにするためにドロワーコンポーネント内でwrapperを使うことになりそう？-->
   <!--onBeforeRouteUpdateはヘッダーコンポーネントがルーター内に入っていないので使えない-->
   <ModalWrapper v-if="shouldShowModal" @close-modal="closeModal">
-    <SideDrawer />
+    <SideDrawer id="side-drawer" />
   </ModalWrapper>
 </template>

@@ -13,7 +13,7 @@ const handleKeydown = (e: KeyboardEvent) => {
     <div
       role="button"
       tabindex="0"
-      aria-label="Close modal"
+      aria-label="モーダルを閉じる"
       className="z-10 fixed top-0 left-0 h-full w-full bg-surface-secondary/50"
       @click.self="emit('closeModal')"
       @keydown="handleKeydown">

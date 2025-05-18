@@ -32,8 +32,8 @@ const handleOpenDrawer = () => {
   <header
     class="fixed flex h-12 w-full items-center bg-white pl-2 shadow-sm"
     :class="shouldShowModal ? 'z-30' : 'z-10'">
-    <button 
-      class="flex items-center md:hidden" 
+    <button
+      class="flex items-center md:hidden"
       @click="handleOpenDrawer"
       aria-label="メニューを開く"
       :aria-expanded="shouldShowModal"

@@ -9,7 +9,7 @@ const props = defineProps<Props>()
 </script>
 
 <template>
-  <router-link 
+  <router-link
     :class="props.isHere ? 'cursor-default' : ''"
     :to="props.path"
     :aria-current="props.isHere ? 'page' : undefined"

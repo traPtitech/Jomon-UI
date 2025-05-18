@@ -40,13 +40,15 @@ if (!isTagFetched.value) {
 </script>
 
 <template>
-  <div v-if="!isAdmin" role="alert" aria-live="assertive">権限がありません。</div>
+  <div v-if="!isAdmin" role="alert" aria-live="assertive">
+    権限がありません。
+  </div>
   <div v-else>
     <div class="pb-6">
       <h1 class="text-2xl" tabindex="0">入出金記録の新規作成</h1>
     </div>
-    <form 
-      class="flex flex-col gap-6" 
+    <form
+      class="flex flex-col gap-6"
       aria-label="入出金記録作成フォーム"
       @submit.prevent="postTransaction">
       <div class="flex flex-col gap-2">

@@ -43,11 +43,15 @@ const formattedDate = computed(() => formatDate(props.transaction.createdAt))
 </script>
 
 <template>
-  <form class="flex flex-col gap-2">
+  <form
+    class="flex flex-col gap-2"
+    aria-label="取引編集フォーム"
+    @submit.prevent="finishEditing(emit)">
     <div class="flex flex-col">
-      <label>紐づける申請</label>
+      <label for="linked-request">紐づける申請</label>
       <div class="flex gap-4">
         <InputText
+          id="linked-request"
           v-model="linkedRequest"
           auto-focus
           class="w-1/2"
@@ -71,13 +75,14 @@ const formattedDate = computed(() => formatDate(props.transaction.createdAt))
       </div>
     </div>
     <div class="flex flex-col">
-      <label>年月日</label>
-      <span>{{ formattedDate }}</span>
+      <label for="date">年月日</label>
+      <span id="date">{{ formattedDate }}</span>
     </div>
     <div class="flex flex-col">
-      <label>取引額</label>
+      <label for="amount">取引額</label>
       <div>
         <InputNumber
+          id="amount"
           v-model="editedValue.amount"
           class="mr-1"
           :min="1"
@@ -85,23 +90,33 @@ const formattedDate = computed(() => formatDate(props.transaction.createdAt))
       </div>
     </div>
     <div class="flex flex-col">
-      <label>お金の方向</label>
-      <InputRadioButton v-model="moneyDirection" :options="directionOptions" />
+      <label for="direction">お金の方向</label>
+      <InputRadioButton
+        id="direction"
+        v-model="moneyDirection"
+        :options="directionOptions" />
     </div>
     <div class="flex flex-col">
-      <label>取引相手</label>
-      <InputText v-model="editedValue.target" placeholder="取引相手を入力" />
+      <label for="target">取引相手</label>
+      <InputText
+        id="target"
+        v-model="editedValue.target"
+        placeholder="取引相手を入力" />
     </div>
     <div class="flex flex-col">
-      <label>取引グループ</label>
+      <label for="group">取引グループ</label>
       <InputSelectSingle
+        id="group"
         v-model="editedValue.group"
         :options="groupOptions"
         placeholder="グループを選択" />
     </div>
     <div class="flex flex-col">
-      <label>タグ</label>
-      <InputSelectTagWithCreation v-model="editedValue.tags" class="w-1/3" />
+      <label for="tags">タグ</label>
+      <InputSelectTagWithCreation
+        id="tags"
+        v-model="editedValue.tags"
+        class="w-1/3" />
     </div>
     <div class="flex items-center justify-end gap-4">
       <SimpleButton font-size="sm" padding="sm" @click="emit('cancel')">

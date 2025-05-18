@@ -71,7 +71,7 @@ jobs:
         with:
           name: apis
           path: ./src/lib/apis/generated
-      - run: npm run format
+      - run: npm run format:check
   genApi:
     name: Generate APIs
     runs-on: ubuntu-latest

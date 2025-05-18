@@ -40,12 +40,15 @@ if (!isTagFetched.value) {
 </script>
 
 <template>
-  <div v-if="!isAdmin">権限がありません。</div>
+  <div v-if="!isAdmin" role="alert" aria-live="assertive">権限がありません。</div>
   <div v-else>
     <div class="pb-6">
-      <h1 class="text-2xl">入出金記録の新規作成</h1>
+      <h1 class="text-2xl" tabindex="0">入出金記録の新規作成</h1>
     </div>
-    <form class="flex flex-col gap-6">
+    <form 
+      class="flex flex-col gap-6" 
+      aria-label="入出金記録作成フォーム"
+      @submit.prevent="postTransaction">
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium" for="amount">金額</label>
         <div>
@@ -58,8 +61,9 @@ if (!isTagFetched.value) {
         </div>
       </div>
       <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium">入出金の方向</label>
+        <label class="text-sm font-medium" for="direction">入出金の方向</label>
         <InputRadioButton
+          id="direction"
           v-model="moneyDirection"
           :options="directionOptions" />
       </div>
@@ -84,7 +88,7 @@ if (!isTagFetched.value) {
           :disabled="isSending"
           font-size="base"
           padding="md"
-          @click.stop="postTransaction">
+          aria-label="入出金記録を作成">
           入出金記録を作成
         </SimpleButton>
       </div>

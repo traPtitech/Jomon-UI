@@ -34,10 +34,10 @@ const handleOpenDrawer = () => {
     :class="shouldShowModal ? 'z-30' : 'z-10'">
     <button
       class="flex items-center md:hidden"
-      @click="handleOpenDrawer"
       aria-label="メニューを開く"
       :aria-expanded="shouldShowModal"
-      aria-controls="side-drawer">
+      aria-controls="side-drawer"
+      @click="handleOpenDrawer">
       <Bars3Icon class="h-8 w-8" aria-hidden="true" />
     </button>
     <RouterLink to="/" aria-label="ホーム" tabindex="0">

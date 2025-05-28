@@ -3,28 +3,17 @@ import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import InputText from '/@/components/shared/InputText.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
-interface Props {
-  targets: string[]
+const targets = defineModel<string[]>('targets', { required: true })
+
+const handleEditTarget = (index: number, value: string) => {
+  targets.value[index] = value
 }
 
-const props = defineProps<Props>()
-const emit = defineEmits<(e: 'input', value: string[]) => void>()
-
-function handleEditTarget(index: number, value: string) {
-  emit(
-    'input',
-    props.targets.map((target, i) => (i === index ? value : target))
-  )
+const handleAddTarget = () => {
+  targets.value.push('')
 }
-
-function handleAddTarget() {
-  emit('input', [...props.targets, ''])
-}
-function handleRemoveTarget(index: number) {
-  emit(
-    'input',
-    props.targets.filter((_, i) => i !== index)
-  )
+const handleRemoveTarget = (index: number) => {
+  targets.value.splice(index, 1)
 }
 </script>
 
@@ -34,7 +23,7 @@ function handleRemoveTarget(index: number) {
     <ul class="flex flex-col gap-2">
       <li
         v-for="(target, i) in targets"
-        :key="target"
+        :key="i"
         class="flex items-center gap-3">
         <InputText
           class="grow"
@@ -42,7 +31,7 @@ function handleRemoveTarget(index: number) {
           placeholder="取引相手"
           @update:model-value="handleEditTarget(i, $event)" />
         <button
-          v-if="props.targets.length > 1"
+          v-if="targets.length > 1"
           class="flex"
           type="button"
           @click="handleRemoveTarget(i)">

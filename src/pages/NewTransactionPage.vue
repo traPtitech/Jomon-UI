@@ -66,9 +66,7 @@ if (!isTagFetched.value) {
           v-model="moneyDirection"
           :options="directionOptions" />
       </div>
-      <NewTransactionTarget
-        :targets="transaction.targets"
-        @input="transaction.targets = $event" />
+      <NewTransactionTarget v-model:targets="transaction.targets" />
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium" for="group">グループ</label>
         <InputSelectSingle

@@ -43,10 +43,7 @@ const formattedDate = computed(() => formatDate(props.transaction.createdAt))
 </script>
 
 <template>
-  <form
-    class="flex flex-col gap-2"
-    aria-label="取引編集フォーム"
-    @submit.prevent="finishEditing(emit)">
+  <form class="flex flex-col gap-2" aria-label="取引編集フォーム">
     <div class="flex flex-col">
       <label for="linked-request">紐づける申請</label>
       <div class="flex gap-4">

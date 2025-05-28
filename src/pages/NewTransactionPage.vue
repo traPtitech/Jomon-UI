@@ -45,12 +45,9 @@ if (!isTagFetched.value) {
   </div>
   <div v-else>
     <div class="pb-6">
-      <h1 class="text-2xl" tabindex="0">入出金記録の新規作成</h1>
+      <h1 class="text-2xl">入出金記録の新規作成</h1>
     </div>
-    <form
-      class="flex flex-col gap-6"
-      aria-label="入出金記録作成フォーム"
-      @submit.prevent="postTransaction">
+    <form class="flex flex-col gap-6" aria-label="入出金記録作成フォーム">
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium" for="amount">金額</label>
         <div>
@@ -90,7 +87,8 @@ if (!isTagFetched.value) {
           :disabled="isSending"
           font-size="base"
           padding="md"
-          aria-label="入出金記録を作成">
+          aria-label="入出金記録を作成"
+          @click.stop="postTransaction">
           入出金記録を作成
         </SimpleButton>
       </div>

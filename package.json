@@ -42,11 +42,13 @@
     "@vue/compiler-sfc": "^3.5.6",
     "@vue/eslint-config-prettier": "^10.2.0",
     "@vue/eslint-config-typescript": "^14.5.0",
+    "axe-core": "^4.10.2",
     "eslint": "^9.25.1",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-unused-imports": "^4.1.4",
     "eslint-plugin-vue": "^10.1.0",
+    "eslint-plugin-vuejs-accessibility": "^2.4.1",
     "esno": "^4.8.0",
     "execa": "^9.5.2",
     "globals": "^16.0.0",
@@ -59,6 +61,7 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.31.1",
     "vite": "^6.3.4",
+    "vue-axe": "^3.1.2",
     "vue-tsc": "^2.2.10"
   },
   "msw": {

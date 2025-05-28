@@ -24,5 +24,8 @@ export default defineConfig({
         agent: keepAliveAgent
       }
     }
+  },
+  optimizeDeps: {
+    include: ['axe-core']
   }
 })

@@ -32,6 +32,10 @@ export const useNewTransaction = () => {
   const moneyDirection = ref<MoneyDirection>('toTraP')
 
   const postTransaction = async () => {
+    if (transaction.title.trim() === '') {
+      toast.warning('タイトルは必須です')
+      return
+    }
     if (transaction.targets.length === 0) {
       toast.warning('取引相手は必須です')
       return

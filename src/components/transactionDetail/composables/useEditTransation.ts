@@ -36,6 +36,10 @@ export const useEditTransaction = (transaction: Transaction) => {
   const finishEditing = async (
     emit: (e: 'finishEditing', value: Transaction) => void
   ) => {
+    if (editedValue.value.title.trim() === '') {
+      toast.warning('タイトルは必須です')
+      return
+    }
     isSending.value = true
     let tags: Tag[]
     try {

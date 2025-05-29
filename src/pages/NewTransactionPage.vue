@@ -49,12 +49,19 @@ if (!isTagFetched.value) {
     </div>
     <form class="flex flex-col gap-6" aria-label="入出金記録作成フォーム">
       <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium" for="title">タイトル</label>
+        <InputText
+          id="title"
+          v-model="transaction.title"
+          auto-focus
+          placeholder="タイトルを入力" />
+      </div>
+      <div class="flex flex-col gap-2">
         <label class="text-sm font-medium" for="amount">金額</label>
         <div>
           <InputNumber
             id="amount"
             v-model="transaction.amount"
-            auto-focus
             class="mr-2"
             :min="1" />円
         </div>

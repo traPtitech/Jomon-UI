@@ -7,6 +7,7 @@ import { mockTags } from '/@/features/tag/mock'
 
 const mockTransaction: Transaction = {
   id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+  title: 'モックタイトル',
   amount: 1200,
   target: 'hoge株式会社',
   request: 'c2cd9bd7-a4e9-4dbd-a26a-5dbb063a7ae7',

@@ -19,6 +19,7 @@ export const useEditTransaction = (transaction: Transaction) => {
   const isSending = ref(false)
 
   const editedValue = ref<TransactionEditSeed>({
+    title: transaction.title,
     amount: transaction.amount,
     target: transaction.target,
     request: transaction.request,

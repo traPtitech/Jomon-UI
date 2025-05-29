@@ -25,6 +25,7 @@ const navigateToTransaction = (transactionId: string) => {
 // TODO: 入出金を削除する API を作成
 const deleteTransaction = (_transactionId: string) => {
   editTransactionUsecase(_transactionId, {
+    title: '',
     amount: 0,
     target: '',
     request: '',

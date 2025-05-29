@@ -2,13 +2,13 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
+import { storeToRefs } from 'pinia'
 import type { RequestDetail } from '/@/features/request/model'
+import type { RequestTarget } from '/@/features/requestTarget/model'
 import type { Tag } from '/@/features/tag/model'
 import { createTagIfNotExistUsecase } from '/@/features/tag/usecase'
 import type { TransactionCreateSeed } from '/@/features/transaction/model'
 import { createTransactionUsecase } from '/@/features/transaction/usecase'
-import type { RequestTarget } from '/@/features/requestTarget/model'
-import { storeToRefs } from 'pinia'
 import { useUserStore } from '/@/stores/user'
 
 export type MoneyDirection = 'toTraP' | 'fromTraP'
@@ -22,6 +22,7 @@ export const useNewTransaction = () => {
   const isSending = ref(false)
 
   const transaction = reactive<TransactionCreateSeed>({
+    title: '',
     amount: 0,
     targets: [''],
     request: null,
@@ -73,6 +74,7 @@ export const useNewTransaction = () => {
     if (!result) return
     isSending.value = true
     const willPostTransaction = {
+      title: request.title,
       amount: target.amount,
       targets: [target.target],
       tags: request.tags,

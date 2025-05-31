@@ -10,6 +10,7 @@ export const convertTransactionFromData = (
   transaction: TransactionData
 ): Transaction => ({
   id: transaction.id,
+  title: transaction.title ?? '',
   amount: transaction.amount,
   target: transaction.target,
   request: transaction.request,

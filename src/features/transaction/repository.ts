@@ -41,6 +41,7 @@ const createTransactionRepository = () => ({
     transaction: TransactionCreateSeed
   ): Promise<Transaction[]> => {
     const transactionData = {
+      title: transaction.title,
       amount: transaction.amount,
       targets: transaction.targets,
       request: transaction.request,
@@ -57,6 +58,7 @@ const createTransactionRepository = () => ({
     transaction: TransactionEditSeed
   ): Promise<Transaction> => {
     const transactionData = {
+      title: transaction.title,
       amount: transaction.amount,
       target: transaction.target,
       request: transaction.request,

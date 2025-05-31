@@ -35,7 +35,7 @@ export const transactionHandlers = [
   }),
   http.put('/api/transactions/:id', async () => {
     // NOTE: tagsの変換が必要なため、reqBodyを使っていない
-    const res: Transaction[] = [mockTransaction]
+    const res: Transaction = mockTransaction
 
     return HttpResponse.json(res)
   }),

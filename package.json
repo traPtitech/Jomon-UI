@@ -50,7 +50,7 @@
     "eslint-plugin-vue": "^10.1.0",
     "eslint-plugin-vuejs-accessibility": "^2.4.1",
     "esno": "^4.8.0",
-    "execa": "^9.5.2",
+    "execa": "^9.6.0",
     "globals": "^16.2.0",
     "msw": "^2.8.7",
     "prettier": "^3.5.3",

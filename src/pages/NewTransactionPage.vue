@@ -11,6 +11,7 @@ import InputNumber from '/@/components/shared/InputNumber.vue'
 import InputRadioButton from '/@/components/shared/InputRadioButton.vue'
 import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
 import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
+import InputText from '/@/components/shared/InputText.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { useFetchGroupsUsecase } from '/@/features/group/usecase'
 import { useFetchTagsUsecase } from '/@/features/tag/usecase'
@@ -49,12 +50,19 @@ if (!isTagFetched.value) {
     </div>
     <form class="flex flex-col gap-6" aria-label="入出金記録作成フォーム">
       <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium" for="title">タイトル</label>
+        <InputText
+          id="title"
+          v-model="transaction.title"
+          auto-focus
+          placeholder="タイトルを入力" />
+      </div>
+      <div class="flex flex-col gap-2">
         <label class="text-sm font-medium" for="amount">金額</label>
         <div>
           <InputNumber
             id="amount"
             v-model="transaction.amount"
-            auto-focus
             class="mr-2"
             :min="1" />円
         </div>
@@ -66,9 +74,7 @@ if (!isTagFetched.value) {
           v-model="moneyDirection"
           :options="directionOptions" />
       </div>
-      <NewTransactionTarget
-        :targets="transaction.targets"
-        @input="transaction.targets = $event" />
+      <NewTransactionTarget v-model:targets="transaction.targets" />
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium" for="group">グループ</label>
         <InputSelectSingle

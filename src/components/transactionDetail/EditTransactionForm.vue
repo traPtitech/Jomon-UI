@@ -45,6 +45,13 @@ const formattedDate = computed(() => formatDate(props.transaction.createdAt))
 <template>
   <form class="flex flex-col gap-2" aria-label="取引編集フォーム">
     <div class="flex flex-col">
+      <label for="title">タイトル</label>
+      <InputText
+        id="title"
+        v-model="editedValue.title"
+        placeholder="タイトルを入力" />
+    </div>
+    <div class="flex flex-col">
       <label for="linked-request">紐づける申請</label>
       <div class="flex gap-4">
         <InputText

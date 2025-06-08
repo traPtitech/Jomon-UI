@@ -6,8 +6,8 @@ import { useUserStore } from '/@/stores/user'
 
 import type { RequestTarget } from '/@/lib/apis'
 
-import InputNumber from '/@/components/shared/InputNumber.vue'
-import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
+import BaseInput from '/@/components/shared/BaseInput.vue'
+import SearchSelect from '/@/components/shared/SearchSelect.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 interface Props {
@@ -63,19 +63,15 @@ function handleRemoveTarget(index: number) {
         v-for="(target, i) in targets"
         :key="target.target"
         class="flex items-center gap-3">
-        <InputSelectSingle
+        <SearchSelect
           class="grow"
           :model-value="target.target"
           :options="userOptions"
-          placeholder="払い戻し対象者を選択"
+          label="払い戻し対象者"
           @update:model-value="handleEditTarget(i, $event)" />
-        <div>
-          <InputNumber
-            class="mr-2"
-            :min="1"
-            :model-value="target.amount"
-            placeholder="金額"
-            @update:model-value="handleEditTarget(i, $event)" />円
+        <div class="flex items-center gap-2">
+          <span aria-hidden="true">¥</span>
+          <BaseInput v-model="target.amount" type="number" label="金額" />
         </div>
         <button
           v-if="targets.length > 1"

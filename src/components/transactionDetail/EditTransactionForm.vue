@@ -7,11 +7,10 @@ import { directionOptions } from '/@/stores/transaction'
 
 import { formatDate } from '/@/lib/date'
 
-import InputNumber from '/@/components/shared/InputNumber.vue'
+import BaseInput from '/@/components/shared/BaseInput.vue'
 import InputRadioButton from '/@/components/shared/InputRadioButton.vue'
-import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
-import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
-import InputText from '/@/components/shared/InputText.vue'
+import SearchSelect from '/@/components/shared/SearchSelect.vue'
+import SearchSelectTagWithCreation from '/@/components/shared/SearchSelectTagWithCreation.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { Transaction } from '/@/features/transaction/model'
 
@@ -43,23 +42,15 @@ const formattedDate = computed(() => formatDate(props.transaction.createdAt))
 </script>
 
 <template>
-  <form class="flex flex-col gap-2" aria-label="取引編集フォーム">
-    <div class="flex flex-col">
-      <label for="title">タイトル</label>
-      <InputText
-        id="title"
-        v-model="editedValue.title"
-        placeholder="タイトルを入力" />
-    </div>
-    <div class="flex flex-col">
-      <label for="linked-request">紐づける申請</label>
+  <form class="flex flex-col gap-6" aria-label="取引編集フォーム">
+    <BaseInput v-model="editedValue.title" label="タイトル" />
+    <div class="flex flex-col gap-2">
       <div class="flex gap-4">
-        <InputText
-          id="linked-request"
+        <BaseInput
           v-model="linkedRequest"
-          auto-focus
+          label="紐づける申請"
           class="w-1/2"
-          placeholder="紐づける申請のURLを入力" />
+          placeholder="https://jomon.trap.jp/requests/..." />
         <SimpleButton
           :disabled="isSending"
           font-size="sm"
@@ -82,16 +73,9 @@ const formattedDate = computed(() => formatDate(props.transaction.createdAt))
       <label for="date">年月日</label>
       <span id="date">{{ formattedDate }}</span>
     </div>
-    <div class="flex flex-col">
-      <label for="amount">取引額</label>
-      <div>
-        <InputNumber
-          id="amount"
-          v-model="editedValue.amount"
-          class="mr-1"
-          :min="1"
-          placeholder="金額" />円
-      </div>
+    <div class="flex items-center gap-2">
+      <span aria-hidden="true">¥</span>
+      <BaseInput v-model="editedValue.amount" label="取引額" type="number" />
     </div>
     <div class="flex flex-col">
       <label for="direction">お金の方向</label>
@@ -100,28 +84,13 @@ const formattedDate = computed(() => formatDate(props.transaction.createdAt))
         v-model="moneyDirection"
         :options="directionOptions" />
     </div>
-    <div class="flex flex-col">
-      <label for="target">取引相手</label>
-      <InputText
-        id="target"
-        v-model="editedValue.target"
-        placeholder="取引相手を入力" />
-    </div>
-    <div class="flex flex-col">
-      <label for="group">取引グループ</label>
-      <InputSelectSingle
-        id="group"
-        v-model="editedValue.group"
-        :options="groupOptions"
-        placeholder="グループを選択" />
-    </div>
-    <div class="flex flex-col">
-      <label for="tags">タグ</label>
-      <InputSelectTagWithCreation
-        id="tags"
-        v-model="editedValue.tags"
-        class="w-1/3" />
-    </div>
+    <BaseInput v-model="editedValue.target" label="取引相手" />
+    <SearchSelect
+      id="group"
+      v-model="editedValue.group"
+      :options="groupOptions"
+      label="取引グループ" />
+    <SearchSelectTagWithCreation v-model="editedValue.tags" class="w-1/3" />
     <div class="flex items-center justify-end gap-4">
       <SimpleButton font-size="sm" padding="sm" @click="emit('cancel')">
         キャンセル

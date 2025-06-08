@@ -5,7 +5,7 @@ import { useUserStore } from '/@/stores/user'
 
 import EditButton from '/@/components/shared/EditButton.vue'
 import { computed, ref } from 'vue'
-import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
+import SearchSelect from '/@/components/shared/SearchSelect.vue'
 import { useGroupStore } from '/@/stores/group'
 import { editRequestUsecase } from '/@/features/request/usecase'
 import type { RequestDetail } from '/@/features/request/model'
@@ -66,8 +66,9 @@ const handleUpdateGroup = async () => {
     <div>
       <span v-if="!isEditMode">{{ groupName }}</span>
       <div v-else>
-        <InputSelectSingle
+        <SearchSelect
           v-model="editedGroup"
+          label="グループ"
           :options="groupOptions"
           @close="handleUpdateGroup" />
       </div>

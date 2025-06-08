@@ -2,7 +2,7 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
-import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
+import SearchSelect from '/@/components/shared/SearchSelect.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { useFetchAdminsUsecase } from '/@/features/admin/usecase'
 import { deleteTagsUsecase, useFetchTagsUsecase } from '/@/features/tag/usecase'
@@ -73,13 +73,14 @@ if (me.value?.admin) {
         管理者の操作
       </label>
       <div class="flex flex-wrap gap-3">
-        <InputSelectMultiple
+        <SearchSelect
           id="add-admin"
           v-model="addList"
           aria-labelledby="manipulate-admin"
           class="grow w-auto"
+          multiple
           :options="absentMembers"
-          placeholder="追加する管理者を選択" />
+          label="追加する管理者" />
         <SimpleButton
           :disabled="isSending"
           font-size="lg"
@@ -89,13 +90,14 @@ if (me.value?.admin) {
         </SimpleButton>
       </div>
       <div class="flex flex-wrap gap-3">
-        <InputSelectMultiple
+        <SearchSelect
           id="delete-admin"
           v-model="removeList"
           class="grow w-auto"
           aria-labelledby="manipulate-admin"
+          multiple
           :options="adminOptions"
-          placeholder="削除する管理者を選択" />
+          label="削除する管理者" />
         <SimpleButton
           :disabled="isSending"
           font-size="lg"
@@ -108,12 +110,13 @@ if (me.value?.admin) {
     <div class="flex flex-col gap-3">
       <label class="text-base font-medium" for="delete-tag">その他の操作</label>
       <div class="flex flex-wrap gap-3">
-        <InputSelectMultiple
+        <SearchSelect
           id="delete-tag"
           v-model="deleteTagList"
+          label="削除するタグ"
           class="grow w-auto"
-          :options="tagIdOptions"
-          placeholder="削除するタグを選択" />
+          multiple
+          :options="tagIdOptions" />
         <SimpleButton
           :disabled="deleteTagList.length === 0 || isSending"
           font-size="lg"

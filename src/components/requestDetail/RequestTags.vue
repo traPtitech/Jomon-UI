@@ -6,7 +6,7 @@ import { useUserStore } from '/@/stores/user'
 
 import { useToast } from 'vue-toastification'
 import EditButton from '/@/components/shared/EditButton.vue'
-import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
+import SearchSelectTagWithCreation from '/@/components/shared/SearchSelectTagWithCreation.vue'
 import TagsGroup from '/@/components/shared/TagsGroup.vue'
 import { useRequest } from '/@/features/request/composables'
 import type { RequestDetail } from '/@/features/request/model'
@@ -61,11 +61,10 @@ const handleUpdateTags = async () => {
         <TagsGroup v-if="request?.tags" :tags="request.tags" />
         <span v-else>なし</span>
       </div>
-      <div v-else>
-        <InputSelectTagWithCreation
-          v-model="editedTags"
-          @close="handleUpdateTags" />
-      </div>
+      <SearchSelectTagWithCreation
+        v-else
+        v-model="editedTags"
+        @close="handleUpdateTags" />
     </div>
   </div>
 </template>

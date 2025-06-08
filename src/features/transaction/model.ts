@@ -5,6 +5,7 @@ import type { Tag } from '/@/features/tag/model'
 
 export interface Transaction {
   id: string
+  title: string
   amount: number
   target: string
   request: string | null
@@ -24,6 +25,7 @@ export interface TransactionQuerySeed {
 }
 
 export interface TransactionCreateSeed {
+  title: string
   amount: number
   targets: string[]
   request: string | null
@@ -32,6 +34,7 @@ export interface TransactionCreateSeed {
 }
 
 export interface TransactionEditSeed {
+  title: string
   amount: number
   target: string
   request: string | null

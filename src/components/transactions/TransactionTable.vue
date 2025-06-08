@@ -25,11 +25,12 @@ const navigateToTransaction = (transactionId: string) => {
 // TODO: 入出金を削除する API を作成
 const deleteTransaction = (_transactionId: string) => {
   editTransactionUsecase(_transactionId, {
+    title: '削除済み',
     amount: 0,
     target: '',
-    request: '',
+    request: null,
     tags: [],
-    group: ''
+    group: null
   })
 }
 </script>
@@ -41,6 +42,7 @@ const deleteTransaction = (_transactionId: string) => {
       <tr>
         <th
           v-for="key in [
+            'タイトル',
             '年 月 日',
             '取引額',
             '取引相手',
@@ -66,6 +68,9 @@ const deleteTransaction = (_transactionId: string) => {
         @keydown.enter="navigateToTransaction(transaction.id)"
         @keydown.space.stop="navigateToTransaction(transaction.id)">
         <td class="px-1 pl-6 py-4">
+          {{ transaction.title || '未設定' }}
+        </td>
+        <td class="px-1 py-4">
           {{ formatDate(transaction.createdAt) }}
         </td>
         <td class="px-1 py-4 text-nowrap">{{ transaction.amount }}円</td>
@@ -96,16 +101,21 @@ const deleteTransaction = (_transactionId: string) => {
       :to="`transactions/${transaction.id}`">
       <div class="flex gap-4">
         <div class="truncate mr-auto">
-          {{ transaction.group ? transaction.group.description : 'なし' }}
+          {{ transaction.title || '未設定' }}
         </div>
         <div class="text-right">{{ transaction.amount }}円</div>
       </div>
       <div class="flex gap-4">
-        <div class="mr-auto">
-          {{ transaction.target }}
+        <div class="truncate mr-auto">
+          {{ transaction.group ? transaction.group.description : 'なし' }}
         </div>
         <div class="text-right">
           {{ formatDate(transaction.createdAt) }}
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="mr-auto">
+          {{ transaction.target }}
         </div>
       </div>
       <div class="flex gap-4">

@@ -18,6 +18,10 @@ const formattedDate = computed(() => formatDate(props.transaction.createdAt))
 <template>
   <div class="flex flex-col gap-6">
     <div class="flex flex-col gap-3">
+      <h2 class="text-xl">タイトル</h2>
+      <p>{{ transaction.title || '未設定' }}</p>
+    </div>
+    <div class="flex flex-col gap-3">
       <h2 class="text-xl">年月日</h2>
       <p>{{ formattedDate }}</p>
     </div>

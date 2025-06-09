@@ -9,6 +9,9 @@ import { useModal } from '/@/components/modal/composables/useModal'
 import type { RequestStatus } from '/@/features/requestStatus/model'
 import ModalWrapper from '/@/components/modal/ModalWrapper.vue'
 import StatusChangeModal from '/@/components/modal/StatusChangeModal.vue'
+import { storeToRefs } from 'pinia'
+import { useUserStore } from '/@/stores/user'
+import { useRequest } from '/@/features/request/composables'
 
 const props = defineProps<{
   request: RequestDetail
@@ -23,7 +26,11 @@ const nextStatus = ref<RequestStatus>()
 const { shouldShowModal, openModal, closeModal } = useModal()
 
 const showMenu = ref(false)
+const userStore = useUserStore()
+const { isRequestCreator } = useRequest(props.request)
 const { statusOptions } = useStatusOptions(props.request)
+const { me, isAdmin } = storeToRefs(userStore)
+const hasAuthority = isRequestCreator.value(me.value)
 </script>
 
 <template>
@@ -34,7 +41,7 @@ const { statusOptions } = useStatusOptions(props.request)
       :status="request.status"
       @click.stop="showMenu = true" />
     <FloatingMenu
-      v-if="showMenu"
+      v-if="showMenu && (hasAuthority || isAdmin)"
       class="absolute top-12 left-0 w-40"
       :current-value="request.status"
       :options="statusOptions"

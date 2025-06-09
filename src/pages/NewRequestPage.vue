@@ -9,7 +9,7 @@ import NewRequestFileForm from '/@/components/newRequest/NewRequestFileForm.vue'
 import NewRequestTargets from '/@/components/newRequest/NewRequestTargets.vue'
 import BaseInput from '/@/components/shared/BaseInput.vue'
 import SearchSelect from '/@/components/shared/SearchSelect.vue'
-import SearchSelectTagWithCreation from '/@/components/shared/SearchSelectTagWithCreation.vue'
+import SearchSelectTag from '/@/components/shared/SearchSelectTag.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { useFetchGroupsUsecase } from '/@/features/group/usecase'
@@ -53,15 +53,13 @@ if (!isUserFetched.value) {
       v-model="request.content"
       label="詳細"
       :templates="requestTemplates" />
-    <NewRequestTargets
-      :targets="request.targets"
-      @input="request.targets = $event" />
+    <NewRequestTargets v-model="request.targets" />
     <SearchSelect
       v-model="request.group"
       class="w-full"
       :options="groupOptions"
       label="グループ" />
-    <SearchSelectTagWithCreation v-model="request.tags" />
+    <SearchSelectTag v-model="request.tags" />
     <NewRequestFileForm :files="files" @input="files = $event" />
     <div class="text-right">
       <SimpleButton

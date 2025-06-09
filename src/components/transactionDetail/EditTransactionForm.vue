@@ -10,7 +10,7 @@ import { formatDate } from '/@/lib/date'
 import BaseInput from '/@/components/shared/BaseInput.vue'
 import InputRadioButton from '/@/components/shared/InputRadioButton.vue'
 import SearchSelect from '/@/components/shared/SearchSelect.vue'
-import SearchSelectTagWithCreation from '/@/components/shared/SearchSelectTagWithCreation.vue'
+import SearchSelectTag from '/@/components/shared/SearchSelectTag.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import type { Transaction } from '/@/features/transaction/model'
 
@@ -73,10 +73,11 @@ const formattedDate = computed(() => formatDate(props.transaction.createdAt))
       <label for="date">年月日</label>
       <span id="date">{{ formattedDate }}</span>
     </div>
-    <div class="flex items-center gap-2">
-      <span aria-hidden="true">¥</span>
-      <BaseInput v-model="editedValue.amount" label="取引額" type="number" />
-    </div>
+    <BaseInput v-model="editedValue.amount" type="number" label="取引額">
+      <span class="text-2xl font-bold ml-3 mt-auto mb-2 text-text-secondary">
+        ¥
+      </span>
+    </BaseInput>
     <div class="flex flex-col">
       <label for="direction">お金の方向</label>
       <InputRadioButton
@@ -90,7 +91,7 @@ const formattedDate = computed(() => formatDate(props.transaction.createdAt))
       v-model="editedValue.group"
       :options="groupOptions"
       label="取引グループ" />
-    <SearchSelectTagWithCreation v-model="editedValue.tags" class="w-1/3" />
+    <SearchSelectTag v-model="editedValue.tags" class="w-1/3" />
     <div class="flex items-center justify-end gap-4">
       <SimpleButton font-size="sm" padding="sm" @click="emit('cancel')">
         キャンセル

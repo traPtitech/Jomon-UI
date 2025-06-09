@@ -45,9 +45,9 @@ if (!isTagFetched.value) {
   <div v-if="request !== undefined" class="flex flex-col gap-5">
     <RequestHeader :request="request" />
     <div class="h-px bg-[#e5e7eb]" />
-    <div class="flex justify-between gap-20">
-      <RequestLogs class="basis-2/3 max-w-[75%]" :request="request" />
-      <RequestSidebar class="basis-1/3" :request="request" />
+    <div class="flex flex-col lg:flex-row justify-between gap-20">
+      <RequestLogs class="lg:w-2/3" :request="request" />
+      <RequestSidebar v-model="request" class="lg:w-1/3" />
     </div>
   </div>
 </template>

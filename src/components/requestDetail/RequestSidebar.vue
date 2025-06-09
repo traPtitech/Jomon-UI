@@ -4,16 +4,14 @@ import RequestTags from '/@/components/requestDetail/RequestTags.vue'
 import RequestTargets from '/@/components/requestDetail/RequestTargets.vue'
 import type { RequestDetail } from '/@/features/request/model'
 
-defineProps<{
-  request: RequestDetail
-}>()
+const request = defineModel<RequestDetail>({ required: true })
 </script>
 
 <template>
   <div class="px-4 flex flex-col gap-8">
     <div class="flex flex-col gap-3">
-      <RequestGroup :request="request" />
-      <RequestTags :request="request" />
+      <RequestGroup v-model="request" />
+      <RequestTags v-model="request" />
     </div>
     <RequestTargets :request="request" />
   </div>

@@ -37,6 +37,7 @@ const handleDeleteTags = async () => {
     }
   }
   isSending.value = false
+  deleteTagList.value = []
 }
 
 if (me.value?.admin) {
@@ -69,14 +70,10 @@ if (me.value?.admin) {
       </ul>
     </div>
     <div class="flex flex-col gap-3">
-      <label for="add-admin" class="text-base font-medium" tabindex="0">
-        管理者の操作
-      </label>
+      <h2 class="text-base font-medium">管理者の操作</h2>
       <div class="flex flex-wrap gap-3">
         <SearchSelect
-          id="add-admin"
           v-model="addList"
-          aria-labelledby="manipulate-admin"
           class="grow w-auto"
           multiple
           :options="absentMembers"
@@ -85,16 +82,19 @@ if (me.value?.admin) {
           :disabled="isSending"
           font-size="lg"
           padding="sm"
-          @click.stop="addAdmins(addList)">
+          @click.stop="
+            () => {
+              addAdmins(addList)
+              addList = []
+            }
+          ">
           選択した管理者を追加
         </SimpleButton>
       </div>
       <div class="flex flex-wrap gap-3">
         <SearchSelect
-          id="delete-admin"
           v-model="removeList"
           class="grow w-auto"
-          aria-labelledby="manipulate-admin"
           multiple
           :options="adminOptions"
           label="削除する管理者" />
@@ -102,13 +102,18 @@ if (me.value?.admin) {
           :disabled="isSending"
           font-size="lg"
           padding="sm"
-          @click.stop="removeAdmins(removeList)">
+          @click.stop="
+            () => {
+              removeAdmins(removeList)
+              removeList = []
+            }
+          ">
           選択した管理者を削除
         </SimpleButton>
       </div>
     </div>
     <div class="flex flex-col gap-3">
-      <label class="text-base font-medium" for="delete-tag">その他の操作</label>
+      <h2 class="text-base font-medium">タグの操作</h2>
       <div class="flex flex-wrap gap-3">
         <SearchSelect
           id="delete-tag"

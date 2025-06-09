@@ -43,10 +43,11 @@ if (!isUserFetched.value) {
   <form class="flex flex-col gap-6">
     <BaseInput v-model="group.name" label="グループ名" required />
     <MarkdownTextarea v-model="group.description" label="説明" required />
-    <div class="flex items-center gap-2">
-      <span aria-hidden="true">¥</span>
-      <BaseInput v-model="group.budget" label="予算" typr="number" required />
-    </div>
+    <BaseInput v-model="group.budget" type="number" label="予算" required>
+      <span class="text-2xl font-bold ml-3 mt-auto mb-2 text-text-secondary">
+        ¥
+      </span>
+    </BaseInput>
     <SearchSelect
       v-model="group.owners"
       class="w-full"

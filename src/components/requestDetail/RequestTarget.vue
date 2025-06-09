@@ -98,10 +98,11 @@ const handleRemoveTarget = async () => {
         v-model="targetModel.target"
         :options="targetOptions"
         label="対象者" />
-      <div class="flex items-center gap-2">
-        <span aria-hidden="true">¥</span>
-        <BaseInput v-model="targetModel.amount" label="金額" type="number" />
-      </div>
+      <BaseInput v-model="targetModel.amount" type="number" label="金額">
+        <span class="text-2xl font-bold ml-3 mt-auto mb-2 text-text-secondary">
+          ¥
+        </span>
+      </BaseInput>
     </div>
     <div>
       <button @click="handleRemoveTarget">

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import BaseInput from './BaseInput.vue'
 import {
   CheckIcon,
   ChevronDownIcon,
+  MagnifyingGlassIcon,
   PlusIcon,
   XMarkIcon
 } from '@heroicons/vue/24/outline'
@@ -42,13 +43,17 @@ const emit = defineEmits<{
 }>()
 const model = defineModel<string | string[] | null>({ required: true })
 
-const isOpen = ref(false)
+const menuState = ref('close')
 const searchTerm = ref('')
 const highlightedIndex = ref(-1)
 const dropdownRef = ref<HTMLElement | null>(null)
 const inputRef = ref<HTMLElement | null>(null)
 
 const filteredOptions = computed(() => {
+  if (menuState.value === 'presearch') {
+    return props.options
+  }
+
   return props.options.filter(option =>
     option.key.toLowerCase().includes(searchTerm.value.toLowerCase())
   )
@@ -71,9 +76,8 @@ const getPlaceholderText = computed(() => {
 
 // Handle click outside
 const handleClickOutside = (event: MouseEvent) => {
-  emit('close')
   if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
-    isOpen.value = false
+    menuState.value = 'close'
     if (!props.multiple && model.value) {
       const selectedOption = props.options.find(
         opt => opt.value === model.value
@@ -97,6 +101,10 @@ onUnmounted(() => {
   document.removeEventListener('mousedown', handleClickOutside)
 })
 
+watch(menuState, () => {
+  if (menuState.value === 'close') emit('close')
+})
+
 const handleSelect = (selectedValue: string) => {
   if (props.multiple) {
     const currentValues = Array.isArray(model.value) ? model.value : []
@@ -110,7 +118,7 @@ const handleSelect = (selectedValue: string) => {
       opt => opt.value === selectedValue
     )
     searchTerm.value = selectedOption?.key || selectedValue
-    isOpen.value = false
+    menuState.value = 'close'
   }
 }
 
@@ -125,22 +133,28 @@ const handleAddCustom = () => {
 
 const handleInputFocus = () => {
   emit('focus')
-  isOpen.value = true
+  menuState.value = 'presearch'
   if (!props.multiple && model.value) {
     const selectedOption = props.options.find(opt => opt.value === model.value)
     searchTerm.value = selectedOption?.key || ''
   }
 }
 
+const handleChange = () => {
+  menuState.value = 'searched'
+}
+
 const handleKeyDown = (e: KeyboardEvent) => {
-  emit('keydown', e)
-  if (!isOpen.value && (e.key === 'ArrowDown' || e.key === 'Enter')) {
+  if (
+    menuState.value === 'close' &&
+    (e.key === 'ArrowDown' || e.key === 'Enter')
+  ) {
     e.preventDefault()
-    isOpen.value = true
+    menuState.value = 'presearch'
     return
   }
-
-  if (!isOpen.value) return
+  if (menuState.value === 'close') return
+  emit('keydown', e)
 
   switch (e.key) {
     case 'ArrowDown':
@@ -169,7 +183,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
       }
       break
     case 'Escape':
-      isOpen.value = false
+      menuState.value = 'close'
       if (!props.multiple && model.value) {
         const selectedOption = props.options.find(
           opt => opt.value === model.value
@@ -180,7 +194,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
       }
       break
     case 'Tab':
-      isOpen.value = false
+      menuState.value = 'close'
       break
   }
 }
@@ -197,29 +211,32 @@ const handleKeyDown = (e: KeyboardEvent) => {
         :placeholder="getPlaceholderText"
         :disabled="disabled"
         @focus="handleInputFocus"
-        @keydown="handleKeyDown" />
+        @input="handleChange"
+        @keydown="handleKeyDown">
+        <MagnifyingGlassIcon class="w-6 ml-3 text-text-secondary" />
+      </BaseInput>
       <button
         type="button"
         class="absolute inset-y-0 right-0 flex items-center pr-2"
         :disabled="disabled"
-        @click="!disabled && (isOpen = !isOpen)">
+        @click="
+          !disabled && menuState === 'close'
+            ? (menuState = 'presearch')
+            : (menuState = 'close')
+        ">
         <ChevronDownIcon
           :class="[
             'h-4 w-4 text-gray-400 transition-transform',
-            isOpen && 'rotate-180'
+            menuState !== 'close' && 'rotate-180'
           ]" />
       </button>
     </div>
 
     <!-- Selected items for multiple selection -->
     <div
-      v-if="multiple && Array.isArray(modelValue) && modelValue.length > 0"
+      v-if="multiple && Array.isArray(model) && model.length > 0"
       class="flex flex-wrap gap-1 mt-2">
-      <div
-        v-for="val in modelValue"
-        :key="val"
-        variant="secondary"
-        class="text-xs">
+      <div v-for="val in model" :key="val" variant="secondary" class="text-xs">
         {{ options.find(opt => opt.value === val)?.key || val }}
         <button
           type="button"
@@ -231,7 +248,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
     </div>
 
     <div
-      v-if="isOpen"
+      v-if="menuState !== 'close'"
       class="absolute z-50 w-full mt-1 bg-white border rounded-md shadow-lg">
       <!-- Options list -->
       <div class="max-h-[200px] overflow-auto p-1">

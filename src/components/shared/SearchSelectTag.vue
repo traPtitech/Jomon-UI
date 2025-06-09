@@ -1,30 +1,16 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useTagStore } from '/@/stores/tag'
 import type { Tag } from '/@/features/tag/model'
 import SearchSelect from './SearchSelect.vue'
 
-const emit = defineEmits<{
-  (e: 'close'): void
-}>()
 const model = defineModel<Tag[]>({ required: true })
 
 const tagStore = useTagStore()
 const { tagOptions } = storeToRefs(tagStore)
 
-const stringModel = computed({
-  get: () => model.value.map(tag => tag.name),
-  set: (value: string[]) => {
-    model.value = value.map(name => ({
-      name,
-      id: '',
-      created_at: '',
-      updated_at: ''
-    }))
-  }
-})
-
+const selectedValue = ref(model.value.map(tag => tag.name))
 const searchOptions = computed(() =>
   tagOptions.value.map(tag => ({
     key: tag.key,
@@ -32,17 +18,21 @@ const searchOptions = computed(() =>
   }))
 )
 
-const handleClose = () => {
-  emit('close')
-}
+watch(selectedValue, () => {
+  model.value = selectedValue.value.map(
+    name =>
+      tagOptions.value.find(tag => tag.value.name === name)?.value ?? {
+        id: '',
+        name
+      }
+  )
+})
 </script>
 
 <template>
   <SearchSelect
-    v-model="stringModel"
+    v-model="selectedValue"
     :options="searchOptions"
     label="タグ"
-    multiple
-    allow-custom
-    @close="handleClose" />
+    multiple />
 </template>

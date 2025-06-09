@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T extends string | number">
+<script setup lang="ts">
 import { ref, computed } from 'vue'
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
   type?: string
 }
 
-const model = defineModel<T>({ required: true })
+const model = defineModel<string | number>({ required: true })
 const props = withDefaults(defineProps<Props>(), {
   required: false,
   placeholder: '',
@@ -38,9 +38,7 @@ const handleBlur = () => {
 
 const handleChange = (e: Event) => {
   const target = e.target as HTMLInputElement
-  model.value = (
-    props.type === 'number' ? Number(target.value) : target.value
-  ) as T
+  model.value = props.type === 'number' ? Number(target.value) : target.value
 }
 
 const handleKey = (e: KeyboardEvent) => {

@@ -12,7 +12,7 @@ import router from './router'
 initMock()
 
 const setup = async () => {
-  if (import.meta.env.NODE_DEV === 'production') {
+  if (import.meta.env.NODE_ENV === 'production') {
     return createApp(App)
   }
 

@@ -10,7 +10,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="px-4 flex flex-col gap-8">
+  <div class="flex flex-col gap-8">
     <div class="flex flex-col gap-3">
       <RequestGroup :request="request" />
       <RequestTags :request="request" />

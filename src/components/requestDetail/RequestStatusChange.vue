@@ -34,7 +34,7 @@ const { statusOptions } = useStatusOptions(props.request)
       :status="request.status"
       @click.stop="showMenu = true" />
     <FloatingMenu
-      v-if="showMenu"
+      v-if="showMenu && statusOptions.length !== 0"
       class="absolute top-12 left-0 w-40"
       :current-value="request.status"
       :options="statusOptions"

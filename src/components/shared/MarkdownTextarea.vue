@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import MarkdownIt from './MarkdownIt.vue'
 import SearchSelect from '/@/components/shared/SearchSelect.vue'
 import BaseInput from './BaseInput.vue'
+import { EyeIcon, PencilSquareIcon } from '@heroicons/vue/24/outline'
 
 type TabType = 'input' | 'preview'
 interface Props {
@@ -50,24 +51,26 @@ function changeCurrentTab(tab: TabType) {
       class="flex items-center justify-between rounded-t bg-hover-secondary px-4 pt-3">
       <div class="flex items-center">
         <button
-          :class="`rounded-t py-2 px-6 ${
+          :class="`rounded-t py-2 px-4 ${
             currentTab === 'input'
               ? 'bg-surface-primary border-t border-x border-surface-secondary'
               : 'bg-hover-secondary'
           }`"
           type="button"
+          aria-label="入力"
           @click="changeCurrentTab('input')">
-          入力
+          <PencilSquareIcon class="w-6" />
         </button>
         <button
-          :class="`rounded-t py-2 px-6 ${
+          :class="`rounded-t py-2 px-4 ${
             currentTab === 'preview'
               ? 'bg-surface-primary border-t border-x border-surface-secondary'
               : 'bg-hover-secondary'
           }`"
           type="button"
+          aria-label="プレビュー"
           @click="changeCurrentTab('preview')">
-          プレビュー
+          <EyeIcon class="w-6" />
         </button>
       </div>
       <SearchSelect

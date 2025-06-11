@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
       port: 3000,
       proxy: {
         '/api/*': {
-          target: env.DEV_SERVER_PROXY_HOST,
+          target: env.VITE_SERVER_HOST,
           changeOrigin: true,
           agent: keepAliveAgent
         }

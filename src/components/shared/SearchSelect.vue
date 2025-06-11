@@ -226,7 +226,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
         ">
         <ChevronDownIcon
           :class="[
-            'h-4 w-4 text-gray-400 transition-transform',
+            'h-4 w-4 text-text-secondary transition-transform',
             menuState !== 'close' && 'rotate-180'
           ]" />
       </button>
@@ -240,7 +240,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
         {{ options.find(opt => opt.value === val)?.key || val }}
         <button
           type="button"
-          class="ml-1 hover:bg-muted rounded-full"
+          class="ml-1 hover:bg-accent-secondary rounded-full"
           @click.stop="handleSelect(val)">
           <XMarkIcon class="h-3 w-3" />
         </button>
@@ -252,9 +252,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
       class="absolute z-50 w-full mt-1 bg-white border rounded-md shadow-lg">
       <!-- Options list -->
       <div class="max-h-[200px] overflow-auto p-1">
-        <div
-          v-if="filteredOptions.length === 0"
-          class="px-2 py-1.5 text-sm text-muted-foreground">
+        <div v-if="filteredOptions.length === 0" class="px-2 py-1.5 text-sm">
           {{ searchTerm ? '該当する項目がありません' : '項目がありません' }}
         </div>
         <button
@@ -263,10 +261,10 @@ const handleKeyDown = (e: KeyboardEvent) => {
           type="button"
           :class="[
             'w-full text-left relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none',
-            'hover:bg-accent hover:text-accent-foreground',
-            highlightedIndex === index && 'bg-accent text-accent-foreground',
+            'hover:bg-blue-100 hover:text-blue-500',
+            highlightedIndex === index && 'bg-blue-100 text-blue-500',
             option.disabled && 'opacity-50 cursor-not-allowed',
-            selectedValues.includes(option.value) && 'bg-accent'
+            selectedValues.includes(option.value) && 'bg-blue-100'
           ]"
           :disabled="option.disabled"
           @click="!option.disabled && handleSelect(option.value)">
@@ -293,7 +291,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
           type="button"
           :class="[
             'w-full text-left relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none',
-            'hover:bg-accent hover:text-accent-foreground border-t'
+            'hover:bg-accent-secondary hover:text-accent-primary border-t'
           ]"
           @click="handleAddCustom">
           <PlusIcon class="mr-2 h-4 w-4" />

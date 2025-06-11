@@ -240,7 +240,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
         {{ options.find(opt => opt.value === val)?.key || val }}
         <button
           type="button"
-          class="ml-1 hover:bg-accent-secondary rounded-full"
+          class="ml-1 hover:bg-blue-100 rounded-full"
           @click.stop="handleSelect(val)">
           <XMarkIcon class="h-3 w-3" />
         </button>
@@ -291,7 +291,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
           type="button"
           :class="[
             'w-full text-left relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none',
-            'hover:bg-accent-secondary hover:text-accent-primary border-t'
+            'hover:bg-blue-100 hover:text-blue-500 border-t'
           ]"
           @click="handleAddCustom">
           <PlusIcon class="mr-2 h-4 w-4" />

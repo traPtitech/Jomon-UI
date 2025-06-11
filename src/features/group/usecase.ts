@@ -1,5 +1,3 @@
-import { storeToRefs } from 'pinia'
-
 import { useGroupStore } from '/@/stores/group'
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 
@@ -8,7 +6,7 @@ import { useGroupRepository } from './repository'
 
 export const useFetchGroupsUsecase = async () => {
   const repository = useGroupRepository()
-  const { groups, isGroupFetched } = storeToRefs(useGroupStore())
+  const { groups, isGroupFetched } = useGroupStore()
 
   try {
     groups.value = await repository.fetchGroups()
@@ -20,7 +18,7 @@ export const useFetchGroupsUsecase = async () => {
 
 export const useFetchGroup = async (id: string) => {
   const repository = useGroupRepository()
-  const { group, editedValue } = storeToRefs(useGroupDetailStore())
+  const { group, editedValue } = useGroupDetailStore()
 
   try {
     group.value = await repository.fetchGroup(id)
@@ -38,7 +36,7 @@ export const createGroupUsecase = async (
   group: GroupSeedWithMemberAndOwners
 ) => {
   const repository = useGroupRepository()
-  const { groups } = storeToRefs(useGroupStore())
+  const { groups } = useGroupStore()
 
   if (group.owners.length === 0) {
     throw new Error('グループオーナーは必須です')
@@ -63,7 +61,7 @@ export const createGroupUsecase = async (
 
 export const editGroupUsecase = async (id: string, groupSeed: GroupSeed) => {
   const repository = useGroupRepository()
-  const { group, editedValue } = storeToRefs(useGroupDetailStore())
+  const { group, editedValue } = useGroupDetailStore()
   if (!group.value) return
 
   try {
@@ -85,7 +83,7 @@ export const editGroupUsecase = async (id: string, groupSeed: GroupSeed) => {
 
 export const deleteGroupUsecase = async (id: string) => {
   const repository = useGroupRepository()
-  const { groups } = storeToRefs(useGroupStore())
+  const { groups } = useGroupStore()
 
   try {
     await repository.deleteGroup(id)
@@ -97,7 +95,7 @@ export const deleteGroupUsecase = async (id: string) => {
 
 export const addGroupMembersUsecase = async (id: string, members: string[]) => {
   const repository = useGroupRepository()
-  const { group } = storeToRefs(useGroupDetailStore())
+  const { group } = useGroupDetailStore()
   if (!group.value) return
 
   try {
@@ -116,7 +114,7 @@ export const removeGroupMembersUsecase = async (
   members: string[]
 ) => {
   const repository = useGroupRepository()
-  const { group } = storeToRefs(useGroupDetailStore())
+  const { group } = useGroupDetailStore()
   if (!group.value) return
 
   try {
@@ -132,7 +130,7 @@ export const removeGroupMembersUsecase = async (
 
 export const addGroupOwnersUsecase = async (id: string, owners: string[]) => {
   const repository = useGroupRepository()
-  const { group } = storeToRefs(useGroupDetailStore())
+  const { group } = useGroupDetailStore()
   if (!group.value) return
 
   try {
@@ -151,7 +149,7 @@ export const removeGroupOwnersUsecase = async (
   owners: string[]
 ) => {
   const repository = useGroupRepository()
-  const { group } = storeToRefs(useGroupDetailStore())
+  const { group } = useGroupDetailStore()
   if (!group.value) return
 
   try {

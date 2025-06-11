@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
@@ -21,13 +20,9 @@ import { useFetchUsersUsecase } from '/@/features/user/usecase'
 const route = useRoute()
 const id = toId(route.params.id)
 
-const userStore = useUserStore()
-const tagStore = useTagStore()
-const groupStore = useGroupStore()
-
-const { isUserFetched, isAdmin } = storeToRefs(userStore)
-const { isTagFetched } = storeToRefs(tagStore)
-const { isGroupFetched } = storeToRefs(groupStore)
+const { isUserFetched, isAdmin } = useUserStore()
+const { isTagFetched } = useTagStore()
+const { isGroupFetched } = useGroupStore()
 
 const isEditMode = ref(false)
 
@@ -38,13 +33,13 @@ function finishEditing(editedTransaction: Transaction) {
   isEditMode.value = false
 }
 
-if (!isUserFetched.value) {
+if (!isUserFetched) {
   await useFetchUsersUsecase()
 }
-if (!isTagFetched.value) {
+if (!isTagFetched) {
   await useFetchTagsUsecase()
 }
-if (!isGroupFetched.value) {
+if (!isGroupFetched) {
   await useFetchGroupsUsecase()
 }
 </script>

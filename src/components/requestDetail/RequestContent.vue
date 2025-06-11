@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-
 import { useUserStore } from '/@/stores/user'
 
 import { formatDateAndTime } from '/@/lib/date'
@@ -23,11 +21,10 @@ const props = defineProps<{
 
 const formattedDateAndTime = formatDateAndTime(props.request.createdAt)
 
-const userStore = useUserStore()
-const { userMap } = storeToRefs(userStore)
 const toast = useToast()
 const { isRequestCreator } = useRequest(props.request)
-const { me } = storeToRefs(userStore)
+
+const { me, userMap } = useUserStore()
 
 const hasAuthority = isRequestCreator.value(me.value)
 const isEditMode = ref(false)

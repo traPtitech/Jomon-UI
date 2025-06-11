@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import { useUserStore } from '/@/stores/user'
@@ -17,9 +16,8 @@ const props = defineProps<{
   request: RequestDetail
 }>()
 
-const userStore = useUserStore()
+const { me } = useUserStore()
 const { isRequestCreator } = useRequest(props.request)
-const { me } = storeToRefs(userStore)
 const toast = useToast()
 
 const hasAuthority = isRequestCreator.value(me.value)

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
@@ -16,12 +15,10 @@ import GroupTable from '../components/groups/GroupTable.vue'
 const route = useRoute()
 const page = ref(toPage(route.query.page))
 
-const userStore = useUserStore()
-const groupStore = useGroupStore()
-const { groups, isGroupFetched } = storeToRefs(groupStore)
-const { isAdmin } = storeToRefs(userStore)
+const { groups, isGroupFetched } = useGroupStore()
+const { isAdmin } = useUserStore()
 
-if (!isGroupFetched.value) {
+if (!isGroupFetched) {
   await useFetchGroupsUsecase()
 }
 

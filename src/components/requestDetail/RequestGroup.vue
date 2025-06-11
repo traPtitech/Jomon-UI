@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-
 import { useUserStore } from '/@/stores/user'
 
 import EditButton from '/@/components/shared/EditButton.vue'
@@ -16,11 +14,9 @@ const props = defineProps<{
   request: RequestDetail
 }>()
 
-const userStore = useUserStore()
-const groupStore = useGroupStore()
+const { me } = useUserStore()
+const { groupOptions } = useGroupStore()
 const { isRequestCreator } = useRequest(props.request)
-const { me } = storeToRefs(userStore)
-const { groupOptions } = storeToRefs(groupStore)
 const toast = useToast()
 
 const hasAuthority = isRequestCreator.value(me.value)

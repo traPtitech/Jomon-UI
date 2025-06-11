@@ -1,7 +1,5 @@
 <script lang="ts" setup>
 import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
-import { storeToRefs } from 'pinia'
-
 import { useUserStore } from '/@/stores/user'
 
 import type { RequestTarget } from '/@/lib/apis'
@@ -17,8 +15,7 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits<(e: 'input', value: RequestTarget[]) => void>()
 
-const userStore = useUserStore()
-const { userOptions } = storeToRefs(userStore)
+const { userOptions } = useUserStore()
 
 function handleEditTarget(index: number, value: unknown) {
   if (typeof value === 'string') {

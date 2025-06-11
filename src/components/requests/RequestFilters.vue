@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
-import { storeToRefs } from 'pinia'
 
 import { useGroupStore } from '/@/stores/group'
 import { useRequestStore } from '/@/stores/request'
@@ -13,15 +12,10 @@ import InputText from '/@/components/shared/InputText.vue'
 import { useFetchRequestsUsecase } from '/@/features/request/usecase'
 import { requestStatusOptions } from '/@/features/requestStatus/model'
 
-const requestStore = useRequestStore()
-const userStore = useUserStore()
-const tagStore = useTagStore()
-const groupStore = useGroupStore()
-
-const { requests, filterParams } = storeToRefs(requestStore)
-const { userOptions } = storeToRefs(userStore)
-const { tagIdOptions } = storeToRefs(tagStore)
-const { groupOptions } = storeToRefs(groupStore)
+const { requests, filterParams } = useRequestStore()
+const { userOptions } = useUserStore()
+const { tagIdOptions } = useTagStore()
+const { groupOptions } = useGroupStore()
 
 function sortByCreatedAt() {
   if (filterParams.value.sort === 'created_at') {

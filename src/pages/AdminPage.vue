@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
@@ -12,14 +11,10 @@ import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 import { useAdmin } from './composables/useAdmin'
 
-const adminStore = useAdminStore()
-const userStore = useUserStore()
-const tagStore = useTagStore()
+const { isAdminFetched, admins, adminOptions } = useAdminStore()
+const { me, isUserFetched, isAdmin, userMap } = useUserStore()
+const { isTagFetched, tagIdOptions } = useTagStore()
 const toast = useToast()
-
-const { isAdminFetched, admins, adminOptions } = storeToRefs(adminStore)
-const { me, isUserFetched, isAdmin, userMap } = storeToRefs(userStore)
-const { isTagFetched, tagIdOptions } = storeToRefs(tagStore)
 
 const addList = ref<string[]>([])
 const removeList = ref<string[]>([])

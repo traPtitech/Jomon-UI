@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { MinusIcon, PlusIcon } from '@heroicons/vue/24/outline'
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import { useGroupDetailStore } from '/@/stores/groupDetail'
@@ -11,14 +10,10 @@ import UserIcon from '/@/components/shared/UserIcon.vue'
 
 import { useGroupOwner } from './composables/useGroupOwner'
 
-const userStore = useUserStore()
-const groupDetailStore = useGroupDetailStore()
-const { canEditGroup } = groupDetailStore
-const { group } = storeToRefs(groupDetailStore)
-const { me, userMap } = storeToRefs(userStore)
+const { me, userMap } = useUserStore()
+const { canEditGroup, group } = useGroupDetailStore()
 
 const ownersToBeAdded = ref<string[]>([])
-const hasAuthority = canEditGroup(me.value)
 const { absentOwnerOptions, isSending, addOwners, removeOwner } =
   useGroupOwner()
 </script>
@@ -37,7 +32,7 @@ const { absentOwnerOptions, isSending, addOwners, removeOwner } =
             <p class="mx-1 break-all">{{ userMap[owner] }}</p>
           </div>
           <button
-            v-if="hasAuthority"
+            v-if="canEditGroup(me)"
             class="flex items-center rounded-full p-1 hover:bg-surface-secondary"
             :disabled="isSending"
             @click="removeOwner(owner)">
@@ -45,7 +40,7 @@ const { absentOwnerOptions, isSending, addOwners, removeOwner } =
           </button>
         </li>
       </ul>
-      <div v-if="hasAuthority" class="flex p-2 gap-2">
+      <div v-if="canEditGroup(me)" class="flex p-2 gap-2">
         <InputSelectMultiple
           v-model="ownersToBeAdded"
           class="grow w-1"

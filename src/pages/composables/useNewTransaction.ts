@@ -2,7 +2,6 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
-import { storeToRefs } from 'pinia'
 import type { RequestDetail } from '/@/features/request/model'
 import type { RequestTarget } from '/@/features/requestTarget/model'
 import type { Tag } from '/@/features/tag/model'
@@ -16,8 +15,7 @@ export type MoneyDirection = 'toTraP' | 'fromTraP'
 export const useNewTransaction = () => {
   const toast = useToast()
   const router = useRouter()
-  const userStore = useUserStore()
-  const { userMap } = storeToRefs(userStore)
+  const { userMap } = useUserStore()
 
   const isSending = ref(false)
 

@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import { useUserStore } from '/@/stores/user'
@@ -18,8 +16,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const userStore = useUserStore()
-const { userMap } = storeToRefs(userStore)
+const { userMap } = useUserStore()
 
 const formattedDate = formatDate(props.request.createdAt)
 

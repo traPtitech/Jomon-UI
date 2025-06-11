@@ -1,6 +1,5 @@
-import { defineStore } from 'pinia'
 import { ref } from 'vue'
-
+import { defineComposable } from '/@/lib/store'
 import type {
   Transaction,
   TransactionQuerySeed
@@ -27,7 +26,7 @@ export const directionOptions = [
   }
 ]
 
-export const useTransactionStore = defineStore('transaction', () => {
+export const useTransactionStore = defineComposable('transaction', () => {
   const transactions = ref<Transaction[]>([])
   const isTransactionFetched = ref(false)
 

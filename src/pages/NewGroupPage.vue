@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import InputNumber from '/@/components/shared/InputNumber.vue'
@@ -15,8 +14,7 @@ import { useNewGroup } from './composables/useNewGroup'
 const toast = useToast()
 const router = useRouter()
 
-const userStore = useUserStore()
-const { isUserFetched, userOptions } = storeToRefs(userStore)
+const { isUserFetched, userOptions } = useUserStore()
 
 const { isSending, group } = useNewGroup()
 
@@ -32,7 +30,7 @@ const handleCreateGroup = async () => {
   }
 }
 
-if (!isUserFetched.value) {
+if (!isUserFetched) {
   await useFetchUsersUsecase()
 }
 </script>

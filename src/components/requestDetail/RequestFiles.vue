@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
-import { storeToRefs } from 'pinia'
 
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
@@ -11,9 +10,7 @@ import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 import { useRequestFile } from './composables/useRequestFile'
 
-const requestDetailStore = useRequestDetailStore()
-
-const { request } = storeToRefs(requestDetailStore)
+const { request } = useRequestDetailStore()
 
 const { files, fetchFiles, removeFile } = useRequestFile()
 const downloadLink = (file: string) => {

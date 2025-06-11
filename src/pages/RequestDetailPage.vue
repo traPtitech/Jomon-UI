@@ -1,10 +1,5 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
-
-import { useGroupStore } from '/@/stores/group'
-import { useTagStore } from '/@/stores/tag'
-import { useUserStore } from '/@/stores/user'
 
 import { toId } from '/@/lib/parseQueryParams'
 
@@ -19,14 +14,11 @@ import { useRequestDetailStore } from '/@/stores/requestDetail'
 const route = useRoute()
 const id = toId(route.params.id)
 
-const userStore = useUserStore()
-const groupStore = useGroupStore()
-const tagStore = useTagStore()
 const requestDetailStore = useRequestDetailStore()
-const { isUserFetched } = storeToRefs(userStore)
-const { isGroupFetched } = storeToRefs(groupStore)
-const { isTagFetched } = storeToRefs(tagStore)
-const { useRequest } = requestDetailStore
+const { isUserFetched } = useUserStore()
+const { isGroupFetched } = useGroupStore()
+const { isTagFetched } = useTagStore()
+const { useRequest } = useRequestDetailStore()
 
 const request = await useRequest(id)
 

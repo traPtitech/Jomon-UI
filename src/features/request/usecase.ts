@@ -1,5 +1,3 @@
-import { storeToRefs } from 'pinia'
-
 import { useRequestStore } from '/@/stores/request'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
@@ -11,8 +9,7 @@ import { createTagIfNotExistUsecase } from '/@/features/tag/usecase'
 
 export const useFetchRequestsUsecase = async () => {
   const repository = useRequestRepository()
-  const { requests, isRequestFetched, filterParams } =
-    storeToRefs(useRequestStore())
+  const { requests, isRequestFetched, filterParams } = useRequestStore()
 
   const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
   if (
@@ -42,7 +39,7 @@ export const useFetchRequestUsecase = async (id: string) => {
 
 export const createRequestUsecase = async (request: RequestSeed) => {
   const repository = useRequestRepository()
-  const { requests } = storeToRefs(useRequestStore())
+  const { requests } = useRequestStore()
 
   try {
     const res = await repository.createRequest(request)
@@ -59,7 +56,7 @@ export const editRequestUsecase = async (
   _requestSeed: RequestSeed
 ) => {
   const repository = useRequestRepository()
-  const { request } = storeToRefs(useRequestDetailStore())
+  const { request } = useRequestDetailStore()
   if (!request.value) return
 
   try {
@@ -77,7 +74,7 @@ export const editRequestUsecase = async (
 
 export const createCommentUsecase = async (id: string, comment: string) => {
   const repository = useRequestRepository()
-  const { request } = storeToRefs(useRequestDetailStore())
+  const { request } = useRequestDetailStore()
   if (!request.value) return
 
   try {
@@ -94,7 +91,7 @@ export const changeStatusUsecase = async (
   comment: string
 ) => {
   const repository = useRequestRepository()
-  const { request } = storeToRefs(useRequestDetailStore())
+  const { request } = useRequestDetailStore()
   if (!request.value) return
 
   try {

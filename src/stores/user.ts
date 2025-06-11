@@ -1,9 +1,8 @@
-import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-
+import { defineComposable } from '/@/lib/store'
 import type { User } from '/@/features/user/model'
 
-export const useUserStore = defineStore('user', () => {
+export const useUserStore = defineComposable('user', () => {
   const me = ref<User>()
   const users = ref<User[]>([])
   const isUserFetched = ref(false)

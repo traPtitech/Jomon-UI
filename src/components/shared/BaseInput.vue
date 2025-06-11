@@ -25,6 +25,7 @@ const isFocused = ref(false)
 const hasValue = computed(() => model.value !== '')
 const isLabelFloating = computed(() => isFocused.value || hasValue.value)
 const inputRef = ref<HTMLInputElement | null>(null)
+const textareaRef = ref<HTMLTextAreaElement | null>(null)
 
 const handleFocus = () => {
   isFocused.value = true
@@ -51,7 +52,20 @@ const handleKey = (e: KeyboardEvent) => {
     class="flex bg-white border border-gray-300 rounded-lg focus-within:outline-none focus-within:!ring-2 focus-within:!ring-blue-500 !ring-offset-2 transition-all duration-200 ease-in-out">
     <slot />
     <div class="relative w-full">
+      <textarea
+        v-if="type === 'textarea'"
+        :id="`input-${props.label}`"
+        ref="textareaRef"
+        class="w-full border-none bg-transparent px-3 pt-6 pb-2 rounded-lg outline-none ring-0 [&:not(:focus-visible)]:placeholder:text-transparent peer"
+        rows="12"
+        :placeholder="props.placeholder"
+        :required="props.required"
+        :value="model"
+        @input="handleChange"
+        @focus="handleFocus"
+        @blur="handleBlur" />
       <input
+        v-else
         :id="`input-${props.label}`"
         ref="inputRef"
         :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} pb-2 focus:outline-none focus:ring-0 [&:not(:focus-within)]:placeholder:text-transparent peer`"
@@ -70,7 +84,9 @@ const handleKey = (e: KeyboardEvent) => {
           'absolute left-3 transition-all duration-200 ease-in-out pointer-events-none text-gray-500 peer-focus:text-blue-500',
           isLabelFloating
             ? 'top-1 text-xs font-medium'
-            : 'top-1/2 -translate-y-1/2 text-base'
+            : type === 'textarea'
+              ? 'top-8 -translate-y-1/2 text-base'
+              : 'top-1/2 -translate-y-1/2 text-base'
         ]">
         {{ props.label }}
         <span v-if="props.required" class="text-red-500">*</span>

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import InputTextarea from './InputTextarea.vue'
 import MarkdownIt from './MarkdownIt.vue'
 import SearchSelect from '/@/components/shared/SearchSelect.vue'
+import BaseInput from './BaseInput.vue'
 
 type TabType = 'input' | 'preview'
 interface Props {
@@ -79,13 +79,13 @@ function changeCurrentTab(tab: TabType) {
         @update:model-value="setTemplate($event)" />
     </div>
     <div class="px-5 py-3">
-      <InputTextarea
+      <BaseInput
         v-if="currentTab === 'input'"
+        v-model="model"
+        type="textarea"
         :label="props.label"
         class="min-h-40 w-full"
-        :model-value="model"
-        :placeholder="placeholder"
-        @update:model-value="model = $event" />
+        :placeholder="placeholder" />
       <MarkdownIt
         v-if="currentTab === 'preview'"
         class="min-h-40 w-full overflow-y-scroll rounded-sm border border-surface-secondary px-3 py-2"

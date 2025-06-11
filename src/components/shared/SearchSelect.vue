@@ -19,21 +19,16 @@ interface Props {
   options: Option[]
   label: string
   placeholder?: string
-  searchPlaceholder?: string
   multiple?: boolean
   allowCustom?: boolean
-  className?: string
   disabled?: boolean
-  maxHeight?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  placeholder: '選択してください',
-  searchPlaceholder: '検索',
+  placeholder: '検索',
   multiple: false,
   allowCustom: false,
-  disabled: false,
-  maxHeight: '200px'
+  disabled: false
 })
 
 const emit = defineEmits<{
@@ -71,7 +66,7 @@ const getPlaceholderText = computed(() => {
   if (props.multiple && Array.isArray(model.value) && model.value.length > 0) {
     return `${model.value.length}個選択中...`
   }
-  return props.searchPlaceholder
+  return props.placeholder
 })
 
 // Handle click outside
@@ -201,7 +196,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
 </script>
 
 <template>
-  <div ref="dropdownRef" class="relative" :class="className">
+  <div ref="dropdownRef" class="relative">
     <div class="relative">
       <BaseInput
         ref="inputRef"

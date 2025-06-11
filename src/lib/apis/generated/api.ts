@@ -26,6 +26,244 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface Application
+ */
+export interface Application {
+    /**
+     * 
+     * @type {string}
+     * @memberof Application
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Application
+     */
+    'status': ApplicationStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof Application
+     */
+    'created_at': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Application
+     */
+    'updated_at': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Application
+     */
+    'created_by': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Application
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Application
+     */
+    'content': string;
+    /**
+     * 
+     * @type {Array<ApplicationTargetDetail>}
+     * @memberof Application
+     */
+    'targets': Array<ApplicationTargetDetail>;
+    /**
+     * 
+     * @type {Array<Tag>}
+     * @memberof Application
+     */
+    'tags': Array<Tag>;
+    /**
+     * 
+     * @type {Partition}
+     * @memberof Application
+     */
+    'partition': Partition;
+}
+
+export const ApplicationStatusEnum = {
+    Submitted: 'submitted',
+    ChangeRequested: 'change_requested',
+    Approved: 'approved',
+    PaymentFinished: 'payment_finished',
+    Rejected: 'rejected'
+} as const;
+
+export type ApplicationStatusEnum = typeof ApplicationStatusEnum[keyof typeof ApplicationStatusEnum];
+
+/**
+ * 
+ * @export
+ * @interface ApplicationDetail
+ */
+export interface ApplicationDetail {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplicationDetail
+     */
+    'id': string;
+    /**
+     * 
+     * @type {StatusEnum}
+     * @memberof ApplicationDetail
+     */
+    'status': StatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplicationDetail
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplicationDetail
+     */
+    'content': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplicationDetail
+     */
+    'created_by': string;
+    /**
+     * 
+     * @type {Array<Comment>}
+     * @memberof ApplicationDetail
+     */
+    'comments': Array<Comment>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ApplicationDetail
+     */
+    'files': Array<string>;
+    /**
+     * 
+     * @type {Array<Status>}
+     * @memberof ApplicationDetail
+     */
+    'statuses': Array<Status>;
+    /**
+     * 
+     * @type {Array<Tag>}
+     * @memberof ApplicationDetail
+     */
+    'tags': Array<Tag>;
+    /**
+     * 
+     * @type {Partition}
+     * @memberof ApplicationDetail
+     */
+    'partition': Partition;
+    /**
+     * 
+     * @type {Array<ApplicationTargetDetail>}
+     * @memberof ApplicationDetail
+     */
+    'targets': Array<ApplicationTargetDetail>;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplicationDetail
+     */
+    'created_at': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplicationDetail
+     */
+    'updated_at': string;
+}
+/**
+ * 
+ * @export
+ * @interface ApplicationFile
+ */
+export interface ApplicationFile {
+    /**
+     * 
+     * @type {any}
+     * @memberof ApplicationFile
+     */
+    'file': any;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplicationFile
+     */
+    'name': string;
+}
+/**
+ * 
+ * @export
+ * @interface ApplicationTarget
+ */
+export interface ApplicationTarget {
+    /**
+     * 
+     * @type {number}
+     * @memberof ApplicationTarget
+     */
+    'amount': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplicationTarget
+     */
+    'target': string;
+}
+/**
+ * 
+ * @export
+ * @interface ApplicationTargetDetail
+ */
+export interface ApplicationTargetDetail {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplicationTargetDetail
+     */
+    'id': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ApplicationTargetDetail
+     */
+    'amount': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplicationTargetDetail
+     */
+    'target': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplicationTargetDetail
+     */
+    'paid_at': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplicationTargetDetail
+     */
+    'created_at': string;
+}
+/**
+ * 
+ * @export
  * @interface AuthInfo
  */
 export interface AuthInfo {
@@ -125,104 +363,6 @@ export interface FileMeta {
 /**
  * 
  * @export
- * @interface Group
- */
-export interface Group {
-    /**
-     * 
-     * @type {string}
-     * @memberof Group
-     */
-    'id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Group
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Group
-     */
-    'description': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof Group
-     */
-    'budget': number | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof Group
-     */
-    'created_at': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Group
-     */
-    'updated_at': string;
-}
-/**
- * 
- * @export
- * @interface GroupDetail
- */
-export interface GroupDetail {
-    /**
-     * 
-     * @type {string}
-     * @memberof GroupDetail
-     */
-    'id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GroupDetail
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GroupDetail
-     */
-    'description': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof GroupDetail
-     */
-    'budget': number | null;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof GroupDetail
-     */
-    'members': Array<string>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof GroupDetail
-     */
-    'owners': Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof GroupDetail
-     */
-    'created_at': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GroupDetail
-     */
-    'updated_at': string;
-}
-/**
- * 
- * @export
  * @interface InlineResponse200
  */
 export interface InlineResponse200 {
@@ -232,6 +372,124 @@ export interface InlineResponse200 {
      * @memberof InlineResponse200
      */
     'id'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface Partition
+ */
+export interface Partition {
+    /**
+     * 
+     * @type {string}
+     * @memberof Partition
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Partition
+     */
+    'name': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Partition
+     */
+    'budget': number | null;
+    /**
+     * 
+     * @type {PartitionManagement}
+     * @memberof Partition
+     */
+    'management': PartitionManagement;
+    /**
+     * 
+     * @type {string}
+     * @memberof Partition
+     */
+    'created_at': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Partition
+     */
+    'updated_at': string;
+}
+/**
+ * 
+ * @export
+ * @interface PartitionManagement
+ */
+export interface PartitionManagement {
+    /**
+     * 管理カテゴリ
+     * @type {string}
+     * @memberof PartitionManagement
+     */
+    'category': PartitionManagementCategoryEnum;
+    /**
+     * パーティションの利用可能状態
+     * @type {string}
+     * @memberof PartitionManagement
+     */
+    'state': PartitionManagementStateEnum;
+}
+
+export const PartitionManagementCategoryEnum = {
+    Manual: 'manual'
+} as const;
+
+export type PartitionManagementCategoryEnum = typeof PartitionManagementCategoryEnum[keyof typeof PartitionManagementCategoryEnum];
+export const PartitionManagementStateEnum = {
+    Available: 'available',
+    Unavailable: 'unavailable'
+} as const;
+
+export type PartitionManagementStateEnum = typeof PartitionManagementStateEnum[keyof typeof PartitionManagementStateEnum];
+
+/**
+ * 
+ * @export
+ * @interface PostApplication
+ */
+export interface PostApplication {
+    /**
+     * 
+     * @type {string}
+     * @memberof PostApplication
+     */
+    'created_by': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostApplication
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostApplication
+     */
+    'content': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof PostApplication
+     */
+    'tags': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostApplication
+     */
+    'partition': string;
+    /**
+     * 
+     * @type {Array<ApplicationTarget>}
+     * @memberof PostApplication
+     */
+    'targets': Array<ApplicationTarget>;
 }
 /**
  * 
@@ -249,70 +507,27 @@ export interface PostComment {
 /**
  * 
  * @export
- * @interface PostGroup
+ * @interface PostPartition
  */
-export interface PostGroup {
+export interface PostPartition {
     /**
      * 
      * @type {string}
-     * @memberof PostGroup
+     * @memberof PostPartition
      */
     'name': string;
     /**
      * 
-     * @type {string}
-     * @memberof PostGroup
-     */
-    'description': string;
-    /**
-     * 
      * @type {number}
-     * @memberof PostGroup
+     * @memberof PostPartition
      */
     'budget': number | null;
-}
-/**
- * 
- * @export
- * @interface PostRequest
- */
-export interface PostRequest {
     /**
      * 
-     * @type {string}
-     * @memberof PostRequest
+     * @type {PartitionManagement}
+     * @memberof PostPartition
      */
-    'created_by': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostRequest
-     */
-    'title': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostRequest
-     */
-    'content': string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof PostRequest
-     */
-    'tags': Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostRequest
-     */
-    'group': string | null;
-    /**
-     * 
-     * @type {Array<RequestTarget>}
-     * @memberof PostRequest
-     */
-    'targets': Array<RequestTarget>;
+    'management': PartitionManagement;
 }
 /**
  * 
@@ -326,117 +541,6 @@ export interface PostTag {
      * @memberof PostTag
      */
     'name': string;
-}
-/**
- * 
- * @export
- * @interface PostTransaction
- */
-export interface PostTransaction {
-    /**
-     * 
-     * @type {string}
-     * @memberof PostTransaction
-     */
-    'title'?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof PostTransaction
-     */
-    'amount': number;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof PostTransaction
-     */
-    'targets': Array<string>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof PostTransaction
-     */
-    'tags': Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostTransaction
-     */
-    'group': string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostTransaction
-     */
-    'request': string | null;
-}
-/**
- * 
- * @export
- * @interface PostTransactionWithOneTarget
- */
-export interface PostTransactionWithOneTarget {
-    /**
-     * 
-     * @type {string}
-     * @memberof PostTransactionWithOneTarget
-     */
-    'title'?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof PostTransactionWithOneTarget
-     */
-    'amount': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostTransactionWithOneTarget
-     */
-    'target'?: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof PostTransactionWithOneTarget
-     */
-    'tags': Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostTransactionWithOneTarget
-     */
-    'group': string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostTransactionWithOneTarget
-     */
-    'request': string | null;
-}
-/**
- * 
- * @export
- * @interface PutGroup
- */
-export interface PutGroup {
-    /**
-     * 
-     * @type {string}
-     * @memberof PutGroup
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PutGroup
-     */
-    'description': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof PutGroup
-     */
-    'budget': number | null;
 }
 /**
  * 
@@ -480,245 +584,7 @@ export interface PutUser {
      * @type {boolean}
      * @memberof PutUser
      */
-    'admin': boolean;
-}
-/**
- * 
- * @export
- * @interface Request
- */
-export interface Request {
-    /**
-     * 
-     * @type {string}
-     * @memberof Request
-     */
-    'id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Request
-     */
-    'status': RequestStatusEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof Request
-     */
-    'created_at': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Request
-     */
-    'updated_at': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Request
-     */
-    'created_by': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Request
-     */
-    'title': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Request
-     */
-    'content': string;
-    /**
-     * 
-     * @type {Array<RequestTargetDetail>}
-     * @memberof Request
-     */
-    'targets': Array<RequestTargetDetail>;
-    /**
-     * 
-     * @type {Array<Tag>}
-     * @memberof Request
-     */
-    'tags': Array<Tag>;
-    /**
-     * 
-     * @type {Group}
-     * @memberof Request
-     */
-    'group': Group | null;
-}
-
-export const RequestStatusEnum = {
-    Submitted: 'submitted',
-    FixRequired: 'fix_required',
-    Accepted: 'accepted',
-    Completed: 'completed',
-    Rejected: 'rejected'
-} as const;
-
-export type RequestStatusEnum = typeof RequestStatusEnum[keyof typeof RequestStatusEnum];
-
-/**
- * 
- * @export
- * @interface RequestDetail
- */
-export interface RequestDetail {
-    /**
-     * 
-     * @type {string}
-     * @memberof RequestDetail
-     */
-    'id': string;
-    /**
-     * 
-     * @type {StatusEnum}
-     * @memberof RequestDetail
-     */
-    'status': StatusEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof RequestDetail
-     */
-    'title': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RequestDetail
-     */
-    'content': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RequestDetail
-     */
-    'created_by': string;
-    /**
-     * 
-     * @type {Array<Comment>}
-     * @memberof RequestDetail
-     */
-    'comments': Array<Comment>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof RequestDetail
-     */
-    'files': Array<string>;
-    /**
-     * 
-     * @type {Array<Status>}
-     * @memberof RequestDetail
-     */
-    'statuses': Array<Status>;
-    /**
-     * 
-     * @type {Array<Tag>}
-     * @memberof RequestDetail
-     */
-    'tags': Array<Tag>;
-    /**
-     * 
-     * @type {Group}
-     * @memberof RequestDetail
-     */
-    'group': Group | null;
-    /**
-     * 
-     * @type {Array<RequestTargetDetail>}
-     * @memberof RequestDetail
-     */
-    'targets': Array<RequestTargetDetail>;
-    /**
-     * 
-     * @type {string}
-     * @memberof RequestDetail
-     */
-    'created_at': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RequestDetail
-     */
-    'updated_at': string;
-}
-/**
- * 
- * @export
- * @interface RequestFile
- */
-export interface RequestFile {
-    /**
-     * 
-     * @type {any}
-     * @memberof RequestFile
-     */
-    'file': any;
-    /**
-     * 
-     * @type {string}
-     * @memberof RequestFile
-     */
-    'name': string;
-}
-/**
- * 
- * @export
- * @interface RequestTarget
- */
-export interface RequestTarget {
-    /**
-     * 
-     * @type {number}
-     * @memberof RequestTarget
-     */
-    'amount': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof RequestTarget
-     */
-    'target': string;
-}
-/**
- * 
- * @export
- * @interface RequestTargetDetail
- */
-export interface RequestTargetDetail {
-    /**
-     * 
-     * @type {string}
-     * @memberof RequestTargetDetail
-     */
-    'id': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof RequestTargetDetail
-     */
-    'amount': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof RequestTargetDetail
-     */
-    'target': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RequestTargetDetail
-     */
-    'paid_at': string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof RequestTargetDetail
-     */
-    'created_at': string;
+    'account_manager': boolean;
 }
 /**
  * 
@@ -784,9 +650,9 @@ export interface StatusDetail {
 
 export const StatusEnum = {
     Submitted: 'submitted',
-    FixRequired: 'fix_required',
-    Accepted: 'accepted',
-    Completed: 'completed',
+    ChangeRequested: 'change_requested',
+    Approved: 'approved',
+    PaymentFinished: 'payment_finished',
     Rejected: 'rejected'
 } as const;
 
@@ -827,67 +693,6 @@ export interface Tag {
 /**
  * 
  * @export
- * @interface Transaction
- */
-export interface Transaction {
-    /**
-     * 
-     * @type {string}
-     * @memberof Transaction
-     */
-    'id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Transaction
-     */
-    'title'?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof Transaction
-     */
-    'amount': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof Transaction
-     */
-    'target': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Transaction
-     */
-    'request': string | null;
-    /**
-     * 
-     * @type {Array<Tag>}
-     * @memberof Transaction
-     */
-    'tags': Array<Tag>;
-    /**
-     * 
-     * @type {Group}
-     * @memberof Transaction
-     */
-    'group': Group | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof Transaction
-     */
-    'created_at': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Transaction
-     */
-    'updated_at': string;
-}
-/**
- * 
- * @export
  * @interface User
  */
 export interface User {
@@ -914,7 +719,7 @@ export interface User {
      * @type {boolean}
      * @memberof User
      */
-    'admin': boolean;
+    'account_manager': boolean;
     /**
      * 
      * @type {string}
@@ -936,21 +741,21 @@ export interface User {
 }
 
 /**
- * AdminsApi - axios parameter creator
+ * AccountManagersApi - axios parameter creator
  * @export
  */
-export const AdminsApiAxiosParamCreator = function (configuration?: Configuration) {
+export const AccountManagersApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * adminユーザーを削除する。管理者権限が必要。
+         * accountManagerユーザーを削除する。accountManager権限が必要。
          * @param {Array<string>} requestBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteAdmins: async (requestBody: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deleteAccountManagers: async (requestBody: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'requestBody' is not null or undefined
-            assertParamExists('deleteAdmins', 'requestBody', requestBody)
-            const localVarPath = `/admins`;
+            assertParamExists('deleteAccountManagers', 'requestBody', requestBody)
+            const localVarPath = `/account-managers`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -977,12 +782,12 @@ export const AdminsApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * adminユーザーの一覧を返す。管理者権限が必要。
+         * accountManagerユーザーの一覧を返す。accountManager権限が必要。
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAdmins: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/admins`;
+        getAccountManagers: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/account-managers`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1006,15 +811,15 @@ export const AdminsApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * adminユーザーを追加する。管理者権限が必要。
+         * accountManagerユーザーを追加する。accountManager権限が必要。
          * @param {Array<string>} requestBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postAdmins: async (requestBody: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        postAccountManagers: async (requestBody: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'requestBody' is not null or undefined
-            assertParamExists('postAdmins', 'requestBody', requestBody)
-            const localVarPath = `/admins`;
+            assertParamExists('postAccountManagers', 'requestBody', requestBody)
+            const localVarPath = `/account-managers`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1044,117 +849,639 @@ export const AdminsApiAxiosParamCreator = function (configuration?: Configuratio
 };
 
 /**
- * AdminsApi - functional programming interface
+ * AccountManagersApi - functional programming interface
  * @export
  */
-export const AdminsApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = AdminsApiAxiosParamCreator(configuration)
+export const AccountManagersApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AccountManagersApiAxiosParamCreator(configuration)
     return {
         /**
-         * adminユーザーを削除する。管理者権限が必要。
+         * accountManagerユーザーを削除する。accountManager権限が必要。
          * @param {Array<string>} requestBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteAdmins(requestBody: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteAdmins(requestBody, options);
+        async deleteAccountManagers(requestBody: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteAccountManagers(requestBody, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * adminユーザーの一覧を返す。管理者権限が必要。
+         * accountManagerユーザーの一覧を返す。accountManager権限が必要。
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAdmins(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAdmins(options);
+        async getAccountManagers(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAccountManagers(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * adminユーザーを追加する。管理者権限が必要。
+         * accountManagerユーザーを追加する。accountManager権限が必要。
          * @param {Array<string>} requestBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postAdmins(requestBody: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.postAdmins(requestBody, options);
+        async postAccountManagers(requestBody: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postAccountManagers(requestBody, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
 
 /**
- * AdminsApi - factory interface
+ * AccountManagersApi - factory interface
  * @export
  */
-export const AdminsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = AdminsApiFp(configuration)
+export const AccountManagersApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AccountManagersApiFp(configuration)
     return {
         /**
-         * adminユーザーを削除する。管理者権限が必要。
+         * accountManagerユーザーを削除する。accountManager権限が必要。
          * @param {Array<string>} requestBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteAdmins(requestBody: Array<string>, options?: any): AxiosPromise<void> {
-            return localVarFp.deleteAdmins(requestBody, options).then((request) => request(axios, basePath));
+        deleteAccountManagers(requestBody: Array<string>, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteAccountManagers(requestBody, options).then((request) => request(axios, basePath));
         },
         /**
-         * adminユーザーの一覧を返す。管理者権限が必要。
+         * accountManagerユーザーの一覧を返す。accountManager権限が必要。
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAdmins(options?: any): AxiosPromise<Array<string>> {
-            return localVarFp.getAdmins(options).then((request) => request(axios, basePath));
+        getAccountManagers(options?: any): AxiosPromise<Array<string>> {
+            return localVarFp.getAccountManagers(options).then((request) => request(axios, basePath));
         },
         /**
-         * adminユーザーを追加する。管理者権限が必要。
+         * accountManagerユーザーを追加する。accountManager権限が必要。
          * @param {Array<string>} requestBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postAdmins(requestBody: Array<string>, options?: any): AxiosPromise<void> {
-            return localVarFp.postAdmins(requestBody, options).then((request) => request(axios, basePath));
+        postAccountManagers(requestBody: Array<string>, options?: any): AxiosPromise<void> {
+            return localVarFp.postAccountManagers(requestBody, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * AdminsApi - object-oriented interface
+ * AccountManagersApi - object-oriented interface
  * @export
- * @class AdminsApi
+ * @class AccountManagersApi
  * @extends {BaseAPI}
  */
-export class AdminsApi extends BaseAPI {
+export class AccountManagersApi extends BaseAPI {
     /**
-     * adminユーザーを削除する。管理者権限が必要。
+     * accountManagerユーザーを削除する。accountManager権限が必要。
      * @param {Array<string>} requestBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AdminsApi
+     * @memberof AccountManagersApi
      */
-    public deleteAdmins(requestBody: Array<string>, options?: AxiosRequestConfig) {
-        return AdminsApiFp(this.configuration).deleteAdmins(requestBody, options).then((request) => request(this.axios, this.basePath));
+    public deleteAccountManagers(requestBody: Array<string>, options?: AxiosRequestConfig) {
+        return AccountManagersApiFp(this.configuration).deleteAccountManagers(requestBody, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * adminユーザーの一覧を返す。管理者権限が必要。
+     * accountManagerユーザーの一覧を返す。accountManager権限が必要。
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AdminsApi
+     * @memberof AccountManagersApi
      */
-    public getAdmins(options?: AxiosRequestConfig) {
-        return AdminsApiFp(this.configuration).getAdmins(options).then((request) => request(this.axios, this.basePath));
+    public getAccountManagers(options?: AxiosRequestConfig) {
+        return AccountManagersApiFp(this.configuration).getAccountManagers(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * adminユーザーを追加する。管理者権限が必要。
+     * accountManagerユーザーを追加する。accountManager権限が必要。
      * @param {Array<string>} requestBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AdminsApi
+     * @memberof AccountManagersApi
      */
-    public postAdmins(requestBody: Array<string>, options?: AxiosRequestConfig) {
-        return AdminsApiFp(this.configuration).postAdmins(requestBody, options).then((request) => request(this.axios, this.basePath));
+    public postAccountManagers(requestBody: Array<string>, options?: AxiosRequestConfig) {
+        return AccountManagersApiFp(this.configuration).postAccountManagers(requestBody, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * ApplicationsApi - axios parameter creator
+ * @export
+ */
+export const ApplicationsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 指定した申請の詳細を取得する。
+         * @param {string} applicationID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getApplicationDetail: async (applicationID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'applicationID' is not null or undefined
+            assertParamExists('getApplicationDetail', 'applicationID', applicationID)
+            const localVarPath = `/applications/{applicationID}`
+                .replace(`{${"applicationID"}}`, encodeURIComponent(String(applicationID)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 申請一覧を取得する。
+         * @param {string} [sort] 並び順 (作成日時が新しい \&quot;created_at\&quot;, 作成日時が古い \&quot;-created_at\&quot;, タイトルの昇順 \&quot;title\&quot;, タイトルの降順 \&quot;-title\&quot;)
+         * @param {StatusEnum} [status] 現在の状態
+         * @param {string} [target] 誰との取引か
+         * @param {string} [since] いつからの依頼か
+         * @param {string} [until] いつまでの依頼か
+         * @param {number} [limit] 取得する最大個数
+         * @param {number} [offset] スキップする個数
+         * @param {string} [tag] タグ(複数の場合カンマ区切り)
+         * @param {string} [partition] パーティション
+         * @param {string} [createdBy] 作成者
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getApplications: async (sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, partition?: string, createdBy?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/applications`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
+            }
+
+            if (status !== undefined) {
+                localVarQueryParameter['status'] = status;
+            }
+
+            if (target !== undefined) {
+                localVarQueryParameter['target'] = target;
+            }
+
+            if (since !== undefined) {
+                localVarQueryParameter['since'] = (since as any instanceof Date) ?
+                    (since as any).toISOString().substr(0,10) :
+                    since;
+            }
+
+            if (until !== undefined) {
+                localVarQueryParameter['until'] = (until as any instanceof Date) ?
+                    (until as any).toISOString().substr(0,10) :
+                    until;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
+            }
+
+            if (tag !== undefined) {
+                localVarQueryParameter['tag'] = tag;
+            }
+
+            if (partition !== undefined) {
+                localVarQueryParameter['partition'] = partition;
+            }
+
+            if (createdBy !== undefined) {
+                localVarQueryParameter['created_by'] = createdBy;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 申請を新規作成する。
+         * @param {PostApplication} postApplication 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postApplication: async (postApplication: PostApplication, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'postApplication' is not null or undefined
+            assertParamExists('postApplication', 'postApplication', postApplication)
+            const localVarPath = `/applications`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(postApplication, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 指定した申請にコメントを新規作成する。
+         * @param {string} applicationID 
+         * @param {PostComment} postComment 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postComment: async (applicationID: string, postComment: PostComment, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'applicationID' is not null or undefined
+            assertParamExists('postComment', 'applicationID', applicationID)
+            // verify required parameter 'postComment' is not null or undefined
+            assertParamExists('postComment', 'postComment', postComment)
+            const localVarPath = `/applications/{applicationID}/comments`
+                .replace(`{${"applicationID"}}`, encodeURIComponent(String(applicationID)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(postComment, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 指定した申請を修正する。作成者権限が必要。
+         * @param {string} applicationID 
+         * @param {PostApplication} postApplication 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putApplicationDetail: async (applicationID: string, postApplication: PostApplication, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'applicationID' is not null or undefined
+            assertParamExists('putApplicationDetail', 'applicationID', applicationID)
+            // verify required parameter 'postApplication' is not null or undefined
+            assertParamExists('putApplicationDetail', 'postApplication', postApplication)
+            const localVarPath = `/applications/{applicationID}`
+                .replace(`{${"applicationID"}}`, encodeURIComponent(String(applicationID)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(postApplication, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの行き来の定義は作成者は「change_requestedからsubmitted」をでき、accountManagerは「submittedからrejected」「submittedからchange_requested」「change_requestedからsubmitted」「submittedからapproved」「approvedからsubmitted（ただしすでに支払われている人がいた場合、この操作は不可)」の操作のみ可。ただし、「approvedからfully_repaid」の操作はここでは行えない。accountManager権限または作成者権限が必要。
+         * @param {string} applicationID 
+         * @param {PutStatus} putStatus 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putStatus: async (applicationID: string, putStatus: PutStatus, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'applicationID' is not null or undefined
+            assertParamExists('putStatus', 'applicationID', applicationID)
+            // verify required parameter 'putStatus' is not null or undefined
+            assertParamExists('putStatus', 'putStatus', putStatus)
+            const localVarPath = `/applications/{applicationID}/status`
+                .replace(`{${"applicationID"}}`, encodeURIComponent(String(applicationID)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(putStatus, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ApplicationsApi - functional programming interface
+ * @export
+ */
+export const ApplicationsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ApplicationsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 指定した申請の詳細を取得する。
+         * @param {string} applicationID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getApplicationDetail(applicationID: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplicationDetail>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getApplicationDetail(applicationID, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 申請一覧を取得する。
+         * @param {string} [sort] 並び順 (作成日時が新しい \&quot;created_at\&quot;, 作成日時が古い \&quot;-created_at\&quot;, タイトルの昇順 \&quot;title\&quot;, タイトルの降順 \&quot;-title\&quot;)
+         * @param {StatusEnum} [status] 現在の状態
+         * @param {string} [target] 誰との取引か
+         * @param {string} [since] いつからの依頼か
+         * @param {string} [until] いつまでの依頼か
+         * @param {number} [limit] 取得する最大個数
+         * @param {number} [offset] スキップする個数
+         * @param {string} [tag] タグ(複数の場合カンマ区切り)
+         * @param {string} [partition] パーティション
+         * @param {string} [createdBy] 作成者
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getApplications(sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, partition?: string, createdBy?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Application>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getApplications(sort, status, target, since, until, limit, offset, tag, partition, createdBy, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 申請を新規作成する。
+         * @param {PostApplication} postApplication 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async postApplication(postApplication: PostApplication, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplicationDetail>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postApplication(postApplication, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 指定した申請にコメントを新規作成する。
+         * @param {string} applicationID 
+         * @param {PostComment} postComment 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async postComment(applicationID: string, postComment: PostComment, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Comment>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postComment(applicationID, postComment, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 指定した申請を修正する。作成者権限が必要。
+         * @param {string} applicationID 
+         * @param {PostApplication} postApplication 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putApplicationDetail(applicationID: string, postApplication: PostApplication, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplicationDetail>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putApplicationDetail(applicationID, postApplication, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの行き来の定義は作成者は「change_requestedからsubmitted」をでき、accountManagerは「submittedからrejected」「submittedからchange_requested」「change_requestedからsubmitted」「submittedからapproved」「approvedからsubmitted（ただしすでに支払われている人がいた場合、この操作は不可)」の操作のみ可。ただし、「approvedからfully_repaid」の操作はここでは行えない。accountManager権限または作成者権限が必要。
+         * @param {string} applicationID 
+         * @param {PutStatus} putStatus 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putStatus(applicationID: string, putStatus: PutStatus, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StatusDetail>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putStatus(applicationID, putStatus, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * ApplicationsApi - factory interface
+ * @export
+ */
+export const ApplicationsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ApplicationsApiFp(configuration)
+    return {
+        /**
+         * 指定した申請の詳細を取得する。
+         * @param {string} applicationID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getApplicationDetail(applicationID: string, options?: any): AxiosPromise<ApplicationDetail> {
+            return localVarFp.getApplicationDetail(applicationID, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 申請一覧を取得する。
+         * @param {string} [sort] 並び順 (作成日時が新しい \&quot;created_at\&quot;, 作成日時が古い \&quot;-created_at\&quot;, タイトルの昇順 \&quot;title\&quot;, タイトルの降順 \&quot;-title\&quot;)
+         * @param {StatusEnum} [status] 現在の状態
+         * @param {string} [target] 誰との取引か
+         * @param {string} [since] いつからの依頼か
+         * @param {string} [until] いつまでの依頼か
+         * @param {number} [limit] 取得する最大個数
+         * @param {number} [offset] スキップする個数
+         * @param {string} [tag] タグ(複数の場合カンマ区切り)
+         * @param {string} [partition] パーティション
+         * @param {string} [createdBy] 作成者
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getApplications(sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, partition?: string, createdBy?: string, options?: any): AxiosPromise<Array<Application>> {
+            return localVarFp.getApplications(sort, status, target, since, until, limit, offset, tag, partition, createdBy, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 申請を新規作成する。
+         * @param {PostApplication} postApplication 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postApplication(postApplication: PostApplication, options?: any): AxiosPromise<ApplicationDetail> {
+            return localVarFp.postApplication(postApplication, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 指定した申請にコメントを新規作成する。
+         * @param {string} applicationID 
+         * @param {PostComment} postComment 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postComment(applicationID: string, postComment: PostComment, options?: any): AxiosPromise<Comment> {
+            return localVarFp.postComment(applicationID, postComment, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 指定した申請を修正する。作成者権限が必要。
+         * @param {string} applicationID 
+         * @param {PostApplication} postApplication 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putApplicationDetail(applicationID: string, postApplication: PostApplication, options?: any): AxiosPromise<ApplicationDetail> {
+            return localVarFp.putApplicationDetail(applicationID, postApplication, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの行き来の定義は作成者は「change_requestedからsubmitted」をでき、accountManagerは「submittedからrejected」「submittedからchange_requested」「change_requestedからsubmitted」「submittedからapproved」「approvedからsubmitted（ただしすでに支払われている人がいた場合、この操作は不可)」の操作のみ可。ただし、「approvedからfully_repaid」の操作はここでは行えない。accountManager権限または作成者権限が必要。
+         * @param {string} applicationID 
+         * @param {PutStatus} putStatus 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putStatus(applicationID: string, putStatus: PutStatus, options?: any): AxiosPromise<StatusDetail> {
+            return localVarFp.putStatus(applicationID, putStatus, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * ApplicationsApi - object-oriented interface
+ * @export
+ * @class ApplicationsApi
+ * @extends {BaseAPI}
+ */
+export class ApplicationsApi extends BaseAPI {
+    /**
+     * 指定した申請の詳細を取得する。
+     * @param {string} applicationID 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationsApi
+     */
+    public getApplicationDetail(applicationID: string, options?: AxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).getApplicationDetail(applicationID, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 申請一覧を取得する。
+     * @param {string} [sort] 並び順 (作成日時が新しい \&quot;created_at\&quot;, 作成日時が古い \&quot;-created_at\&quot;, タイトルの昇順 \&quot;title\&quot;, タイトルの降順 \&quot;-title\&quot;)
+     * @param {StatusEnum} [status] 現在の状態
+     * @param {string} [target] 誰との取引か
+     * @param {string} [since] いつからの依頼か
+     * @param {string} [until] いつまでの依頼か
+     * @param {number} [limit] 取得する最大個数
+     * @param {number} [offset] スキップする個数
+     * @param {string} [tag] タグ(複数の場合カンマ区切り)
+     * @param {string} [partition] パーティション
+     * @param {string} [createdBy] 作成者
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationsApi
+     */
+    public getApplications(sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, partition?: string, createdBy?: string, options?: AxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).getApplications(sort, status, target, since, until, limit, offset, tag, partition, createdBy, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 申請を新規作成する。
+     * @param {PostApplication} postApplication 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationsApi
+     */
+    public postApplication(postApplication: PostApplication, options?: AxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).postApplication(postApplication, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 指定した申請にコメントを新規作成する。
+     * @param {string} applicationID 
+     * @param {PostComment} postComment 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationsApi
+     */
+    public postComment(applicationID: string, postComment: PostComment, options?: AxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).postComment(applicationID, postComment, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 指定した申請を修正する。作成者権限が必要。
+     * @param {string} applicationID 
+     * @param {PostApplication} postApplication 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationsApi
+     */
+    public putApplicationDetail(applicationID: string, postApplication: PostApplication, options?: AxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).putApplicationDetail(applicationID, postApplication, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの行き来の定義は作成者は「change_requestedからsubmitted」をでき、accountManagerは「submittedからrejected」「submittedからchange_requested」「change_requestedからsubmitted」「submittedからapproved」「approvedからsubmitted（ただしすでに支払われている人がいた場合、この操作は不可)」の操作のみ可。ただし、「approvedからfully_repaid」の操作はここでは行えない。accountManager権限または作成者権限が必要。
+     * @param {string} applicationID 
+     * @param {PutStatus} putStatus 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationsApi
+     */
+    public putStatus(applicationID: string, putStatus: PutStatus, options?: AxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).putStatus(applicationID, putStatus, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1260,7 +1587,7 @@ export class AuthApi extends BaseAPI {
 export const FilesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 指定したidのファイルを削除する。管理者権限または作成者権限が必要。
+         * 指定したidのファイルを削除する。accountManager権限または作成者権限が必要。
          * @param {string} fileID 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1362,17 +1689,17 @@ export const FilesApiAxiosParamCreator = function (configuration?: Configuration
          * ファイルをアップロードする。
          * @param {any} file 
          * @param {string} name 
-         * @param {string} requestId 
+         * @param {string} applicationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postFile: async (file: any, name: string, requestId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        postFile: async (file: any, name: string, applicationId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'file' is not null or undefined
             assertParamExists('postFile', 'file', file)
             // verify required parameter 'name' is not null or undefined
             assertParamExists('postFile', 'name', name)
-            // verify required parameter 'requestId' is not null or undefined
-            assertParamExists('postFile', 'requestId', requestId)
+            // verify required parameter 'applicationId' is not null or undefined
+            assertParamExists('postFile', 'applicationId', applicationId)
             const localVarPath = `/files`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1395,8 +1722,8 @@ export const FilesApiAxiosParamCreator = function (configuration?: Configuration
                 localVarFormParams.append('name', name as any);
             }
     
-            if (requestId !== undefined) { 
-                localVarFormParams.append('request_id', requestId as any);
+            if (applicationId !== undefined) { 
+                localVarFormParams.append('application_id', applicationId as any);
             }
     
     
@@ -1423,7 +1750,7 @@ export const FilesApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = FilesApiAxiosParamCreator(configuration)
     return {
         /**
-         * 指定したidのファイルを削除する。管理者権限または作成者権限が必要。
+         * 指定したidのファイルを削除する。accountManager権限または作成者権限が必要。
          * @param {string} fileID 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1456,12 +1783,12 @@ export const FilesApiFp = function(configuration?: Configuration) {
          * ファイルをアップロードする。
          * @param {any} file 
          * @param {string} name 
-         * @param {string} requestId 
+         * @param {string} applicationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postFile(file: any, name: string, requestId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.postFile(file, name, requestId, options);
+        async postFile(file: any, name: string, applicationId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postFile(file, name, applicationId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -1475,7 +1802,7 @@ export const FilesApiFactory = function (configuration?: Configuration, basePath
     const localVarFp = FilesApiFp(configuration)
     return {
         /**
-         * 指定したidのファイルを削除する。管理者権限または作成者権限が必要。
+         * 指定したidのファイルを削除する。accountManager権限または作成者権限が必要。
          * @param {string} fileID 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1505,12 +1832,12 @@ export const FilesApiFactory = function (configuration?: Configuration, basePath
          * ファイルをアップロードする。
          * @param {any} file 
          * @param {string} name 
-         * @param {string} requestId 
+         * @param {string} applicationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postFile(file: any, name: string, requestId: string, options?: any): AxiosPromise<InlineResponse200> {
-            return localVarFp.postFile(file, name, requestId, options).then((request) => request(axios, basePath));
+        postFile(file: any, name: string, applicationId: string, options?: any): AxiosPromise<InlineResponse200> {
+            return localVarFp.postFile(file, name, applicationId, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1523,7 +1850,7 @@ export const FilesApiFactory = function (configuration?: Configuration, basePath
  */
 export class FilesApi extends BaseAPI {
     /**
-     * 指定したidのファイルを削除する。管理者権限または作成者権限が必要。
+     * 指定したidのファイルを削除する。accountManager権限または作成者権限が必要。
      * @param {string} fileID 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1559,34 +1886,34 @@ export class FilesApi extends BaseAPI {
      * ファイルをアップロードする。
      * @param {any} file 
      * @param {string} name 
-     * @param {string} requestId 
+     * @param {string} applicationId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FilesApi
      */
-    public postFile(file: any, name: string, requestId: string, options?: AxiosRequestConfig) {
-        return FilesApiFp(this.configuration).postFile(file, name, requestId, options).then((request) => request(this.axios, this.basePath));
+    public postFile(file: any, name: string, applicationId: string, options?: AxiosRequestConfig) {
+        return FilesApiFp(this.configuration).postFile(file, name, applicationId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
 
 /**
- * GroupsApi - axios parameter creator
+ * PartitionsApi - axios parameter creator
  * @export
  */
-export const GroupsApiAxiosParamCreator = function (configuration?: Configuration) {
+export const PartitionsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * グループを削除する。管理者権限またはグループオーナー権限が必要。
-         * @param {string} groupID 
+         * パーティションを削除する。accountManager権限が必要。
+         * @param {string} partitionID 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteGroup: async (groupID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'groupID' is not null or undefined
-            assertParamExists('deleteGroup', 'groupID', groupID)
-            const localVarPath = `/groups/{groupID}`
-                .replace(`{${"groupID"}}`, encodeURIComponent(String(groupID)));
+        deletePartition: async (partitionID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'partitionID' is not null or undefined
+            assertParamExists('deletePartition', 'partitionID', partitionID)
+            const localVarPath = `/partitions/{partitionID}`
+                .replace(`{${"partitionID"}}`, encodeURIComponent(String(partitionID)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1610,94 +1937,16 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * ユーザーをグループのメンバーから外す。管理者権限またはグループオーナー権限が必要。
-         * @param {string} groupID 
-         * @param {Array<string>} requestBody 
+         * パーティションの情報を返す。
+         * @param {string} partitionID 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteGroupMembers: async (groupID: string, requestBody: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'groupID' is not null or undefined
-            assertParamExists('deleteGroupMembers', 'groupID', groupID)
-            // verify required parameter 'requestBody' is not null or undefined
-            assertParamExists('deleteGroupMembers', 'requestBody', requestBody)
-            const localVarPath = `/groups/{groupID}/members`
-                .replace(`{${"groupID"}}`, encodeURIComponent(String(groupID)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * ユーザーをグループから削除する。管理者権限またはグループオーナー権限が必要。
-         * @param {string} groupID 
-         * @param {Array<string>} requestBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteGroupOwners: async (groupID: string, requestBody: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'groupID' is not null or undefined
-            assertParamExists('deleteGroupOwners', 'groupID', groupID)
-            // verify required parameter 'requestBody' is not null or undefined
-            assertParamExists('deleteGroupOwners', 'requestBody', requestBody)
-            const localVarPath = `/groups/{groupID}/owners`
-                .replace(`{${"groupID"}}`, encodeURIComponent(String(groupID)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * グループの情報を返す。
-         * @param {string} groupID 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getGroupDetail: async (groupID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'groupID' is not null or undefined
-            assertParamExists('getGroupDetail', 'groupID', groupID)
-            const localVarPath = `/groups/{groupID}`
-                .replace(`{${"groupID"}}`, encodeURIComponent(String(groupID)));
+        getPartition: async (partitionID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'partitionID' is not null or undefined
+            assertParamExists('getPartition', 'partitionID', partitionID)
+            const localVarPath = `/partitions/{partitionID}`
+                .replace(`{${"partitionID"}}`, encodeURIComponent(String(partitionID)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1721,12 +1970,12 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * グループの一覧を返す。
+         * パーティションの一覧を返す。
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getGroups: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/groups`;
+        getPartitions: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/partitions`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1750,15 +1999,15 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * グループを追加する。管理者権限が必要。
-         * @param {PostGroup} postGroup 
+         * パーティションを追加する。accountManager権限が必要。
+         * @param {PostPartition} postPartition 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postGroup: async (postGroup: PostGroup, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postGroup' is not null or undefined
-            assertParamExists('postGroup', 'postGroup', postGroup)
-            const localVarPath = `/groups`;
+        postPartition: async (postPartition: PostPartition, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'postPartition' is not null or undefined
+            assertParamExists('postPartition', 'postPartition', postPartition)
+            const localVarPath = `/partitions`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1777,7 +2026,7 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postGroup, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(postPartition, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1785,97 +2034,19 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * ユーザーをグループに追加する。管理者権限またはグループオーナー権限が必要。
-         * @param {string} groupID 
-         * @param {Array<string>} requestBody 
+         * パーティションの情報を変更する。accountManager権限が必要。
+         * @param {string} partitionID 
+         * @param {PostPartition} postPartition 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postGroupMembers: async (groupID: string, requestBody: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'groupID' is not null or undefined
-            assertParamExists('postGroupMembers', 'groupID', groupID)
-            // verify required parameter 'requestBody' is not null or undefined
-            assertParamExists('postGroupMembers', 'requestBody', requestBody)
-            const localVarPath = `/groups/{groupID}/members`
-                .replace(`{${"groupID"}}`, encodeURIComponent(String(groupID)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * グループオーナーをグループに追加する。管理者権限またはグループオーナー権限が必要。
-         * @param {string} groupID 
-         * @param {Array<string>} requestBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        postGroupOwners: async (groupID: string, requestBody: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'groupID' is not null or undefined
-            assertParamExists('postGroupOwners', 'groupID', groupID)
-            // verify required parameter 'requestBody' is not null or undefined
-            assertParamExists('postGroupOwners', 'requestBody', requestBody)
-            const localVarPath = `/groups/{groupID}/owners`
-                .replace(`{${"groupID"}}`, encodeURIComponent(String(groupID)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * グループの情報を変更する。管理者権限またはグループオーナー権限が必要。
-         * @param {string} groupID 
-         * @param {PutGroup} putGroup 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        putGroupDetail: async (groupID: string, putGroup: PutGroup, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'groupID' is not null or undefined
-            assertParamExists('putGroupDetail', 'groupID', groupID)
-            // verify required parameter 'putGroup' is not null or undefined
-            assertParamExists('putGroupDetail', 'putGroup', putGroup)
-            const localVarPath = `/groups/{groupID}`
-                .replace(`{${"groupID"}}`, encodeURIComponent(String(groupID)));
+        putPartition: async (partitionID: string, postPartition: PostPartition, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'partitionID' is not null or undefined
+            assertParamExists('putPartition', 'partitionID', partitionID)
+            // verify required parameter 'postPartition' is not null or undefined
+            assertParamExists('putPartition', 'postPartition', postPartition)
+            const localVarPath = `/partitions/{partitionID}`
+                .replace(`{${"partitionID"}}`, encodeURIComponent(String(partitionID)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1894,7 +2065,7 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(putGroup, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(postPartition, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1905,834 +2076,180 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
 };
 
 /**
- * GroupsApi - functional programming interface
+ * PartitionsApi - functional programming interface
  * @export
  */
-export const GroupsApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = GroupsApiAxiosParamCreator(configuration)
+export const PartitionsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = PartitionsApiAxiosParamCreator(configuration)
     return {
         /**
-         * グループを削除する。管理者権限またはグループオーナー権限が必要。
-         * @param {string} groupID 
+         * パーティションを削除する。accountManager権限が必要。
+         * @param {string} partitionID 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteGroup(groupID: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteGroup(groupID, options);
+        async deletePartition(partitionID: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deletePartition(partitionID, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * ユーザーをグループのメンバーから外す。管理者権限またはグループオーナー権限が必要。
-         * @param {string} groupID 
-         * @param {Array<string>} requestBody 
+         * パーティションの情報を返す。
+         * @param {string} partitionID 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteGroupMembers(groupID: string, requestBody: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteGroupMembers(groupID, requestBody, options);
+        async getPartition(partitionID: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Partition>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPartition(partitionID, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * ユーザーをグループから削除する。管理者権限またはグループオーナー権限が必要。
-         * @param {string} groupID 
-         * @param {Array<string>} requestBody 
+         * パーティションの一覧を返す。
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteGroupOwners(groupID: string, requestBody: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteGroupOwners(groupID, requestBody, options);
+        async getPartitions(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Partition>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPartitions(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * グループの情報を返す。
-         * @param {string} groupID 
+         * パーティションを追加する。accountManager権限が必要。
+         * @param {PostPartition} postPartition 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getGroupDetail(groupID: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GroupDetail>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getGroupDetail(groupID, options);
+        async postPartition(postPartition: PostPartition, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Partition>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postPartition(postPartition, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * グループの一覧を返す。
+         * パーティションの情報を変更する。accountManager権限が必要。
+         * @param {string} partitionID 
+         * @param {PostPartition} postPartition 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getGroups(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Group>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getGroups(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * グループを追加する。管理者権限が必要。
-         * @param {PostGroup} postGroup 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async postGroup(postGroup: PostGroup, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Group>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.postGroup(postGroup, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * ユーザーをグループに追加する。管理者権限またはグループオーナー権限が必要。
-         * @param {string} groupID 
-         * @param {Array<string>} requestBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async postGroupMembers(groupID: string, requestBody: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.postGroupMembers(groupID, requestBody, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * グループオーナーをグループに追加する。管理者権限またはグループオーナー権限が必要。
-         * @param {string} groupID 
-         * @param {Array<string>} requestBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async postGroupOwners(groupID: string, requestBody: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.postGroupOwners(groupID, requestBody, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * グループの情報を変更する。管理者権限またはグループオーナー権限が必要。
-         * @param {string} groupID 
-         * @param {PutGroup} putGroup 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async putGroupDetail(groupID: string, putGroup: PutGroup, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Group>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.putGroupDetail(groupID, putGroup, options);
+        async putPartition(partitionID: string, postPartition: PostPartition, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Partition>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putPartition(partitionID, postPartition, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
 
 /**
- * GroupsApi - factory interface
+ * PartitionsApi - factory interface
  * @export
  */
-export const GroupsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = GroupsApiFp(configuration)
+export const PartitionsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = PartitionsApiFp(configuration)
     return {
         /**
-         * グループを削除する。管理者権限またはグループオーナー権限が必要。
-         * @param {string} groupID 
+         * パーティションを削除する。accountManager権限が必要。
+         * @param {string} partitionID 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteGroup(groupID: string, options?: any): AxiosPromise<void> {
-            return localVarFp.deleteGroup(groupID, options).then((request) => request(axios, basePath));
+        deletePartition(partitionID: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deletePartition(partitionID, options).then((request) => request(axios, basePath));
         },
         /**
-         * ユーザーをグループのメンバーから外す。管理者権限またはグループオーナー権限が必要。
-         * @param {string} groupID 
-         * @param {Array<string>} requestBody 
+         * パーティションの情報を返す。
+         * @param {string} partitionID 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteGroupMembers(groupID: string, requestBody: Array<string>, options?: any): AxiosPromise<void> {
-            return localVarFp.deleteGroupMembers(groupID, requestBody, options).then((request) => request(axios, basePath));
+        getPartition(partitionID: string, options?: any): AxiosPromise<Partition> {
+            return localVarFp.getPartition(partitionID, options).then((request) => request(axios, basePath));
         },
         /**
-         * ユーザーをグループから削除する。管理者権限またはグループオーナー権限が必要。
-         * @param {string} groupID 
-         * @param {Array<string>} requestBody 
+         * パーティションの一覧を返す。
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteGroupOwners(groupID: string, requestBody: Array<string>, options?: any): AxiosPromise<void> {
-            return localVarFp.deleteGroupOwners(groupID, requestBody, options).then((request) => request(axios, basePath));
+        getPartitions(options?: any): AxiosPromise<Array<Partition>> {
+            return localVarFp.getPartitions(options).then((request) => request(axios, basePath));
         },
         /**
-         * グループの情報を返す。
-         * @param {string} groupID 
+         * パーティションを追加する。accountManager権限が必要。
+         * @param {PostPartition} postPartition 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getGroupDetail(groupID: string, options?: any): AxiosPromise<GroupDetail> {
-            return localVarFp.getGroupDetail(groupID, options).then((request) => request(axios, basePath));
+        postPartition(postPartition: PostPartition, options?: any): AxiosPromise<Partition> {
+            return localVarFp.postPartition(postPartition, options).then((request) => request(axios, basePath));
         },
         /**
-         * グループの一覧を返す。
+         * パーティションの情報を変更する。accountManager権限が必要。
+         * @param {string} partitionID 
+         * @param {PostPartition} postPartition 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getGroups(options?: any): AxiosPromise<Array<Group>> {
-            return localVarFp.getGroups(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * グループを追加する。管理者権限が必要。
-         * @param {PostGroup} postGroup 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        postGroup(postGroup: PostGroup, options?: any): AxiosPromise<Group> {
-            return localVarFp.postGroup(postGroup, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * ユーザーをグループに追加する。管理者権限またはグループオーナー権限が必要。
-         * @param {string} groupID 
-         * @param {Array<string>} requestBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        postGroupMembers(groupID: string, requestBody: Array<string>, options?: any): AxiosPromise<Array<string>> {
-            return localVarFp.postGroupMembers(groupID, requestBody, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * グループオーナーをグループに追加する。管理者権限またはグループオーナー権限が必要。
-         * @param {string} groupID 
-         * @param {Array<string>} requestBody 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        postGroupOwners(groupID: string, requestBody: Array<string>, options?: any): AxiosPromise<Array<string>> {
-            return localVarFp.postGroupOwners(groupID, requestBody, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * グループの情報を変更する。管理者権限またはグループオーナー権限が必要。
-         * @param {string} groupID 
-         * @param {PutGroup} putGroup 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        putGroupDetail(groupID: string, putGroup: PutGroup, options?: any): AxiosPromise<Group> {
-            return localVarFp.putGroupDetail(groupID, putGroup, options).then((request) => request(axios, basePath));
+        putPartition(partitionID: string, postPartition: PostPartition, options?: any): AxiosPromise<Partition> {
+            return localVarFp.putPartition(partitionID, postPartition, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * GroupsApi - object-oriented interface
+ * PartitionsApi - object-oriented interface
  * @export
- * @class GroupsApi
+ * @class PartitionsApi
  * @extends {BaseAPI}
  */
-export class GroupsApi extends BaseAPI {
+export class PartitionsApi extends BaseAPI {
     /**
-     * グループを削除する。管理者権限またはグループオーナー権限が必要。
-     * @param {string} groupID 
+     * パーティションを削除する。accountManager権限が必要。
+     * @param {string} partitionID 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupsApi
+     * @memberof PartitionsApi
      */
-    public deleteGroup(groupID: string, options?: AxiosRequestConfig) {
-        return GroupsApiFp(this.configuration).deleteGroup(groupID, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * ユーザーをグループのメンバーから外す。管理者権限またはグループオーナー権限が必要。
-     * @param {string} groupID 
-     * @param {Array<string>} requestBody 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GroupsApi
-     */
-    public deleteGroupMembers(groupID: string, requestBody: Array<string>, options?: AxiosRequestConfig) {
-        return GroupsApiFp(this.configuration).deleteGroupMembers(groupID, requestBody, options).then((request) => request(this.axios, this.basePath));
+    public deletePartition(partitionID: string, options?: AxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).deletePartition(partitionID, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * ユーザーをグループから削除する。管理者権限またはグループオーナー権限が必要。
-     * @param {string} groupID 
-     * @param {Array<string>} requestBody 
+     * パーティションの情報を返す。
+     * @param {string} partitionID 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupsApi
+     * @memberof PartitionsApi
      */
-    public deleteGroupOwners(groupID: string, requestBody: Array<string>, options?: AxiosRequestConfig) {
-        return GroupsApiFp(this.configuration).deleteGroupOwners(groupID, requestBody, options).then((request) => request(this.axios, this.basePath));
+    public getPartition(partitionID: string, options?: AxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).getPartition(partitionID, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * グループの情報を返す。
-     * @param {string} groupID 
+     * パーティションの一覧を返す。
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupsApi
+     * @memberof PartitionsApi
      */
-    public getGroupDetail(groupID: string, options?: AxiosRequestConfig) {
-        return GroupsApiFp(this.configuration).getGroupDetail(groupID, options).then((request) => request(this.axios, this.basePath));
+    public getPartitions(options?: AxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).getPartitions(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * グループの一覧を返す。
+     * パーティションを追加する。accountManager権限が必要。
+     * @param {PostPartition} postPartition 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupsApi
+     * @memberof PartitionsApi
      */
-    public getGroups(options?: AxiosRequestConfig) {
-        return GroupsApiFp(this.configuration).getGroups(options).then((request) => request(this.axios, this.basePath));
+    public postPartition(postPartition: PostPartition, options?: AxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).postPartition(postPartition, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * グループを追加する。管理者権限が必要。
-     * @param {PostGroup} postGroup 
+     * パーティションの情報を変更する。accountManager権限が必要。
+     * @param {string} partitionID 
+     * @param {PostPartition} postPartition 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupsApi
+     * @memberof PartitionsApi
      */
-    public postGroup(postGroup: PostGroup, options?: AxiosRequestConfig) {
-        return GroupsApiFp(this.configuration).postGroup(postGroup, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * ユーザーをグループに追加する。管理者権限またはグループオーナー権限が必要。
-     * @param {string} groupID 
-     * @param {Array<string>} requestBody 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GroupsApi
-     */
-    public postGroupMembers(groupID: string, requestBody: Array<string>, options?: AxiosRequestConfig) {
-        return GroupsApiFp(this.configuration).postGroupMembers(groupID, requestBody, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * グループオーナーをグループに追加する。管理者権限またはグループオーナー権限が必要。
-     * @param {string} groupID 
-     * @param {Array<string>} requestBody 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GroupsApi
-     */
-    public postGroupOwners(groupID: string, requestBody: Array<string>, options?: AxiosRequestConfig) {
-        return GroupsApiFp(this.configuration).postGroupOwners(groupID, requestBody, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * グループの情報を変更する。管理者権限またはグループオーナー権限が必要。
-     * @param {string} groupID 
-     * @param {PutGroup} putGroup 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GroupsApi
-     */
-    public putGroupDetail(groupID: string, putGroup: PutGroup, options?: AxiosRequestConfig) {
-        return GroupsApiFp(this.configuration).putGroupDetail(groupID, putGroup, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-/**
- * RequestsApi - axios parameter creator
- * @export
- */
-export const RequestsApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 指定した依頼の詳細を取得する。
-         * @param {string} requestID 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getRequestDetail: async (requestID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'requestID' is not null or undefined
-            assertParamExists('getRequestDetail', 'requestID', requestID)
-            const localVarPath = `/requests/{requestID}`
-                .replace(`{${"requestID"}}`, encodeURIComponent(String(requestID)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 依頼一覧を取得する。
-         * @param {string} [sort] 並び順 (作成日時が新しい \&quot;created_at\&quot;, 作成日時が古い \&quot;-created_at\&quot;, タイトルの昇順 \&quot;title\&quot;, タイトルの降順 \&quot;-title\&quot;)
-         * @param {StatusEnum} [status] 現在の状態
-         * @param {string} [target] 誰との取引か
-         * @param {string} [since] いつからの依頼か
-         * @param {string} [until] いつまでの依頼か
-         * @param {number} [limit] 取得する最大個数
-         * @param {number} [offset] スキップする個数
-         * @param {string} [tag] タグ(複数の場合カンマ区切り)
-         * @param {string} [group] グループ
-         * @param {string} [createdBy] 作成者
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getRequests: async (sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, group?: string, createdBy?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/requests`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (sort !== undefined) {
-                localVarQueryParameter['sort'] = sort;
-            }
-
-            if (status !== undefined) {
-                localVarQueryParameter['status'] = status;
-            }
-
-            if (target !== undefined) {
-                localVarQueryParameter['target'] = target;
-            }
-
-            if (since !== undefined) {
-                localVarQueryParameter['since'] = (since as any instanceof Date) ?
-                    (since as any).toISOString().substr(0,10) :
-                    since;
-            }
-
-            if (until !== undefined) {
-                localVarQueryParameter['until'] = (until as any instanceof Date) ?
-                    (until as any).toISOString().substr(0,10) :
-                    until;
-            }
-
-            if (limit !== undefined) {
-                localVarQueryParameter['limit'] = limit;
-            }
-
-            if (offset !== undefined) {
-                localVarQueryParameter['offset'] = offset;
-            }
-
-            if (tag !== undefined) {
-                localVarQueryParameter['tag'] = tag;
-            }
-
-            if (group !== undefined) {
-                localVarQueryParameter['group'] = group;
-            }
-
-            if (createdBy !== undefined) {
-                localVarQueryParameter['created_by'] = createdBy;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 指定した依頼にコメントを新規作成する。
-         * @param {string} requestID 
-         * @param {PostComment} postComment 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        postComment: async (requestID: string, postComment: PostComment, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'requestID' is not null or undefined
-            assertParamExists('postComment', 'requestID', requestID)
-            // verify required parameter 'postComment' is not null or undefined
-            assertParamExists('postComment', 'postComment', postComment)
-            const localVarPath = `/requests/{requestID}/comments`
-                .replace(`{${"requestID"}}`, encodeURIComponent(String(requestID)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postComment, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 依頼を新規作成する。
-         * @param {PostRequest} postRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        postRequest: async (postRequest: PostRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postRequest' is not null or undefined
-            assertParamExists('postRequest', 'postRequest', postRequest)
-            const localVarPath = `/requests`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postRequest, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 指定した依頼を修正する。作成者権限が必要。
-         * @param {string} requestID 
-         * @param {PostRequest} postRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        putRequestDetail: async (requestID: string, postRequest: PostRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'requestID' is not null or undefined
-            assertParamExists('putRequestDetail', 'requestID', requestID)
-            // verify required parameter 'postRequest' is not null or undefined
-            assertParamExists('putRequestDetail', 'postRequest', postRequest)
-            const localVarPath = `/requests/{requestID}`
-                .replace(`{${"requestID"}}`, encodeURIComponent(String(requestID)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postRequest, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 指定した依頼のstatusを変更のみ(新規はpost /requests)する。commentは常に必須(ないときは空文字列)。statusの行き来の定義は作成者は「fix_requiredからsubmitted」をでき、adminは「submittedからrejected」「submittedからrequired」「fix_requiredからsubmitted」「submittedからaccepted」「acceptedからsubmitted（ただしすでに支払われている人がいた場合、この操作は不可)」の操作のみ可。ただし、「acceptedからfully_repaid」の操作はここでは行えない。管理者権限または作成者権限が必要。
-         * @param {string} requestID 
-         * @param {PutStatus} putStatus 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        putStatus: async (requestID: string, putStatus: PutStatus, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'requestID' is not null or undefined
-            assertParamExists('putStatus', 'requestID', requestID)
-            // verify required parameter 'putStatus' is not null or undefined
-            assertParamExists('putStatus', 'putStatus', putStatus)
-            const localVarPath = `/requests/{requestID}/status`
-                .replace(`{${"requestID"}}`, encodeURIComponent(String(requestID)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(putStatus, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * RequestsApi - functional programming interface
- * @export
- */
-export const RequestsApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = RequestsApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 指定した依頼の詳細を取得する。
-         * @param {string} requestID 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getRequestDetail(requestID: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RequestDetail>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getRequestDetail(requestID, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 依頼一覧を取得する。
-         * @param {string} [sort] 並び順 (作成日時が新しい \&quot;created_at\&quot;, 作成日時が古い \&quot;-created_at\&quot;, タイトルの昇順 \&quot;title\&quot;, タイトルの降順 \&quot;-title\&quot;)
-         * @param {StatusEnum} [status] 現在の状態
-         * @param {string} [target] 誰との取引か
-         * @param {string} [since] いつからの依頼か
-         * @param {string} [until] いつまでの依頼か
-         * @param {number} [limit] 取得する最大個数
-         * @param {number} [offset] スキップする個数
-         * @param {string} [tag] タグ(複数の場合カンマ区切り)
-         * @param {string} [group] グループ
-         * @param {string} [createdBy] 作成者
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getRequests(sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, group?: string, createdBy?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Request>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getRequests(sort, status, target, since, until, limit, offset, tag, group, createdBy, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 指定した依頼にコメントを新規作成する。
-         * @param {string} requestID 
-         * @param {PostComment} postComment 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async postComment(requestID: string, postComment: PostComment, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Comment>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.postComment(requestID, postComment, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 依頼を新規作成する。
-         * @param {PostRequest} postRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async postRequest(postRequest: PostRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RequestDetail>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.postRequest(postRequest, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 指定した依頼を修正する。作成者権限が必要。
-         * @param {string} requestID 
-         * @param {PostRequest} postRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async putRequestDetail(requestID: string, postRequest: PostRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RequestDetail>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.putRequestDetail(requestID, postRequest, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 指定した依頼のstatusを変更のみ(新規はpost /requests)する。commentは常に必須(ないときは空文字列)。statusの行き来の定義は作成者は「fix_requiredからsubmitted」をでき、adminは「submittedからrejected」「submittedからrequired」「fix_requiredからsubmitted」「submittedからaccepted」「acceptedからsubmitted（ただしすでに支払われている人がいた場合、この操作は不可)」の操作のみ可。ただし、「acceptedからfully_repaid」の操作はここでは行えない。管理者権限または作成者権限が必要。
-         * @param {string} requestID 
-         * @param {PutStatus} putStatus 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async putStatus(requestID: string, putStatus: PutStatus, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StatusDetail>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.putStatus(requestID, putStatus, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-    }
-};
-
-/**
- * RequestsApi - factory interface
- * @export
- */
-export const RequestsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = RequestsApiFp(configuration)
-    return {
-        /**
-         * 指定した依頼の詳細を取得する。
-         * @param {string} requestID 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getRequestDetail(requestID: string, options?: any): AxiosPromise<RequestDetail> {
-            return localVarFp.getRequestDetail(requestID, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 依頼一覧を取得する。
-         * @param {string} [sort] 並び順 (作成日時が新しい \&quot;created_at\&quot;, 作成日時が古い \&quot;-created_at\&quot;, タイトルの昇順 \&quot;title\&quot;, タイトルの降順 \&quot;-title\&quot;)
-         * @param {StatusEnum} [status] 現在の状態
-         * @param {string} [target] 誰との取引か
-         * @param {string} [since] いつからの依頼か
-         * @param {string} [until] いつまでの依頼か
-         * @param {number} [limit] 取得する最大個数
-         * @param {number} [offset] スキップする個数
-         * @param {string} [tag] タグ(複数の場合カンマ区切り)
-         * @param {string} [group] グループ
-         * @param {string} [createdBy] 作成者
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getRequests(sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, group?: string, createdBy?: string, options?: any): AxiosPromise<Array<Request>> {
-            return localVarFp.getRequests(sort, status, target, since, until, limit, offset, tag, group, createdBy, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 指定した依頼にコメントを新規作成する。
-         * @param {string} requestID 
-         * @param {PostComment} postComment 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        postComment(requestID: string, postComment: PostComment, options?: any): AxiosPromise<Comment> {
-            return localVarFp.postComment(requestID, postComment, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 依頼を新規作成する。
-         * @param {PostRequest} postRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        postRequest(postRequest: PostRequest, options?: any): AxiosPromise<RequestDetail> {
-            return localVarFp.postRequest(postRequest, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 指定した依頼を修正する。作成者権限が必要。
-         * @param {string} requestID 
-         * @param {PostRequest} postRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        putRequestDetail(requestID: string, postRequest: PostRequest, options?: any): AxiosPromise<RequestDetail> {
-            return localVarFp.putRequestDetail(requestID, postRequest, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 指定した依頼のstatusを変更のみ(新規はpost /requests)する。commentは常に必須(ないときは空文字列)。statusの行き来の定義は作成者は「fix_requiredからsubmitted」をでき、adminは「submittedからrejected」「submittedからrequired」「fix_requiredからsubmitted」「submittedからaccepted」「acceptedからsubmitted（ただしすでに支払われている人がいた場合、この操作は不可)」の操作のみ可。ただし、「acceptedからfully_repaid」の操作はここでは行えない。管理者権限または作成者権限が必要。
-         * @param {string} requestID 
-         * @param {PutStatus} putStatus 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        putStatus(requestID: string, putStatus: PutStatus, options?: any): AxiosPromise<StatusDetail> {
-            return localVarFp.putStatus(requestID, putStatus, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * RequestsApi - object-oriented interface
- * @export
- * @class RequestsApi
- * @extends {BaseAPI}
- */
-export class RequestsApi extends BaseAPI {
-    /**
-     * 指定した依頼の詳細を取得する。
-     * @param {string} requestID 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RequestsApi
-     */
-    public getRequestDetail(requestID: string, options?: AxiosRequestConfig) {
-        return RequestsApiFp(this.configuration).getRequestDetail(requestID, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 依頼一覧を取得する。
-     * @param {string} [sort] 並び順 (作成日時が新しい \&quot;created_at\&quot;, 作成日時が古い \&quot;-created_at\&quot;, タイトルの昇順 \&quot;title\&quot;, タイトルの降順 \&quot;-title\&quot;)
-     * @param {StatusEnum} [status] 現在の状態
-     * @param {string} [target] 誰との取引か
-     * @param {string} [since] いつからの依頼か
-     * @param {string} [until] いつまでの依頼か
-     * @param {number} [limit] 取得する最大個数
-     * @param {number} [offset] スキップする個数
-     * @param {string} [tag] タグ(複数の場合カンマ区切り)
-     * @param {string} [group] グループ
-     * @param {string} [createdBy] 作成者
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RequestsApi
-     */
-    public getRequests(sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, group?: string, createdBy?: string, options?: AxiosRequestConfig) {
-        return RequestsApiFp(this.configuration).getRequests(sort, status, target, since, until, limit, offset, tag, group, createdBy, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 指定した依頼にコメントを新規作成する。
-     * @param {string} requestID 
-     * @param {PostComment} postComment 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RequestsApi
-     */
-    public postComment(requestID: string, postComment: PostComment, options?: AxiosRequestConfig) {
-        return RequestsApiFp(this.configuration).postComment(requestID, postComment, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 依頼を新規作成する。
-     * @param {PostRequest} postRequest 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RequestsApi
-     */
-    public postRequest(postRequest: PostRequest, options?: AxiosRequestConfig) {
-        return RequestsApiFp(this.configuration).postRequest(postRequest, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 指定した依頼を修正する。作成者権限が必要。
-     * @param {string} requestID 
-     * @param {PostRequest} postRequest 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RequestsApi
-     */
-    public putRequestDetail(requestID: string, postRequest: PostRequest, options?: AxiosRequestConfig) {
-        return RequestsApiFp(this.configuration).putRequestDetail(requestID, postRequest, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 指定した依頼のstatusを変更のみ(新規はpost /requests)する。commentは常に必須(ないときは空文字列)。statusの行き来の定義は作成者は「fix_requiredからsubmitted」をでき、adminは「submittedからrejected」「submittedからrequired」「fix_requiredからsubmitted」「submittedからaccepted」「acceptedからsubmitted（ただしすでに支払われている人がいた場合、この操作は不可)」の操作のみ可。ただし、「acceptedからfully_repaid」の操作はここでは行えない。管理者権限または作成者権限が必要。
-     * @param {string} requestID 
-     * @param {PutStatus} putStatus 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RequestsApi
-     */
-    public putStatus(requestID: string, putStatus: PutStatus, options?: AxiosRequestConfig) {
-        return RequestsApiFp(this.configuration).putStatus(requestID, putStatus, options).then((request) => request(this.axios, this.basePath));
+    public putPartition(partitionID: string, postPartition: PostPartition, options?: AxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).putPartition(partitionID, postPartition, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2743,6 +2260,39 @@ export class RequestsApi extends BaseAPI {
  */
 export const TagsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * タグの情報を取得する。
+         * @param {string} tagID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTag: async (tagID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'tagID' is not null or undefined
+            assertParamExists('getTag', 'tagID', tagID)
+            const localVarPath = `/tags/{tagID}`
+                .replace(`{${"tagID"}}`, encodeURIComponent(String(tagID)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * タグの一覧を返す。
          * @param {*} [options] Override http request option.
@@ -2840,39 +2390,6 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * タグの情報を取得する。
-         * @param {string} tagID 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        tagsTagIDGet: async (tagID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'tagID' is not null or undefined
-            assertParamExists('tagsTagIDGet', 'tagID', tagID)
-            const localVarPath = `/tags/{tagID}`
-                .replace(`{${"tagID"}}`, encodeURIComponent(String(tagID)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -2883,6 +2400,16 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
 export const TagsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = TagsApiAxiosParamCreator(configuration)
     return {
+        /**
+         * タグの情報を取得する。
+         * @param {string} tagID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getTag(tagID: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Tag & object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTag(tagID, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
         /**
          * タグの一覧を返す。
          * @param {*} [options] Override http request option.
@@ -2912,16 +2439,6 @@ export const TagsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.tagsTagIDDelete(tagID, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
-        /**
-         * タグの情報を取得する。
-         * @param {string} tagID 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async tagsTagIDGet(tagID: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Tag & object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.tagsTagIDGet(tagID, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
     }
 };
 
@@ -2932,6 +2449,15 @@ export const TagsApiFp = function(configuration?: Configuration) {
 export const TagsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = TagsApiFp(configuration)
     return {
+        /**
+         * タグの情報を取得する。
+         * @param {string} tagID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTag(tagID: string, options?: any): AxiosPromise<Tag & object> {
+            return localVarFp.getTag(tagID, options).then((request) => request(axios, basePath));
+        },
         /**
          * タグの一覧を返す。
          * @param {*} [options] Override http request option.
@@ -2958,15 +2484,6 @@ export const TagsApiFactory = function (configuration?: Configuration, basePath?
         tagsTagIDDelete(tagID: string, options?: any): AxiosPromise<void> {
             return localVarFp.tagsTagIDDelete(tagID, options).then((request) => request(axios, basePath));
         },
-        /**
-         * タグの情報を取得する。
-         * @param {string} tagID 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        tagsTagIDGet(tagID: string, options?: any): AxiosPromise<Tag & object> {
-            return localVarFp.tagsTagIDGet(tagID, options).then((request) => request(axios, basePath));
-        },
     };
 };
 
@@ -2977,6 +2494,17 @@ export const TagsApiFactory = function (configuration?: Configuration, basePath?
  * @extends {BaseAPI}
  */
 export class TagsApi extends BaseAPI {
+    /**
+     * タグの情報を取得する。
+     * @param {string} tagID 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TagsApi
+     */
+    public getTag(tagID: string, options?: AxiosRequestConfig) {
+        return TagsApiFp(this.configuration).getTag(tagID, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * タグの一覧を返す。
      * @param {*} [options] Override http request option.
@@ -3007,387 +2535,6 @@ export class TagsApi extends BaseAPI {
      */
     public tagsTagIDDelete(tagID: string, options?: AxiosRequestConfig) {
         return TagsApiFp(this.configuration).tagsTagIDDelete(tagID, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * タグの情報を取得する。
-     * @param {string} tagID 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TagsApi
-     */
-    public tagsTagIDGet(tagID: string, options?: AxiosRequestConfig) {
-        return TagsApiFp(this.configuration).tagsTagIDGet(tagID, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-/**
- * TransactionsApi - axios parameter creator
- * @export
- */
-export const TransactionsApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 指定したトランザクションの詳細を取得する。
-         * @param {string} transactionID 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getTransactionDetail: async (transactionID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'transactionID' is not null or undefined
-            assertParamExists('getTransactionDetail', 'transactionID', transactionID)
-            const localVarPath = `/transactions/{transactionID}`
-                .replace(`{${"transactionID"}}`, encodeURIComponent(String(transactionID)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * トランザクション一覧を取得する。
-         * @param {string} [sort] 並び順 (作成日時が新しい \&quot;created_at\&quot;, 作成日時が古い \&quot;-created_at\&quot;, 金額の昇順 \&quot;amount\&quot;, 金額の降順 \&quot;-amount\&quot;)
-         * @param {string} [target] 誰との取引か
-         * @param {string} [since] いつからの依頼か
-         * @param {string} [until] いつまでの依頼か
-         * @param {number} [limit] 取得する最大個数
-         * @param {number} [offset] スキップする個数
-         * @param {string} [tag] タグ(複数の場合カンマ区切り)
-         * @param {string} [group] グループ
-         * @param {string} [request] 依頼
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getTransactions: async (sort?: string, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, group?: string, request?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/transactions`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            if (sort !== undefined) {
-                localVarQueryParameter['sort'] = sort;
-            }
-
-            if (target !== undefined) {
-                localVarQueryParameter['target'] = target;
-            }
-
-            if (since !== undefined) {
-                localVarQueryParameter['since'] = (since as any instanceof Date) ?
-                    (since as any).toISOString().substr(0,10) :
-                    since;
-            }
-
-            if (until !== undefined) {
-                localVarQueryParameter['until'] = (until as any instanceof Date) ?
-                    (until as any).toISOString().substr(0,10) :
-                    until;
-            }
-
-            if (limit !== undefined) {
-                localVarQueryParameter['limit'] = limit;
-            }
-
-            if (offset !== undefined) {
-                localVarQueryParameter['offset'] = offset;
-            }
-
-            if (tag !== undefined) {
-                localVarQueryParameter['tag'] = tag;
-            }
-
-            if (group !== undefined) {
-                localVarQueryParameter['group'] = group;
-            }
-
-            if (request !== undefined) {
-                localVarQueryParameter['request'] = request;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * トランザクションを新規作成する。管理者権限が必要。
-         * @param {PostTransaction} postTransaction 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        postTransaction: async (postTransaction: PostTransaction, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postTransaction' is not null or undefined
-            assertParamExists('postTransaction', 'postTransaction', postTransaction)
-            const localVarPath = `/transactions`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postTransaction, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 指定したTransactionを修正する。管理者権限が必要。requestに紐づいている場合は変更不可。
-         * @param {string} transactionID 
-         * @param {PostTransactionWithOneTarget} postTransactionWithOneTarget 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        putTransactionDetail: async (transactionID: string, postTransactionWithOneTarget: PostTransactionWithOneTarget, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'transactionID' is not null or undefined
-            assertParamExists('putTransactionDetail', 'transactionID', transactionID)
-            // verify required parameter 'postTransactionWithOneTarget' is not null or undefined
-            assertParamExists('putTransactionDetail', 'postTransactionWithOneTarget', postTransactionWithOneTarget)
-            const localVarPath = `/transactions/{transactionID}`
-                .replace(`{${"transactionID"}}`, encodeURIComponent(String(transactionID)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postTransactionWithOneTarget, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * TransactionsApi - functional programming interface
- * @export
- */
-export const TransactionsApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = TransactionsApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 指定したトランザクションの詳細を取得する。
-         * @param {string} transactionID 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getTransactionDetail(transactionID: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Transaction>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getTransactionDetail(transactionID, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * トランザクション一覧を取得する。
-         * @param {string} [sort] 並び順 (作成日時が新しい \&quot;created_at\&quot;, 作成日時が古い \&quot;-created_at\&quot;, 金額の昇順 \&quot;amount\&quot;, 金額の降順 \&quot;-amount\&quot;)
-         * @param {string} [target] 誰との取引か
-         * @param {string} [since] いつからの依頼か
-         * @param {string} [until] いつまでの依頼か
-         * @param {number} [limit] 取得する最大個数
-         * @param {number} [offset] スキップする個数
-         * @param {string} [tag] タグ(複数の場合カンマ区切り)
-         * @param {string} [group] グループ
-         * @param {string} [request] 依頼
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getTransactions(sort?: string, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, group?: string, request?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Transaction>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getTransactions(sort, target, since, until, limit, offset, tag, group, request, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * トランザクションを新規作成する。管理者権限が必要。
-         * @param {PostTransaction} postTransaction 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async postTransaction(postTransaction: PostTransaction, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Transaction>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.postTransaction(postTransaction, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 指定したTransactionを修正する。管理者権限が必要。requestに紐づいている場合は変更不可。
-         * @param {string} transactionID 
-         * @param {PostTransactionWithOneTarget} postTransactionWithOneTarget 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async putTransactionDetail(transactionID: string, postTransactionWithOneTarget: PostTransactionWithOneTarget, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Transaction>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.putTransactionDetail(transactionID, postTransactionWithOneTarget, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-    }
-};
-
-/**
- * TransactionsApi - factory interface
- * @export
- */
-export const TransactionsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = TransactionsApiFp(configuration)
-    return {
-        /**
-         * 指定したトランザクションの詳細を取得する。
-         * @param {string} transactionID 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getTransactionDetail(transactionID: string, options?: any): AxiosPromise<Transaction> {
-            return localVarFp.getTransactionDetail(transactionID, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * トランザクション一覧を取得する。
-         * @param {string} [sort] 並び順 (作成日時が新しい \&quot;created_at\&quot;, 作成日時が古い \&quot;-created_at\&quot;, 金額の昇順 \&quot;amount\&quot;, 金額の降順 \&quot;-amount\&quot;)
-         * @param {string} [target] 誰との取引か
-         * @param {string} [since] いつからの依頼か
-         * @param {string} [until] いつまでの依頼か
-         * @param {number} [limit] 取得する最大個数
-         * @param {number} [offset] スキップする個数
-         * @param {string} [tag] タグ(複数の場合カンマ区切り)
-         * @param {string} [group] グループ
-         * @param {string} [request] 依頼
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getTransactions(sort?: string, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, group?: string, request?: string, options?: any): AxiosPromise<Array<Transaction>> {
-            return localVarFp.getTransactions(sort, target, since, until, limit, offset, tag, group, request, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * トランザクションを新規作成する。管理者権限が必要。
-         * @param {PostTransaction} postTransaction 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        postTransaction(postTransaction: PostTransaction, options?: any): AxiosPromise<Array<Transaction>> {
-            return localVarFp.postTransaction(postTransaction, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 指定したTransactionを修正する。管理者権限が必要。requestに紐づいている場合は変更不可。
-         * @param {string} transactionID 
-         * @param {PostTransactionWithOneTarget} postTransactionWithOneTarget 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        putTransactionDetail(transactionID: string, postTransactionWithOneTarget: PostTransactionWithOneTarget, options?: any): AxiosPromise<Transaction> {
-            return localVarFp.putTransactionDetail(transactionID, postTransactionWithOneTarget, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * TransactionsApi - object-oriented interface
- * @export
- * @class TransactionsApi
- * @extends {BaseAPI}
- */
-export class TransactionsApi extends BaseAPI {
-    /**
-     * 指定したトランザクションの詳細を取得する。
-     * @param {string} transactionID 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TransactionsApi
-     */
-    public getTransactionDetail(transactionID: string, options?: AxiosRequestConfig) {
-        return TransactionsApiFp(this.configuration).getTransactionDetail(transactionID, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * トランザクション一覧を取得する。
-     * @param {string} [sort] 並び順 (作成日時が新しい \&quot;created_at\&quot;, 作成日時が古い \&quot;-created_at\&quot;, 金額の昇順 \&quot;amount\&quot;, 金額の降順 \&quot;-amount\&quot;)
-     * @param {string} [target] 誰との取引か
-     * @param {string} [since] いつからの依頼か
-     * @param {string} [until] いつまでの依頼か
-     * @param {number} [limit] 取得する最大個数
-     * @param {number} [offset] スキップする個数
-     * @param {string} [tag] タグ(複数の場合カンマ区切り)
-     * @param {string} [group] グループ
-     * @param {string} [request] 依頼
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TransactionsApi
-     */
-    public getTransactions(sort?: string, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, group?: string, request?: string, options?: AxiosRequestConfig) {
-        return TransactionsApiFp(this.configuration).getTransactions(sort, target, since, until, limit, offset, tag, group, request, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * トランザクションを新規作成する。管理者権限が必要。
-     * @param {PostTransaction} postTransaction 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TransactionsApi
-     */
-    public postTransaction(postTransaction: PostTransaction, options?: AxiosRequestConfig) {
-        return TransactionsApiFp(this.configuration).postTransaction(postTransaction, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 指定したTransactionを修正する。管理者権限が必要。requestに紐づいている場合は変更不可。
-     * @param {string} transactionID 
-     * @param {PostTransactionWithOneTarget} postTransactionWithOneTarget 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TransactionsApi
-     */
-    public putTransactionDetail(transactionID: string, postTransactionWithOneTarget: PostTransactionWithOneTarget, options?: AxiosRequestConfig) {
-        return TransactionsApiFp(this.configuration).putTransactionDetail(transactionID, postTransactionWithOneTarget, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3543,35 +2690,113 @@ export class UsersApi extends BaseAPI {
 
 export class Apis extends BaseAPI {
     /**
-     * adminユーザーを削除する。管理者権限が必要。
+     * accountManagerユーザーを削除する。accountManager権限が必要。
      * @param {Array<string>} requestBody
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AdminsApi
+     * @memberof AccountManagersApi
      */
-    public deleteAdmins(requestBody: Array<string>, options?: AxiosRequestConfig) {
-        return AdminsApiFp(this.configuration).deleteAdmins(requestBody, options).then((request) => request(this.axios, this.basePath));
+    public deleteAccountManagers(requestBody: Array<string>, options?: AxiosRequestConfig) {
+        return AccountManagersApiFp(this.configuration).deleteAccountManagers(requestBody, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * adminユーザーの一覧を返す。管理者権限が必要。
+     * accountManagerユーザーの一覧を返す。accountManager権限が必要。
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AdminsApi
+     * @memberof AccountManagersApi
      */
-    public getAdmins(options?: AxiosRequestConfig) {
-        return AdminsApiFp(this.configuration).getAdmins(options).then((request) => request(this.axios, this.basePath));
+    public getAccountManagers(options?: AxiosRequestConfig) {
+        return AccountManagersApiFp(this.configuration).getAccountManagers(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * adminユーザーを追加する。管理者権限が必要。
+     * accountManagerユーザーを追加する。accountManager権限が必要。
      * @param {Array<string>} requestBody
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AdminsApi
+     * @memberof AccountManagersApi
      */
-    public postAdmins(requestBody: Array<string>, options?: AxiosRequestConfig) {
-        return AdminsApiFp(this.configuration).postAdmins(requestBody, options).then((request) => request(this.axios, this.basePath));
+    public postAccountManagers(requestBody: Array<string>, options?: AxiosRequestConfig) {
+        return AccountManagersApiFp(this.configuration).postAccountManagers(requestBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 指定した申請の詳細を取得する。
+     * @param {string} applicationID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationsApi
+     */
+    public getApplicationDetail(applicationID: string, options?: AxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).getApplicationDetail(applicationID, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 申請一覧を取得する。
+     * @param {string} [sort] 並び順 (作成日時が新しい \&quot;created_at\&quot;, 作成日時が古い \&quot;-created_at\&quot;, タイトルの昇順 \&quot;title\&quot;, タイトルの降順 \&quot;-title\&quot;)
+     * @param {StatusEnum} [status] 現在の状態
+     * @param {string} [target] 誰との取引か
+     * @param {string} [since] いつからの依頼か
+     * @param {string} [until] いつまでの依頼か
+     * @param {number} [limit] 取得する最大個数
+     * @param {number} [offset] スキップする個数
+     * @param {string} [tag] タグ(複数の場合カンマ区切り)
+     * @param {string} [partition] パーティション
+     * @param {string} [createdBy] 作成者
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationsApi
+     */
+    public getApplications(sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, partition?: string, createdBy?: string, options?: AxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).getApplications(sort, status, target, since, until, limit, offset, tag, partition, createdBy, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 申請を新規作成する。
+     * @param {PostApplication} postApplication
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationsApi
+     */
+    public postApplication(postApplication: PostApplication, options?: AxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).postApplication(postApplication, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 指定した申請にコメントを新規作成する。
+     * @param {string} applicationID
+     * @param {PostComment} postComment
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationsApi
+     */
+    public postComment(applicationID: string, postComment: PostComment, options?: AxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).postComment(applicationID, postComment, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 指定した申請を修正する。作成者権限が必要。
+     * @param {string} applicationID
+     * @param {PostApplication} postApplication
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationsApi
+     */
+    public putApplicationDetail(applicationID: string, postApplication: PostApplication, options?: AxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).putApplicationDetail(applicationID, postApplication, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの行き来の定義は作成者は「change_requestedからsubmitted」をでき、accountManagerは「submittedからrejected」「submittedからchange_requested」「change_requestedからsubmitted」「submittedからapproved」「approvedからsubmitted（ただしすでに支払われている人がいた場合、この操作は不可)」の操作のみ可。ただし、「approvedからfully_repaid」の操作はここでは行えない。accountManager権限または作成者権限が必要。
+     * @param {string} applicationID
+     * @param {PutStatus} putStatus
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationsApi
+     */
+    public putStatus(applicationID: string, putStatus: PutStatus, options?: AxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).putStatus(applicationID, putStatus, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3585,7 +2810,7 @@ export class Apis extends BaseAPI {
     }
 
     /**
-     * 指定したidのファイルを削除する。管理者権限または作成者権限が必要。
+     * 指定したidのファイルを削除する。accountManager権限または作成者権限が必要。
      * @param {string} fileID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -3621,194 +2846,79 @@ export class Apis extends BaseAPI {
      * ファイルをアップロードする。
      * @param {any} file
      * @param {string} name
-     * @param {string} requestId
+     * @param {string} applicationId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FilesApi
      */
-    public postFile(file: any, name: string, requestId: string, options?: AxiosRequestConfig) {
-        return FilesApiFp(this.configuration).postFile(file, name, requestId, options).then((request) => request(this.axios, this.basePath));
+    public postFile(file: any, name: string, applicationId: string, options?: AxiosRequestConfig) {
+        return FilesApiFp(this.configuration).postFile(file, name, applicationId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * グループを削除する。管理者権限またはグループオーナー権限が必要。
-     * @param {string} groupID
+     * パーティションを削除する。accountManager権限が必要。
+     * @param {string} partitionID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupsApi
+     * @memberof PartitionsApi
      */
-    public deleteGroup(groupID: string, options?: AxiosRequestConfig) {
-        return GroupsApiFp(this.configuration).deleteGroup(groupID, options).then((request) => request(this.axios, this.basePath));
+    public deletePartition(partitionID: string, options?: AxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).deletePartition(partitionID, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * ユーザーをグループのメンバーから外す。管理者権限またはグループオーナー権限が必要。
-     * @param {string} groupID
-     * @param {Array<string>} requestBody
+     * パーティションの情報を返す。
+     * @param {string} partitionID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupsApi
+     * @memberof PartitionsApi
      */
-    public deleteGroupMembers(groupID: string, requestBody: Array<string>, options?: AxiosRequestConfig) {
-        return GroupsApiFp(this.configuration).deleteGroupMembers(groupID, requestBody, options).then((request) => request(this.axios, this.basePath));
+    public getPartition(partitionID: string, options?: AxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).getPartition(partitionID, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * ユーザーをグループから削除する。管理者権限またはグループオーナー権限が必要。
-     * @param {string} groupID
-     * @param {Array<string>} requestBody
+     * パーティションの一覧を返す。
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupsApi
+     * @memberof PartitionsApi
      */
-    public deleteGroupOwners(groupID: string, requestBody: Array<string>, options?: AxiosRequestConfig) {
-        return GroupsApiFp(this.configuration).deleteGroupOwners(groupID, requestBody, options).then((request) => request(this.axios, this.basePath));
+    public getPartitions(options?: AxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).getPartitions(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * グループの情報を返す。
-     * @param {string} groupID
+     * パーティションを追加する。accountManager権限が必要。
+     * @param {PostPartition} postPartition
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupsApi
+     * @memberof PartitionsApi
      */
-    public getGroupDetail(groupID: string, options?: AxiosRequestConfig) {
-        return GroupsApiFp(this.configuration).getGroupDetail(groupID, options).then((request) => request(this.axios, this.basePath));
+    public postPartition(postPartition: PostPartition, options?: AxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).postPartition(postPartition, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * グループの一覧を返す。
+     * パーティションの情報を変更する。accountManager権限が必要。
+     * @param {string} partitionID
+     * @param {PostPartition} postPartition
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupsApi
+     * @memberof PartitionsApi
      */
-    public getGroups(options?: AxiosRequestConfig) {
-        return GroupsApiFp(this.configuration).getGroups(options).then((request) => request(this.axios, this.basePath));
+    public putPartition(partitionID: string, postPartition: PostPartition, options?: AxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).putPartition(partitionID, postPartition, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * グループを追加する。管理者権限が必要。
-     * @param {PostGroup} postGroup
+     * タグの情報を取得する。
+     * @param {string} tagID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof GroupsApi
+     * @memberof TagsApi
      */
-    public postGroup(postGroup: PostGroup, options?: AxiosRequestConfig) {
-        return GroupsApiFp(this.configuration).postGroup(postGroup, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * ユーザーをグループに追加する。管理者権限またはグループオーナー権限が必要。
-     * @param {string} groupID
-     * @param {Array<string>} requestBody
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GroupsApi
-     */
-    public postGroupMembers(groupID: string, requestBody: Array<string>, options?: AxiosRequestConfig) {
-        return GroupsApiFp(this.configuration).postGroupMembers(groupID, requestBody, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * グループオーナーをグループに追加する。管理者権限またはグループオーナー権限が必要。
-     * @param {string} groupID
-     * @param {Array<string>} requestBody
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GroupsApi
-     */
-    public postGroupOwners(groupID: string, requestBody: Array<string>, options?: AxiosRequestConfig) {
-        return GroupsApiFp(this.configuration).postGroupOwners(groupID, requestBody, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * グループの情報を変更する。管理者権限またはグループオーナー権限が必要。
-     * @param {string} groupID
-     * @param {PutGroup} putGroup
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof GroupsApi
-     */
-    public putGroupDetail(groupID: string, putGroup: PutGroup, options?: AxiosRequestConfig) {
-        return GroupsApiFp(this.configuration).putGroupDetail(groupID, putGroup, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 指定した依頼の詳細を取得する。
-     * @param {string} requestID
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RequestsApi
-     */
-    public getRequestDetail(requestID: string, options?: AxiosRequestConfig) {
-        return RequestsApiFp(this.configuration).getRequestDetail(requestID, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 依頼一覧を取得する。
-     * @param {string} [sort] 並び順 (作成日時が新しい \&quot;created_at\&quot;, 作成日時が古い \&quot;-created_at\&quot;, タイトルの昇順 \&quot;title\&quot;, タイトルの降順 \&quot;-title\&quot;)
-     * @param {StatusEnum} [status] 現在の状態
-     * @param {string} [target] 誰との取引か
-     * @param {string} [since] いつからの依頼か
-     * @param {string} [until] いつまでの依頼か
-     * @param {number} [limit] 取得する最大個数
-     * @param {number} [offset] スキップする個数
-     * @param {string} [tag] タグ(複数の場合カンマ区切り)
-     * @param {string} [group] グループ
-     * @param {string} [createdBy] 作成者
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RequestsApi
-     */
-    public getRequests(sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, group?: string, createdBy?: string, options?: AxiosRequestConfig) {
-        return RequestsApiFp(this.configuration).getRequests(sort, status, target, since, until, limit, offset, tag, group, createdBy, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 指定した依頼にコメントを新規作成する。
-     * @param {string} requestID
-     * @param {PostComment} postComment
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RequestsApi
-     */
-    public postComment(requestID: string, postComment: PostComment, options?: AxiosRequestConfig) {
-        return RequestsApiFp(this.configuration).postComment(requestID, postComment, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 依頼を新規作成する。
-     * @param {PostRequest} postRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RequestsApi
-     */
-    public postRequest(postRequest: PostRequest, options?: AxiosRequestConfig) {
-        return RequestsApiFp(this.configuration).postRequest(postRequest, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 指定した依頼を修正する。作成者権限が必要。
-     * @param {string} requestID
-     * @param {PostRequest} postRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RequestsApi
-     */
-    public putRequestDetail(requestID: string, postRequest: PostRequest, options?: AxiosRequestConfig) {
-        return RequestsApiFp(this.configuration).putRequestDetail(requestID, postRequest, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 指定した依頼のstatusを変更のみ(新規はpost /requests)する。commentは常に必須(ないときは空文字列)。statusの行き来の定義は作成者は「fix_requiredからsubmitted」をでき、adminは「submittedからrejected」「submittedからrequired」「fix_requiredからsubmitted」「submittedからaccepted」「acceptedからsubmitted（ただしすでに支払われている人がいた場合、この操作は不可)」の操作のみ可。ただし、「acceptedからfully_repaid」の操作はここでは行えない。管理者権限または作成者権限が必要。
-     * @param {string} requestID
-     * @param {PutStatus} putStatus
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RequestsApi
-     */
-    public putStatus(requestID: string, putStatus: PutStatus, options?: AxiosRequestConfig) {
-        return RequestsApiFp(this.configuration).putStatus(requestID, putStatus, options).then((request) => request(this.axios, this.basePath));
+    public getTag(tagID: string, options?: AxiosRequestConfig) {
+        return TagsApiFp(this.configuration).getTag(tagID, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3841,70 +2951,6 @@ export class Apis extends BaseAPI {
      */
     public tagsTagIDDelete(tagID: string, options?: AxiosRequestConfig) {
         return TagsApiFp(this.configuration).tagsTagIDDelete(tagID, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * タグの情報を取得する。
-     * @param {string} tagID
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TagsApi
-     */
-    public tagsTagIDGet(tagID: string, options?: AxiosRequestConfig) {
-        return TagsApiFp(this.configuration).tagsTagIDGet(tagID, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 指定したトランザクションの詳細を取得する。
-     * @param {string} transactionID
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TransactionsApi
-     */
-    public getTransactionDetail(transactionID: string, options?: AxiosRequestConfig) {
-        return TransactionsApiFp(this.configuration).getTransactionDetail(transactionID, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * トランザクション一覧を取得する。
-     * @param {string} [sort] 並び順 (作成日時が新しい \&quot;created_at\&quot;, 作成日時が古い \&quot;-created_at\&quot;, 金額の昇順 \&quot;amount\&quot;, 金額の降順 \&quot;-amount\&quot;)
-     * @param {string} [target] 誰との取引か
-     * @param {string} [since] いつからの依頼か
-     * @param {string} [until] いつまでの依頼か
-     * @param {number} [limit] 取得する最大個数
-     * @param {number} [offset] スキップする個数
-     * @param {string} [tag] タグ(複数の場合カンマ区切り)
-     * @param {string} [group] グループ
-     * @param {string} [request] 依頼
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TransactionsApi
-     */
-    public getTransactions(sort?: string, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, group?: string, request?: string, options?: AxiosRequestConfig) {
-        return TransactionsApiFp(this.configuration).getTransactions(sort, target, since, until, limit, offset, tag, group, request, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * トランザクションを新規作成する。管理者権限が必要。
-     * @param {PostTransaction} postTransaction
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TransactionsApi
-     */
-    public postTransaction(postTransaction: PostTransaction, options?: AxiosRequestConfig) {
-        return TransactionsApiFp(this.configuration).postTransaction(postTransaction, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 指定したTransactionを修正する。管理者権限が必要。requestに紐づいている場合は変更不可。
-     * @param {string} transactionID
-     * @param {PostTransactionWithOneTarget} postTransactionWithOneTarget
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TransactionsApi
-     */
-    public putTransactionDetail(transactionID: string, postTransactionWithOneTarget: PostTransactionWithOneTarget, options?: AxiosRequestConfig) {
-        return TransactionsApiFp(this.configuration).putTransactionDetail(transactionID, postTransactionWithOneTarget, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

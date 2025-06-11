@@ -42,12 +42,12 @@ if (!isTagFetched.value) {
 </script>
 
 <template>
-  <div v-if="request !== undefined" class="flex flex-col gap-5">
+  <div v-if="request !== undefined" class="flex flex-col gap-6">
     <RequestHeader :request="request" />
     <div class="h-px bg-[#e5e7eb]" />
-    <div class="flex flex-col lg:flex-row justify-between gap-20">
+    <div class="flex flex-col lg:flex-row justify-between gap-12">
       <RequestLogs class="lg:w-2/3" :request="request" />
-      <RequestSidebar v-model="request" class="lg:w-1/3" />
+      <RequestSidebar v-model="request" />
     </div>
   </div>
 </template>

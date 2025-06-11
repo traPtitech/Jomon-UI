@@ -35,7 +35,7 @@ const putStatus = async (nextStatus: RequestStatus, comment: string) => {
     class="absolute inset-0 m-auto h-3/5 w-1/2 bg-white shadow-lg flex flex-col gap-6 pt-4 px-12">
     <h1 class="text-center text-3xl">申請の状態変更</h1>
     <div class="flex flex-col gap-4">
-      <div class="flex items-center gap-1">
+      <div class="flex flex-wrap items-center gap-1">
         <span>申請の状態を</span>
         <StatusChip class="mx-1" has-text :status="request.status" />
         <span>から</span>

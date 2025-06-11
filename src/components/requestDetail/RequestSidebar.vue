@@ -8,7 +8,7 @@ const request = defineModel<RequestDetail>({ required: true })
 </script>
 
 <template>
-  <div class="px-4 flex flex-col gap-8">
+  <div class="flex flex-col gap-8">
     <div class="flex flex-col gap-3">
       <RequestGroup v-model="request" />
       <RequestTags v-model="request" />

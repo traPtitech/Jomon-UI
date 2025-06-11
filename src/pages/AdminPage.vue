@@ -58,9 +58,9 @@ if (me.value?.admin) {
     権限がありません。
   </div>
   <div v-else class="flex flex-col gap-6">
-    <h1 class="text-2xl" tabindex="0">管理</h1>
+    <h1 class="text-2xl">管理</h1>
     <div class="flex flex-col gap-3">
-      <h2 id="admin-list" class="text-base font-medium" tabindex="0">管理者</h2>
+      <h2 class="text-base font-medium">管理者</h2>
       <ul class="flex gap-3" aria-labelledby="admin-list">
         <li v-for="admin in admins" :key="admin">
           <div class="border-text-primary rounded-sm border px-2 text-center">
@@ -116,7 +116,6 @@ if (me.value?.admin) {
       <h2 class="text-base font-medium">タグの操作</h2>
       <div class="flex flex-wrap gap-3">
         <SearchSelect
-          id="delete-tag"
           v-model="deleteTagList"
           label="削除するタグ"
           class="grow w-auto"

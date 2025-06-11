@@ -64,13 +64,12 @@ const handleUpdateGroup = async () => {
     </div>
     <div>
       <span v-if="!isEditMode">{{ groupName }}</span>
-      <div v-else>
-        <SearchSelect
-          v-model="editedGroup"
-          label="グループ"
-          :options="groupOptions"
-          @close="handleUpdateGroup" />
-      </div>
+      <SearchSelect
+        v-else
+        v-model="editedGroup"
+        label="グループ"
+        :options="groupOptions"
+        @close="handleUpdateGroup" />
     </div>
   </div>
 </template>

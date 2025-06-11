@@ -93,7 +93,7 @@ const handleRemoveTarget = async () => {
     </div>
   </div>
   <div v-else class="flex items-center justify-between">
-    <div class="flex flex-col gap-1">
+    <div class="flex gap-1">
       <SearchSelect
         v-model="targetModel.target"
         :options="targetOptions"
@@ -103,8 +103,6 @@ const handleRemoveTarget = async () => {
           ¥
         </span>
       </BaseInput>
-    </div>
-    <div>
       <button @click="handleRemoveTarget">
         <TrashIcon class="w-6 text-error-primary cursor-pointer" />
       </button>

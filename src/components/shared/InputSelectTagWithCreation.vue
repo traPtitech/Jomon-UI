@@ -1,13 +1,11 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { useTagStore } from '/@/stores/tag'
 import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
 import type { Tag } from '/@/features/tag/model'
 
 const model = defineModel<Tag[]>({ required: true })
 
-const tagStore = useTagStore()
-const { tagOptions } = storeToRefs(tagStore)
+const { tagOptions } = useTagStore()
 </script>
 
 <template>

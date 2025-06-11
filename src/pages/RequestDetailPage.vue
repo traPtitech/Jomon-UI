@@ -10,11 +10,13 @@ import { useFetchGroupsUsecase } from '/@/features/group/usecase'
 import { useFetchTagsUsecase } from '/@/features/tag/usecase'
 import { useFetchUsersUsecase } from '/@/features/user/usecase'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
+import { useUserStore } from '/@/stores/user'
+import { useGroupStore } from '/@/stores/group'
+import { useTagStore } from '/@/stores/tag'
 
 const route = useRoute()
 const id = toId(route.params.id)
 
-const requestDetailStore = useRequestDetailStore()
 const { isUserFetched } = useUserStore()
 const { isGroupFetched } = useGroupStore()
 const { isTagFetched } = useTagStore()

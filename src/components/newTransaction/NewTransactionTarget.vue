@@ -1,13 +1,9 @@
 <script lang="ts" setup>
 import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
-import InputText from '/@/components/shared/InputText.vue'
+import BaseInput from '/@/components/shared/BaseInput.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 const targets = defineModel<string[]>('targets', { required: true })
-
-const handleEditTarget = (index: number, value: string) => {
-  targets.value[index] = value
-}
 
 const handleAddTarget = () => {
   targets.value.push('')
@@ -19,17 +15,13 @@ const handleRemoveTarget = (index: number) => {
 
 <template>
   <div class="flex flex-col gap-2">
-    <label class="text-sm font-medium" for="target">取引相手</label>
     <ul class="flex flex-col gap-2">
-      <li
-        v-for="(target, i) in targets"
-        :key="i"
-        class="flex items-center gap-3">
-        <InputText
+      <li v-for="(_, i) in targets" :key="i" class="flex items-center gap-3">
+        <BaseInput
+          v-model="targets[i]"
+          label="取引相手"
           class="grow"
-          :model-value="target"
-          placeholder="取引相手"
-          @update:model-value="handleEditTarget(i, $event)" />
+          required />
         <button
           v-if="targets.length > 1"
           class="flex"

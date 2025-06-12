@@ -1,22 +1,20 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import InputTextarea from './InputTextarea.vue'
 import MarkdownIt from './MarkdownIt.vue'
-import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
+import SearchSelect from '/@/components/shared/SearchSelect.vue'
+import BaseInput from './BaseInput.vue'
 import { EyeIcon, PencilSquareIcon } from '@heroicons/vue/24/outline'
 
 type TabType = 'input' | 'preview'
 interface Props {
+  label: string
   placeholder?: string
   templates?: readonly { name: string; value: string }[]
-  autoFocus?: boolean
-  id?: string
 }
 
 const model = defineModel<string>({ required: true })
 const props = withDefaults(defineProps<Props>(), {
-  placeholder: '',
-  autoFocus: false
+  placeholder: ''
 })
 
 const currentTab = ref<TabType>('input')
@@ -75,24 +73,22 @@ function changeCurrentTab(tab: TabType) {
           <EyeIcon class="w-6" />
         </button>
       </div>
-      <InputSelectSingle
+      <SearchSelect
         v-if="props.templates !== undefined"
         class="inline-block"
         :model-value="selectedTemplate"
         :options="templateOptions"
-        placeholder="テンプレートを選択"
-        @update:model-value="setTemplate($event)">
-      </InputSelectSingle>
+        label="テンプレートを選択"
+        @update:model-value="setTemplate($event)" />
     </div>
     <div class="px-5 py-3">
-      <InputTextarea
+      <BaseInput
         v-if="currentTab === 'input'"
-        :id="props.id"
-        :auto-focus="autoFocus"
+        v-model="model"
+        type="textarea"
+        :label="props.label"
         class="min-h-40 w-full"
-        :model-value="model"
-        :placeholder="placeholder"
-        @update:model-value="model = $event" />
+        :placeholder="placeholder" />
       <MarkdownIt
         v-if="currentTab === 'preview'"
         class="min-h-40 w-full overflow-y-scroll rounded-sm border border-surface-secondary px-3 py-2"

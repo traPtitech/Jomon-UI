@@ -13,7 +13,7 @@ const { comment, isSending, submit } = useNewComment(props.request.id)
 
 <template>
   <div class="w-full">
-    <MarkdownTextarea v-model="comment">
+    <MarkdownTextarea v-model="comment" label="コメント">
       <SimpleButton
         :disabled="isSending"
         font-size="base"

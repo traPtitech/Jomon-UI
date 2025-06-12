@@ -7,12 +7,11 @@ import { directionOptions } from '/@/stores/transaction'
 import { useUserStore } from '/@/stores/user'
 
 import NewTransactionTarget from '/@/components/newTransaction/NewTransactionTarget.vue'
-import InputNumber from '/@/components/shared/InputNumber.vue'
 import InputRadioButton from '/@/components/shared/InputRadioButton.vue'
-import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
-import InputSelectTagWithCreation from '/@/components/shared/InputSelectTagWithCreation.vue'
-import InputText from '/@/components/shared/InputText.vue'
+import BaseInput from '/@/components/shared/BaseInput.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import SearchSelect from '/@/components/shared/SearchSelect.vue'
+import SearchSelectTag from '/@/components/shared/SearchSelectTag.vue'
 import { useFetchGroupsUsecase } from '/@/features/group/usecase'
 import { useFetchTagsUsecase } from '/@/features/tag/usecase'
 import { useFetchUsersUsecase } from '/@/features/user/usecase'
@@ -49,24 +48,16 @@ if (!isTagFetched.value) {
       <h1 class="text-2xl">入出金記録の新規作成</h1>
     </div>
     <form class="flex flex-col gap-6" aria-label="入出金記録作成フォーム">
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium" for="title">タイトル</label>
-        <InputText
-          id="title"
-          v-model="transaction.title"
-          auto-focus
-          placeholder="タイトルを入力" />
-      </div>
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium" for="amount">金額</label>
-        <div>
-          <InputNumber
-            id="amount"
-            v-model="transaction.amount"
-            class="mr-2"
-            :min="1" />円
-        </div>
-      </div>
+      <BaseInput v-model="transaction.title" label="タイトル" required />
+      <BaseInput
+        v-model="transaction.amount"
+        type="number"
+        label="金額"
+        required>
+        <span class="text-2xl font-bold ml-3 mt-auto mb-2 text-text-secondary">
+          ¥
+        </span>
+      </BaseInput>
       <div class="flex flex-col gap-2">
         <label class="text-sm font-medium" for="direction">入出金の方向</label>
         <InputRadioButton
@@ -75,19 +66,12 @@ if (!isTagFetched.value) {
           :options="directionOptions" />
       </div>
       <NewTransactionTarget v-model:targets="transaction.targets" />
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium" for="group">グループ</label>
-        <InputSelectSingle
-          id="group"
-          v-model="transaction.group"
-          class="w-full"
-          :options="groupOptions"
-          placeholder="グループを選択" />
-      </div>
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium" for="tag">タグ</label>
-        <InputSelectTagWithCreation id="tag" v-model="transaction.tags" />
-      </div>
+      <SearchSelect
+        v-model="transaction.group"
+        class="w-full"
+        :options="groupOptions"
+        label="グループ" />
+      <SearchSelectTag v-model="transaction.tags" />
       <div class="text-right">
         <SimpleButton
           :disabled="isSending"

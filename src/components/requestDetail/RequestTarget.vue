@@ -9,8 +9,8 @@ import type {
 
 import UserIcon from '/@/components/shared/UserIcon.vue'
 import { RouterLink } from 'vue-router'
-import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
-import InputNumber from '/@/components/shared/InputNumber.vue'
+import BaseInput from '/@/components/shared/BaseInput.vue'
+import SearchSelect from '/@/components/shared/SearchSelect.vue'
 import { TrashIcon } from '@heroicons/vue/24/solid'
 import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
 import type { RequestDetail } from '/@/features/request/model'
@@ -95,13 +95,16 @@ const handleRemoveTarget = async () => {
     </div>
   </div>
   <div v-else class="flex items-center justify-between">
-    <div class="flex flex-col gap-1">
-      <InputSelectSingle
+    <div class="flex gap-1">
+      <SearchSelect
         v-model="targetModel.target"
-        :options="targetOptions" />
-      <div><InputNumber v-model="targetModel.amount" />円</div>
-    </div>
-    <div>
+        :options="targetOptions"
+        label="対象者" />
+      <BaseInput v-model="targetModel.amount" type="number" label="金額">
+        <span class="text-2xl font-bold ml-3 mt-auto mb-2 text-text-secondary">
+          ¥
+        </span>
+      </BaseInput>
       <button @click="handleRemoveTarget">
         <TrashIcon class="w-6 text-error-primary cursor-pointer" />
       </button>

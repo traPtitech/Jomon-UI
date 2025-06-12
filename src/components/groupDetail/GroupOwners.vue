@@ -6,7 +6,7 @@ import { ref } from 'vue'
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
 
-import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
+import SearchSelect from '/@/components/shared/SearchSelect.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
 
 import { useGroupOwner } from './composables/useGroupOwner'
@@ -46,11 +46,12 @@ const { absentOwnerOptions, isSending, addOwners, removeOwner } =
         </li>
       </ul>
       <div v-if="hasAuthority" class="flex p-2 gap-2">
-        <InputSelectMultiple
+        <SearchSelect
           v-model="ownersToBeAdded"
           class="grow w-1"
           :options="absentOwnerOptions"
-          placeholder="追加するオーナーを選択" />
+          multiple
+          label="追加するオーナー" />
         <button
           class="flex items-center rounded-full p-1 hover:bg-surface-secondary"
           :disabled="ownersToBeAdded.length === 0 || isSending"

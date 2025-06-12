@@ -42,10 +42,7 @@ const putStatus = async (nextStatus: RequestStatus, comment: string) => {
         <StatusChip class="mx-1" has-text :status="props.nextStatus" />
         <span>へ変更します</span>
       </div>
-      <MarkdownTextarea
-        v-model="comment"
-        auto-focus
-        placeholder="コメントを入力" />
+      <MarkdownTextarea v-model="comment" label="コメント" />
       <div class="flex justify-end">
         <SimpleButton
           font-size="xl"

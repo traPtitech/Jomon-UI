@@ -47,7 +47,7 @@ if (!isTagFetched.value) {
     <div class="h-px bg-[#e5e7eb]" />
     <div class="flex flex-col lg:flex-row justify-between gap-12">
       <RequestLogs class="lg:w-2/3" :request="request" />
-      <RequestSidebar :request="request" />
+      <RequestSidebar v-model="request" />
     </div>
   </div>
 </template>

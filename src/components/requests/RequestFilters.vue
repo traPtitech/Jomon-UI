@@ -7,9 +7,8 @@ import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
-import InputSelectSingle from '/@/components/shared/InputSelectSingle.vue'
-import InputText from '/@/components/shared/InputText.vue'
+import BaseInput from '/@/components/shared/BaseInput.vue'
+import SearchSelect from '/@/components/shared/SearchSelect.vue'
 import { useFetchRequestsUsecase } from '/@/features/request/usecase'
 import { requestStatusOptions } from '/@/features/requestStatus/model'
 
@@ -44,37 +43,40 @@ function sortByCreatedAt() {
       <ChevronUpIcon v-if="filterParams.sort === '-created_at'" class="w-4" />
     </button>
     <div>
-      <InputText
+      <BaseInput
         v-model="filterParams.since"
+        label="開始日"
         class="w-28"
         placeholder="yyyy-MM-dd"
         @blur="useFetchRequestsUsecase" />
       ～
-      <InputText
+      <BaseInput
         v-model="filterParams.until"
+        label="終了日"
         class="w-28"
         placeholder="yyyy-MM-dd"
         @blur="useFetchRequestsUsecase" />
     </div>
-    <InputSelectSingle
+    <SearchSelect
       v-model="filterParams.target"
       :options="userOptions"
-      placeholder="申請者"
+      label="申請者"
       @close="useFetchRequestsUsecase" />
-    <InputSelectSingle
+    <SearchSelect
       v-model="filterParams.currentStatus"
       :options="requestStatusOptions()"
-      placeholder="申請の状態"
+      label="申請の状態"
       @close="useFetchRequestsUsecase" />
-    <InputSelectSingle
+    <SearchSelect
       v-model="filterParams.group"
       :options="groupOptions"
-      placeholder="グループ"
+      label="グループ"
       @close="useFetchRequestsUsecase" />
-    <InputSelectMultiple
+    <SearchSelect
       v-model="filterParams.tags"
       :options="tagIdOptions"
-      placeholder="タグ"
+      label="タグ"
+      multiple
       @close="useFetchRequestsUsecase" />
   </div>
   <span v-if="requests && requests.length !== 0" class="ml-1/6">

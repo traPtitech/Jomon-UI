@@ -4,7 +4,7 @@ import { useUserStore } from '/@/stores/user'
 
 import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
 import EditButton from '/@/components/shared/EditButton.vue'
-import InputText from '/@/components/shared/InputText.vue'
+import BaseInput from '/@/components/shared/BaseInput.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 interface Props {
@@ -27,12 +27,11 @@ const { canEditGroup, group, editedValue } = useGroupDetailStore()
     <h1 v-if="!props.isEditMode" class="grow text-2xl">
       {{ group.name }}
     </h1>
-    <InputText
+    <BaseInput
       v-else
       v-model="editedValue.name"
-      auto-focus
-      class="grow"
-      placeholder="グループ名" />
+      label="グループ名"
+      class="grow" />
     <SimpleButton
       v-if="isEditMode"
       font-size="base"

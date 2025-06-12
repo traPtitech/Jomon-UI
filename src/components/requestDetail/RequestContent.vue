@@ -76,7 +76,7 @@ const handleUpdateContent = async () => {
       <MarkdownTextarea
         v-else
         v-model="editedContent"
-        auto-focus
+        label="詳細"
         class="flex-1" />
       <EditButton
         v-if="hasAuthority"

@@ -5,7 +5,7 @@ import { ref } from 'vue'
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
 
-import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
+import SearchSelect from '/@/components/shared/SearchSelect.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
 
 import { useGroupMember } from './composables/useGroupMember'
@@ -41,12 +41,12 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
         </li>
       </ul>
       <div v-if="canEditGroup(me)" class="flex p-2 gap-2 w-full">
-        <InputSelectMultiple
+        <SearchSelect
           v-model="membersToBeAdded"
           class="grow w-1"
-          is-dropdown-above
+          multiple
           :options="absentMemberOptions"
-          placeholder="追加するメンバーを選択" />
+          label="追加するメンバー" />
         <button
           class="flex items-center rounded-full p-1 hover:bg-surface-secondary"
           :disabled="membersToBeAdded.length === 0 || isSending"

@@ -1,9 +1,8 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
-import InputNumber from '/@/components/shared/InputNumber.vue'
-import InputSelectMultiple from '/@/components/shared/InputSelectMultiple.vue'
-import InputText from '/@/components/shared/InputText.vue'
+import BaseInput from '/@/components/shared/BaseInput.vue'
+import SearchSelect from '/@/components/shared/SearchSelect.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { createGroupUsecase } from '/@/features/group/usecase'
@@ -40,52 +39,25 @@ if (!isUserFetched) {
     <h1 class="text-2xl">グループの新規作成</h1>
   </div>
   <form class="flex flex-col gap-6">
-    <div class="flex flex-col gap-3">
-      <label class="font-medium" for="group-name">グループ名</label>
-      <InputText
-        id="group-name"
-        v-model="group.name"
-        auto-focus
-        placeholder="グループ名を入力"
-        required />
-    </div>
-    <div class="flex flex-col gap-3">
-      <label class="font-medium" for="group-description">説明</label>
-      <MarkdownTextarea
-        id="group-description"
-        v-model="group.description"
-        placeholder=""
-        required />
-    </div>
-    <div class="flex flex-col gap-3">
-      <label class="font-medium" for="group-budget">予算</label>
-      <div class="flex w-1/2">
-        <InputNumber
-          id="group-budget"
-          v-model="group.budget"
-          class="mr-2"
-          :min="1"
-          required />円
-      </div>
-    </div>
-    <div class="flex flex-col gap-3">
-      <label class="font-medium" for="group-owner">オーナー</label>
-      <InputSelectMultiple
-        id="group-owner"
-        v-model="group.owners"
-        class="w-full"
-        :options="userOptions"
-        placeholder="オーナーを選択" />
-    </div>
-    <div class="flex flex-col gap-3">
-      <label class="font-medium" for="group-member">メンバー</label>
-      <InputSelectMultiple
-        id="group-member"
-        v-model="group.members"
-        class="w-full"
-        :options="userOptions"
-        placeholder="メンバーを選択" />
-    </div>
+    <BaseInput v-model="group.name" label="グループ名" required />
+    <MarkdownTextarea v-model="group.description" label="説明" required />
+    <BaseInput v-model="group.budget" type="number" label="予算" required>
+      <span class="text-2xl font-bold ml-3 mt-auto mb-2 text-text-secondary">
+        ¥
+      </span>
+    </BaseInput>
+    <SearchSelect
+      v-model="group.owners"
+      class="w-full"
+      :options="userOptions"
+      multiple
+      label="オーナー" />
+    <SearchSelect
+      v-model="group.members"
+      class="w-full"
+      :options="userOptions"
+      multiple
+      label="メンバー" />
     <div>
       <SimpleButton
         class="ml-auto mt-8 block"

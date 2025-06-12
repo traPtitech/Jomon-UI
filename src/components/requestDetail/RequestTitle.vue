@@ -3,7 +3,7 @@ import { ref } from 'vue'
 
 import type { RequestDetail } from '/@/features/request/model'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import InputText from '/@/components/shared/InputText.vue'
+import BaseInput from '/@/components/shared/BaseInput.vue'
 import { editRequestUsecase } from '/@/features/request/usecase'
 import EditButton from '/@/components/shared/EditButton.vue'
 import { useToast } from 'vue-toastification'
@@ -46,7 +46,7 @@ const handleUpdateTitle = async () => {
 <template>
   <div class="flex gap-2">
     <h1 v-if="!isEditMode" class="text-2xl">{{ request.title }}</h1>
-    <InputText v-else v-model="editedTitle" auto-focus class="flex-1" />
+    <BaseInput v-else v-model="editedTitle" label="タイトル" class="flex-1" />
     <SimpleButton
       v-if="isEditMode"
       font-size="base"

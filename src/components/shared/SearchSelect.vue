@@ -38,7 +38,8 @@ const emit = defineEmits<{
 }>()
 const model = defineModel<string | string[] | null>({ required: true })
 
-const menuState = ref('close')
+type MenuState = 'close' | 'presearch' | 'searched'
+const menuState = ref<MenuState>('close')
 const searchTerm = ref('')
 const highlightedIndex = ref(-1)
 const dropdownRef = ref<HTMLElement | null>(null)

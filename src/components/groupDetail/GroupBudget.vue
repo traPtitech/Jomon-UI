@@ -1,11 +1,7 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 
-const groupDetailStore = useGroupDetailStore()
-
-const { group } = storeToRefs(groupDetailStore)
+const { group } = useGroupDetailStore()
 </script>
 
 <template>

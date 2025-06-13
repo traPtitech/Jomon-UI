@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import { useUserStore } from '/@/stores/user'
@@ -14,9 +13,8 @@ import { editRequestUsecase } from '/@/features/request/usecase'
 
 const request = defineModel<RequestDetail>({ required: true })
 
-const userStore = useUserStore()
+const { me } = useUserStore()
 const { isRequestCreator } = useRequest(request.value)
-const { me } = storeToRefs(userStore)
 const toast = useToast()
 
 const hasAuthority = isRequestCreator.value(me.value)

@@ -1,16 +1,14 @@
 import type { RequestStatus } from '/@/features/requestStatus/model'
 
-import { storeToRefs } from 'pinia'
 import { useUserStore } from '/@/stores/user'
 import type { RequestDetail } from '/@/features/request/model'
 import { computed } from 'vue'
 import { useRequest } from '/@/features/request/composables'
 
 export const useStatusOptions = (request: RequestDetail) => {
-  const userStore = useUserStore()
+  const { me, isAdmin } = useUserStore()
   const { isRequestCreator } = useRequest(request)
 
-  const { me, isAdmin } = storeToRefs(userStore)
   const hasAuthority = isRequestCreator.value(me.value)
 
   const showToSubmitted =

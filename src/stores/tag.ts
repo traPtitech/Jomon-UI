@@ -1,9 +1,8 @@
-import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-
+import { defineComposable } from '/@/lib/store'
 import type { Tag } from '/@/features/tag/model'
 
-export const useTagStore = defineStore('tag', () => {
+export const useTagStore = defineComposable('tag', () => {
   const tags = ref<Tag[]>([])
   const isTagFetched = ref(false)
 

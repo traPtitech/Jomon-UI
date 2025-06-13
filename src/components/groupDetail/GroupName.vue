@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 import { useUserStore } from '/@/stores/user'
 
@@ -20,13 +18,8 @@ const emit = defineEmits<{
   (e: 'finishEditing'): void
 }>()
 
-const userStore = useUserStore()
-const groupDetailStore = useGroupDetailStore()
-const { canEditGroup } = groupDetailStore
-const { group, editedValue } = storeToRefs(groupDetailStore)
-const { me } = storeToRefs(userStore)
-
-const hasAuthority = canEditGroup(me.value)
+const { me } = useUserStore()
+const { canEditGroup, group, editedValue } = useGroupDetailStore()
 </script>
 
 <template>
@@ -47,7 +40,7 @@ const hasAuthority = canEditGroup(me.value)
       完了
     </SimpleButton>
     <EditButton
-      v-if="hasAuthority"
+      v-if="canEditGroup(me)"
       :is-edit-mode="props.isEditMode"
       @click="
         props.isEditMode

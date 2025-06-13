@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { MinusIcon, PlusIcon } from '@heroicons/vue/24/outline'
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import { useGroupDetailStore } from '/@/stores/groupDetail'
@@ -11,14 +10,10 @@ import UserIcon from '/@/components/shared/UserIcon.vue'
 
 import { useGroupMember } from './composables/useGroupMember'
 
-const userStore = useUserStore()
-const groupDetailStore = useGroupDetailStore()
-const { canEditGroup } = groupDetailStore
-const { group } = storeToRefs(groupDetailStore)
-const { me, userMap } = storeToRefs(userStore)
+const { me, userMap } = useUserStore()
+const { canEditGroup, group } = useGroupDetailStore()
 
 const membersToBeAdded = ref<string[]>([])
-const hasAuthority = canEditGroup(me.value)
 const { absentMemberOptions, isSending, addMembers, removeMember } =
   useGroupMember()
 </script>
@@ -37,7 +32,7 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
             <p class="mx-1 break-all">{{ userMap[member] }}</p>
           </div>
           <button
-            v-if="hasAuthority"
+            v-if="canEditGroup(me)"
             class="flex items-center rounded-full p-1 hover:bg-surface-secondary"
             :disabled="isSending"
             @click="removeMember(member)">
@@ -45,7 +40,7 @@ const { absentMemberOptions, isSending, addMembers, removeMember } =
           </button>
         </li>
       </ul>
-      <div v-if="hasAuthority" class="flex p-2 gap-2 w-full">
+      <div v-if="canEditGroup(me)" class="flex p-2 gap-2 w-full">
         <SearchSelect
           v-model="membersToBeAdded"
           class="grow w-1"

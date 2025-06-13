@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-
 import { useUserStore } from '/@/stores/user'
 import type {
   RequestTargetDetail,
@@ -26,8 +24,7 @@ const props = defineProps<{
 }>()
 
 const { isSending, postTransactionFromRequest } = useNewTransaction()
-const userStore = useUserStore()
-const { userMap, userOptions, isAdmin } = storeToRefs(userStore)
+const { userMap, userOptions, isAdmin } = useUserStore()
 
 const targets = computed(() =>
   props.request.targets.map(target => target.target)

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { RouterLink, useRoute } from 'vue-router'
 
 import { useGroupDetailStore } from '/@/stores/groupDetail'
@@ -20,11 +19,8 @@ import { useFetchUsersUsecase } from '/@/features/user/usecase'
 const route = useRoute()
 const id = toId(route.params.id)
 
-const userStore = useUserStore()
-const groupDetailStore = useGroupDetailStore()
-
-const { group } = storeToRefs(groupDetailStore)
-const { isUserFetched } = storeToRefs(userStore)
+const { isUserFetched } = useUserStore()
+const { group } = useGroupDetailStore()
 
 const { isSending, editMode, changeEditMode, finishEditing } =
   useGroupInformation()

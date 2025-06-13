@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 
 import { useUserStore } from '/@/stores/user'
 
 import HeaderButton from './HeaderButton.vue'
 
-const userStore = useUserStore()
-const { isAdmin } = storeToRefs(userStore)
+const { isAdmin } = useUserStore()
 
 const route = useRoute()
 </script>

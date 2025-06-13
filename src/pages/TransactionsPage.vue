@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -20,14 +19,10 @@ import { useFetchTransactionsUsecase } from '/@/features/transaction/usecase'
 const route = useRoute()
 const page = ref(toPage(route.query.page))
 
-const transactionStore = useTransactionStore()
-const userStore = useUserStore()
-const tagStore = useTagStore()
-const groupStore = useGroupStore()
-const { transactions } = storeToRefs(transactionStore)
-const { isGroupFetched } = storeToRefs(groupStore)
-const { isTagFetched } = storeToRefs(tagStore)
-const { isAdmin } = storeToRefs(userStore)
+const { transactions } = useTransactionStore()
+const { isGroupFetched } = useGroupStore()
+const { isTagFetched } = useTagStore()
+const { isAdmin } = useUserStore()
 
 //TODO:  `request: toId(route.query.requestID)`でフィルターする
 await useFetchTransactionsUsecase()

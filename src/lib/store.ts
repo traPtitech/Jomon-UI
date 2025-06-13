@@ -9,18 +9,8 @@ export function defineComposable<Id extends string, SS extends () => any>(
 
   return () => {
     const store = piniaStore()
-    const storeRefs = storeToRefs(store) as ReturnType<SS>
-    const composable = {} as ReturnType<SS>
+    const storeRefs = storeToRefs(store)
 
-    for (const key in store) {
-      if (key in storeRefs) {
-        composable[key] = storeRefs[key]
-      } else {
-        // @ts-expect-error Incorrect store typings
-        composable[key] = store[key]
-      }
-    }
-
-    return composable
+    return { ...store, ...storeRefs } as ReturnType<SS>
   }
 }

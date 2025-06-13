@@ -22,8 +22,8 @@ export const useFetchRequestsUsecase = async () => {
   try {
     requests.value = await repository.fetchRequests(filterParams.value)
     isRequestFetched.value = true
-  } catch {
-    throw new Error('申請一覧の取得に失敗しました')
+  } catch (e) {
+    throw new Error('申請一覧の取得に失敗しました: ' + e)
   }
 }
 

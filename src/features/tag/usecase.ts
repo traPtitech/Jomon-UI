@@ -10,8 +10,8 @@ export const useFetchTagsUsecase = async () => {
   try {
     tags.value = await repository.fetchTags()
     isTagFetched.value = true
-  } catch {
-    throw new Error('タグの取得に失敗しました')
+  } catch (e) {
+    throw new Error('タグの取得に失敗しました: ' + e)
   }
 }
 

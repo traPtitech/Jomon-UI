@@ -3,16 +3,24 @@ import { Fragment, createApp, h } from 'vue'
 import type { PluginOptions } from 'vue-toastification'
 import Toast, { POSITION } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
-
-import { initMock } from '/@/lib/msw'
+import { setupWorker } from 'msw/browser'
 
 import App from './App.vue'
 import router from './router'
+import { handlers } from '/@/lib/msw'
 
-initMock()
+if (
+  import.meta.env.MODE === 'development' &&
+  import.meta.env.VITE_USE_MSW === 'true'
+) {
+  const worker = setupWorker(...handlers)
+  worker.start({
+    onUnhandledRequest: 'bypass'
+  })
+}
 
 const setup = async () => {
-  if (import.meta.env.NODE_ENV === 'production') {
+  if (import.meta.env.MODE === 'production') {
     return createApp(App)
   }
 

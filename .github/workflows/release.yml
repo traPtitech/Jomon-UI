@@ -20,8 +20,6 @@ jobs:
           node-version-file: ./.node-version
       - run: npm ci
       - run: npm run build
-        env:
-          NODE_ENV: production
       - name: Archive dist/
         run: tar -cvf ./dist.tar.gz ./dist
       - name: Create Release

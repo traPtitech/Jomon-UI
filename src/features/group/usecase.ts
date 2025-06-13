@@ -11,8 +11,8 @@ export const useFetchGroupsUsecase = async () => {
   try {
     groups.value = await repository.fetchGroups()
     isGroupFetched.value = true
-  } catch {
-    throw new Error('グループ一覧の取得に失敗しました')
+  } catch (e) {
+    throw new Error('グループ一覧の取得に失敗しました: ' + e)
   }
 }
 

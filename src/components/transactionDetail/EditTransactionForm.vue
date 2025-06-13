@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
 import { useGroupStore } from '/@/stores/group'
@@ -26,7 +25,7 @@ const emit = defineEmits<{
   (e: 'cancel'): void
 }>()
 
-const groupStore = useGroupStore()
+const { groupOptions } = useGroupStore()
 const {
   isSending,
   editedValue,
@@ -36,7 +35,6 @@ const {
   updateLinkedRequest,
   unlinkRequest
 } = useEditTransaction(props.transaction)
-const { groupOptions } = storeToRefs(groupStore)
 
 const formattedDate = computed(() => formatDate(props.transaction.createdAt))
 </script>

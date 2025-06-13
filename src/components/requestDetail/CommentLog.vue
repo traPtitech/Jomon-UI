@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-
 import { useUserStore } from '/@/stores/user'
 
 import { formatDateAndTime } from '/@/lib/date'
@@ -15,8 +13,7 @@ const props = defineProps<{
 
 const formattedDateAndTime = formatDateAndTime(props.comment.createdAt)
 
-const userStore = useUserStore()
-const { userMap } = storeToRefs(userStore)
+const { userMap } = useUserStore()
 </script>
 
 <template>

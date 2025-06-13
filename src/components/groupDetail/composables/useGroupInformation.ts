@@ -1,4 +1,3 @@
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
@@ -11,8 +10,7 @@ export type EditMode = 'name' | 'description' | 'budget' | ''
 export const useGroupInformation = () => {
   const toast = useToast()
 
-  const groupDetailStore = useGroupDetailStore()
-  const { group, editedValue } = storeToRefs(groupDetailStore)
+  const { group, editedValue } = useGroupDetailStore()
 
   const isSending = ref(false)
 

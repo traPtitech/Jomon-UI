@@ -1,5 +1,3 @@
-import { storeToRefs } from 'pinia'
-
 import { useTransactionStore } from '/@/stores/transaction'
 
 import type {
@@ -11,9 +9,8 @@ import { useTransactionRepository } from './repository'
 
 export const useFetchTransactionsUsecase = async () => {
   const repository = useTransactionRepository()
-  const { transactions, isTransactionFetched, filterParams } = storeToRefs(
+  const { transactions, isTransactionFetched, filterParams } =
     useTransactionStore()
-  )
 
   const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
   if (
@@ -45,7 +42,7 @@ export const createTransactionUsecase = async (
   transaction: TransactionCreateSeed
 ) => {
   const repository = useTransactionRepository()
-  const { transactions } = storeToRefs(useTransactionStore())
+  const { transactions } = useTransactionStore()
 
   try {
     const res = await repository.createTransaction(transaction)

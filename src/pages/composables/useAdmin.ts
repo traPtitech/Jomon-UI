@@ -1,4 +1,3 @@
-import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
@@ -11,12 +10,12 @@ import {
 } from '/@/features/admin/usecase'
 
 export const useAdmin = () => {
-  const { users } = storeToRefs(useUserStore())
-  const { admins } = storeToRefs(useAdminStore())
+  const { users } = useUserStore()
+  const { admins } = useAdminStore()
   const toast = useToast()
 
   const absentMembers = computed(() => {
-    if (users.value === undefined || admins === undefined) {
+    if (users.value === undefined || admins.value === undefined) {
       return []
     }
     return users.value

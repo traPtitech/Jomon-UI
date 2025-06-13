@@ -1,5 +1,3 @@
-import { storeToRefs } from 'pinia'
-
 import { useTagStore } from '/@/stores/tag'
 
 import type { Tag } from './model'
@@ -7,7 +5,7 @@ import { useTagRepository } from './repository'
 
 export const useFetchTagsUsecase = async () => {
   const repository = useTagRepository()
-  const { tags, isTagFetched } = storeToRefs(useTagStore())
+  const { tags, isTagFetched } = useTagStore()
 
   try {
     tags.value = await repository.fetchTags()
@@ -22,7 +20,7 @@ export const createTagIfNotExistUsecase = async (
   containNewTags: Tag[]
 ): Promise<Tag[]> => {
   const repository = useTagRepository()
-  const { tags } = storeToRefs(useTagStore())
+  const { tags } = useTagStore()
 
   const alreadyExists: Tag[] = []
 
@@ -49,7 +47,7 @@ export const createTagIfNotExistUsecase = async (
 
 export const deleteTagsUsecase = async (ids: string[]) => {
   const repository = useTagRepository()
-  const { tags } = storeToRefs(useTagStore())
+  const { tags } = useTagStore()
 
   try {
     const promises = ids.map(repository.deleteTag)

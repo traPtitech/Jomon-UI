@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-
 import { useUserStore } from '/@/stores/user'
 
 import EditButton from '/@/components/shared/EditButton.vue'
@@ -14,11 +12,9 @@ import { useToast } from 'vue-toastification'
 
 const request = defineModel<RequestDetail>('modelValue', { required: true })
 
-const userStore = useUserStore()
-const groupStore = useGroupStore()
+const { me } = useUserStore()
+const { groupOptions } = useGroupStore()
 const { isRequestCreator } = useRequest(request.value)
-const { me } = storeToRefs(userStore)
-const { groupOptions } = storeToRefs(groupStore)
 const toast = useToast()
 
 const hasAuthority = isRequestCreator.value(me.value)

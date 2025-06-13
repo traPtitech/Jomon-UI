@@ -1,4 +1,3 @@
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import { useUserStore } from '/@/stores/user'
@@ -6,8 +5,7 @@ import { useUserStore } from '/@/stores/user'
 import type { GroupSeedWithMemberAndOwners } from '/@/features/group/model'
 
 export const useNewGroup = () => {
-  const userStore = useUserStore()
-  const { me } = storeToRefs(userStore)
+  const { me } = useUserStore()
 
   const isSending = ref(false)
 

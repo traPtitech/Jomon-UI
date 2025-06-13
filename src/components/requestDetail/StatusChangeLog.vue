@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-
 import { useUserStore } from '/@/stores/user'
 
 import { formatDateAndTime } from '/@/lib/date'
@@ -14,8 +12,7 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const userStore = useUserStore()
-const { userMap } = storeToRefs(userStore)
+const { userMap } = useUserStore()
 
 const formattedDateAndTime = formatDateAndTime(props.log.createdAt)
 </script>

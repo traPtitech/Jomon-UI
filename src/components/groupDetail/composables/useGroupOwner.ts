@@ -1,4 +1,3 @@
-import { storeToRefs } from 'pinia'
 import { ref, computed } from 'vue'
 import { useToast } from 'vue-toastification'
 
@@ -10,11 +9,9 @@ import apis from '/@/lib/apis'
 import { addGroupOwnersUsecase } from '/@/features/group/usecase'
 
 export const useGroupOwner = () => {
-  const groupDetailStore = useGroupDetailStore()
+  const { users } = useUserStore()
+  const { group } = useGroupDetailStore()
   const toast = useToast()
-
-  const { users } = storeToRefs(useUserStore())
-  const { group } = storeToRefs(groupDetailStore)
 
   const absentOwnerOptions = computed(() => {
     if (users.value === undefined) {

@@ -1,10 +1,9 @@
-import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-
+import { defineComposable } from '/@/lib/store'
 import type { GroupDetail } from '/@/features/group/model'
 import type { User } from '/@/features/user/model'
 
-export const useGroupDetailStore = defineStore('groupDetail', () => {
+export const useGroupDetailStore = defineComposable('groupDetail', () => {
   const group = ref<GroupDetail>()
 
   const editedValue = ref({

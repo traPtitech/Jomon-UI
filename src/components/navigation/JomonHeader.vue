@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { Bars3Icon } from '@heroicons/vue/24/outline'
-import { storeToRefs } from 'pinia'
 import { RouterLink } from 'vue-router'
 
 import { useUserStore } from '/@/stores/user'
@@ -13,9 +12,7 @@ import UserIcon from '/@/components/shared/UserIcon.vue'
 import PageNavigations from './PageNavigations.vue'
 import SideDrawer from './SideDrawer.vue'
 
-const userStore = useUserStore()
-
-const { me } = storeToRefs(userStore)
+const { me } = useUserStore()
 
 const { shouldShowModal, openModal, closeModal } = useModal()
 

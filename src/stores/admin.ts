@@ -1,11 +1,9 @@
-import { defineStore, storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
-
+import { defineComposable } from '/@/lib/store'
 import { useUserStore } from '/@/stores/user'
 
-export const useAdminStore = defineStore('admin', () => {
-  const userStore = useUserStore()
-  const { userMap } = storeToRefs(userStore)
+export const useAdminStore = defineComposable('admin', () => {
+  const { userMap } = useUserStore()
 
   const admins = ref<string[]>([])
   const isAdminFetched = ref(false)

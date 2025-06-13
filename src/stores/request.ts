@@ -1,6 +1,5 @@
-import { defineStore } from 'pinia'
 import { ref } from 'vue'
-
+import { defineComposable } from '/@/lib/store'
 import type { Request, RequestQuerySeed } from '/@/features/request/model'
 
 const defaultParams: RequestQuerySeed = {
@@ -15,7 +14,7 @@ const defaultParams: RequestQuerySeed = {
   group: ''
 }
 
-export const useRequestStore = defineStore('request', () => {
+export const useRequestStore = defineComposable('request', () => {
   const requests = ref<Request[]>([])
   const isRequestFetched = ref(false)
 

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
@@ -21,15 +20,10 @@ import { useFetchUsersUsecase } from '/@/features/user/usecase'
 const route = useRoute()
 const page = ref(toPage(route.query.page))
 
-const requestStore = useRequestStore()
-const tagStore = useTagStore()
-const groupStore = useGroupStore()
-const userStore = useUserStore()
-const { requests } = storeToRefs(requestStore)
-const { isRequestFetched } = storeToRefs(requestStore)
-const { isTagFetched } = storeToRefs(tagStore)
-const { isGroupFetched } = storeToRefs(groupStore)
-const { isUserFetched } = storeToRefs(userStore)
+const { requests, isRequestFetched } = useRequestStore()
+const { isTagFetched } = useTagStore()
+const { isGroupFetched } = useGroupStore()
+const { isUserFetched } = useUserStore()
 
 const sliceRequestsAt = (index: number, n: number) => {
   const start = (index - 1) * n

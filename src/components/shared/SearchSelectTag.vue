@@ -1,14 +1,12 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
-import { storeToRefs } from 'pinia'
 import { useTagStore } from '/@/stores/tag'
 import type { Tag } from '/@/features/tag/model'
 import SearchSelect from './SearchSelect.vue'
 
 const model = defineModel<Tag[]>({ required: true })
 
-const tagStore = useTagStore()
-const { tagOptions } = storeToRefs(tagStore)
+const { tagOptions } = useTagStore()
 
 const selectedValue = ref(model.value.map(tag => tag.name))
 const searchOptions = computed(() =>

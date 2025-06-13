@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import BaseInput from '/@/components/shared/BaseInput.vue'
@@ -14,8 +13,7 @@ import { useNewGroup } from './composables/useNewGroup'
 const toast = useToast()
 const router = useRouter()
 
-const userStore = useUserStore()
-const { isUserFetched, userOptions } = storeToRefs(userStore)
+const { isUserFetched, userOptions } = useUserStore()
 
 const { isSending, group } = useNewGroup()
 

@@ -1,4 +1,3 @@
-import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
@@ -15,8 +14,7 @@ import { createTagIfNotExistUsecase } from '/@/features/tag/usecase'
 export const useNewRequest = () => {
   const toast = useToast()
   const router = useRouter()
-  const userStore = useUserStore()
-  const { me } = storeToRefs(userStore)
+  const { me } = useUserStore()
 
   const isSending = ref(false)
 

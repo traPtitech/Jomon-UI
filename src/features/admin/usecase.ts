@@ -1,12 +1,10 @@
-import { storeToRefs } from 'pinia'
-
 import { useAdminStore } from '/@/stores/admin'
 
 import { useAdminRepository } from './repository'
 
 export const useFetchAdminsUsecase = async () => {
   const repository = useAdminRepository()
-  const { admins, isAdminFetched } = storeToRefs(useAdminStore())
+  const { admins, isAdminFetched } = useAdminStore()
 
   try {
     admins.value = await repository.fetchAdmins()
@@ -18,7 +16,7 @@ export const useFetchAdminsUsecase = async () => {
 
 export const addAdminsUsecase = async (adminsSeed: string[]) => {
   const repository = useAdminRepository()
-  const { admins } = storeToRefs(useAdminStore())
+  const { admins } = useAdminStore()
 
   try {
     const res = await repository.addAdmins(adminsSeed)
@@ -30,7 +28,7 @@ export const addAdminsUsecase = async (adminsSeed: string[]) => {
 
 export const removeAdminsUsecase = async (adminsSeed: string[]) => {
   const repository = useAdminRepository()
-  const { admins } = storeToRefs(useAdminStore())
+  const { admins } = useAdminStore()
 
   try {
     await repository.removeAdmins(adminsSeed)

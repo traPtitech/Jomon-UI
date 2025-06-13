@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-
 import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
@@ -19,12 +17,9 @@ import { useFetchUsersUsecase } from '/@/features/user/usecase'
 
 import { useNewRequest } from './composables/useNewRequest'
 
-const tagStore = useTagStore()
-const userStore = useUserStore()
-const groupStore = useGroupStore()
-const { isTagFetched } = storeToRefs(tagStore)
-const { isGroupFetched, groupOptions } = storeToRefs(groupStore)
-const { isUserFetched, me } = storeToRefs(userStore)
+const { isTagFetched } = useTagStore()
+const { isUserFetched, me } = useUserStore()
+const { isGroupFetched, groupOptions } = useGroupStore()
 
 const { isSending, request, files, postRequest } = useNewRequest()
 

@@ -1,12 +1,10 @@
-import { storeToRefs } from 'pinia'
-
 import { useUserStore } from '/@/stores/user'
 
 import { useUserRepository } from './repository'
 
 export const useFetchUsersUsecase = async () => {
   const repository = useUserRepository()
-  const { users, isUserFetched } = storeToRefs(useUserStore())
+  const { users, isUserFetched } = useUserStore()
 
   try {
     users.value = await repository.fetchUsers()
@@ -18,7 +16,7 @@ export const useFetchUsersUsecase = async () => {
 
 export const useFetchMeUsecase = async () => {
   const repository = useUserRepository()
-  const { me, isMeFetched } = storeToRefs(useUserStore())
+  const { me, isMeFetched } = useUserStore()
 
   if (isMeFetched.value) return
 

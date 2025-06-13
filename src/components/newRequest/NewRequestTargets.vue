@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
-import { storeToRefs } from 'pinia'
 import { useUserStore } from '/@/stores/user'
 import type { RequestTarget } from '/@/lib/apis'
 import BaseInput from '/@/components/shared/BaseInput.vue'
@@ -9,8 +8,7 @@ import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 const model = defineModel<RequestTarget[]>({ required: true })
 
-const userStore = useUserStore()
-const { userOptions } = storeToRefs(userStore)
+const { userOptions } = useUserStore()
 
 function handleAddTarget() {
   model.value = [...model.value, { target: '', amount: 0 }]

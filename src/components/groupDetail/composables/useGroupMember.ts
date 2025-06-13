@@ -1,4 +1,3 @@
-import { storeToRefs } from 'pinia'
 import { ref, computed } from 'vue'
 import { useToast } from 'vue-toastification'
 
@@ -11,11 +10,9 @@ import {
 } from '/@/features/group/usecase'
 
 export const useGroupMember = () => {
-  const groupDetailStore = useGroupDetailStore()
+  const { users } = useUserStore()
+  const { group } = useGroupDetailStore()
   const toast = useToast()
-
-  const { users } = storeToRefs(useUserStore())
-  const { group } = storeToRefs(groupDetailStore)
 
   const absentMemberOptions = computed(() => {
     if (users.value === undefined) {

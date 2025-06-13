@@ -18,7 +18,7 @@ const page = ref(toPage(route.query.page))
 const { groups, isGroupFetched } = useGroupStore()
 const { isAdmin } = useUserStore()
 
-if (!isGroupFetched) {
+if (!isGroupFetched.value) {
   await useFetchGroupsUsecase()
 }
 

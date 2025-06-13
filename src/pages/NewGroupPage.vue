@@ -29,7 +29,7 @@ const handleCreateGroup = async () => {
   }
 }
 
-if (!isUserFetched) {
+if (!isUserFetched.value) {
   await useFetchUsersUsecase()
 }
 </script>

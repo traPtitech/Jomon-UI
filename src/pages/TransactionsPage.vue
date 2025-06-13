@@ -26,10 +26,10 @@ const { isAdmin } = useUserStore()
 
 //TODO:  `request: toId(route.query.requestID)`でフィルターする
 await useFetchTransactionsUsecase()
-if (!isGroupFetched) {
+if (!isGroupFetched.value) {
   await useFetchGroupsUsecase()
 }
-if (!isTagFetched) {
+if (!isTagFetched.value) {
   await useFetchTagsUsecase()
 }
 

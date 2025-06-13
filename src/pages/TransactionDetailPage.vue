@@ -33,13 +33,13 @@ function finishEditing(editedTransaction: Transaction) {
   isEditMode.value = false
 }
 
-if (!isUserFetched) {
+if (!isUserFetched.value) {
   await useFetchUsersUsecase()
 }
-if (!isTagFetched) {
+if (!isTagFetched.value) {
   await useFetchTagsUsecase()
 }
-if (!isGroupFetched) {
+if (!isGroupFetched.value) {
   await useFetchGroupsUsecase()
 }
 </script>

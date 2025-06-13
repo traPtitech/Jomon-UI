@@ -14,14 +14,18 @@
 
 
 // @ts-ignore error happens by importsNotUsedAsValues
-import { Configuration } from './configuration';
+import type { Configuration } from './configuration';
 // @ts-ignore error happens by importsNotUsedAsValues
-import globalAxios, { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+// @ts-ignore error happens by importsNotUsedAsValues
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
+// @ts-ignore error happens by importsNotUsedAsValues
+import type { RequestArgs } from './base';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
+import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
 
 /**
  * 
@@ -186,6 +190,8 @@ export interface ApplicationDetail {
      */
     'updated_at': string;
 }
+
+
 /**
  * 
  * @export
@@ -194,10 +200,10 @@ export interface ApplicationDetail {
 export interface ApplicationFile {
     /**
      * 
-     * @type {any}
+     * @type {File}
      * @memberof ApplicationFile
      */
-    'file': any;
+    'file': File;
     /**
      * 
      * @type {string}
@@ -363,15 +369,39 @@ export interface FileMeta {
 /**
  * 
  * @export
- * @interface InlineResponse200
+ * @interface GetTag200Response
  */
-export interface InlineResponse200 {
+export interface GetTag200Response {
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse200
+     * @memberof GetTag200Response
      */
-    'id'?: string;
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTag200Response
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTag200Response
+     */
+    'created_at': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTag200Response
+     */
+    'updated_at': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof GetTag200Response
+     */
+    'applications'?: Array<string>;
 }
 /**
  * 
@@ -507,6 +537,19 @@ export interface PostComment {
 /**
  * 
  * @export
+ * @interface PostFile200Response
+ */
+export interface PostFile200Response {
+    /**
+     * 
+     * @type {string}
+     * @memberof PostFile200Response
+     */
+    'id'?: string;
+}
+/**
+ * 
+ * @export
  * @interface PostPartition
  */
 export interface PostPartition {
@@ -561,6 +604,8 @@ export interface PutStatus {
      */
     'comment': string;
 }
+
+
 /**
  * 
  * @export
@@ -611,6 +656,8 @@ export interface Status {
      */
     'created_at': string;
 }
+
+
 /**
  * 
  * @export
@@ -642,6 +689,8 @@ export interface StatusDetail {
      */
     'created_at': string;
 }
+
+
 /**
  * 
  * @export
@@ -752,7 +801,7 @@ export const AccountManagersApiAxiosParamCreator = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteAccountManagers: async (requestBody: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deleteAccountManagers: async (requestBody: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'requestBody' is not null or undefined
             assertParamExists('deleteAccountManagers', 'requestBody', requestBody)
             const localVarPath = `/account-managers`;
@@ -786,7 +835,7 @@ export const AccountManagersApiAxiosParamCreator = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAccountManagers: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getAccountManagers: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/account-managers`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -816,7 +865,7 @@ export const AccountManagersApiAxiosParamCreator = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postAccountManagers: async (requestBody: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        postAccountManagers: async (requestBody: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'requestBody' is not null or undefined
             assertParamExists('postAccountManagers', 'requestBody', requestBody)
             const localVarPath = `/account-managers`;
@@ -861,18 +910,22 @@ export const AccountManagersApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteAccountManagers(requestBody: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async deleteAccountManagers(requestBody: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteAccountManagers(requestBody, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountManagersApi.deleteAccountManagers']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * accountManagerユーザーの一覧を返す。accountManager権限が必要。
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAccountManagers(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
+        async getAccountManagers(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAccountManagers(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountManagersApi.getAccountManagers']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * accountManagerユーザーを追加する。accountManager権限が必要。
@@ -880,9 +933,11 @@ export const AccountManagersApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postAccountManagers(requestBody: Array<string>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async postAccountManagers(requestBody: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postAccountManagers(requestBody, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountManagersApi.postAccountManagers']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
@@ -900,7 +955,7 @@ export const AccountManagersApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteAccountManagers(requestBody: Array<string>, options?: any): AxiosPromise<void> {
+        deleteAccountManagers(requestBody: Array<string>, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.deleteAccountManagers(requestBody, options).then((request) => request(axios, basePath));
         },
         /**
@@ -908,7 +963,7 @@ export const AccountManagersApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAccountManagers(options?: any): AxiosPromise<Array<string>> {
+        getAccountManagers(options?: RawAxiosRequestConfig): AxiosPromise<Array<string>> {
             return localVarFp.getAccountManagers(options).then((request) => request(axios, basePath));
         },
         /**
@@ -917,7 +972,7 @@ export const AccountManagersApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postAccountManagers(requestBody: Array<string>, options?: any): AxiosPromise<void> {
+        postAccountManagers(requestBody: Array<string>, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.postAccountManagers(requestBody, options).then((request) => request(axios, basePath));
         },
     };
@@ -937,7 +992,7 @@ export class AccountManagersApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AccountManagersApi
      */
-    public deleteAccountManagers(requestBody: Array<string>, options?: AxiosRequestConfig) {
+    public deleteAccountManagers(requestBody: Array<string>, options?: RawAxiosRequestConfig) {
         return AccountManagersApiFp(this.configuration).deleteAccountManagers(requestBody, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -947,7 +1002,7 @@ export class AccountManagersApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AccountManagersApi
      */
-    public getAccountManagers(options?: AxiosRequestConfig) {
+    public getAccountManagers(options?: RawAxiosRequestConfig) {
         return AccountManagersApiFp(this.configuration).getAccountManagers(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -958,10 +1013,11 @@ export class AccountManagersApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AccountManagersApi
      */
-    public postAccountManagers(requestBody: Array<string>, options?: AxiosRequestConfig) {
+    public postAccountManagers(requestBody: Array<string>, options?: RawAxiosRequestConfig) {
         return AccountManagersApiFp(this.configuration).postAccountManagers(requestBody, options).then((request) => request(this.axios, this.basePath));
     }
 }
+
 
 
 /**
@@ -976,7 +1032,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getApplicationDetail: async (applicationID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getApplicationDetail: async (applicationID: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'applicationID' is not null or undefined
             assertParamExists('getApplicationDetail', 'applicationID', applicationID)
             const localVarPath = `/applications/{applicationID}`
@@ -1018,7 +1074,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getApplications: async (sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, partition?: string, createdBy?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getApplications: async (sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, partition?: string, createdBy?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/applications`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1045,13 +1101,13 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
 
             if (since !== undefined) {
                 localVarQueryParameter['since'] = (since as any instanceof Date) ?
-                    (since as any).toISOString().substr(0,10) :
+                    (since as any).toISOString().substring(0,10) :
                     since;
             }
 
             if (until !== undefined) {
                 localVarQueryParameter['until'] = (until as any instanceof Date) ?
-                    (until as any).toISOString().substr(0,10) :
+                    (until as any).toISOString().substring(0,10) :
                     until;
             }
 
@@ -1092,7 +1148,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postApplication: async (postApplication: PostApplication, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        postApplication: async (postApplication: PostApplication, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'postApplication' is not null or undefined
             assertParamExists('postApplication', 'postApplication', postApplication)
             const localVarPath = `/applications`;
@@ -1128,7 +1184,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postComment: async (applicationID: string, postComment: PostComment, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        postComment: async (applicationID: string, postComment: PostComment, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'applicationID' is not null or undefined
             assertParamExists('postComment', 'applicationID', applicationID)
             // verify required parameter 'postComment' is not null or undefined
@@ -1167,7 +1223,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putApplicationDetail: async (applicationID: string, postApplication: PostApplication, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        putApplicationDetail: async (applicationID: string, postApplication: PostApplication, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'applicationID' is not null or undefined
             assertParamExists('putApplicationDetail', 'applicationID', applicationID)
             // verify required parameter 'postApplication' is not null or undefined
@@ -1206,7 +1262,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putStatus: async (applicationID: string, putStatus: PutStatus, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        putStatus: async (applicationID: string, putStatus: PutStatus, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'applicationID' is not null or undefined
             assertParamExists('putStatus', 'applicationID', applicationID)
             // verify required parameter 'putStatus' is not null or undefined
@@ -1254,9 +1310,11 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getApplicationDetail(applicationID: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplicationDetail>> {
+        async getApplicationDetail(applicationID: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplicationDetail>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getApplicationDetail(applicationID, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.getApplicationDetail']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 申請一覧を取得する。
@@ -1273,9 +1331,11 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getApplications(sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, partition?: string, createdBy?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Application>>> {
+        async getApplications(sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, partition?: string, createdBy?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Application>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getApplications(sort, status, target, since, until, limit, offset, tag, partition, createdBy, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.getApplications']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 申請を新規作成する。
@@ -1283,9 +1343,11 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postApplication(postApplication: PostApplication, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplicationDetail>> {
+        async postApplication(postApplication: PostApplication, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplicationDetail>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postApplication(postApplication, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.postApplication']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 指定した申請にコメントを新規作成する。
@@ -1294,9 +1356,11 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postComment(applicationID: string, postComment: PostComment, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Comment>> {
+        async postComment(applicationID: string, postComment: PostComment, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Comment>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postComment(applicationID, postComment, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.postComment']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 指定した申請を修正する。作成者権限が必要。
@@ -1305,9 +1369,11 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async putApplicationDetail(applicationID: string, postApplication: PostApplication, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplicationDetail>> {
+        async putApplicationDetail(applicationID: string, postApplication: PostApplication, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplicationDetail>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.putApplicationDetail(applicationID, postApplication, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.putApplicationDetail']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの行き来の定義は作成者は「change_requestedからsubmitted」をでき、accountManagerは「submittedからrejected」「submittedからchange_requested」「change_requestedからsubmitted」「submittedからapproved」「approvedからsubmitted（ただしすでに支払われている人がいた場合、この操作は不可)」の操作のみ可。ただし、「approvedからfully_repaid」の操作はここでは行えない。accountManager権限または作成者権限が必要。
@@ -1316,9 +1382,11 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async putStatus(applicationID: string, putStatus: PutStatus, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StatusDetail>> {
+        async putStatus(applicationID: string, putStatus: PutStatus, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StatusDetail>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.putStatus(applicationID, putStatus, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.putStatus']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
@@ -1336,7 +1404,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getApplicationDetail(applicationID: string, options?: any): AxiosPromise<ApplicationDetail> {
+        getApplicationDetail(applicationID: string, options?: RawAxiosRequestConfig): AxiosPromise<ApplicationDetail> {
             return localVarFp.getApplicationDetail(applicationID, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1354,7 +1422,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getApplications(sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, partition?: string, createdBy?: string, options?: any): AxiosPromise<Array<Application>> {
+        getApplications(sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, partition?: string, createdBy?: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<Application>> {
             return localVarFp.getApplications(sort, status, target, since, until, limit, offset, tag, partition, createdBy, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1363,7 +1431,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postApplication(postApplication: PostApplication, options?: any): AxiosPromise<ApplicationDetail> {
+        postApplication(postApplication: PostApplication, options?: RawAxiosRequestConfig): AxiosPromise<ApplicationDetail> {
             return localVarFp.postApplication(postApplication, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1373,7 +1441,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postComment(applicationID: string, postComment: PostComment, options?: any): AxiosPromise<Comment> {
+        postComment(applicationID: string, postComment: PostComment, options?: RawAxiosRequestConfig): AxiosPromise<Comment> {
             return localVarFp.postComment(applicationID, postComment, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1383,7 +1451,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putApplicationDetail(applicationID: string, postApplication: PostApplication, options?: any): AxiosPromise<ApplicationDetail> {
+        putApplicationDetail(applicationID: string, postApplication: PostApplication, options?: RawAxiosRequestConfig): AxiosPromise<ApplicationDetail> {
             return localVarFp.putApplicationDetail(applicationID, postApplication, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1393,7 +1461,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putStatus(applicationID: string, putStatus: PutStatus, options?: any): AxiosPromise<StatusDetail> {
+        putStatus(applicationID: string, putStatus: PutStatus, options?: RawAxiosRequestConfig): AxiosPromise<StatusDetail> {
             return localVarFp.putStatus(applicationID, putStatus, options).then((request) => request(axios, basePath));
         },
     };
@@ -1413,7 +1481,7 @@ export class ApplicationsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public getApplicationDetail(applicationID: string, options?: AxiosRequestConfig) {
+    public getApplicationDetail(applicationID: string, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).getApplicationDetail(applicationID, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1433,7 +1501,7 @@ export class ApplicationsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public getApplications(sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, partition?: string, createdBy?: string, options?: AxiosRequestConfig) {
+    public getApplications(sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, partition?: string, createdBy?: string, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).getApplications(sort, status, target, since, until, limit, offset, tag, partition, createdBy, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1444,7 +1512,7 @@ export class ApplicationsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public postApplication(postApplication: PostApplication, options?: AxiosRequestConfig) {
+    public postApplication(postApplication: PostApplication, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).postApplication(postApplication, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1456,7 +1524,7 @@ export class ApplicationsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public postComment(applicationID: string, postComment: PostComment, options?: AxiosRequestConfig) {
+    public postComment(applicationID: string, postComment: PostComment, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).postComment(applicationID, postComment, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1468,7 +1536,7 @@ export class ApplicationsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public putApplicationDetail(applicationID: string, postApplication: PostApplication, options?: AxiosRequestConfig) {
+    public putApplicationDetail(applicationID: string, postApplication: PostApplication, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).putApplicationDetail(applicationID, postApplication, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1480,10 +1548,11 @@ export class ApplicationsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public putStatus(applicationID: string, putStatus: PutStatus, options?: AxiosRequestConfig) {
+    public putStatus(applicationID: string, putStatus: PutStatus, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).putStatus(applicationID, putStatus, options).then((request) => request(this.axios, this.basePath));
     }
 }
+
 
 
 /**
@@ -1497,7 +1566,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        generatePKCE: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        generatePKCE: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/auth/genpkce`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1536,9 +1605,11 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async generatePKCE(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async generatePKCE(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.generatePKCE(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.generatePKCE']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
@@ -1555,7 +1626,7 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        generatePKCE(options?: any): AxiosPromise<void> {
+        generatePKCE(options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.generatePKCE(options).then((request) => request(axios, basePath));
         },
     };
@@ -1574,10 +1645,11 @@ export class AuthApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public generatePKCE(options?: AxiosRequestConfig) {
+    public generatePKCE(options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).generatePKCE(options).then((request) => request(this.axios, this.basePath));
     }
 }
+
 
 
 /**
@@ -1592,7 +1664,7 @@ export const FilesApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteFile: async (fileID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deleteFile: async (fileID: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'fileID' is not null or undefined
             assertParamExists('deleteFile', 'fileID', fileID)
             const localVarPath = `/files/{fileID}`
@@ -1625,7 +1697,7 @@ export const FilesApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFile: async (fileID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getFile: async (fileID: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'fileID' is not null or undefined
             assertParamExists('getFile', 'fileID', fileID)
             const localVarPath = `/files/{fileID}`
@@ -1658,7 +1730,7 @@ export const FilesApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFileMeta: async (fileID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getFileMeta: async (fileID: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'fileID' is not null or undefined
             assertParamExists('getFileMeta', 'fileID', fileID)
             const localVarPath = `/files/{fileID}/meta`
@@ -1687,13 +1759,13 @@ export const FilesApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * ファイルをアップロードする。
-         * @param {any} file 
+         * @param {File} file 
          * @param {string} name 
          * @param {string} applicationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postFile: async (file: any, name: string, applicationId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        postFile: async (file: File, name: string, applicationId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'file' is not null or undefined
             assertParamExists('postFile', 'file', file)
             // verify required parameter 'name' is not null or undefined
@@ -1755,9 +1827,11 @@ export const FilesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteFile(fileID: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async deleteFile(fileID: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteFile(fileID, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['FilesApi.deleteFile']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 指定されたファイルを返す
@@ -1765,9 +1839,11 @@ export const FilesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getFile(fileID: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+        async getFile(fileID: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getFile(fileID, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['FilesApi.getFile']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 指定されたファイルのメタデータを返す
@@ -1775,21 +1851,25 @@ export const FilesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getFileMeta(fileID: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileMeta>> {
+        async getFileMeta(fileID: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileMeta>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getFileMeta(fileID, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['FilesApi.getFileMeta']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * ファイルをアップロードする。
-         * @param {any} file 
+         * @param {File} file 
          * @param {string} name 
          * @param {string} applicationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postFile(file: any, name: string, applicationId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200>> {
+        async postFile(file: File, name: string, applicationId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PostFile200Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postFile(file, name, applicationId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['FilesApi.postFile']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
@@ -1807,7 +1887,7 @@ export const FilesApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteFile(fileID: string, options?: any): AxiosPromise<void> {
+        deleteFile(fileID: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.deleteFile(fileID, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1816,7 +1896,7 @@ export const FilesApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFile(fileID: string, options?: any): AxiosPromise<any> {
+        getFile(fileID: string, options?: RawAxiosRequestConfig): AxiosPromise<File> {
             return localVarFp.getFile(fileID, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1825,18 +1905,18 @@ export const FilesApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFileMeta(fileID: string, options?: any): AxiosPromise<FileMeta> {
+        getFileMeta(fileID: string, options?: RawAxiosRequestConfig): AxiosPromise<FileMeta> {
             return localVarFp.getFileMeta(fileID, options).then((request) => request(axios, basePath));
         },
         /**
          * ファイルをアップロードする。
-         * @param {any} file 
+         * @param {File} file 
          * @param {string} name 
          * @param {string} applicationId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postFile(file: any, name: string, applicationId: string, options?: any): AxiosPromise<InlineResponse200> {
+        postFile(file: File, name: string, applicationId: string, options?: RawAxiosRequestConfig): AxiosPromise<PostFile200Response> {
             return localVarFp.postFile(file, name, applicationId, options).then((request) => request(axios, basePath));
         },
     };
@@ -1856,7 +1936,7 @@ export class FilesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof FilesApi
      */
-    public deleteFile(fileID: string, options?: AxiosRequestConfig) {
+    public deleteFile(fileID: string, options?: RawAxiosRequestConfig) {
         return FilesApiFp(this.configuration).deleteFile(fileID, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1867,7 +1947,7 @@ export class FilesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof FilesApi
      */
-    public getFile(fileID: string, options?: AxiosRequestConfig) {
+    public getFile(fileID: string, options?: RawAxiosRequestConfig) {
         return FilesApiFp(this.configuration).getFile(fileID, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1878,23 +1958,24 @@ export class FilesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof FilesApi
      */
-    public getFileMeta(fileID: string, options?: AxiosRequestConfig) {
+    public getFileMeta(fileID: string, options?: RawAxiosRequestConfig) {
         return FilesApiFp(this.configuration).getFileMeta(fileID, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * ファイルをアップロードする。
-     * @param {any} file 
+     * @param {File} file 
      * @param {string} name 
      * @param {string} applicationId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FilesApi
      */
-    public postFile(file: any, name: string, applicationId: string, options?: AxiosRequestConfig) {
+    public postFile(file: File, name: string, applicationId: string, options?: RawAxiosRequestConfig) {
         return FilesApiFp(this.configuration).postFile(file, name, applicationId, options).then((request) => request(this.axios, this.basePath));
     }
 }
+
 
 
 /**
@@ -1909,7 +1990,7 @@ export const PartitionsApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deletePartition: async (partitionID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deletePartition: async (partitionID: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'partitionID' is not null or undefined
             assertParamExists('deletePartition', 'partitionID', partitionID)
             const localVarPath = `/partitions/{partitionID}`
@@ -1942,7 +2023,7 @@ export const PartitionsApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPartition: async (partitionID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getPartition: async (partitionID: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'partitionID' is not null or undefined
             assertParamExists('getPartition', 'partitionID', partitionID)
             const localVarPath = `/partitions/{partitionID}`
@@ -1974,7 +2055,7 @@ export const PartitionsApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPartitions: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getPartitions: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/partitions`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2004,7 +2085,7 @@ export const PartitionsApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postPartition: async (postPartition: PostPartition, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        postPartition: async (postPartition: PostPartition, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'postPartition' is not null or undefined
             assertParamExists('postPartition', 'postPartition', postPartition)
             const localVarPath = `/partitions`;
@@ -2040,7 +2121,7 @@ export const PartitionsApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putPartition: async (partitionID: string, postPartition: PostPartition, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        putPartition: async (partitionID: string, postPartition: PostPartition, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'partitionID' is not null or undefined
             assertParamExists('putPartition', 'partitionID', partitionID)
             // verify required parameter 'postPartition' is not null or undefined
@@ -2088,9 +2169,11 @@ export const PartitionsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deletePartition(partitionID: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async deletePartition(partitionID: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deletePartition(partitionID, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PartitionsApi.deletePartition']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * パーティションの情報を返す。
@@ -2098,18 +2181,22 @@ export const PartitionsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPartition(partitionID: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Partition>> {
+        async getPartition(partitionID: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Partition>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPartition(partitionID, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PartitionsApi.getPartition']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * パーティションの一覧を返す。
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPartitions(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Partition>>> {
+        async getPartitions(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Partition>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPartitions(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PartitionsApi.getPartitions']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * パーティションを追加する。accountManager権限が必要。
@@ -2117,9 +2204,11 @@ export const PartitionsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postPartition(postPartition: PostPartition, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Partition>> {
+        async postPartition(postPartition: PostPartition, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Partition>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postPartition(postPartition, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PartitionsApi.postPartition']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * パーティションの情報を変更する。accountManager権限が必要。
@@ -2128,9 +2217,11 @@ export const PartitionsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async putPartition(partitionID: string, postPartition: PostPartition, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Partition>> {
+        async putPartition(partitionID: string, postPartition: PostPartition, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Partition>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.putPartition(partitionID, postPartition, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PartitionsApi.putPartition']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
@@ -2148,7 +2239,7 @@ export const PartitionsApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deletePartition(partitionID: string, options?: any): AxiosPromise<void> {
+        deletePartition(partitionID: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.deletePartition(partitionID, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2157,7 +2248,7 @@ export const PartitionsApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPartition(partitionID: string, options?: any): AxiosPromise<Partition> {
+        getPartition(partitionID: string, options?: RawAxiosRequestConfig): AxiosPromise<Partition> {
             return localVarFp.getPartition(partitionID, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2165,7 +2256,7 @@ export const PartitionsApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPartitions(options?: any): AxiosPromise<Array<Partition>> {
+        getPartitions(options?: RawAxiosRequestConfig): AxiosPromise<Array<Partition>> {
             return localVarFp.getPartitions(options).then((request) => request(axios, basePath));
         },
         /**
@@ -2174,7 +2265,7 @@ export const PartitionsApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postPartition(postPartition: PostPartition, options?: any): AxiosPromise<Partition> {
+        postPartition(postPartition: PostPartition, options?: RawAxiosRequestConfig): AxiosPromise<Partition> {
             return localVarFp.postPartition(postPartition, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2184,7 +2275,7 @@ export const PartitionsApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putPartition(partitionID: string, postPartition: PostPartition, options?: any): AxiosPromise<Partition> {
+        putPartition(partitionID: string, postPartition: PostPartition, options?: RawAxiosRequestConfig): AxiosPromise<Partition> {
             return localVarFp.putPartition(partitionID, postPartition, options).then((request) => request(axios, basePath));
         },
     };
@@ -2204,7 +2295,7 @@ export class PartitionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PartitionsApi
      */
-    public deletePartition(partitionID: string, options?: AxiosRequestConfig) {
+    public deletePartition(partitionID: string, options?: RawAxiosRequestConfig) {
         return PartitionsApiFp(this.configuration).deletePartition(partitionID, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2215,7 +2306,7 @@ export class PartitionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PartitionsApi
      */
-    public getPartition(partitionID: string, options?: AxiosRequestConfig) {
+    public getPartition(partitionID: string, options?: RawAxiosRequestConfig) {
         return PartitionsApiFp(this.configuration).getPartition(partitionID, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2225,7 +2316,7 @@ export class PartitionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PartitionsApi
      */
-    public getPartitions(options?: AxiosRequestConfig) {
+    public getPartitions(options?: RawAxiosRequestConfig) {
         return PartitionsApiFp(this.configuration).getPartitions(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2236,7 +2327,7 @@ export class PartitionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PartitionsApi
      */
-    public postPartition(postPartition: PostPartition, options?: AxiosRequestConfig) {
+    public postPartition(postPartition: PostPartition, options?: RawAxiosRequestConfig) {
         return PartitionsApiFp(this.configuration).postPartition(postPartition, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2248,10 +2339,11 @@ export class PartitionsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PartitionsApi
      */
-    public putPartition(partitionID: string, postPartition: PostPartition, options?: AxiosRequestConfig) {
+    public putPartition(partitionID: string, postPartition: PostPartition, options?: RawAxiosRequestConfig) {
         return PartitionsApiFp(this.configuration).putPartition(partitionID, postPartition, options).then((request) => request(this.axios, this.basePath));
     }
 }
+
 
 
 /**
@@ -2266,7 +2358,7 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTag: async (tagID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getTag: async (tagID: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'tagID' is not null or undefined
             assertParamExists('getTag', 'tagID', tagID)
             const localVarPath = `/tags/{tagID}`
@@ -2298,7 +2390,7 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTags: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getTags: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/tags`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2328,7 +2420,7 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postTag: async (postTag: PostTag, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        postTag: async (postTag: PostTag, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'postTag' is not null or undefined
             assertParamExists('postTag', 'postTag', postTag)
             const localVarPath = `/tags`;
@@ -2363,7 +2455,7 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        tagsTagIDDelete: async (tagID: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        tagsTagIDDelete: async (tagID: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'tagID' is not null or undefined
             assertParamExists('tagsTagIDDelete', 'tagID', tagID)
             const localVarPath = `/tags/{tagID}`
@@ -2406,18 +2498,22 @@ export const TagsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTag(tagID: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Tag & object>> {
+        async getTag(tagID: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTag200Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTag(tagID, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TagsApi.getTag']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * タグの一覧を返す。
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTags(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Tag>>> {
+        async getTags(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Tag>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getTags(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TagsApi.getTags']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * タグを追加する。
@@ -2425,9 +2521,11 @@ export const TagsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postTag(postTag: PostTag, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Tag>> {
+        async postTag(postTag: PostTag, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Tag>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postTag(postTag, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TagsApi.postTag']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * タグを削除する
@@ -2435,9 +2533,11 @@ export const TagsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async tagsTagIDDelete(tagID: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async tagsTagIDDelete(tagID: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.tagsTagIDDelete(tagID, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TagsApi.tagsTagIDDelete']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
@@ -2455,7 +2555,7 @@ export const TagsApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTag(tagID: string, options?: any): AxiosPromise<Tag & object> {
+        getTag(tagID: string, options?: RawAxiosRequestConfig): AxiosPromise<GetTag200Response> {
             return localVarFp.getTag(tagID, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2463,7 +2563,7 @@ export const TagsApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTags(options?: any): AxiosPromise<Array<Tag>> {
+        getTags(options?: RawAxiosRequestConfig): AxiosPromise<Array<Tag>> {
             return localVarFp.getTags(options).then((request) => request(axios, basePath));
         },
         /**
@@ -2472,7 +2572,7 @@ export const TagsApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postTag(postTag: PostTag, options?: any): AxiosPromise<Tag> {
+        postTag(postTag: PostTag, options?: RawAxiosRequestConfig): AxiosPromise<Tag> {
             return localVarFp.postTag(postTag, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2481,7 +2581,7 @@ export const TagsApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        tagsTagIDDelete(tagID: string, options?: any): AxiosPromise<void> {
+        tagsTagIDDelete(tagID: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.tagsTagIDDelete(tagID, options).then((request) => request(axios, basePath));
         },
     };
@@ -2501,7 +2601,7 @@ export class TagsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TagsApi
      */
-    public getTag(tagID: string, options?: AxiosRequestConfig) {
+    public getTag(tagID: string, options?: RawAxiosRequestConfig) {
         return TagsApiFp(this.configuration).getTag(tagID, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2511,7 +2611,7 @@ export class TagsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TagsApi
      */
-    public getTags(options?: AxiosRequestConfig) {
+    public getTags(options?: RawAxiosRequestConfig) {
         return TagsApiFp(this.configuration).getTags(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2522,7 +2622,7 @@ export class TagsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TagsApi
      */
-    public postTag(postTag: PostTag, options?: AxiosRequestConfig) {
+    public postTag(postTag: PostTag, options?: RawAxiosRequestConfig) {
         return TagsApiFp(this.configuration).postTag(postTag, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2533,10 +2633,11 @@ export class TagsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TagsApi
      */
-    public tagsTagIDDelete(tagID: string, options?: AxiosRequestConfig) {
+    public tagsTagIDDelete(tagID: string, options?: RawAxiosRequestConfig) {
         return TagsApiFp(this.configuration).tagsTagIDDelete(tagID, options).then((request) => request(this.axios, this.basePath));
     }
 }
+
 
 
 /**
@@ -2550,7 +2651,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMe: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getMe: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/users/me`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2579,7 +2680,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUsers: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getUsers: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/users`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2618,18 +2719,22 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMe(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+        async getMe(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getMe(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.getMe']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * ユーザー一覧を取得する。
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getUsers(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<User>>> {
+        async getUsers(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<User>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getUsers(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.getUsers']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
@@ -2646,7 +2751,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMe(options?: any): AxiosPromise<User> {
+        getMe(options?: RawAxiosRequestConfig): AxiosPromise<User> {
             return localVarFp.getMe(options).then((request) => request(axios, basePath));
         },
         /**
@@ -2654,7 +2759,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUsers(options?: any): AxiosPromise<Array<User>> {
+        getUsers(options?: RawAxiosRequestConfig): AxiosPromise<Array<User>> {
             return localVarFp.getUsers(options).then((request) => request(axios, basePath));
         },
     };
@@ -2673,7 +2778,7 @@ export class UsersApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public getMe(options?: AxiosRequestConfig) {
+    public getMe(options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).getMe(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2683,7 +2788,7 @@ export class UsersApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public getUsers(options?: AxiosRequestConfig) {
+    public getUsers(options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).getUsers(options).then((request) => request(this.axios, this.basePath));
     }
 }
@@ -2696,7 +2801,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AccountManagersApi
      */
-    public deleteAccountManagers(requestBody: Array<string>, options?: AxiosRequestConfig) {
+    public deleteAccountManagers(requestBody: Array<string>, options?: RawAxiosRequestConfig) {
         return AccountManagersApiFp(this.configuration).deleteAccountManagers(requestBody, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2706,7 +2811,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AccountManagersApi
      */
-    public getAccountManagers(options?: AxiosRequestConfig) {
+    public getAccountManagers(options?: RawAxiosRequestConfig) {
         return AccountManagersApiFp(this.configuration).getAccountManagers(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2717,7 +2822,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AccountManagersApi
      */
-    public postAccountManagers(requestBody: Array<string>, options?: AxiosRequestConfig) {
+    public postAccountManagers(requestBody: Array<string>, options?: RawAxiosRequestConfig) {
         return AccountManagersApiFp(this.configuration).postAccountManagers(requestBody, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2728,7 +2833,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public getApplicationDetail(applicationID: string, options?: AxiosRequestConfig) {
+    public getApplicationDetail(applicationID: string, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).getApplicationDetail(applicationID, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2748,7 +2853,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public getApplications(sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, partition?: string, createdBy?: string, options?: AxiosRequestConfig) {
+    public getApplications(sort?: string, status?: StatusEnum, target?: string, since?: string, until?: string, limit?: number, offset?: number, tag?: string, partition?: string, createdBy?: string, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).getApplications(sort, status, target, since, until, limit, offset, tag, partition, createdBy, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2759,7 +2864,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public postApplication(postApplication: PostApplication, options?: AxiosRequestConfig) {
+    public postApplication(postApplication: PostApplication, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).postApplication(postApplication, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2771,7 +2876,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public postComment(applicationID: string, postComment: PostComment, options?: AxiosRequestConfig) {
+    public postComment(applicationID: string, postComment: PostComment, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).postComment(applicationID, postComment, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2783,7 +2888,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public putApplicationDetail(applicationID: string, postApplication: PostApplication, options?: AxiosRequestConfig) {
+    public putApplicationDetail(applicationID: string, postApplication: PostApplication, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).putApplicationDetail(applicationID, postApplication, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2795,7 +2900,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public putStatus(applicationID: string, putStatus: PutStatus, options?: AxiosRequestConfig) {
+    public putStatus(applicationID: string, putStatus: PutStatus, options?: RawAxiosRequestConfig) {
         return ApplicationsApiFp(this.configuration).putStatus(applicationID, putStatus, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2805,7 +2910,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public generatePKCE(options?: AxiosRequestConfig) {
+    public generatePKCE(options?: RawAxiosRequestConfig) {
         return AuthApiFp(this.configuration).generatePKCE(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2816,7 +2921,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof FilesApi
      */
-    public deleteFile(fileID: string, options?: AxiosRequestConfig) {
+    public deleteFile(fileID: string, options?: RawAxiosRequestConfig) {
         return FilesApiFp(this.configuration).deleteFile(fileID, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2827,7 +2932,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof FilesApi
      */
-    public getFile(fileID: string, options?: AxiosRequestConfig) {
+    public getFile(fileID: string, options?: RawAxiosRequestConfig) {
         return FilesApiFp(this.configuration).getFile(fileID, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2838,20 +2943,20 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof FilesApi
      */
-    public getFileMeta(fileID: string, options?: AxiosRequestConfig) {
+    public getFileMeta(fileID: string, options?: RawAxiosRequestConfig) {
         return FilesApiFp(this.configuration).getFileMeta(fileID, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * ファイルをアップロードする。
-     * @param {any} file
+     * @param {File} file
      * @param {string} name
      * @param {string} applicationId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FilesApi
      */
-    public postFile(file: any, name: string, applicationId: string, options?: AxiosRequestConfig) {
+    public postFile(file: File, name: string, applicationId: string, options?: RawAxiosRequestConfig) {
         return FilesApiFp(this.configuration).postFile(file, name, applicationId, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2862,7 +2967,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PartitionsApi
      */
-    public deletePartition(partitionID: string, options?: AxiosRequestConfig) {
+    public deletePartition(partitionID: string, options?: RawAxiosRequestConfig) {
         return PartitionsApiFp(this.configuration).deletePartition(partitionID, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2873,7 +2978,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PartitionsApi
      */
-    public getPartition(partitionID: string, options?: AxiosRequestConfig) {
+    public getPartition(partitionID: string, options?: RawAxiosRequestConfig) {
         return PartitionsApiFp(this.configuration).getPartition(partitionID, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2883,7 +2988,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PartitionsApi
      */
-    public getPartitions(options?: AxiosRequestConfig) {
+    public getPartitions(options?: RawAxiosRequestConfig) {
         return PartitionsApiFp(this.configuration).getPartitions(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2894,7 +2999,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PartitionsApi
      */
-    public postPartition(postPartition: PostPartition, options?: AxiosRequestConfig) {
+    public postPartition(postPartition: PostPartition, options?: RawAxiosRequestConfig) {
         return PartitionsApiFp(this.configuration).postPartition(postPartition, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2906,7 +3011,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PartitionsApi
      */
-    public putPartition(partitionID: string, postPartition: PostPartition, options?: AxiosRequestConfig) {
+    public putPartition(partitionID: string, postPartition: PostPartition, options?: RawAxiosRequestConfig) {
         return PartitionsApiFp(this.configuration).putPartition(partitionID, postPartition, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2917,7 +3022,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TagsApi
      */
-    public getTag(tagID: string, options?: AxiosRequestConfig) {
+    public getTag(tagID: string, options?: RawAxiosRequestConfig) {
         return TagsApiFp(this.configuration).getTag(tagID, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2927,7 +3032,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TagsApi
      */
-    public getTags(options?: AxiosRequestConfig) {
+    public getTags(options?: RawAxiosRequestConfig) {
         return TagsApiFp(this.configuration).getTags(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2938,7 +3043,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TagsApi
      */
-    public postTag(postTag: PostTag, options?: AxiosRequestConfig) {
+    public postTag(postTag: PostTag, options?: RawAxiosRequestConfig) {
         return TagsApiFp(this.configuration).postTag(postTag, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2949,7 +3054,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TagsApi
      */
-    public tagsTagIDDelete(tagID: string, options?: AxiosRequestConfig) {
+    public tagsTagIDDelete(tagID: string, options?: RawAxiosRequestConfig) {
         return TagsApiFp(this.configuration).tagsTagIDDelete(tagID, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2959,7 +3064,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public getMe(options?: AxiosRequestConfig) {
+    public getMe(options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).getMe(options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2969,7 +3074,7 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public getUsers(options?: AxiosRequestConfig) {
+    public getUsers(options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).getUsers(options).then((request) => request(this.axios, this.basePath));
     }
 }

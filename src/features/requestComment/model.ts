@@ -1,6 +1,6 @@
 import type { DateTime } from 'luxon'
 
-export interface RequestComment {
+export interface ApplicationComment {
   id: string
   user: string
   comment: string

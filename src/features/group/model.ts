@@ -1,25 +1,29 @@
-import type { DateTime } from 'luxon'
-
-export interface Group {
+export interface Partition {
   id: string
   name: string
-  description: string
-  budget: number
-  createdAt: DateTime
+  budget: number | null
+  management: {
+    category: 'manual'
+    state: 'available' | 'unavailable'
+  }
+  createdAt: string
+  updatedAt: string
 }
 
-export interface GroupDetail extends Group {
-  members: string[]
-  owners: string[]
-}
-
-export interface GroupSeed {
+export interface PartitionSeed {
   name: string
-  description: string
-  budget: number
+  budget: number | null
+  management: {
+    category: 'manual'
+    state: 'available' | 'unavailable'
+  }
 }
 
-export interface GroupSeedWithMemberAndOwners extends GroupSeed {
-  members: string[]
-  owners: string[]
+export interface PartitionQuerySeed {
+  name?: string
+  budget?: number
+  management?: {
+    category?: 'manual'
+    state?: 'available' | 'unavailable'
+  }
 }

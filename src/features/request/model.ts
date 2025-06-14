@@ -1,52 +1,52 @@
-import type { DateTime } from 'luxon'
-
-import type { Group } from '/@/features/group/model'
-import type { RequestComment } from '/@/features/requestComment/model'
+import { DateTime } from 'luxon'
+import type { Partition } from '/@/features/group/model'
+import type { ApplicationComment } from '/@/features/requestComment/model'
 import type {
-  RequestStatus,
-  RequestStatusDetail
+  ApplicationStatus,
+  ApplicationStatusDetail
 } from '/@/features/requestStatus/model'
 import type {
-  RequestTarget,
-  RequestTargetDetail
+  ApplicationTarget,
+  ApplicationTargetDetail
 } from '/@/features/requestTarget/model'
 import type { Tag } from '/@/features/tag/model'
 
-export interface Request {
+export interface Application {
   id: string
-  status: RequestStatus
+  status: ApplicationStatus
   createdBy: string
   title: string
   content: string
-  targets: RequestTargetDetail[]
+  targets: ApplicationTargetDetail[]
   tags: Tag[]
-  group: Group | null
+  partition: Partition
   createdAt: DateTime
+  updatedAt: DateTime
 }
 
-export interface RequestQuerySeed {
+export interface ApplicationDetail extends Application {
+  files: string[]
+  comments: ApplicationComment[]
+  statuses: ApplicationStatusDetail[]
+}
+
+export interface ApplicationQuerySeed {
   sort: string
-  currentStatus: RequestStatus | ''
+  currentStatus: ApplicationStatus | ''
   target: string
   since: string
   until: string
   limit: number
   offset: number
   tags: string[]
-  group: string
+  partition: string
 }
 
-export interface RequestDetail extends Request {
-  files: string[]
-  comments: RequestComment[]
-  statuses: RequestStatusDetail[]
-}
-
-export interface RequestSeed {
+export interface ApplicationSeed {
   createdBy: string
   title: string
   content: string
-  targets: RequestTarget[]
   tags: Tag[]
-  group: string | null
+  partition: string
+  targets: ApplicationTarget[]
 }

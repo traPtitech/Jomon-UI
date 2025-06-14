@@ -50,7 +50,7 @@ if (!isUserFetched.value) {
       :templates="requestTemplates" />
     <NewRequestTargets v-model="request.targets" />
     <SearchSelect
-      v-model="request.group"
+      v-model="request.partition"
       class="w-full"
       :options="groupOptions"
       label="グループ" />

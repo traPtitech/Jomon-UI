@@ -1,31 +1,30 @@
 import apis from '/@/lib/apis'
 
-import {
-  convertRequestDetailFromData,
-  convertRequestFromData
-} from '/@/features/request/converter'
-import { convertRequestCommentFromData } from '/@/features/requestComment/converter'
-import type { RequestComment } from '/@/features/requestComment/model'
-import { convertRequestStatusFromData } from '/@/features/requestStatus/converter'
+import { convertApplication, convertApplicationDetail } from './converter'
+import { convertApplicationCommentFromData } from '/@/features/requestComment/converter'
+import type { ApplicationComment } from '/@/features/requestComment/model'
+import { convertApplicationStatusDetailFromData } from '/@/features/requestStatus/converter'
 import type {
-  RequestStatus,
-  RequestStatusDetail
+  ApplicationStatus,
+  ApplicationStatusDetail
 } from '/@/features/requestStatus/model'
 
 import type {
-  Request,
-  RequestDetail,
-  RequestQuerySeed,
-  RequestSeed
+  Application,
+  ApplicationDetail,
+  ApplicationQuerySeed,
+  ApplicationSeed
 } from './model'
 
-export const useRequestRepository = () => {
-  return createRequestRepository()
+export const useApplicationRepository = () => {
+  return createApplicationRepository()
 }
 
-const createRequestRepository = () => ({
-  fetchRequests: async (querySeed: RequestQuerySeed): Promise<Request[]> => {
-    const { data } = await apis.getRequests(
+const createApplicationRepository = () => ({
+  fetchApplications: async (
+    querySeed: ApplicationQuerySeed
+  ): Promise<Application[]> => {
+    const { data } = await apis.getApplications(
       querySeed.sort,
       querySeed.currentStatus !== '' ? querySeed.currentStatus : undefined,
       querySeed.target,
@@ -34,72 +33,74 @@ const createRequestRepository = () => ({
       querySeed.limit,
       querySeed.offset,
       querySeed.tags.join(','),
-      querySeed.group
+      querySeed.partition
     )
 
-    return data.map(convertRequestFromData)
+    return data.map(convertApplication)
   },
 
-  fetchRequest: async (id: string): Promise<RequestDetail> => {
-    const { data } = await apis.getRequestDetail(id)
+  fetchApplication: async (id: string): Promise<ApplicationDetail> => {
+    const { data } = await apis.getApplicationDetail(id)
 
-    return convertRequestDetailFromData(data)
+    return convertApplicationDetail(data)
   },
 
-  createRequest: async (request: RequestSeed): Promise<RequestDetail> => {
-    const requestData = {
-      title: request.title,
-      content: request.content,
-      targets: request.targets,
-      tags: request.tags.map(tag => tag.id),
-      group: request.group,
-      created_by: request.createdBy
+  createApplication: async (
+    application: ApplicationSeed
+  ): Promise<ApplicationDetail> => {
+    const applicationData = {
+      title: application.title,
+      content: application.content,
+      targets: application.targets,
+      tags: application.tags.map(tag => tag.id),
+      partition: application.partition ?? '',
+      created_by: application.createdBy
     }
-    const { data } = await apis.postRequest(requestData)
+    const { data } = await apis.postApplication(applicationData)
 
-    return convertRequestDetailFromData(data)
+    return convertApplicationDetail(data)
   },
 
-  editRequest: async (
+  editApplication: async (
     id: string,
-    request: RequestSeed
-  ): Promise<RequestDetail> => {
-    const requestData = {
-      title: request.title,
-      content: request.content,
-      targets: request.targets,
-      tags: request.tags.map(tag => tag.id),
-      group: request.group,
-      created_by: request.createdBy
+    application: ApplicationSeed
+  ): Promise<ApplicationDetail> => {
+    const applicationData = {
+      title: application.title,
+      content: application.content,
+      targets: application.targets,
+      tags: application.tags.map(tag => tag.id),
+      partition: application.partition ?? '',
+      created_by: application.createdBy
     }
-    const { data } = await apis.putRequestDetail(id, requestData)
+    const { data } = await apis.putApplicationDetail(id, applicationData)
 
-    return convertRequestDetailFromData(data)
+    return convertApplicationDetail(data)
   },
 
   createComment: async (
     id: string,
     comment: string
-  ): Promise<RequestComment> => {
+  ): Promise<ApplicationComment> => {
     const commentData = {
       comment
     }
     const { data } = await apis.postComment(id, commentData)
 
-    return convertRequestCommentFromData(data)
+    return convertApplicationCommentFromData(data)
   },
 
   editStatus: async (
     id: string,
-    status: RequestStatus,
+    status: ApplicationStatus,
     comment: string
-  ): Promise<RequestStatusDetail> => {
+  ): Promise<ApplicationStatusDetail> => {
     const statusData = {
       status,
       comment
     }
     const { data } = await apis.putStatus(id, statusData)
 
-    return convertRequestStatusFromData(data)
+    return convertApplicationStatusDetailFromData(data)
   }
 })

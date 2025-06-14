@@ -26,7 +26,7 @@ function handleFileChange(e: Event) {
     reader.onload = () => {
       emit('input', [
         ...props.files,
-        { name: file.name, src: reader.result as string, type: file.type }
+        { name: file.name, file: file } as FileSeed
       ])
     }
   }
@@ -64,10 +64,10 @@ function removeFile(index: number) {
         :key="index"
         class="not-first:ml-2 relative flex flex-col items-center group">
         <img
-          v-if="isImageByType(file.type)"
+          v-if="isImageByType(file.file.type)"
           :alt="file.name"
           class="h-32"
-          :src="file.src" />
+          :src="file.name" />
         <DocumentIcon v-else class="h-32" />
         <button
           aria-label="ファイルを削除"

@@ -17,10 +17,6 @@ const route = useRoute()
       path="/requests"
       text="申請一覧" />
     <HeaderButton
-      :is-here="route.path === '/transactions'"
-      path="/transactions"
-      text="入出金記録一覧" />
-    <HeaderButton
       :is-here="route.path === '/groups'"
       path="/groups"
       text="グループ一覧" />

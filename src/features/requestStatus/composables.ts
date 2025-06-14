@@ -1,31 +1,32 @@
-import type { RequestStatus } from '/@/features/requestStatus/model'
+import type { ApplicationStatus } from '/@/features/requestStatus/model'
 
 import { useUserStore } from '/@/stores/user'
-import type { RequestDetail } from '/@/features/request/model'
+import type { ApplicationDetail } from '/@/features/request/model'
 import { computed } from 'vue'
 import { useRequest } from '/@/features/request/composables'
 
-export const useStatusOptions = (request: RequestDetail) => {
+export const useStatusOptions = (request: ApplicationDetail) => {
   const { me, isAdmin } = useUserStore()
   const { isRequestCreator } = useRequest(request)
 
   const hasAuthority = isRequestCreator.value(me.value)
 
   const showToSubmitted =
-    (hasAuthority && request.status === 'fix_required') ||
+    (hasAuthority && request.status === 'change_requested') ||
     (isAdmin.value &&
-      (request.status === 'fix_required' || request.status === 'accepted'))
+      (request.status === 'change_requested' || request.status === 'approved'))
   const showToRequired = isAdmin.value && request.status === 'submitted'
   const showToAccepted = isAdmin.value && request.status === 'submitted'
   const showToRejected = isAdmin.value && request.status === 'submitted'
 
   const statusOptions = computed<
-    { value: RequestStatus; key: string; show: boolean }[]
+    { value: ApplicationStatus; key: string; show: boolean }[]
   >(() => [
-    { value: 'submitted', key: '承認待ちにする', show: showToSubmitted }, //TODO: 表示するべきか確認
+    { value: 'submitted', key: '承認待ちにする', show: showToSubmitted },
+    { value: 'change_requested', key: '要修正にする', show: showToRequired },
+    { value: 'approved', key: '承認する', show: showToAccepted },
     { value: 'rejected', key: '却下する', show: showToRejected },
-    { value: 'fix_required', key: '要修正にする', show: showToRequired },
-    { value: 'accepted', key: '承認する', show: showToAccepted }
+    { value: 'payment_finished', key: '支払い済み', show: showToSubmitted }
   ])
   const showStatusOptions = computed(() =>
     statusOptions.value

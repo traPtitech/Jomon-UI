@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import type { Group } from '/@/features/group/model'
+import type { Partition } from '/@/features/group/model'
 import router from '/@/router'
 
 interface Props {
   page: number
-  groups: Group[]
+  groups: Partition[]
 }
 const props = defineProps<Props>()
 
@@ -25,7 +25,7 @@ const navigateToGroup = (transactionId: string) => {
     <thead>
       <tr>
         <th
-          v-for="key in ['グループ名', '詳細', '予算']"
+          v-for="key in ['グループ名', '予算']"
           :key="key"
           scope="col"
           class="px-1 py-4 text-left font-normal bg-surface-tertiary first:pl-6 first:rounded-ss-xl last:pr-6 last:rounded-se-xl">
@@ -46,7 +46,6 @@ const navigateToGroup = (transactionId: string) => {
         <td class="px-1 pl-6 py-4">
           {{ group.name }}
         </td>
-        <td class="px-1 py-4 truncate">{{ group.description }}</td>
         <td class="px-1 pr-6 py-4">{{ group.budget }}円</td>
       </tr>
     </tbody>

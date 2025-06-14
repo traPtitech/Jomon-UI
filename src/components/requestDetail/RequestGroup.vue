@@ -6,11 +6,11 @@ import { computed, ref } from 'vue'
 import SearchSelect from '/@/components/shared/SearchSelect.vue'
 import { useGroupStore } from '/@/stores/group'
 import { editRequestUsecase } from '/@/features/request/usecase'
-import type { RequestDetail } from '/@/features/request/model'
+import type { ApplicationDetail } from '/@/features/request/model'
 import { useRequest } from '/@/features/request/composables'
 import { useToast } from 'vue-toastification'
 
-const request = defineModel<RequestDetail>('modelValue', { required: true })
+const request = defineModel<ApplicationDetail>('modelValue', { required: true })
 
 const { me } = useUserStore()
 const { groupOptions } = useGroupStore()
@@ -20,10 +20,10 @@ const toast = useToast()
 const hasAuthority = isRequestCreator.value(me.value)
 
 const defaultGroup = computed(() =>
-  request.value.group ? request.value.group.id : null
+  request.value.partition ? request.value.partition.id : null
 )
 const groupName = computed(() =>
-  request.value.group ? request.value.group.name : 'なし'
+  request.value.partition ? request.value.partition.name : 'なし'
 )
 
 const isEditMode = ref(false)
@@ -39,7 +39,7 @@ const handleUpdateGroup = async () => {
   try {
     await editRequestUsecase(request.value.id, {
       ...request.value,
-      group: editedGroup.value
+      partition: editedGroup.value ?? ''
     })
     toast.success('更新しました')
   } catch {

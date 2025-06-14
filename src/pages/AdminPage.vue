@@ -35,7 +35,7 @@ const handleDeleteTags = async () => {
   deleteTagList.value = []
 }
 
-if (me.value?.admin) {
+if (me.value?.accountManager) {
   if (!isAdminFetched.value) {
     await useFetchAdminsUsecase()
   }

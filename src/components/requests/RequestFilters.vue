@@ -58,11 +58,11 @@ function sortByCreatedAt() {
       @close="useFetchRequestsUsecase" />
     <SearchSelect
       v-model="filterParams.currentStatus"
-      :options="requestStatusOptions()"
+      :options="[...requestStatusOptions]"
       label="申請の状態"
       @close="useFetchRequestsUsecase" />
     <SearchSelect
-      v-model="filterParams.group"
+      v-model="filterParams.partition"
       :options="groupOptions"
       label="グループ"
       @close="useFetchRequestsUsecase" />

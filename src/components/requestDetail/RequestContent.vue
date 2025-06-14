@@ -11,12 +11,12 @@ import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
 import { useRequest } from '/@/features/request/composables'
-import type { RequestDetail } from '/@/features/request/model'
+import type { ApplicationDetail } from '/@/features/request/model'
 import { editRequestUsecase } from '/@/features/request/usecase'
 import RequestAttachment from './RequestAttachment.vue'
 
 const props = defineProps<{
-  request: RequestDetail
+  request: ApplicationDetail
 }>()
 
 const formattedDateAndTime = formatDateAndTime(props.request.createdAt)
@@ -39,7 +39,7 @@ const handleUpdateContent = async () => {
   try {
     await editRequestUsecase(props.request.id, {
       ...props.request,
-      group: props.request.group?.id ?? null, // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
+      partition: props.request.partition?.id ?? null, // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
       content: editedContent.value
     })
     toast.success('更新しました')

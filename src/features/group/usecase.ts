@@ -1,164 +1,78 @@
 import { useGroupStore } from '/@/stores/group'
+
+import type { Partition, PartitionSeed } from './model'
+import { usePartitionRepository } from './repository'
 import { useGroupDetailStore } from '/@/stores/groupDetail'
 
-import type { GroupSeed, GroupSeedWithMemberAndOwners } from './model'
-import { useGroupRepository } from './repository'
-
 export const useFetchGroupsUsecase = async () => {
-  const repository = useGroupRepository()
+  const repository = usePartitionRepository()
   const { groups, isGroupFetched } = useGroupStore()
 
   try {
-    groups.value = await repository.fetchGroups()
+    groups.value = await repository.fetchPartitions()
     isGroupFetched.value = true
   } catch {
-    throw new Error('グループ一覧の取得に失敗しました')
+    throw new Error('パーティション一覧の取得に失敗しました')
   }
 }
 
 export const useFetchGroup = async (id: string) => {
-  const repository = useGroupRepository()
+  const repository = usePartitionRepository()
   const { group, editedValue } = useGroupDetailStore()
 
   try {
-    group.value = await repository.fetchGroup(id)
+    group.value = await repository.fetchPartition(id)
     editedValue.value = {
       name: group.value.name,
-      description: group.value.description,
-      budget: group.value.budget
+      budget: group.value.budget ?? 0,
+      management: group.value.management
     }
   } catch {
-    throw new Error('グループの取得に失敗しました')
+    throw new Error('パーティションの取得に失敗しました')
   }
 }
 
-export const createGroupUsecase = async (
-  group: GroupSeedWithMemberAndOwners
-) => {
-  const repository = useGroupRepository()
+export const createGroupUsecase = async (partition: PartitionSeed) => {
+  const repository = usePartitionRepository()
   const { groups } = useGroupStore()
 
-  if (group.owners.length === 0) {
-    throw new Error('グループオーナーは必須です')
-  }
-
   try {
-    const res = await repository.createGroup(group)
+    const res = await repository.createPartition(partition)
     groups.value.unshift(res)
-
-    try {
-      await Promise.all([
-        await repository.postGroupMembers(res.id, group.members),
-        await repository.postGroupOwners(res.id, group.owners)
-      ])
-    } catch {
-      throw new Error('グループの作成に失敗しました')
-    }
   } catch {
-    throw new Error('グループの作成に失敗しました')
+    throw new Error('パーティションの作成に失敗しました')
   }
 }
 
-export const editGroupUsecase = async (id: string, groupSeed: GroupSeed) => {
-  const repository = useGroupRepository()
+export const editGroupUsecase = async (
+  id: string,
+  partitionSeed: PartitionSeed
+) => {
+  const repository = usePartitionRepository()
   const { group, editedValue } = useGroupDetailStore()
   if (!group.value) return
 
   try {
-    const res = await repository.editGroup(id, groupSeed)
-    group.value = {
-      ...res,
-      members: group.value.members,
-      owners: group.value.owners
-    }
+    const res = await repository.editPartition(id, partitionSeed)
+    group.value = res
   } catch {
     editedValue.value = {
       name: group.value.name,
-      description: group.value.description,
-      budget: group.value.budget ?? 0
+      budget: group.value.budget ?? 0,
+      management: group.value.management
     }
-    throw new Error('グループの更新に失敗しました')
+    throw new Error('パーティションの更新に失敗しました')
   }
 }
 
 export const deleteGroupUsecase = async (id: string) => {
-  const repository = useGroupRepository()
+  const repository = usePartitionRepository()
   const { groups } = useGroupStore()
 
   try {
-    await repository.deleteGroup(id)
-    groups.value = groups.value.filter(group => group.id !== id)
+    await repository.deletePartition(id)
+    groups.value = groups.value.filter((p: Partition) => p.id !== id)
   } catch {
-    throw new Error('グループの削除に失敗しました')
-  }
-}
-
-export const addGroupMembersUsecase = async (id: string, members: string[]) => {
-  const repository = useGroupRepository()
-  const { group } = useGroupDetailStore()
-  if (!group.value) return
-
-  try {
-    const res = await repository.postGroupMembers(id, members)
-    group.value = {
-      ...group.value,
-      members: [...group.value.members, ...res]
-    }
-  } catch {
-    throw new Error('グループメンバーの追加に失敗しました')
-  }
-}
-
-export const removeGroupMembersUsecase = async (
-  id: string,
-  members: string[]
-) => {
-  const repository = useGroupRepository()
-  const { group } = useGroupDetailStore()
-  if (!group.value) return
-
-  try {
-    await repository.deleteGroupMembers(id, members)
-    group.value = {
-      ...group.value,
-      members: group.value.members.filter(member => !members.includes(member))
-    }
-  } catch {
-    throw new Error('グループメンバーの削除に失敗しました')
-  }
-}
-
-export const addGroupOwnersUsecase = async (id: string, owners: string[]) => {
-  const repository = useGroupRepository()
-  const { group } = useGroupDetailStore()
-  if (!group.value) return
-
-  try {
-    const res = await repository.postGroupOwners(id, owners)
-    group.value = {
-      ...group.value,
-      owners: [...group.value.owners, ...res]
-    }
-  } catch {
-    throw new Error('グループオーナーの追加に失敗しました')
-  }
-}
-
-export const removeGroupOwnersUsecase = async (
-  id: string,
-  owners: string[]
-) => {
-  const repository = useGroupRepository()
-  const { group } = useGroupDetailStore()
-  if (!group.value) return
-
-  try {
-    await repository.deleteGroupOwners(id, owners)
-    group.value = {
-      ...group.value,
-      owners: group.value.owners.filter(owner => !owners.includes(owner))
-    }
-  } catch {
-    throw new Error('グループオーナーの削除に失敗しました')
+    throw new Error('パーティションの削除に失敗しました')
   }
 }

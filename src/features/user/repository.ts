@@ -13,7 +13,7 @@ const createUserRepository = () => ({
       id: user.id,
       name: user.name,
       displayName: user.display_name,
-      admin: user.admin
+      accountManager: user.account_manager
     }))
   },
   fetchMe: async (): Promise<User> => {
@@ -22,7 +22,7 @@ const createUserRepository = () => ({
       id: data.id,
       name: data.name,
       displayName: data.display_name,
-      admin: data.admin
+      accountManager: data.account_manager
     }
   }
 })

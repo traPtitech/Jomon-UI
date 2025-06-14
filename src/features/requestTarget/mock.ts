@@ -1,6 +1,6 @@
-import type { RequestTargetDetail } from '/@/lib/apis'
+import type { ApplicationTargetDetail } from '/@/lib/apis'
 
-export const mockRequestTarget: RequestTargetDetail = {
+export const mockRequestTarget: ApplicationTargetDetail = {
   id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
   amount: 1200,
   target: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -8,7 +8,7 @@ export const mockRequestTarget: RequestTargetDetail = {
   created_at: '2020-01-01'
 }
 
-export const mockRequestTargets: RequestTargetDetail[] = [
+export const mockRequestTargets: ApplicationTargetDetail[] = [
   {
     id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
     amount: 1200,

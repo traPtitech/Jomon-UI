@@ -6,7 +6,7 @@ import { useUserStore } from '/@/stores/user'
 
 import type { FileSeed } from '/@/features/file/model'
 import { createFilesUsecase } from '/@/features/file/usecase'
-import type { RequestSeed } from '/@/features/request/model'
+import type { ApplicationSeed } from '/@/features/request/model'
 import { createRequestUsecase } from '/@/features/request/usecase'
 import type { Tag } from '/@/features/tag/model'
 import { createTagIfNotExistUsecase } from '/@/features/tag/usecase'
@@ -18,13 +18,13 @@ export const useNewRequest = () => {
 
   const isSending = ref(false)
 
-  const request = ref<RequestSeed>({
+  const request = ref<ApplicationSeed>({
     createdBy: me.value?.id ?? '',
     title: '',
     targets: [{ target: '', amount: 0 }],
     content: '',
     tags: [],
-    group: null
+    partition: ''
   })
   const files = ref<FileSeed[]>([])
 

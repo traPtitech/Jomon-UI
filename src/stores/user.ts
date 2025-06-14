@@ -10,7 +10,7 @@ export const useUserStore = defineComposable('user', () => {
 
   const isAdmin = computed(() => {
     if (!me.value) return false
-    return me.value.admin
+    return me.value.accountManager
   })
 
   const userOptions = computed(() =>

@@ -5,13 +5,13 @@ import { useToast } from 'vue-toastification'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
-import type { RequestDetail } from '/@/features/request/model'
+import type { ApplicationDetail } from '/@/features/request/model'
 import { changeStatusUsecase } from '/@/features/request/usecase'
-import type { RequestStatus } from '/@/features/requestStatus/model'
+import type { ApplicationStatus } from '/@/features/requestStatus/model'
 
 const props = defineProps<{
-  request: RequestDetail
-  nextStatus: RequestStatus
+  request: ApplicationDetail
+  nextStatus: ApplicationStatus
 }>()
 const emit = defineEmits<(e: 'closeModal') => void>()
 
@@ -19,7 +19,7 @@ const toast = useToast()
 
 const comment = ref('')
 
-const putStatus = async (nextStatus: RequestStatus, comment: string) => {
+const putStatus = async (nextStatus: ApplicationStatus, comment: string) => {
   try {
     await changeStatusUsecase(props.request.id, nextStatus, comment)
     toast.success('申請の状態を変更しました')

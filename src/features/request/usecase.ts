@@ -1,14 +1,14 @@
 import { useRequestStore } from '/@/stores/request'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 
-import type { RequestStatus } from '/@/features/requestStatus/model'
+import type { ApplicationStatus } from '/@/features/requestStatus/model'
 
-import type { RequestSeed } from './model'
-import { useRequestRepository } from './repository'
+import type { ApplicationSeed } from './model'
+import { useApplicationRepository } from './repository'
 import { createTagIfNotExistUsecase } from '/@/features/tag/usecase'
 
 export const useFetchRequestsUsecase = async () => {
-  const repository = useRequestRepository()
+  const repository = useApplicationRepository()
   const { requests, isRequestFetched, filterParams } = useRequestStore()
 
   const rule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
@@ -20,7 +20,7 @@ export const useFetchRequestsUsecase = async () => {
   }
 
   try {
-    requests.value = await repository.fetchRequests(filterParams.value)
+    requests.value = await repository.fetchApplications(filterParams.value)
     isRequestFetched.value = true
   } catch {
     throw new Error('申請一覧の取得に失敗しました')
@@ -28,21 +28,21 @@ export const useFetchRequestsUsecase = async () => {
 }
 
 export const useFetchRequestUsecase = async (id: string) => {
-  const repository = useRequestRepository()
+  const repository = useApplicationRepository()
 
   try {
-    return await repository.fetchRequest(id)
+    return await repository.fetchApplication(id)
   } catch {
     throw new Error('申請の取得に失敗しました')
   }
 }
 
-export const createRequestUsecase = async (request: RequestSeed) => {
-  const repository = useRequestRepository()
+export const createRequestUsecase = async (application: ApplicationSeed) => {
+  const repository = useApplicationRepository()
   const { requests } = useRequestStore()
 
   try {
-    const res = await repository.createRequest(request)
+    const res = await repository.createApplication(application)
     requests.value.unshift(res)
 
     return res
@@ -53,19 +53,19 @@ export const createRequestUsecase = async (request: RequestSeed) => {
 
 export const editRequestUsecase = async (
   id: string,
-  _requestSeed: RequestSeed
+  _applicationSeed: ApplicationSeed
 ) => {
-  const repository = useRequestRepository()
+  const repository = useApplicationRepository()
   const { request } = useRequestDetailStore()
   if (!request.value) return
 
   try {
-    const tags = await createTagIfNotExistUsecase(_requestSeed.tags)
-    const requestSeed = {
-      ..._requestSeed,
+    const tags = await createTagIfNotExistUsecase(_applicationSeed.tags)
+    const applicationSeed = {
+      ..._applicationSeed,
       tags
     }
-    const res = await repository.editRequest(id, requestSeed)
+    const res = await repository.editApplication(id, applicationSeed)
     request.value = res
   } catch {
     throw new Error('申請の更新に失敗しました')
@@ -73,7 +73,7 @@ export const editRequestUsecase = async (
 }
 
 export const createCommentUsecase = async (id: string, comment: string) => {
-  const repository = useRequestRepository()
+  const repository = useApplicationRepository()
   const { request } = useRequestDetailStore()
   if (!request.value) return
 
@@ -87,10 +87,10 @@ export const createCommentUsecase = async (id: string, comment: string) => {
 
 export const changeStatusUsecase = async (
   id: string,
-  status: RequestStatus,
+  status: ApplicationStatus,
   comment: string
 ) => {
-  const repository = useRequestRepository()
+  const repository = useApplicationRepository()
   const { request } = useRequestDetailStore()
   if (!request.value) return
 

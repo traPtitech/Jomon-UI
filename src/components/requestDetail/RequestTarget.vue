@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { useUserStore } from '/@/stores/user'
 import type {
-  RequestTargetDetail,
-  RequestTarget
+  ApplicationTargetDetail,
+  ApplicationTarget
 } from '/@/features/requestTarget/model'
 
 import UserIcon from '/@/components/shared/UserIcon.vue'
@@ -11,20 +11,18 @@ import BaseInput from '/@/components/shared/BaseInput.vue'
 import SearchSelect from '/@/components/shared/SearchSelect.vue'
 import { TrashIcon } from '@heroicons/vue/24/solid'
 import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
-import type { RequestDetail } from '/@/features/request/model'
+import type { ApplicationDetail } from '/@/features/request/model'
 
-import { useNewTransaction } from '/@/pages/composables/useNewTransaction'
 import { computed } from 'vue'
 import { editRequestUsecase } from '/@/features/request/usecase'
 
 const props = defineProps<{
-  request: RequestDetail
+  request: ApplicationDetail
   isEditMode: boolean
-  target: RequestTargetDetail
+  target: ApplicationTargetDetail
 }>()
 
-const { isSending, postTransactionFromRequest } = useNewTransaction()
-const { userMap, userOptions, isAdmin } = useUserStore()
+const { userMap, userOptions } = useUserStore()
 
 const targets = computed(() =>
   props.request.targets.map(target => target.target)
@@ -36,7 +34,7 @@ const targetOptions = computed(() =>
   )
 )
 
-const targetModel = defineModel<RequestTarget>('targetModel', {
+const targetModel = defineModel<ApplicationTarget>('targetModel', {
   required: true
 })
 
@@ -49,7 +47,7 @@ const handleRemoveTarget = async () => {
   try {
     await editRequestUsecase(props.request.id, {
       ...props.request,
-      group: props.request.group?.id ?? null,
+      partition: props.request.partition?.id ?? null,
       targets: props.request.targets.filter(
         target => target.target !== props.target.target
       )
@@ -82,13 +80,13 @@ const handleRemoveTarget = async () => {
           <ArrowTopRightOnSquareIcon class="w-6" />
         </RouterLink>
       </div>
-      <button
+      <!-- <button
         v-else-if="isAdmin"
         class="text-blue-500 cursor-pointer"
         :disabled="isSending"
         @click="postTransactionFromRequest(request, target)">
         入出金記録を作成
-      </button>
+      </button> -->
     </div>
   </div>
   <div v-else class="flex items-center justify-between">

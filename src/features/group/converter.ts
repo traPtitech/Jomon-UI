@@ -1,28 +1,16 @@
-import { DateTime } from 'luxon'
+import type { Partition } from './model'
+import type { Partition as ApiPartition } from '/@/lib/apis'
 
-import type {
-  Group as GroupData,
-  GroupDetail as GroupDetailData
-} from '/@/lib/apis'
-
-import type { Group, GroupDetail } from './model'
-
-export const convertGroupFromData = (group: GroupData): Group => ({
-  id: group.id,
-  name: group.name,
-  description: group.description,
-  budget: group.budget ?? 0,
-  createdAt: DateTime.fromISO(group.created_at)
-})
-
-export const convertGroupDetailFromData = (
-  group: GroupDetailData
-): GroupDetail => ({
-  id: group.id,
-  name: group.name,
-  description: group.description,
-  budget: group.budget ?? 0,
-  createdAt: DateTime.fromISO(group.created_at),
-  members: group.members,
-  owners: group.owners
+export const convertPartitionFromData = (
+  partition: ApiPartition
+): Partition => ({
+  id: partition.id,
+  name: partition.name,
+  budget: partition.budget ?? 0,
+  management: {
+    category: partition.management.category,
+    state: partition.management.state
+  },
+  createdAt: partition.created_at,
+  updatedAt: partition.updated_at
 })

@@ -1,11 +1,11 @@
 import { computed } from 'vue'
-import type { RequestDetail } from '/@/features/request/model'
+import type { ApplicationDetail } from './model'
 import type { User } from '/@/features/user/model'
 
-export const useRequest = (request: RequestDetail) => {
+export const useRequest = (application: ApplicationDetail) => {
   const isRequestCreator = computed(() => (user: User | undefined) => {
     if (!user) return false
-    return user.id === request.createdBy
+    return user.id === application.createdBy
   })
 
   return { isRequestCreator }

@@ -1,9 +1,9 @@
 import { computed, ref } from 'vue'
 import { defineComposable } from '/@/lib/store'
-import type { Group } from '/@/features/group/model'
+import type { Partition } from '/@/features/group/model'
 
 export const useGroupStore = defineComposable('group', () => {
-  const groups = ref<Group[]>([])
+  const groups = ref<Partition[]>([])
 
   const isGroupFetched = ref(false)
 

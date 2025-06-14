@@ -2,23 +2,29 @@ import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
-  { path: '/', redirect: '/requests' },
+  { path: '/', redirect: '/applications' },
   {
-    path: '/requests',
+    path: '/applications',
     component: () => import('./pages/RequestsPage.vue')
   },
   {
-    path: '/requests/new',
+    path: '/applications/new',
     component: () => import('./pages/NewRequestPage.vue')
   },
   {
-    path: '/requests/:id',
+    path: '/applications/:id',
     component: () => import('./pages/RequestDetailPage.vue')
   },
-  { path: '/groups', component: () => import('./pages/GroupsPage.vue') },
-  { path: '/groups/new', component: () => import('./pages/NewGroupPage.vue') },
   {
-    path: '/groups/:id',
+    path: '/partitions',
+    component: () => import('./pages/GroupsPage.vue')
+  },
+  {
+    path: '/partitions/new',
+    component: () => import('./pages/NewGroupPage.vue')
+  },
+  {
+    path: '/partitions/:id',
     component: () => import('./pages/GroupDetailPage.vue')
   },
   { path: '/admins', component: () => import('./pages/AdminPage.vue') },

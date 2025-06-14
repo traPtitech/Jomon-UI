@@ -58,7 +58,7 @@ watch(
       <div class="relative flex w-full items-center justify-start gap-7">
         <h1 class="text-center text-2xl">申請一覧</h1>
         <div>
-          <RouterLink to="/requests/new">
+          <RouterLink to="/applications/new">
             <SimpleButton font-size="lg" padding="md">
               申請を作成
             </SimpleButton>
@@ -81,7 +81,7 @@ watch(
     <PaginationBar
       v-if="requests.length > 0"
       :current-page="page"
-      path="/requests"
+      path="/applications"
       :total-pages="Math.ceil(requests.length / 7)" />
   </div>
 </template>

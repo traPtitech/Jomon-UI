@@ -15,7 +15,7 @@ const sliceGroupsAt = (index: number, n: number) => {
 }
 
 const navigateToGroup = (transactionId: string) => {
-  router.push(`/groups/${transactionId}`)
+  router.push(`/partitions/${transactionId}`)
 }
 </script>
 
@@ -25,7 +25,7 @@ const navigateToGroup = (transactionId: string) => {
     <thead>
       <tr>
         <th
-          v-for="key in ['グループ名', '予算']"
+          v-for="key in ['パーティション名', '予算']"
           :key="key"
           scope="col"
           class="px-1 py-4 text-left font-normal bg-surface-tertiary first:pl-6 first:rounded-ss-xl last:pr-6 last:rounded-se-xl">

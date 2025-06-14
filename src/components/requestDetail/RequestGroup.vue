@@ -52,7 +52,7 @@ const handleUpdateGroup = async () => {
 <template>
   <div class="flex flex-col gap-1">
     <div class="flex items-center justify-between">
-      <h2 class="text-sm font-bold">グループ</h2>
+      <h2 class="text-sm font-bold">パーティション</h2>
       <EditButton
         v-if="hasAuthority"
         :is-edit-mode="isEditMode"
@@ -63,7 +63,7 @@ const handleUpdateGroup = async () => {
       <SearchSelect
         v-else
         v-model="editedGroup"
-        label="グループ"
+        label="パーティション"
         :options="groupOptions"
         @close="handleUpdateGroup" />
     </div>

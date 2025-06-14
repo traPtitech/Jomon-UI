@@ -15,9 +15,11 @@ export const mockPartition: Partition = {
   updated_at: '2024-01-01T00:00:00Z'
 }
 
+const mockPartitions = Array(10).fill(mockPartition)
+
 export const groupHandlers = [
   http.get('/api/partitions', () => {
-    return HttpResponse.json([mockPartition])
+    return HttpResponse.json(mockPartitions)
   }),
 
   http.get('/api/partitions/:id', ({ params }) => {

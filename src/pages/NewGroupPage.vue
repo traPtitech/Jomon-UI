@@ -18,8 +18,8 @@ const { isSending, group } = useNewGroup()
 const handleCreateGroup = async () => {
   try {
     await createGroupUsecase(group.value)
-    toast.success('グループを作成しました')
-    router.push('/groups')
+    toast.success('パーティションを作成しました')
+    router.push('/partitions')
   } catch (e) {
     if (e instanceof Error) {
       toast.error(e.message)
@@ -34,10 +34,10 @@ if (!isUserFetched.value) {
 
 <template>
   <div class="mb-6">
-    <h1 class="text-2xl">グループの新規作成</h1>
+    <h1 class="text-2xl">パーティションの新規作成</h1>
   </div>
   <form class="flex flex-col gap-6">
-    <BaseInput v-model="group.name" label="グループ名" required />
+    <BaseInput v-model="group.name" label="パーティション名" required />
     <BaseInput v-model="group.budget" type="number" label="予算" required>
       <span class="text-2xl font-bold ml-3 mt-auto mb-2 text-text-secondary">
         ¥
@@ -50,7 +50,7 @@ if (!isUserFetched.value) {
         font-size="xl"
         padding="md"
         @click="handleCreateGroup">
-        グループを作成
+        パーティションを作成
       </SimpleButton>
     </div>
   </form>

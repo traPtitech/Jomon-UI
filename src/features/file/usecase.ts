@@ -62,6 +62,6 @@ export const deleteFileUsecase = async (requestId: string) => {
   try {
     await repository.deleteFile(requestId)
   } catch {
-    throw new Error('グループの削除に失敗しました')
+    throw new Error('パーティションの削除に失敗しました')
   }
 }

@@ -47,7 +47,7 @@ if (!isUserFetched.value) {
       <RouterLink
         class="flex w-fit items-center"
         :to="`/transactions?group=${group.id}`">
-        このグループの入出金記録へ
+        このパーティションの入出金記録へ
         <ArrowTopRightOnSquareIcon class="ml-1 w-6" />
       </RouterLink>
     </div>

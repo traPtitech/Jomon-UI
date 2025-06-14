@@ -64,7 +64,7 @@ function sortByCreatedAt() {
     <SearchSelect
       v-model="filterParams.partition"
       :options="groupOptions"
-      label="グループ"
+      label="パーティション"
       @close="useFetchRequestsUsecase" />
     <SearchSelect
       v-model="filterParams.tags"

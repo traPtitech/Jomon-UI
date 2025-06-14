@@ -76,7 +76,7 @@ const handleRemoveTarget = async () => {
         <RouterLink
           class="underline"
           title="入出金記録へ"
-          :to="`/transactions/`">
+          :to="`/applications/`">
           <ArrowTopRightOnSquareIcon class="w-6" />
         </RouterLink>
       </div>

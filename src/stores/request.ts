@@ -1,8 +1,11 @@
 import { ref } from 'vue'
 import { defineComposable } from '/@/lib/store'
-import type { Request, RequestQuerySeed } from '/@/features/request/model'
+import type {
+  Application,
+  ApplicationQuerySeed
+} from '/@/features/request/model'
 
-const defaultParams: RequestQuerySeed = {
+const defaultParams: ApplicationQuerySeed = {
   sort: 'created_at',
   currentStatus: '',
   target: '',
@@ -11,14 +14,14 @@ const defaultParams: RequestQuerySeed = {
   limit: 10,
   offset: 0,
   tags: [],
-  group: ''
+  partition: ''
 }
 
 export const useRequestStore = defineComposable('request', () => {
-  const requests = ref<Request[]>([])
+  const requests = ref<Application[]>([])
   const isRequestFetched = ref(false)
 
-  const filterParams = ref<RequestQuerySeed>(defaultParams)
+  const filterParams = ref<ApplicationQuerySeed>(defaultParams)
 
   return { requests, isRequestFetched, filterParams }
 })

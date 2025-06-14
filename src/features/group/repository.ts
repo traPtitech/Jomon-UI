@@ -1,58 +1,35 @@
 import apis from '/@/lib/apis'
 
-import { convertGroupDetailFromData, convertGroupFromData } from './converter'
-import type { Group, GroupDetail, GroupSeed } from './model'
+import { convertPartitionFromData } from './converter'
+import type { PartitionSeed, Partition } from './model'
 
-export const useGroupRepository = () => {
-  return createGroupRepository()
+export const usePartitionRepository = () => {
+  return createPartitionRepository()
 }
 
-const createGroupRepository = () => ({
-  fetchGroups: async (): Promise<Group[]> => {
-    const { data } = await apis.getGroups()
+const createPartitionRepository = () => ({
+  fetchPartitions: async (): Promise<Partition[]> => {
+    const { data } = await apis.getPartitions()
 
-    return data.map(convertGroupFromData)
+    return data.map(convertPartitionFromData)
   },
-  fetchGroup: async (id: string): Promise<GroupDetail> => {
-    const { data } = await apis.getGroupDetail(id)
+  fetchPartition: async (id: string): Promise<Partition> => {
+    const { data } = await apis.getPartition(id)
 
-    return convertGroupDetailFromData(data)
+    return convertPartitionFromData(data)
   },
-  createGroup: async (group: GroupSeed): Promise<Group> => {
-    const groupData = {
-      name: group.name,
-      description: group.description,
-      budget: group.budget
-    }
-    const { data } = await apis.postGroup(groupData)
-
-    return convertGroupFromData(data)
+  createPartition: async (partition: PartitionSeed): Promise<Partition> => {
+    const { data } = await apis.postPartition(partition)
+    return convertPartitionFromData(data)
   },
-  editGroup: async (id: string, group: GroupSeed): Promise<Group> => {
-    const groupData = {
-      name: group.name,
-      description: group.description,
-      budget: group.budget
-    }
-    const { data } = await apis.putGroupDetail(id, groupData)
-
-    return convertGroupFromData(data)
+  editPartition: async (
+    id: string,
+    partition: PartitionSeed
+  ): Promise<Partition> => {
+    const { data } = await apis.putPartition(id, partition)
+    return convertPartitionFromData(data)
   },
-  deleteGroup: async (id: string) => {
-    await apis.deleteGroup(id)
-  },
-  postGroupMembers: async (id: string, members: string[]) => {
-    const { data } = await apis.postGroupMembers(id, members)
-    return data
-  },
-  deleteGroupMembers: async (id: string, members: string[]) => {
-    await apis.deleteGroupMembers(id, members)
-  },
-  postGroupOwners: async (id: string, owners: string[]) => {
-    const { data } = await apis.postGroupOwners(id, owners)
-    return data
-  },
-  deleteGroupOwners: async (id: string, owners: string[]) => {
-    await apis.deleteGroupOwners(id, owners)
+  deletePartition: async (id: string) => {
+    await apis.deletePartition(id)
   }
 })

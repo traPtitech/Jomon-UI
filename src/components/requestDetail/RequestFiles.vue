@@ -27,12 +27,12 @@ await fetchFiles(request.value?.files ?? [])
       <div class="flex flex-wrap">
         <div
           v-for="file in files"
-          :key="file.file"
+          :key="file.id"
           class="not-first:ml-2 relative flex flex-col items-center">
           <img
             v-if="isImageByName(file.name)"
             :alt="file.name"
-            :src="file.file" />
+            :src="file.id" />
           <DocumentIcon v-else class="h-32" />
           <!--画像の色によっては見えづらい(新規作成画面も)-->
           <button
@@ -47,7 +47,7 @@ await fetchFiles(request.value?.files ?? [])
             v-if="!isImageByName(file.name)"
             font-size="sm"
             padding="sm">
-            <a :download="file.name" :href="downloadLink(file.file)">
+            <a :download="file.name" :href="downloadLink(file.id)">
               ダウンロード
             </a>
           </SimpleButton>

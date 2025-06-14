@@ -8,10 +8,10 @@ import EditButton from '/@/components/shared/EditButton.vue'
 import SearchSelectTag from '/@/components/shared/SearchSelectTag.vue'
 import TagsGroup from '/@/components/shared/TagsGroup.vue'
 import { useRequest } from '/@/features/request/composables'
-import type { RequestDetail } from '/@/features/request/model'
+import type { ApplicationDetail } from '/@/features/request/model'
 import { editRequestUsecase } from '/@/features/request/usecase'
 
-const request = defineModel<RequestDetail>({ required: true })
+const request = defineModel<ApplicationDetail>({ required: true })
 
 const { me } = useUserStore()
 const { isRequestCreator } = useRequest(request.value)
@@ -27,7 +27,7 @@ const handleUpdateTags = async () => {
   try {
     await editRequestUsecase(request.value.id, {
       ...request.value,
-      group: request.value.group?.id ?? null // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
+      partition: request.value.partition?.id ?? null // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
     })
     toast.success('更新しました')
   } catch {

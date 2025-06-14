@@ -9,10 +9,10 @@ import { formatDate } from '/@/lib/date'
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import TagsGroup from '/@/components/shared/TagsGroup.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
-import type { Request } from '/@/features/request/model'
+import type { Application } from '/@/features/request/model'
 
 interface Props {
-  request: Request
+  request: Application
 }
 
 const props = defineProps<Props>()
@@ -29,7 +29,7 @@ const totalAmount = computed(
 <template>
   <RouterLink
     class="flex px-3 sm:px-6 py-4 gap-2 sm:gap-5"
-    :to="'/requests/' + request.id">
+    :to="'/applications/' + request.id">
     <div class="flex items-start justify-center">
       <StatusChip :status="request.status" />
     </div>
@@ -44,7 +44,7 @@ const totalAmount = computed(
             <UserIcon class="max-w-7" :name="userMap[request.createdBy]" />
             <span>{{ userMap[request.createdBy] }}</span>
           </div>
-          <span v-if="request.group"> {{ request.group.name }} </span>
+          <span v-if="request.partition"> {{ request.partition.name }} </span>
           <span>{{ formattedDate }}</span>
         </div>
         <div class="text-right font-bold font-sans text-2xl">

@@ -27,7 +27,7 @@ export const useGroupInformation = () => {
     isSending.value = true
     try {
       await editGroupUsecase(group.value?.id ?? '', editedValue.value)
-      toast.success('グループ情報を更新しました')
+      toast.success('パーティション情報を更新しました')
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message)

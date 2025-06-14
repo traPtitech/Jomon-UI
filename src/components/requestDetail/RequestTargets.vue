@@ -7,12 +7,12 @@ import RequestTarget from '/@/components/requestDetail/RequestTarget.vue'
 import EditButton from '/@/components/shared/EditButton.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { useRequest } from '/@/features/request/composables'
-import type { RequestDetail } from '/@/features/request/model'
+import type { ApplicationDetail } from '/@/features/request/model'
 import { editRequestUsecase } from '/@/features/request/usecase'
-import type { RequestTargetDetail } from '/@/features/requestTarget/model'
+import type { ApplicationTargetDetail } from '/@/features/requestTarget/model'
 
 const props = defineProps<{
-  request: RequestDetail
+  request: ApplicationDetail
 }>()
 
 const { me } = useUserStore()
@@ -22,7 +22,7 @@ const toast = useToast()
 const hasAuthority = isRequestCreator.value(me.value)
 
 const isEditMode = ref(false)
-const editedTargets = ref<RequestTargetDetail[]>(props.request.targets)
+const editedTargets = ref<ApplicationTargetDetail[]>(props.request.targets)
 const toggleEditTargets = () => {
   editedTargets.value = props.request.targets
   isEditMode.value = !isEditMode.value
@@ -36,7 +36,7 @@ const handleUpdateTargets = async () => {
   try {
     await editRequestUsecase(props.request.id, {
       ...props.request,
-      group: props.request.group?.id ?? null, // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
+      partition: props.request.partition?.id ?? null, // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
       targets: editedTargets.value
     })
     toast.success('更新しました')

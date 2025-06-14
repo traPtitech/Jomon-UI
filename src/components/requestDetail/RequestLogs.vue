@@ -1,21 +1,21 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 
-import type { RequestComment } from '/@/features/requestComment/model'
-import type { RequestStatusDetail } from '/@/features/requestStatus/model'
+import type { ApplicationComment } from '/@/features/requestComment/model'
+import type { ApplicationStatusDetail } from '/@/features/requestStatus/model'
 
 import CommentLog from './CommentLog.vue'
 import StatusChangeLog from './StatusChangeLog.vue'
 import NewComment from './NewComment.vue'
 import RequestContent from '/@/components/requestDetail/RequestContent.vue'
-import type { RequestDetail } from '/@/features/request/model'
+import type { ApplicationDetail } from '/@/features/request/model'
 
 const props = defineProps<{
-  request: RequestDetail
+  request: ApplicationDetail
 }>()
 
-type CommentWithType = RequestComment & { type: 'comment' }
-type StatusWithType = RequestStatusDetail & { type: 'statusChange' }
+type CommentWithType = ApplicationComment & { type: 'comment' }
+type StatusWithType = ApplicationStatusDetail & { type: 'statusChange' }
 
 type Log = CommentWithType | StatusWithType
 

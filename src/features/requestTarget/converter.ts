@@ -1,12 +1,12 @@
 import { DateTime } from 'luxon'
 
-import type { RequestTargetDetail as RequestTargetDetailData } from '/@/lib/apis'
+import type { ApplicationTargetDetail as RequestTargetDetailData } from '/@/lib/apis'
 
-import type { RequestTargetDetail } from './model'
+import type { ApplicationTargetDetail } from './model'
 
 export const convertRequestTargetFromData = (
   target: RequestTargetDetailData
-): RequestTargetDetail => ({
+): ApplicationTargetDetail => ({
   id: target.id,
   amount: target.amount,
   target: target.target,

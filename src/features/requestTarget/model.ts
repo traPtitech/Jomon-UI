@@ -1,11 +1,11 @@
 import type { DateTime } from 'luxon'
 
-export interface RequestTarget {
+export interface ApplicationTarget {
   amount: number
   target: string
 }
 
-export interface RequestTargetDetail extends RequestTarget {
+export interface ApplicationTargetDetail extends ApplicationTarget {
   id: string
   paidAt: string | null
   createdAt: DateTime

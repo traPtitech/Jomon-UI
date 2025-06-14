@@ -2,24 +2,24 @@
 import { ref } from 'vue'
 
 import StatusChip from '/@/components/shared/StatusChip.vue'
-import type { RequestDetail } from '/@/features/request/model'
+import type { ApplicationDetail } from '/@/features/request/model'
 import { useStatusOptions } from '/@/features/requestStatus/composables'
 import FloatingMenu from '/@/components/shared/FloatingMenu.vue'
 import { useModal } from '/@/components/modal/composables/useModal'
-import type { RequestStatus } from '/@/features/requestStatus/model'
+import type { ApplicationStatus } from '/@/features/requestStatus/model'
 import ModalWrapper from '/@/components/modal/ModalWrapper.vue'
 import StatusChangeModal from '/@/components/modal/StatusChangeModal.vue'
 
 const props = defineProps<{
-  request: RequestDetail
+  request: ApplicationDetail
 }>()
 
-const handleSelectOption = (status: RequestStatus) => {
+const handleSelectOption = (status: ApplicationStatus) => {
   nextStatus.value = status
   openModal()
 }
 
-const nextStatus = ref<RequestStatus>()
+const nextStatus = ref<ApplicationStatus>()
 const { shouldShowModal, openModal, closeModal } = useModal()
 
 const showMenu = ref(false)

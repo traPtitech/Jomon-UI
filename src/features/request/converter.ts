@@ -1,42 +1,45 @@
-import { DateTime } from 'luxon'
-
 import type {
-  Request as RequestData,
-  RequestDetail as RequestDetailData
-} from '/@/lib/apis'
+  Application as ApiApplication,
+  ApplicationDetail as ApiApplicationDetail
+} from '/@/lib/apis/generated/api'
 
-import { convertGroupFromData } from '/@/features/group/converter'
-import { convertRequestCommentFromData } from '/@/features/requestComment/converter'
-import { convertRequestStatusFromData } from '/@/features/requestStatus/converter'
+import { convertPartitionFromData } from '/@/features/group/converter'
+import { convertApplicationCommentFromData } from '/@/features/requestComment/converter'
+import { convertApplicationStatusDetailFromData } from '/@/features/requestStatus/converter'
 import { convertRequestTargetFromData } from '/@/features/requestTarget/converter'
 
-import type { Request, RequestDetail } from './model'
+import type { Application, ApplicationDetail } from './model'
+import { DateTime } from 'luxon'
 
-export const convertRequestFromData = (request: RequestData): Request => ({
-  id: request.id,
-  status: request.status,
-  createdBy: request.created_by,
-  title: request.title,
-  content: request.content,
-  targets: request.targets.map(convertRequestTargetFromData),
-  tags: request.tags,
-  group: request.group ? convertGroupFromData(request.group) : request.group,
-  createdAt: DateTime.fromISO(request.created_at)
+export const convertApplication = (
+  application: ApiApplication
+): Application => ({
+  id: application.id,
+  status: application.status,
+  createdBy: application.created_by,
+  title: application.title,
+  content: application.content,
+  targets: application.targets.map(convertRequestTargetFromData),
+  tags: application.tags,
+  partition: convertPartitionFromData(application.partition),
+  createdAt: DateTime.fromISO(application.created_at),
+  updatedAt: DateTime.fromISO(application.updated_at)
 })
 
-export const convertRequestDetailFromData = (
-  request: RequestDetailData
-): RequestDetail => ({
-  id: request.id,
-  status: request.status,
-  createdBy: request.created_by,
-  title: request.title,
-  content: request.content,
-  targets: request.targets.map(convertRequestTargetFromData),
-  tags: request.tags,
-  group: request.group ? convertGroupFromData(request.group) : request.group,
-  createdAt: DateTime.fromISO(request.created_at),
-  files: request.files,
-  comments: request.comments.map(convertRequestCommentFromData),
-  statuses: request.statuses.map(convertRequestStatusFromData)
+export const convertApplicationDetail = (
+  application: ApiApplicationDetail
+): ApplicationDetail => ({
+  id: application.id,
+  status: application.status,
+  createdBy: application.created_by,
+  title: application.title,
+  content: application.content,
+  targets: application.targets.map(convertRequestTargetFromData),
+  tags: application.tags,
+  partition: convertPartitionFromData(application.partition),
+  createdAt: DateTime.fromISO(application.created_at),
+  updatedAt: DateTime.fromISO(application.updated_at),
+  files: application.files,
+  comments: application.comments.map(convertApplicationCommentFromData),
+  statuses: application.statuses.map(convertApplicationStatusDetailFromData)
 })

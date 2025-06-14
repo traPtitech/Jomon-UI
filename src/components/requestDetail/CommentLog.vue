@@ -5,10 +5,10 @@ import { formatDateAndTime } from '/@/lib/date'
 
 import MarkdownIt from '/@/components//shared/MarkdownIt.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
-import type { RequestComment } from '/@/features/requestComment/model'
+import type { ApplicationComment } from '/@/features/requestComment/model'
 
 const props = defineProps<{
-  comment: RequestComment
+  comment: ApplicationComment
 }>()
 
 const formattedDateAndTime = formatDateAndTime(props.comment.createdAt)

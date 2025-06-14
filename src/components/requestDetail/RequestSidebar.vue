@@ -2,9 +2,9 @@
 import RequestGroup from '/@/components/requestDetail/RequestGroup.vue'
 import RequestTags from '/@/components/requestDetail/RequestTags.vue'
 import RequestTargets from '/@/components/requestDetail/RequestTargets.vue'
-import type { RequestDetail } from '/@/features/request/model'
+import type { ApplicationDetail } from '/@/features/request/model'
 
-const request = defineModel<RequestDetail>({ required: true })
+const request = defineModel<ApplicationDetail>({ required: true })
 </script>
 
 <template>

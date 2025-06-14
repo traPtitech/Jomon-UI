@@ -5,10 +5,10 @@ import { formatDateAndTime } from '/@/lib/date'
 
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
-import type { RequestStatusDetail } from '/@/features/requestStatus/model'
+import type { ApplicationStatusDetail } from '/@/features/requestStatus/model'
 
 interface Props {
-  log: RequestStatusDetail
+  log: ApplicationStatusDetail
 }
 const props = defineProps<Props>()
 

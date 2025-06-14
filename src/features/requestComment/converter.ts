@@ -2,11 +2,11 @@ import { DateTime } from 'luxon'
 
 import type { Comment as CommentData } from '/@/lib/apis'
 
-import type { RequestComment } from './model'
+import type { ApplicationComment } from './model'
 
-export const convertRequestCommentFromData = (
+export const convertApplicationCommentFromData = (
   comment: CommentData
-): RequestComment => ({
+): ApplicationComment => ({
   id: comment.id,
   user: comment.user,
   comment: comment.comment,

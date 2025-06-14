@@ -6,14 +6,14 @@ export const useAdminRepository = () => {
 
 const createAdminRepository = () => ({
   fetchAdmins: async () => {
-    const { data } = await apis.getAdmins()
+    const { data } = await apis.getAccountManagers()
     return data
   },
   addAdmins: async (admins: string[]): Promise<string[]> => {
-    await apis.postAdmins(admins)
+    await apis.postAccountManagers(admins)
     return admins //TODO: レスポンスほしい
   },
   removeAdmins: async (admins: string[]) => {
-    await apis.deleteAdmins(admins)
+    await apis.deleteAccountManagers(admins)
   }
 })

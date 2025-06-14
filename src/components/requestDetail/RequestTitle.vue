@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import type { RequestDetail } from '/@/features/request/model'
+import type { ApplicationDetail } from '/@/features/request/model'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import BaseInput from '/@/components/shared/BaseInput.vue'
 import { editRequestUsecase } from '/@/features/request/usecase'
@@ -11,7 +11,7 @@ import { useUserStore } from '/@/stores/user'
 import { useRequest } from '/@/features/request/composables'
 
 const props = defineProps<{
-  request: RequestDetail
+  request: ApplicationDetail
 }>()
 
 const { me } = useUserStore()
@@ -32,7 +32,7 @@ const handleUpdateTitle = async () => {
   try {
     await editRequestUsecase(props.request.id, {
       ...props.request,
-      group: props.request.group?.id ?? null,
+      partition: props.request.partition?.id ?? null,
       title: editedTitle.value
     })
     toast.success('更新しました')

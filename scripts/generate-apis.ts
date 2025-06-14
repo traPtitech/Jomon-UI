@@ -8,7 +8,7 @@ import { addTsIgnoreToImports } from './add-ts-ignore-to-imports'
 import { fileURLToPath } from 'url'
 
 const SWAGGER_PATH =
-  'https://raw.githubusercontent.com/traPtitech/Jomon/9e908bc824eda85554027ddc5e69ff3a1697d599/docs/swagger.yaml'
+  'https://raw.githubusercontent.com/traPtitech/Jomon/v2/docs/swagger.yaml'
 const GENERATED_DIR = 'src/lib/apis/generated'
 
 const generateCmd = [

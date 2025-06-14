@@ -12,14 +12,14 @@ export const useDeleteGroup = () => {
   const isDeleting = ref(false)
 
   const deleteGroup = async (id: string) => {
-    if (!confirm('本当にこのグループを削除しますか？')) {
+    if (!confirm('本当にこのパーティションを削除しますか？')) {
       return
     }
     try {
       isDeleting.value = true
       await deleteGroupUsecase(id)
-      toast.success('グループを削除しました')
-      router.push('/groups')
+      toast.success('パーティションを削除しました')
+      router.push('/partitions')
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e)

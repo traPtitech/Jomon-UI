@@ -30,7 +30,7 @@ const { canEditGroup, group, editedValue } = useGroupDetailStore()
     <BaseInput
       v-else
       v-model="editedValue.name"
-      label="グループ名"
+      label="パーティション名"
       class="grow" />
     <SimpleButton
       v-if="isEditMode"

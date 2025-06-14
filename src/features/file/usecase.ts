@@ -1,12 +1,15 @@
 import { convertFileAndMeta } from './converter'
-import type { FileSeed, File } from './model'
+import type { FileSeed, FileData } from './model'
 import { useFileRepository } from './repository'
 
 export const useFetchFilesUsecase = async (fileIds: string[]) => {
   const repository = useFileRepository()
 
   try {
-    const promises = fileIds.map(fileId => repository.fetchFile(fileId))
+    const promises = fileIds.map(async fileId => {
+      const text = await repository.fetchFile(fileId)
+      return new File([text], fileId)
+    })
     return await Promise.all(promises)
   } catch {
     throw new Error('ファイルの取得に失敗しました')
@@ -26,7 +29,7 @@ export const useFetchFileMetasUsecase = async (fileIds: string[]) => {
 
 export const useFetchFileWithMetasUsecase = async (
   fileIds: string[]
-): Promise<File[]> => {
+): Promise<FileData[]> => {
   try {
     const filePromises = await useFetchFilesUsecase(fileIds)
     const fileMetaPromises = await useFetchFileMetasUsecase(fileIds)
@@ -59,6 +62,6 @@ export const deleteFileUsecase = async (requestId: string) => {
   try {
     await repository.deleteFile(requestId)
   } catch {
-    throw new Error('グループの削除に失敗しました')
+    throw new Error('パーティションの削除に失敗しました')
   }
 }

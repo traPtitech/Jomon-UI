@@ -10,7 +10,7 @@ export const useFetchAdminsUsecase = async () => {
     admins.value = await repository.fetchAdmins()
     isAdminFetched.value = true
   } catch {
-    throw new Error('管理者の取得に失敗しました')
+    throw new Error('会計士の取得に失敗しました')
   }
 }
 
@@ -22,7 +22,7 @@ export const addAdminsUsecase = async (adminsSeed: string[]) => {
     const res = await repository.addAdmins(adminsSeed)
     admins.value.push(...res)
   } catch {
-    throw new Error('管理者の追加に失敗しました')
+    throw new Error('会計士の追加に失敗しました')
   }
 }
 
@@ -34,6 +34,6 @@ export const removeAdminsUsecase = async (adminsSeed: string[]) => {
     await repository.removeAdmins(adminsSeed)
     admins.value = admins.value.filter(admin => !adminsSeed.includes(admin))
   } catch {
-    throw new Error('管理者の削除に失敗しました')
+    throw new Error('会計士の削除に失敗しました')
   }
 }

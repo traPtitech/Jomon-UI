@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 
-import type { RequestDetail } from '/@/features/request/model'
+import type { ApplicationDetail } from '/@/features/request/model'
 import RequestStatusChange from '/@/components/requestDetail/RequestStatusChange.vue'
 import RequestTitle from '/@/components/requestDetail/RequestTitle.vue'
 
 const props = defineProps<{
-  request: RequestDetail
+  request: ApplicationDetail
 }>()
 
 const totalAmount = computed(() =>

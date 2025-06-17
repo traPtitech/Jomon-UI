@@ -9,8 +9,8 @@ export const useFetchUsersUsecase = async () => {
   try {
     users.value = await repository.fetchUsers()
     isUserFetched.value = true
-  } catch {
-    throw new Error('ユーザー一覧の取得に失敗しました')
+  } catch (e) {
+    throw new Error('ユーザー一覧の取得に失敗しました: ' + e)
   }
 }
 

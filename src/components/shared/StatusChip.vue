@@ -68,7 +68,6 @@ const backgroundColor = computed(() => (status: ApplicationStatus) => {
     <XCircleIcon v-else-if="status === 'change_requested'" class="w-6" />
     <CloudArrowUpIcon v-else-if="status === 'rejected'" class="w-6" />
     <HandThumbUpIcon v-else-if="status === 'payment_finished'" class="w-6" />
-    <!-- todo:アイコン考える。別のアイコンライブラリ使うのもありかも -->
     <span v-if="props.hasText">
       {{ statusToJpn(status) }}
     </span>

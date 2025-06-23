@@ -9,10 +9,10 @@ import {
 } from '@heroicons/vue/24/solid'
 import { computed } from 'vue'
 
-import type { RequestStatus } from '/@/features/requestStatus/model'
+import type { ApplicationStatus } from '/@/features/applicationStatus/model'
 
 interface Props {
-  status: RequestStatus
+  status: ApplicationStatus
   hasText?: boolean
   hasMenu?: boolean
 }
@@ -22,15 +22,15 @@ const props = withDefaults(defineProps<Props>(), {
   hasMenu: false
 })
 
-const statusToJpn = computed(() => (status: RequestStatus) => {
+const statusToJpn = computed(() => (status: ApplicationStatus) => {
   switch (status) {
     case 'submitted':
       return '承認待ち'
-    case 'fix_required':
+    case 'change_requested':
       return '要修正'
-    case 'accepted':
+    case 'approved':
       return '承認済み'
-    case 'completed':
+    case 'payment_finished':
       return '返済完了'
     case 'rejected':
       return '却下'
@@ -39,15 +39,15 @@ const statusToJpn = computed(() => (status: RequestStatus) => {
   }
 })
 
-const backgroundColor = computed(() => (status: RequestStatus) => {
+const backgroundColor = computed(() => (status: ApplicationStatus) => {
   switch (status) {
     case 'submitted':
       return 'bg-status-submitted'
-    case 'fix_required':
+    case 'change_requested':
       return 'bg-status-fix-required'
-    case 'accepted':
+    case 'approved':
       return 'bg-status-accepted'
-    case 'completed':
+    case 'payment_finished':
       return 'bg-status-completed'
     case 'rejected':
       return 'bg-status-rejected'
@@ -63,11 +63,11 @@ const backgroundColor = computed(() => (status: RequestStatus) => {
       status
     )}${hasMenu ? ' cursor-pointer' : ''}`"
     :title="statusToJpn(status)">
-    <CheckCircleIcon v-if="status === 'accepted'" class="w-6" />
+    <CheckCircleIcon v-if="status === 'approved'" class="w-6" />
     <ExclamationTriangleIcon v-else-if="status === 'submitted'" class="w-6" />
-    <XCircleIcon v-else-if="status === 'fix_required'" class="w-6" />
+    <XCircleIcon v-else-if="status === 'change_requested'" class="w-6" />
     <CloudArrowUpIcon v-else-if="status === 'rejected'" class="w-6" />
-    <HandThumbUpIcon v-else-if="status === 'completed'" class="w-6" />
+    <HandThumbUpIcon v-else-if="status === 'payment_finished'" class="w-6" />
     <!-- todo:アイコン考える。別のアイコンライブラリ使うのもありかも -->
     <span v-if="props.hasText">
       {{ statusToJpn(status) }}

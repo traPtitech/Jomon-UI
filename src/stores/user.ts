@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
-import { defineComposable } from '/@/lib/store'
 import type { User } from '/@/features/user/model'
+import { defineComposable } from '/@/lib/store'
 
 export const useUserStore = defineComposable('user', () => {
   const me = ref<User>()
@@ -8,9 +8,9 @@ export const useUserStore = defineComposable('user', () => {
   const isUserFetched = ref(false)
   const isMeFetched = ref(false)
 
-  const isAdmin = computed(() => {
+  const isAccountManager = computed(() => {
     if (!me.value) return false
-    return me.value.admin
+    return me.value.accountManager
   })
 
   const userOptions = computed(() =>
@@ -36,7 +36,7 @@ export const useUserStore = defineComposable('user', () => {
   return {
     me,
     users,
-    isAdmin,
+    isAccountManager,
     userOptions,
     isUserFetched,
     isMeFetched,

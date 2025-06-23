@@ -11,20 +11,15 @@ const createFileRepository = () => ({
   fetchFile: async (fileId: string): Promise<string> => {
     const { data } = await apis.getFile(fileId)
 
-    return data
+    return data.text()
   },
   fetchFileMeta: async (fileId: string): Promise<FileMeta> => {
     const { data } = await apis.getFileMeta(fileId)
 
     return convertFileMetaFromData(data)
   },
-  createFile: async (requestId: string, file: FileSeed) => {
-    const fileData = {
-      name: file.name,
-      src: file.src,
-      id: requestId
-    }
-    await apis.postFile(fileData.name, fileData.src, fileData.id)
+  createFile: async (applicationId: string, file: FileSeed) => {
+    await apis.postFile(file.file, file.name, applicationId)
   },
   deleteFile: async (id: string) => {
     await apis.deleteFile(id)

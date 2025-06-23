@@ -2,38 +2,35 @@ import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
-  { path: '/', redirect: '/requests' },
+  { path: '/', redirect: '/applications' },
   {
-    path: '/requests',
-    component: () => import('./pages/RequestsPage.vue')
+    path: '/applications',
+    component: () => import('./pages/ApplicationsPage.vue')
   },
   {
-    path: '/requests/new',
-    component: () => import('./pages/NewRequestPage.vue')
+    path: '/applications/new',
+    component: () => import('./pages/NewApplicationPage.vue')
   },
   {
-    path: '/requests/:id',
-    component: () => import('./pages/RequestDetailPage.vue')
+    path: '/applications/:id',
+    component: () => import('./pages/ApplicationDetailPage.vue')
   },
   {
-    path: '/transactions',
-    component: () => import('./pages/TransactionsPage.vue')
+    path: '/partitions',
+    component: () => import('./pages/PartitionsPage.vue')
   },
   {
-    path: '/transactions/new',
-    component: () => import('./pages/NewTransactionPage.vue')
+    path: '/partitions/new',
+    component: () => import('./pages/NewPartitionPage.vue')
   },
   {
-    path: '/transactions/:id',
-    component: () => import('./pages/TransactionDetailPage.vue')
+    path: '/partitions/:id',
+    component: () => import('./pages/PartitionDetailPage.vue')
   },
-  { path: '/groups', component: () => import('./pages/GroupsPage.vue') },
-  { path: '/groups/new', component: () => import('./pages/NewGroupPage.vue') },
   {
-    path: '/groups/:id',
-    component: () => import('./pages/GroupDetailPage.vue')
+    path: '/account-managers',
+    component: () => import('./pages/AccountManagerPage.vue')
   },
-  { path: '/admins', component: () => import('./pages/AdminPage.vue') },
   { path: '/:path(.*)', component: () => import('./pages/NotFoundPage.vue') }
 ]
 

@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { useGroupDetailStore } from '/@/stores/groupDetail'
+import { usePartitionDetailStore } from '/@/stores/partitionDetail'
 
-const { group } = useGroupDetailStore()
+const { partition } = usePartitionDetailStore()
 </script>
 
 <template>
-  <div v-if="group" class="flex flex-col gap-3">
+  <div v-if="partition" class="flex flex-col gap-3">
     <h2 class="text-xl">予算</h2>
-    <p>{{ group?.budget }} 円</p>
+    <p>{{ partition?.budget }} 円</p>
   </div>
 </template>

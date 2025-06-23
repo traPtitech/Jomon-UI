@@ -1,22 +1,22 @@
 import { computed, ref } from 'vue'
+import type { Partition } from '/@/features/partition/model'
 import { defineComposable } from '/@/lib/store'
-import type { Partition } from '/@/features/group/model'
 
-export const useGroupStore = defineComposable('group', () => {
-  const groups = ref<Partition[]>([])
+export const usePartitionStore = defineComposable('partition', () => {
+  const partitions = ref<Partition[]>([])
 
-  const isGroupFetched = ref(false)
+  const isPartitionFetched = ref(false)
 
-  const groupOptions = computed(() =>
-    groups.value.map(group => ({
-      key: group.name,
-      value: group.id
+  const partitionOptions = computed(() =>
+    partitions.value.map(partition => ({
+      key: partition.name,
+      value: partition.id
     }))
   )
 
   return {
-    groups,
-    groupOptions,
-    isGroupFetched
+    partitions,
+    partitionOptions,
+    isPartitionFetched
   }
 })

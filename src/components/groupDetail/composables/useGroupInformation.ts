@@ -1,16 +1,16 @@
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import { useGroupDetailStore } from '/@/stores/groupDetail'
+import { usePartitionDetailStore } from '/@/stores/partitionDetail'
 
-import { editGroupUsecase } from '/@/features/group/usecase'
+import { editPartitionUsecase } from '/@/features/partition/usecase'
 
 export type EditMode = 'name' | 'description' | 'budget' | ''
 
-export const useGroupInformation = () => {
+export const usePartitionInformation = () => {
   const toast = useToast()
 
-  const { group, editedValue } = useGroupDetailStore()
+  const { partition, editedValue } = usePartitionDetailStore()
 
   const isSending = ref(false)
 
@@ -26,7 +26,7 @@ export const useGroupInformation = () => {
   const finishEditing = async () => {
     isSending.value = true
     try {
-      await editGroupUsecase(group.value?.id ?? '', editedValue.value)
+      await editPartitionUsecase(partition.value?.id ?? '', editedValue.value)
       toast.success('パーティション情報を更新しました')
     } catch (e) {
       if (e instanceof Error) {

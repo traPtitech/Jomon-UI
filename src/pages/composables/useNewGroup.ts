@@ -1,11 +1,11 @@
 import { ref } from 'vue'
 
-import type { PartitionSeed } from '/@/features/group/model'
+import type { PartitionSeed } from '/@/features/partition/model'
 
-export const useNewGroup = () => {
+export const useNewPartition = () => {
   const isSending = ref(false)
 
-  const group = ref<PartitionSeed>({
+  const partition = ref<PartitionSeed>({
     name: '',
     budget: 0,
     management: {
@@ -14,5 +14,5 @@ export const useNewGroup = () => {
     }
   })
 
-  return { isSending, group }
+  return { isSending, partition }
 }

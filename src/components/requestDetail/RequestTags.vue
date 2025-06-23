@@ -6,7 +6,7 @@ import { useUserStore } from '/@/stores/user'
 import { useToast } from 'vue-toastification'
 import EditButton from '/@/components/shared/EditButton.vue'
 import SearchSelectTag from '/@/components/shared/SearchSelectTag.vue'
-import TagsGroup from '/@/components/shared/TagsGroup.vue'
+import TagsPartition from '/@/components/shared/TagsPartition.vue'
 import { useRequest } from '/@/features/request/composables'
 import type { ApplicationDetail } from '/@/features/request/model'
 import { editRequestUsecase } from '/@/features/request/usecase'
@@ -48,7 +48,7 @@ const handleUpdateTags = async () => {
     </div>
     <div>
       <div v-if="!isEditMode">
-        <TagsGroup v-if="request.tags" :tags="request.tags" />
+        <TagsPartition v-if="request.tags" :tags="request.tags" />
         <span v-else>なし</span>
       </div>
       <SearchSelectTag

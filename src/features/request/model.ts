@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import type { Partition } from '/@/features/group/model'
+import type { Partition } from '/@/features/partition/model'
 import type { ApplicationComment } from '/@/features/requestComment/model'
 import type {
   ApplicationStatus,

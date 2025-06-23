@@ -1,37 +1,37 @@
 <script lang="ts" setup>
 import { RouterLink, useRoute } from 'vue-router'
 
-import { useGroupDetailStore } from '/@/stores/groupDetail'
+import { usePartitionDetailStore } from '/@/stores/partitionDetail'
 import { useUserStore } from '/@/stores/user'
 
 import { toId } from '/@/lib/parsePathParams'
 
 import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
-import GroupBudget from '/@/components/groupDetail/GroupBudget.vue'
-import GroupName from '/@/components/groupDetail/GroupName.vue'
-import { useGroupInformation } from '/@/components/groupDetail/composables/useGroupInformation'
-import { useFetchGroup } from '/@/features/group/usecase'
+import PartitionBudget from '/@/components/partitionDetail/PartitionBudget.vue'
+import PartitionName from '/@/components/partitionDetail/PartitionName.vue'
+import { usePartitionInformation } from '/@/components/partitionDetail/composables/usePartitionInformation'
+import { useFetchPartition } from '/@/features/partition/usecase'
 import { useFetchUsersUsecase } from '/@/features/user/usecase'
 
 const route = useRoute()
 const id = toId(route.params.id)
 
 const { isUserFetched } = useUserStore()
-const { group } = useGroupDetailStore()
+const { partition } = usePartitionDetailStore()
 
 const { isSending, editMode, changeEditMode, finishEditing } =
-  useGroupInformation()
+  usePartitionInformation()
 
-await useFetchGroup(id)
+await useFetchPartition(id)
 if (!isUserFetched.value) {
   await useFetchUsersUsecase()
 }
 </script>
 
 <template>
-  <div v-if="group !== undefined" class="flex flex-col gap-6">
+  <div v-if="partition !== undefined" class="flex flex-col gap-6">
     <div class="flex">
-      <GroupName
+      <PartitionName
         class="grow"
         :is-edit-mode="editMode === 'name'"
         :is-sending="isSending"
@@ -39,14 +39,14 @@ if (!isUserFetched.value) {
         @finish-editing="finishEditing" />
     </div>
     <div class="grow flex flex-col gap-6">
-      <GroupBudget
+      <PartitionBudget
         :is-edit-mode="editMode === 'budget'"
         :is-sending="isSending"
         @change-edit-mode="changeEditMode($event)"
         @finish-editing="finishEditing" />
       <RouterLink
         class="flex w-fit items-center"
-        :to="`/transactions?group=${group.id}`">
+        :to="`/transactions?partition=${partition.id}`">
         このパーティションの入出金記録へ
         <ArrowTopRightOnSquareIcon class="ml-1 w-6" />
       </RouterLink>

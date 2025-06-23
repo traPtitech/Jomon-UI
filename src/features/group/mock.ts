@@ -17,7 +17,7 @@ export const mockPartition: Partition = {
 
 const mockPartitions = Array(10).fill(mockPartition)
 
-export const groupHandlers = [
+export const partitionHandlers = [
   http.get('/api/partitions', () => {
     return HttpResponse.json(mockPartitions)
   }),

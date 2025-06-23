@@ -28,7 +28,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('./pages/PartitionDetailPage.vue')
   },
   {
-    path: '/accountManagers',
+    path: '/account-managers',
     component: () => import('./pages/AccountManagerPage.vue')
   },
   { path: '/:path(.*)', component: () => import('./pages/NotFoundPage.vue') }

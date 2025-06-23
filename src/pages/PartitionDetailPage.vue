@@ -1,17 +1,13 @@
 <script lang="ts" setup>
-import { RouterLink, useRoute } from 'vue-router'
-
-import { usePartitionDetailStore } from '/@/stores/partitionDetail'
-import { useUserStore } from '/@/stores/user'
-
-import { toId } from '/@/lib/parsePathParams'
-
-import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
+import { useRoute } from 'vue-router'
 import PartitionBudget from '/@/components/partitionDetail/PartitionBudget.vue'
 import PartitionName from '/@/components/partitionDetail/PartitionName.vue'
 import { usePartitionInformation } from '/@/components/partitionDetail/composables/usePartitionInformation'
 import { useFetchPartition } from '/@/features/partition/usecase'
 import { useFetchUsersUsecase } from '/@/features/user/usecase'
+import { toId } from '/@/lib/parsePathParams'
+import { usePartitionDetailStore } from '/@/stores/partitionDetail'
+import { useUserStore } from '/@/stores/user'
 
 const route = useRoute()
 const id = toId(route.params.id)
@@ -44,12 +40,6 @@ if (!isUserFetched.value) {
         :is-sending="isSending"
         @change-edit-mode="changeEditMode($event)"
         @finish-editing="finishEditing" />
-      <RouterLink
-        class="flex w-fit items-center"
-        :to="`/transactions?partition=${partition.id}`">
-        このパーティションの入出金記録へ
-        <ArrowTopRightOnSquareIcon class="ml-1 w-6" />
-      </RouterLink>
     </div>
   </div>
 </template>

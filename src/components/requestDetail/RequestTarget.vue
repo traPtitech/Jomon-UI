@@ -1,20 +1,16 @@
 <script lang="ts" setup>
-import { useUserStore } from '/@/stores/user'
-import type {
-  ApplicationTargetDetail,
-  ApplicationTarget
-} from '/@/features/requestTarget/model'
-
-import UserIcon from '/@/components/shared/UserIcon.vue'
-import { RouterLink } from 'vue-router'
+import { TrashIcon } from '@heroicons/vue/24/solid'
+import { computed } from 'vue'
 import BaseInput from '/@/components/shared/BaseInput.vue'
 import SearchSelect from '/@/components/shared/SearchSelect.vue'
-import { TrashIcon } from '@heroicons/vue/24/solid'
-import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
+import UserIcon from '/@/components/shared/UserIcon.vue'
 import type { ApplicationDetail } from '/@/features/request/model'
-
-import { computed } from 'vue'
 import { editRequestUsecase } from '/@/features/request/usecase'
+import type {
+  ApplicationTarget,
+  ApplicationTargetDetail
+} from '/@/features/requestTarget/model'
+import { useUserStore } from '/@/stores/user'
 
 const props = defineProps<{
   request: ApplicationDetail
@@ -68,25 +64,6 @@ const handleRemoveTarget = async () => {
         <div>{{ userMap[target.target] }}</div>
         <div>{{ target.amount }}円</div>
       </div>
-    </div>
-    <div>
-      <!--TODO: targetのレスポンスにtransactionのidを入れてもらう-->
-      <div v-if="target.paidAt !== null" class="flex items-center gap-2">
-        払い戻し済み
-        <RouterLink
-          class="underline"
-          title="入出金記録へ"
-          :to="`/applications/`">
-          <ArrowTopRightOnSquareIcon class="w-6" />
-        </RouterLink>
-      </div>
-      <!-- <button
-        v-else-if="isAdmin"
-        class="text-blue-500 cursor-pointer"
-        :disabled="isSending"
-        @click="postTransactionFromRequest(request, target)">
-        入出金記録を作成
-      </button> -->
     </div>
   </div>
   <div v-else class="flex items-center justify-between">

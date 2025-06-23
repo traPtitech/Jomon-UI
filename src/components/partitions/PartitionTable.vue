@@ -14,8 +14,8 @@ const slicePartitionsAt = (index: number, n: number) => {
   return props.partitions.slice(start, end) ?? []
 }
 
-const navigateToPartition = (transactionId: string) => {
-  router.push(`/partitions/${transactionId}`)
+const navigateToPartition = (partitionId: string) => {
+  router.push(`/partitions/${partitionId}`)
 }
 </script>
 

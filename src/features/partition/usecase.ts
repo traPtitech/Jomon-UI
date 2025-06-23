@@ -11,8 +11,8 @@ export const useFetchPartitionsUsecase = async () => {
   try {
     partitions.value = await repository.fetchPartitions()
     isPartitionFetched.value = true
-  } catch {
-    throw new Error('パーティション一覧の取得に失敗しました')
+  } catch (e) {
+    throw new Error('パーティション一覧の取得に失敗しました: ' + e)
   }
 }
 

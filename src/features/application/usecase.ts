@@ -23,8 +23,8 @@ export const useFetchApplicationsUsecase = async () => {
   try {
     applications.value = await repository.fetchApplications(filterParams.value)
     isApplicationFetched.value = true
-  } catch {
-    throw new Error('申請一覧の取得に失敗しました')
+  } catch (e) {
+    throw new Error('申請一覧の取得に失敗しました: ' + e)
   }
 }
 

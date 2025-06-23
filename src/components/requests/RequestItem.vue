@@ -7,7 +7,7 @@ import { useUserStore } from '/@/stores/user'
 import { formatDate } from '/@/lib/date'
 
 import StatusChip from '/@/components/shared/StatusChip.vue'
-import TagsPartiton from '/@/components/shared/TagsPartiton.vue'
+import TagsGroup from '/@/components/shared/TagsGroup.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
 import type { Application } from '/@/features/request/model'
 
@@ -36,7 +36,7 @@ const totalAmount = computed(
     <div class="flex flex-grow flex-wrap">
       <div class="flex-grow flex flex-col gap-2">
         <span class="text-xl">{{ request.title }}</span>
-        <TagsPartiton :tags="request.tags" />
+        <TagsGroup :tags="request.tags" />
       </div>
       <div class="flex flex-col gap-2">
         <div class="flex items-center justify-end gap-x-4 flex-wrap">

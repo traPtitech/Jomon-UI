@@ -17,15 +17,15 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/partitions',
-    component: () => import('./pages/PartitonsPage.vue')
+    component: () => import('./pages/GroupsPage.vue')
   },
   {
     path: '/partitions/new',
-    component: () => import('./pages/NewPartitonPage.vue')
+    component: () => import('./pages/NewGroupPage.vue')
   },
   {
     path: '/partitions/:id',
-    component: () => import('./pages/PartitonDetailPage.vue')
+    component: () => import('./pages/GroupDetailPage.vue')
   },
   { path: '/admins', component: () => import('./pages/AdminPage.vue') },
   { path: '/:path(.*)', component: () => import('./pages/NotFoundPage.vue') }

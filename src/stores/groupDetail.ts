@@ -1,11 +1,11 @@
 import { computed, ref } from 'vue'
 
-import type { Partition, PartitionSeed } from '/@/features/partiton/model'
-import type { User } from '/@/features/user/model'
 import { defineComposable } from '/@/lib/store'
+import type { Partition, PartitionSeed } from '/@/features/group/model'
+import type { User } from '/@/features/user/model'
 
-export const usePartitonDetailStore = defineComposable('partitonDetail', () => {
-  const partiton = ref<Partition>()
+export const useGroupDetailStore = defineComposable('groupDetail', () => {
+  const group = ref<Partition>()
 
   const editedValue = ref<PartitionSeed>({
     name: '',
@@ -15,14 +15,14 @@ export const usePartitonDetailStore = defineComposable('partitonDetail', () => {
       state: 'available'
     }
   })
-  const canEditPartiton = computed(() => (user: User | undefined) => {
+  const canEditGroup = computed(() => (user: User | undefined) => {
     if (!user) return false
     return user.accountManager
   })
 
   return {
-    partiton,
+    group,
     editedValue,
-    canEditPartiton
+    canEditGroup
   }
 })

@@ -2,22 +2,22 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
-import { deletePartitonUsecase } from '/@/features/partiton/usecase'
+import { deleteGroupUsecase } from '/@/features/group/usecase'
 
-export const useDeletePartiton = () => {
+export const useDeleteGroup = () => {
   const router = useRouter()
 
   const toast = useToast()
 
   const isDeleting = ref(false)
 
-  const deletePartiton = async (id: string) => {
+  const deleteGroup = async (id: string) => {
     if (!confirm('本当にこのパーティションを削除しますか？')) {
       return
     }
     try {
       isDeleting.value = true
-      await deletePartitonUsecase(id)
+      await deleteGroupUsecase(id)
       toast.success('パーティションを削除しました')
       router.push('/partitions')
     } catch (e) {
@@ -27,5 +27,5 @@ export const useDeletePartiton = () => {
     }
     isDeleting.value = false
   }
-  return { isDeleting, deletePartiton }
+  return { isDeleting, deleteGroup }
 }

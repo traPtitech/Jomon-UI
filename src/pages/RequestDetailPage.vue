@@ -6,26 +6,26 @@ import { toId } from '/@/lib/parseQueryParams'
 import RequestHeader from '/@/components/requestDetail/RequestHeader.vue'
 import RequestLogs from '/@/components/requestDetail/RequestLogs.vue'
 import RequestSidebar from '/@/components/requestDetail/RequestSidebar.vue'
-import { useFetchPartitonsUsecase } from '/@/features/partiton/usecase'
+import { useFetchGroupsUsecase } from '/@/features/group/usecase'
 import { useFetchTagsUsecase } from '/@/features/tag/usecase'
 import { useFetchUsersUsecase } from '/@/features/user/usecase'
 import { useRequestDetailStore } from '/@/stores/requestDetail'
 import { useUserStore } from '/@/stores/user'
-import { usePartitonStore } from '/@/stores/partiton'
+import { useGroupStore } from '/@/stores/group'
 import { useTagStore } from '/@/stores/tag'
 
 const route = useRoute()
 const id = toId(route.params.id)
 
 const { isUserFetched } = useUserStore()
-const { isPartitonFetched } = usePartitonStore()
+const { isGroupFetched } = useGroupStore()
 const { isTagFetched } = useTagStore()
 const { useRequest } = useRequestDetailStore()
 
 const request = await useRequest(id)
 
-if (!isPartitonFetched.value) {
-  await useFetchPartitonsUsecase()
+if (!isGroupFetched.value) {
+  await useFetchGroupsUsecase()
 }
 if (!isUserFetched.value) {
   await useFetchUsersUsecase()

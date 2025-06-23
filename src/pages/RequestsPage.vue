@@ -2,7 +2,7 @@
 import { ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
-import { usePartitonStore } from '/@/stores/partiton'
+import { useGroupStore } from '/@/stores/group'
 import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
@@ -12,7 +12,7 @@ import { toPage } from '/@/lib/parseQueryParams'
 import RequestItem from '/@/components/requests/RequestItem.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import { useFetchPartitonsUsecase } from '/@/features/partiton/usecase'
+import { useFetchGroupsUsecase } from '/@/features/group/usecase'
 import { useFetchRequestsUsecase } from '/@/features/request/usecase'
 import { useFetchTagsUsecase } from '/@/features/tag/usecase'
 import { useFetchUsersUsecase } from '/@/features/user/usecase'
@@ -22,7 +22,7 @@ const page = ref(toPage(route.query.page))
 
 const { requests, isRequestFetched } = useRequestStore()
 const { isTagFetched } = useTagStore()
-const { isPartitonFetched } = usePartitonStore()
+const { isGroupFetched } = useGroupStore()
 const { isUserFetched } = useUserStore()
 
 const sliceRequestsAt = (index: number, n: number) => {
@@ -37,8 +37,8 @@ if (!isRequestFetched.value) {
 if (!isTagFetched.value) {
   useFetchTagsUsecase()
 }
-if (!isPartitonFetched.value) {
-  useFetchPartitonsUsecase()
+if (!isGroupFetched.value) {
+  useFetchGroupsUsecase()
 }
 if (!isUserFetched.value) {
   useFetchUsersUsecase()

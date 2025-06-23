@@ -56,11 +56,11 @@ export const createFilesUsecase = async (
   }
 }
 
-export const deleteFileUsecase = async (applicationId: string) => {
+export const deleteFileUsecase = async (fileIds: string) => {
   const repository = useFileRepository()
 
   try {
-    await repository.deleteFile(applicationId)
+    await repository.deleteFile(fileIds)
   } catch {
     throw new Error('パーティションの削除に失敗しました')
   }

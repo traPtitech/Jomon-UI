@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { useGroupDetailStore } from '/@/stores/groupDetail'
+import { usePartitonDetailStore } from '/@/stores/partitonDetail'
 
-const { group } = useGroupDetailStore()
+const { partiton } = usePartitonDetailStore()
 </script>
 
 <template>
-  <div v-if="group" class="flex flex-col gap-3">
+  <div v-if="partiton" class="flex flex-col gap-3">
     <h2 class="text-xl">予算</h2>
-    <p>{{ group?.budget }} 円</p>
+    <p>{{ partiton?.budget }} 円</p>
   </div>
 </template>

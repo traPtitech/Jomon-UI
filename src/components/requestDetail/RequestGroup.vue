@@ -4,7 +4,7 @@ import { useUserStore } from '/@/stores/user'
 import EditButton from '/@/components/shared/EditButton.vue'
 import { computed, ref } from 'vue'
 import SearchSelect from '/@/components/shared/SearchSelect.vue'
-import { useGroupStore } from '/@/stores/group'
+import { usePartitonStore } from '/@/stores/partiton'
 import { editRequestUsecase } from '/@/features/request/usecase'
 import type { ApplicationDetail } from '/@/features/request/model'
 import { useRequest } from '/@/features/request/composables'
@@ -13,33 +13,33 @@ import { useToast } from 'vue-toastification'
 const request = defineModel<ApplicationDetail>('modelValue', { required: true })
 
 const { me } = useUserStore()
-const { groupOptions } = useGroupStore()
+const { partitonOptions } = usePartitonStore()
 const { isRequestCreator } = useRequest(request.value)
 const toast = useToast()
 
 const hasAuthority = isRequestCreator.value(me.value)
 
-const defaultGroup = computed(() =>
+const defaultPartiton = computed(() =>
   request.value.partition ? request.value.partition.id : null
 )
-const groupName = computed(() =>
+const partitonName = computed(() =>
   request.value.partition ? request.value.partition.name : 'なし'
 )
 
 const isEditMode = ref(false)
-const editedGroup = ref<string | null>(defaultGroup.value)
-const toggleEditGroup = () => {
+const editedPartiton = ref<string | null>(defaultPartiton.value)
+const toggleEditPartiton = () => {
   if (isEditMode.value) {
-    editedGroup.value = defaultGroup.value
+    editedPartiton.value = defaultPartiton.value
   }
   isEditMode.value = !isEditMode.value
 }
 
-const handleUpdateGroup = async () => {
+const handleUpdatePartiton = async () => {
   try {
     await editRequestUsecase(request.value.id, {
       ...request.value,
-      partition: editedGroup.value ?? ''
+      partition: editedPartiton.value ?? ''
     })
     toast.success('更新しました')
   } catch {
@@ -56,16 +56,16 @@ const handleUpdateGroup = async () => {
       <EditButton
         v-if="hasAuthority"
         :is-edit-mode="isEditMode"
-        @click="toggleEditGroup" />
+        @click="toggleEditPartiton" />
     </div>
     <div>
-      <span v-if="!isEditMode">{{ groupName }}</span>
+      <span v-if="!isEditMode">{{ partitonName }}</span>
       <SearchSelect
         v-else
-        v-model="editedGroup"
+        v-model="editedPartiton"
         label="パーティション"
-        :options="groupOptions"
-        @close="handleUpdateGroup" />
+        :options="partitonOptions"
+        @close="handleUpdatePartiton" />
     </div>
   </div>
 </template>

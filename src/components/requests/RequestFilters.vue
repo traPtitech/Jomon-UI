@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
 
-import { useGroupStore } from '/@/stores/group'
+import { usePartitonStore } from '/@/stores/partiton'
 import { useRequestStore } from '/@/stores/request'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
@@ -14,7 +14,7 @@ import { requestStatusOptions } from '/@/features/requestStatus/model'
 const { requests, filterParams } = useRequestStore()
 const { userOptions } = useUserStore()
 const { tagIdOptions } = useTagStore()
-const { groupOptions } = useGroupStore()
+const { partitonOptions } = usePartitonStore()
 
 function sortByCreatedAt() {
   if (filterParams.value.sort === 'created_at') {
@@ -63,7 +63,7 @@ function sortByCreatedAt() {
       @close="useFetchRequestsUsecase" />
     <SearchSelect
       v-model="filterParams.partition"
-      :options="groupOptions"
+      :options="partitonOptions"
       label="パーティション"
       @close="useFetchRequestsUsecase" />
     <SearchSelect

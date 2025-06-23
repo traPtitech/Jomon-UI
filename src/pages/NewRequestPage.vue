@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useGroupStore } from '/@/stores/group'
+import { usePartitonStore } from '/@/stores/partiton'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
@@ -10,7 +10,7 @@ import SearchSelect from '/@/components/shared/SearchSelect.vue'
 import SearchSelectTag from '/@/components/shared/SearchSelectTag.vue'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import { useFetchGroupsUsecase } from '/@/features/group/usecase'
+import { useFetchPartitonsUsecase } from '/@/features/partiton/usecase'
 import { requestTemplates } from '/@/features/requestTemplate/model'
 import { useFetchTagsUsecase } from '/@/features/tag/usecase'
 import { useFetchUsersUsecase } from '/@/features/user/usecase'
@@ -19,15 +19,15 @@ import { useNewRequest } from './composables/useNewRequest'
 
 const { isTagFetched } = useTagStore()
 const { isUserFetched, me } = useUserStore()
-const { isGroupFetched, groupOptions } = useGroupStore()
+const { isPartitonFetched, partitonOptions } = usePartitonStore()
 
 const { isSending, request, files, postRequest } = useNewRequest()
 
 if (!isTagFetched.value) {
   useFetchTagsUsecase()
 }
-if (!isGroupFetched.value) {
-  useFetchGroupsUsecase()
+if (!isPartitonFetched.value) {
+  useFetchPartitonsUsecase()
 }
 if (!isUserFetched.value) {
   useFetchUsersUsecase()
@@ -52,7 +52,7 @@ if (!isUserFetched.value) {
     <SearchSelect
       v-model="request.partition"
       class="w-full"
-      :options="groupOptions"
+      :options="partitonOptions"
       label="パーティション" />
     <SearchSelectTag v-model="request.tags" />
     <NewRequestFileForm :files="files" @input="files = $event" />

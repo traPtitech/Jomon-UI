@@ -1,20 +1,20 @@
 <script lang="ts" setup>
-import type { Partition } from '/@/features/group/model'
+import type { Partition } from '/@/features/partiton/model'
 import router from '/@/router'
 
 interface Props {
   page: number
-  groups: Partition[]
+  partitons: Partition[]
 }
 const props = defineProps<Props>()
 
-const sliceGroupsAt = (index: number, n: number) => {
+const slicePartitonsAt = (index: number, n: number) => {
   const start = (index - 1) * n
   const end = index * n
-  return props.groups.slice(start, end) ?? []
+  return props.partitons.slice(start, end) ?? []
 }
 
-const navigateToGroup = (transactionId: string) => {
+const navigateToPartiton = (transactionId: string) => {
   router.push(`/partitions/${transactionId}`)
 }
 </script>
@@ -35,18 +35,18 @@ const navigateToGroup = (transactionId: string) => {
     </thead>
     <tbody>
       <tr
-        v-for="group in sliceGroupsAt(props.page, 10)"
-        :key="group.id"
+        v-for="partiton in slicePartitonsAt(props.page, 10)"
+        :key="partiton.id"
         tabindex="0"
-        :aria-label="'View details for ' + group.id"
+        :aria-label="'View details for ' + partiton.id"
         class="cursor-pointer border-b hover:bg-hover-secondary"
-        @click="navigateToGroup(group.id)"
-        @keydown.enter="navigateToGroup(group.id)"
-        @keydown.space.stop="navigateToGroup(group.id)">
+        @click="navigateToPartiton(partiton.id)"
+        @keydown.enter="navigateToPartiton(partiton.id)"
+        @keydown.space.stop="navigateToPartiton(partiton.id)">
         <td class="px-1 pl-6 py-4">
-          {{ group.name }}
+          {{ partiton.name }}
         </td>
-        <td class="px-1 pr-6 py-4">{{ group.budget }}円</td>
+        <td class="px-1 pr-6 py-4">{{ partiton.budget }}円</td>
       </tr>
     </tbody>
   </table>

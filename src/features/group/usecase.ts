@@ -1,77 +1,77 @@
-import { useGroupStore } from '/@/stores/group'
+import { usePartitonStore } from '/@/stores/partiton'
 
 import type { Partition, PartitionSeed } from './model'
 import { usePartitionRepository } from './repository'
-import { useGroupDetailStore } from '/@/stores/groupDetail'
+import { usePartitonDetailStore } from '/@/stores/partitonDetail'
 
-export const useFetchGroupsUsecase = async () => {
+export const useFetchPartitonsUsecase = async () => {
   const repository = usePartitionRepository()
-  const { groups, isGroupFetched } = useGroupStore()
+  const { partitons, isPartitonFetched } = usePartitonStore()
 
   try {
-    groups.value = await repository.fetchPartitions()
-    isGroupFetched.value = true
+    partitons.value = await repository.fetchPartitions()
+    isPartitonFetched.value = true
   } catch {
     throw new Error('パーティション一覧の取得に失敗しました')
   }
 }
 
-export const useFetchGroup = async (id: string) => {
+export const useFetchPartiton = async (id: string) => {
   const repository = usePartitionRepository()
-  const { group, editedValue } = useGroupDetailStore()
+  const { partiton, editedValue } = usePartitonDetailStore()
 
   try {
-    group.value = await repository.fetchPartition(id)
+    partiton.value = await repository.fetchPartition(id)
     editedValue.value = {
-      name: group.value.name,
-      budget: group.value.budget ?? 0,
-      management: group.value.management
+      name: partiton.value.name,
+      budget: partiton.value.budget ?? 0,
+      management: partiton.value.management
     }
   } catch {
     throw new Error('パーティションの取得に失敗しました')
   }
 }
 
-export const createGroupUsecase = async (partition: PartitionSeed) => {
+export const createPartitonUsecase = async (partition: PartitionSeed) => {
   const repository = usePartitionRepository()
-  const { groups } = useGroupStore()
+  const { partitons } = usePartitonStore()
 
   try {
     const res = await repository.createPartition(partition)
-    groups.value.unshift(res)
+    partitons.value.unshift(res)
   } catch {
     throw new Error('パーティションの作成に失敗しました')
   }
 }
 
-export const editGroupUsecase = async (
+export const editPartitonUsecase = async (
   id: string,
   partitionSeed: PartitionSeed
 ) => {
   const repository = usePartitionRepository()
-  const { group, editedValue } = useGroupDetailStore()
-  if (!group.value) return
+  const { partiton, editedValue } = usePartitonDetailStore()
+  if (!partiton.value) return
 
   try {
     const res = await repository.editPartition(id, partitionSeed)
-    group.value = res
+    partiton.value = res
   } catch {
     editedValue.value = {
-      name: group.value.name,
-      budget: group.value.budget ?? 0,
-      management: group.value.management
+      name: partiton.value.name,
+      budget: partiton.value.budget ?? 0,
+      management: partiton.value.management
     }
     throw new Error('パーティションの更新に失敗しました')
   }
 }
 
-export const deleteGroupUsecase = async (id: string) => {
+export const deletePartitonUsecase = async (id: string) => {
   const repository = usePartitionRepository()
-  const { groups } = useGroupStore()
+  const { partitons } = usePartitonStore()
 
   try {
     await repository.deletePartition(id)
-    groups.value = groups.value.filter((p: Partition) => p.id !== id)
+    partitons.value = partitons.value.filter((p: Partition) => p.id !== id)
   } catch {
     throw new Error('パーティションの削除に失敗しました')
   }

@@ -5,12 +5,12 @@ import { useToast } from 'vue-toastification'
 import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
-import type { ApplicationDetail } from '/@/features/request/model'
-import { changeStatusUsecase } from '/@/features/request/usecase'
-import type { ApplicationStatus } from '/@/features/requestStatus/model'
+import type { ApplicationDetail } from '/@/features/application/model'
+import { changeStatusUsecase } from '/@/features/application/usecase'
+import type { ApplicationStatus } from '/@/features/applicationStatus/model'
 
 const props = defineProps<{
-  request: ApplicationDetail
+  application: ApplicationDetail
   nextStatus: ApplicationStatus
 }>()
 const emit = defineEmits<(e: 'closeModal') => void>()
@@ -21,7 +21,7 @@ const comment = ref('')
 
 const putStatus = async (nextStatus: ApplicationStatus, comment: string) => {
   try {
-    await changeStatusUsecase(props.request.id, nextStatus, comment)
+    await changeStatusUsecase(props.application.id, nextStatus, comment)
     toast.success('申請の状態を変更しました')
     emit('closeModal')
   } catch {
@@ -37,7 +37,7 @@ const putStatus = async (nextStatus: ApplicationStatus, comment: string) => {
     <div class="flex flex-col gap-4">
       <div class="flex flex-wrap items-center gap-1">
         <span>申請の状態を</span>
-        <StatusChip class="mx-1" has-text :status="request.status" />
+        <StatusChip class="mx-1" has-text :status="application.status" />
         <span>から</span>
         <StatusChip class="mx-1" has-text :status="props.nextStatus" />
         <span>へ変更します</span>

@@ -5,15 +5,15 @@ const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/applications' },
   {
     path: '/applications',
-    component: () => import('./pages/RequestsPage.vue')
+    component: () => import('./pages/ApplicationsPage.vue')
   },
   {
     path: '/applications/new',
-    component: () => import('./pages/NewRequestPage.vue')
+    component: () => import('./pages/NewApplicationPage.vue')
   },
   {
     path: '/applications/:id',
-    component: () => import('./pages/RequestDetailPage.vue')
+    component: () => import('./pages/ApplicationDetailPage.vue')
   },
   {
     path: '/partitions',

@@ -9,7 +9,7 @@ import {
 } from '@heroicons/vue/24/solid'
 import { computed } from 'vue'
 
-import type { ApplicationStatus } from '/@/features/requestStatus/model'
+import type { ApplicationStatus } from '/@/features/applicationStatus/model'
 
 interface Props {
   status: ApplicationStatus

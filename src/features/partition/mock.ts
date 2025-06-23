@@ -29,8 +29,8 @@ export const partitionHandlers = [
     return new HttpResponse(null, { status: 404 })
   }),
 
-  http.post('/api/partitions', async ({ request }) => {
-    const seed = (await request.json()) as PartitionSeed
+  http.post('/api/partitions', async ({ application }) => {
+    const seed = (await application.json()) as PartitionSeed
     const partition: Partition = {
       ...mockPartition,
       name: seed.name,
@@ -40,8 +40,8 @@ export const partitionHandlers = [
     return HttpResponse.json(partition)
   }),
 
-  http.put('/api/partitions/:id', async ({ request }) => {
-    const seed = (await request.json()) as PartitionSeed
+  http.put('/api/partitions/:id', async ({ application }) => {
+    const seed = (await application.json()) as PartitionSeed
     const partition: Partition = {
       ...mockPartition,
       name: seed.name,

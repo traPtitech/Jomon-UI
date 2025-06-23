@@ -36,8 +36,8 @@ export const tagHandlers = [
 
     return HttpResponse.json(res)
   }),
-  http.post<PathParams, Tag, Tag>('/api/tags', async ({ request }) => {
-    const reqBody: Tag = await request.json()
+  http.post<PathParams, Tag, Tag>('/api/tags', async ({ application }) => {
+    const reqBody: Tag = await application.json()
     return HttpResponse.json(reqBody)
   }),
   http.delete('/api/tags/:id', () => {

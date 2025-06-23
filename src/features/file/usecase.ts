@@ -1,5 +1,5 @@
 import { convertFileAndMeta } from './converter'
-import type { FileSeed, FileData } from './model'
+import type { FileData, FileSeed } from './model'
 import { useFileRepository } from './repository'
 
 export const useFetchFilesUsecase = async (fileIds: string[]) => {
@@ -41,14 +41,14 @@ export const useFetchFileWithMetasUsecase = async (
 }
 
 export const createFilesUsecase = async (
-  requestId: string,
+  applicationId: string,
   fileSeeds: FileSeed[]
 ) => {
   const repository = useFileRepository()
 
   try {
     const promises = fileSeeds.map(fileSeed =>
-      repository.createFile(requestId, fileSeed)
+      repository.createFile(applicationId, fileSeed)
     )
     return await Promise.all(promises)
   } catch {
@@ -56,11 +56,11 @@ export const createFilesUsecase = async (
   }
 }
 
-export const deleteFileUsecase = async (requestId: string) => {
+export const deleteFileUsecase = async (applicationId: string) => {
   const repository = useFileRepository()
 
   try {
-    await repository.deleteFile(requestId)
+    await repository.deleteFile(applicationId)
   } catch {
     throw new Error('パーティションの削除に失敗しました')
   }

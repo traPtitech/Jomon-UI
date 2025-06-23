@@ -18,8 +18,8 @@ const createFileRepository = () => ({
 
     return convertFileMetaFromData(data)
   },
-  createFile: async (requestId: string, file: FileSeed) => {
-    await apis.postFile(file.file, file.name, requestId)
+  createFile: async (applicationId: string, file: FileSeed) => {
+    await apis.postFile(file.file, file.name, applicationId)
   },
   deleteFile: async (id: string) => {
     await apis.deleteFile(id)

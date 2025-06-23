@@ -57,8 +57,8 @@ export const applicationHandlers = [
   }),
   http.post<PathParams, Application, ApplicationDetail>(
     '/api/applications',
-    async ({ application }) => {
-      const reqBody: Application = await application.json()
+    async ({ request }) => {
+      const reqBody: Application = await request.json()
       const res: ApplicationDetail = {
         ...mockApplicationDetail,
         ...reqBody
@@ -78,8 +78,8 @@ export const applicationHandlers = [
   }),
   http.post<PathParams, PostComment, Comment>(
     '/api/applications/:id/comments',
-    async ({ application, params }) => {
-      const reqBody: PostComment = await application.json()
+    async ({ request, params }) => {
+      const reqBody: PostComment = await request.json()
       const res: Comment = {
         ...mockApplicationComment,
         id: params.id as string,

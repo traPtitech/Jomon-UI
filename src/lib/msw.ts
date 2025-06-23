@@ -20,7 +20,7 @@ export const initMock = () => {
   if (process.env.NODE_ENV === 'development') {
     const worker = setupWorker(...handlers)
     worker.start({
-      onUnhandledApplication: 'bypass'
+      onUnhandledRequest: 'bypass'
     })
   }
 }

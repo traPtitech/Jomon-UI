@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useGroupDetailStore } from '/@/stores/groupDetail'
+import { usePartitionDetailStore } from '/@/stores/partitionDetail'
 import { useUserStore } from '/@/stores/user'
 
-import type { EditMode } from '/@/components/groupDetail/composables/useGroupInformation'
+import type { EditMode } from '/@/components/partitionDetail/composables/usePartitionInformation'
 import EditButton from '/@/components/shared/EditButton.vue'
 import BaseInput from '/@/components/shared/BaseInput.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
@@ -19,13 +19,13 @@ const emit = defineEmits<{
 }>()
 
 const { me } = useUserStore()
-const { canEditGroup, group, editedValue } = useGroupDetailStore()
+const { canEditPartition, partition, editedValue } = usePartitionDetailStore()
 </script>
 
 <template>
-  <div v-if="group" class="flex items-center gap-3">
+  <div v-if="partition" class="flex items-center gap-3">
     <h1 v-if="!props.isEditMode" class="grow text-2xl">
-      {{ group.name }}
+      {{ partition.name }}
     </h1>
     <BaseInput
       v-else
@@ -40,7 +40,7 @@ const { canEditGroup, group, editedValue } = useGroupDetailStore()
       完了
     </SimpleButton>
     <EditButton
-      v-if="canEditGroup(me)"
+      v-if="canEditPartition(me)"
       :is-edit-mode="props.isEditMode"
       @click="
         props.isEditMode

@@ -3,21 +3,21 @@ import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import BaseInput from '/@/components/shared/BaseInput.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import { createGroupUsecase } from '/@/features/group/usecase'
+import { createPartitionUsecase } from '/@/features/partition/usecase'
 import { useFetchUsersUsecase } from '/@/features/user/usecase'
 import { useUserStore } from '/@/stores/user'
-import { useNewGroup } from './composables/useNewGroup'
+import { useNewPartition } from './composables/useNewPartition'
 
 const toast = useToast()
 const router = useRouter()
 
 const { isUserFetched } = useUserStore()
 
-const { isSending, group } = useNewGroup()
+const { isSending, partition } = useNewPartition()
 
-const handleCreateGroup = async () => {
+const handleCreatePartition = async () => {
   try {
-    await createGroupUsecase(group.value)
+    await createPartitionUsecase(partition.value)
     toast.success('パーティションを作成しました')
     router.push('/partitions')
   } catch (e) {
@@ -37,8 +37,8 @@ if (!isUserFetched.value) {
     <h1 class="text-2xl">パーティションの新規作成</h1>
   </div>
   <form class="flex flex-col gap-6">
-    <BaseInput v-model="group.name" label="パーティション名" required />
-    <BaseInput v-model="group.budget" type="number" label="予算" required>
+    <BaseInput v-model="partition.name" label="パーティション名" required />
+    <BaseInput v-model="partition.budget" type="number" label="予算" required>
       <span class="text-2xl font-bold ml-3 mt-auto mb-2 text-text-secondary">
         ¥
       </span>
@@ -49,7 +49,7 @@ if (!isUserFetched.value) {
         :disabled="isSending"
         font-size="xl"
         padding="md"
-        @click="handleCreateGroup">
+        @click="handleCreatePartition">
         パーティションを作成
       </SimpleButton>
     </div>

@@ -2,24 +2,24 @@
 import { ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
-import { useGroupStore } from '/@/stores/group'
+import { usePartitionStore } from '/@/stores/partition'
 import { useUserStore } from '/@/stores/user'
 
 import { toPage } from '/@/lib/parseQueryParams'
 
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import { useFetchGroupsUsecase } from '/@/features/group/usecase'
-import GroupTable from '/@/components/groups/GroupTable.vue'
+import { useFetchPartitionsUsecase } from '/@/features/partition/usecase'
+import PartitionTable from '/@/components/partitions/PartitionTable.vue'
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))
 
-const { groups, isGroupFetched } = useGroupStore()
+const { partitions, isPartitionFetched } = usePartitionStore()
 const { isAdmin } = useUserStore()
 
-if (!isGroupFetched.value) {
-  await useFetchGroupsUsecase()
+if (!isPartitionFetched.value) {
+  await useFetchPartitionsUsecase()
 }
 
 watch(
@@ -43,12 +43,12 @@ watch(
       </div>
     </div>
 
-    <GroupTable :page="page" :groups="groups" />
+    <PartitionTable :page="page" :partitions="partitions" />
 
     <PaginationBar
-      v-if="groups.length > 0"
+      v-if="partitions.length > 0"
       :current-page="page"
       path="/partitions"
-      :total-pages="Math.ceil(groups.length / 10)" />
+      :total-pages="Math.ceil(partitions.length / 10)" />
   </div>
 </template>

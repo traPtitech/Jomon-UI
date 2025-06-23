@@ -1,21 +1,21 @@
 import { http, HttpResponse, type PathParams } from 'msw'
 
 import type {
-  PostComment,
+  Application,
   ApplicationDetail,
   Comment,
-  StatusDetail,
-  Application
+  PostComment,
+  StatusDetail
 } from '/@/lib/apis'
 
-import { mockPartition } from '/@/features/group/mock'
+import { mockPartition } from '/@/features/partition/mock'
 import {
   mockRequestComment,
   mockRequestComments
 } from '/@/features/requestComment/mock'
 import {
-  mockApplicationStatus as mockRequestStatus,
-  mockApplicationStatuses
+  mockApplicationStatuses,
+  mockApplicationStatus as mockRequestStatus
 } from '/@/features/requestStatus/mock'
 import { mockRequestTargets } from '/@/features/requestTarget/mock'
 import { mockTags } from '/@/features/tag/mock'

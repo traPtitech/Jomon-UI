@@ -39,7 +39,7 @@ export const useAdmin = () => {
     try {
       isSending.value = true
       await addAdminsUsecase(adminsToBeAdded)
-      toast.success('会計士を追加しました')
+      toast.success('会計管理者を追加しました')
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message)
@@ -59,7 +59,7 @@ export const useAdmin = () => {
     try {
       isSending.value = true
       await removeAdminsUsecase(adminsToBeRemoved)
-      toast.success('会計士を削除しました')
+      toast.success('会計管理者を削除しました')
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message)

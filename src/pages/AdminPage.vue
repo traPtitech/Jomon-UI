@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
+import { useAdmin } from './composables/useAdmin'
 import SearchSelect from '/@/components/shared/SearchSelect.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { useFetchAdminsUsecase } from '/@/features/admin/usecase'
@@ -9,7 +10,6 @@ import { useFetchUsersUsecase } from '/@/features/user/usecase'
 import { useAdminStore } from '/@/stores/admin'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
-import { useAdmin } from './composables/useAdmin'
 
 const { isAdminFetched, admins, adminOptions } = useAdminStore()
 const { me, isUserFetched, isAdmin, userMap } = useUserStore()
@@ -55,7 +55,7 @@ if (me.value?.accountManager) {
   <div v-else class="flex flex-col gap-6">
     <h1 class="text-2xl">管理</h1>
     <div class="flex flex-col gap-3">
-      <h2 class="text-base font-medium">会計士</h2>
+      <h2 class="text-base font-medium">会計管理者</h2>
       <ul class="flex gap-3" aria-labelledby="admin-list">
         <li v-for="admin in admins" :key="admin">
           <div class="border-text-primary rounded-sm border px-2 text-center">
@@ -65,14 +65,14 @@ if (me.value?.accountManager) {
       </ul>
     </div>
     <div class="flex flex-col gap-3">
-      <h2 class="text-base font-medium">会計士の操作</h2>
+      <h2 class="text-base font-medium">会計管理者の操作</h2>
       <div class="flex flex-wrap gap-3">
         <SearchSelect
           v-model="addList"
           class="grow w-auto"
           multiple
           :options="absentMembers"
-          label="追加する会計士" />
+          label="追加する会計管理者" />
         <SimpleButton
           :disabled="isSending"
           font-size="lg"
@@ -83,7 +83,7 @@ if (me.value?.accountManager) {
               addList = []
             }
           ">
-          選択した会計士を追加
+          選択した会計管理者を追加
         </SimpleButton>
       </div>
       <div class="flex flex-wrap gap-3">
@@ -92,7 +92,7 @@ if (me.value?.accountManager) {
           class="grow w-auto"
           multiple
           :options="adminOptions"
-          label="削除する会計士" />
+          label="削除する会計管理者" />
         <SimpleButton
           :disabled="isSending"
           font-size="lg"
@@ -103,7 +103,7 @@ if (me.value?.accountManager) {
               removeList = []
             }
           ">
-          選択した会計士を削除
+          選択した会計管理者を削除
         </SimpleButton>
       </div>
     </div>

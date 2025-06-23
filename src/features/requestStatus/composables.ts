@@ -1,23 +1,26 @@
 import type { ApplicationStatus } from '/@/features/requestStatus/model'
 
-import { useUserStore } from '/@/stores/user'
-import type { ApplicationDetail } from '/@/features/request/model'
 import { computed } from 'vue'
 import { useRequest } from '/@/features/request/composables'
+import type { ApplicationDetail } from '/@/features/request/model'
+import { useUserStore } from '/@/stores/user'
 
 export const useStatusOptions = (request: ApplicationDetail) => {
-  const { me, isAdmin } = useUserStore()
+  const { me, isAccountManager } = useUserStore()
   const { isRequestCreator } = useRequest(request)
 
   const hasAuthority = isRequestCreator.value(me.value)
 
   const showToSubmitted =
     (hasAuthority && request.status === 'change_requested') ||
-    (isAdmin.value &&
+    (isAccountManager.value &&
       (request.status === 'change_requested' || request.status === 'approved'))
-  const showToRequired = isAdmin.value && request.status === 'submitted'
-  const showToAccepted = isAdmin.value && request.status === 'submitted'
-  const showToRejected = isAdmin.value && request.status === 'submitted'
+  const showToRequired =
+    isAccountManager.value && request.status === 'submitted'
+  const showToAccepted =
+    isAccountManager.value && request.status === 'submitted'
+  const showToRejected =
+    isAccountManager.value && request.status === 'submitted'
 
   const statusOptions = computed<
     { value: ApplicationStatus; key: string; show: boolean }[]

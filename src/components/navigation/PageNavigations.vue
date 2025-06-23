@@ -5,7 +5,7 @@ import { useUserStore } from '/@/stores/user'
 
 import HeaderButton from './HeaderButton.vue'
 
-const { isAdmin } = useUserStore()
+const { isAccountManager } = useUserStore()
 
 const route = useRoute()
 </script>
@@ -21,9 +21,9 @@ const route = useRoute()
       path="/partitions"
       text="パーティション一覧" />
     <HeaderButton
-      v-if="isAdmin"
-      :is-here="route.path === '/admins'"
-      path="/admins"
+      v-if="isAccountManager"
+      :is-here="route.path === '/account-managers'"
+      path="/account-managers"
       text="管理ページ" />
   </nav>
 </template>

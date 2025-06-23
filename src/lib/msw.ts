@@ -1,6 +1,6 @@
 import { setupWorker } from 'msw/browser'
 
-import { adminHandlers } from '/@/features/admin/mock'
+import { accountManagerHandlers } from '/@/features/accountManager/mock'
 import { fileHandlers } from '/@/features/file/mock'
 import { partitionHandlers } from '/@/features/partition/mock'
 import { requestHandlers } from '/@/features/request/mock'
@@ -10,7 +10,7 @@ import { userHandlers } from '/@/features/user/mock'
 const handlers = [
   requestHandlers,
   partitionHandlers,
-  adminHandlers,
+  accountManagerHandlers,
   tagHandlers,
   userHandlers,
   fileHandlers

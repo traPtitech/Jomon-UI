@@ -1,25 +1,25 @@
 import { computed, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import { useAdminStore } from '/@/stores/admin'
+import { useAccountManagerStore } from '/@/stores/accountManager'
 import { useUserStore } from '/@/stores/user'
 
 import {
-  addAdminsUsecase,
-  removeAdminsUsecase
-} from '/@/features/admin/usecase'
+  addAccountManagersUsecase,
+  removeAccountManagersUsecase
+} from '/@/features/accountManager/usecase'
 
-export const useAdmin = () => {
+export const useAccountManager = () => {
   const { users } = useUserStore()
-  const { admins } = useAdminStore()
+  const { accountManagers } = useAccountManagerStore()
   const toast = useToast()
 
   const absentMembers = computed(() => {
-    if (users.value === undefined || admins.value === undefined) {
+    if (users.value === undefined || accountManagers.value === undefined) {
       return []
     }
     return users.value
-      .filter(user => !admins.value?.includes(user.id))
+      .filter(user => !accountManagers.value?.includes(user.id))
       .map(user => ({
         key: user.name,
         value: user.id
@@ -28,8 +28,8 @@ export const useAdmin = () => {
 
   const isSending = ref(false)
 
-  const addAdmins = async (adminsToBeAdded: string[]) => {
-    if (adminsToBeAdded.length === 0) {
+  const addAccountManagers = async (accountManagersToBeAdded: string[]) => {
+    if (accountManagersToBeAdded.length === 0) {
       toast.warning('1人以上選択してください')
       return
     }
@@ -38,7 +38,7 @@ export const useAdmin = () => {
     }
     try {
       isSending.value = true
-      await addAdminsUsecase(adminsToBeAdded)
+      await addAccountManagersUsecase(accountManagersToBeAdded)
       toast.success('会計管理者を追加しました')
     } catch (e) {
       if (e instanceof Error) {
@@ -48,8 +48,10 @@ export const useAdmin = () => {
     isSending.value = false
   }
 
-  const removeAdmins = async (adminsToBeRemoved: string[]) => {
-    if (adminsToBeRemoved.length === 0) {
+  const removeAccountManagers = async (
+    accountManagersToBeRemoved: string[]
+  ) => {
+    if (accountManagersToBeRemoved.length === 0) {
       toast.warning('1人以上選択してください')
       return
     }
@@ -58,7 +60,7 @@ export const useAdmin = () => {
     }
     try {
       isSending.value = true
-      await removeAdminsUsecase(adminsToBeRemoved)
+      await removeAccountManagersUsecase(accountManagersToBeRemoved)
       toast.success('会計管理者を削除しました')
     } catch (e) {
       if (e instanceof Error) {
@@ -67,5 +69,5 @@ export const useAdmin = () => {
     }
     isSending.value = false
   }
-  return { absentMembers, isSending, addAdmins, removeAdmins }
+  return { absentMembers, isSending, addAccountManagers, removeAccountManagers }
 }

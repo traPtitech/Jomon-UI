@@ -1,25 +1,27 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
-import { useAdmin } from './composables/useAdmin'
+import { useAccountManager } from './composables/useAccountManager'
 import SearchSelect from '/@/components/shared/SearchSelect.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import { useFetchAdminsUsecase } from '/@/features/admin/usecase'
+import { useFetchAccountManagersUsecase } from '/@/features/accountManager/usecase'
 import { deleteTagsUsecase, useFetchTagsUsecase } from '/@/features/tag/usecase'
 import { useFetchUsersUsecase } from '/@/features/user/usecase'
-import { useAdminStore } from '/@/stores/admin'
+import { useAccountManagerStore } from '/@/stores/accountManager'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
-const { isAdminFetched, admins, adminOptions } = useAdminStore()
-const { me, isUserFetched, isAdmin, userMap } = useUserStore()
+const { isAccountManagerFetched, accountManagers, accountManagerOptions } =
+  useAccountManagerStore()
+const { me, isUserFetched, isAccountManager, userMap } = useUserStore()
 const { isTagFetched, tagIdOptions } = useTagStore()
 const toast = useToast()
 
 const addList = ref<string[]>([])
 const removeList = ref<string[]>([])
 const deleteTagList = ref<string[]>([])
-const { absentMembers, isSending, addAdmins, removeAdmins } = useAdmin()
+const { absentMembers, isSending, addAccountManagers, removeAccountManagers } =
+  useAccountManager()
 
 const handleDeleteTags = async () => {
   isSending.value = true
@@ -36,8 +38,8 @@ const handleDeleteTags = async () => {
 }
 
 if (me.value?.accountManager) {
-  if (!isAdminFetched.value) {
-    await useFetchAdminsUsecase()
+  if (!isAccountManagerFetched.value) {
+    await useFetchAccountManagersUsecase()
   }
   if (!isUserFetched.value) {
     await useFetchUsersUsecase()
@@ -49,17 +51,17 @@ if (me.value?.accountManager) {
 </script>
 
 <template>
-  <div v-if="!isAdmin" class="p-2" role="alert" aria-live="assertive">
+  <div v-if="!isAccountManager" class="p-2" role="alert" aria-live="assertive">
     権限がありません。
   </div>
   <div v-else class="flex flex-col gap-6">
     <h1 class="text-2xl">管理</h1>
     <div class="flex flex-col gap-3">
       <h2 class="text-base font-medium">会計管理者</h2>
-      <ul class="flex gap-3" aria-labelledby="admin-list">
-        <li v-for="admin in admins" :key="admin">
+      <ul class="flex gap-3" aria-labelledby="accountManager-list">
+        <li v-for="accountManager in accountManagers" :key="accountManager">
           <div class="border-text-primary rounded-sm border px-2 text-center">
-            {{ userMap[admin] }}
+            {{ userMap[accountManager] }}
           </div>
         </li>
       </ul>
@@ -79,7 +81,7 @@ if (me.value?.accountManager) {
           padding="sm"
           @click.stop="
             () => {
-              addAdmins(addList)
+              addAccountManagers(addList)
               addList = []
             }
           ">
@@ -91,7 +93,7 @@ if (me.value?.accountManager) {
           v-model="removeList"
           class="grow w-auto"
           multiple
-          :options="adminOptions"
+          :options="accountManagerOptions"
           label="削除する会計管理者" />
         <SimpleButton
           :disabled="isSending"
@@ -99,7 +101,7 @@ if (me.value?.accountManager) {
           padding="sm"
           @click.stop="
             () => {
-              removeAdmins(removeList)
+              removeAccountManagers(removeList)
               removeList = []
             }
           ">

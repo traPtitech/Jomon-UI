@@ -7,16 +7,16 @@ import { useUserStore } from '/@/stores/user'
 
 import { toPage } from '/@/lib/parseQueryParams'
 
+import PartitionTable from '/@/components/partitions/PartitionTable.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { useFetchPartitionsUsecase } from '/@/features/partition/usecase'
-import PartitionTable from '/@/components/partitions/PartitionTable.vue'
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))
 
 const { partitions, isPartitionFetched } = usePartitionStore()
-const { isAdmin } = useUserStore()
+const { isAccountManager } = useUserStore()
 
 if (!isPartitionFetched.value) {
   await useFetchPartitionsUsecase()
@@ -34,7 +34,7 @@ watch(
   <div class="flex flex-col gap-7">
     <div class="relative flex flex-wrap gap-x-7 gap-y-2 w-full items-center">
       <h1 class="text-2xl">パーティション一覧</h1>
-      <div v-if="isAdmin">
+      <div v-if="isAccountManager">
         <RouterLink to="/partitions/new">
           <SimpleButton font-size="lg" padding="md">
             パーティションを作成

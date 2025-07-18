@@ -46,7 +46,7 @@ function changeCurrentTab(tab: TabType) {
 </script>
 
 <template>
-  <div class="flex flex-col rounded-sm border border-surface-secondary">
+  <div class="h-1/2 flex flex-col rounded-sm border border-surface-secondary">
     <div
       class="flex items-center justify-between rounded-t bg-hover-secondary px-4 pt-3">
       <div class="flex items-center">
@@ -81,17 +81,17 @@ function changeCurrentTab(tab: TabType) {
         label="テンプレートを選択"
         @update:model-value="setTemplate($event)" />
     </div>
-    <div class="px-5 py-3">
+    <div class="px-5 py-3 h-3/5">
       <BaseInput
         v-if="currentTab === 'input'"
         v-model="model"
         type="textarea"
         :label="props.label"
-        class="min-h-40 w-full"
+        class="min-h-40 w-full h-1/2 overflow-y-auto resize-none"
         :placeholder="placeholder" />
       <MarkdownIt
         v-if="currentTab === 'preview'"
-        class="min-h-40 w-full overflow-y-scroll rounded-sm border border-surface-secondary px-3 py-2"
+        class="min-h-10 h-1/2 w-full overflow-y-scroll rounded-sm border border-surface-secondary px-3 py-2"
         :text="model" />
       <div class="flex justify-end pt-3">
         <slot />

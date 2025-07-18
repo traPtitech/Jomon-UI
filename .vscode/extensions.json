@@ -4,6 +4,7 @@
     "vue.volar",
     "github.vscode-pull-request-github",
     "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss"
   ],
   "unwantedRecommendations": ["octref.vetur"]
 }

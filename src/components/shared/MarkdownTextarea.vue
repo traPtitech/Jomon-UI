@@ -46,7 +46,7 @@ function changeCurrentTab(tab: TabType) {
 </script>
 
 <template>
-  <div class="h-1/2 flex flex-col rounded-sm border border-surface-secondary">
+  <div class="min-h-25 h-3/5 flex flex-col rounded-sm border border-surface-secondary">
     <div
       class="flex items-center justify-between rounded-t bg-hover-secondary px-4 pt-3">
       <div class="flex items-center">
@@ -87,11 +87,11 @@ function changeCurrentTab(tab: TabType) {
         v-model="model"
         type="textarea"
         :label="props.label"
-        class="min-h-40 h-7/10 w-full overflow-y-auto resize-none"
+        class="h-full w-full overflow-y-auto resize-none"
         :placeholder="placeholder" />
       <MarkdownIt
         v-if="currentTab === 'preview'"
-        class="min-h-10 h-12/10 w-full overflow-y-scroll rounded-sm border border-surface-secondary px-3 py-2"
+        class="h-1/1 w-full overflow-y-scroll rounded-sm border border-surface-secondary px-3 py-2"
         :text="model" />
       <div class="flex justify-end pt-3">
         <slot />

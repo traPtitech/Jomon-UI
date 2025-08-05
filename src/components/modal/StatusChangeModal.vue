@@ -32,9 +32,9 @@ const putStatus = async (nextStatus: ApplicationStatus, comment: string) => {
 
 <template>
   <div
-    class="absolute inset-0 m-auto h-6/10 w-19/20 lg:w-3/5 max-w-200  bg-white shadow-lg flex flex-col gap-6 pt-4 px-12">
+    class="absolute inset-0 m-auto min-h-80 h-6/10 w-19/20 lg:w-3/5 max-w-200  bg-white shadow-lg flex flex-col gap-6 pt-4 px-12">
     <h1 class="text-center text-3xl">申請の状態変更</h1>
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4 h-5/5 min-h-60">
       <div class="flex flex-wrap items-center gap-1">
         <span>申請の状態を</span>
         <StatusChip class="mx-1" has-text :status="application.status" />
@@ -44,11 +44,7 @@ const putStatus = async (nextStatus: ApplicationStatus, comment: string) => {
       </div>
       <MarkdownTextarea v-model="comment" label="コメント" />
       <div class="flex justify-end">
-        <SimpleButton
-          font-size="xl"
-          padding="sm"
-          type="success"
-          @click="putStatus(nextStatus, comment)">
+        <SimpleButton font-size="xl" padding="sm" type="success" @click="putStatus(nextStatus, comment)">
           申請の状態を変更する
         </SimpleButton>
       </div>

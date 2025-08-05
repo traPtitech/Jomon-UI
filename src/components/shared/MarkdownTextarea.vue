@@ -51,7 +51,7 @@ function changeCurrentTab(tab: TabType) {
       class="flex items-center justify-between rounded-t bg-hover-secondary px-4 pt-3">
       <div class="flex items-center">
         <button
-          :class="`rounded-t py-2 px-4 h-12 ${
+          :class="`rounded-t py-2 px-4 h-15 ${
             currentTab === 'input'
               ? 'bg-surface-primary border-t border-x border-surface-secondary'
               : 'bg-hover-secondary'
@@ -62,7 +62,7 @@ function changeCurrentTab(tab: TabType) {
           <PencilSquareIcon class="w-6" />
         </button>
         <button
-          :class="`rounded-t py-2 px-4 h-12 ${
+          :class="`rounded-t py-2 px-4 h-15 ${
             currentTab === 'preview'
               ? 'bg-surface-primary border-t border-x border-surface-secondary'
               : 'bg-hover-secondary'

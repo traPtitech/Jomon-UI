@@ -203,7 +203,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
         ref="inputRef"
         v-model="searchTerm"
         :label="label"
-        :class="['pr-8', disabled && 'opacity-50 cursor-not-allowed']"
+        :class="['h-12 pr-8', disabled && 'opacity-50 cursor-not-allowed']"
         :placeholder="getPlaceholderText"
         :disabled="disabled"
         @focus="handleInputFocus"

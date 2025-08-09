@@ -91,7 +91,7 @@ function changeCurrentTab(tab: TabType) {
         :placeholder="placeholder" />
       <MarkdownIt
         v-if="currentTab === 'preview'"
-        class="h-1/1 w-full overflow-y-scroll rounded-sm border border-surface-secondary px-3 py-2"
+        class="h-full w-full overflow-y-scroll rounded-sm border border-surface-secondary px-3 py-2"
         :text="model" />
       <div class="flex justify-end pt-3">
         <slot />

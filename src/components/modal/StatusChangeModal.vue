@@ -32,7 +32,7 @@ const putStatus = async (nextStatus: ApplicationStatus, comment: string) => {
 
 <template>
   <div
-    class="absolute inset-0 m-auto min-h-80 h-6/10 w-19/20 lg:w-3/5 max-w-200  bg-white shadow-lg flex flex-col gap-6 pt-4 px-12">
+    class="absolute inset-0 m-auto min-h-100 h-6/10 w-19/20 lg:w-3/5 max-w-200  bg-white shadow-lg flex flex-col gap-6 pt-4 px-12">
     <h1 class="text-center text-3xl">申請の状態変更</h1>
     <div class="flex flex-col gap-4 h-full min-h-60">
       <div class="flex flex-wrap items-center gap-1">

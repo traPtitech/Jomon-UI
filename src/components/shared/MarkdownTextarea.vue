@@ -46,7 +46,8 @@ function changeCurrentTab(tab: TabType) {
 </script>
 
 <template>
-  <div class="min-h-25 h-3/5 flex flex-col rounded-sm border border-surface-secondary">
+  <div
+    class="min-h-25 h-3/5 flex flex-col rounded-sm border border-surface-secondary">
     <div
       class="flex items-center justify-between rounded-t bg-hover-secondary px-4 pt-3">
       <div class="flex items-center">

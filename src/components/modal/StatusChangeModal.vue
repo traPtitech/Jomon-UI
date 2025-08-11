@@ -44,7 +44,7 @@ const putStatus = async (nextStatus: ApplicationStatus, comment: string) => {
       </div>
       <MarkdownTextarea v-model="comment" label="コメント" />
       <div class="flex justify-end">
-        <SimpleButton font-size="xl" padding="sm" type="success" @click="putStatus(nextStatus, comment)">
+        <SimpleButton class="mb-5" font-size="xl" padding="sm" type="success" @click="putStatus(nextStatus, comment)">
           申請の状態を変更する
         </SimpleButton>
       </div>

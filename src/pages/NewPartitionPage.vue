@@ -1,37 +1,14 @@
 <script lang="ts" setup>
-import { useRouter } from 'vue-router'
-import { useToast } from 'vue-toastification'
 import BaseInput from '/@/components/shared/BaseInput.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import { createPartitionUsecase } from '/@/features/partition/usecase'
+
 import { useFetchUsersUsecase } from '/@/features/user/usecase'
 import { useUserStore } from '/@/stores/user'
 import { useNewPartition } from './composables/useNewPartition'
 
-const toast = useToast()
-const router = useRouter()
-
 const { isUserFetched } = useUserStore()
 
-const { isSending, partition } = useNewPartition()
-
-const handleCreatePartition = async () => {
-  if (
-    partition.value.name === ''
-  ) {
-    toast.warning('パーティション名は必須です')
-    return
-  }
-  try {
-    await createPartitionUsecase(partition.value)
-    toast.success('パーティションを作成しました')
-    router.push('/partitions')
-  } catch (e) {
-    if (e instanceof Error) {
-      toast.error(e.message)
-    }
-  }
-}
+const { isSending, partition, handleCreatePartition } = useNewPartition()
 
 if (!isUserFetched.value) {
   await useFetchUsersUsecase()

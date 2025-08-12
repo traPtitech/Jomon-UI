@@ -16,6 +16,12 @@ const { isUserFetched } = useUserStore()
 const { isSending, partition } = useNewPartition()
 
 const handleCreatePartition = async () => {
+  if (
+    partition.value.name === ''
+  ) {
+    toast.warning('パーティション名は必須です')
+    return
+  }
   try {
     await createPartitionUsecase(partition.value)
     toast.success('パーティションを作成しました')
@@ -44,11 +50,7 @@ if (!isUserFetched.value) {
       </span>
     </BaseInput>
     <div>
-      <SimpleButton
-        class="ml-auto mt-8 block"
-        :disabled="isSending"
-        font-size="xl"
-        padding="md"
+      <SimpleButton class="ml-auto mt-8 block" :disabled="isSending" font-size="xl" padding="md"
         @click="handleCreatePartition">
         パーティションを作成
       </SimpleButton>

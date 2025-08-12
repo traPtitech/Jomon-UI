@@ -46,12 +46,13 @@ function changeCurrentTab(tab: TabType) {
 </script>
 
 <template>
-  <div class="flex flex-col rounded-sm border border-surface-secondary">
+  <div
+    class="min-h-25 h-3/5 flex flex-col rounded-sm border border-surface-secondary">
     <div
       class="flex items-center justify-between rounded-t bg-hover-secondary px-4 pt-3">
       <div class="flex items-center">
         <button
-          :class="`rounded-t py-2 px-4 ${
+          :class="`rounded-t py-2 px-4 h-15 ${
             currentTab === 'input'
               ? 'bg-surface-primary border-t border-x border-surface-secondary'
               : 'bg-hover-secondary'
@@ -62,7 +63,7 @@ function changeCurrentTab(tab: TabType) {
           <PencilSquareIcon class="w-6" />
         </button>
         <button
-          :class="`rounded-t py-2 px-4 ${
+          :class="`rounded-t py-2 px-4 h-15 ${
             currentTab === 'preview'
               ? 'bg-surface-primary border-t border-x border-surface-secondary'
               : 'bg-hover-secondary'
@@ -81,17 +82,17 @@ function changeCurrentTab(tab: TabType) {
         label="テンプレートを選択"
         @update:model-value="setTemplate($event)" />
     </div>
-    <div class="px-5 py-3">
+    <div class="px-5 py-3 h-3/5">
       <BaseInput
         v-if="currentTab === 'input'"
         v-model="model"
         type="textarea"
         :label="props.label"
-        class="min-h-40 w-full"
+        class="h-full w-full overflow-y-auto resize-none"
         :placeholder="placeholder" />
       <MarkdownIt
         v-if="currentTab === 'preview'"
-        class="min-h-40 w-full overflow-y-scroll rounded-sm border border-surface-secondary px-3 py-2"
+        class="h-full w-full overflow-y-scroll rounded-sm border border-surface-secondary px-3 py-2"
         :text="model" />
       <div class="flex justify-end pt-3">
         <slot />

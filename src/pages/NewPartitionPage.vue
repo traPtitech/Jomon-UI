@@ -16,6 +16,12 @@ const { isUserFetched } = useUserStore()
 const { isSending, partition } = useNewPartition()
 
 const handleCreatePartition = async () => {
+  if (
+    partition.value.name === ''
+  ) {
+    toast.warning('パーティション名は必須です')
+    return
+  }
   try {
     await createPartitionUsecase(partition.value)
     toast.success('パーティションを作成しました')

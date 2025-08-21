@@ -13,7 +13,6 @@ const handleKeydown = (e: KeyboardEvent) => {
 const isAnyFocused = ref(false)
 
 const updateFocusState = () => {
-  // 今フォーカスされている要素が input かどうか確認
   const active = document.activeElement
   isAnyFocused.value = active && active.tagName === "TEXTAREA"
 }

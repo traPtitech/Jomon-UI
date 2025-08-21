@@ -28,9 +28,6 @@ onUnmounted(() => {
   window.removeEventListener("focusout", updateFocusState)
 })
 
-setInterval(() => {
-  console.log(isAnyFocused.value);
-}, 100);
 </script>
 
 <template>

@@ -8,16 +8,14 @@ on:
     types:
       - created
       - edited
-
-permissions:
-  issues: write
-  pull-requests: write
-  contents: write
-
 jobs:
   pr_agent_job:
     if: ${{github.event.sender.type != 'Bot' && github.event.pull_request.draft == false}}
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: write
     name: Run pr agent on every pull request, respond to user comments
     steps:
       - name: PR Agent action step

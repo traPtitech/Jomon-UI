@@ -45,6 +45,8 @@ jobs:
         with:
           name: node_modules
           path: node_modules
+      - name: Restore executable permissions
+        run: chmod +x -R ./node_modules/.bin/
       - uses: actions/download-artifact@v4
         with:
           name: apis
@@ -63,6 +65,8 @@ jobs:
         with:
           name: node_modules
           path: node_modules
+      - name: Restore executable permissions
+        run: chmod +x -R ./node_modules/.bin/
       - uses: actions/download-artifact@v4
         with:
           name: apis
@@ -81,6 +85,8 @@ jobs:
         with:
           name: node_modules
           path: node_modules
+      - name: Restore executable permissions
+        run: chmod +x -R ./node_modules/.bin/
       - uses: actions/download-artifact@v4
         with:
           name: apis
@@ -99,6 +105,8 @@ jobs:
         with:
           name: node_modules
           path: node_modules
+      - name: Restore executable permissions
+        run: chmod +x -R ./node_modules/.bin/
       - run: npm run gen-api
       - name: Check for differences in generated APIs
         run: |
@@ -119,6 +127,8 @@ jobs:
         with:
           name: node_modules
           path: node_modules
+      - name: Restore executable permissions
+        run: chmod +x -R ./node_modules/.bin/
       - run: npx msw init
       - name: Check for differences in msw worker
         run: |
@@ -139,6 +149,8 @@ jobs:
         with:
           name: node_modules
           path: node_modules
+      - name: Restore executable permissions
+        run: chmod +x -R ./node_modules/.bin/
       - uses: actions/download-artifact@v4
         with:
           name: apis

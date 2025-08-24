@@ -22,7 +22,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: ./.node-version
-          cache: npm
       - name: Cache node_modules
         id: cache-node-modules
         uses: actions/cache@v4
@@ -40,7 +39,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: src/lib/apis/generated
-          key: ${{ runner.os }}-apis-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-apis-${{ hashFiles('**/openapitools.json', '**/scripts/generate-apis.ts') }}
   type-check:
     name: Type Check
     runs-on: ubuntu-latest

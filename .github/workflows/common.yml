@@ -90,6 +90,23 @@ jobs:
             echo "Generated APIs are outdated or modified. Please run 'npm run gen-api' and commit the changes."
             exit 1
           }
+  check-msw:
+    name: Check MSW
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ./.node-version
+          cache: npm
+      - run: npm ci
+      - run: npx msw init
+      - name: Check for differences in msw worker
+        run: |
+          git diff --exit-code public/mockServiceWorker.js || {
+            echo "public/mockServiceWorker.js is outdated. Please run 'npx msw init' and commit the changes."
+            exit 1
+          }
   build:
     name: Build
     runs-on: ubuntu-latest

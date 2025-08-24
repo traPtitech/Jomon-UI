@@ -26,11 +26,11 @@ jobs:
       - run: npm ci
       - name: Archive node_modules
         run: tar -czf node_modules.tar.gz node_modules
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v4
         with:
           name: node-modules-archive
           path: node_modules.tar.gz
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v4
         with:
           name: apis
           path: ./src/lib/apis/generated

@@ -11,8 +11,8 @@ permissions:
   actions: read
 
 jobs:
-  dependencies:
-    name: Prepare packages and Generate apis
+  install:
+    name: Install Dependencies
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -26,20 +26,26 @@ jobs:
       - run: npm ci
       - uses: actions/upload-artifact@v4
         with:
+          name: node_modules
+          path: node_modules
+      - uses: actions/upload-artifact@v4
+        with:
           name: apis
           path: ./src/lib/apis/generated
   type-check:
     name: Type Check
     runs-on: ubuntu-latest
-    needs: [dependencies]
+    needs: [install]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
           node-version-file: ./.node-version
-          cache: npm
-      - run: npm ci
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v4
+        with:
+          name: node_modules
+          path: node_modules
+      - uses: actions/download-artifact@v4
         with:
           name: apis
           path: ./src/lib/apis/generated
@@ -47,15 +53,17 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
-    needs: [dependencies]
+    needs: [install]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
           node-version-file: ./.node-version
-          cache: npm
-      - run: npm ci
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v4
+        with:
+          name: node_modules
+          path: node_modules
+      - uses: actions/download-artifact@v4
         with:
           name: apis
           path: ./src/lib/apis/generated
@@ -63,15 +71,17 @@ jobs:
   format:
     name: Format
     runs-on: ubuntu-latest
-    needs: [dependencies]
+    needs: [install]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
           node-version-file: ./.node-version
-          cache: npm
-      - run: npm ci
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v4
+        with:
+          name: node_modules
+          path: node_modules
+      - uses: actions/download-artifact@v4
         with:
           name: apis
           path: ./src/lib/apis/generated
@@ -79,14 +89,16 @@ jobs:
   genApi:
     name: Generate APIs
     runs-on: ubuntu-latest
-    needs: [dependencies]
+    needs: [install]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
           node-version-file: ./.node-version
-          cache: npm
-      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: node_modules
+          path: node_modules
       - run: npm run gen-api
       - name: Check for differences in generated APIs
         run: |
@@ -97,13 +109,16 @@ jobs:
   check-msw:
     name: Check MSW
     runs-on: ubuntu-latest
+    needs: [install]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
           node-version-file: ./.node-version
-          cache: npm
-      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: node_modules
+          path: node_modules
       - run: npx msw init
       - name: Check for differences in msw worker
         run: |
@@ -114,15 +129,17 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [dependencies]
+    needs: [install]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
           node-version-file: ./.node-version
-          cache: npm
-      - run: npm ci
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v4
+        with:
+          name: node_modules
+          path: node_modules
+      - uses: actions/download-artifact@v4
         with:
           name: apis
           path: ./src/lib/apis/generated

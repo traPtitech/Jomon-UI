@@ -1,0 +1,27 @@
+name: 'Node.js Setup'
+description: 'Checks out code, sets up Node.js, and caches dependencies'
+inputs:
+  cache-apis:
+    description: 'Whether to cache the generated apis directory'
+    required: false
+    default: 'false'
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v5
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: ./.node-version
+    - name: Cache node_modules
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+    - name: Cache generated APIs
+      if: inputs.cache-apis == 'true'
+      uses: actions/cache@v4
+      with:
+        path: src/lib/apis/generated
+        key: ${{ runner.os }}-apis-${{ hashFiles('**/package-lock.json') }}

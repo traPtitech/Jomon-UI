@@ -46,75 +46,34 @@ jobs:
     runs-on: ubuntu-latest
     needs: [install]
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
+      - uses: ./.github/actions/setup
         with:
-          node-version-file: ./.node-version
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-      - name: Cache generated APIs
-        uses: actions/cache@v4
-        with:
-          path: src/lib/apis/generated
-          key: ${{ runner.os }}-apis-${{ hashFiles('**/package-lock.json') }}
+          cache-apis: true
       - run: npm run type-check
   lint:
     name: Lint
     runs-on: ubuntu-latest
     needs: [install]
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
+      - uses: ./.github/actions/setup
         with:
-          node-version-file: ./.node-version
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-      - name: Cache generated APIs
-        uses: actions/cache@v4
-        with:
-          path: src/lib/apis/generated
-          key: ${{ runner.os }}-apis-${{ hashFiles('**/package-lock.json') }}
+          cache-apis: true
       - run: npm run lint:nofix -- --max-warnings=0
   format:
     name: Format
     runs-on: ubuntu-latest
     needs: [install]
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
+      - uses: ./.github/actions/setup
         with:
-          node-version-file: ./.node-version
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-      - name: Cache generated APIs
-        uses: actions/cache@v4
-        with:
-          path: src/lib/apis/generated
-          key: ${{ runner.os }}-apis-${{ hashFiles('**/package-lock.json') }}
+          cache-apis: true
       - run: npm run format:check
   genApi:
     name: Generate APIs
     runs-on: ubuntu-latest
     needs: [install]
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: ./.node-version
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - uses: ./.github/actions/setup
       - run: npm run gen-api
       - name: Check for differences in generated APIs
         run: |
@@ -127,15 +86,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [install]
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: ./.node-version
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - uses: ./.github/actions/setup
       - run: npx msw init
       - name: Check for differences in msw worker
         run: |
@@ -148,18 +99,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [install]
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
+      - uses: ./.github/actions/setup
         with:
-          node-version-file: ./.node-version
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-      - name: Cache generated APIs
-        uses: actions/cache@v4
-        with:
-          path: src/lib/apis/generated
-          key: ${{ runner.os }}-apis-${{ hashFiles('**/package-lock.json') }}
+          cache-apis: true
       - run: npm run build

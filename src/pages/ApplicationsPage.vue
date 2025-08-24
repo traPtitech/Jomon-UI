@@ -7,6 +7,7 @@ import { usePartitionStore } from '/@/stores/partition'
 import { useTagStore } from '/@/stores/tag'
 import { useUserStore } from '/@/stores/user'
 
+import { useResourceFetcher } from '/@/lib/composables/useResourceFetcher'
 import { toPage } from '/@/lib/parseQueryParams'
 
 import ApplicationItem from '/@/components/applications/ApplicationItem.vue'
@@ -19,30 +20,25 @@ import { useFetchUsersUsecase } from '/@/features/user/usecase'
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))
+const APPLICATIONS_PER_PAGE = 7
 
 const { applications, isApplicationFetched } = useApplicationStore()
 const { isTagFetched } = useTagStore()
 const { isPartitionFetched } = usePartitionStore()
 const { isUserFetched } = useUserStore()
 
+// TODO: APIの `/applications` が返す件数の総数を返さないため、
+// いったんフロントでページネーションを行っている
 const sliceApplicationsAt = (index: number, n: number) => {
   const start = (index - 1) * n
   const end = index * n
   return applications.value?.slice(start, end) ?? []
 }
 
-if (!isApplicationFetched.value) {
-  useFetchApplicationsUsecase()
-}
-if (!isTagFetched.value) {
-  useFetchTagsUsecase()
-}
-if (!isPartitionFetched.value) {
-  useFetchPartitionsUsecase()
-}
-if (!isUserFetched.value) {
-  useFetchUsersUsecase()
-}
+useResourceFetcher(isApplicationFetched, useFetchApplicationsUsecase)
+useResourceFetcher(isTagFetched, useFetchTagsUsecase)
+useResourceFetcher(isPartitionFetched, useFetchPartitionsUsecase)
+useResourceFetcher(isUserFetched, useFetchUsersUsecase)
 
 watch(
   () => route.query.page,
@@ -70,7 +66,7 @@ watch(
       <div class="mx-auto rounded-xl shadow">
         <ul>
           <li
-            v-for="application in sliceApplicationsAt(page, 7)"
+            v-for="application in sliceApplicationsAt(page, APPLICATIONS_PER_PAGE)"
             :key="application.id"
             class="hover:bg-hover-secondary">
             <ApplicationItem :application="application" />
@@ -82,6 +78,6 @@ watch(
       v-if="applications.length > 0"
       :current-page="page"
       path="/applications"
-      :total-pages="Math.ceil(applications.length / 7)" />
+      :total-pages="Math.ceil(applications.length / APPLICATIONS_PER_PAGE)" />
   </div>
 </template>

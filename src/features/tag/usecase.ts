@@ -15,7 +15,7 @@ export const useFetchTagsUsecase = async () => {
   }
 }
 
-// TODO: composablesでまとめる&空文字じゃなくてnullで判定する
+// TODO: composablesでまとめる
 export const createTagIfNotExistUsecase = async (
   containNewTags: Tag[]
 ): Promise<Tag[]> => {
@@ -24,10 +24,10 @@ export const createTagIfNotExistUsecase = async (
 
   const alreadyExists: Tag[] = []
 
-  // idが空文字のタグは新しいタグなので新規作成する
+  // idがないタグは新しいタグなので新規作成する
   const promises: ReturnType<typeof repository.createTag>[] = []
   for (const tag of containNewTags) {
-    if (tag.id === '') {
+    if (!tag.id) {
       promises.push(repository.createTag(tag.name))
     } else {
       alreadyExists.push(tag)

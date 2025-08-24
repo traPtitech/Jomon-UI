@@ -8,12 +8,15 @@ on:
 
 permissions:
   contents: read
-  actions: write
+  actions: read
 
 jobs:
   dependencies:
     name: Prepare packages and Generate apis
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

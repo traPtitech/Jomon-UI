@@ -20,10 +20,8 @@ runs:
       uses: actions/cache@v4
       with:
         path: node_modules
-        key: ${{ runner.os }}-node-${{ github.ref }}-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-node-${{ github.ref }}-
-          ${{ runner.os }}-node-refs/heads/main-
           ${{ runner.os }}-node-
     - name: Verify node_modules cache
       shell: bash
@@ -37,10 +35,8 @@ runs:
       uses: actions/cache@v4
       with:
         path: src/lib/apis/generated
-        key: ${{ runner.os }}-apis-${{ github.ref }}-${{ hashFiles('**/openapitools.json', '**/scripts/generate-apis.ts') }}
+        key: ${{ runner.os }}-apis-${{ hashFiles('**/openapitools.json', '**/scripts/generate-apis.ts') }}
         restore-keys: |
-          ${{ runner.os }}-apis-${{ github.ref }}-
-          ${{ runner.os }}-apis-refs/heads/main-
           ${{ runner.os }}-apis-
     - name: Verify generated APIs cache
       if: inputs.cache-apis == 'true'

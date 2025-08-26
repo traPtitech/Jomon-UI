@@ -39,9 +39,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: src/lib/apis/generated
-          key: ${{ runner.os }}-apis-${{ hashFiles('**/openapitools.json', '**/scripts/generate-apis.ts') }}
+          key: ${{ runner.os }}-apis-${{ hashFiles('**/openapitools.json', '**/scripts/generate-apis.ts') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-apis-
+            ${{ runner.os }}-apis-${{ hashFiles('**/openapitools.json', '**/scripts/generate-apis.ts') }}-
   type-check:
     name: Type Check
     runs-on: ubuntu-latest

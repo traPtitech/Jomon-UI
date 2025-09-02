@@ -24,7 +24,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const statusToJpn = computed(() => (status: ApplicationStatus) => {
   switch (status) {
-    case 'submitted':
+    case 'pending_review':
       return '承認待ち'
     case 'change_requested':
       return '要修正'
@@ -41,7 +41,7 @@ const statusToJpn = computed(() => (status: ApplicationStatus) => {
 
 const backgroundColor = computed(() => (status: ApplicationStatus) => {
   switch (status) {
-    case 'submitted':
+    case 'pending_review':
       return 'bg-status-submitted'
     case 'change_requested':
       return 'bg-status-fix-required'
@@ -64,7 +64,9 @@ const backgroundColor = computed(() => (status: ApplicationStatus) => {
     )}${hasMenu ? ' cursor-pointer' : ''}`"
     :title="statusToJpn(status)">
     <CheckCircleIcon v-if="status === 'approved'" class="w-6" />
-    <ExclamationTriangleIcon v-else-if="status === 'submitted'" class="w-6" />
+    <ExclamationTriangleIcon
+      v-else-if="status === 'pending_review'"
+      class="w-6" />
     <XCircleIcon v-else-if="status === 'change_requested'" class="w-6" />
     <CloudArrowUpIcon v-else-if="status === 'rejected'" class="w-6" />
     <HandThumbUpIcon v-else-if="status === 'payment_finished'" class="w-6" />

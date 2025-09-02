@@ -9,9 +9,8 @@ const createAccountManagerRepository = () => ({
     const { data } = await apis.getAccountManagers()
     return data
   },
-  addAccountManagers: async (accountManagers: string[]): Promise<string[]> => {
-    await apis.postAccountManagers(accountManagers)
-    return accountManagers //TODO: レスポンスほしい
+  addAccountManagers: async (accountManagers: string[]) => {
+    await apis.postAccountManagers(accountManagers) //TODO: レスポンスほしい
   },
   removeAccountManagers: async (accountManagers: string[]) => {
     await apis.deleteAccountManagers(accountManagers)

@@ -1,7 +1,6 @@
-import type { FileMeta as FileMetaData } from '/@/lib/apis'
-
-import type { FileMeta, FileData } from './model'
 import { DateTime } from 'luxon'
+import type { FileData, FileMeta } from './model'
+import type { FileMeta as FileMetaData } from '/@/lib/apis'
 
 export const convertFileMetaFromData = (fileMeta: FileMetaData): FileMeta => ({
   id: fileMeta.id,

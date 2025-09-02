@@ -1,4 +1,4 @@
-# PutUser
+# PartitionGroupInput
 
 
 ## Properties
@@ -6,18 +6,18 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **string** |  | [default to undefined]
-**display_name** | **string** |  | [default to undefined]
-**account_manager** | **boolean** |  | [default to undefined]
+**child_partitions** | **Array&lt;string&gt;** |  | [default to undefined]
+**child_partition_groups** | **Array&lt;string&gt;** |  | [default to undefined]
 
 ## Example
 
 ```typescript
-import { PutUser } from './api';
+import { PartitionGroupInput } from './api';
 
-const instance: PutUser = {
+const instance: PartitionGroupInput = {
     name,
-    display_name,
-    account_manager,
+    child_partitions,
+    child_partition_groups,
 };
 ```
 

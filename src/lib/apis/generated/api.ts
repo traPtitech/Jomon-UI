@@ -41,10 +41,10 @@ export interface Application {
     'id': string;
     /**
      * 
-     * @type {string}
+     * @type {StatusEnum}
      * @memberof Application
      */
-    'status': ApplicationStatusEnum;
+    'status': StatusEnum;
     /**
      * 
      * @type {string}
@@ -77,10 +77,10 @@ export interface Application {
     'content': string;
     /**
      * 
-     * @type {Array<ApplicationTargetDetail>}
+     * @type {Array<ApplicationTarget>}
      * @memberof Application
      */
-    'targets': Array<ApplicationTargetDetail>;
+    'targets': Array<ApplicationTarget>;
     /**
      * 
      * @type {Array<Tag>}
@@ -95,15 +95,6 @@ export interface Application {
     'partition': Partition;
 }
 
-export const ApplicationStatusEnum = {
-    Submitted: 'submitted',
-    ChangeRequested: 'change_requested',
-    Approved: 'approved',
-    PaymentFinished: 'payment_finished',
-    Rejected: 'rejected'
-} as const;
-
-export type ApplicationStatusEnum = typeof ApplicationStatusEnum[keyof typeof ApplicationStatusEnum];
 
 /**
  * 
@@ -173,10 +164,10 @@ export interface ApplicationDetail {
     'partition': Partition;
     /**
      * 
-     * @type {Array<ApplicationTargetDetail>}
+     * @type {Array<ApplicationTarget>}
      * @memberof ApplicationDetail
      */
-    'targets': Array<ApplicationTargetDetail>;
+    'targets': Array<ApplicationTarget>;
     /**
      * 
      * @type {string}
@@ -214,58 +205,101 @@ export interface ApplicationFile {
 /**
  * 
  * @export
+ * @interface ApplicationInput
+ */
+export interface ApplicationInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplicationInput
+     */
+    'created_by': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplicationInput
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplicationInput
+     */
+    'content': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ApplicationInput
+     */
+    'tags': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplicationInput
+     */
+    'partition': string;
+    /**
+     * 
+     * @type {Array<ApplicationTargetInput>}
+     * @memberof ApplicationInput
+     */
+    'targets': Array<ApplicationTargetInput>;
+}
+/**
+ * 
+ * @export
  * @interface ApplicationTarget
  */
 export interface ApplicationTarget {
     /**
      * 
-     * @type {number}
-     * @memberof ApplicationTarget
-     */
-    'amount': number;
-    /**
-     * 
      * @type {string}
      * @memberof ApplicationTarget
-     */
-    'target': string;
-}
-/**
- * 
- * @export
- * @interface ApplicationTargetDetail
- */
-export interface ApplicationTargetDetail {
-    /**
-     * 
-     * @type {string}
-     * @memberof ApplicationTargetDetail
      */
     'id': string;
     /**
      * 
      * @type {number}
-     * @memberof ApplicationTargetDetail
+     * @memberof ApplicationTarget
      */
     'amount': number;
     /**
      * 
      * @type {string}
-     * @memberof ApplicationTargetDetail
+     * @memberof ApplicationTarget
      */
     'target': string;
     /**
      * 
      * @type {string}
-     * @memberof ApplicationTargetDetail
+     * @memberof ApplicationTarget
      */
     'paid_at': string | null;
     /**
      * 
      * @type {string}
-     * @memberof ApplicationTargetDetail
+     * @memberof ApplicationTarget
      */
     'created_at': string;
+}
+/**
+ * 
+ * @export
+ * @interface ApplicationTargetInput
+ */
+export interface ApplicationTargetInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof ApplicationTargetInput
+     */
+    'amount': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApplicationTargetInput
+     */
+    'target': string;
 }
 /**
  * 
@@ -338,6 +372,19 @@ export interface Comment {
 /**
  * 
  * @export
+ * @interface CommentInput
+ */
+export interface CommentInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof CommentInput
+     */
+    'comment': string;
+}
+/**
+ * 
+ * @export
  * @interface FileMeta
  */
 export interface FileMeta {
@@ -365,43 +412,6 @@ export interface FileMeta {
      * @memberof FileMeta
      */
     'created_at': string;
-}
-/**
- * 
- * @export
- * @interface GetTag200Response
- */
-export interface GetTag200Response {
-    /**
-     * 
-     * @type {string}
-     * @memberof GetTag200Response
-     */
-    'id': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetTag200Response
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetTag200Response
-     */
-    'created_at': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof GetTag200Response
-     */
-    'updated_at': string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof GetTag200Response
-     */
-    'applications'?: Array<string>;
 }
 /**
  * 
@@ -449,6 +459,99 @@ export interface Partition {
 /**
  * 
  * @export
+ * @interface PartitionGroup
+ */
+export interface PartitionGroup {
+    /**
+     * 
+     * @type {string}
+     * @memberof PartitionGroup
+     */
+    'id': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PartitionGroup
+     */
+    'name': string;
+    /**
+     * 
+     * @type {Array<Partition>}
+     * @memberof PartitionGroup
+     */
+    'child_partitions': Array<Partition>;
+    /**
+     * 
+     * @type {Array<PartitionGroup>}
+     * @memberof PartitionGroup
+     */
+    'child_partition_groups': Array<PartitionGroup>;
+    /**
+     * 
+     * @type {string}
+     * @memberof PartitionGroup
+     */
+    'created_at': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PartitionGroup
+     */
+    'updated_at': string;
+}
+/**
+ * 
+ * @export
+ * @interface PartitionGroupInput
+ */
+export interface PartitionGroupInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof PartitionGroupInput
+     */
+    'name': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof PartitionGroupInput
+     */
+    'child_partitions': Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof PartitionGroupInput
+     */
+    'child_partition_groups': Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface PartitionInput
+ */
+export interface PartitionInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof PartitionInput
+     */
+    'name': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PartitionInput
+     */
+    'budget': number | null;
+    /**
+     * 
+     * @type {PartitionManagement}
+     * @memberof PartitionInput
+     */
+    'management': PartitionManagement;
+}
+/**
+ * 
+ * @export
  * @interface PartitionManagement
  */
 export interface PartitionManagement {
@@ -481,62 +584,6 @@ export type PartitionManagementStateEnum = typeof PartitionManagementStateEnum[k
 /**
  * 
  * @export
- * @interface PostApplication
- */
-export interface PostApplication {
-    /**
-     * 
-     * @type {string}
-     * @memberof PostApplication
-     */
-    'created_by': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostApplication
-     */
-    'title': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostApplication
-     */
-    'content': string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof PostApplication
-     */
-    'tags': Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof PostApplication
-     */
-    'partition': string;
-    /**
-     * 
-     * @type {Array<ApplicationTarget>}
-     * @memberof PostApplication
-     */
-    'targets': Array<ApplicationTarget>;
-}
-/**
- * 
- * @export
- * @interface PostComment
- */
-export interface PostComment {
-    /**
-     * 
-     * @type {string}
-     * @memberof PostComment
-     */
-    'comment': string;
-}
-/**
- * 
- * @export
  * @interface PostFile200Response
  */
 export interface PostFile200Response {
@@ -546,90 +593,6 @@ export interface PostFile200Response {
      * @memberof PostFile200Response
      */
     'id'?: string;
-}
-/**
- * 
- * @export
- * @interface PostPartition
- */
-export interface PostPartition {
-    /**
-     * 
-     * @type {string}
-     * @memberof PostPartition
-     */
-    'name': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof PostPartition
-     */
-    'budget': number | null;
-    /**
-     * 
-     * @type {PartitionManagement}
-     * @memberof PostPartition
-     */
-    'management': PartitionManagement;
-}
-/**
- * 
- * @export
- * @interface PostTag
- */
-export interface PostTag {
-    /**
-     * 
-     * @type {string}
-     * @memberof PostTag
-     */
-    'name': string;
-}
-/**
- * 
- * @export
- * @interface PutStatus
- */
-export interface PutStatus {
-    /**
-     * 
-     * @type {StatusEnum}
-     * @memberof PutStatus
-     */
-    'status': StatusEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof PutStatus
-     */
-    'comment': string;
-}
-
-
-/**
- * 
- * @export
- * @interface PutUser
- */
-export interface PutUser {
-    /**
-     * 
-     * @type {string}
-     * @memberof PutUser
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PutUser
-     */
-    'display_name': string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof PutUser
-     */
-    'account_manager': boolean;
 }
 /**
  * 
@@ -698,7 +661,7 @@ export interface StatusDetail {
  */
 
 export const StatusEnum = {
-    Submitted: 'submitted',
+    PendingReview: 'pending_review',
     ChangeRequested: 'change_requested',
     Approved: 'approved',
     PaymentFinished: 'payment_finished',
@@ -706,6 +669,27 @@ export const StatusEnum = {
 } as const;
 
 export type StatusEnum = typeof StatusEnum[keyof typeof StatusEnum];
+
+
+/**
+ * 
+ * @export
+ * @interface StatusInput
+ */
+export interface StatusInput {
+    /**
+     * 
+     * @type {StatusEnum}
+     * @memberof StatusInput
+     */
+    'status': StatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof StatusInput
+     */
+    'comment': string;
+}
 
 
 /**
@@ -738,6 +722,19 @@ export interface Tag {
      * @memberof Tag
      */
     'updated_at': string;
+}
+/**
+ * 
+ * @export
+ * @interface TagInput
+ */
+export interface TagInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof TagInput
+     */
+    'name': string;
 }
 /**
  * 
@@ -1144,13 +1141,13 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 申請を新規作成する。
-         * @param {PostApplication} postApplication 
+         * @param {ApplicationInput} applicationInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postApplication: async (postApplication: PostApplication, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postApplication' is not null or undefined
-            assertParamExists('postApplication', 'postApplication', postApplication)
+        postApplication: async (applicationInput: ApplicationInput, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'applicationInput' is not null or undefined
+            assertParamExists('postApplication', 'applicationInput', applicationInput)
             const localVarPath = `/applications`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1170,7 +1167,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postApplication, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(applicationInput, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1180,15 +1177,15 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
         /**
          * 指定した申請にコメントを新規作成する。
          * @param {string} applicationID 
-         * @param {PostComment} postComment 
+         * @param {CommentInput} commentInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postComment: async (applicationID: string, postComment: PostComment, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        postComment: async (applicationID: string, commentInput: CommentInput, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'applicationID' is not null or undefined
             assertParamExists('postComment', 'applicationID', applicationID)
-            // verify required parameter 'postComment' is not null or undefined
-            assertParamExists('postComment', 'postComment', postComment)
+            // verify required parameter 'commentInput' is not null or undefined
+            assertParamExists('postComment', 'commentInput', commentInput)
             const localVarPath = `/applications/{applicationID}/comments`
                 .replace(`{${"applicationID"}}`, encodeURIComponent(String(applicationID)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1209,7 +1206,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postComment, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(commentInput, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1219,15 +1216,15 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
         /**
          * 指定した申請を修正する。作成者権限が必要。
          * @param {string} applicationID 
-         * @param {PostApplication} postApplication 
+         * @param {ApplicationInput} applicationInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putApplicationDetail: async (applicationID: string, postApplication: PostApplication, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        putApplicationDetail: async (applicationID: string, applicationInput: ApplicationInput, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'applicationID' is not null or undefined
             assertParamExists('putApplicationDetail', 'applicationID', applicationID)
-            // verify required parameter 'postApplication' is not null or undefined
-            assertParamExists('putApplicationDetail', 'postApplication', postApplication)
+            // verify required parameter 'applicationInput' is not null or undefined
+            assertParamExists('putApplicationDetail', 'applicationInput', applicationInput)
             const localVarPath = `/applications/{applicationID}`
                 .replace(`{${"applicationID"}}`, encodeURIComponent(String(applicationID)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1248,7 +1245,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postApplication, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(applicationInput, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1256,17 +1253,17 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             };
         },
         /**
-         * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの行き来の定義は作成者は「change_requestedからsubmitted」をでき、accountManagerは「submittedからrejected」「submittedからchange_requested」「change_requestedからsubmitted」「submittedからapproved」「approvedからsubmitted（ただしすでに支払われている人がいた場合、この操作は不可)」の操作のみ可。ただし、「approvedからfully_repaid」の操作はここでは行えない。accountManager権限または作成者権限が必要。
+         * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、accountManagerはpayment_finishedを除く任意の状態間で可能。ただしapprovedからの変更は、すでに支払われている人がいた場合不可。payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
          * @param {string} applicationID 
-         * @param {PutStatus} putStatus 
+         * @param {StatusInput} statusInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putStatus: async (applicationID: string, putStatus: PutStatus, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        putStatus: async (applicationID: string, statusInput: StatusInput, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'applicationID' is not null or undefined
             assertParamExists('putStatus', 'applicationID', applicationID)
-            // verify required parameter 'putStatus' is not null or undefined
-            assertParamExists('putStatus', 'putStatus', putStatus)
+            // verify required parameter 'statusInput' is not null or undefined
+            assertParamExists('putStatus', 'statusInput', statusInput)
             const localVarPath = `/applications/{applicationID}/status`
                 .replace(`{${"applicationID"}}`, encodeURIComponent(String(applicationID)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1287,7 +1284,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(putStatus, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(statusInput, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1339,12 +1336,12 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 申請を新規作成する。
-         * @param {PostApplication} postApplication 
+         * @param {ApplicationInput} applicationInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postApplication(postApplication: PostApplication, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplicationDetail>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.postApplication(postApplication, options);
+        async postApplication(applicationInput: ApplicationInput, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplicationDetail>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postApplication(applicationInput, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.postApplication']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1352,12 +1349,12 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
         /**
          * 指定した申請にコメントを新規作成する。
          * @param {string} applicationID 
-         * @param {PostComment} postComment 
+         * @param {CommentInput} commentInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postComment(applicationID: string, postComment: PostComment, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Comment>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.postComment(applicationID, postComment, options);
+        async postComment(applicationID: string, commentInput: CommentInput, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Comment>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postComment(applicationID, commentInput, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.postComment']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1365,25 +1362,25 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
         /**
          * 指定した申請を修正する。作成者権限が必要。
          * @param {string} applicationID 
-         * @param {PostApplication} postApplication 
+         * @param {ApplicationInput} applicationInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async putApplicationDetail(applicationID: string, postApplication: PostApplication, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplicationDetail>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.putApplicationDetail(applicationID, postApplication, options);
+        async putApplicationDetail(applicationID: string, applicationInput: ApplicationInput, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplicationDetail>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putApplicationDetail(applicationID, applicationInput, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.putApplicationDetail']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの行き来の定義は作成者は「change_requestedからsubmitted」をでき、accountManagerは「submittedからrejected」「submittedからchange_requested」「change_requestedからsubmitted」「submittedからapproved」「approvedからsubmitted（ただしすでに支払われている人がいた場合、この操作は不可)」の操作のみ可。ただし、「approvedからfully_repaid」の操作はここでは行えない。accountManager権限または作成者権限が必要。
+         * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、accountManagerはpayment_finishedを除く任意の状態間で可能。ただしapprovedからの変更は、すでに支払われている人がいた場合不可。payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
          * @param {string} applicationID 
-         * @param {PutStatus} putStatus 
+         * @param {StatusInput} statusInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async putStatus(applicationID: string, putStatus: PutStatus, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StatusDetail>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.putStatus(applicationID, putStatus, options);
+        async putStatus(applicationID: string, statusInput: StatusInput, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StatusDetail>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putStatus(applicationID, statusInput, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.putStatus']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1427,42 +1424,42 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
         },
         /**
          * 申請を新規作成する。
-         * @param {PostApplication} postApplication 
+         * @param {ApplicationInput} applicationInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postApplication(postApplication: PostApplication, options?: RawAxiosRequestConfig): AxiosPromise<ApplicationDetail> {
-            return localVarFp.postApplication(postApplication, options).then((request) => request(axios, basePath));
+        postApplication(applicationInput: ApplicationInput, options?: RawAxiosRequestConfig): AxiosPromise<ApplicationDetail> {
+            return localVarFp.postApplication(applicationInput, options).then((request) => request(axios, basePath));
         },
         /**
          * 指定した申請にコメントを新規作成する。
          * @param {string} applicationID 
-         * @param {PostComment} postComment 
+         * @param {CommentInput} commentInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postComment(applicationID: string, postComment: PostComment, options?: RawAxiosRequestConfig): AxiosPromise<Comment> {
-            return localVarFp.postComment(applicationID, postComment, options).then((request) => request(axios, basePath));
+        postComment(applicationID: string, commentInput: CommentInput, options?: RawAxiosRequestConfig): AxiosPromise<Comment> {
+            return localVarFp.postComment(applicationID, commentInput, options).then((request) => request(axios, basePath));
         },
         /**
          * 指定した申請を修正する。作成者権限が必要。
          * @param {string} applicationID 
-         * @param {PostApplication} postApplication 
+         * @param {ApplicationInput} applicationInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putApplicationDetail(applicationID: string, postApplication: PostApplication, options?: RawAxiosRequestConfig): AxiosPromise<ApplicationDetail> {
-            return localVarFp.putApplicationDetail(applicationID, postApplication, options).then((request) => request(axios, basePath));
+        putApplicationDetail(applicationID: string, applicationInput: ApplicationInput, options?: RawAxiosRequestConfig): AxiosPromise<ApplicationDetail> {
+            return localVarFp.putApplicationDetail(applicationID, applicationInput, options).then((request) => request(axios, basePath));
         },
         /**
-         * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの行き来の定義は作成者は「change_requestedからsubmitted」をでき、accountManagerは「submittedからrejected」「submittedからchange_requested」「change_requestedからsubmitted」「submittedからapproved」「approvedからsubmitted（ただしすでに支払われている人がいた場合、この操作は不可)」の操作のみ可。ただし、「approvedからfully_repaid」の操作はここでは行えない。accountManager権限または作成者権限が必要。
+         * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、accountManagerはpayment_finishedを除く任意の状態間で可能。ただしapprovedからの変更は、すでに支払われている人がいた場合不可。payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
          * @param {string} applicationID 
-         * @param {PutStatus} putStatus 
+         * @param {StatusInput} statusInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putStatus(applicationID: string, putStatus: PutStatus, options?: RawAxiosRequestConfig): AxiosPromise<StatusDetail> {
-            return localVarFp.putStatus(applicationID, putStatus, options).then((request) => request(axios, basePath));
+        putStatus(applicationID: string, statusInput: StatusInput, options?: RawAxiosRequestConfig): AxiosPromise<StatusDetail> {
+            return localVarFp.putStatus(applicationID, statusInput, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1507,49 +1504,49 @@ export class ApplicationsApi extends BaseAPI {
 
     /**
      * 申請を新規作成する。
-     * @param {PostApplication} postApplication 
+     * @param {ApplicationInput} applicationInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public postApplication(postApplication: PostApplication, options?: RawAxiosRequestConfig) {
-        return ApplicationsApiFp(this.configuration).postApplication(postApplication, options).then((request) => request(this.axios, this.basePath));
+    public postApplication(applicationInput: ApplicationInput, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).postApplication(applicationInput, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 指定した申請にコメントを新規作成する。
      * @param {string} applicationID 
-     * @param {PostComment} postComment 
+     * @param {CommentInput} commentInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public postComment(applicationID: string, postComment: PostComment, options?: RawAxiosRequestConfig) {
-        return ApplicationsApiFp(this.configuration).postComment(applicationID, postComment, options).then((request) => request(this.axios, this.basePath));
+    public postComment(applicationID: string, commentInput: CommentInput, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).postComment(applicationID, commentInput, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 指定した申請を修正する。作成者権限が必要。
      * @param {string} applicationID 
-     * @param {PostApplication} postApplication 
+     * @param {ApplicationInput} applicationInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public putApplicationDetail(applicationID: string, postApplication: PostApplication, options?: RawAxiosRequestConfig) {
-        return ApplicationsApiFp(this.configuration).putApplicationDetail(applicationID, postApplication, options).then((request) => request(this.axios, this.basePath));
+    public putApplicationDetail(applicationID: string, applicationInput: ApplicationInput, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).putApplicationDetail(applicationID, applicationInput, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの行き来の定義は作成者は「change_requestedからsubmitted」をでき、accountManagerは「submittedからrejected」「submittedからchange_requested」「change_requestedからsubmitted」「submittedからapproved」「approvedからsubmitted（ただしすでに支払われている人がいた場合、この操作は不可)」の操作のみ可。ただし、「approvedからfully_repaid」の操作はここでは行えない。accountManager権限または作成者権限が必要。
+     * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、accountManagerはpayment_finishedを除く任意の状態間で可能。ただしapprovedからの変更は、すでに支払われている人がいた場合不可。payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
      * @param {string} applicationID 
-     * @param {PutStatus} putStatus 
+     * @param {StatusInput} statusInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public putStatus(applicationID: string, putStatus: PutStatus, options?: RawAxiosRequestConfig) {
-        return ApplicationsApiFp(this.configuration).putStatus(applicationID, putStatus, options).then((request) => request(this.axios, this.basePath));
+    public putStatus(applicationID: string, statusInput: StatusInput, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).putStatus(applicationID, statusInput, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2018,6 +2015,39 @@ export const PartitionsApiAxiosParamCreator = function (configuration?: Configur
             };
         },
         /**
+         * パーティショングループを削除する。accountManager権限が必要。
+         * @param {string} partitionGroupID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePartitionGroup: async (partitionGroupID: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'partitionGroupID' is not null or undefined
+            assertParamExists('deletePartitionGroup', 'partitionGroupID', partitionGroupID)
+            const localVarPath = `/partition-groups/{partitionGroupID}`
+                .replace(`{${"partitionGroupID"}}`, encodeURIComponent(String(partitionGroupID)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * パーティションの情報を返す。
          * @param {string} partitionID 
          * @param {*} [options] Override http request option.
@@ -2028,6 +2058,68 @@ export const PartitionsApiAxiosParamCreator = function (configuration?: Configur
             assertParamExists('getPartition', 'partitionID', partitionID)
             const localVarPath = `/partitions/{partitionID}`
                 .replace(`{${"partitionID"}}`, encodeURIComponent(String(partitionID)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * パーティショングループの情報を返す。
+         * @param {string} partitionGroupID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPartitionGroup: async (partitionGroupID: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'partitionGroupID' is not null or undefined
+            assertParamExists('getPartitionGroup', 'partitionGroupID', partitionGroupID)
+            const localVarPath = `/partition-groups/{partitionGroupID}`
+                .replace(`{${"partitionGroupID"}}`, encodeURIComponent(String(partitionGroupID)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * パーティショングループの一覧を返す。
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPartitionGroups: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/partition-groups`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2081,13 +2173,13 @@ export const PartitionsApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * パーティションを追加する。accountManager権限が必要。
-         * @param {PostPartition} postPartition 
+         * @param {PartitionInput} partitionInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postPartition: async (postPartition: PostPartition, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postPartition' is not null or undefined
-            assertParamExists('postPartition', 'postPartition', postPartition)
+        postPartition: async (partitionInput: PartitionInput, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'partitionInput' is not null or undefined
+            assertParamExists('postPartition', 'partitionInput', partitionInput)
             const localVarPath = `/partitions`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2107,7 +2199,42 @@ export const PartitionsApiAxiosParamCreator = function (configuration?: Configur
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postPartition, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(partitionInput, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * パーティショングループを追加する。accountManager権限が必要。
+         * @param {PartitionGroupInput} partitionGroupInput 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postPartitionGroup: async (partitionGroupInput: PartitionGroupInput, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'partitionGroupInput' is not null or undefined
+            assertParamExists('postPartitionGroup', 'partitionGroupInput', partitionGroupInput)
+            const localVarPath = `/partition-groups`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(partitionGroupInput, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2117,15 +2244,15 @@ export const PartitionsApiAxiosParamCreator = function (configuration?: Configur
         /**
          * パーティションの情報を変更する。accountManager権限が必要。
          * @param {string} partitionID 
-         * @param {PostPartition} postPartition 
+         * @param {PartitionInput} partitionInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putPartition: async (partitionID: string, postPartition: PostPartition, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        putPartition: async (partitionID: string, partitionInput: PartitionInput, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'partitionID' is not null or undefined
             assertParamExists('putPartition', 'partitionID', partitionID)
-            // verify required parameter 'postPartition' is not null or undefined
-            assertParamExists('putPartition', 'postPartition', postPartition)
+            // verify required parameter 'partitionInput' is not null or undefined
+            assertParamExists('putPartition', 'partitionInput', partitionInput)
             const localVarPath = `/partitions/{partitionID}`
                 .replace(`{${"partitionID"}}`, encodeURIComponent(String(partitionID)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2146,7 +2273,46 @@ export const PartitionsApiAxiosParamCreator = function (configuration?: Configur
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postPartition, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(partitionInput, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * パーティショングループの情報を変更する。accountManager権限が必要。
+         * @param {string} partitionGroupID 
+         * @param {PartitionGroupInput} partitionGroupInput 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putPartitionGroup: async (partitionGroupID: string, partitionGroupInput: PartitionGroupInput, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'partitionGroupID' is not null or undefined
+            assertParamExists('putPartitionGroup', 'partitionGroupID', partitionGroupID)
+            // verify required parameter 'partitionGroupInput' is not null or undefined
+            assertParamExists('putPartitionGroup', 'partitionGroupInput', partitionGroupInput)
+            const localVarPath = `/partition-groups/{partitionGroupID}`
+                .replace(`{${"partitionGroupID"}}`, encodeURIComponent(String(partitionGroupID)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(partitionGroupInput, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2176,6 +2342,18 @@ export const PartitionsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * パーティショングループを削除する。accountManager権限が必要。
+         * @param {string} partitionGroupID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deletePartitionGroup(partitionGroupID: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deletePartitionGroup(partitionGroupID, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PartitionsApi.deletePartitionGroup']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * パーティションの情報を返す。
          * @param {string} partitionID 
          * @param {*} [options] Override http request option.
@@ -2185,6 +2363,29 @@ export const PartitionsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPartition(partitionID, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PartitionsApi.getPartition']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * パーティショングループの情報を返す。
+         * @param {string} partitionGroupID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPartitionGroup(partitionGroupID: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartitionGroup>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPartitionGroup(partitionGroupID, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PartitionsApi.getPartitionGroup']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * パーティショングループの一覧を返す。
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPartitionGroups(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<PartitionGroup>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPartitionGroups(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PartitionsApi.getPartitionGroups']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2200,27 +2401,52 @@ export const PartitionsApiFp = function(configuration?: Configuration) {
         },
         /**
          * パーティションを追加する。accountManager権限が必要。
-         * @param {PostPartition} postPartition 
+         * @param {PartitionInput} partitionInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postPartition(postPartition: PostPartition, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Partition>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.postPartition(postPartition, options);
+        async postPartition(partitionInput: PartitionInput, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Partition>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postPartition(partitionInput, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PartitionsApi.postPartition']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * パーティションの情報を変更する。accountManager権限が必要。
-         * @param {string} partitionID 
-         * @param {PostPartition} postPartition 
+         * パーティショングループを追加する。accountManager権限が必要。
+         * @param {PartitionGroupInput} partitionGroupInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async putPartition(partitionID: string, postPartition: PostPartition, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Partition>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.putPartition(partitionID, postPartition, options);
+        async postPartitionGroup(partitionGroupInput: PartitionGroupInput, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartitionGroup>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postPartitionGroup(partitionGroupInput, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PartitionsApi.postPartitionGroup']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * パーティションの情報を変更する。accountManager権限が必要。
+         * @param {string} partitionID 
+         * @param {PartitionInput} partitionInput 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putPartition(partitionID: string, partitionInput: PartitionInput, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Partition>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putPartition(partitionID, partitionInput, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PartitionsApi.putPartition']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * パーティショングループの情報を変更する。accountManager権限が必要。
+         * @param {string} partitionGroupID 
+         * @param {PartitionGroupInput} partitionGroupInput 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putPartitionGroup(partitionGroupID: string, partitionGroupInput: PartitionGroupInput, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartitionGroup>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putPartitionGroup(partitionGroupID, partitionGroupInput, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PartitionsApi.putPartitionGroup']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -2243,6 +2469,15 @@ export const PartitionsApiFactory = function (configuration?: Configuration, bas
             return localVarFp.deletePartition(partitionID, options).then((request) => request(axios, basePath));
         },
         /**
+         * パーティショングループを削除する。accountManager権限が必要。
+         * @param {string} partitionGroupID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePartitionGroup(partitionGroupID: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.deletePartitionGroup(partitionGroupID, options).then((request) => request(axios, basePath));
+        },
+        /**
          * パーティションの情報を返す。
          * @param {string} partitionID 
          * @param {*} [options] Override http request option.
@@ -2250,6 +2485,23 @@ export const PartitionsApiFactory = function (configuration?: Configuration, bas
          */
         getPartition(partitionID: string, options?: RawAxiosRequestConfig): AxiosPromise<Partition> {
             return localVarFp.getPartition(partitionID, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * パーティショングループの情報を返す。
+         * @param {string} partitionGroupID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPartitionGroup(partitionGroupID: string, options?: RawAxiosRequestConfig): AxiosPromise<PartitionGroup> {
+            return localVarFp.getPartitionGroup(partitionGroupID, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * パーティショングループの一覧を返す。
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPartitionGroups(options?: RawAxiosRequestConfig): AxiosPromise<Array<PartitionGroup>> {
+            return localVarFp.getPartitionGroups(options).then((request) => request(axios, basePath));
         },
         /**
          * パーティションの一覧を返す。
@@ -2261,22 +2513,41 @@ export const PartitionsApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * パーティションを追加する。accountManager権限が必要。
-         * @param {PostPartition} postPartition 
+         * @param {PartitionInput} partitionInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postPartition(postPartition: PostPartition, options?: RawAxiosRequestConfig): AxiosPromise<Partition> {
-            return localVarFp.postPartition(postPartition, options).then((request) => request(axios, basePath));
+        postPartition(partitionInput: PartitionInput, options?: RawAxiosRequestConfig): AxiosPromise<Partition> {
+            return localVarFp.postPartition(partitionInput, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * パーティショングループを追加する。accountManager権限が必要。
+         * @param {PartitionGroupInput} partitionGroupInput 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postPartitionGroup(partitionGroupInput: PartitionGroupInput, options?: RawAxiosRequestConfig): AxiosPromise<PartitionGroup> {
+            return localVarFp.postPartitionGroup(partitionGroupInput, options).then((request) => request(axios, basePath));
         },
         /**
          * パーティションの情報を変更する。accountManager権限が必要。
          * @param {string} partitionID 
-         * @param {PostPartition} postPartition 
+         * @param {PartitionInput} partitionInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putPartition(partitionID: string, postPartition: PostPartition, options?: RawAxiosRequestConfig): AxiosPromise<Partition> {
-            return localVarFp.putPartition(partitionID, postPartition, options).then((request) => request(axios, basePath));
+        putPartition(partitionID: string, partitionInput: PartitionInput, options?: RawAxiosRequestConfig): AxiosPromise<Partition> {
+            return localVarFp.putPartition(partitionID, partitionInput, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * パーティショングループの情報を変更する。accountManager権限が必要。
+         * @param {string} partitionGroupID 
+         * @param {PartitionGroupInput} partitionGroupInput 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putPartitionGroup(partitionGroupID: string, partitionGroupInput: PartitionGroupInput, options?: RawAxiosRequestConfig): AxiosPromise<PartitionGroup> {
+            return localVarFp.putPartitionGroup(partitionGroupID, partitionGroupInput, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2300,6 +2571,17 @@ export class PartitionsApi extends BaseAPI {
     }
 
     /**
+     * パーティショングループを削除する。accountManager権限が必要。
+     * @param {string} partitionGroupID 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartitionsApi
+     */
+    public deletePartitionGroup(partitionGroupID: string, options?: RawAxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).deletePartitionGroup(partitionGroupID, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * パーティションの情報を返す。
      * @param {string} partitionID 
      * @param {*} [options] Override http request option.
@@ -2308,6 +2590,27 @@ export class PartitionsApi extends BaseAPI {
      */
     public getPartition(partitionID: string, options?: RawAxiosRequestConfig) {
         return PartitionsApiFp(this.configuration).getPartition(partitionID, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * パーティショングループの情報を返す。
+     * @param {string} partitionGroupID 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartitionsApi
+     */
+    public getPartitionGroup(partitionGroupID: string, options?: RawAxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).getPartitionGroup(partitionGroupID, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * パーティショングループの一覧を返す。
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartitionsApi
+     */
+    public getPartitionGroups(options?: RawAxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).getPartitionGroups(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2322,25 +2625,48 @@ export class PartitionsApi extends BaseAPI {
 
     /**
      * パーティションを追加する。accountManager権限が必要。
-     * @param {PostPartition} postPartition 
+     * @param {PartitionInput} partitionInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PartitionsApi
      */
-    public postPartition(postPartition: PostPartition, options?: RawAxiosRequestConfig) {
-        return PartitionsApiFp(this.configuration).postPartition(postPartition, options).then((request) => request(this.axios, this.basePath));
+    public postPartition(partitionInput: PartitionInput, options?: RawAxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).postPartition(partitionInput, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * パーティショングループを追加する。accountManager権限が必要。
+     * @param {PartitionGroupInput} partitionGroupInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartitionsApi
+     */
+    public postPartitionGroup(partitionGroupInput: PartitionGroupInput, options?: RawAxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).postPartitionGroup(partitionGroupInput, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * パーティションの情報を変更する。accountManager権限が必要。
      * @param {string} partitionID 
-     * @param {PostPartition} postPartition 
+     * @param {PartitionInput} partitionInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PartitionsApi
      */
-    public putPartition(partitionID: string, postPartition: PostPartition, options?: RawAxiosRequestConfig) {
-        return PartitionsApiFp(this.configuration).putPartition(partitionID, postPartition, options).then((request) => request(this.axios, this.basePath));
+    public putPartition(partitionID: string, partitionInput: PartitionInput, options?: RawAxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).putPartition(partitionID, partitionInput, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * パーティショングループの情報を変更する。accountManager権限が必要。
+     * @param {string} partitionGroupID 
+     * @param {PartitionGroupInput} partitionGroupInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartitionsApi
+     */
+    public putPartitionGroup(partitionGroupID: string, partitionGroupInput: PartitionGroupInput, options?: RawAxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).putPartitionGroup(partitionGroupID, partitionGroupInput, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2352,39 +2678,6 @@ export class PartitionsApi extends BaseAPI {
  */
 export const TagsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
-        /**
-         * タグの情報を取得する。
-         * @param {string} tagID 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getTag: async (tagID: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'tagID' is not null or undefined
-            assertParamExists('getTag', 'tagID', tagID)
-            const localVarPath = `/tags/{tagID}`
-                .replace(`{${"tagID"}}`, encodeURIComponent(String(tagID)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
         /**
          * タグの一覧を返す。
          * @param {*} [options] Override http request option.
@@ -2416,13 +2709,13 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * タグを追加する。
-         * @param {PostTag} postTag 
+         * @param {TagInput} tagInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postTag: async (postTag: PostTag, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'postTag' is not null or undefined
-            assertParamExists('postTag', 'postTag', postTag)
+        postTag: async (tagInput: TagInput, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'tagInput' is not null or undefined
+            assertParamExists('postTag', 'tagInput', tagInput)
             const localVarPath = `/tags`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2442,7 +2735,46 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(postTag, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(tagInput, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * タグの情報を変更する。accountManager権限が必要。
+         * @param {string} tagID 
+         * @param {TagInput} tagInput 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putTag: async (tagID: string, tagInput: TagInput, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'tagID' is not null or undefined
+            assertParamExists('putTag', 'tagID', tagID)
+            // verify required parameter 'tagInput' is not null or undefined
+            assertParamExists('putTag', 'tagInput', tagInput)
+            const localVarPath = `/tags/{tagID}`
+                .replace(`{${"tagID"}}`, encodeURIComponent(String(tagID)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(tagInput, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2493,18 +2825,6 @@ export const TagsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = TagsApiAxiosParamCreator(configuration)
     return {
         /**
-         * タグの情報を取得する。
-         * @param {string} tagID 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getTag(tagID: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTag200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getTag(tagID, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TagsApi.getTag']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
          * タグの一覧を返す。
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2517,14 +2837,27 @@ export const TagsApiFp = function(configuration?: Configuration) {
         },
         /**
          * タグを追加する。
-         * @param {PostTag} postTag 
+         * @param {TagInput} tagInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postTag(postTag: PostTag, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Tag>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.postTag(postTag, options);
+        async postTag(tagInput: TagInput, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Tag>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postTag(tagInput, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TagsApi.postTag']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * タグの情報を変更する。accountManager権限が必要。
+         * @param {string} tagID 
+         * @param {TagInput} tagInput 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putTag(tagID: string, tagInput: TagInput, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Tag>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putTag(tagID, tagInput, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TagsApi.putTag']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2550,15 +2883,6 @@ export const TagsApiFactory = function (configuration?: Configuration, basePath?
     const localVarFp = TagsApiFp(configuration)
     return {
         /**
-         * タグの情報を取得する。
-         * @param {string} tagID 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getTag(tagID: string, options?: RawAxiosRequestConfig): AxiosPromise<GetTag200Response> {
-            return localVarFp.getTag(tagID, options).then((request) => request(axios, basePath));
-        },
-        /**
          * タグの一覧を返す。
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2568,12 +2892,22 @@ export const TagsApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * タグを追加する。
-         * @param {PostTag} postTag 
+         * @param {TagInput} tagInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postTag(postTag: PostTag, options?: RawAxiosRequestConfig): AxiosPromise<Tag> {
-            return localVarFp.postTag(postTag, options).then((request) => request(axios, basePath));
+        postTag(tagInput: TagInput, options?: RawAxiosRequestConfig): AxiosPromise<Tag> {
+            return localVarFp.postTag(tagInput, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * タグの情報を変更する。accountManager権限が必要。
+         * @param {string} tagID 
+         * @param {TagInput} tagInput 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putTag(tagID: string, tagInput: TagInput, options?: RawAxiosRequestConfig): AxiosPromise<Tag> {
+            return localVarFp.putTag(tagID, tagInput, options).then((request) => request(axios, basePath));
         },
         /**
          * タグを削除する
@@ -2595,17 +2929,6 @@ export const TagsApiFactory = function (configuration?: Configuration, basePath?
  */
 export class TagsApi extends BaseAPI {
     /**
-     * タグの情報を取得する。
-     * @param {string} tagID 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TagsApi
-     */
-    public getTag(tagID: string, options?: RawAxiosRequestConfig) {
-        return TagsApiFp(this.configuration).getTag(tagID, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
      * タグの一覧を返す。
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2617,13 +2940,25 @@ export class TagsApi extends BaseAPI {
 
     /**
      * タグを追加する。
-     * @param {PostTag} postTag 
+     * @param {TagInput} tagInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TagsApi
      */
-    public postTag(postTag: PostTag, options?: RawAxiosRequestConfig) {
-        return TagsApiFp(this.configuration).postTag(postTag, options).then((request) => request(this.axios, this.basePath));
+    public postTag(tagInput: TagInput, options?: RawAxiosRequestConfig) {
+        return TagsApiFp(this.configuration).postTag(tagInput, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * タグの情報を変更する。accountManager権限が必要。
+     * @param {string} tagID 
+     * @param {TagInput} tagInput 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TagsApi
+     */
+    public putTag(tagID: string, tagInput: TagInput, options?: RawAxiosRequestConfig) {
+        return TagsApiFp(this.configuration).putTag(tagID, tagInput, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2859,49 +3194,49 @@ export class Apis extends BaseAPI {
 
     /**
      * 申請を新規作成する。
-     * @param {PostApplication} postApplication
+     * @param {ApplicationInput} applicationInput
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public postApplication(postApplication: PostApplication, options?: RawAxiosRequestConfig) {
-        return ApplicationsApiFp(this.configuration).postApplication(postApplication, options).then((request) => request(this.axios, this.basePath));
+    public postApplication(applicationInput: ApplicationInput, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).postApplication(applicationInput, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 指定した申請にコメントを新規作成する。
      * @param {string} applicationID
-     * @param {PostComment} postComment
+     * @param {CommentInput} commentInput
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public postComment(applicationID: string, postComment: PostComment, options?: RawAxiosRequestConfig) {
-        return ApplicationsApiFp(this.configuration).postComment(applicationID, postComment, options).then((request) => request(this.axios, this.basePath));
+    public postComment(applicationID: string, commentInput: CommentInput, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).postComment(applicationID, commentInput, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 指定した申請を修正する。作成者権限が必要。
      * @param {string} applicationID
-     * @param {PostApplication} postApplication
+     * @param {ApplicationInput} applicationInput
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public putApplicationDetail(applicationID: string, postApplication: PostApplication, options?: RawAxiosRequestConfig) {
-        return ApplicationsApiFp(this.configuration).putApplicationDetail(applicationID, postApplication, options).then((request) => request(this.axios, this.basePath));
+    public putApplicationDetail(applicationID: string, applicationInput: ApplicationInput, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).putApplicationDetail(applicationID, applicationInput, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの行き来の定義は作成者は「change_requestedからsubmitted」をでき、accountManagerは「submittedからrejected」「submittedからchange_requested」「change_requestedからsubmitted」「submittedからapproved」「approvedからsubmitted（ただしすでに支払われている人がいた場合、この操作は不可)」の操作のみ可。ただし、「approvedからfully_repaid」の操作はここでは行えない。accountManager権限または作成者権限が必要。
+     * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、accountManagerはpayment_finishedを除く任意の状態間で可能。ただしapprovedからの変更は、すでに支払われている人がいた場合不可。payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
      * @param {string} applicationID
-     * @param {PutStatus} putStatus
+     * @param {StatusInput} statusInput
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public putStatus(applicationID: string, putStatus: PutStatus, options?: RawAxiosRequestConfig) {
-        return ApplicationsApiFp(this.configuration).putStatus(applicationID, putStatus, options).then((request) => request(this.axios, this.basePath));
+    public putStatus(applicationID: string, statusInput: StatusInput, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).putStatus(applicationID, statusInput, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2972,6 +3307,17 @@ export class Apis extends BaseAPI {
     }
 
     /**
+     * パーティショングループを削除する。accountManager権限が必要。
+     * @param {string} partitionGroupID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartitionsApi
+     */
+    public deletePartitionGroup(partitionGroupID: string, options?: RawAxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).deletePartitionGroup(partitionGroupID, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * パーティションの情報を返す。
      * @param {string} partitionID
      * @param {*} [options] Override http request option.
@@ -2980,6 +3326,27 @@ export class Apis extends BaseAPI {
      */
     public getPartition(partitionID: string, options?: RawAxiosRequestConfig) {
         return PartitionsApiFp(this.configuration).getPartition(partitionID, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * パーティショングループの情報を返す。
+     * @param {string} partitionGroupID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartitionsApi
+     */
+    public getPartitionGroup(partitionGroupID: string, options?: RawAxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).getPartitionGroup(partitionGroupID, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * パーティショングループの一覧を返す。
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartitionsApi
+     */
+    public getPartitionGroups(options?: RawAxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).getPartitionGroups(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2994,36 +3361,48 @@ export class Apis extends BaseAPI {
 
     /**
      * パーティションを追加する。accountManager権限が必要。
-     * @param {PostPartition} postPartition
+     * @param {PartitionInput} partitionInput
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PartitionsApi
      */
-    public postPartition(postPartition: PostPartition, options?: RawAxiosRequestConfig) {
-        return PartitionsApiFp(this.configuration).postPartition(postPartition, options).then((request) => request(this.axios, this.basePath));
+    public postPartition(partitionInput: PartitionInput, options?: RawAxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).postPartition(partitionInput, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * パーティショングループを追加する。accountManager権限が必要。
+     * @param {PartitionGroupInput} partitionGroupInput
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartitionsApi
+     */
+    public postPartitionGroup(partitionGroupInput: PartitionGroupInput, options?: RawAxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).postPartitionGroup(partitionGroupInput, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * パーティションの情報を変更する。accountManager権限が必要。
      * @param {string} partitionID
-     * @param {PostPartition} postPartition
+     * @param {PartitionInput} partitionInput
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PartitionsApi
      */
-    public putPartition(partitionID: string, postPartition: PostPartition, options?: RawAxiosRequestConfig) {
-        return PartitionsApiFp(this.configuration).putPartition(partitionID, postPartition, options).then((request) => request(this.axios, this.basePath));
+    public putPartition(partitionID: string, partitionInput: PartitionInput, options?: RawAxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).putPartition(partitionID, partitionInput, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * タグの情報を取得する。
-     * @param {string} tagID
+     * パーティショングループの情報を変更する。accountManager権限が必要。
+     * @param {string} partitionGroupID
+     * @param {PartitionGroupInput} partitionGroupInput
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof TagsApi
+     * @memberof PartitionsApi
      */
-    public getTag(tagID: string, options?: RawAxiosRequestConfig) {
-        return TagsApiFp(this.configuration).getTag(tagID, options).then((request) => request(this.axios, this.basePath));
+    public putPartitionGroup(partitionGroupID: string, partitionGroupInput: PartitionGroupInput, options?: RawAxiosRequestConfig) {
+        return PartitionsApiFp(this.configuration).putPartitionGroup(partitionGroupID, partitionGroupInput, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3038,13 +3417,25 @@ export class Apis extends BaseAPI {
 
     /**
      * タグを追加する。
-     * @param {PostTag} postTag
+     * @param {TagInput} tagInput
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TagsApi
      */
-    public postTag(postTag: PostTag, options?: RawAxiosRequestConfig) {
-        return TagsApiFp(this.configuration).postTag(postTag, options).then((request) => request(this.axios, this.basePath));
+    public postTag(tagInput: TagInput, options?: RawAxiosRequestConfig) {
+        return TagsApiFp(this.configuration).postTag(tagInput, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * タグの情報を変更する。accountManager権限が必要。
+     * @param {string} tagID
+     * @param {TagInput} tagInput
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TagsApi
+     */
+    public putTag(tagID: string, tagInput: TagInput, options?: RawAxiosRequestConfig) {
+        return TagsApiFp(this.configuration).putTag(tagID, tagInput, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

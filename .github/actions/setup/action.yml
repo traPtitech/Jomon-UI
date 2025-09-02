@@ -1,0 +1,48 @@
+name: 'Node.js Setup'
+description: >
+  Sets up Node.js and restores caches for node_modules and generated APIs.
+  This action is designed for jobs that depend on an 'install' job which is
+  responsible for populating these caches. It will not run 'npm ci' itself,
+  but will verify that the caches were successfully restored.
+inputs:
+  cache-apis:
+    description: 'Whether to cache the generated apis directory'
+    required: false
+    default: 'false'
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: ./.node-version
+    - name: Cache node_modules
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: Verify node_modules cache
+      shell: bash
+      run: |
+        if [ ! -d "node_modules" ] || [ -z "$(ls -A "node_modules")" ]; then
+          echo "Error: node_modules cache not found or is empty. This job depends on a successful 'install' job."
+          exit 1
+        fi
+    - name: Cache generated APIs
+      if: inputs.cache-apis == 'true'
+      uses: actions/cache@v4
+      with:
+        path: src/lib/apis/generated
+        key: ${{ runner.os }}-apis-${{ hashFiles('**/openapitools.json', '**/scripts/generate-apis.ts') }}-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-apis-${{ hashFiles('**/openapitools.json', '**/scripts/generate-apis.ts') }}-
+    - name: Verify generated APIs cache
+      if: inputs.cache-apis == 'true'
+      shell: bash
+      run: |
+        if [ ! -d "src/lib/apis/generated" ] || [ -z "$(ls -A "src/lib/apis/generated")" ]; then
+          echo "Error: generated APIs cache not found or is empty. This job depends on a successful 'install' job."
+          exit 1
+        fi

@@ -143,7 +143,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **postApplication**
-> ApplicationDetail postApplication(postApplication)
+> ApplicationDetail postApplication(applicationInput)
 
 申請を新規作成する。
 
@@ -153,16 +153,16 @@ No authorization required
 import {
     ApplicationsApi,
     Configuration,
-    PostApplication
+    ApplicationInput
 } from './api';
 
 const configuration = new Configuration();
 const apiInstance = new ApplicationsApi(configuration);
 
-let postApplication: PostApplication; //
+let applicationInput: ApplicationInput; //
 
 const { status, data } = await apiInstance.postApplication(
-    postApplication
+    applicationInput
 );
 ```
 
@@ -170,7 +170,7 @@ const { status, data } = await apiInstance.postApplication(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **postApplication** | **PostApplication**|  | |
+| **applicationInput** | **ApplicationInput**|  | |
 
 
 ### Return type
@@ -196,7 +196,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **postComment**
-> Comment postComment(postComment)
+> Comment postComment(commentInput)
 
 指定した申請にコメントを新規作成する。
 
@@ -206,18 +206,18 @@ No authorization required
 import {
     ApplicationsApi,
     Configuration,
-    PostComment
+    CommentInput
 } from './api';
 
 const configuration = new Configuration();
 const apiInstance = new ApplicationsApi(configuration);
 
 let applicationID: string; // (default to undefined)
-let postComment: PostComment; //
+let commentInput: CommentInput; //
 
 const { status, data } = await apiInstance.postComment(
     applicationID,
-    postComment
+    commentInput
 );
 ```
 
@@ -225,7 +225,7 @@ const { status, data } = await apiInstance.postComment(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **postComment** | **PostComment**|  | |
+| **commentInput** | **CommentInput**|  | |
 | **applicationID** | [**string**] |  | defaults to undefined|
 
 
@@ -253,7 +253,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **putApplicationDetail**
-> ApplicationDetail putApplicationDetail(postApplication)
+> ApplicationDetail putApplicationDetail(applicationInput)
 
 指定した申請を修正する。作成者権限が必要。
 
@@ -263,18 +263,18 @@ No authorization required
 import {
     ApplicationsApi,
     Configuration,
-    PostApplication
+    ApplicationInput
 } from './api';
 
 const configuration = new Configuration();
 const apiInstance = new ApplicationsApi(configuration);
 
 let applicationID: string; // (default to undefined)
-let postApplication: PostApplication; //
+let applicationInput: ApplicationInput; //
 
 const { status, data } = await apiInstance.putApplicationDetail(
     applicationID,
-    postApplication
+    applicationInput
 );
 ```
 
@@ -282,7 +282,7 @@ const { status, data } = await apiInstance.putApplicationDetail(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **postApplication** | **PostApplication**|  | |
+| **applicationInput** | **ApplicationInput**|  | |
 | **applicationID** | [**string**] |  | defaults to undefined|
 
 
@@ -311,9 +311,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **putStatus**
-> StatusDetail putStatus(putStatus)
+> StatusDetail putStatus(statusInput)
 
-指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの行き来の定義は作成者は「change_requestedからsubmitted」をでき、accountManagerは「submittedからrejected」「submittedからchange_requested」「change_requestedからsubmitted」「submittedからapproved」「approvedからsubmitted（ただしすでに支払われている人がいた場合、この操作は不可)」の操作のみ可。ただし、「approvedからfully_repaid」の操作はここでは行えない。accountManager権限または作成者権限が必要。
+指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、accountManagerはpayment_finishedを除く任意の状態間で可能。ただしapprovedからの変更は、すでに支払われている人がいた場合不可。payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
 
 ### Example
 
@@ -321,18 +321,18 @@ No authorization required
 import {
     ApplicationsApi,
     Configuration,
-    PutStatus
+    StatusInput
 } from './api';
 
 const configuration = new Configuration();
 const apiInstance = new ApplicationsApi(configuration);
 
 let applicationID: string; // (default to undefined)
-let putStatus: PutStatus; //
+let statusInput: StatusInput; //
 
 const { status, data } = await apiInstance.putStatus(
     applicationID,
-    putStatus
+    statusInput
 );
 ```
 
@@ -340,7 +340,7 @@ const { status, data } = await apiInstance.putStatus(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **putStatus** | **PutStatus**|  | |
+| **statusInput** | **StatusInput**|  | |
 | **applicationID** | [**string**] |  | defaults to undefined|
 
 

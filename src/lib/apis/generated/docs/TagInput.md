@@ -1,21 +1,19 @@
-# PutStatus
+# TagInput
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**status** | [**StatusEnum**](StatusEnum.md) |  | [default to undefined]
-**comment** | **string** |  | [default to undefined]
+**name** | **string** |  | [default to undefined]
 
 ## Example
 
 ```typescript
-import { PutStatus } from './api';
+import { TagInput } from './api';
 
-const instance: PutStatus = {
-    status,
-    comment,
+const instance: TagInput = {
+    name,
 };
 ```
 

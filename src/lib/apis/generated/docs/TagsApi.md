@@ -4,62 +4,10 @@ All URIs are relative to *https://raw.githubusercontent.com/api*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**getTag**](#gettag) | **GET** /tags/{tagID} | |
 |[**getTags**](#gettags) | **GET** /tags | |
 |[**postTag**](#posttag) | **POST** /tags | |
+|[**putTag**](#puttag) | **PUT** /tags/{tagID} | |
 |[**tagsTagIDDelete**](#tagstagiddelete) | **DELETE** /tags/{tagID} | |
-
-# **getTag**
-> GetTag200Response getTag()
-
-タグの情報を取得する。
-
-### Example
-
-```typescript
-import {
-    TagsApi,
-    Configuration
-} from './api';
-
-const configuration = new Configuration();
-const apiInstance = new TagsApi(configuration);
-
-let tagID: string; // (default to undefined)
-
-const { status, data } = await apiInstance.getTag(
-    tagID
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **tagID** | [**string**] |  | defaults to undefined|
-
-
-### Return type
-
-**GetTag200Response**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | 取得に成功した場合。 |  -  |
-|**404** | 指定したリソースは存在しない。 |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getTags**
 > Array<Tag> getTags()
@@ -106,7 +54,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **postTag**
-> Tag postTag(postTag)
+> Tag postTag(tagInput)
 
 タグを追加する。
 
@@ -116,16 +64,16 @@ No authorization required
 import {
     TagsApi,
     Configuration,
-    PostTag
+    TagInput
 } from './api';
 
 const configuration = new Configuration();
 const apiInstance = new TagsApi(configuration);
 
-let postTag: PostTag; //
+let tagInput: TagInput; //
 
 const { status, data } = await apiInstance.postTag(
-    postTag
+    tagInput
 );
 ```
 
@@ -133,7 +81,7 @@ const { status, data } = await apiInstance.postTag(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **postTag** | **PostTag**|  | |
+| **tagInput** | **TagInput**|  | |
 
 
 ### Return type
@@ -155,6 +103,64 @@ No authorization required
 |-------------|-------------|------------------|
 |**200** | 追加に成功した場合。追加されたタグの情報を返す。 |  -  |
 |**400** | 不正なリクエスト。 |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **putTag**
+> Tag putTag(tagInput)
+
+タグの情報を変更する。accountManager権限が必要。
+
+### Example
+
+```typescript
+import {
+    TagsApi,
+    Configuration,
+    TagInput
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new TagsApi(configuration);
+
+let tagID: string; // (default to undefined)
+let tagInput: TagInput; //
+
+const { status, data } = await apiInstance.putTag(
+    tagID,
+    tagInput
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **tagInput** | **TagInput**|  | |
+| **tagID** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**Tag**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | 変更に成功した場合。 |  -  |
+|**400** | 不正なリクエスト。 |  -  |
+|**403** | 編集権限がない人による操作。 |  -  |
+|**404** | 指定したリソースは存在しない。 |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

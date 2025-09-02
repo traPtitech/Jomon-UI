@@ -4,7 +4,7 @@ import type {
   Application,
   ApplicationDetail,
   Comment,
-  PostComment,
+  CommentInput,
   StatusDetail
 } from '/@/lib/apis'
 
@@ -22,7 +22,8 @@ import { mockTags } from '/@/features/tag/mock'
 
 const mockApplication: Application = {
   id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-  status: 'submitted',
+  status: 'pending_review',
+
   created_at: '2022-01-25T13:29:19.918Z',
   updated_at: '2022-01-25T13:29:19.918Z',
   created_by: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -76,10 +77,10 @@ export const applicationHandlers = [
 
     return HttpResponse.json(res)
   }),
-  http.post<PathParams, PostComment, Comment>(
+  http.post<PathParams, CommentInput, Comment>(
     '/api/applications/:id/comments',
     async ({ request, params }) => {
-      const reqBody: PostComment = await request.json()
+      const reqBody: CommentInput = await request.json()
       const res: Comment = {
         ...mockApplicationComment,
         id: params.id as string,

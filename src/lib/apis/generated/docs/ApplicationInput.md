@@ -1,4 +1,4 @@
-# PostApplication
+# ApplicationInput
 
 
 ## Properties
@@ -10,14 +10,14 @@ Name | Type | Description | Notes
 **content** | **string** |  | [default to undefined]
 **tags** | **Array&lt;string&gt;** |  | [default to undefined]
 **partition** | **string** |  | [default to undefined]
-**targets** | [**Array&lt;ApplicationTarget&gt;**](ApplicationTarget.md) |  | [default to undefined]
+**targets** | [**Array&lt;ApplicationTargetInput&gt;**](ApplicationTargetInput.md) |  | [default to undefined]
 
 ## Example
 
 ```typescript
-import { PostApplication } from './api';
+import { ApplicationInput } from './api';
 
-const instance: PostApplication = {
+const instance: ApplicationInput = {
     created_by,
     title,
     content,

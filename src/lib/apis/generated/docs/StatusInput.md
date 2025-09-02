@@ -1,18 +1,20 @@
-# PostComment
+# StatusInput
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**status** | [**StatusEnum**](StatusEnum.md) |  | [default to undefined]
 **comment** | **string** |  | [default to undefined]
 
 ## Example
 
 ```typescript
-import { PostComment } from './api';
+import { StatusInput } from './api';
 
-const instance: PostComment = {
+const instance: StatusInput = {
+    status,
     comment,
 };
 ```

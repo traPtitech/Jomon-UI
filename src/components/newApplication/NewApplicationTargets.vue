@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
-import { useUserStore } from '/@/stores/user'
-import { ApplicationTarget } from '/@/lib/apis'
 import BaseInput from '/@/components/shared/BaseInput.vue'
 import SearchSelect from '/@/components/shared/SearchSelect.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import { ApplicationTargetInput } from '/@/lib/apis'
+import { useUserStore } from '/@/stores/user'
 
-const model = defineModel<ApplicationTarget[]>({ required: true })
+const model = defineModel<ApplicationTargetInput[]>({ required: true })
 
 const { userOptions } = useUserStore()
 

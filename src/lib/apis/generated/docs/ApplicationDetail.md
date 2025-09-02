@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 **statuses** | [**Array&lt;Status&gt;**](Status.md) |  | [default to undefined]
 **tags** | [**Array&lt;Tag&gt;**](Tag.md) |  | [default to undefined]
 **partition** | [**Partition**](Partition.md) |  | [default to undefined]
-**targets** | [**Array&lt;ApplicationTargetDetail&gt;**](ApplicationTargetDetail.md) |  | [default to undefined]
+**targets** | [**Array&lt;ApplicationTarget&gt;**](ApplicationTarget.md) |  | [default to undefined]
 **created_at** | **string** |  | [default to undefined]
 **updated_at** | **string** |  | [default to undefined]
 

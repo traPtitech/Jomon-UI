@@ -79,6 +79,7 @@ if (me.value?.accountManager) {
           :disabled="isSending"
           font-size="lg"
           padding="sm"
+          class="max-h-14"
           @click.stop="
             () => {
               addAccountManagers(addList)
@@ -99,6 +100,7 @@ if (me.value?.accountManager) {
           :disabled="isSending"
           font-size="lg"
           padding="sm"
+          class="max-h-14"
           @click.stop="
             () => {
               removeAccountManagers(removeList)
@@ -122,6 +124,7 @@ if (me.value?.accountManager) {
           :disabled="deleteTagList.length === 0 || isSending"
           font-size="lg"
           padding="sm"
+          class="max-h-14"
           @click.stop="handleDeleteTags">
           選択したタグを削除
         </SimpleButton>

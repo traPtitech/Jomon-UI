@@ -28,6 +28,13 @@ const putStatus = async (nextStatus: ApplicationStatus, comment: string) => {
     toast.error('変更に失敗しました')
   }
 }
+
+const handleKeydown = (e: KeyboardEvent) => {
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+    putStatus(props.nextStatus, comment.value)
+
+  }
+}
 </script>
 
 <template>
@@ -42,7 +49,7 @@ const putStatus = async (nextStatus: ApplicationStatus, comment: string) => {
         <StatusChip class="mx-1" has-text :status="props.nextStatus" />
         <span>へ変更します</span>
       </div>
-      <MarkdownTextarea v-model="comment" label="コメント" />
+      <MarkdownTextarea v-model="comment" label="コメント" @keydown="handleKeydown"/>
       <div class="flex justify-end">
         <SimpleButton
           class="mb-5"

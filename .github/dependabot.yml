@@ -20,8 +20,6 @@ updates:
     target-branch: "main"
     labels:
       - "dependencies"
-    reviewers:
-      - reiroop
   - package-ecosystem: github-actions
     directory: "/"
     schedule:

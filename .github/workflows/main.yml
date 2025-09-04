@@ -9,8 +9,11 @@ jobs:
   build:
     name: run build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
           node-version-file: ./.node-version
@@ -31,13 +34,15 @@ jobs:
     name: Deploy staging
     runs-on: ubuntu-latest
     needs: [build]
+    permissions:
+      actions: read
     steps:
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.STAGING_SSH_KEY }}
           known_hosts: ${{ secrets.STAGING_KNOWN_HOSTS }}
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: dist
           path: ./dist

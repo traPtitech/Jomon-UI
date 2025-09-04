@@ -4,7 +4,6 @@ const emit = defineEmits<(e: 'closeModal') => void>()
 const handleKeydown = (e: KeyboardEvent) => {
   if (e.key === 'Escape') {
     emit('closeModal')
-    
   }
 }
 </script>

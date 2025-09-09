@@ -3,7 +3,7 @@
 
 ## Enum
 
-* `Submitted` (value: `'submitted'`)
+* `PendingReview` (value: `'pending_review'`)
 
 * `ChangeRequested` (value: `'change_requested'`)
 

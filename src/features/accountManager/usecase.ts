@@ -21,8 +21,8 @@ export const addAccountManagersUsecase = async (
   const { accountManagers } = useAccountManagerStore()
 
   try {
-    const res = await repository.addAccountManagers(accountManagersSeed)
-    accountManagers.value.push(...res)
+    await repository.addAccountManagers(accountManagersSeed)
+    accountManagers.value.push(...accountManagersSeed)
   } catch {
     throw new Error('会計管理者の追加に失敗しました')
   }

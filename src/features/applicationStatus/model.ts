@@ -12,7 +12,7 @@ export interface ApplicationStatusDetail {
 }
 
 export const applicationStatusOptions = [
-  { value: 'submitted', key: '提出済み' },
+  { value: 'pending_review', key: '提出済み' },
   { value: 'change_requested', key: '要修正' },
   { value: 'approved', key: '承認済み' },
   { value: 'rejected', key: '却下' },

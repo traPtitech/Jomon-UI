@@ -6,13 +6,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **string** |  | [default to undefined]
-**status** | **string** |  | [default to undefined]
+**status** | [**StatusEnum**](StatusEnum.md) |  | [default to undefined]
 **created_at** | **string** |  | [default to undefined]
 **updated_at** | **string** |  | [default to undefined]
 **created_by** | **string** |  | [default to undefined]
 **title** | **string** |  | [default to undefined]
 **content** | **string** |  | [default to undefined]
-**targets** | [**Array&lt;ApplicationTargetDetail&gt;**](ApplicationTargetDetail.md) |  | [default to undefined]
+**targets** | [**Array&lt;ApplicationTarget&gt;**](ApplicationTarget.md) |  | [default to undefined]
 **tags** | [**Array&lt;Tag&gt;**](Tag.md) |  | [default to undefined]
 **partition** | [**Partition**](Partition.md) |  | [default to undefined]
 

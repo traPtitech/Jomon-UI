@@ -42,13 +42,13 @@ const statusToJpn = computed(() => (status: ApplicationStatus) => {
 const backgroundColor = computed(() => (status: ApplicationStatus) => {
   switch (status) {
     case 'pending_review':
-      return 'bg-status-submitted'
+      return 'bg-status-pending-review'
     case 'change_requested':
-      return 'bg-status-fix-required'
+      return 'bg-status-change-requested'
     case 'approved':
-      return 'bg-status-accepted'
+      return 'bg-status-approved'
     case 'payment_finished':
-      return 'bg-status-completed'
+      return 'bg-status-payment-finished'
     case 'rejected':
       return 'bg-status-rejected'
     default:

@@ -1,4 +1,4 @@
-# GetTag200Response
+# PartitionGroup
 
 
 ## Properties
@@ -7,21 +7,23 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **string** |  | [default to undefined]
 **name** | **string** |  | [default to undefined]
+**child_partitions** | [**Array&lt;Partition&gt;**](Partition.md) |  | [default to undefined]
+**child_partition_groups** | [**Array&lt;PartitionGroup&gt;**](PartitionGroup.md) |  | [default to undefined]
 **created_at** | **string** |  | [default to undefined]
 **updated_at** | **string** |  | [default to undefined]
-**applications** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { GetTag200Response } from './api';
+import { PartitionGroup } from './api';
 
-const instance: GetTag200Response = {
+const instance: PartitionGroup = {
     id,
     name,
+    child_partitions,
+    child_partition_groups,
     created_at,
     updated_at,
-    applications,
 };
 ```
 

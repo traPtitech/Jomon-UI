@@ -11,7 +11,7 @@ const createFileRepository = () => ({
   fetchFile: async (fileId: string): Promise<string> => {
     const { data } = await apis.getFile(fileId)
 
-    return data.text()
+    return await data.text()
   },
   fetchFileMeta: async (fileId: string): Promise<FileMeta> => {
     const { data } = await apis.getFileMeta(fileId)
@@ -19,7 +19,9 @@ const createFileRepository = () => ({
     return convertFileMetaFromData(data)
   },
   createFile: async (applicationId: string, file: FileSeed) => {
-    await apis.postFile(file.file, file.name, applicationId)
+    const { data } = await apis.postFile(file.file, file.name, applicationId)
+
+    return data.id
   },
   deleteFile: async (id: string) => {
     await apis.deleteFile(id)

@@ -16,10 +16,10 @@
   --color-error-secondary: #fca5a5;
   --color-accent-primary: #10b981;
   --color-accent-secondary: #6ee7b7;
-  --color-status-submitted: #fbbf24;
-  --color-status-fix-required: #f87171;
-  --color-status-accepted: #34d399;
-  --color-status-completed: #9ca3af;
+  --color-status-pending-review: #fbbf24;
+  --color-status-change-requested: #f87171;
+  --color-status-approved: #34d399;
+  --color-status-payment-finished: #9ca3af;
   --color-status-rejected: #9ca3af;
 }
 

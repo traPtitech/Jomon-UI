@@ -40,8 +40,10 @@ if (!isTagFetched.value) {
     <ApplicationHeader :application="application" />
     <div class="h-px bg-[#e5e7eb]" />
     <div class="flex flex-col lg:flex-row justify-between gap-12">
-      <ApplicationLogs class="lg:w-2/3" :application="application" />
-      <ApplicationSidebar v-model="application" />
+      <ApplicationLogs
+        class="order-2 lg:order-1 lg:w-2/3"
+        :application="application" />
+      <ApplicationSidebar v-model="application" class="order-1 lg:order-2" />
     </div>
   </div>
 </template>

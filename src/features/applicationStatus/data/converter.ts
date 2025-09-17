@@ -1,9 +1,7 @@
-import { DateTime } from 'luxon'
-
-import type { StatusDetail as ApplicationStatusData } from '@/lib/apis'
-
-import { convertApplicationCommentFromData } from '@/features/applicationComment/data/converter'
 import type { ApplicationStatusDetail } from '../entities'
+import { convertApplicationCommentFromData } from '@/features/applicationComment/data/converter'
+import type { StatusDetail as ApplicationStatusData } from '@/lib/apis'
+import { DateTime } from 'luxon'
 
 export const convertApplicationStatusDetailFromData = (
   status: ApplicationStatusData

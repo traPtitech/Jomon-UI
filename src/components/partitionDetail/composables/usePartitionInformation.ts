@@ -1,7 +1,6 @@
+import { usePartitionStore } from '@/features/partition/store'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
-
-import { usePartitionStore } from '@/features/partition/store'
 
 export type EditMode = 'name' | 'description' | 'budget' | ''
 

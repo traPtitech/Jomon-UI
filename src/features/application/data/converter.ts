@@ -1,15 +1,13 @@
-import type {
-  Application as ApiApplication,
-  ApplicationDetail as ApiApplicationDetail
-} from '@/lib/apis/generated/api'
-
+import type { Application, ApplicationDetail } from '../entities'
 import { convertApplicationCommentFromData } from '@/features/applicationComment/data/converter'
 import { convertApplicationStatusDetailFromData } from '@/features/applicationStatus/data/converter'
 import { convertApplicationTargetFromData } from '@/features/applicationTarget/data/converter'
 import { convertPartitionFromData } from '@/features/partition/data/converter'
-
+import type {
+  Application as ApiApplication,
+  ApplicationDetail as ApiApplicationDetail
+} from '@/lib/apis/generated/api'
 import { DateTime } from 'luxon'
-import type { Application, ApplicationDetail } from '../entities'
 
 export const convertApplication = (
   application: ApiApplication

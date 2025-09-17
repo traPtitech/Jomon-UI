@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import BaseInput from './BaseInput.vue'
 import {
   CheckIcon,
@@ -8,6 +7,7 @@ import {
   PlusIcon,
   XMarkIcon
 } from '@heroicons/vue/24/outline'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 
 interface Option {
   key: string

@@ -1,6 +1,5 @@
-import apis from '@/lib/apis'
-
 import type { User } from '../entities'
+import apis from '@/lib/apis'
 
 export const useUserRepository = () => {
   return createUserRepository()

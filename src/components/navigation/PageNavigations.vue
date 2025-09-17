@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
-
-import { useUserStore } from '@/features/user/store'
-
 import HeaderButton from './HeaderButton.vue'
+import { useUserStore } from '@/features/user/store'
+import { useRoute } from 'vue-router'
 
 const { isAccountManager } = useUserStore()
 

@@ -1,8 +1,6 @@
-import type { DateTime } from 'luxon'
-
-import type { StatusEnum } from '@/lib/apis'
-
 import type { ApplicationComment } from '@/features/applicationComment/entities'
+import type { StatusEnum } from '@/lib/apis'
+import type { DateTime } from 'luxon'
 
 export interface ApplicationStatusDetail {
   createdBy: string

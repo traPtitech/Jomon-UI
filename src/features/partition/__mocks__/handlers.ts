@@ -1,7 +1,6 @@
-import { http, HttpResponse } from 'msw'
-
 import type { PartitionSeed } from '../entities'
 import { Partition } from '@/lib/apis'
+import { http, HttpResponse } from 'msw'
 
 export const mockPartition: Partition = {
   id: '1',

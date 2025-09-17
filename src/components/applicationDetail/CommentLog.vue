@@ -1,11 +1,9 @@
 <script lang="ts" setup>
-import { useUserStore } from '@/features/user/store'
-
-import { formatDateAndTime } from '@/lib/date'
-
-import MarkdownIt from '@/components//shared/MarkdownIt.vue'
+import MarkdownIt from '@/components/shared/MarkdownIt.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'
 import type { ApplicationComment } from '@/features/applicationComment/entities'
+import { useUserStore } from '@/features/user/store'
+import { formatDateAndTime } from '@/lib/date'
 
 const props = defineProps<{
   comment: ApplicationComment

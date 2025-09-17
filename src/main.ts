@@ -1,13 +1,12 @@
+import App from './App.vue'
+import router from './router'
+import { handlers } from '@/lib/msw'
+import { setupWorker } from 'msw/browser'
 import { createPinia } from 'pinia'
 import { Fragment, createApp, h } from 'vue'
 import type { PluginOptions } from 'vue-toastification'
 import Toast, { POSITION } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
-import { setupWorker } from 'msw/browser'
-
-import App from './App.vue'
-import router from './router'
-import { handlers } from '@/lib/msw'
 
 if (
   import.meta.env.MODE === 'development' &&

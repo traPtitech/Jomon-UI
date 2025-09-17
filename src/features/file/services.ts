@@ -1,6 +1,6 @@
 import { convertFileAndMeta } from './data/converter'
-import type { FileData, FileSeed } from './entities'
 import { useFileRepository } from './data/repository'
+import type { FileData, FileSeed } from './entities'
 
 export const fetchFiles = async (fileIds: string[]): Promise<File[]> => {
   const repository = useFileRepository()

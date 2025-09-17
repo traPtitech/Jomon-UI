@@ -1,10 +1,8 @@
+import { addApis } from './add-apis'
+import { addTsIgnoreToImports } from './add-ts-ignore-to-imports'
 import { execa } from 'execa'
 import fs from 'fs/promises'
 import path from 'path'
-
-import { addApis } from './add-apis'
-import { addTsIgnoreToImports } from './add-ts-ignore-to-imports'
-
 import { fileURLToPath } from 'url'
 
 const SWAGGER_PATH =

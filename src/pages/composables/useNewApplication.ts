@@ -1,14 +1,13 @@
+import type { ApplicationSeed } from '@/features/application/entities'
+import { useApplicationStore } from '@/features/application/store'
+import type { FileSeed } from '@/features/file/entities'
+import { createFiles } from '@/features/file/services'
+import type { Tag } from '@/features/tag/entities'
+import { useTagStore } from '@/features/tag/store'
+import { useUserStore } from '@/features/user/store'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
-
-import { useApplicationStore } from '@/features/application/store'
-import type { ApplicationSeed } from '@/features/application/entities'
-import type { FileSeed } from '@/features/file/entities'
-import { createFiles } from '@/features/file/services'
-import { useTagStore } from '@/features/tag/store'
-import type { Tag } from '@/features/tag/entities'
-import { useUserStore } from '@/features/user/store'
 
 export const useNewApplication = () => {
   const toast = useToast()

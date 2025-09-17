@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { useNewComment } from '/@/components/applicationDetail/composables/useNewComment'
-import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import type { ApplicationDetail } from '/@/features/application/model'
+import { useNewComment } from '@/components/applicationDetail/composables/useNewComment'
+import MarkdownTextarea from '@/components/shared/MarkdownTextarea.vue'
+import SimpleButton from '@/components/shared/SimpleButton.vue'
+import type { ApplicationDetail } from '@/features/application/entities'
 
 const props = defineProps<{
   application: ApplicationDetail

@@ -3,9 +3,9 @@ import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
 import { ref } from 'vue'
 
-import { isImageByType } from '/@/lib/checkFileType'
+import { isImageByType } from '@/lib/checkFileType'
 
-import type { FileSeed } from '/@/features/file/model'
+import type { FileSeed } from '@/features/file/entities'
 
 interface Props {
   files: FileSeed[]

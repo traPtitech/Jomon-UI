@@ -1,11 +1,8 @@
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import type { FileData } from '/@/features/file/model'
-import {
-  deleteFileUsecase,
-  useFetchFileWithMetasUsecase
-} from '/@/features/file/usecase'
+import type { FileData } from '@/features/file/entities'
+import { deleteFile, fetchFilesWithMetas } from '@/features/file/services'
 
 export const useApplicationFile = () => {
   const toast = useToast()
@@ -14,7 +11,7 @@ export const useApplicationFile = () => {
 
   const fetchFiles = async (ids: string[]) => {
     try {
-      files.value = await useFetchFileWithMetasUsecase(ids)
+      files.value = await fetchFilesWithMetas(ids)
     } catch {
       toast.error('ファイルの取得に失敗しました')
     }
@@ -26,7 +23,7 @@ export const useApplicationFile = () => {
       return
     }
     try {
-      await deleteFileUsecase(id)
+      await deleteFile(id)
       files.value = files.value.filter(file => file.id !== id)
       toast.success('ファイルを削除しました')
     } catch {

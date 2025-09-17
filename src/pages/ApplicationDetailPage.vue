@@ -1,42 +1,42 @@
 <script lang="ts" setup>
 import { useRoute } from 'vue-router'
 
-import { toId } from '/@/lib/parseQueryParams'
+import { useApplicationStore } from '@/features/application/store'
+import { usePartitionStore } from '@/features/partition/store'
+import { useTagStore } from '@/features/tag/store'
+import { useUserStore } from '@/features/user/store'
+import { toId } from '@/lib/parseQueryParams'
 
-import ApplicationHeader from '/@/components/applicationDetail/ApplicationHeader.vue'
-import ApplicationLogs from '/@/components/applicationDetail/ApplicationLogs.vue'
-import ApplicationSidebar from '/@/components/applicationDetail/ApplicationSidebar.vue'
-import { useFetchPartitionsUsecase } from '/@/features/partition/usecase'
-import { useFetchTagsUsecase } from '/@/features/tag/usecase'
-import { useFetchUsersUsecase } from '/@/features/user/usecase'
-import { useApplicationDetailStore } from '/@/stores/applicationDetail'
-import { usePartitionStore } from '/@/stores/partition'
-import { useTagStore } from '/@/stores/tag'
-import { useUserStore } from '/@/stores/user'
+import ApplicationHeader from '@/components/applicationDetail/ApplicationHeader.vue'
+import ApplicationLogs from '@/components/applicationDetail/ApplicationLogs.vue'
+import ApplicationSidebar from '@/components/applicationDetail/ApplicationSidebar.vue'
 
 const route = useRoute()
 const id = toId(route.params.id)
 
-const { isUserFetched } = useUserStore()
-const { isPartitionFetched } = usePartitionStore()
-const { isTagFetched } = useTagStore()
-const { useApplication } = useApplicationDetailStore()
+const { currentApplication: application, ensureApplication } =
+  useApplicationStore()
+const { isPartitionFetched, fetchPartitions } = usePartitionStore()
+const { isUserFetched, fetchUsers } = useUserStore()
+const { isTagFetched, fetchTags } = useTagStore()
 
-const application = await useApplication(id)
+await ensureApplication(id)
 
 if (!isPartitionFetched.value) {
-  await useFetchPartitionsUsecase()
+  await fetchPartitions()
 }
 if (!isUserFetched.value) {
-  await useFetchUsersUsecase()
+  await fetchUsers()
 }
 if (!isTagFetched.value) {
-  await useFetchTagsUsecase()
+  await fetchTags()
 }
 </script>
 
 <template>
-  <div v-if="application !== undefined" class="flex flex-col gap-6">
+  <div
+    v-if="application !== undefined && application !== null"
+    class="flex flex-col gap-6">
     <ApplicationHeader :application="application" />
     <div class="h-px bg-[#e5e7eb]" />
     <div class="flex flex-col lg:flex-row justify-between gap-12">

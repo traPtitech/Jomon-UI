@@ -2,19 +2,20 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
-import { useUserStore } from '/@/stores/user'
-
-import type { ApplicationSeed } from '/@/features/application/model'
-import { createApplicationUsecase } from '/@/features/application/usecase'
-import type { FileSeed } from '/@/features/file/model'
-import { createFilesUsecase } from '/@/features/file/usecase'
-import type { Tag } from '/@/features/tag/model'
-import { createTagIfNotExistUsecase } from '/@/features/tag/usecase'
+import { useApplicationStore } from '@/features/application/store'
+import type { ApplicationSeed } from '@/features/application/entities'
+import type { FileSeed } from '@/features/file/entities'
+import { createFiles } from '@/features/file/services'
+import { useTagStore } from '@/features/tag/store'
+import type { Tag } from '@/features/tag/entities'
+import { useUserStore } from '@/features/user/store'
 
 export const useNewApplication = () => {
   const toast = useToast()
   const router = useRouter()
   const { me } = useUserStore()
+  const { createApplication } = useApplicationStore()
+  const { ensureTags } = useTagStore()
 
   const isSending = ref(false)
 
@@ -49,9 +50,11 @@ export const useNewApplication = () => {
 
     let tags: Tag[]
     try {
-      tags = await createTagIfNotExistUsecase(application.value.tags)
+      tags = await ensureTags(application.value.tags)
     } catch (e) {
-      if (e instanceof Error) {
+      if (e instanceof Error && e.message) {
+        toast.error(e.message)
+      } else {
         toast.error('新規タグの作成に失敗しました')
       }
       isSending.value = false
@@ -63,9 +66,9 @@ export const useNewApplication = () => {
         ...application.value,
         tags
       }
-      const res = await createApplicationUsecase(applicationSeedWithNewTags)
+      const res = await createApplication(applicationSeedWithNewTags)
       try {
-        await createFilesUsecase(res.id, files.value)
+        await createFiles(res.id, files.value)
         toast.success('申請を作成しました')
         router.push('/')
       } catch (e) {

@@ -1,17 +1,16 @@
 <script lang="ts" setup>
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
 
-import { useApplicationStore } from '/@/stores/application'
-import { usePartitionStore } from '/@/stores/partition'
-import { useTagStore } from '/@/stores/tag'
-import { useUserStore } from '/@/stores/user'
+import { useApplicationStore } from '@/features/application/store'
+import { usePartitionStore } from '@/features/partition/store'
+import { useTagStore } from '@/features/tag/store'
+import { useUserStore } from '@/features/user/store'
 
-import BaseInput from '/@/components/shared/BaseInput.vue'
-import SearchSelect from '/@/components/shared/SearchSelect.vue'
-import { useFetchApplicationsUsecase } from '/@/features/application/usecase'
-import { applicationStatusOptions } from '/@/features/applicationStatus/model'
+import BaseInput from '@/components/shared/BaseInput.vue'
+import SearchSelect from '@/components/shared/SearchSelect.vue'
+import { applicationStatusOptions } from '@/features/applicationStatus/entities'
 
-const { applications, filterParams } = useApplicationStore()
+const { applications, filterParams, fetchApplications } = useApplicationStore()
 const { userOptions } = useUserStore()
 const { tagIdOptions } = useTagStore()
 const { partitionOptions } = usePartitionStore()
@@ -22,7 +21,7 @@ function sortByCreatedAt() {
   } else {
     filterParams.value.sort = 'created_at'
   }
-  useFetchApplicationsUsecase()
+  fetchApplications()
 }
 </script>
 
@@ -42,36 +41,36 @@ function sortByCreatedAt() {
         label="開始日"
         class="w-28"
         placeholder="yyyy-MM-dd"
-        @blur="useFetchApplicationsUsecase" />
+        @blur="fetchApplications" />
       ～
       <BaseInput
         v-model="filterParams.until"
         label="終了日"
         class="w-28"
         placeholder="yyyy-MM-dd"
-        @blur="useFetchApplicationsUsecase" />
+        @blur="fetchApplications" />
     </div>
     <SearchSelect
       v-model="filterParams.target"
       :options="userOptions"
       label="申請者"
-      @close="useFetchApplicationsUsecase" />
+      @close="fetchApplications" />
     <SearchSelect
       v-model="filterParams.currentStatus"
       :options="[...applicationStatusOptions]"
       label="申請の状態"
-      @close="useFetchApplicationsUsecase" />
+      @close="fetchApplications" />
     <SearchSelect
       v-model="filterParams.partition"
       :options="partitionOptions"
       label="パーティション"
-      @close="useFetchApplicationsUsecase" />
+      @close="fetchApplications" />
     <SearchSelect
       v-model="filterParams.tags"
       :options="tagIdOptions"
       label="タグ"
       multiple
-      @close="useFetchApplicationsUsecase" />
+      @close="fetchApplications" />
   </div>
   <span v-if="applications && applications.length !== 0" class="ml-1/6">
     {{ applications.length }}件取得しました

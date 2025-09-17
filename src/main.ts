@@ -7,7 +7,7 @@ import { setupWorker } from 'msw/browser'
 
 import App from './App.vue'
 import router from './router'
-import { handlers } from '/@/lib/msw'
+import { handlers } from '@/lib/msw'
 
 if (
   import.meta.env.MODE === 'development' &&

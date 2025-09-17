@@ -2,12 +2,12 @@
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import StatusChip from '/@/components/shared/StatusChip.vue'
-import type { ApplicationDetail } from '/@/features/application/model'
-import { changeStatusUsecase } from '/@/features/application/usecase'
-import type { ApplicationStatus } from '/@/features/applicationStatus/model'
+import MarkdownTextarea from '@/components/shared/MarkdownTextarea.vue'
+import SimpleButton from '@/components/shared/SimpleButton.vue'
+import StatusChip from '@/components/shared/StatusChip.vue'
+import { useApplicationStore } from '@/features/application/store'
+import type { ApplicationDetail } from '@/features/application/entities'
+import type { ApplicationStatus } from '@/features/applicationStatus/entities'
 
 const props = defineProps<{
   application: ApplicationDetail
@@ -16,16 +16,24 @@ const props = defineProps<{
 const emit = defineEmits<(e: 'closeModal') => void>()
 
 const toast = useToast()
+const { changeStatus } = useApplicationStore()
 
 const comment = ref('')
 
-const putStatus = async (nextStatus: ApplicationStatus, comment: string) => {
+const putStatus = async (
+  nextStatus: ApplicationStatus,
+  commentValue: string
+) => {
   try {
-    await changeStatusUsecase(props.application.id, nextStatus, comment)
+    await changeStatus(props.application.id, nextStatus, commentValue)
     toast.success('申請の状態を変更しました')
     emit('closeModal')
-  } catch {
-    toast.error('変更に失敗しました')
+  } catch (e) {
+    if (e instanceof Error && e.message) {
+      toast.error(e.message)
+    } else {
+      toast.error('変更に失敗しました')
+    }
   }
 }
 

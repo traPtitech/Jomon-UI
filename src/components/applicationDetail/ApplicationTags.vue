@@ -1,20 +1,21 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import { useUserStore } from '/@/stores/user'
+import { useUserStore } from '@/features/user/store'
 
 import { useToast } from 'vue-toastification'
-import EditButton from '/@/components/shared/EditButton.vue'
-import SearchSelectTag from '/@/components/shared/SearchSelectTag.vue'
-import TagsPartition from '/@/components/shared/TagsPartition.vue'
-import { useApplication } from '/@/features/application/composables'
-import type { ApplicationDetail } from '/@/features/application/model'
-import { editApplicationUsecase } from '/@/features/application/usecase'
+import EditButton from '@/components/shared/EditButton.vue'
+import SearchSelectTag from '@/components/shared/SearchSelectTag.vue'
+import TagsPartition from '@/components/shared/TagsPartition.vue'
+import { useApplication } from '@/features/application/composables'
+import type { ApplicationDetail } from '@/features/application/entities'
+import { useApplicationStore } from '@/features/application/store'
 
 const application = defineModel<ApplicationDetail>({ required: true })
 
 const { me } = useUserStore()
 const { isApplicationCreator } = useApplication(application.value)
+const { editApplication } = useApplicationStore()
 const toast = useToast()
 
 const hasAuthority = isApplicationCreator.value(me.value)
@@ -25,7 +26,7 @@ const toggleEditTags = () => {
 }
 const handleUpdateTags = async () => {
   try {
-    await editApplicationUsecase(application.value.id, {
+    await editApplication(application.value.id, {
       ...application.value,
       partition: application.value.partition?.id ?? null // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
     })

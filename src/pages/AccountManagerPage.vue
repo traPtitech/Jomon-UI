@@ -1,20 +1,23 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
-import { useAccountManager } from './composables/useAccountManager'
-import SearchSelect from '/@/components/shared/SearchSelect.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import { useFetchAccountManagersUsecase } from '/@/features/accountManager/usecase'
-import { deleteTagsUsecase, useFetchTagsUsecase } from '/@/features/tag/usecase'
-import { useFetchUsersUsecase } from '/@/features/user/usecase'
-import { useAccountManagerStore } from '/@/stores/accountManager'
-import { useTagStore } from '/@/stores/tag'
-import { useUserStore } from '/@/stores/user'
 
-const { isAccountManagerFetched, accountManagers, accountManagerOptions } =
-  useAccountManagerStore()
-const { me, isUserFetched, isAccountManager, userMap } = useUserStore()
-const { isTagFetched, tagIdOptions } = useTagStore()
+import SearchSelect from '@/components/shared/SearchSelect.vue'
+import SimpleButton from '@/components/shared/SimpleButton.vue'
+import { useAccountManager } from './composables/useAccountManager'
+import { useAccountManagerStore } from '@/features/accountManager/store'
+import { useTagStore } from '@/features/tag/store'
+import { useUserStore } from '@/features/user/store'
+
+const {
+  isAccountManagerFetched,
+  accountManagers,
+  accountManagerOptions,
+  fetchAccountManagers
+} = useAccountManagerStore()
+const { me, isUserFetched, isAccountManager, userMap, fetchUsers } =
+  useUserStore()
+const { isTagFetched, tagIdOptions, deleteTags, fetchTags } = useTagStore()
 const toast = useToast()
 
 const addList = ref<string[]>([])
@@ -24,13 +27,19 @@ const { absentMembers, isSending, addAccountManagers, removeAccountManagers } =
   useAccountManager()
 
 const handleDeleteTags = async () => {
+  if (deleteTagList.value.length === 0) {
+    toast.warning('1つ以上のタグを選択してください')
+    return
+  }
   isSending.value = true
   try {
-    await deleteTagsUsecase(deleteTagList.value)
+    await deleteTags(deleteTagList.value)
     toast.success('タグを削除しました')
   } catch (e) {
-    if (e instanceof Error) {
+    if (e instanceof Error && e.message) {
       toast.error(e.message)
+    } else {
+      toast.error('タグの削除に失敗しました')
     }
   }
   isSending.value = false
@@ -39,13 +48,13 @@ const handleDeleteTags = async () => {
 
 if (me.value?.accountManager) {
   if (!isAccountManagerFetched.value) {
-    await useFetchAccountManagersUsecase()
+    await fetchAccountManagers()
   }
   if (!isUserFetched.value) {
-    await useFetchUsersUsecase()
+    await fetchUsers()
   }
   if (!isTagFetched.value) {
-    await useFetchTagsUsecase()
+    await fetchTags()
   }
 }
 </script>

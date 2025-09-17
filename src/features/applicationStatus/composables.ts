@@ -1,9 +1,9 @@
-import type { ApplicationStatus } from '/@/features/applicationStatus/model'
+import type { ApplicationStatus } from '@/features/applicationStatus/entities'
 
 import { computed } from 'vue'
-import { useApplication } from '/@/features/application/composables'
-import type { ApplicationDetail } from '/@/features/application/model'
-import { useUserStore } from '/@/stores/user'
+import { useApplication } from '@/features/application/composables'
+import type { ApplicationDetail } from '@/features/application/entities'
+import { useUserStore } from '@/features/user/store'
 
 export const useStatusOptions = (application: ApplicationDetail) => {
   const { me, isAccountManager } = useUserStore()

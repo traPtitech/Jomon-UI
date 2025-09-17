@@ -1,9 +1,9 @@
-import { accountManagerHandlers } from '/@/features/accountManager/mock'
-import { applicationHandlers } from '/@/features/application/mock'
-import { fileHandlers } from '/@/features/file/mock'
-import { partitionHandlers } from '/@/features/partition/mock'
-import { tagHandlers } from '/@/features/tag/mock'
-import { userHandlers } from '/@/features/user/mock'
+import { accountManagerHandlers } from '@/features/accountManager/__mocks__/handlers'
+import { applicationHandlers } from '@/features/application/__mocks__/handlers'
+import { fileHandlers } from '@/features/file/__mocks__/handlers'
+import { partitionHandlers } from '@/features/partition/__mocks__/handlers'
+import { tagHandlers } from '@/features/tag/__mocks__/handlers'
+import { userHandlers } from '@/features/user/__mocks__/handlers'
 
 export const handlers = [
   applicationHandlers,

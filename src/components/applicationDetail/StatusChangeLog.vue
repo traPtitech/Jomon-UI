@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { useUserStore } from '/@/stores/user'
+import { useUserStore } from '@/features/user/store'
 
-import { formatDateAndTime } from '/@/lib/date'
+import { formatDateAndTime } from '@/lib/date'
 
-import StatusChip from '/@/components/shared/StatusChip.vue'
-import UserIcon from '/@/components/shared/UserIcon.vue'
-import type { ApplicationStatusDetail } from '/@/features/applicationStatus/model'
+import StatusChip from '@/components/shared/StatusChip.vue'
+import UserIcon from '@/components/shared/UserIcon.vue'
+import type { ApplicationStatusDetail } from '@/features/applicationStatus/entities'
 
 interface Props {
   log: ApplicationStatusDetail

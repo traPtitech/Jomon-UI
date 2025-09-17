@@ -1,17 +1,16 @@
 <script lang="ts" setup>
-import BaseInput from '/@/components/shared/BaseInput.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import BaseInput from '@/components/shared/BaseInput.vue'
+import SimpleButton from '@/components/shared/SimpleButton.vue'
 
-import { useFetchUsersUsecase } from '/@/features/user/usecase'
-import { useUserStore } from '/@/stores/user'
+import { useUserStore } from '@/features/user/store'
 import { useNewPartition } from './composables/useNewPartition'
 
-const { isUserFetched } = useUserStore()
+const { isUserFetched, fetchUsers } = useUserStore()
 
 const { isSending, partition, handleCreatePartition } = useNewPartition()
 
 if (!isUserFetched.value) {
-  await useFetchUsersUsecase()
+  await fetchUsers()
 }
 </script>
 

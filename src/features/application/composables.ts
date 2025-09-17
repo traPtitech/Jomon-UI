@@ -1,6 +1,6 @@
 import { computed } from 'vue'
-import type { ApplicationDetail } from './model'
-import type { User } from '/@/features/user/model'
+import type { ApplicationDetail } from './entities'
+import type { User } from '@/features/user/entities'
 
 export const useApplication = (application: ApplicationDetail) => {
   const isApplicationCreator = computed(() => (user: User | undefined) => {

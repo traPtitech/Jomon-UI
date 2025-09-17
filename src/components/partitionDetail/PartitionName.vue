@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { usePartitionDetailStore } from '/@/stores/partitionDetail'
-import { useUserStore } from '/@/stores/user'
+import { usePartitionStore } from '@/features/partition/store'
+import { useUserStore } from '@/features/user/store'
 
-import type { EditMode } from '/@/components/partitionDetail/composables/usePartitionInformation'
-import EditButton from '/@/components/shared/EditButton.vue'
-import BaseInput from '/@/components/shared/BaseInput.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import type { EditMode } from '@/components/partitionDetail/composables/usePartitionInformation'
+import EditButton from '@/components/shared/EditButton.vue'
+import BaseInput from '@/components/shared/BaseInput.vue'
+import SimpleButton from '@/components/shared/SimpleButton.vue'
 
 interface Props {
   isEditMode: boolean
@@ -19,7 +19,11 @@ const emit = defineEmits<{
 }>()
 
 const { me } = useUserStore()
-const { canEditPartition, partition, editedValue } = usePartitionDetailStore()
+const {
+  canEditPartition,
+  currentPartition: partition,
+  editedValue
+} = usePartitionStore()
 </script>
 
 <template>

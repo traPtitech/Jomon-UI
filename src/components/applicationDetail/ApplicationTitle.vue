@@ -2,13 +2,13 @@
 import { ref } from 'vue'
 
 import { useToast } from 'vue-toastification'
-import BaseInput from '/@/components/shared/BaseInput.vue'
-import EditButton from '/@/components/shared/EditButton.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import { useApplication } from '/@/features/application/composables'
-import type { ApplicationDetail } from '/@/features/application/model'
-import { editApplicationUsecase } from '/@/features/application/usecase'
-import { useUserStore } from '/@/stores/user'
+import BaseInput from '@/components/shared/BaseInput.vue'
+import EditButton from '@/components/shared/EditButton.vue'
+import SimpleButton from '@/components/shared/SimpleButton.vue'
+import { useApplication } from '@/features/application/composables'
+import type { ApplicationDetail } from '@/features/application/entities'
+import { useApplicationStore } from '@/features/application/store'
+import { useUserStore } from '@/features/user/store'
 
 const props = defineProps<{
   application: ApplicationDetail
@@ -16,6 +16,7 @@ const props = defineProps<{
 
 const { me } = useUserStore()
 const { isApplicationCreator } = useApplication(props.application)
+const { editApplication } = useApplicationStore()
 const toast = useToast()
 
 const hasAuthority = isApplicationCreator.value(me.value)
@@ -30,7 +31,7 @@ const toggleEditTitle = () => {
 }
 const handleUpdateTitle = async () => {
   try {
-    await editApplicationUsecase(props.application.id, {
+    await editApplication(props.application.id, {
       ...props.application,
       partition: props.application.partition?.id ?? null,
       title: editedTitle.value

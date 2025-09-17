@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 
-import { useUserStore } from '/@/stores/user'
+import { useUserStore } from '@/features/user/store'
 
 import HeaderButton from './HeaderButton.vue'
 

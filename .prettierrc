@@ -22,14 +22,10 @@
   "htmlWhitespaceSensitivity": "css",
   "vueIndentScriptAndStyle": false,
   "endOfLine": "auto",
-  "tailwindStylesheet": "./src/styles/main.css"
-  ,
+  "tailwindStylesheet": "./src/styles/main.css",
   "overrides": [
     {
-      "files": [
-        ".prettierrc",
-        ".prettierrc.json"
-      ],
+      "files": [".prettierrc", ".prettierrc.json"],
       "options": {
         "singleQuote": false
       }

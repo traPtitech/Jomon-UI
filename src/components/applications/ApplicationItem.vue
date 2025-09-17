@@ -2,14 +2,14 @@
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import { useUserStore } from '/@/stores/user'
+import { useUserStore } from '/@/features/user/store'
 
 import { formatDate } from '/@/lib/date'
 
 import StatusChip from '/@/components/shared/StatusChip.vue'
 import TagsPartition from '/@/components/shared/TagsPartition.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
-import type { Application } from '/@/features/application/model'
+import type { Application } from '/@/features/application/entities'
 
 interface Props {
   application: Application

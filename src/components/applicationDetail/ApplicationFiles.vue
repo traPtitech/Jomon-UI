@@ -2,7 +2,7 @@
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
 
-import { useApplicationDetailStore } from '/@/stores/applicationDetail'
+import { useApplicationStore } from '/@/features/application/store'
 
 import { isImageByName } from '/@/lib/checkFileType'
 
@@ -10,7 +10,7 @@ import SimpleButton from '/@/components/shared/SimpleButton.vue'
 
 import { useApplicationFile } from './composables/useApplicationFile'
 
-const { application } = useApplicationDetailStore()
+const { currentApplication: application } = useApplicationStore()
 
 const { files, fetchFiles, removeFile } = useApplicationFile()
 const downloadLink = (file: string) => {

@@ -2,7 +2,7 @@
 import ApplicationPartition from '/@/components/applicationDetail/ApplicationPartition.vue'
 import ApplicationTags from '/@/components/applicationDetail/ApplicationTags.vue'
 import ApplicationTargets from '/@/components/applicationDetail/ApplicationTargets.vue'
-import type { ApplicationDetail } from '/@/features/application/model'
+import type { ApplicationDetail } from '/@/features/application/entities'
 
 const application = defineModel<ApplicationDetail>({ required: true })
 </script>

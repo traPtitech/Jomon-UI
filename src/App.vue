@@ -1,21 +1,21 @@
 <script lang="ts" setup>
 import { watch } from 'vue'
-
-import { useFetchMeUsecase } from '/@/features/user/usecase'
+import { useRoute } from 'vue-router'
 
 import JomonHeader from './components/navigation/JomonHeader.vue'
 import './styles/main.css'
 import './styles/scrollbar.css'
 import './styles/toast.css'
-import { useRoute } from 'vue-router'
+import { useUserStore } from '/@/features/user/store'
 
 const route = useRoute()
+const { fetchMe } = useUserStore()
 
 watch(
   () => route.fullPath,
   async () => {
     try {
-      await useFetchMeUsecase()
+      await fetchMe()
     } catch {
       document.location = 'https://jomon-dev.trapti.tech/api/auth/genpkce'
     }

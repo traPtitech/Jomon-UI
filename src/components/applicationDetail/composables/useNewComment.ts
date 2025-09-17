@@ -1,10 +1,11 @@
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import { createCommentUsecase } from '/@/features/application/usecase'
+import { useApplicationStore } from '/@/features/application/store'
 
 export const useNewComment = (applicationId: string) => {
   const toast = useToast()
+  const { createComment } = useApplicationStore()
 
   const comment = ref('')
   const isSending = ref(false)
@@ -16,11 +17,15 @@ export const useNewComment = (applicationId: string) => {
     }
     try {
       isSending.value = true
-      await createCommentUsecase(applicationId, comment.value)
+      await createComment(applicationId, comment.value)
       comment.value = ''
       toast.success('コメントを送信しました')
-    } catch {
-      toast.error('送信に失敗しました')
+    } catch (e) {
+      if (e instanceof Error && e.message) {
+        toast.error(e.message)
+      } else {
+        toast.error('送信に失敗しました')
+      }
     }
     isSending.value = false
   }

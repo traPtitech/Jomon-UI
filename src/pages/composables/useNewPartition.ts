@@ -2,13 +2,14 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
-import type { PartitionSeed } from '/@/features/partition/model'
-import { createPartitionUsecase } from '/@/features/partition/usecase'
+import type { PartitionSeed } from '/@/features/partition/entities'
+import { usePartitionStore } from '/@/features/partition/store'
 
 export const useNewPartition = () => {
   const isSending = ref(false)
   const toast = useToast()
   const router = useRouter()
+  const { createPartition } = usePartitionStore()
   const partition = ref<PartitionSeed>({
     name: '',
     budget: 0,
@@ -23,14 +24,18 @@ export const useNewPartition = () => {
       return
     }
     try {
-      await createPartitionUsecase(partition.value)
+      isSending.value = true
+      await createPartition(partition.value)
       toast.success('パーティションを作成しました')
       router.push('/partitions')
     } catch (e) {
-      if (e instanceof Error) {
+      if (e instanceof Error && e.message) {
         toast.error(e.message)
+      } else {
+        toast.error('パーティションの作成に失敗しました')
       }
     }
+    isSending.value = false
   }
 
   return { isSending, partition, handleCreatePartition }

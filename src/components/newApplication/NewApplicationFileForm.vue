@@ -5,7 +5,7 @@ import { ref } from 'vue'
 
 import { isImageByType } from '/@/lib/checkFileType'
 
-import type { FileSeed } from '/@/features/file/model'
+import type { FileSeed } from '/@/features/file/entities'
 
 interface Props {
   files: FileSeed[]

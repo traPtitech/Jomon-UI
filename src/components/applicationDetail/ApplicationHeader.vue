@@ -3,7 +3,7 @@ import { computed } from 'vue'
 
 import ApplicationStatusChange from '/@/components/applicationDetail/ApplicationStatusChange.vue'
 import ApplicationTitle from '/@/components/applicationDetail/ApplicationTitle.vue'
-import type { ApplicationDetail } from '/@/features/application/model'
+import type { ApplicationDetail } from '/@/features/application/entities'
 
 const props = defineProps<{
   application: ApplicationDetail

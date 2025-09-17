@@ -4,13 +4,13 @@ import { computed } from 'vue'
 import BaseInput from '/@/components/shared/BaseInput.vue'
 import SearchSelect from '/@/components/shared/SearchSelect.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
-import type { ApplicationDetail } from '/@/features/application/model'
-import { editApplicationUsecase } from '/@/features/application/usecase'
+import type { ApplicationDetail } from '/@/features/application/entities'
+import { useApplicationStore } from '/@/features/application/store'
 import type {
   ApplicationTarget,
   ApplicationTargetDetail
-} from '/@/features/applicationTarget/model'
-import { useUserStore } from '/@/stores/user'
+} from '/@/features/applicationTarget/entities'
+import { useUserStore } from '/@/features/user/store'
 
 const props = defineProps<{
   application: ApplicationDetail
@@ -19,6 +19,7 @@ const props = defineProps<{
 }>()
 
 const { userMap, userOptions } = useUserStore()
+const { editApplication } = useApplicationStore()
 
 const targets = computed(() =>
   props.application.targets.map(target => target.target)
@@ -41,7 +42,7 @@ const handleRemoveTarget = async () => {
   }
 
   try {
-    await editApplicationUsecase(props.application.id, {
+    await editApplication(props.application.id, {
       ...props.application,
       partition: props.application.partition?.id ?? null,
       targets: props.application.targets.filter(

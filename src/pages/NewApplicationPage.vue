@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { usePartitionStore } from '/@/stores/partition'
-import { useTagStore } from '/@/stores/tag'
-import { useUserStore } from '/@/stores/user'
+import { usePartitionStore } from '/@/features/partition/store'
+import { useTagStore } from '/@/features/tag/store'
+import { useUserStore } from '/@/features/user/store'
 
 import NewApplicationFileForm from '/@/components/newApplication/NewApplicationFileForm.vue'
 import NewApplicationTargets from '/@/components/newApplication/NewApplicationTargets.vue'
@@ -10,27 +10,25 @@ import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SearchSelect from '/@/components/shared/SearchSelect.vue'
 import SearchSelectTag from '/@/components/shared/SearchSelectTag.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import { applicationTemplates } from '/@/features/applicationTemplate/model'
-import { useFetchPartitionsUsecase } from '/@/features/partition/usecase'
-import { useFetchTagsUsecase } from '/@/features/tag/usecase'
-import { useFetchUsersUsecase } from '/@/features/user/usecase'
+import { applicationTemplates } from '/@/features/applicationTemplate/entities'
 
 import { useNewApplication } from './composables/useNewApplication'
 
-const { isTagFetched } = useTagStore()
-const { isUserFetched, me } = useUserStore()
-const { isPartitionFetched, partitionOptions } = usePartitionStore()
+const { isTagFetched, fetchTags } = useTagStore()
+const { isUserFetched, fetchUsers, me } = useUserStore()
+const { isPartitionFetched, partitionOptions, fetchPartitions } =
+  usePartitionStore()
 
 const { isSending, application, files, postApplication } = useNewApplication()
 
 if (!isTagFetched.value) {
-  useFetchTagsUsecase()
+  fetchTags()
 }
 if (!isPartitionFetched.value) {
-  useFetchPartitionsUsecase()
+  fetchPartitions()
 }
 if (!isUserFetched.value) {
-  useFetchUsersUsecase()
+  fetchUsers()
 }
 </script>
 

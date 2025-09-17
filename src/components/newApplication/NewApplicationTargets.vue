@@ -4,7 +4,7 @@ import BaseInput from '/@/components/shared/BaseInput.vue'
 import SearchSelect from '/@/components/shared/SearchSelect.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import { ApplicationTargetInput } from '/@/lib/apis'
-import { useUserStore } from '/@/stores/user'
+import { useUserStore } from '/@/features/user/store'
 
 const model = defineModel<ApplicationTargetInput[]>({ required: true })
 

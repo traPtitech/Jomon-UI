@@ -2,24 +2,23 @@
 import { ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
-import { usePartitionStore } from '/@/stores/partition'
-import { useUserStore } from '/@/stores/user'
+import { usePartitionStore } from '/@/features/partition/store'
+import { useUserStore } from '/@/features/user/store'
 
 import { toPage } from '/@/lib/parseQueryParams'
 
 import PartitionTable from '/@/components/partitions/PartitionTable.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import { useFetchPartitionsUsecase } from '/@/features/partition/usecase'
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))
 
-const { partitions, isPartitionFetched } = usePartitionStore()
+const { partitions, isPartitionFetched, fetchPartitions } = usePartitionStore()
 const { isAccountManager } = useUserStore()
 
 if (!isPartitionFetched.value) {
-  await useFetchPartitionsUsecase()
+  await fetchPartitions()
 }
 
 watch(

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useUserStore } from '/@/stores/user'
+import { useUserStore } from '/@/features/user/store'
 
 import { formatDateAndTime } from '/@/lib/date'
 
@@ -12,8 +12,8 @@ import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
 import UserIcon from '/@/components/shared/UserIcon.vue'
 import { useApplication } from '/@/features/application/composables'
-import type { ApplicationDetail } from '/@/features/application/model'
-import { editApplicationUsecase } from '/@/features/application/usecase'
+import type { ApplicationDetail } from '/@/features/application/entities'
+import { useApplicationStore } from '/@/features/application/store'
 
 const props = defineProps<{
   application: ApplicationDetail
@@ -25,6 +25,7 @@ const toast = useToast()
 const { isApplicationCreator } = useApplication(props.application)
 
 const { me, userMap } = useUserStore()
+const { editApplication } = useApplicationStore()
 
 const hasAuthority = isApplicationCreator.value(me.value)
 const isEditMode = ref(false)
@@ -37,7 +38,7 @@ const toggleEditContent = () => {
 }
 const handleUpdateContent = async () => {
   try {
-    await editApplicationUsecase(props.application.id, {
+    await editApplication(props.application.id, {
       ...props.application,
       partition: props.application.partition?.id ?? null, // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
       content: editedContent.value

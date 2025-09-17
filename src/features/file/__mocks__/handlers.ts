@@ -1,8 +1,8 @@
 import { HttpResponse, http } from 'msw'
 
-import type { FileMeta } from '/@/lib/apis'
+import type { FileMeta } from '@/lib/apis'
 
-import mehm8128 from '/@/assets/mehm8128.png'
+import mehm8128 from '@/assets/mehm8128.png'
 
 const mockFile = mehm8128
 

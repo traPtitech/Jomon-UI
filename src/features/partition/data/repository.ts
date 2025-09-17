@@ -1,4 +1,4 @@
-import apis from '/@/lib/apis'
+import apis from '@/lib/apis'
 
 import { convertPartitionFromData } from './converter'
 import type { PartitionSeed, Partition } from '../entities'

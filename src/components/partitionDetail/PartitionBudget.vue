@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { usePartitionStore } from '/@/features/partition/store'
+import { usePartitionStore } from '@/features/partition/store'
 
 const { currentPartition: partition } = usePartitionStore()
 </script>

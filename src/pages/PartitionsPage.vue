@@ -2,14 +2,14 @@
 import { ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
-import { usePartitionStore } from '/@/features/partition/store'
-import { useUserStore } from '/@/features/user/store'
+import { usePartitionStore } from '@/features/partition/store'
+import { useUserStore } from '@/features/user/store'
 
-import { toPage } from '/@/lib/parseQueryParams'
+import { toPage } from '@/lib/parseQueryParams'
 
-import PartitionTable from '/@/components/partitions/PartitionTable.vue'
-import PaginationBar from '/@/components/shared/PaginationBar.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import PartitionTable from '@/components/partitions/PartitionTable.vue'
+import PaginationBar from '@/components/shared/PaginationBar.vue'
+import SimpleButton from '@/components/shared/SimpleButton.vue'
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))

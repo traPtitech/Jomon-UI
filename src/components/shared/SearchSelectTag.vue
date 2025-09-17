@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
-import { useTagStore } from '/@/features/tag/store'
-import type { Tag } from '/@/features/tag/entities'
+import { useTagStore } from '@/features/tag/store'
+import type { Tag } from '@/features/tag/entities'
 import SearchSelect from './SearchSelect.vue'
 
 const model = defineModel<Tag[]>({ required: true })

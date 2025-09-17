@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import { useUserStore } from '/@/features/user/store'
+import { useUserStore } from '@/features/user/store'
 
 import { useToast } from 'vue-toastification'
-import EditButton from '/@/components/shared/EditButton.vue'
-import SearchSelectTag from '/@/components/shared/SearchSelectTag.vue'
-import TagsPartition from '/@/components/shared/TagsPartition.vue'
-import { useApplication } from '/@/features/application/composables'
-import type { ApplicationDetail } from '/@/features/application/entities'
-import { useApplicationStore } from '/@/features/application/store'
+import EditButton from '@/components/shared/EditButton.vue'
+import SearchSelectTag from '@/components/shared/SearchSelectTag.vue'
+import TagsPartition from '@/components/shared/TagsPartition.vue'
+import { useApplication } from '@/features/application/composables'
+import type { ApplicationDetail } from '@/features/application/entities'
+import { useApplicationStore } from '@/features/application/store'
 
 const application = defineModel<ApplicationDetail>({ required: true })
 

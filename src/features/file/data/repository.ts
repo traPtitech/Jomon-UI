@@ -1,4 +1,4 @@
-import apis from '/@/lib/apis'
+import apis from '@/lib/apis'
 
 import { convertFileMetaFromData } from './converter'
 import type { FileMeta, FileSeed } from '../entities'

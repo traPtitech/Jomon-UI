@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 import { TrashIcon } from '@heroicons/vue/24/solid'
 import { computed } from 'vue'
-import BaseInput from '/@/components/shared/BaseInput.vue'
-import SearchSelect from '/@/components/shared/SearchSelect.vue'
-import UserIcon from '/@/components/shared/UserIcon.vue'
-import type { ApplicationDetail } from '/@/features/application/entities'
-import { useApplicationStore } from '/@/features/application/store'
+import BaseInput from '@/components/shared/BaseInput.vue'
+import SearchSelect from '@/components/shared/SearchSelect.vue'
+import UserIcon from '@/components/shared/UserIcon.vue'
+import type { ApplicationDetail } from '@/features/application/entities'
+import { useApplicationStore } from '@/features/application/store'
 import type {
   ApplicationTarget,
   ApplicationTargetDetail
-} from '/@/features/applicationTarget/entities'
-import { useUserStore } from '/@/features/user/store'
+} from '@/features/applicationTarget/entities'
+import { useUserStore } from '@/features/user/store'
 
 const props = defineProps<{
   application: ApplicationDetail

@@ -2,11 +2,11 @@
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
 
-import { useApplicationStore } from '/@/features/application/store'
+import { useApplicationStore } from '@/features/application/store'
 
-import { isImageByName } from '/@/lib/checkFileType'
+import { isImageByName } from '@/lib/checkFileType'
 
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import SimpleButton from '@/components/shared/SimpleButton.vue'
 
 import { useApplicationFile } from './composables/useApplicationFile'
 

@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 
-import type { ApplicationComment } from '/@/features/applicationComment/entities'
-import type { ApplicationStatusDetail } from '/@/features/applicationStatus/entities'
+import type { ApplicationComment } from '@/features/applicationComment/entities'
+import type { ApplicationStatusDetail } from '@/features/applicationStatus/entities'
 
 import CommentLog from './CommentLog.vue'
 import NewComment from './NewComment.vue'
 import StatusChangeLog from './StatusChangeLog.vue'
-import ApplicationContent from '/@/components/applicationDetail/ApplicationContent.vue'
-import type { ApplicationDetail } from '/@/features/application/entities'
+import ApplicationContent from '@/components/applicationDetail/ApplicationContent.vue'
+import type { ApplicationDetail } from '@/features/application/entities'
 
 const props = defineProps<{
   application: ApplicationDetail

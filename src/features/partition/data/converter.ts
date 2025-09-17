@@ -1,5 +1,5 @@
 import type { Partition } from '../entities'
-import type { Partition as ApiPartition } from '/@/lib/apis'
+import type { Partition as ApiPartition } from '@/lib/apis'
 
 export const convertPartitionFromData = (
   partition: ApiPartition

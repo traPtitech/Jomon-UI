@@ -2,7 +2,7 @@ import { defineStore, storeToRefs } from 'pinia'
 
 import type { Partition, PartitionSeed } from './entities'
 import { usePartitionRepository } from './data/repository'
-import type { User } from '/@/features/user/entities'
+import type { User } from '@/features/user/entities'
 
 const createDefaultPartitionSeed = (): PartitionSeed => ({
   name: '',

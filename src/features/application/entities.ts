@@ -1,15 +1,15 @@
 import { DateTime } from 'luxon'
-import type { ApplicationComment } from '/@/features/applicationComment/entities'
+import type { ApplicationComment } from '@/features/applicationComment/entities'
 import type {
   ApplicationStatus,
   ApplicationStatusDetail
-} from '/@/features/applicationStatus/entities'
+} from '@/features/applicationStatus/entities'
 import type {
   ApplicationTarget,
   ApplicationTargetDetail
-} from '/@/features/applicationTarget/entities'
-import type { Partition } from '/@/features/partition/entities'
-import type { Tag } from '/@/features/tag/entities'
+} from '@/features/applicationTarget/entities'
+import type { Partition } from '@/features/partition/entities'
+import type { Tag } from '@/features/tag/entities'
 
 export interface Application {
   id: string

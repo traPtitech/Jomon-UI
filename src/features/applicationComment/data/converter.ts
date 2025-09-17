@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-import type { Comment as CommentData } from '/@/lib/apis'
+import type { Comment as CommentData } from '@/lib/apis'
 
 import type { ApplicationComment } from '../entities'
 

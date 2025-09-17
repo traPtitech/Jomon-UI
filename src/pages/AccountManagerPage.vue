@@ -2,12 +2,12 @@
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import SearchSelect from '/@/components/shared/SearchSelect.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import SearchSelect from '@/components/shared/SearchSelect.vue'
+import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useAccountManager } from './composables/useAccountManager'
-import { useAccountManagerStore } from '/@/features/accountManager/store'
-import { useTagStore } from '/@/features/tag/store'
-import { useUserStore } from '/@/features/user/store'
+import { useAccountManagerStore } from '@/features/accountManager/store'
+import { useTagStore } from '@/features/tag/store'
+import { useUserStore } from '@/features/user/store'
 
 const {
   isAccountManagerFetched,

@@ -28,7 +28,7 @@ watch(
 
 <template>
   <div class="flex flex-col gap-7">
-    <div class="relative flex flex-wrap gap-x-7 gap-y-2 w-full items-center">
+    <div class="relative flex w-full flex-wrap items-center gap-x-7 gap-y-2">
       <h1 class="text-2xl">パーティション一覧</h1>
       <div v-if="isAccountManager">
         <RouterLink to="/partitions/new">

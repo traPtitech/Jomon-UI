@@ -58,9 +58,9 @@ const backgroundColor = computed(() => (status: ApplicationStatus) => {
 
 <template>
   <div
-    :class="`flex items-center rounded-3xl px-2 py-2 gap-2 text-white ${backgroundColor(
+    :class="`flex items-center gap-2 rounded-3xl px-2 py-2 text-white ${backgroundColor(
       status
-    )}${hasMenu ? ' cursor-pointer' : ''}`"
+    )}${hasMenu ? 'cursor-pointer' : ''}`"
     :title="statusToJpn(status)">
     <CheckCircleIcon v-if="status === 'approved'" class="w-6" />
     <ExclamationTriangleIcon

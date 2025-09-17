@@ -16,8 +16,8 @@ const formattedDateAndTime = formatDateAndTime(props.log.createdAt)
 </script>
 
 <template>
-  <div class="w-full flex items-center">
-    <div class="flex items-center gap-4 flex-1">
+  <div class="flex w-full items-center">
+    <div class="flex flex-1 items-center gap-4">
       <UserIcon class="w-12" :name="userMap[log.createdBy]" />
       <p class="flex flex-wrap items-center gap-2">
         <span class="font-bold">{{ userMap[log.createdBy] }}</span>

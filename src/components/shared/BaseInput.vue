@@ -49,14 +49,14 @@ const handleKey = (e: KeyboardEvent) => {
 
 <template>
   <div
-    class="flex bg-white border border-surface-secondary rounded-lg focus-within:outline-none focus-within:!ring-2 focus-within:!ring-blue-500 !ring-offset-2 transition-all duration-200 ease-in-out">
+    class="flex rounded-lg border border-surface-secondary bg-white !ring-offset-2 transition-all duration-200 ease-in-out focus-within:!ring-2 focus-within:!ring-blue-500 focus-within:outline-none">
     <slot />
     <div class="relative w-full">
       <textarea
         v-if="type === 'textarea'"
         :id="`input-${props.label}`"
         ref="textareaRef"
-        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} pb-2 outline-none ring-0 [&:not(:focus-visible)]:placeholder:text-transparent peer`"
+        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent`"
         rows="12"
         :placeholder="props.placeholder"
         :required="props.required"
@@ -69,7 +69,7 @@ const handleKey = (e: KeyboardEvent) => {
         v-else
         :id="`input-${props.label}`"
         ref="inputRef"
-        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} pb-2 outline-none ring-0 [&:not(:focus-visible)]:placeholder:text-transparent peer`"
+        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent`"
         :placeholder="props.placeholder"
         :required="props.required"
         :type="props.type"
@@ -82,7 +82,7 @@ const handleKey = (e: KeyboardEvent) => {
       <label
         :for="`input-${props.label}`"
         :class="[
-          'absolute left-3 transition-all duration-200 ease-in-out pointer-events-none text-text-secondary peer-focus:text-blue-500',
+          'pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out peer-focus:text-blue-500',
           isLabelFloating
             ? 'top-1 text-xs font-medium'
             : type === 'textarea'

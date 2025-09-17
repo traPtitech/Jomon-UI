@@ -47,14 +47,14 @@ function changeCurrentTab(tab: TabType) {
 
 <template>
   <div
-    class="min-h-25 h-3/5 flex flex-col rounded-sm border border-surface-secondary">
+    class="flex h-3/5 min-h-25 flex-col rounded-sm border border-surface-secondary">
     <div
       class="flex items-center justify-between rounded-t bg-hover-secondary px-4 pt-3">
       <div class="flex items-center">
         <button
-          :class="`rounded-t py-2 px-4 h-15 ${
+          :class="`h-15 rounded-t px-4 py-2 ${
             currentTab === 'input'
-              ? 'bg-surface-primary border-t border-x border-surface-secondary'
+              ? 'border-x border-t border-surface-secondary bg-surface-primary'
               : 'bg-hover-secondary'
           }`"
           type="button"
@@ -63,9 +63,9 @@ function changeCurrentTab(tab: TabType) {
           <PencilSquareIcon class="w-6" />
         </button>
         <button
-          :class="`rounded-t py-2 px-4 h-15 ${
+          :class="`h-15 rounded-t px-4 py-2 ${
             currentTab === 'preview'
-              ? 'bg-surface-primary border-t border-x border-surface-secondary'
+              ? 'border-x border-t border-surface-secondary bg-surface-primary'
               : 'bg-hover-secondary'
           }`"
           type="button"
@@ -82,13 +82,13 @@ function changeCurrentTab(tab: TabType) {
         label="テンプレートを選択"
         @update:model-value="setTemplate($event)" />
     </div>
-    <div class="px-5 py-3 h-3/5">
+    <div class="h-3/5 px-5 py-3">
       <BaseInput
         v-if="currentTab === 'input'"
         v-model="model"
         type="textarea"
         :label="props.label"
-        class="h-full w-full overflow-y-auto resize-none"
+        class="h-full w-full resize-none overflow-y-auto"
         :placeholder="placeholder" />
       <MarkdownIt
         v-if="currentTab === 'preview'"

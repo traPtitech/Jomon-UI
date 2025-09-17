@@ -32,14 +32,14 @@ onUnmounted(() => {
 <template>
   <div
     ref="containerRef"
-    class="bg-white rounded-md p-2 flex flex-col gap-2 border"
+    class="flex flex-col gap-2 rounded-md border bg-white p-2"
     @click.stop="">
     <div
       v-for="option in options"
       :key="option.value"
-      class="hover:bg-hover-primary rounded-sm p-1">
+      class="rounded-sm p-1 hover:bg-hover-primary">
       <button
-        class="w-full h-full text-left"
+        class="h-full w-full text-left"
         type="button"
         @click="handleSelectOption(option.value)">
         {{ option.key }}

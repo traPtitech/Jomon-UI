@@ -21,14 +21,14 @@ const navigateToPartition = (partitionId: string) => {
 
 <template>
   <table
-    class="table-auto border-collapse w-full overflow-x-scroll rounded-xl shadow">
+    class="w-full table-auto border-collapse overflow-x-scroll rounded-xl shadow">
     <thead>
       <tr>
         <th
           v-for="key in ['パーティション名', '予算']"
           :key="key"
           scope="col"
-          class="px-1 py-4 text-left font-normal bg-surface-tertiary first:pl-6 first:rounded-ss-xl last:pr-6 last:rounded-se-xl">
+          class="bg-surface-tertiary px-1 py-4 text-left font-normal first:rounded-ss-xl first:pl-6 last:rounded-se-xl last:pr-6">
           {{ key }}
         </th>
       </tr>
@@ -43,10 +43,10 @@ const navigateToPartition = (partitionId: string) => {
         @click="navigateToPartition(partition.id)"
         @keydown.enter="navigateToPartition(partition.id)"
         @keydown.space.stop="navigateToPartition(partition.id)">
-        <td class="px-1 pl-6 py-4">
+        <td class="px-1 py-4 pl-6">
           {{ partition.name }}
         </td>
-        <td class="px-1 pr-6 py-4">{{ partition.budget }}円</td>
+        <td class="px-1 py-4 pr-6">{{ partition.budget }}円</td>
       </tr>
     </tbody>
   </table>

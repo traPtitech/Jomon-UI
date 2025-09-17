@@ -32,7 +32,7 @@ if (!isUserFetched.value) {
         @change-edit-mode="changeEditMode($event)"
         @finish-editing="finishEditing" />
     </div>
-    <div class="grow flex flex-col gap-6">
+    <div class="flex grow flex-col gap-6">
       <PartitionBudget
         :is-edit-mode="editMode === 'budget'"
         :is-sending="isSending"

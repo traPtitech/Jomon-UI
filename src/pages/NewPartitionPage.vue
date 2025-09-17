@@ -20,13 +20,13 @@ if (!isUserFetched.value) {
   <form class="flex flex-col gap-6">
     <BaseInput v-model="partition.name" label="パーティション名" required />
     <BaseInput v-model="partition.budget" type="number" label="予算" required>
-      <span class="text-2xl font-bold ml-3 mt-auto mb-2 text-text-secondary">
+      <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
         ¥
       </span>
     </BaseInput>
     <div>
       <SimpleButton
-        class="ml-auto mt-8 block"
+        class="mt-8 ml-auto block"
         :disabled="isSending"
         font-size="xl"
         padding="md"

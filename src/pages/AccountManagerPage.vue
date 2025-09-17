@@ -68,7 +68,7 @@ if (me.value?.accountManager) {
       <h2 class="text-base font-medium">会計管理者</h2>
       <ul class="flex gap-3" aria-labelledby="accountManager-list">
         <li v-for="accountManager in accountManagers" :key="accountManager">
-          <div class="border-text-primary rounded-sm border px-2 text-center">
+          <div class="rounded-sm border border-text-primary px-2 text-center">
             {{ userMap[accountManager] }}
           </div>
         </li>
@@ -79,7 +79,7 @@ if (me.value?.accountManager) {
       <div class="flex flex-wrap gap-3">
         <SearchSelect
           v-model="addList"
-          class="grow w-auto"
+          class="w-auto grow"
           multiple
           :options="absentMembers"
           label="追加する会計管理者" />
@@ -100,7 +100,7 @@ if (me.value?.accountManager) {
       <div class="flex flex-wrap gap-3">
         <SearchSelect
           v-model="removeList"
-          class="grow w-auto"
+          class="w-auto grow"
           multiple
           :options="accountManagerOptions"
           label="削除する会計管理者" />
@@ -125,7 +125,7 @@ if (me.value?.accountManager) {
         <SearchSelect
           v-model="deleteTagList"
           label="削除するタグ"
-          class="grow w-auto"
+          class="w-auto grow"
           multiple
           :options="tagIdOptions" />
         <SimpleButton

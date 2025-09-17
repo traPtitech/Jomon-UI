@@ -1,1 +1,3 @@
+public/mockServiceWorker.js
 src/lib/apis/generated/**/*
+package-lock.json

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import ApplicationAttachment from './ApplicationAttachment.vue'
-import MarkdownIt from '@/components//shared/MarkdownIt.vue'
 import EditButton from '@/components/shared/EditButton.vue'
+import MarkdownIt from '@/components/shared/MarkdownIt.vue'
 import MarkdownTextarea from '@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'

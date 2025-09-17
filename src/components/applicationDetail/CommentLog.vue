@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import MarkdownIt from '@/components//shared/MarkdownIt.vue'
+import MarkdownIt from '@/components/shared/MarkdownIt.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'
 import type { ApplicationComment } from '@/features/applicationComment/entities'
 import { useUserStore } from '@/features/user/store'

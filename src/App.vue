@@ -6,7 +6,7 @@ import JomonHeader from './components/navigation/JomonHeader.vue'
 import './styles/main.css'
 import './styles/scrollbar.css'
 import './styles/toast.css'
-import { useUserStore } from '/@/features/user/store'
+import { useUserStore } from '@/features/user/store'
 
 const route = useRoute()
 const { fetchMe } = useUserStore()

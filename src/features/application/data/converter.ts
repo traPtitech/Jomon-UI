@@ -1,12 +1,12 @@
 import type {
   Application as ApiApplication,
   ApplicationDetail as ApiApplicationDetail
-} from '/@/lib/apis/generated/api'
+} from '@/lib/apis/generated/api'
 
-import { convertApplicationCommentFromData } from '/@/features/applicationComment/data/converter'
-import { convertApplicationStatusDetailFromData } from '/@/features/applicationStatus/data/converter'
-import { convertApplicationTargetFromData } from '/@/features/applicationTarget/data/converter'
-import { convertPartitionFromData } from '/@/features/partition/data/converter'
+import { convertApplicationCommentFromData } from '@/features/applicationComment/data/converter'
+import { convertApplicationStatusDetailFromData } from '@/features/applicationStatus/data/converter'
+import { convertApplicationTargetFromData } from '@/features/applicationTarget/data/converter'
+import { convertPartitionFromData } from '@/features/partition/data/converter'
 
 import { DateTime } from 'luxon'
 import type { Application, ApplicationDetail } from '../entities'

@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-import type { ApplicationTarget as ApplicationTargetData } from '/@/lib/apis'
+import type { ApplicationTarget as ApplicationTargetData } from '@/lib/apis'
 
 import type { ApplicationTargetDetail } from '../entities'
 

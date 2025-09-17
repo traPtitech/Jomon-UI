@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { useRoute } from 'vue-router'
 
-import { useApplicationStore } from '/@/features/application/store'
-import { usePartitionStore } from '/@/features/partition/store'
-import { useTagStore } from '/@/features/tag/store'
-import { useUserStore } from '/@/features/user/store'
-import { toId } from '/@/lib/parseQueryParams'
+import { useApplicationStore } from '@/features/application/store'
+import { usePartitionStore } from '@/features/partition/store'
+import { useTagStore } from '@/features/tag/store'
+import { useUserStore } from '@/features/user/store'
+import { toId } from '@/lib/parseQueryParams'
 
-import ApplicationHeader from '/@/components/applicationDetail/ApplicationHeader.vue'
-import ApplicationLogs from '/@/components/applicationDetail/ApplicationLogs.vue'
-import ApplicationSidebar from '/@/components/applicationDetail/ApplicationSidebar.vue'
+import ApplicationHeader from '@/components/applicationDetail/ApplicationHeader.vue'
+import ApplicationLogs from '@/components/applicationDetail/ApplicationLogs.vue'
+import ApplicationSidebar from '@/components/applicationDetail/ApplicationSidebar.vue'
 
 const route = useRoute()
 const id = toId(route.params.id)

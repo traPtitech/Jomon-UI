@@ -2,12 +2,12 @@
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import MarkdownTextarea from '/@/components/shared/MarkdownTextarea.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import StatusChip from '/@/components/shared/StatusChip.vue'
-import { useApplicationStore } from '/@/features/application/store'
-import type { ApplicationDetail } from '/@/features/application/entities'
-import type { ApplicationStatus } from '/@/features/applicationStatus/entities'
+import MarkdownTextarea from '@/components/shared/MarkdownTextarea.vue'
+import SimpleButton from '@/components/shared/SimpleButton.vue'
+import StatusChip from '@/components/shared/StatusChip.vue'
+import { useApplicationStore } from '@/features/application/store'
+import type { ApplicationDetail } from '@/features/application/entities'
+import type { ApplicationStatus } from '@/features/applicationStatus/entities'
 
 const props = defineProps<{
   application: ApplicationDetail

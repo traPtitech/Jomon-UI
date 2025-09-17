@@ -1,13 +1,13 @@
-import apis from '/@/lib/apis'
+import apis from '@/lib/apis'
 
 import { convertApplication, convertApplicationDetail } from './converter'
-import { convertApplicationCommentFromData } from '/@/features/applicationComment/data/converter'
-import type { ApplicationComment } from '/@/features/applicationComment/entities'
-import { convertApplicationStatusDetailFromData } from '/@/features/applicationStatus/data/converter'
+import { convertApplicationCommentFromData } from '@/features/applicationComment/data/converter'
+import type { ApplicationComment } from '@/features/applicationComment/entities'
+import { convertApplicationStatusDetailFromData } from '@/features/applicationStatus/data/converter'
 import type {
   ApplicationStatus,
   ApplicationStatusDetail
-} from '/@/features/applicationStatus/entities'
+} from '@/features/applicationStatus/entities'
 
 import type {
   Application,

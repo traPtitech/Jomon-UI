@@ -1,4 +1,4 @@
-import apis from '/@/lib/apis'
+import apis from '@/lib/apis'
 
 import type { Tag } from '../entities'
 

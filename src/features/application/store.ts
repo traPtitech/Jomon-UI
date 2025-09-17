@@ -1,14 +1,14 @@
 import { defineStore, storeToRefs } from 'pinia'
 
+import type { ApplicationStatus } from '@/features/applicationStatus/entities'
+import { useTagStore } from '@/features/tag/store'
+import { useApplicationRepository } from './data/repository'
 import type {
   Application,
   ApplicationDetail,
   ApplicationQuerySeed,
   ApplicationSeed
 } from './entities'
-import { useApplicationRepository } from './data/repository'
-import type { ApplicationStatus } from '/@/features/applicationStatus/entities'
-import { useTagStore } from '/@/features/tag/store'
 
 const createDefaultParams = (): ApplicationQuerySeed => ({
   sort: 'created_at',

@@ -1,8 +1,8 @@
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import type { FileData } from '/@/features/file/entities'
-import { deleteFile, fetchFilesWithMetas } from '/@/features/file/services'
+import type { FileData } from '@/features/file/entities'
+import { deleteFile, fetchFilesWithMetas } from '@/features/file/services'
 
 export const useApplicationFile = () => {
   const toast = useToast()

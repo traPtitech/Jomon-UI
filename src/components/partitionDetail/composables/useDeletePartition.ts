@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
-import { usePartitionStore } from '/@/features/partition/store'
+import { usePartitionStore } from '@/features/partition/store'
 
 export const useDeletePartition = () => {
   const router = useRouter()

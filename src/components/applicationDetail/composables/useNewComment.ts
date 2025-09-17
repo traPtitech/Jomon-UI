@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import { useApplicationStore } from '/@/features/application/store'
+import { useApplicationStore } from '@/features/application/store'
 
 export const useNewComment = (applicationId: string) => {
   const toast = useToast()

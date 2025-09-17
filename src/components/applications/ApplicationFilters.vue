@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
 
-import { useApplicationStore } from '/@/features/application/store'
-import { usePartitionStore } from '/@/features/partition/store'
-import { useTagStore } from '/@/features/tag/store'
-import { useUserStore } from '/@/features/user/store'
+import { useApplicationStore } from '@/features/application/store'
+import { usePartitionStore } from '@/features/partition/store'
+import { useTagStore } from '@/features/tag/store'
+import { useUserStore } from '@/features/user/store'
 
-import BaseInput from '/@/components/shared/BaseInput.vue'
-import SearchSelect from '/@/components/shared/SearchSelect.vue'
-import { applicationStatusOptions } from '/@/features/applicationStatus/entities'
+import BaseInput from '@/components/shared/BaseInput.vue'
+import SearchSelect from '@/components/shared/SearchSelect.vue'
+import { applicationStatusOptions } from '@/features/applicationStatus/entities'
 
 const { applications, filterParams, fetchApplications } = useApplicationStore()
 const { userOptions } = useUserStore()

@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
     plugins: [vue(), brotli(), tailwindcss()],
     resolve: {
       alias: {
-        '/@': path.resolve(__dirname, '/src')
+        '@': path.resolve(__dirname, '/src')
       }
     },
     server: {

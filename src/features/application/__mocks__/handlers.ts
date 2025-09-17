@@ -6,19 +6,19 @@ import type {
   Comment,
   CommentInput,
   StatusDetail
-} from '/@/lib/apis'
+} from '@/lib/apis'
 
 import {
   mockApplicationComment,
   mockApplicationComments
-} from '/@/features/applicationComment/__mocks__/handlers'
+} from '@/features/applicationComment/__mocks__/handlers'
 import {
   mockApplicationStatus,
   mockApplicationStatuses
-} from '/@/features/applicationStatus/__mocks__/handlers'
-import { mockApplicationTargets } from '/@/features/applicationTarget/__mocks__/handlers'
-import { mockPartition } from '/@/features/partition/__mocks__/handlers'
-import { mockTags } from '/@/features/tag/__mocks__/handlers'
+} from '@/features/applicationStatus/__mocks__/handlers'
+import { mockApplicationTargets } from '@/features/applicationTarget/__mocks__/handlers'
+import { mockPartition } from '@/features/partition/__mocks__/handlers'
+import { mockTags } from '@/features/tag/__mocks__/handlers'
 
 const mockApplication: Application = {
   id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',

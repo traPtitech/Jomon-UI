@@ -1,6 +1,6 @@
 import { HttpResponse, type PathParams, http } from 'msw'
 
-import type { Tag } from '/@/lib/apis'
+import type { Tag } from '@/lib/apis'
 
 export const mockTag: Tag = {
   id: '3fa85f64-5717-4562-b3fc-2c963f66afa5',

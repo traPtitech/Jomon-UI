@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import { useUserStore } from '/@/features/user/store'
+import { useUserStore } from '@/features/user/store'
 
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
-import ApplicationTarget from '/@/components/applicationDetail/ApplicationTarget.vue'
-import EditButton from '/@/components/shared/EditButton.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import { useApplication } from '/@/features/application/composables'
-import type { ApplicationDetail } from '/@/features/application/entities'
-import { useApplicationStore } from '/@/features/application/store'
-import type { ApplicationTargetDetail } from '/@/features/applicationTarget/entities'
+import ApplicationTarget from '@/components/applicationDetail/ApplicationTarget.vue'
+import EditButton from '@/components/shared/EditButton.vue'
+import SimpleButton from '@/components/shared/SimpleButton.vue'
+import { useApplication } from '@/features/application/composables'
+import type { ApplicationDetail } from '@/features/application/entities'
+import { useApplicationStore } from '@/features/application/store'
+import type { ApplicationTargetDetail } from '@/features/applicationTarget/entities'
 
 const props = defineProps<{
   application: ApplicationDetail

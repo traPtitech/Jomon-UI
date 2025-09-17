@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import BaseInput from '/@/components/shared/BaseInput.vue'
-import SimpleButton from '/@/components/shared/SimpleButton.vue'
+import BaseInput from '@/components/shared/BaseInput.vue'
+import SimpleButton from '@/components/shared/SimpleButton.vue'
 
-import { useUserStore } from '/@/features/user/store'
+import { useUserStore } from '@/features/user/store'
 import { useNewPartition } from './composables/useNewPartition'
 
 const { isUserFetched, fetchUsers } = useUserStore()

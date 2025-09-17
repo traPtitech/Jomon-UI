@@ -1,8 +1,8 @@
 import { computed, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import { useAccountManagerStore } from '/@/features/accountManager/store'
-import { useUserStore } from '/@/features/user/store'
+import { useAccountManagerStore } from '@/features/accountManager/store'
+import { useUserStore } from '@/features/user/store'
 
 export const useAccountManager = () => {
   const { users } = useUserStore()

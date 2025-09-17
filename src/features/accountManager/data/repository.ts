@@ -1,4 +1,4 @@
-import apis from '/@/lib/apis'
+import apis from '@/lib/apis'
 
 export const useAccountManagerRepository = () => {
   return createAccountManagerRepository()

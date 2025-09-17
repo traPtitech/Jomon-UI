@@ -1,7 +1,7 @@
 import { defineStore, storeToRefs } from 'pinia'
 
 import { useAccountManagerRepository } from './data/repository'
-import { useUserStore } from '/@/features/user/store'
+import { useUserStore } from '@/features/user/store'
 
 const createAccountManagerStore = defineStore('accountManager', {
   state: () => ({

@@ -24,8 +24,8 @@ watch(
 
 <template>
   <JomonHeader />
-  <main class="text-text-primary bg-surface-primary pt-12 min-h-screen">
-    <div class="md:w-2/3 w-5/6 mx-auto mt-8 pb-32">
+  <main class="min-h-screen bg-surface-primary pt-12 text-text-primary">
+    <div class="mx-auto mt-8 w-5/6 pb-32 md:w-2/3">
       <router-view v-slot="{ Component }">
         <template v-if="Component">
           <suspense>

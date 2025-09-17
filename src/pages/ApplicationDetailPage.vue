@@ -37,7 +37,7 @@ if (!isTagFetched.value) {
     class="flex flex-col gap-6">
     <ApplicationHeader :application="application" />
     <div class="h-px bg-[#e5e7eb]" />
-    <div class="flex flex-col lg:flex-row justify-between gap-12">
+    <div class="flex flex-col justify-between gap-12 lg:flex-row">
       <ApplicationLogs
         class="order-2 lg:order-1 lg:w-2/3"
         :application="application" />

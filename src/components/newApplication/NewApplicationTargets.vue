@@ -29,7 +29,7 @@ function handleRemoveTarget(index: number) {
           label="払い戻し対象者" />
         <BaseInput v-model="target.amount" type="number" label="金額">
           <span
-            class="text-2xl font-bold ml-3 mt-auto mb-2 text-text-secondary">
+            class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
             ¥
           </span>
         </BaseInput>
@@ -45,7 +45,7 @@ function handleRemoveTarget(index: number) {
     </ul>
     <div v-if="userOptions.length > model.length" class="ml-3">
       <SimpleButton font-size="base" padding="sm" @click="handleAddTarget">
-        <PlusIcon class="w-5 mr-2" />
+        <PlusIcon class="mr-2 w-5" />
         払い戻し対象者を追加
       </SimpleButton>
     </div>

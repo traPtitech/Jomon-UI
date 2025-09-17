@@ -26,18 +26,18 @@ const totalAmount = computed(
 
 <template>
   <RouterLink
-    class="flex px-3 sm:px-6 py-4 gap-2 sm:gap-5"
+    class="flex gap-2 px-3 py-4 sm:gap-5 sm:px-6"
     :to="'/applications/' + application.id">
     <div class="flex items-start justify-center">
       <StatusChip :status="application.status" />
     </div>
     <div class="flex flex-grow flex-wrap">
-      <div class="flex-grow flex flex-col gap-2">
+      <div class="flex flex-grow flex-col gap-2">
         <span class="text-xl">{{ application.title }}</span>
         <TagsPartition :tags="application.tags" />
       </div>
       <div class="flex flex-col gap-2">
-        <div class="flex items-center justify-end gap-x-4 flex-wrap">
+        <div class="flex flex-wrap items-center justify-end gap-x-4">
           <div class="flex items-center gap-1">
             <UserIcon class="max-w-7" :name="userMap[application.createdBy]" />
             <span>{{ userMap[application.createdBy] }}</span>
@@ -47,7 +47,7 @@ const totalAmount = computed(
           </span>
           <span>{{ formattedDate }}</span>
         </div>
-        <div class="text-right font-bold font-sans text-2xl">
+        <div class="text-right font-sans text-2xl font-bold">
           {{ totalAmount }}円
         </div>
       </div>

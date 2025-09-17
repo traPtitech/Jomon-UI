@@ -58,10 +58,10 @@ const handleRemoveTarget = async () => {
 <template>
   <div
     v-if="!props.isEditMode"
-    class="flex flex-wrap justify-between items-center gap-2 md:gap-0">
+    class="flex flex-wrap items-center justify-between gap-2 md:gap-0">
     <div class="flex items-center gap-1">
       <UserIcon class="w-10" :name="userMap[target.target]" />
-      <div class="flex flex-col break-all gap-1">
+      <div class="flex flex-col gap-1 break-all">
         <div>{{ userMap[target.target] }}</div>
         <div>{{ target.amount }}円</div>
       </div>
@@ -74,12 +74,12 @@ const handleRemoveTarget = async () => {
         :options="targetOptions"
         label="対象者" />
       <BaseInput v-model="targetModel.amount" type="number" label="金額">
-        <span class="text-2xl font-bold ml-3 mt-auto mb-2 text-text-secondary">
+        <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
           ¥
         </span>
       </BaseInput>
       <button @click="handleRemoveTarget">
-        <TrashIcon class="w-6 text-error-primary cursor-pointer" />
+        <TrashIcon class="w-6 cursor-pointer text-error-primary" />
       </button>
     </div>
   </div>

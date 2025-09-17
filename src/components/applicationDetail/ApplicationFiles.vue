@@ -24,7 +24,7 @@ await fetchFiles(application.value?.files ?? [])
         <div
           v-for="file in files"
           :key="file.id"
-          class="not-first:ml-2 relative flex flex-col items-center">
+          class="relative flex flex-col items-center not-first:ml-2">
           <img
             v-if="isImageByName(file.name)"
             :alt="file.name"

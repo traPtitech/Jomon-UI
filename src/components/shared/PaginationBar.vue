@@ -57,14 +57,14 @@ const pages = computed(() => {
     <div class="mx-auto flex h-full w-min justify-center ring-0">
       <!-- Prev -->
       <router-link
-        class="w-16 mr-4 flex items-center justify-center rounded-sm hover:bg-hover-primary"
+        class="mr-4 flex w-16 items-center justify-center rounded-sm hover:bg-hover-primary"
         :class="currentPage === 1 ? 'invisible' : ''"
         :to="`${path}?page=${currentPage - 1}`">
         <ChevronLeftIcon class="w-4" />Prev
       </router-link>
 
       <!-- Pagination -->
-      <div class="hidden lg:flex gap-1">
+      <div class="hidden gap-1 lg:flex">
         <div v-for="page in pages[0]" :key="page" class="flex">
           <PageLink
             v-if="typeof page === 'number'"
@@ -75,7 +75,7 @@ const pages = computed(() => {
           <span v-else class="w-10 self-end pb-2">...</span>
         </div>
       </div>
-      <div class="hidden md:max-lg:flex gap-1">
+      <div class="hidden gap-1 md:max-lg:flex">
         <div v-for="page in pages[1]" :key="page" class="flex">
           <PageLink
             v-if="typeof page === 'number'"
@@ -89,7 +89,7 @@ const pages = computed(() => {
 
       <!-- Next -->
       <router-link
-        class="w-16 ml-4 flex items-center justify-center rounded-sm hover:bg-hover-primary"
+        class="ml-4 flex w-16 items-center justify-center rounded-sm hover:bg-hover-primary"
         :class="currentPage === totalPages ? 'invisible' : ''"
         :to="`${path}?page=${currentPage + 1}`">
         Next<ChevronRightIcon class="w-4" />

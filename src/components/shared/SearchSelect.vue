@@ -203,13 +203,13 @@ const handleKeyDown = (e: KeyboardEvent) => {
         ref="inputRef"
         v-model="searchTerm"
         :label="label"
-        :class="['pr-8', disabled && 'opacity-50 cursor-not-allowed']"
+        :class="['pr-8', disabled && 'cursor-not-allowed opacity-50']"
         :placeholder="getPlaceholderText"
         :disabled="disabled"
         @focus="handleInputFocus"
         @input="handleChange"
         @keydown="handleKeyDown">
-        <MagnifyingGlassIcon class="w-6 ml-3 text-text-secondary" />
+        <MagnifyingGlassIcon class="ml-3 w-6 text-text-secondary" />
       </BaseInput>
       <button
         type="button"
@@ -231,12 +231,12 @@ const handleKeyDown = (e: KeyboardEvent) => {
     <!-- Selected items for multiple selection -->
     <div
       v-if="multiple && Array.isArray(model) && model.length > 0"
-      class="flex flex-wrap gap-1 mt-2">
+      class="mt-2 flex flex-wrap gap-1">
       <div v-for="val in model" :key="val" variant="secondary" class="text-xs">
         {{ options.find(opt => opt.value === val)?.key || val }}
         <button
           type="button"
-          class="ml-1 hover:bg-blue-100 rounded-full"
+          class="ml-1 rounded-full hover:bg-blue-100"
           @click.stop="handleSelect(val)">
           <XMarkIcon class="h-3 w-3" />
         </button>
@@ -245,7 +245,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
 
     <div
       v-if="menuState !== 'close'"
-      class="absolute z-50 w-full mt-1 bg-white border rounded-md shadow-lg">
+      class="absolute z-50 mt-1 w-full rounded-md border bg-white shadow-lg">
       <!-- Options list -->
       <div class="max-h-[200px] overflow-auto p-1">
         <div v-if="filteredOptions.length === 0" class="px-2 py-1.5 text-sm">
@@ -256,10 +256,10 @@ const handleKeyDown = (e: KeyboardEvent) => {
           :key="option.value"
           type="button"
           :class="[
-            'w-full text-left relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none',
+            'relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm outline-none select-none',
             'hover:bg-blue-100 hover:text-blue-500',
             highlightedIndex === index && 'bg-blue-100 text-blue-500',
-            option.disabled && 'opacity-50 cursor-not-allowed',
+            option.disabled && 'cursor-not-allowed opacity-50',
             selectedValues.includes(option.value) && 'bg-blue-100'
           ]"
           :disabled="option.disabled"
@@ -286,8 +286,8 @@ const handleKeyDown = (e: KeyboardEvent) => {
           "
           type="button"
           :class="[
-            'w-full text-left relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none',
-            'hover:bg-blue-100 hover:text-blue-500 border-t'
+            'relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm outline-none select-none',
+            'border-t hover:bg-blue-100 hover:text-blue-500'
           ]"
           @click="handleAddCustom">
           <PlusIcon class="mr-2 h-4 w-4" />

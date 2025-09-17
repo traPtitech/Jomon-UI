@@ -47,7 +47,7 @@ watch(
 </script>
 
 <template>
-  <div class="max-w-6xl mx-auto px-3 sm:px-8 flex flex-col gap-7">
+  <div class="mx-auto flex max-w-6xl flex-col gap-7 px-3 sm:px-8">
     <div class="flex flex-col">
       <div class="relative flex w-full items-center justify-start gap-7">
         <h1 class="text-center text-2xl">申請一覧</h1>

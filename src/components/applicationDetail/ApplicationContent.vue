@@ -50,9 +50,9 @@ const handleUpdateContent = async () => {
 </script>
 
 <template>
-  <div class="w-full flex flex-col gap-3">
+  <div class="flex w-full flex-col gap-3">
     <div class="flex w-full items-center">
-      <div class="flex items-center gap-4 flex-1">
+      <div class="flex flex-1 items-center gap-4">
         <UserIcon class="w-12" :name="userMap[application.createdBy]" />
         <div>
           <span class="font-bold">{{ userMap[application.createdBy] }}</span>
@@ -68,7 +68,7 @@ const handleUpdateContent = async () => {
     <div class="ml-16 flex items-start gap-2">
       <div
         v-if="!isEditMode"
-        class="border border-surface-secondary px-4 py-3 rounded-lg flex-1 w-full">
+        class="w-full flex-1 rounded-lg border border-surface-secondary px-4 py-3">
         <MarkdownIt :text="application.content" />
         <ApplicationAttachment :files="application.files" />
       </div>

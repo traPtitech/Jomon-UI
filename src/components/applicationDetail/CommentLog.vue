@@ -15,9 +15,9 @@ const { userMap } = useUserStore()
 </script>
 
 <template>
-  <div :id="comment.id" class="w-full flex flex-col gap-3">
+  <div :id="comment.id" class="flex w-full flex-col gap-3">
     <div class="flex w-full items-center">
-      <div class="flex items-center gap-4 flex-1">
+      <div class="flex flex-1 items-center gap-4">
         <UserIcon class="w-12" :name="userMap[comment.user]" />
         <div>
           <span class="font-bold">{{ userMap[comment.user] }}</span>
@@ -32,7 +32,7 @@ const { userMap } = useUserStore()
     </div>
     <div class="ml-16">
       <MarkdownIt
-        class="border border-surface-secondary px-4 py-3 rounded-lg"
+        class="rounded-lg border border-surface-secondary px-4 py-3"
         :text="comment.comment" />
     </div>
   </div>

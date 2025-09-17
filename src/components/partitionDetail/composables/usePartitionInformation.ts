@@ -1,16 +1,14 @@
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-import { usePartitionDetailStore } from '/@/stores/partitionDetail'
-
-import { editPartitionUsecase } from '/@/features/partition/usecase'
+import { usePartitionStore } from '/@/features/partition/store'
 
 export type EditMode = 'name' | 'description' | 'budget' | ''
 
 export const usePartitionInformation = () => {
   const toast = useToast()
 
-  const { partition, editedValue } = usePartitionDetailStore()
+  const { currentPartition, editedValue, editPartition } = usePartitionStore()
 
   const isSending = ref(false)
 
@@ -24,9 +22,11 @@ export const usePartitionInformation = () => {
   }
 
   const finishEditing = async () => {
+    if (!currentPartition.value) return
+
     isSending.value = true
     try {
-      await editPartitionUsecase(partition.value?.id ?? '', editedValue.value)
+      await editPartition(currentPartition.value.id, editedValue.value)
       toast.success('パーティション情報を更新しました')
     } catch (e) {
       if (e instanceof Error) {

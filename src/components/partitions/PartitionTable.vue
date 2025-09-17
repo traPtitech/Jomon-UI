@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Partition } from '/@/features/partition/model'
+import type { Partition } from '/@/features/partition/entities'
 import router from '/@/router'
 
 interface Props {

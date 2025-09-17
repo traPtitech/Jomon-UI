@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { usePartitionDetailStore } from '/@/stores/partitionDetail'
+import { usePartitionStore } from '/@/features/partition/store'
 
-const { partition } = usePartitionDetailStore()
+const { currentPartition: partition } = usePartitionStore()
 </script>
 
 <template>

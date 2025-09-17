@@ -2,28 +2,25 @@
 import { ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
-import { useApplicationStore } from '/@/stores/application'
-import { usePartitionStore } from '/@/stores/partition'
-import { useTagStore } from '/@/stores/tag'
-import { useUserStore } from '/@/stores/user'
+import { useApplicationStore } from '/@/features/application/store'
+import { usePartitionStore } from '/@/features/partition/store'
+import { useTagStore } from '/@/features/tag/store'
+import { useUserStore } from '/@/features/user/store'
 
 import { toPage } from '/@/lib/parseQueryParams'
 
 import ApplicationItem from '/@/components/applications/ApplicationItem.vue'
 import PaginationBar from '/@/components/shared/PaginationBar.vue'
 import SimpleButton from '/@/components/shared/SimpleButton.vue'
-import { useFetchApplicationsUsecase } from '/@/features/application/usecase'
-import { useFetchPartitionsUsecase } from '/@/features/partition/usecase'
-import { useFetchTagsUsecase } from '/@/features/tag/usecase'
-import { useFetchUsersUsecase } from '/@/features/user/usecase'
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))
 
-const { applications, isApplicationFetched } = useApplicationStore()
-const { isTagFetched } = useTagStore()
-const { isPartitionFetched } = usePartitionStore()
-const { isUserFetched } = useUserStore()
+const { applications, isApplicationFetched, fetchApplications } =
+  useApplicationStore()
+const { isTagFetched, fetchTags } = useTagStore()
+const { isPartitionFetched, fetchPartitions } = usePartitionStore()
+const { isUserFetched, fetchUsers } = useUserStore()
 
 const sliceApplicationsAt = (index: number, n: number) => {
   const start = (index - 1) * n
@@ -32,16 +29,16 @@ const sliceApplicationsAt = (index: number, n: number) => {
 }
 
 if (!isApplicationFetched.value) {
-  useFetchApplicationsUsecase()
+  fetchApplications()
 }
 if (!isTagFetched.value) {
-  useFetchTagsUsecase()
+  fetchTags()
 }
 if (!isPartitionFetched.value) {
-  useFetchPartitionsUsecase()
+  fetchPartitions()
 }
 if (!isUserFetched.value) {
-  useFetchUsersUsecase()
+  fetchUsers()
 }
 
 watch(

@@ -6,9 +6,9 @@ import ModalWrapper from '/@/components/modal/ModalWrapper.vue'
 import StatusChangeModal from '/@/components/modal/StatusChangeModal.vue'
 import FloatingMenu from '/@/components/shared/FloatingMenu.vue'
 import StatusChip from '/@/components/shared/StatusChip.vue'
-import type { ApplicationDetail } from '/@/features/application/model'
+import type { ApplicationDetail } from '/@/features/application/entities'
 import { useStatusOptions } from '/@/features/applicationStatus/composables'
-import type { ApplicationStatus } from '/@/features/applicationStatus/model'
+import type { ApplicationStatus } from '/@/features/applicationStatus/entities'
 
 const props = defineProps<{
   application: ApplicationDetail

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Tag } from '/@/features/tag/model'
+import type { Tag } from '/@/features/tag/entities'
 
 interface Props {
   tags: Tag[]

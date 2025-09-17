@@ -1,5 +1,9 @@
-import apis from '@/lib/apis'
-
+import type {
+  Application,
+  ApplicationDetail,
+  ApplicationQuerySeed,
+  ApplicationSeed
+} from '../entities'
 import { convertApplication, convertApplicationDetail } from './converter'
 import { convertApplicationCommentFromData } from '@/features/applicationComment/data/converter'
 import type { ApplicationComment } from '@/features/applicationComment/entities'
@@ -8,13 +12,7 @@ import type {
   ApplicationStatus,
   ApplicationStatusDetail
 } from '@/features/applicationStatus/entities'
-
-import type {
-  Application,
-  ApplicationDetail,
-  ApplicationQuerySeed,
-  ApplicationSeed
-} from '../entities'
+import apis from '@/lib/apis'
 
 export const useApplicationRepository = () => {
   return createApplicationRepository()

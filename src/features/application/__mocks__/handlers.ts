@@ -1,13 +1,3 @@
-import { http, HttpResponse, type PathParams } from 'msw'
-
-import type {
-  Application,
-  ApplicationDetail,
-  Comment,
-  CommentInput,
-  StatusDetail
-} from '@/lib/apis'
-
 import {
   mockApplicationComment,
   mockApplicationComments
@@ -19,6 +9,14 @@ import {
 import { mockApplicationTargets } from '@/features/applicationTarget/__mocks__/handlers'
 import { mockPartition } from '@/features/partition/__mocks__/handlers'
 import { mockTags } from '@/features/tag/__mocks__/handlers'
+import type {
+  Application,
+  ApplicationDetail,
+  Comment,
+  CommentInput,
+  StatusDetail
+} from '@/lib/apis'
+import { http, HttpResponse, type PathParams } from 'msw'
 
 const mockApplication: Application = {
   id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',

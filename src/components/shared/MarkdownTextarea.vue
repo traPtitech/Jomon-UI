@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import BaseInput from './BaseInput.vue'
 import MarkdownIt from './MarkdownIt.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
-import BaseInput from './BaseInput.vue'
 import { EyeIcon, PencilSquareIcon } from '@heroicons/vue/24/outline'
+import { computed, ref } from 'vue'
 
 type TabType = 'input' | 'preview'
 interface Props {

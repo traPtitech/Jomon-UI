@@ -1,6 +1,5 @@
-import apis from '@/lib/apis'
-
 import type { Tag } from '../entities'
+import apis from '@/lib/apis'
 
 export const useTagRepository = () => {
   return createTagRepository()

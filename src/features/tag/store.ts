@@ -1,7 +1,6 @@
-import { defineStore, storeToRefs } from 'pinia'
-
-import type { Tag } from './entities'
 import { useTagRepository } from './data/repository'
+import type { Tag } from './entities'
+import { defineStore, storeToRefs } from 'pinia'
 
 const createTagStore = defineStore('tag', {
   state: () => ({

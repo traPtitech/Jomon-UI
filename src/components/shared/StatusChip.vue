@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { ApplicationStatus } from '@/features/applicationStatus/entities'
 import {
   CheckCircleIcon,
   ChevronDownIcon,
@@ -8,8 +9,6 @@ import {
   XCircleIcon
 } from '@heroicons/vue/24/solid'
 import { computed } from 'vue'
-
-import type { ApplicationStatus } from '@/features/applicationStatus/entities'
 
 interface Props {
   status: ApplicationStatus

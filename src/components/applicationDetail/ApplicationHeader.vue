@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
-
 import ApplicationStatusChange from '@/components/applicationDetail/ApplicationStatusChange.vue'
 import ApplicationTitle from '@/components/applicationDetail/ApplicationTitle.vue'
 import type { ApplicationDetail } from '@/features/application/entities'
+import { computed } from 'vue'
 
 const props = defineProps<{
   application: ApplicationDetail

@@ -1,10 +1,4 @@
 <script lang="ts" setup>
-import { useUserStore } from '@/features/user/store'
-
-import { formatDateAndTime } from '@/lib/date'
-
-import { ref } from 'vue'
-import { useToast } from 'vue-toastification'
 import ApplicationAttachment from './ApplicationAttachment.vue'
 import MarkdownIt from '@/components//shared/MarkdownIt.vue'
 import EditButton from '@/components/shared/EditButton.vue'
@@ -14,6 +8,10 @@ import UserIcon from '@/components/shared/UserIcon.vue'
 import { useApplication } from '@/features/application/composables'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
+import { useUserStore } from '@/features/user/store'
+import { formatDateAndTime } from '@/lib/date'
+import { ref } from 'vue'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps<{
   application: ApplicationDetail

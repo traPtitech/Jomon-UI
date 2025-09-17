@@ -1,11 +1,10 @@
 <script setup lang="ts">
+import type { EditMode } from '@/components/partitionDetail/composables/usePartitionInformation'
+import BaseInput from '@/components/shared/BaseInput.vue'
+import EditButton from '@/components/shared/EditButton.vue'
+import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { usePartitionStore } from '@/features/partition/store'
 import { useUserStore } from '@/features/user/store'
-
-import type { EditMode } from '@/components/partitionDetail/composables/usePartitionInformation'
-import EditButton from '@/components/shared/EditButton.vue'
-import BaseInput from '@/components/shared/BaseInput.vue'
-import SimpleButton from '@/components/shared/SimpleButton.vue'
 
 interface Props {
   isEditMode: boolean

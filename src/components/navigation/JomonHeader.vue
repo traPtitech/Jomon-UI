@@ -1,16 +1,13 @@
 <script lang="ts" setup>
-import { Bars3Icon } from '@heroicons/vue/24/outline'
-import { RouterLink } from 'vue-router'
-
-import { useUserStore } from '@/features/user/store'
-
+import PageNavigations from './PageNavigations.vue'
+import SideDrawer from './SideDrawer.vue'
 import ModalWrapper from '@/components/modal/ModalWrapper.vue'
 import { useModal } from '@/components/modal/composables/useModal'
 import JomonLogo from '@/components/shared/JomonLogo.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'
-
-import PageNavigations from './PageNavigations.vue'
-import SideDrawer from './SideDrawer.vue'
+import { useUserStore } from '@/features/user/store'
+import { Bars3Icon } from '@heroicons/vue/24/outline'
+import { RouterLink } from 'vue-router'
 
 const { me } = useUserStore()
 

@@ -1,7 +1,6 @@
-import { defineStore, storeToRefs } from 'pinia'
-
-import type { User } from './entities'
 import { useUserRepository } from './data/repository'
+import type { User } from './entities'
+import { defineStore, storeToRefs } from 'pinia'
 
 const createUserStore = defineStore('user', {
   state: () => ({

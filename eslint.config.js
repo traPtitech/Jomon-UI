@@ -36,15 +36,18 @@ export default [
       'vue/require-default-prop': 'off'
     }
   },
-  ...pluginVueA11y.configs["flat/recommended"],
+  ...pluginVueA11y.configs['flat/recommended'],
   {
-    "rules": {
-      "vuejs-accessibility/label-has-for": ["error", {
-        "required": {
-          "some": ["nesting", "id"]
+    rules: {
+      'vuejs-accessibility/label-has-for': [
+        'error',
+        {
+          required: {
+            some: ['nesting', 'id']
+          }
         }
-      }]
-    },
+      ]
+    }
   },
   eslintConfigPrettier
 ]

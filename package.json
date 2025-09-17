@@ -13,8 +13,8 @@
     "gen-api": "esno ./scripts/generate-apis.ts",
     "clean": "rimraf src/lib/apis/generated",
     "postinstall": "npm run gen-api",
-    "format": "prettier --write src",
-    "format:check": "prettier --check src"
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "axios": "^1.12.0",

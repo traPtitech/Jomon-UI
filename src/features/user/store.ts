@@ -17,13 +17,10 @@ const createUserStore = defineStore('user', {
         value: user.id
       })),
     userMap: state =>
-      state.users.reduce<Record<string, string>>(
-        (acc, user) => {
-          acc[user.id] = user.name
-          return acc
-        },
-        {}
-      )
+      state.users.reduce<Record<string, string>>((acc, user) => {
+        acc[user.id] = user.name
+        return acc
+      }, {})
   },
   actions: {
     async fetchUsers() {

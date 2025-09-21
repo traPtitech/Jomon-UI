@@ -78,7 +78,7 @@ if (me.value?.accountManager) {
       <h2 class="text-base font-medium">会計管理者</h2>
       <ul class="flex gap-3" aria-labelledby="accountManager-list">
         <li v-for="accountManager in accountManagers" :key="accountManager">
-          <div class="border-text-primary rounded-sm border px-2 text-center">
+          <div class="rounded-sm border border-text-primary px-2 text-center">
             {{ userMap[accountManager] }}
           </div>
         </li>

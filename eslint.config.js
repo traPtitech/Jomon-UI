@@ -27,19 +27,27 @@ export default defineConfig([
   },
   {
     files: [
-      'eslint.config.js',
+      'scripts/**/*.{js,mjs,cjs,ts,mts,cts}',
       'vite.config.ts',
-      '**/*.config.{js,ts,mjs,cjs}',
-      'scripts/**/*.{js,ts,mts,cts}'
+      '**/*.config.{js,mjs,cjs,ts,mts,cts}'
     ],
-    languageOptions: { globals: globals.node }
+    languageOptions: {
+      globals: globals.node,
+      parserOptions: {
+        projectService: {
+          defaultProject: './tsconfig.node.json',
+          allowDefaultProject: ['eslint.config.js']
+        },
+        tsconfigRootDir
+      }
+    }
   },
   pluginJs.configs.recommended,
   ...defineConfigWithVueTs(
     pluginVue.configs['flat/strongly-recommended'],
     pluginVueA11y.configs['flat/recommended'],
     {
-      files: ['**/*.{ts,tsx,cts,mts,vue}'],
+      files: ['src/**/*.{ts,tsx,cts,mts,d.ts,vue}'],
       languageOptions: {
         parserOptions: {
           projectService: true,
@@ -50,7 +58,7 @@ export default defineConfig([
     vueTsConfigs.strictTypeChecked,
     vueTsConfigs.stylisticTypeChecked,
     {
-      files: ['**/*.vue'],
+      files: ['src/**/*.vue'],
       rules: {
         'vue/require-default-prop': 'off',
         'vuejs-accessibility/label-has-for': [

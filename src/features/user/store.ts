@@ -17,12 +17,12 @@ const createUserStore = defineStore('user', {
         value: user.id
       })),
     userMap: state =>
-      state.users.reduce(
+      state.users.reduce<Record<string, string>>(
         (acc, user) => {
           acc[user.id] = user.name
           return acc
         },
-        {} as Record<string, string>
+        {}
       )
   },
   actions: {

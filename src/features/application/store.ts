@@ -27,7 +27,7 @@ const createApplicationStore = defineStore('application', {
   state: () => ({
     applications: [] as Application[],
     isApplicationFetched: false,
-    filterParams: createDefaultParams() as ApplicationQuerySeed,
+    filterParams: createDefaultParams(),
     currentApplication: null as ApplicationDetail | null
   }),
   getters: {

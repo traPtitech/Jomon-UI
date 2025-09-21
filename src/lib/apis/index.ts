@@ -8,7 +8,7 @@ export default new Apis(
 
 export * from './generated'
 
-export type ErrorResponse = {
+export interface ErrorResponse {
   error: string
   message: string
 }

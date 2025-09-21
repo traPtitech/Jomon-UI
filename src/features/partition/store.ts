@@ -17,7 +17,7 @@ const createPartitionStore = defineStore('partition', {
     partitions: [] as Partition[],
     isPartitionFetched: false,
     currentPartition: undefined as Partition | undefined,
-    editedValue: createDefaultPartitionSeed() as PartitionSeed
+    editedValue: createDefaultPartitionSeed()
   }),
   getters: {
     partitionOptions: state =>

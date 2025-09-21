@@ -26,16 +26,16 @@ const sliceApplicationsAt = (index: number, n: number) => {
 }
 
 if (!isApplicationFetched.value) {
-  fetchApplications()
+  await fetchApplications()
 }
 if (!isTagFetched.value) {
-  fetchTags()
+  await fetchTags()
 }
 if (!isPartitionFetched.value) {
-  fetchPartitions()
+  await fetchPartitions()
 }
 if (!isUserFetched.value) {
-  fetchUsers()
+  await fetchUsers()
 }
 
 watch(

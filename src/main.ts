@@ -13,7 +13,7 @@ if (
   import.meta.env.VITE_USE_MSW === 'true'
 ) {
   const worker = setupWorker(...handlers)
-  worker.start({
+  await worker.start({
     onUnhandledRequest: 'bypass'
   })
 }
@@ -42,6 +42,6 @@ const options: PluginOptions = {
   hideProgressBar: true
 }
 
-setup().then(app =>
+await setup().then(app =>
   app.use(router).use(createPinia()).use(Toast, options).mount('#app')
 )

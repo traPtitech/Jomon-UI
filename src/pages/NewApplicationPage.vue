@@ -20,13 +20,13 @@ const { isPartitionFetched, partitionOptions, fetchPartitions } =
 const { isSending, application, files, postApplication } = useNewApplication()
 
 if (!isTagFetched.value) {
-  fetchTags()
+  await fetchTags()
 }
 if (!isPartitionFetched.value) {
-  fetchPartitions()
+  await fetchPartitions()
 }
 if (!isUserFetched.value) {
-  fetchUsers()
+  await fetchUsers()
 }
 </script>
 

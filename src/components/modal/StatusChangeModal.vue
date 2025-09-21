@@ -36,9 +36,9 @@ const putStatus = async (
   }
 }
 
-const handleKeydown = (e: KeyboardEvent) => {
+const handleKeydown = async (e: KeyboardEvent) => {
   if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-    putStatus(props.nextStatus, comment.value)
+    await putStatus(props.nextStatus, comment.value)
   }
 }
 </script>

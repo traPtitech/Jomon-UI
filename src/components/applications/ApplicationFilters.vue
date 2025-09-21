@@ -7,11 +7,14 @@ import { usePartitionStore } from '@/features/partition/store'
 import { useTagStore } from '@/features/tag/store'
 import { useUserStore } from '@/features/user/store'
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
+import { useToast } from 'vue-toastification'
 
 const { applications, filterParams, fetchApplications } = useApplicationStore()
 const { userOptions } = useUserStore()
 const { tagIdOptions } = useTagStore()
 const { partitionOptions } = usePartitionStore()
+
+const toast = useToast()
 
 function sortByCreatedAt() {
   if (filterParams.value.sort === 'created_at') {
@@ -19,7 +22,9 @@ function sortByCreatedAt() {
   } else {
     filterParams.value.sort = 'created_at'
   }
-  fetchApplications()
+  fetchApplications().catch(() => {
+    toast.error('申請の取得に失敗しました')
+  })
 }
 </script>
 

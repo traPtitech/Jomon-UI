@@ -69,7 +69,7 @@ export const useNewApplication = () => {
       try {
         await createFiles(res.id, files.value)
         toast.success('申請を作成しました')
-        router.push('/')
+        await router.push('/')
       } catch (e) {
         if (e instanceof Error) {
           toast.error(e.message)

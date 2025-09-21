@@ -16,8 +16,6 @@
     "paths": { "@/*": ["src/*"] },
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
-    "exactOptionalPropertyTypes": true,
-    "noUncheckedIndexedAccess": true,
     "types": ["vite/client"],
     "noEmit": true
   },

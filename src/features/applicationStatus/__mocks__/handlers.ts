@@ -1,4 +1,4 @@
-import { Status } from '@/lib/apis'
+import type { Status } from '@/lib/apis'
 import { http, HttpResponse } from 'msw'
 
 export const mockApplicationStatus: Status = {

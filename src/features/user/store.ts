@@ -60,9 +60,9 @@ export const useUserStore = () => {
 
   return {
     ...refs,
-    fetchUsers: store.fetchUsers,
-    fetchMe: store.fetchMe,
-    reset: store.reset
+    fetchUsers: store.fetchUsers.bind(store),
+    fetchMe: store.fetchMe.bind(store),
+    reset: store.reset.bind(store)
   }
 }
 

@@ -57,7 +57,10 @@ const createApplicationStore = defineStore('application', {
         )
         this.isApplicationFetched = true
       } catch (e) {
-        throw new Error('申請一覧の取得に失敗しました: ' + e)
+        throw new Error(
+          '申請一覧の取得に失敗しました: ' +
+            (e instanceof Error ? e.message : String(e))
+        )
       }
     },
     async ensureApplication(id: string) {
@@ -146,15 +149,15 @@ export const useApplicationStore = () => {
 
   return {
     ...refs,
-    resetFilters: store.resetFilters,
-    clearCurrentApplication: store.clearCurrentApplication,
-    fetchApplications: store.fetchApplications,
-    ensureApplication: store.ensureApplication,
-    fetchApplication: store.fetchApplication,
-    createApplication: store.createApplication,
-    editApplication: store.editApplication,
-    createComment: store.createComment,
-    changeStatus: store.changeStatus
+    resetFilters: store.resetFilters.bind(store),
+    clearCurrentApplication: store.clearCurrentApplication.bind(store),
+    fetchApplications: store.fetchApplications.bind(store),
+    ensureApplication: store.ensureApplication.bind(store),
+    fetchApplication: store.fetchApplication.bind(store),
+    createApplication: store.createApplication.bind(store),
+    editApplication: store.editApplication.bind(store),
+    createComment: store.createComment.bind(store),
+    changeStatus: store.changeStatus.bind(store)
   }
 }
 

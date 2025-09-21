@@ -26,7 +26,10 @@ const createTagStore = defineStore('tag', {
         this.tags = await repository.fetchTags()
         this.isTagFetched = true
       } catch (e) {
-        throw new Error('タグの取得に失敗しました: ' + e)
+        throw new Error(
+          'タグの取得に失敗しました: ' +
+            (e instanceof Error ? e.message : String(e))
+        )
       }
     },
     async ensureTags(containNewTags: Tag[]): Promise<Tag[]> {
@@ -72,10 +75,10 @@ export const useTagStore = () => {
 
   return {
     ...refs,
-    fetchTags: store.fetchTags,
-    ensureTags: store.ensureTags,
-    deleteTags: store.deleteTags,
-    reset: store.reset
+    fetchTags: store.fetchTags.bind(store),
+    ensureTags: store.ensureTags.bind(store),
+    deleteTags: store.deleteTags.bind(store),
+    reset: store.reset.bind(store)
   }
 }
 

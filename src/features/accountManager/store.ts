@@ -66,10 +66,10 @@ export const useAccountManagerStore = () => {
 
   return {
     ...refs,
-    fetchAccountManagers: store.fetchAccountManagers,
-    addAccountManagers: store.addAccountManagers,
-    removeAccountManagers: store.removeAccountManagers,
-    reset: store.reset
+    fetchAccountManagers: store.fetchAccountManagers.bind(store),
+    addAccountManagers: store.addAccountManagers.bind(store),
+    removeAccountManagers: store.removeAccountManagers.bind(store),
+    reset: store.reset.bind(store)
   }
 }
 

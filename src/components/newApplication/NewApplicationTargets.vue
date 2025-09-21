@@ -3,7 +3,7 @@ import BaseInput from '@/components/shared/BaseInput.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useUserStore } from '@/features/user/store'
-import { ApplicationTargetInput } from '@/lib/apis'
+import type { ApplicationTargetInput } from '@/lib/apis'
 import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
 const model = defineModel<ApplicationTargetInput[]>({ required: true })

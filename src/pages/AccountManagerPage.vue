@@ -47,13 +47,23 @@ const handleDeleteTags = async () => {
 
 if (me.value?.accountManager) {
   if (!isAccountManagerFetched.value) {
-    await fetchAccountManagers()
+    fetchAccountManagers().catch(() => {
+      toast.error(
+        '会計管理者の取得に失敗しました。時間をおいて再度お試しください。'
+      )
+    })
   }
   if (!isUserFetched.value) {
-    await fetchUsers()
+    fetchUsers().catch(() => {
+      toast.error(
+        'ユーザーの取得に失敗しました。時間をおいて再度お試しください。'
+      )
+    })
   }
   if (!isTagFetched.value) {
-    await fetchTags()
+    fetchTags().catch(() => {
+      toast.error('タグの取得に失敗しました。時間をおいて再度お試しください。')
+    })
   }
 }
 </script>
@@ -68,7 +78,7 @@ if (me.value?.accountManager) {
       <h2 class="text-base font-medium">会計管理者</h2>
       <ul class="flex gap-3" aria-labelledby="accountManager-list">
         <li v-for="accountManager in accountManagers" :key="accountManager">
-          <div class="rounded-sm border border-text-primary px-2 text-center">
+          <div class="border-text-primary rounded-sm border px-2 text-center">
             {{ userMap[accountManager] }}
           </div>
         </li>

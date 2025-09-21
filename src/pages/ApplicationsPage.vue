@@ -9,6 +9,7 @@ import { useUserStore } from '@/features/user/store'
 import { toPage } from '@/lib/parseQueryParams'
 import { ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
+import { useToast } from 'vue-toastification'
 
 const route = useRoute()
 const page = ref(toPage(route.query.page))
@@ -25,17 +26,31 @@ const sliceApplicationsAt = (index: number, n: number) => {
   return applications.value.slice(start, end)
 }
 
+const toast = useToast()
+
 if (!isApplicationFetched.value) {
-  await fetchApplications()
+  fetchApplications().catch(() => {
+    toast.error('申請の取得に失敗しました。時間をおいて再度お試しください。')
+  })
 }
 if (!isTagFetched.value) {
-  await fetchTags()
+  fetchTags().catch(() => {
+    toast.error('タグの取得に失敗しました。時間をおいて再度お試しください。')
+  })
 }
 if (!isPartitionFetched.value) {
-  await fetchPartitions()
+  fetchPartitions().catch(() => {
+    toast.error(
+      'パーティションの取得に失敗しました。時間をおいて再度お試しください。'
+    )
+  })
 }
 if (!isUserFetched.value) {
-  await fetchUsers()
+  fetchUsers().catch(() => {
+    toast.error(
+      'ユーザーの取得に失敗しました。時間をおいて再度お試しください。'
+    )
+  })
 }
 
 watch(

@@ -30,7 +30,7 @@ const createUserStore = defineStore('user', {
         this.users = await repository.fetchUsers()
         this.isUserFetched = true
       } catch (e) {
-        throw new Error('ユーザー一覧の取得に失敗しました: ' + e)
+        throw new Error('ユーザー一覧の取得に失敗しました: ' + String(e))
       }
     },
     async fetchMe() {

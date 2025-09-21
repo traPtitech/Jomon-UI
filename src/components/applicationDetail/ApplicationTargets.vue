@@ -29,14 +29,14 @@ const toggleEditTargets = () => {
 }
 
 const handleUpdateTargets = async () => {
-  if (editedTargets.value.some(target => target.target === null)) {
+  if (editedTargets.value.some(target => target.target === '')) {
     toast.error('払い戻し対象者を選択してください')
     return
   }
   try {
     await editApplication(props.application.id, {
       ...props.application,
-      partition: props.application.partition?.id ?? null, // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
+      partition: props.application.partition.id,
       targets: editedTargets.value
     })
     toast.success('更新しました')

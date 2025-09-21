@@ -6,7 +6,7 @@ import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import { usePartitionStore } from '@/features/partition/store'
 import { useUserStore } from '@/features/user/store'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
 const application = defineModel<ApplicationDetail>('modelValue', {
@@ -21,18 +21,11 @@ const toast = useToast()
 
 const hasAuthority = isApplicationCreator.value(me.value)
 
-const defaultPartition = computed(() =>
-  application.value.partition ? application.value.partition.id : null
-)
-const partitionName = computed(() =>
-  application.value.partition ? application.value.partition.name : 'なし'
-)
-
 const isEditMode = ref(false)
-const editedPartition = ref<string | null>(defaultPartition.value)
+const editedPartition = ref<string | null>(application.value.partition.id)
 const toggleEditPartition = () => {
   if (isEditMode.value) {
-    editedPartition.value = defaultPartition.value
+    editedPartition.value = application.value.partition.id
   }
   isEditMode.value = !isEditMode.value
 }
@@ -61,7 +54,7 @@ const handleUpdatePartition = async () => {
         @click="toggleEditPartition" />
     </div>
     <div>
-      <span v-if="!isEditMode">{{ partitionName }}</span>
+      <span v-if="!isEditMode">{{ application.partition.name }}</span>
       <SearchSelect
         v-else
         v-model="editedPartition"

@@ -22,7 +22,7 @@ const { isUserFetched, fetchUsers } = useUserStore()
 const sliceApplicationsAt = (index: number, n: number) => {
   const start = (index - 1) * n
   const end = index * n
-  return applications.value?.slice(start, end) ?? []
+  return applications.value.slice(start, end)
 }
 
 if (!isApplicationFetched.value) {

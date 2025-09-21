@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 
 interface Props {
   label: string
@@ -16,8 +16,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  (e: 'focus'): void
-  (e: 'blur'): void
+  (e: 'focus' | 'blur'): void
   (e: 'keydown', value: KeyboardEvent): void
 }>()
 

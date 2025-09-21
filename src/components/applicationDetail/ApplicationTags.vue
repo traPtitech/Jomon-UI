@@ -26,7 +26,7 @@ const handleUpdateTags = async () => {
   try {
     await editApplication(application.value.id, {
       ...application.value,
-      partition: application.value.partition?.id ?? null // TODO: 関係ないときでも書かないといけないので、デフォルトの値をどこかに置いておく
+      partition: application.value.partition.id
     })
     toast.success('更新しました')
   } catch {

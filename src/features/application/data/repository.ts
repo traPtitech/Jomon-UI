@@ -51,7 +51,7 @@ const createApplicationRepository = () => ({
       content: application.content,
       targets: application.targets,
       tags: application.tags.map(tag => tag.id),
-      partition: application.partition ?? '',
+      partition: application.partition,
       created_by: application.createdBy
     }
     const { data } = await apis.postApplication(applicationData)
@@ -68,7 +68,7 @@ const createApplicationRepository = () => ({
       content: application.content,
       targets: application.targets,
       tags: application.tags.map(tag => tag.id),
-      partition: application.partition ?? '',
+      partition: application.partition,
       created_by: application.createdBy
     }
     const { data } = await apis.putApplicationDetail(id, applicationData)

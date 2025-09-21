@@ -10,11 +10,8 @@ export const useAccountManager = () => {
   const toast = useToast()
 
   const absentMembers = computed(() => {
-    if (!users.value) {
-      return []
-    }
     return users.value
-      .filter(user => !accountManagers.value?.includes(user.id))
+      .filter(user => !accountManagers.value.includes(user.id))
       .map(user => ({
         key: user.name,
         value: user.id

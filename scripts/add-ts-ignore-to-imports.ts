@@ -1,12 +1,12 @@
 import type { SourceFile } from 'ts-morph'
-import { SyntaxKind, Project } from 'ts-morph'
+import { Project, SyntaxKind } from 'ts-morph'
 
 const addTsIgnoreToImportsToFile = async (sourceFile: SourceFile) => {
   const imports = sourceFile.getImportDeclarations()
 
   const insertPos: number[] = []
   for (const imp of imports) {
-    const firstComment = imp.getLeadingCommentRanges()?.at(-1)
+    const firstComment = imp.getLeadingCommentRanges().at(-1)
     if (firstComment) {
       const kind = firstComment.getKind()
       const text = firstComment.getText()

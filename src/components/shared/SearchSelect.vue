@@ -7,7 +7,7 @@ import {
   PlusIcon,
   XMarkIcon
 } from '@heroicons/vue/24/outline'
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 interface Option {
   key: string
@@ -32,8 +32,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  (e: 'focus'): void
-  (e: 'close'): void
+  (e: 'focus' | 'close'): void
   (e: 'keydown', value: KeyboardEvent): void
 }>()
 const model = defineModel<string | string[] | null>({ required: true })
@@ -65,7 +64,7 @@ const selectedValues = computed(() => {
 
 const getPlaceholderText = computed(() => {
   if (props.multiple && Array.isArray(model.value) && model.value.length > 0) {
-    return `${model.value.length}個選択中...`
+    return `${String(model.value.length)}個選択中...`
   }
   return props.placeholder
 })
@@ -78,7 +77,7 @@ const handleClickOutside = (event: MouseEvent) => {
       const selectedOption = props.options.find(
         opt => opt.value === model.value
       )
-      searchTerm.value = selectedOption?.key || ''
+      searchTerm.value = selectedOption?.key ?? ''
     } else if (!props.multiple) {
       searchTerm.value = ''
     }
@@ -89,7 +88,7 @@ onMounted(() => {
   document.addEventListener('mousedown', handleClickOutside)
   if (!props.multiple && model.value && !searchTerm.value) {
     const selectedOption = props.options.find(opt => opt.value === model.value)
-    searchTerm.value = selectedOption?.key || ''
+    searchTerm.value = selectedOption?.key ?? ''
   }
 })
 
@@ -113,7 +112,7 @@ const handleSelect = (selectedValue: string) => {
     const selectedOption = props.options.find(
       opt => opt.value === selectedValue
     )
-    searchTerm.value = selectedOption?.key || selectedValue
+    searchTerm.value = selectedOption?.key ?? selectedValue
     menuState.value = 'close'
   }
 }
@@ -132,7 +131,7 @@ const handleInputFocus = () => {
   menuState.value = 'presearch'
   if (!props.multiple && model.value) {
     const selectedOption = props.options.find(opt => opt.value === model.value)
-    searchTerm.value = selectedOption?.key || ''
+    searchTerm.value = selectedOption?.key ?? ''
   }
 }
 
@@ -184,7 +183,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
         const selectedOption = props.options.find(
           opt => opt.value === model.value
         )
-        searchTerm.value = selectedOption?.key || ''
+        searchTerm.value = selectedOption?.key ?? ''
       } else {
         searchTerm.value = ''
       }

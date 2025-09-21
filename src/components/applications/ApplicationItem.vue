@@ -18,9 +18,8 @@ const { userMap } = useUserStore()
 
 const formattedDate = formatDate(props.application.createdAt)
 
-const totalAmount = computed(
-  () =>
-    props.application.targets.reduce((a, target) => a + target.amount, 0) ?? 0
+const totalAmount = computed(() =>
+  props.application.targets.reduce((a, target) => a + target.amount, 0)
 )
 </script>
 

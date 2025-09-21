@@ -1,5 +1,5 @@
-import { addApis } from './add-apis'
-import { addTsIgnoreToImports } from './add-ts-ignore-to-imports'
+import { addApis } from './add-apis.js'
+import { addTsIgnoreToImports } from './add-ts-ignore-to-imports.js'
 import { execa } from 'execa'
 import fs from 'fs/promises'
 import path from 'path'

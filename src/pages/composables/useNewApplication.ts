@@ -37,6 +37,10 @@ export const useNewApplication = () => {
       toast.warning('タイトル、詳細、対象者は必須です')
       return
     }
+    if (!application.value.partition) {
+      toast.warning('パーティションは必須です')
+      return
+    }
     if (
       application.value.targets.some(
         target => target.target === '' || target.amount === 0

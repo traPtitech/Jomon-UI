@@ -6,7 +6,7 @@ import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import { usePartitionStore } from '@/features/partition/store'
 import { useUserStore } from '@/features/user/store'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
 const application = defineModel<ApplicationDetail>('modelValue', {
@@ -19,7 +19,7 @@ const { isApplicationCreator } = useApplication(application.value)
 const { editApplication } = useApplicationStore()
 const toast = useToast()
 
-const hasAuthority = isApplicationCreator.value(me.value)
+const hasAuthority = computed(() => isApplicationCreator.value(me.value))
 
 const isEditMode = ref(false)
 const editedPartition = ref<string>(application.value.partition.id)

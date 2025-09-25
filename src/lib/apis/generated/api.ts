@@ -439,6 +439,12 @@ export interface Partition {
     'budget': number | null;
     /**
      * 
+     * @type {string}
+     * @memberof Partition
+     */
+    'parent_partition_group': string;
+    /**
+     * 
      * @type {PartitionManagement}
      * @memberof Partition
      */
@@ -475,17 +481,17 @@ export interface PartitionGroup {
      */
     'name': string;
     /**
-     * 
-     * @type {Array<Partition>}
+     * 現時点の仕様では常にnullとする
+     * @type {string}
      * @memberof PartitionGroup
      */
-    'child_partitions': Array<Partition>;
+    'parent_partition_group': string | null;
     /**
      * 
-     * @type {Array<PartitionGroup>}
+     * @type {number}
      * @memberof PartitionGroup
      */
-    'child_partition_groups': Array<PartitionGroup>;
+    'depth': number;
     /**
      * 
      * @type {string}
@@ -512,17 +518,17 @@ export interface PartitionGroupInput {
      */
     'name': string;
     /**
-     * 
-     * @type {Array<string>}
+     * 現時点の仕様では常にnullとする
+     * @type {string}
      * @memberof PartitionGroupInput
      */
-    'child_partitions': Array<string>;
+    'parent_partition_group': string | null;
     /**
      * 
-     * @type {Array<string>}
+     * @type {number}
      * @memberof PartitionGroupInput
      */
-    'child_partition_groups': Array<string>;
+    'depth': number;
 }
 /**
  * 
@@ -542,6 +548,12 @@ export interface PartitionInput {
      * @memberof PartitionInput
      */
     'budget': number | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PartitionInput
+     */
+    'parent_partition_group': string;
     /**
      * 
      * @type {PartitionManagement}
@@ -2679,6 +2691,39 @@ export class PartitionsApi extends BaseAPI {
 export const TagsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * タグを削除する
+         * @param {string} tagID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteTag: async (tagID: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'tagID' is not null or undefined
+            assertParamExists('deleteTag', 'tagID', tagID)
+            const localVarPath = `/tags/{tagID}`
+                .replace(`{${"tagID"}}`, encodeURIComponent(String(tagID)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * タグの一覧を返す。
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2781,39 +2826,6 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * タグを削除する
-         * @param {string} tagID 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        tagsTagIDDelete: async (tagID: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'tagID' is not null or undefined
-            assertParamExists('tagsTagIDDelete', 'tagID', tagID)
-            const localVarPath = `/tags/{tagID}`
-                .replace(`{${"tagID"}}`, encodeURIComponent(String(tagID)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -2824,6 +2836,18 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
 export const TagsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = TagsApiAxiosParamCreator(configuration)
     return {
+        /**
+         * タグを削除する
+         * @param {string} tagID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteTag(tagID: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteTag(tagID, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TagsApi.deleteTag']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
         /**
          * タグの一覧を返す。
          * @param {*} [options] Override http request option.
@@ -2860,18 +2884,6 @@ export const TagsApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['TagsApi.putTag']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
-        /**
-         * タグを削除する
-         * @param {string} tagID 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async tagsTagIDDelete(tagID: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.tagsTagIDDelete(tagID, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TagsApi.tagsTagIDDelete']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
     }
 };
 
@@ -2882,6 +2894,15 @@ export const TagsApiFp = function(configuration?: Configuration) {
 export const TagsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = TagsApiFp(configuration)
     return {
+        /**
+         * タグを削除する
+         * @param {string} tagID 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteTag(tagID: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.deleteTag(tagID, options).then((request) => request(axios, basePath));
+        },
         /**
          * タグの一覧を返す。
          * @param {*} [options] Override http request option.
@@ -2909,15 +2930,6 @@ export const TagsApiFactory = function (configuration?: Configuration, basePath?
         putTag(tagID: string, tagInput: TagInput, options?: RawAxiosRequestConfig): AxiosPromise<Tag> {
             return localVarFp.putTag(tagID, tagInput, options).then((request) => request(axios, basePath));
         },
-        /**
-         * タグを削除する
-         * @param {string} tagID 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        tagsTagIDDelete(tagID: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.tagsTagIDDelete(tagID, options).then((request) => request(axios, basePath));
-        },
     };
 };
 
@@ -2928,6 +2940,17 @@ export const TagsApiFactory = function (configuration?: Configuration, basePath?
  * @extends {BaseAPI}
  */
 export class TagsApi extends BaseAPI {
+    /**
+     * タグを削除する
+     * @param {string} tagID 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TagsApi
+     */
+    public deleteTag(tagID: string, options?: RawAxiosRequestConfig) {
+        return TagsApiFp(this.configuration).deleteTag(tagID, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * タグの一覧を返す。
      * @param {*} [options] Override http request option.
@@ -2959,17 +2982,6 @@ export class TagsApi extends BaseAPI {
      */
     public putTag(tagID: string, tagInput: TagInput, options?: RawAxiosRequestConfig) {
         return TagsApiFp(this.configuration).putTag(tagID, tagInput, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * タグを削除する
-     * @param {string} tagID 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TagsApi
-     */
-    public tagsTagIDDelete(tagID: string, options?: RawAxiosRequestConfig) {
-        return TagsApiFp(this.configuration).tagsTagIDDelete(tagID, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3406,6 +3418,17 @@ export class Apis extends BaseAPI {
     }
 
     /**
+     * タグを削除する
+     * @param {string} tagID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TagsApi
+     */
+    public deleteTag(tagID: string, options?: RawAxiosRequestConfig) {
+        return TagsApiFp(this.configuration).deleteTag(tagID, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * タグの一覧を返す。
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -3436,17 +3459,6 @@ export class Apis extends BaseAPI {
      */
     public putTag(tagID: string, tagInput: TagInput, options?: RawAxiosRequestConfig) {
         return TagsApiFp(this.configuration).putTag(tagID, tagInput, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * タグを削除する
-     * @param {string} tagID
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TagsApi
-     */
-    public tagsTagIDDelete(tagID: string, options?: RawAxiosRequestConfig) {
-        return TagsApiFp(this.configuration).tagsTagIDDelete(tagID, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

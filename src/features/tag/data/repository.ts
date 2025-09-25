@@ -21,6 +21,6 @@ const createTagRepository = () => ({
     }
   },
   deleteTag: async (id: string) => {
-    await apis.tagsTagIDDelete(id)
+    await apis.deleteTag(id)
   }
 })

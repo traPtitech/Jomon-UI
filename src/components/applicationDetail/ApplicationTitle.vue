@@ -32,7 +32,7 @@ const handleUpdateTitle = async () => {
   try {
     await editApplication(props.application.id, {
       ...props.application,
-      partition: props.application.partition?.id ?? null,
+      partition: props.application.partition.id,
       title: editedTitle.value
     })
     toast.success('更新しました')

@@ -11,6 +11,7 @@ import { applicationTemplates } from '@/features/applicationTemplate/entities'
 import { usePartitionStore } from '@/features/partition/store'
 import { useTagStore } from '@/features/tag/store'
 import { useUserStore } from '@/features/user/store'
+import { useToast } from 'vue-toastification'
 
 const { isTagFetched, fetchTags } = useTagStore()
 const { isUserFetched, fetchUsers, me } = useUserStore()
@@ -19,14 +20,26 @@ const { isPartitionFetched, partitionOptions, fetchPartitions } =
 
 const { isSending, application, files, postApplication } = useNewApplication()
 
+const toast = useToast()
+
 if (!isTagFetched.value) {
-  fetchTags()
+  fetchTags().catch(() => {
+    toast.error('タグの取得に失敗しました。時間をおいて再度お試しください。')
+  })
 }
 if (!isPartitionFetched.value) {
-  fetchPartitions()
+  fetchPartitions().catch(() => {
+    toast.error(
+      'パーティションの取得に失敗しました。時間をおいて再度お試しください。'
+    )
+  })
 }
 if (!isUserFetched.value) {
-  fetchUsers()
+  fetchUsers().catch(() => {
+    toast.error(
+      'ユーザーの取得に失敗しました。時間をおいて再度お試しください。'
+    )
+  })
 }
 </script>
 

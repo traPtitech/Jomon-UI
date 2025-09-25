@@ -47,13 +47,23 @@ const handleDeleteTags = async () => {
 
 if (me.value?.accountManager) {
   if (!isAccountManagerFetched.value) {
-    await fetchAccountManagers()
+    fetchAccountManagers().catch(() => {
+      toast.error(
+        '会計管理者の取得に失敗しました。時間をおいて再度お試しください。'
+      )
+    })
   }
   if (!isUserFetched.value) {
-    await fetchUsers()
+    fetchUsers().catch(() => {
+      toast.error(
+        'ユーザーの取得に失敗しました。時間をおいて再度お試しください。'
+      )
+    })
   }
   if (!isTagFetched.value) {
-    await fetchTags()
+    fetchTags().catch(() => {
+      toast.error('タグの取得に失敗しました。時間をおいて再度お試しください。')
+    })
   }
 }
 </script>

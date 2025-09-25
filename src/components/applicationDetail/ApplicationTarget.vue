@@ -44,7 +44,7 @@ const handleRemoveTarget = async () => {
   try {
     await editApplication(props.application.id, {
       ...props.application,
-      partition: props.application.partition?.id ?? null,
+      partition: props.application.partition.id,
       targets: props.application.targets.filter(
         target => target.target !== props.target.target
       )

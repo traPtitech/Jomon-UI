@@ -3,7 +3,13 @@
     "composite": true,
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
+    "strict": true,
     "types": ["node"]
   },
-  "include": ["vite.config.ts"]
+  "include": [
+    "vite.config.ts",
+    "scripts/**/*.ts",
+    "scripts/**/*.mts",
+    "scripts/**/*.cts"
+  ]
 }

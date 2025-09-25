@@ -17,13 +17,10 @@ const createUserStore = defineStore('user', {
         value: user.id
       })),
     userMap: state =>
-      state.users.reduce(
-        (acc, user) => {
-          acc[user.id] = user.name
-          return acc
-        },
-        {} as Record<string, string>
-      )
+      state.users.reduce<Record<string, string>>((acc, user) => {
+        acc[user.id] = user.name
+        return acc
+      }, {})
   },
   actions: {
     async fetchUsers() {
@@ -33,7 +30,7 @@ const createUserStore = defineStore('user', {
         this.users = await repository.fetchUsers()
         this.isUserFetched = true
       } catch (e) {
-        throw new Error('ユーザー一覧の取得に失敗しました: ' + e)
+        throw new Error('ユーザー一覧の取得に失敗しました: ' + String(e))
       }
     },
     async fetchMe() {
@@ -63,9 +60,9 @@ export const useUserStore = () => {
 
   return {
     ...refs,
-    fetchUsers: store.fetchUsers,
-    fetchMe: store.fetchMe,
-    reset: store.reset
+    fetchUsers: store.fetchUsers.bind(store),
+    fetchMe: store.fetchMe.bind(store),
+    reset: store.reset.bind(store)
   }
 }
 

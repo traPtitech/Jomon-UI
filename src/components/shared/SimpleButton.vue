@@ -17,17 +17,13 @@ const props = withDefaults(defineProps<Props>(), {
 const typeClass = computed(() => {
   switch (props.type) {
     case 'plain':
-      return `${!props.disabled && 'hover:bg-hover-primary'} border-surface-secondary`
+      return `${!props.disabled ? 'hover:bg-hover-primary' : ''} border-surface-secondary`
     case 'danger':
-      return `${
-        !props.disabled && 'hover:bg-error-secondary'
-      } bg-error-primary border-error-secondary text-white`
+      return `${!props.disabled ? 'hover:bg-error-secondary' : ''} bg-error-primary border-error-secondary text-white`
     case 'success':
-      return `${
-        !props.disabled && 'hover:bg-accent-secondary'
-      } bg-accent-primary border-accent-secondary text-white`
+      return `${!props.disabled ? 'hover:bg-accent-secondary' : ''} bg-accent-primary border-accent-secondary text-white`
     default:
-      return `${!props.disabled && 'hover:bg-hover-primary'} border-surface-secondary`
+      return `${!props.disabled ? 'hover:bg-hover-primary' : ''} border-surface-secondary`
   }
 })
 const fontSizeClass = computed(() => {
@@ -45,7 +41,7 @@ const paddingClass = computed(() => {
       return 'py-8 px-16'
     default: {
       const n: never = props.padding
-      throw new Error(`unexpected padding: ${n}`)
+      throw new Error(`unexpected padding: ${String(n)}`)
     }
   }
 })

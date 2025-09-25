@@ -9,7 +9,7 @@ export const convertApplicationStatusDetailFromData = (
   createdBy: status.created_by,
   status: status.status,
   comment: status.comment
-    ? convertApplicationCommentFromData(status?.comment)
+    ? convertApplicationCommentFromData(status.comment)
     : undefined,
   createdAt: DateTime.fromISO(status.created_at)
 })

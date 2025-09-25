@@ -18,16 +18,16 @@ type StatusWithType = ApplicationStatusDetail & { type: 'statusChange' }
 type Log = CommentWithType | StatusWithType
 
 const logs = computed((): Log[] => {
-  const comments: CommentWithType[] =
-    props.application.comments.map(comment => ({
+  const comments: CommentWithType[] = props.application.comments.map(
+    comment => ({
       ...comment,
       type: 'comment'
-    })) ?? []
-  const statuses: StatusWithType[] =
-    props.application?.statuses.map(status => ({
-      ...status,
-      type: 'statusChange'
-    })) ?? []
+    })
+  )
+  const statuses: StatusWithType[] = props.application.statuses.map(status => ({
+    ...status,
+    type: 'statusChange'
+  }))
 
   const logs = [...comments, ...statuses]
 

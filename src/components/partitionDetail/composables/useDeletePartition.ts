@@ -19,7 +19,7 @@ export const useDeletePartition = () => {
       isDeleting.value = true
       await deletePartitionAction(id)
       toast.success('パーティションを削除しました')
-      router.push('/partitions')
+      await router.push('/partitions')
     } catch (e) {
       if (e instanceof Error && e.message) {
         toast.error(e.message)

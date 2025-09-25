@@ -11,11 +11,11 @@ const props = defineProps<Props>()
 const slicePartitionsAt = (index: number, n: number) => {
   const start = (index - 1) * n
   const end = index * n
-  return props.partitions.slice(start, end) ?? []
+  return props.partitions.slice(start, end)
 }
 
-const navigateToPartition = (partitionId: string) => {
-  router.push(`/partitions/${partitionId}`)
+const navigateToPartition = async (partitionId: string) => {
+  await router.push(`/partitions/${partitionId}`)
 }
 </script>
 

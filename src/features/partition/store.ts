@@ -17,7 +17,7 @@ const createPartitionStore = defineStore('partition', {
     partitions: [] as Partition[],
     isPartitionFetched: false,
     currentPartition: undefined as Partition | undefined,
-    editedValue: createDefaultPartitionSeed() as PartitionSeed
+    editedValue: createDefaultPartitionSeed()
   }),
   getters: {
     partitionOptions: state =>
@@ -37,7 +37,10 @@ const createPartitionStore = defineStore('partition', {
         this.partitions = await repository.fetchPartitions()
         this.isPartitionFetched = true
       } catch (e) {
-        throw new Error('パーティション一覧の取得に失敗しました: ' + e)
+        throw new Error(
+          'パーティション一覧の取得に失敗しました: ' +
+            (e instanceof Error ? e.message : String(e))
+        )
       }
     },
     async fetchPartition(id: string) {
@@ -108,12 +111,12 @@ export const usePartitionStore = () => {
 
   return {
     ...refs,
-    fetchPartitions: store.fetchPartitions,
-    fetchPartition: store.fetchPartition,
-    createPartition: store.createPartition,
-    editPartition: store.editPartition,
-    deletePartition: store.deletePartition,
-    resetDetail: store.resetDetail
+    fetchPartitions: store.fetchPartitions.bind(store),
+    fetchPartition: store.fetchPartition.bind(store),
+    createPartition: store.createPartition.bind(store),
+    editPartition: store.editPartition.bind(store),
+    deletePartition: store.deletePartition.bind(store),
+    resetDetail: store.resetDetail.bind(store)
   }
 }
 

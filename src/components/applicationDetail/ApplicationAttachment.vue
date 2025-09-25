@@ -4,7 +4,7 @@ import { useToast } from 'vue-toastification'
 defineProps<{ files: string[] }>()
 const toast = useToast()
 
-const handleFileUpload = async () => {
+const handleFileUpload = () => {
   try {
     toast.success('ファイルを追加しました')
   } catch {

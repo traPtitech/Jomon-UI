@@ -19,20 +19,13 @@ const { isApplicationCreator } = useApplication(application.value)
 const { editApplication } = useApplicationStore()
 const toast = useToast()
 
-const hasAuthority = isApplicationCreator.value(me.value)
-
-const defaultPartition = computed(() =>
-  application.value.partition ? application.value.partition.id : null
-)
-const partitionName = computed(() =>
-  application.value.partition ? application.value.partition.name : 'なし'
-)
+const hasAuthority = computed(() => isApplicationCreator.value(me.value))
 
 const isEditMode = ref(false)
-const editedPartition = ref<string | null>(defaultPartition.value)
+const editedPartition = ref<string>(application.value.partition.id)
 const toggleEditPartition = () => {
   if (isEditMode.value) {
-    editedPartition.value = defaultPartition.value
+    editedPartition.value = application.value.partition.id
   }
   isEditMode.value = !isEditMode.value
 }
@@ -41,7 +34,7 @@ const handleUpdatePartition = async () => {
   try {
     await editApplication(application.value.id, {
       ...application.value,
-      partition: editedPartition.value ?? ''
+      partition: editedPartition.value
     })
     toast.success('更新しました')
   } catch {
@@ -61,7 +54,7 @@ const handleUpdatePartition = async () => {
         @click="toggleEditPartition" />
     </div>
     <div>
-      <span v-if="!isEditMode">{{ partitionName }}</span>
+      <span v-if="!isEditMode">{{ application.partition.name }}</span>
       <SearchSelect
         v-else
         v-model="editedPartition"

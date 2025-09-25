@@ -1,5 +1,5 @@
-import { addApis } from './add-apis'
-import { addTsIgnoreToImports } from './add-ts-ignore-to-imports'
+import { addApis } from './add-apis.js'
+import { addTsIgnoreToImports } from './add-ts-ignore-to-imports.js'
 import { execa } from 'execa'
 import fs from 'fs/promises'
 import path from 'path'
@@ -24,12 +24,13 @@ const __filename = fileURLToPath(import.meta.url)
 
 const __dirname = path.dirname(__filename)
 
-;(async () => {
+await (async () => {
   await fs.mkdir(path.resolve(__dirname, '../', GENERATED_DIR), {
     recursive: true
   })
 
   const p = execa('npx', generateCmd)
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   p.stdout?.pipe(process.stdout)
   await p
 

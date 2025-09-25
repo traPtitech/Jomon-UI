@@ -66,7 +66,7 @@ export const applicationHandlers = [
       return HttpResponse.json(res)
     }
   ),
-  http.put('/api/applications/:id', async ({ params }) => {
+  http.put('/api/applications/:id', ({ params }) => {
     // tagsの変換が必要なため、reqBodyを使っていない
     const res: ApplicationDetail = {
       ...mockApplicationDetail,
@@ -88,7 +88,7 @@ export const applicationHandlers = [
       return HttpResponse.json(res)
     }
   ),
-  http.put('/api/applications/:id/status', async () => {
+  http.put('/api/applications/:id/status', () => {
     // NOTE: commentの変換が必要なため、reqBodyを使っていない
     const res: StatusDetail = mockApplicationStatus
 

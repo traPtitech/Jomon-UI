@@ -26,7 +26,7 @@ export const useNewPartition = () => {
       isSending.value = true
       await createPartition(partition.value)
       toast.success('パーティションを作成しました')
-      router.push('/partitions')
+      await router.push('/partitions')
     } catch (e) {
       if (e instanceof Error && e.message) {
         toast.error(e.message)

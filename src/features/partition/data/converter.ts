@@ -6,7 +6,8 @@ export const convertPartitionFromData = (
 ): Partition => ({
   id: partition.id,
   name: partition.name,
-  budget: partition.budget ?? 0,
+  budget: partition.budget,
+  parentPartitionGroupId: partition.parent_partition_group,
   management: {
     category: partition.management.category,
     state: partition.management.state

@@ -4,10 +4,62 @@ All URIs are relative to *https://raw.githubusercontent.com/api*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
+|[**deleteTag**](#deletetag) | **DELETE** /tags/{tagID} | |
 |[**getTags**](#gettags) | **GET** /tags | |
 |[**postTag**](#posttag) | **POST** /tags | |
 |[**putTag**](#puttag) | **PUT** /tags/{tagID} | |
-|[**tagsTagIDDelete**](#tagstagiddelete) | **DELETE** /tags/{tagID} | |
+
+# **deleteTag**
+> deleteTag()
+
+タグを削除する
+
+### Example
+
+```typescript
+import {
+    TagsApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new TagsApi(configuration);
+
+let tagID: string; // (default to undefined)
+
+const { status, data } = await apiInstance.deleteTag(
+    tagID
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **tagID** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | 削除に成功した場合。 |  -  |
+|**404** | 指定したリソースは存在しない。 |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getTags**
 > Array<Tag> getTags()
@@ -160,58 +212,6 @@ No authorization required
 |**200** | 変更に成功した場合。 |  -  |
 |**400** | 不正なリクエスト。 |  -  |
 |**403** | 編集権限がない人による操作。 |  -  |
-|**404** | 指定したリソースは存在しない。 |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **tagsTagIDDelete**
-> tagsTagIDDelete()
-
-タグを削除する
-
-### Example
-
-```typescript
-import {
-    TagsApi,
-    Configuration
-} from './api';
-
-const configuration = new Configuration();
-const apiInstance = new TagsApi(configuration);
-
-let tagID: string; // (default to undefined)
-
-const { status, data } = await apiInstance.tagsTagIDDelete(
-    tagID
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **tagID** | [**string**] |  | defaults to undefined|
-
-
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: Not defined
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | 削除に成功した場合。 |  -  |
 |**404** | 指定したリソースは存在しない。 |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

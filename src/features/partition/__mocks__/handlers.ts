@@ -6,6 +6,7 @@ export const mockPartition: Partition = {
   id: '1',
   name: 'テストパーティション',
   budget: 10000,
+  parent_partition_group: 'mock-group',
   management: {
     category: 'manual',
     state: 'available'
@@ -34,6 +35,8 @@ export const partitionHandlers = [
       ...mockPartition,
       name: seed.name,
       budget: seed.budget,
+      parent_partition_group:
+        seed.parentPartitionGroupId || mockPartition.parent_partition_group,
       management: seed.management
     }
     return HttpResponse.json(partition)
@@ -45,6 +48,8 @@ export const partitionHandlers = [
       ...mockPartition,
       name: seed.name,
       budget: seed.budget,
+      parent_partition_group:
+        seed.parentPartitionGroupId || mockPartition.parent_partition_group,
       management: seed.management
     }
     return HttpResponse.json(partition)

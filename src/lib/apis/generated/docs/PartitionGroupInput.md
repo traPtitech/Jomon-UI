@@ -6,8 +6,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **string** |  | [default to undefined]
-**child_partitions** | **Array&lt;string&gt;** |  | [default to undefined]
-**child_partition_groups** | **Array&lt;string&gt;** |  | [default to undefined]
+**parent_partition_group** | **string** | 現時点の仕様では常にnullとする | [default to undefined]
+**depth** | **number** |  | [default to undefined]
 
 ## Example
 
@@ -16,8 +16,8 @@ import { PartitionGroupInput } from './api';
 
 const instance: PartitionGroupInput = {
     name,
-    child_partitions,
-    child_partition_groups,
+    parent_partition_group,
+    depth,
 };
 ```
 

@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **id** | **string** |  | [default to undefined]
 **name** | **string** |  | [default to undefined]
 **budget** | **number** |  | [default to undefined]
+**parent_partition_group** | **string** |  | [default to undefined]
 **management** | [**PartitionManagement**](PartitionManagement.md) |  | [default to undefined]
 **created_at** | **string** |  | [default to undefined]
 **updated_at** | **string** |  | [default to undefined]
@@ -21,6 +22,7 @@ const instance: Partition = {
     id,
     name,
     budget,
+    parent_partition_group,
     management,
     created_at,
     updated_at,

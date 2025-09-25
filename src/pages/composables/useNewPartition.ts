@@ -12,6 +12,7 @@ export const useNewPartition = () => {
   const partition = ref<PartitionSeed>({
     name: '',
     budget: 0,
+    parentPartitionGroupId: '',
     management: {
       category: 'manual',
       state: 'available'

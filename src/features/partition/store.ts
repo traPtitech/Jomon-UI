@@ -6,6 +6,7 @@ import { defineStore, storeToRefs } from 'pinia'
 const createDefaultPartitionSeed = (): PartitionSeed => ({
   name: '',
   budget: 0,
+  parentPartitionGroupId: '',
   management: {
     category: 'manual',
     state: 'available'
@@ -51,6 +52,7 @@ const createPartitionStore = defineStore('partition', {
         this.editedValue = {
           name: partition.name,
           budget: partition.budget ?? 0,
+          parentPartitionGroupId: partition.parentPartitionGroupId,
           management: { ...partition.management }
         }
       } catch {
@@ -82,6 +84,7 @@ const createPartitionStore = defineStore('partition', {
         this.editedValue = {
           name: this.currentPartition.name,
           budget: this.currentPartition.budget ?? 0,
+          parentPartitionGroupId: this.currentPartition.parentPartitionGroupId,
           management: { ...this.currentPartition.management }
         }
         throw new Error('パーティションの更新に失敗しました')

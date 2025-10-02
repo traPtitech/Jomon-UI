@@ -28,7 +28,7 @@
   "devDependencies": {
     "@eslint/js": "^9.35.0",
     "@heroicons/vue": "^2.2.0",
-    "@openapitools/openapi-generator-cli": "^2.23.4",
+    "@openapitools/openapi-generator-cli": "^2.24.0",
     "@tailwindcss/postcss": "^4.1.13",
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.1.13",
@@ -59,7 +59,7 @@
     "tailwindcss": "^4.1.3",
     "ts-morph": "^27.0.0",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.44.0",
+    "typescript-eslint": "^8.45.0",
     "vite": "^7.1.5",
     "vue-axe": "^3.1.2",
     "vue-tsc": "^3.1.0"

@@ -62,7 +62,7 @@
     "typescript-eslint": "^8.44.0",
     "vite": "^7.1.5",
     "vue-axe": "^3.1.2",
-    "vue-tsc": "^3.0.7"
+    "vue-tsc": "^3.1.0"
   },
   "msw": {
     "workerDirectory": "public"

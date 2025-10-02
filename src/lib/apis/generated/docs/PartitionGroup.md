@@ -7,8 +7,8 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **string** |  | [default to undefined]
 **name** | **string** |  | [default to undefined]
-**child_partitions** | [**Array&lt;Partition&gt;**](Partition.md) |  | [default to undefined]
-**child_partition_groups** | [**Array&lt;PartitionGroup&gt;**](PartitionGroup.md) |  | [default to undefined]
+**parent_partition_group** | **string** | 現時点の仕様では常にnullとする | [default to undefined]
+**depth** | **number** |  | [default to undefined]
 **created_at** | **string** |  | [default to undefined]
 **updated_at** | **string** |  | [default to undefined]
 
@@ -20,8 +20,8 @@ import { PartitionGroup } from './api';
 const instance: PartitionGroup = {
     id,
     name,
-    child_partitions,
-    child_partition_groups,
+    parent_partition_group,
+    depth,
     created_at,
     updated_at,
 };

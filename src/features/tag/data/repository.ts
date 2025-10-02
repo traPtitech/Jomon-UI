@@ -1,9 +1,13 @@
 import type { Tag } from '../entities'
-import apis from '@/lib/apis'
+import apis, { type TagInput } from '@/lib/apis'
 
 export const useTagRepository = () => {
   return createTagRepository()
 }
+
+const toTagInput = (name: string): TagInput => ({
+  name
+})
 
 const createTagRepository = () => ({
   fetchTags: async (): Promise<Tag[]> => {
@@ -14,13 +18,13 @@ const createTagRepository = () => ({
     }))
   },
   createTag: async (name: string): Promise<Tag> => {
-    const { data } = await apis.postTag({ name })
+    const { data } = await apis.postTag(toTagInput(name))
     return {
       id: data.id,
       name: data.name
     }
   },
   deleteTag: async (id: string) => {
-    await apis.tagsTagIDDelete(id)
+    await apis.deleteTag(id)
   }
 })

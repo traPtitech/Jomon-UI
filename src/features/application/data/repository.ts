@@ -12,11 +12,46 @@ import type {
   ApplicationStatus,
   ApplicationStatusDetail
 } from '@/features/applicationStatus/entities'
-import apis from '@/lib/apis'
+import apis, {
+  type ApplicationInput,
+  type ApplicationTargetInput,
+  type CommentInput,
+  type StatusInput
+} from '@/lib/apis'
 
 export const useApplicationRepository = () => {
   return createApplicationRepository()
 }
+
+const toApplicationTargetInput = (
+  target: ApplicationSeed['targets'][number]
+): ApplicationTargetInput => ({
+  amount: target.amount,
+  target: target.target
+})
+
+const toApplicationInput = (
+  application: ApplicationSeed
+): ApplicationInput => ({
+  created_by: application.createdBy,
+  title: application.title,
+  content: application.content,
+  tags: application.tags.map(tag => tag.id),
+  partition: application.partition,
+  targets: application.targets.map(toApplicationTargetInput)
+})
+
+const toCommentInput = (comment: string): CommentInput => ({
+  comment
+})
+
+const toStatusInput = (
+  status: ApplicationStatus,
+  comment: string
+): StatusInput => ({
+  status,
+  comment
+})
 
 const createApplicationRepository = () => ({
   fetchApplications: async (
@@ -46,15 +81,7 @@ const createApplicationRepository = () => ({
   createApplication: async (
     application: ApplicationSeed
   ): Promise<ApplicationDetail> => {
-    const applicationData = {
-      title: application.title,
-      content: application.content,
-      targets: application.targets,
-      tags: application.tags.map(tag => tag.id),
-      partition: application.partition,
-      created_by: application.createdBy
-    }
-    const { data } = await apis.postApplication(applicationData)
+    const { data } = await apis.postApplication(toApplicationInput(application))
 
     return convertApplicationDetail(data)
   },
@@ -63,15 +90,10 @@ const createApplicationRepository = () => ({
     id: string,
     application: ApplicationSeed
   ): Promise<ApplicationDetail> => {
-    const applicationData = {
-      title: application.title,
-      content: application.content,
-      targets: application.targets,
-      tags: application.tags.map(tag => tag.id),
-      partition: application.partition,
-      created_by: application.createdBy
-    }
-    const { data } = await apis.putApplicationDetail(id, applicationData)
+    const { data } = await apis.putApplicationDetail(
+      id,
+      toApplicationInput(application)
+    )
 
     return convertApplicationDetail(data)
   },
@@ -80,10 +102,7 @@ const createApplicationRepository = () => ({
     id: string,
     comment: string
   ): Promise<ApplicationComment> => {
-    const commentData = {
-      comment
-    }
-    const { data } = await apis.postComment(id, commentData)
+    const { data } = await apis.postComment(id, toCommentInput(comment))
 
     return convertApplicationCommentFromData(data)
   },
@@ -93,11 +112,7 @@ const createApplicationRepository = () => ({
     status: ApplicationStatus,
     comment: string
   ): Promise<ApplicationStatusDetail> => {
-    const statusData = {
-      status,
-      comment
-    }
-    const { data } = await apis.putStatus(id, statusData)
+    const { data } = await apis.putStatus(id, toStatusInput(status, comment))
 
     return convertApplicationStatusDetailFromData(data)
   }

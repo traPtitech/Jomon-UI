@@ -4,6 +4,10 @@ updates:
     directory: '/'
     schedule:
       interval: monthly
+    cooldown:
+      - semver-major: 30
+      - semver-minor: 7
+      - semver-patch: 7
     open-pull-requests-limit: 20
     groups:
       types:
@@ -24,4 +28,8 @@ updates:
     directory: '/'
     schedule:
       interval: monthly
+    cooldown:
+      - semver-major: 30
+      - semver-minor: 7
+      - semver-patch: 7
     open-pull-requests-limit: 10

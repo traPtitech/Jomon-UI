@@ -7,13 +7,13 @@ updates:
     cooldown:
       - days: 30
         update-types:
-          - 'semver-major'
+          - 'version-update:semver-major'
       - days: 7
         update-types:
-          - 'semver-minor'
+          - 'version-update:semver-minor'
       - days: 7
         update-types:
-          - 'semver-patch'
+          - 'version-update:semver-patch'
     open-pull-requests-limit: 20
     groups:
       types:
@@ -37,11 +37,11 @@ updates:
     cooldown:
       - days: 30
         update-types:
-          - 'semver-major'
+          - 'version-update:semver-major'
       - days: 7
         update-types:
-          - 'semver-minor'
+          - 'version-update:semver-minor'
       - days: 7
         update-types:
-          - 'semver-patch'
+          - 'version-update:semver-patch'
     open-pull-requests-limit: 10

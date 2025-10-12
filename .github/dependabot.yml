@@ -5,9 +5,15 @@ updates:
     schedule:
       interval: monthly
     cooldown:
-      - semver-major: 30
-      - semver-minor: 7
-      - semver-patch: 7
+      - days: 30
+        update-types:
+          - 'semver-major'
+      - days: 7
+        update-types:
+          - 'semver-minor'
+      - days: 7
+        update-types:
+          - 'semver-patch'
     open-pull-requests-limit: 20
     groups:
       types:
@@ -29,7 +35,13 @@ updates:
     schedule:
       interval: monthly
     cooldown:
-      - semver-major: 30
-      - semver-minor: 7
-      - semver-patch: 7
+      - days: 30
+        update-types:
+          - 'semver-major'
+      - days: 7
+        update-types:
+          - 'semver-minor'
+      - days: 7
+        update-types:
+          - 'semver-patch'
     open-pull-requests-limit: 10

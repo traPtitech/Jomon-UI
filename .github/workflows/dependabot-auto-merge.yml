@@ -1,0 +1,39 @@
+name: Dependabot Auto Merge
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Collect metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Enable auto-merge when approved
+        if: steps.metadata.outputs.update-type != 'version-update:semver-major'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          decision=$(gh pr view "$PR_URL" --json reviewDecision --jq '.reviewDecision // "PENDING"')
+          echo "Review decision: $decision"
+          if [ "$decision" = "APPROVED" ]; then
+            gh pr merge --auto --squash "$PR_URL"
+          else
+            echo "PR is not yet approved. Skipping auto-merge enablement."
+          fi

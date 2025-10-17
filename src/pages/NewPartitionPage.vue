@@ -31,13 +31,14 @@ watch(noLimitPartition, val => {
     <BaseInput v-model="partition.name" label="パーティション名" required />
     <div>
       <BaseInput
-        v-if="!noLimitPartition"
         v-model="partition.budget"
         type="number"
         label="予算"
         required
         :readonly="noLimitPartition"
-        :class="{ 'cursor-not-allowed bg-gray-100': noLimitPartition }">
+        :bgclass="
+          noLimitPartition ? 'cursor-not-allowed bg-surface-secondary' : ''
+        ">
         <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
           ¥
         </span>

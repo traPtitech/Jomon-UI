@@ -7,6 +7,7 @@ interface Props {
   placeholder?: string
   type?: string
   readonly?: boolean
+  bgclass?: string
 }
 
 // allow boolean for checkbox inputs
@@ -15,7 +16,8 @@ const props = withDefaults(defineProps<Props>(), {
   required: false,
   placeholder: '',
   type: 'text',
-  readonly: false
+  readonly: false,
+  bgclass: 'bg-white'
 })
 
 const emit = defineEmits<{
@@ -67,7 +69,7 @@ const checkedForCheckbox = computed(() => Boolean(model.value))
 
 <template>
   <div
-    class="flex rounded-lg border border-surface-secondary bg-white !ring-offset-2 transition-all duration-200 ease-in-out focus-within:!ring-2 focus-within:!ring-blue-500 focus-within:outline-none">
+    :class="`flex rounded-lg border border-surface-secondary !ring-offset-2 transition-all duration-200 ease-in-out focus-within:!ring-2 focus-within:!ring-blue-500 focus-within:outline-none ${props.bgclass}`">
     <slot />
     <div class="relative w-full">
       <textarea
@@ -102,7 +104,7 @@ const checkedForCheckbox = computed(() => Boolean(model.value))
         :readonly="props.readonly"
         :id="`input-${props.label}`"
         ref="inputRef"
-        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent ${props.readonly ? 'cursor-not-allowed bg-gray-100' : ''}`"
+        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent`"
         :placeholder="props.placeholder"
         :required="props.required"
         :type="props.type"

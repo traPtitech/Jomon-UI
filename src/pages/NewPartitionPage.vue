@@ -14,11 +14,6 @@ if (!isUserFetched.value) {
 }
 const noLimitPartition = ref(false)
 
-setInterval(() => {
-  console.log(noLimitPartition.value,partition.value.budget);
-}, 1000);
-
-
 watch(noLimitPartition, (val) => {
   if (isRef(partition) && val) {
     partition.value.budget = 1000000000

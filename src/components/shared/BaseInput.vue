@@ -6,6 +6,7 @@ interface Props {
   required?: boolean
   placeholder?: string
   type?: string
+  readonly?: boolean
 }
 
 // allow boolean for checkbox inputs
@@ -13,7 +14,8 @@ const model = defineModel<string | number | boolean | null>({ required: true })
 const props = withDefaults(defineProps<Props>(), {
   required: false,
   placeholder: '',
-  type: 'text'
+  type: 'text',
+  readonly: false
 })
 
 const emit = defineEmits<{
@@ -83,7 +85,7 @@ const checkedForCheckbox = computed(() => Boolean(model.value))
         @keydown="handleKey" />
       
       <input
-        v-else-if="props.type === 'checkbox'"
+        v-else-if="type === 'checkbox'"
         :id="`input-${props.label}`"
         ref="inputRef"
         :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent`"
@@ -97,9 +99,10 @@ const checkedForCheckbox = computed(() => Boolean(model.value))
 
       <input
         v-else
+        :readonly="props.readonly"
         :id="`input-${props.label}`"
         ref="inputRef"
-        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent`"
+        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent ${props.readonly ? 'bg-gray-100 cursor-not-allowed' :''}`"
         :placeholder="props.placeholder"
         :required="props.required"
         :type="props.type"

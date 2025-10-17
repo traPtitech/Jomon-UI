@@ -3,7 +3,7 @@ import { useNewPartition } from './composables/useNewPartition'
 import BaseInput from '@/components/shared/BaseInput.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useUserStore } from '@/features/user/store'
-import { ref } from 'vue'
+import { ref,watch,isRef } from 'vue'
 
 const { isUserFetched, fetchUsers } = useUserStore()
 
@@ -15,8 +15,18 @@ if (!isUserFetched.value) {
 const nolimitpartition = ref(false)
 
 setInterval(() => {
-  console.log(nolimitpartition.value);
+  console.log(nolimitpartition.value,partition.value.budget);
 }, 1000);
+
+
+watch(nolimitpartition, (val) => {
+  if (isRef(partition) && val) {
+    partition.value.budget = 1000000000
+  }
+  else if (isRef(partition) && !val) {
+    partition.value.budget = 0
+  }
+})
 </script>
 
 <template>
@@ -26,7 +36,7 @@ setInterval(() => {
   <form class="flex flex-col gap-6">
     <BaseInput v-model="partition.name" label="パーティション名" required />
     <div>
-    <BaseInput v-model="partition.budget" type="number" label="予算" required>
+    <BaseInput v-if="!nolimitpartition" v-model="partition.budget" type="number" label="予算" required :readonly="nolimitpartition"  :class="{ 'bg-gray-100 cursor-not-allowed': nolimitpartition }">
       <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
         ¥
       </span>

@@ -44,7 +44,7 @@ const checkedForCheckbox = computed(() => model.value)
       <input
         :id="`input-${props.label}`"
         ref="inputRef"
-        :class="`w-full border-none bg-transparent px-3 pt-2 peer pb-2 ring-0 outline-none`"
+        :class="`peer w-full border-none bg-transparent px-3 pt-2 pb-2 ring-0 outline-none`"
         :placeholder="props.placeholder"
         :required="props.required"
         type="checkbox"
@@ -55,7 +55,7 @@ const checkedForCheckbox = computed(() => model.value)
       <label
         :for="`input-${props.label}`"
         :class="[
-          'pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out peer-focus:text-blue-500',
+          'pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out peer-focus:text-blue-500'
         ]">
         {{ props.label }}
         <span v-if="props.required" class="text-red-500">*</span>

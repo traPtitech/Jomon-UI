@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { useNewPartition } from './composables/useNewPartition'
 import BaseInput from '@/components/shared/BaseInput.vue'
-import SimpleButton from '@/components/shared/SimpleButton.vue'
 import InputCheckBox from '@/components/shared/InputCheckButton.vue'
+import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useUserStore } from '@/features/user/store'
 import { ref, watch, isRef, computed } from 'vue'
 

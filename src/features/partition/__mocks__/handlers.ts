@@ -14,8 +14,22 @@ export const mockPartition: Partition = {
   created_at: '2024-01-01T00:00:00Z',
   updated_at: '2024-01-01T00:00:00Z'
 }
-
-const mockPartitions = Array(10).fill(mockPartition)
+export const mockPartitionWithoutBudget: Partition = {
+  id: '2',
+  name: 'テストパーティション(指定なし)',
+  budget: null,
+  parent_partition_group: 'mock-group2',
+  management: {
+    category: 'manual',
+    state: 'available'
+  },
+  created_at: '2024-01-02T00:00:00Z',
+  updated_at: '2024-01-02T00:00:00Z'
+}
+const mockPartitions: Partition[] = [
+  ...Array(5).fill(mockPartition),
+  ...Array(5).fill(mockPartitionWithoutBudget)
+]
 
 export const partitionHandlers = [
   http.get('/api/partitions', () => {
@@ -25,6 +39,9 @@ export const partitionHandlers = [
   http.get('/api/partitions/:id', ({ params }) => {
     if (params.id === '1') {
       return HttpResponse.json(mockPartition)
+    }
+    if (params.id === '2') {
+      return HttpResponse.json(mockPartitionWithoutBudget)
     }
     return new HttpResponse(null, { status: 404 })
   }),

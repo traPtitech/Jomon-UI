@@ -7,6 +7,8 @@ const { currentPartition: partition } = usePartitionStore()
 <template>
   <div v-if="partition" class="flex flex-col gap-3">
     <h2 class="text-xl">予算</h2>
-    <p>{{ partition?.budget }} 円</p>
+    <p v-if="partition.budget !== null">{{ partition?.budget }} 円</p>
+    <p v-else>指定なし</p>
+    <!-- budgetがnullの時に指定なしと表示 -->
   </div>
 </template>

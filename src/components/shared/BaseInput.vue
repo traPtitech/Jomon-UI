@@ -6,13 +6,18 @@ interface Props {
   required?: boolean
   placeholder?: string
   type?: string
+  readonly?: boolean
+  bgclass?: string
 }
 
-const model = defineModel<string | number | null>({ required: true })
+// allow boolean for checkbox inputs
+const model = defineModel<string | number | boolean | null>({ required: true })
 const props = withDefaults(defineProps<Props>(), {
   required: false,
   placeholder: '',
-  type: 'text'
+  type: 'text',
+  readonly: false,
+  bgclass: 'bg-white'
 })
 
 const emit = defineEmits<{
@@ -38,17 +43,33 @@ const handleBlur = () => {
 
 const handleChange = (e: Event) => {
   const target = e.target as HTMLInputElement
-  model.value = props.type === 'number' ? Number(target.value) : target.value
+  if (props.type === 'checkbox') {
+    model.value = target.checked
+    return
+  }
+  if (props.type === 'number') {
+    model.value = Number(target.value)
+    return
+  }
+  model.value = target.value
 }
 
 const handleKey = (e: KeyboardEvent) => {
   emit('keydown', e)
 }
+
+const valueForInput = computed<string | number | null>(() => {
+  if (props.type === 'checkbox') return null
+  if (props.type === 'number') return model.value as number | null
+  return model.value as string | null
+})
+
+const checkedForCheckbox = computed(() => Boolean(model.value))
 </script>
 
 <template>
   <div
-    class="flex rounded-lg border border-surface-secondary bg-white !ring-offset-2 transition-all duration-200 ease-in-out focus-within:!ring-2 focus-within:!ring-blue-500 focus-within:outline-none">
+    :class="`flex rounded-lg border border-surface-secondary !ring-offset-2 transition-all duration-200 ease-in-out focus-within:!ring-2 focus-within:!ring-blue-500 focus-within:outline-none ${props.bgclass}`">
     <slot />
     <div class="relative w-full">
       <textarea
@@ -59,20 +80,35 @@ const handleKey = (e: KeyboardEvent) => {
         rows="12"
         :placeholder="props.placeholder"
         :required="props.required"
-        :value="model"
+        :value="valueForInput"
         @input="handleChange"
         @focus="handleFocus"
         @blur="handleBlur"
         @keydown="handleKey" />
+
+      <input
+        v-else-if="type === 'checkbox'"
+        :id="`input-${props.label}`"
+        ref="inputRef"
+        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent`"
+        :placeholder="props.placeholder"
+        :required="props.required"
+        type="checkbox"
+        :checked="checkedForCheckbox"
+        @change="handleChange"
+        @focus="handleFocus"
+        @blur="handleBlur" />
+
       <input
         v-else
+        :readonly="props.readonly"
         :id="`input-${props.label}`"
         ref="inputRef"
         :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent`"
         :placeholder="props.placeholder"
         :required="props.required"
         :type="props.type"
-        :value="model"
+        :value="valueForInput"
         :min="type === 'number' ? 0 : undefined"
         @input="handleChange"
         @focus="handleFocus"

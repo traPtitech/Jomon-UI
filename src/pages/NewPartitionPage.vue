@@ -2,8 +2,9 @@
 import { useNewPartition } from './composables/useNewPartition'
 import BaseInput from '@/components/shared/BaseInput.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
+import InputCheckBox from '@/components/shared/InputCheckButton.vue'
 import { useUserStore } from '@/features/user/store'
-import { ref, watch, isRef } from 'vue'
+import { ref, watch, isRef, computed } from 'vue'
 
 const { isUserFetched, fetchUsers } = useUserStore()
 
@@ -12,13 +13,24 @@ const { isSending, partition, handleCreatePartition } = useNewPartition()
 if (!isUserFetched.value) {
   await fetchUsers()
 }
-const noLimitPartition = ref(false)
 
-watch(noLimitPartition, val => {
-  if (isRef(partition) && val) {
-    partition.value.budget = null
-  } else if (isRef(partition) && !val) {
-    partition.value.budget = 0
+const _noLimit = ref(false)
+let tempBudget: number | null = null
+
+const noLimitPartition = computed<boolean>({
+  get() {
+    return _noLimit.value
+  },
+  set(val: boolean) {
+    if (val === _noLimit.value) return
+    _noLimit.value = val
+    if (val) {
+      tempBudget = partition.value.budget ?? null
+      partition.value.budget = null
+    } else {
+      partition.value.budget = tempBudget ?? 0
+      tempBudget = null
+    }
   }
 })
 </script>
@@ -43,8 +55,9 @@ watch(noLimitPartition, val => {
           ¥
         </span>
       </BaseInput>
-      <BaseInput
+      <InputCheckBox
         v-model="noLimitPartition"
+        class="mt-1"
         type="checkbox"
         label="予算上限なし" />
     </div>

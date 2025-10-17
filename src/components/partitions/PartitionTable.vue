@@ -47,7 +47,7 @@ const navigateToPartition = async (partitionId: string) => {
           {{ partition.name }}
         </td>
         <td v-if="partition?.budget<10000000" class="px-1 py-4 pr-6">{{ partition?.budget }}円</td>
-        <td v-else-if="partition?.budget>=10000000" class="px-1 py-4 pr-6">無制限</td>
+        <td v-else class="px-1 py-4 pr-6">無制限</td>
         <!-- 異常に大きい場合は無制限と表示 -->
       </tr>
     </tbody>

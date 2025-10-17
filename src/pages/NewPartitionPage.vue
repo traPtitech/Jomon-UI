@@ -4,7 +4,7 @@ import BaseInput from '@/components/shared/BaseInput.vue'
 import InputCheckBox from '@/components/shared/InputCheckButton.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useUserStore } from '@/features/user/store'
-import { ref, watch, isRef, computed } from 'vue'
+import { ref, computed } from 'vue'
 
 const { isUserFetched, fetchUsers } = useUserStore()
 

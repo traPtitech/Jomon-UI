@@ -59,7 +59,7 @@ const noLimitPartition = computed<boolean>({
         v-model="noLimitPartition"
         class="mt-1"
         type="checkbox"
-        label="予算上限なし" />
+        label="予算指定なし" />
     </div>
     <div>
       <SimpleButton

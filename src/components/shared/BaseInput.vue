@@ -83,7 +83,7 @@ const checkedForCheckbox = computed(() => Boolean(model.value))
         @focus="handleFocus"
         @blur="handleBlur"
         @keydown="handleKey" />
-      
+
       <input
         v-else-if="type === 'checkbox'"
         :id="`input-${props.label}`"
@@ -102,7 +102,7 @@ const checkedForCheckbox = computed(() => Boolean(model.value))
         :readonly="props.readonly"
         :id="`input-${props.label}`"
         ref="inputRef"
-        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent ${props.readonly ? 'bg-gray-100 cursor-not-allowed' :''}`"
+        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent ${props.readonly ? 'cursor-not-allowed bg-gray-100' : ''}`"
         :placeholder="props.placeholder"
         :required="props.required"
         :type="props.type"

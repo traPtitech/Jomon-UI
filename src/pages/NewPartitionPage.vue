@@ -3,7 +3,7 @@ import { useNewPartition } from './composables/useNewPartition'
 import BaseInput from '@/components/shared/BaseInput.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useUserStore } from '@/features/user/store'
-import { ref,watch,isRef } from 'vue'
+import { ref, watch, isRef } from 'vue'
 
 const { isUserFetched, fetchUsers } = useUserStore()
 
@@ -14,11 +14,10 @@ if (!isUserFetched.value) {
 }
 const noLimitPartition = ref(false)
 
-watch(noLimitPartition, (val) => {
+watch(noLimitPartition, val => {
   if (isRef(partition) && val) {
     partition.value.budget = null
-  }
-  else if (isRef(partition) && !val) {
+  } else if (isRef(partition) && !val) {
     partition.value.budget = 0
   }
 })
@@ -31,13 +30,23 @@ watch(noLimitPartition, (val) => {
   <form class="flex flex-col gap-6">
     <BaseInput v-model="partition.name" label="パーティション名" required />
     <div>
-    <BaseInput v-if="!noLimitPartition" v-model="partition.budget" type="number" label="予算" required :readonly="noLimitPartition"  :class="{ 'bg-gray-100 cursor-not-allowed': noLimitPartition }">
-      <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
-        ¥
-      </span>
-    </BaseInput>
-    <BaseInput v-model="noLimitPartition" type="checkbox" label="予算上限なし" />
-   </div>
+      <BaseInput
+        v-if="!noLimitPartition"
+        v-model="partition.budget"
+        type="number"
+        label="予算"
+        required
+        :readonly="noLimitPartition"
+        :class="{ 'cursor-not-allowed bg-gray-100': noLimitPartition }">
+        <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
+          ¥
+        </span>
+      </BaseInput>
+      <BaseInput
+        v-model="noLimitPartition"
+        type="checkbox"
+        label="予算上限なし" />
+    </div>
     <div>
       <SimpleButton
         class="mt-8 ml-auto block"

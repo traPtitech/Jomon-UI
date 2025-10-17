@@ -16,7 +16,7 @@ const noLimitPartition = ref(false)
 
 watch(noLimitPartition, (val) => {
   if (isRef(partition) && val) {
-    partition.value.budget = 1000000000
+    partition.value.budget = null
   }
   else if (isRef(partition) && !val) {
     partition.value.budget = 0

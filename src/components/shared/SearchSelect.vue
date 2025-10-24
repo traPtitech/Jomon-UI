@@ -18,6 +18,7 @@ interface Option {
 interface Props {
   options: Option[]
   label: string
+  displayOptions?: Option[]
   placeholder?: string
   multiple?: boolean
   allowCustom?: boolean
@@ -44,12 +45,17 @@ const highlightedIndex = ref(-1)
 const dropdownRef = ref<HTMLElement | null>(null)
 const inputRef = ref<HTMLElement | null>(null)
 
+const displayOptions = computed(() => {
+  if (props.displayOptions !== undefined) return props.displayOptions
+  else return props.options
+})
+
 const filteredOptions = computed(() => {
   if (menuState.value === 'presearch') {
-    return props.options
+    return displayOptions.value
   }
 
-  return props.options.filter(option =>
+  return displayOptions.value.filter(option =>
     option.key.toLowerCase().includes(searchTerm.value.toLowerCase())
   )
 })

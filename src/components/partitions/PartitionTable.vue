@@ -47,8 +47,11 @@ const navigateToPartition = async (partitionId: string) => {
           {{ partition.name }}
         </td>
         <td class="px-1 py-4 pl-6">
-          <div v-if="partition.budget !== null">{{ partition.budget }} 円</div>
-          <div v-else>指定なし</div>
+          <div>  
+            {{  
+              partition.budget === null ? '指定なし' : partition.budget + '円'  
+            }}  
+          </div>  
         </td>
         <!-- budgetがnullの時に指定なしと表示 -->
       </tr>

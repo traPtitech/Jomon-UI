@@ -4,14 +4,10 @@ import { computed, ref } from 'vue'
 interface Props {
   label: string
   required?: boolean
-  placeholder?: string
-  type?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  required: false,
-  placeholder: '',
-  type: 'text'
+  required: false
 })
 
 // v-model (boolean) を受ける
@@ -45,7 +41,6 @@ const checkedForCheckbox = computed(() => model.value)
         :id="`input-${props.label}`"
         ref="inputRef"
         :class="`peer w-full border-none bg-transparent px-3 pt-2 pb-2 ring-0 outline-none`"
-        :placeholder="props.placeholder"
         :required="props.required"
         type="checkbox"
         :checked="checkedForCheckbox"

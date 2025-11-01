@@ -39,7 +39,7 @@ jobs:
           node-version-file: ./.node-version
           cache: npm
       - run: npm ci
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v6
         with:
           name: apis
           path: ./src/lib/apis/generated
@@ -55,7 +55,7 @@ jobs:
           node-version-file: ./.node-version
           cache: npm
       - run: npm ci
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v6
         with:
           name: apis
           path: ./src/lib/apis/generated
@@ -71,7 +71,7 @@ jobs:
           node-version-file: ./.node-version
           cache: npm
       - run: npm ci
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v6
         with:
           name: apis
           path: ./src/lib/apis/generated
@@ -122,7 +122,7 @@ jobs:
           node-version-file: ./.node-version
           cache: npm
       - run: npm ci
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v6
         with:
           name: apis
           path: ./src/lib/apis/generated

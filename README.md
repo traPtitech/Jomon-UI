@@ -31,7 +31,7 @@
 
 ### Requirements
 
-- Node.js 22.12 or higher (Vite 7 requires Node.js 20.19+ / 22.12+; using the latest LTS is recommended)
+- Node.js 24.11 or higher
 - npm (bundled with Node.js)
 - JVM (Java 17+ recommended for OpenAPI Generator)
 
@@ -145,7 +145,7 @@ GET flows convert generated models to domain models in `data/converter.ts`, whil
 
 ### 必要条件
 
-- Node.js 22.12 以上 (Vite 7 が要求する Node.js 20.19+ / 22.12+ を満たすため最新 LTS を推奨)
+- Node.js 24.11 以上
 - npm (Node.js に同梱)
 - JVM (OpenAPI Generator 利用のため Java 17 以上を推奨)
 

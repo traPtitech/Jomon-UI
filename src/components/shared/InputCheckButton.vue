@@ -1,4 +1,5 @@
 <script setup lang="ts">
+let uidCounter = 0
 import { computed, ref } from 'vue'
 
 interface Props {
@@ -30,6 +31,16 @@ const handleChange = (e: Event) => {
 }
 
 const checkedForCheckbox = computed(() => model.value)
+
+const instanceUid = ++uidCounter
+
+const slugify = (s: string) =>
+  s.trim().toLowerCase().replace(/\s+/g, '-')
+
+const inputId = computed(() => {
+  const slug = slugify(props.label || '') || 'input'
+  return `input-${slug}-${instanceUid}`
+})
 </script>
 
 <template>
@@ -38,7 +49,7 @@ const checkedForCheckbox = computed(() => model.value)
     <slot />
     <div class="relative w-full">
       <input
-        :id="`input-${props.label}`"
+        :id="inputId"
         ref="inputRef"
         :class="`peer w-full border-none bg-transparent px-3 pt-2 pb-2 ring-0 outline-none`"
         :required="props.required"

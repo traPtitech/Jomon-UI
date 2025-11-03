@@ -51,7 +51,7 @@ const createPartitionStore = defineStore('partition', {
         this.currentPartition = partition
         this.editedValue = {
           name: partition.name,
-          budget: partition.budget ?? 0,
+          budget: partition.budget,
           parentPartitionGroupId: partition.parentPartitionGroupId,
           management: { ...partition.management }
         }
@@ -83,7 +83,7 @@ const createPartitionStore = defineStore('partition', {
       } catch {
         this.editedValue = {
           name: this.currentPartition.name,
-          budget: this.currentPartition.budget ?? 0,
+          budget: this.currentPartition.budget,
           parentPartitionGroupId: this.currentPartition.parentPartitionGroupId,
           management: { ...this.currentPartition.management }
         }

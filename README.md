@@ -153,22 +153,19 @@ Node.js 環境は [Volta](https://volta.sh/) や [fnm](https://github.com/Schniz
 
 ### セットアップ
 
-1. 依存パッケージをインストールします。
+依存パッケージをインストールします。
 
-   ```sh
-   npm install
-   ```
+```sh
+npm install
+```
 
-2. 環境変数ファイルを設定します。
-   - プロジェクトルートに `.env.local` を配置し、`VITE_` プレフィックス付きで設定を記述します。
+### 開発サーバーの起動
 
-3. 開発サーバーを起動します。
+`npm run dev` で Vite の開発サーバーが立ち上がり、デフォルトで `http://localhost:5173` が開きます。
 
-   ```sh
-   npm run dev
-   ```
-
-   - 既定では `http://localhost:5173` で Vite の開発サーバーが起動し、HMR が有効になります。
+```sh
+npm run dev
+```
 
 ### 主要スクリプト
 

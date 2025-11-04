@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const inputRef = ref<HTMLInputElement | null>(null)
 
-const checked = ref<boolean>(false)
+const model = defineModel<boolean>({ required: true })
 
 const instanceUid = ++uidCounter
 
@@ -37,7 +37,7 @@ const inputId = computed(() => {
         :class="`peer w-full border-none bg-transparent px-3 pt-2 pb-2 ring-0 outline-none`"
         :required="props.required"
         type="checkbox"
-        v-model="checked" />
+        v-model="model" />
       <label
         :for="`input-${props.label}`"
         :class="[

@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 jobs:
   pr_agent_job:
-    if: ${{github.event.sender.type != 'Bot' && github.event.pull_request.draft == false}}
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.pull_request != null && github.event.sender.type != 'Bot' && github.event.pull_request.draft == false) }}
     runs-on: ubuntu-latest
     permissions:
       issues: write

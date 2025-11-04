@@ -22,14 +22,13 @@ const noLimitPartition = computed<boolean>({
     return _noLimit.value
   },
   set(val: boolean) {
-    if (val === _noLimit.value) return
     _noLimit.value = val
+
     if (val) {
-      tempBudget = partition.value.budget ?? null
+      tempBudget = partition.value.budget
       partition.value.budget = null
     } else {
       partition.value.budget = tempBudget ?? 0
-      tempBudget = null
     }
   }
 })
@@ -49,7 +48,9 @@ const noLimitPartition = computed<boolean>({
         required
         :readonly="noLimitPartition"
         :bgclass="
-          noLimitPartition ? 'cursor-not-allowed bg-surface-secondary' : ''
+          noLimitPartition
+            ? 'cursor-not-allowed bg-surface-secondary'
+            : undefined
         ">
         <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
           ¥

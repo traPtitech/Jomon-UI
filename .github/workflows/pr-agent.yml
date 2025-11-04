@@ -1,13 +1,6 @@
 name: PR Agent
 on:
-  pull_request:
-    types:
-      - ready_for_review
-      - opened
-  issue_comment:
-    types:
-      - created
-      - edited
+  workflow_dispatch:
 jobs:
   pr_agent_job:
     if: ${{github.event.sender.type != 'Bot' && github.event.pull_request.draft == false}}

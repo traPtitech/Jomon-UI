@@ -64,7 +64,7 @@ const createApplicationStore = defineStore('application', {
       }
     },
     async ensureApplication(id: string) {
-      if (this.currentApplication && this.currentApplication.id === id) {
+      if (this.currentApplication?.id === id) {
         return this.currentApplication
       }
       return await this.fetchApplication(id)

@@ -31,7 +31,7 @@
 
 ### Requirements
 
-- Node.js 22.12 or higher (Vite 7 requires Node.js 20.19+ / 22.12+; using the latest LTS is recommended)
+- Node.js 24.11 or higher
 - npm (bundled with Node.js)
 - JVM (Java 17+ recommended for OpenAPI Generator)
 
@@ -39,22 +39,19 @@ We recommend locking Node.js versions via tools like [Volta](https://volta.sh/) 
 
 ### Setup
 
-1. Install dependencies.
+Install dependencies.
 
-   ```sh
-   npm install
-   ```
+```sh
+npm install
+```
 
-2. Configure environment variables.
-   - Place `.env.local` at the project root and define settings with the `VITE_` prefix.
+### Development Server
 
-3. Start the development server.
+Start the development server (defaults to `http://localhost:5173` with hot module replacement enabled).
 
-   ```sh
-   npm run dev
-   ```
-
-   - Vite boots at `http://localhost:5173` by default with hot module replacement enabled.
+```sh
+npm run dev
+```
 
 ### Scripts
 
@@ -145,7 +142,7 @@ GET flows convert generated models to domain models in `data/converter.ts`, whil
 
 ### 必要条件
 
-- Node.js 22.12 以上 (Vite 7 が要求する Node.js 20.19+ / 22.12+ を満たすため最新 LTS を推奨)
+- Node.js 24.11 以上
 - npm (Node.js に同梱)
 - JVM (OpenAPI Generator 利用のため Java 17 以上を推奨)
 
@@ -153,22 +150,19 @@ Node.js 環境は [Volta](https://volta.sh/) や [fnm](https://github.com/Schniz
 
 ### セットアップ
 
-1. 依存パッケージをインストールします。
+依存パッケージをインストールします。
 
-   ```sh
-   npm install
-   ```
+```sh
+npm install
+```
 
-2. 環境変数ファイルを設定します。
-   - プロジェクトルートに `.env.local` を配置し、`VITE_` プレフィックス付きで設定を記述します。
+### 開発サーバーの起動
 
-3. 開発サーバーを起動します。
+`npm run dev` で Vite の開発サーバーが立ち上がり、デフォルトで `http://localhost:5173` が開きます。
 
-   ```sh
-   npm run dev
-   ```
-
-   - 既定では `http://localhost:5173` で Vite の開発サーバーが起動し、HMR が有効になります。
+```sh
+npm run dev
+```
 
 ### 主要スクリプト
 

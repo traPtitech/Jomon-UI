@@ -34,7 +34,7 @@ const inputId = computed(() => {
       <input
         :id="inputId"
         ref="inputRef"
-        :class="`peer w-full border-none bg-transparent px-3 pt-2 pb-2 ring-0 outline-none`"
+        :class="`peer w-full border-none bg-transparent px-3 pt-2 pb-2 ring-0 outline-none cursor-pointer`"
         :required="props.required"
         type="checkbox"
         v-model="model" />

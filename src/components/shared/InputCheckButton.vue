@@ -1,6 +1,7 @@
 <script setup lang="ts">
-let uidCounter = 0
 import { computed, ref } from 'vue'
+
+let uidCounter = 0
 
 interface Props {
   label: string
@@ -11,35 +12,17 @@ const props = withDefaults(defineProps<Props>(), {
   required: false
 })
 
-// v-model (boolean) を受ける
-const model = defineModel<boolean>({ required: true })
-
 const inputRef = ref<HTMLInputElement | null>(null)
-const isFocused = ref(false)
 
-const handleFocus = () => {
-  isFocused.value = true
-}
-
-const handleBlur = () => {
-  isFocused.value = false
-}
-
-const handleChange = (e: Event) => {
-  const target = e.target as HTMLInputElement
-  model.value = target.checked
-}
-
-const checkedForCheckbox = computed(() => model.value)
+const checked = ref<boolean>(false)
 
 const instanceUid = ++uidCounter
 
-const slugify = (s: string) =>
-  s.trim().toLowerCase().replace(/\s+/g, '-')
+const slugify = (s: string) => s.trim().toLowerCase().replace(/\s+/g, '-')
 
 const inputId = computed(() => {
   const slug = slugify(props.label || '') || 'input'
-  return `input-${slug}-${instanceUid}`
+  return `input-${slug}-${instanceUid.toString()}`
 })
 </script>
 
@@ -54,10 +37,7 @@ const inputId = computed(() => {
         :class="`peer w-full border-none bg-transparent px-3 pt-2 pb-2 ring-0 outline-none`"
         :required="props.required"
         type="checkbox"
-        :checked="checkedForCheckbox"
-        @change="handleChange"
-        @focus="handleFocus"
-        @blur="handleBlur" />
+        v-model="checked" />
       <label
         :for="`input-${props.label}`"
         :class="[

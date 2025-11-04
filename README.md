@@ -39,22 +39,19 @@ We recommend locking Node.js versions via tools like [Volta](https://volta.sh/) 
 
 ### Setup
 
-1. Install dependencies.
+Install dependencies.
 
-   ```sh
-   npm install
-   ```
+```sh
+npm install
+```
 
-2. Configure environment variables.
-   - Place `.env.local` at the project root and define settings with the `VITE_` prefix.
+### Development Server
 
-3. Start the development server.
+Start the development server (defaults to `http://localhost:5173` with hot module replacement enabled).
 
-   ```sh
-   npm run dev
-   ```
-
-   - Vite boots at `http://localhost:5173` by default with hot module replacement enabled.
+```sh
+npm run dev
+```
 
 ### Scripts
 

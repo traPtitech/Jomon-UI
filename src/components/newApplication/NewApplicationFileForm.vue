@@ -5,39 +5,43 @@ import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
 import { ref } from 'vue'
 
-interface Props {
-  files: FileSeed[]
-}
-
-const props = defineProps<Props>()
-const emit = defineEmits<(e: 'input', value: FileSeed[]) => void>()
+const files = defineModel<FileSeed[]>({ required: true })
 
 const inputRef = ref()
+const filePreviewUrls = ref<string[]>([])
 
-function handleFileChange(e: Event) {
+async function handleFileChange(e: Event) {
   if (!(e.target instanceof HTMLInputElement) || !e.target.files) {
     return
   }
-  for (const file of Array.from(e.target.files)) {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => {
-      emit('input', [
-        ...props.files,
-        { name: file.name, file: file } as FileSeed
-      ])
-    }
-  }
+
+  const newFiles = await Promise.all(
+    Array.from(e.target.files).map(file => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      return new Promise<{ fileSeed: FileSeed; previewUrl: string }>(
+        resolve => {
+          reader.onload = () => {
+            resolve({
+              fileSeed: { name: file.name, file: file },
+              previewUrl: reader.result as string
+            })
+          }
+        }
+      )
+    })
+  )
+  files.value.push(...newFiles.map(file => file.fileSeed))
+  filePreviewUrls.value.push(...newFiles.map(file => file.previewUrl))
+
   if (inputRef.value) {
     inputRef.value.value = null
   }
 }
 
 function removeFile(index: number) {
-  emit(
-    'input',
-    props.files.filter((_, i) => index !== i)
-  )
+  files.value.splice(index, 1)
+  filePreviewUrls.value.splice(index, 1)
 }
 </script>
 
@@ -65,7 +69,7 @@ function removeFile(index: number) {
           v-if="isImageByType(file.file.type)"
           :alt="file.name"
           class="h-32"
-          :src="file.name" />
+          :src="filePreviewUrls[index]" />
         <DocumentIcon v-else class="h-32" />
         <button
           aria-label="ファイルを削除"

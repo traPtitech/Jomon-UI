@@ -64,7 +64,7 @@ if (!isUserFetched.value) {
       :options="partitionOptions"
       label="パーティション" />
     <SearchSelectTag v-model="application.tags" />
-    <NewApplicationFileForm :files="files" @input="files = $event" />
+    <NewApplicationFileForm v-model="files" />
     <div class="text-right">
       <SimpleButton
         :disabled="isSending"

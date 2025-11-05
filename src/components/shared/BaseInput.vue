@@ -40,7 +40,12 @@ const handleBlur = () => {
 
 const handleChange = (e: Event) => {
   const target = e.target as HTMLInputElement
-  model.value = props.type === 'number' ? Number(target.value) : target.value
+  model.value =
+    props.type === 'number'
+      ? target.value === ''
+        ? null
+        : Number(target.value)
+      : target.value
 }
 
 const handleKey = (e: KeyboardEvent) => {

@@ -46,12 +46,7 @@ const noLimitPartition = computed<boolean>({
         type="number"
         label="予算"
         required
-        :readonly="noLimitPartition"
-        :bgclass="
-          noLimitPartition
-            ? 'cursor-not-allowed bg-surface-secondary'
-            : undefined
-        ">
+        :readonly="noLimitPartition">
         <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
           ¥
         </span>

@@ -7,7 +7,6 @@ interface Props {
   placeholder?: string
   type?: string
   readonly?: boolean
-  bgclass?: string
 }
 
 const model = defineModel<string | number | null>({ required: true })
@@ -15,8 +14,7 @@ const props = withDefaults(defineProps<Props>(), {
   required: false,
   placeholder: '',
   type: 'text',
-  readonly: false,
-  bgclass: 'bg-white'
+  readonly: false
 })
 
 const emit = defineEmits<{
@@ -52,14 +50,14 @@ const handleKey = (e: KeyboardEvent) => {
 
 <template>
   <div
-    :class="`flex rounded-lg border border-surface-secondary !ring-offset-2 transition-all duration-200 ease-in-out focus-within:!ring-2 focus-within:!ring-blue-500 focus-within:outline-none ${props.bgclass}`">
+    :class="`flex rounded-lg border border-surface-secondary !ring-offset-2 transition-all duration-200 ease-in-out focus-within:!ring-2 focus-within:!ring-blue-500 focus-within:outline-none ${props.readonly ? 'cursor-not-allowed bg-surface-secondary' : ''}`">
     <slot />
     <div class="relative w-full">
       <textarea
         v-if="type === 'textarea'"
         :id="`input-${props.label}`"
         ref="textareaRef"
-        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent`"
+        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent ${props.readonly ? 'cursor-not-allowed' : ''}`"
         rows="12"
         :placeholder="props.placeholder"
         :required="props.required"
@@ -74,7 +72,7 @@ const handleKey = (e: KeyboardEvent) => {
         :readonly="props.readonly"
         :id="`input-${props.label}`"
         ref="inputRef"
-        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent`"
+        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent ${props.readonly ? 'cursor-not-allowed' : ''}`"
         :placeholder="props.placeholder"
         :required="props.required"
         :type="props.type"

@@ -55,7 +55,7 @@ const handleKey = (e: KeyboardEvent) => {
 
 <template>
   <div
-    :class="`flex rounded-lg border border-surface-secondary !ring-offset-2 transition-all duration-200 ease-in-out focus-within:!ring-2 focus-within:!ring-blue-500 focus-within:outline-none ${props.readonly ? 'cursor-not-allowed bg-surface-secondary' : ''}`">
+    :class="`flex rounded-lg border border-surface-secondary !ring-offset-2 transition-all duration-200 ease-in-out focus-within:!ring-2 focus-within:!ring-blue-500 focus-within:outline-none ${props.readonly ? 'cursor-not-allowed bg-surface-secondary' : 'bg-white'}`">
     <slot />
     <div class="relative w-full">
       <textarea

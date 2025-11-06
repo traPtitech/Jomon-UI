@@ -3,37 +3,22 @@ import type { FileSeed } from '@/features/file/entities'
 import { isImageByType } from '@/lib/checkFileType'
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 const files = defineModel<FileSeed[]>({ required: true })
 
 const inputRef = ref()
 const filePreviewUrls = ref<string[]>([])
 
-async function handleFileChange(e: Event) {
+function handleFileChange(e: Event) {
   if (!(e.target instanceof HTMLInputElement) || !e.target.files) {
     return
   }
 
-  const newFiles = await Promise.all(
-    Array.from(e.target.files).map(file => {
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      return new Promise<{ fileSeed: FileSeed; previewUrl: string }>(
-        resolve => {
-          reader.onload = () => {
-            resolve({
-              fileSeed: { name: file.name, file: file },
-              previewUrl: reader.result as string
-            })
-          }
-        }
-      )
-    })
-  )
-  files.value.push(...newFiles.map(file => file.fileSeed))
-  filePreviewUrls.value.push(...newFiles.map(file => file.previewUrl))
-
+  const newFiles = Array.from(e.target.files).map(file => {
+    return { name: file.name, file: file }
+  })
+  files.value.push(...newFiles)
   if (inputRef.value) {
     inputRef.value.value = null
   }
@@ -41,8 +26,28 @@ async function handleFileChange(e: Event) {
 
 function removeFile(index: number) {
   files.value.splice(index, 1)
-  filePreviewUrls.value.splice(index, 1)
 }
+
+watch(
+  files,
+  async files => {
+    filePreviewUrls.value = await Promise.all(
+      files.map(({ file }) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        return new Promise<string>(resolve => {
+          reader.onload = () => {
+            resolve(reader.result as string)
+          }
+        })
+      })
+    )
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
 </script>
 
 <template>
@@ -53,7 +58,7 @@ function removeFile(index: number) {
       ref="inputRef"
       multiple
       type="file"
-      class="flex w-fit items-center rounded-md border border-surface-secondary px-2 py-1 hover:bg-hover-primary focus:ring-2 focus:ring-accent-primary focus:ring-offset-2"
+      class="border-surface-secondary hover:bg-hover-primary focus:ring-accent-primary flex w-fit items-center rounded-md border px-2 py-1 focus:ring-2 focus:ring-offset-2"
       @change="handleFileChange" />
   </div>
   <div>
@@ -64,7 +69,7 @@ function removeFile(index: number) {
       <div
         v-for="(file, index) in files"
         :key="index"
-        class="group relative flex flex-col items-center not-first:ml-2">
+        class="not-first:ml-2 group relative flex flex-col items-center">
         <img
           v-if="isImageByType(file.file.type)"
           :alt="file.name"
@@ -73,7 +78,7 @@ function removeFile(index: number) {
         <DocumentIcon v-else class="h-32" />
         <button
           aria-label="ファイルを削除"
-          class="invisible absolute top-1 right-1 h-6 w-6 cursor-pointer group-hover:visible"
+          class="invisible absolute right-1 top-1 h-6 w-6 cursor-pointer group-hover:visible"
           type="button"
           @click="removeFile(index)">
           <XCircleIcon />

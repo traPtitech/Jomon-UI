@@ -43,7 +43,7 @@ const navigateToPartition = async (partitionId: string) => {
         @click="navigateToPartition(partition.id)"
         @keydown.enter="navigateToPartition(partition.id)"
         @keydown.space.stop="navigateToPartition(partition.id)">
-        <td class="px-1 py-4 pr-6">
+        <td class="px-1 py-4 pl-6">
           {{ partition.name }}
         </td>
         <td class="px-1 py-4 pr-6">

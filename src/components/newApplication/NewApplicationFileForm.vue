@@ -9,6 +9,7 @@ const files = defineModel<FileSeed[]>({ required: true })
 
 const inputRef = ref()
 const filePreviewUrls = ref<string[]>([])
+const previewUrlCache = new WeakMap<File, string>()
 
 function handleFileChange(e: Event) {
   if (!(e.target instanceof HTMLInputElement) || !e.target.files) {
@@ -33,11 +34,18 @@ watch(
   async files => {
     filePreviewUrls.value = await Promise.all(
       files.map(({ file }) => {
+        if (previewUrlCache.has(file)) {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          return Promise.resolve(previewUrlCache.get(file)!)
+        }
+
         const reader = new FileReader()
         reader.readAsDataURL(file)
         return new Promise<string>(resolve => {
           reader.onload = () => {
-            resolve(reader.result as string)
+            const previewUrl = reader.result as string
+            previewUrlCache.set(file, previewUrl)
+            resolve(previewUrl)
           }
         })
       })
@@ -58,7 +66,7 @@ watch(
       ref="inputRef"
       multiple
       type="file"
-      class="border-surface-secondary hover:bg-hover-primary focus:ring-accent-primary flex w-fit items-center rounded-md border px-2 py-1 focus:ring-2 focus:ring-offset-2"
+      class="flex w-fit items-center rounded-md border border-surface-secondary px-2 py-1 hover:bg-hover-primary focus:ring-2 focus:ring-accent-primary focus:ring-offset-2"
       @change="handleFileChange" />
   </div>
   <div>
@@ -69,7 +77,7 @@ watch(
       <div
         v-for="(file, index) in files"
         :key="index"
-        class="not-first:ml-2 group relative flex flex-col items-center">
+        class="group relative flex flex-col items-center not-first:ml-2">
         <img
           v-if="isImageByType(file.file.type)"
           :alt="file.name"
@@ -78,7 +86,7 @@ watch(
         <DocumentIcon v-else class="h-32" />
         <button
           aria-label="ファイルを削除"
-          class="invisible absolute right-1 top-1 h-6 w-6 cursor-pointer group-hover:visible"
+          class="invisible absolute top-1 right-1 h-6 w-6 cursor-pointer group-hover:visible"
           type="button"
           @click="removeFile(index)">
           <XCircleIcon />

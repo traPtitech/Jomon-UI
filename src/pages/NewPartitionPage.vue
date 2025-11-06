@@ -4,7 +4,7 @@ import BaseInput from '@/components/shared/BaseInput.vue'
 import InputCheckBox from '@/components/shared/InputCheckButton.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useUserStore } from '@/features/user/store'
-import { ref, computed } from 'vue'
+import { ref, watch } from 'vue'
 
 const { isUserFetched, fetchUsers } = useUserStore()
 
@@ -14,22 +14,15 @@ if (!isUserFetched.value) {
   await fetchUsers()
 }
 
-const _noLimit = ref(false)
-let tempBudget: number | null = null
+const isUnlimitedBudget = ref(false)
+const savedBudgetBeforeUnlimited = ref<number | null>(null)
 
-const noLimitPartition = computed<boolean>({
-  get() {
-    return _noLimit.value
-  },
-  set(val: boolean) {
-    _noLimit.value = val
-
-    if (val) {
-      tempBudget = partition.value.budget
-      partition.value.budget = null
-    } else {
-      partition.value.budget = tempBudget ?? 0
-    }
+watch(isUnlimitedBudget, newVal => {
+  if (newVal) {
+    savedBudgetBeforeUnlimited.value = partition.value.budget
+    partition.value.budget = null
+  } else {
+    partition.value.budget = savedBudgetBeforeUnlimited.value ?? 0
   }
 })
 </script>
@@ -46,13 +39,13 @@ const noLimitPartition = computed<boolean>({
         type="number"
         label="予算"
         required
-        :readonly="noLimitPartition">
+        :readonly="isUnlimitedBudget">
         <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
           ¥
         </span>
       </BaseInput>
       <InputCheckBox
-        v-model="noLimitPartition"
+        v-model="isUnlimitedBudget"
         class="mt-1"
         label="予算指定なし" />
     </div>

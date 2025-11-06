@@ -42,7 +42,7 @@ const logs = computed((): Log[] => {
         <ApplicationContent :application="application" />
       </li>
       <li
-        v-for="(log, i) in logs.slice(1)"
+        v-for="(log, i) in logs"
         :key="log.createdAt.toISO() ?? i"
         class="vertical-bar">
         <CommentLog v-if="log.type === 'comment'" :comment="log" />

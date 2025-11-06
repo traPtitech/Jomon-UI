@@ -39,7 +39,7 @@ const inputId = computed(() => {
         type="checkbox"
         v-model="model" />
       <label
-        :for="`input-${props.label}`"
+        :for="inputId"
         :class="[
           'pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out peer-focus:text-blue-500'
         ]">

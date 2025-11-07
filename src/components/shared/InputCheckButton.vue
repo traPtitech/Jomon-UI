@@ -20,7 +20,7 @@ const slugify = (s: string) => s.trim().toLowerCase().replace(/\s+/g, '-')
 
 const inputId = computed(() => {
   const slug = slugify(props.label || '') || 'input'
-  return `input-${slug}-${instanceUid}`
+  return `${slug}-${instanceUid}`
 })
 </script>
 

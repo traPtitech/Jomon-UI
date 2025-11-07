@@ -59,6 +59,7 @@ const handleKey = (e: KeyboardEvent) => {
     <slot />
     <div class="relative w-full">
       <textarea
+        :readonly="props.readonly"
         v-if="type === 'textarea'"
         :id="`input-${props.label}`"
         ref="textareaRef"

@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-
-let uidCounter = 0
+import { computed, useTemplateRef, useId } from 'vue'
 
 interface Props {
   label: string
@@ -12,17 +10,17 @@ const props = withDefaults(defineProps<Props>(), {
   required: false
 })
 
-const inputRef = ref<HTMLInputElement | null>(null)
+const inputRef = useTemplateRef<HTMLInputElement>('inputRef')
 
 const model = defineModel<boolean>({ required: true })
 
-const instanceUid = ++uidCounter
+const instanceUid = useId()
 
 const slugify = (s: string) => s.trim().toLowerCase().replace(/\s+/g, '-')
 
 const inputId = computed(() => {
   const slug = slugify(props.label || '') || 'input'
-  return `input-${slug}-${instanceUid.toString()}`
+  return `input-${slug}-${instanceUid}`
 })
 </script>
 

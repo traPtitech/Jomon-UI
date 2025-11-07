@@ -22,7 +22,7 @@ watch(isUnlimitedBudget, newVal => {
     savedBudgetBeforeUnlimited.value = partition.value.budget
     partition.value.budget = null
   } else {
-    partition.value.budget = savedBudgetBeforeUnlimited.value ?? 0
+    partition.value.budget = savedBudgetBeforeUnlimited.value
   }
 })
 </script>
@@ -38,7 +38,7 @@ watch(isUnlimitedBudget, newVal => {
         v-model="partition.budget"
         type="number"
         label="予算"
-        required
+        :required="!isUnlimitedBudget"
         :readonly="isUnlimitedBudget">
         <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
           ¥

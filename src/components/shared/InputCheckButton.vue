@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, useTemplateRef, useId } from 'vue'
+import { useTemplateRef, useId } from 'vue'
 
 interface Props {
   label: string
@@ -14,14 +14,7 @@ const inputRef = useTemplateRef<HTMLInputElement>('inputRef')
 
 const model = defineModel<boolean>({ required: true })
 
-const instanceUid = useId()
-
-const slugify = (s: string) => s.trim().toLowerCase().replace(/\s+/g, '-')
-
-const inputId = computed(() => {
-  const slug = slugify(props.label || '') || 'input'
-  return `${slug}-${instanceUid}`
-})
+const inputId = useId()
 </script>
 
 <template>

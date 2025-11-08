@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { Partition } from '@/features/partition/entities'
 import router from '@/router'
+import { isBudgetNull } from '@/features/shared/isBudgetNull'
 
 interface Props {
   page: number
@@ -17,8 +18,6 @@ const slicePartitionsAt = (index: number, n: number) => {
 const navigateToPartition = async (partitionId: string) => {
   await router.push(`/partitions/${partitionId}`)
 }
-
-const isBudgetNull = (budget: number | null): boolean => budget === null
 </script>
 
 <template>

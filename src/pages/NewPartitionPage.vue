@@ -14,15 +14,15 @@ if (!isUserFetched.value) {
   await fetchUsers()
 }
 
-const isUnlimitedBudget = ref(false)
-const savedBudgetBeforeUnlimited = ref<number | null>(null)
+const isunspecifiedBudget = ref(false)
+const savedBudgetBeforeUnspecified = ref<number | null>(null)
 
-watch(isUnlimitedBudget, newVal => {
+watch(isunspecifiedBudget, newVal => {
   if (newVal) {
-    savedBudgetBeforeUnlimited.value = partition.value.budget
+    savedBudgetBeforeUnspecified.value = partition.value.budget
     partition.value.budget = null
   } else {
-    partition.value.budget = savedBudgetBeforeUnlimited.value
+    partition.value.budget = savedBudgetBeforeUnspecified.value
   }
 })
 </script>
@@ -38,14 +38,14 @@ watch(isUnlimitedBudget, newVal => {
         v-model="partition.budget"
         type="number"
         label="予算"
-        :required="!isUnlimitedBudget"
-        :readonly="isUnlimitedBudget">
+        :required="!isunspecifiedBudget"
+        :readonly="isunspecifiedBudget">
         <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
           ¥
         </span>
       </BaseInput>
       <InputCheckBox
-        v-model="isUnlimitedBudget"
+        v-model="isunspecifiedBudget"
         class="mt-1"
         label="予算指定なし" />
     </div>

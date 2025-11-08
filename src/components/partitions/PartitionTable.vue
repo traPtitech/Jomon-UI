@@ -17,6 +17,8 @@ const slicePartitionsAt = (index: number, n: number) => {
 const navigateToPartition = async (partitionId: string) => {
   await router.push(`/partitions/${partitionId}`)
 }
+
+const isBudgetNull = (budget: number | null): boolean => budget === null
 </script>
 
 <template>
@@ -47,7 +49,11 @@ const navigateToPartition = async (partitionId: string) => {
           {{ partition.name }}
         </td>
         <td class="px-1 py-4 pr-6">
-          {{ partition.budget === null ? '指定なし' : partition.budget + '円' }}
+          {{
+            isBudgetNull(partition.budget)
+              ? '指定なし'
+              : partition.budget + '円'
+          }}
         </td>
       </tr>
     </tbody>

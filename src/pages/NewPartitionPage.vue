@@ -14,10 +14,10 @@ if (!isUserFetched.value) {
   await fetchUsers()
 }
 
-const isunspecifiedBudget = ref(false)
+const isUnspecifiedBudget = ref(false)
 const savedBudgetBeforeUnspecified = ref<number | null>(null)
 
-watch(isunspecifiedBudget, newVal => {
+watch(isUnspecifiedBudget, newVal => {
   if (newVal) {
     savedBudgetBeforeUnspecified.value = partition.value.budget
     partition.value.budget = null
@@ -39,13 +39,13 @@ watch(isunspecifiedBudget, newVal => {
         type="number"
         label="予算"
         required
-        :readonly="isunspecifiedBudget">
+        :readonly="isUnspecifiedBudget">
         <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
           ¥
         </span>
       </BaseInput>
       <InputCheckBox
-        v-model="isunspecifiedBudget"
+        v-model="isUnspecifiedBudget"
         class="mt-1"
         label="予算指定なし" />
     </div>

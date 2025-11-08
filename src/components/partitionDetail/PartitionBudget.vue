@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { usePartitionStore } from '@/features/partition/store'
-import { isBudgetNull } from '@/features/shared/isBudgetNull';
+import { isBudgetNull } from '@/features/shared/isBudgetNull'
 
 const { currentPartition: partition } = usePartitionStore()
 </script>

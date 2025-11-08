@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { Partition } from '@/features/partition/entities'
-import router from '@/router'
 import { isBudgetNull } from '@/features/shared/isBudgetNull'
+import router from '@/router'
 
 interface Props {
   page: number

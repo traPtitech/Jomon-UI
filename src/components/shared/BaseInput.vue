@@ -25,8 +25,6 @@ const emit = defineEmits<{
 const isFocused = ref(false)
 const hasValue = computed(() => model.value !== '')
 const isLabelFloating = computed(() => isFocused.value || hasValue.value)
-const inputRef = ref<HTMLInputElement | null>(null)
-const textareaRef = ref<HTMLTextAreaElement | null>(null)
 
 const isRequired = computed(() => props.required && !props.readonly)
 
@@ -64,7 +62,6 @@ const handleKey = (e: KeyboardEvent) => {
         :readonly="props.readonly"
         v-if="type === 'textarea'"
         :id="`input-${props.label}`"
-        ref="textareaRef"
         :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent ${props.readonly ? 'cursor-not-allowed' : ''}`"
         rows="12"
         :placeholder="props.placeholder"
@@ -79,7 +76,6 @@ const handleKey = (e: KeyboardEvent) => {
         v-else
         :readonly="props.readonly"
         :id="`input-${props.label}`"
-        ref="inputRef"
         :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent ${props.readonly ? 'cursor-not-allowed' : ''}`"
         :placeholder="props.placeholder"
         :required="isRequired"

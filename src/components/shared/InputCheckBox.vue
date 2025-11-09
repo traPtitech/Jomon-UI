@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useTemplateRef, useId } from 'vue'
+import { useId } from 'vue'
 
 interface Props {
   label: string
@@ -9,8 +9,6 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   required: false
 })
-
-const inputRef = useTemplateRef<HTMLInputElement>('inputRef')
 
 const model = defineModel<boolean>({ required: true })
 
@@ -24,7 +22,6 @@ const inputId = useId()
     <div class="relative w-full">
       <input
         :id="inputId"
-        ref="inputRef"
         :class="`peer w-full cursor-pointer border-none bg-transparent px-3 pt-2 pb-2 ring-0 outline-none`"
         :required="props.required"
         type="checkbox"

@@ -27,7 +27,7 @@ function handleRemoveTarget(index: number) {
           :options="userOptions"
           class="grow"
           label="払い戻し対象者" />
-        <BaseNumberInput v-model="target.amount" label="金額">
+        <BaseNumberInput v-model="target.amount" label="金額" :min="0">
           <span
             class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
             ¥

@@ -73,7 +73,7 @@ const handleRemoveTarget = async () => {
         v-model="targetModel.target"
         :options="targetOptions"
         label="対象者" />
-      <BaseNumberInput v-model="targetModel.amount" label="金額">
+      <BaseNumberInput v-model="targetModel.amount" label="金額" :min="0">
         <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
           ¥
         </span>

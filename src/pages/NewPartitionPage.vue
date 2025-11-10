@@ -39,6 +39,7 @@ watch(isUnspecifiedBudget, newVal => {
         v-model="partition.budget"
         label="予算"
         required
+        :min="0"
         :readonly="isUnspecifiedBudget">
         <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
           ¥

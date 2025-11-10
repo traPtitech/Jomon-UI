@@ -50,6 +50,9 @@ const displayValue = computed(() =>
   model.value === null || Number.isNaN(model.value) ? '' : String(model.value)
 )
 const hasValue = computed(() => displayValue.value !== '')
+const isFieldRequired = computed(
+  () => props.required && !(props.readonly || props.disabled)
+)
 
 const fieldClasses = computed(() => [
   'peer w-full border-none bg-transparent px-3 pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent',
@@ -117,6 +120,8 @@ const handleChange = (event: Event) => {
         :max="max"
         :step="step"
         :inputmode="inputmode"
+        :required="isFieldRequired"
+        :aria-required="isFieldRequired ? 'true' : undefined"
         :value="displayValue"
         @input="handleInput"
         @focus="handleFocus"

@@ -42,7 +42,6 @@ const menuState = ref<MenuState>('close')
 const searchTerm = ref('')
 const highlightedIndex = ref(-1)
 const dropdownRef = ref<HTMLElement | null>(null)
-const inputRef = ref<HTMLElement | null>(null)
 
 const filteredOptions = computed(() => {
   if (menuState.value === 'presearch') {
@@ -199,7 +198,6 @@ const handleKeyDown = (e: KeyboardEvent) => {
   <div ref="dropdownRef" class="relative">
     <div class="relative">
       <BaseInput
-        ref="inputRef"
         v-model="searchTerm"
         :label="label"
         :class="['pr-8', disabled && 'cursor-not-allowed opacity-50']"

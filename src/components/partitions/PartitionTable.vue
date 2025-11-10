@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { Partition } from '@/features/partition/entities'
+import { isBudgetSet } from '@/features/partition/lib/isBudgetSet'
 import router from '@/router'
 
 interface Props {
@@ -46,7 +47,11 @@ const navigateToPartition = async (partitionId: string) => {
         <td class="px-1 py-4 pl-6">
           {{ partition.name }}
         </td>
-        <td class="px-1 py-4 pr-6">{{ partition.budget }}円</td>
+        <td class="px-1 py-4 pr-6">
+          {{
+            isBudgetSet(partition.budget) ? partition.budget + '円' : '指定なし'
+          }}
+        </td>
       </tr>
     </tbody>
   </table>

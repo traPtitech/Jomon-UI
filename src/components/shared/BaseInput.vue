@@ -6,13 +6,15 @@ interface Props {
   required?: boolean
   placeholder?: string
   type?: string
+  readonly?: boolean
 }
 
 const model = defineModel<string | number | null>({ required: true })
 const props = withDefaults(defineProps<Props>(), {
   required: false,
   placeholder: '',
-  type: 'text'
+  type: 'text',
+  readonly: false
 })
 
 const emit = defineEmits<{
@@ -23,8 +25,8 @@ const emit = defineEmits<{
 const isFocused = ref(false)
 const hasValue = computed(() => model.value !== '')
 const isLabelFloating = computed(() => isFocused.value || hasValue.value)
-const inputRef = ref<HTMLInputElement | null>(null)
-const textareaRef = ref<HTMLTextAreaElement | null>(null)
+
+const isRequired = computed(() => props.required && !props.readonly)
 
 const handleFocus = () => {
   isFocused.value = true
@@ -53,29 +55,30 @@ const handleKey = (e: KeyboardEvent) => {
 
 <template>
   <div
-    class="flex rounded-lg border border-surface-secondary bg-white !ring-offset-2 transition-all duration-200 ease-in-out focus-within:!ring-2 focus-within:!ring-blue-500 focus-within:outline-none">
+    :class="`flex rounded-lg border border-surface-secondary !ring-offset-2 transition-all duration-200 ease-in-out focus-within:!ring-2 focus-within:!ring-blue-500 focus-within:outline-none ${props.readonly ? 'cursor-not-allowed bg-surface-secondary' : 'bg-white'}`">
     <slot />
     <div class="relative w-full">
       <textarea
+        :readonly="props.readonly"
         v-if="type === 'textarea'"
         :id="`input-${props.label}`"
-        ref="textareaRef"
-        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent`"
+        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent ${props.readonly ? 'cursor-not-allowed' : ''}`"
         rows="12"
         :placeholder="props.placeholder"
-        :required="props.required"
+        :required="isRequired"
         :value="model"
         @input="handleChange"
         @focus="handleFocus"
         @blur="handleBlur"
         @keydown="handleKey" />
+
       <input
         v-else
+        :readonly="props.readonly"
         :id="`input-${props.label}`"
-        ref="inputRef"
-        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent`"
+        :class="`w-full border-none bg-transparent px-3 ${props.label ? 'pt-6' : 'pt-2'} peer pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent ${props.readonly ? 'cursor-not-allowed' : ''}`"
         :placeholder="props.placeholder"
-        :required="props.required"
+        :required="isRequired"
         :type="props.type"
         :value="model"
         :min="type === 'number' ? 0 : undefined"
@@ -94,7 +97,7 @@ const handleKey = (e: KeyboardEvent) => {
               : 'top-1/2 -translate-y-1/2 text-base'
         ]">
         {{ props.label }}
-        <span v-if="props.required" class="text-red-500">*</span>
+        <span v-if="isRequired" class="text-red-500">*</span>
       </label>
     </div>
   </div>

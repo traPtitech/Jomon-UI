@@ -26,6 +26,10 @@ function handleFileChange(e: Event) {
 }
 
 function removeFile(index: number) {
+  const { file } = files.value[index]
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  URL.revokeObjectURL(previewUrlCache.get(file)!)
+  previewUrlCache.delete(file)
   files.value.splice(index, 1)
 }
 

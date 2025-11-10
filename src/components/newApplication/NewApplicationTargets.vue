@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import BaseInput from '@/components/shared/BaseInput.vue'
+import BaseNumberInput from '@/components/shared/BaseNumberInput.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useUserStore } from '@/features/user/store'
@@ -27,12 +27,12 @@ function handleRemoveTarget(index: number) {
           :options="userOptions"
           class="grow"
           label="払い戻し対象者" />
-        <BaseInput v-model="target.amount" type="number" label="金額">
+        <BaseNumberInput v-model="target.amount" label="金額">
           <span
             class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
             ¥
           </span>
-        </BaseInput>
+        </BaseNumberInput>
         <button
           v-if="model.length > 1"
           aria-label="払い戻し対象者を削除"

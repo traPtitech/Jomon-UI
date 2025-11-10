@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useNewPartition } from './composables/useNewPartition'
-import BaseInput from '@/components/shared/BaseInput.vue'
+import BaseNumberInput from '@/components/shared/BaseNumberInput.vue'
+import BaseTextInput from '@/components/shared/BaseTextInput.vue'
 import InputCheckBox from '@/components/shared/InputCheckBox.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useUserStore } from '@/features/user/store'
@@ -32,18 +33,17 @@ watch(isUnspecifiedBudget, newVal => {
     <h1 class="text-2xl">パーティションの新規作成</h1>
   </div>
   <form class="flex flex-col gap-6">
-    <BaseInput v-model="partition.name" label="パーティション名" required />
+    <BaseTextInput v-model="partition.name" label="パーティション名" required />
     <div>
-      <BaseInput
+      <BaseNumberInput
         v-model="partition.budget"
-        type="number"
         label="予算"
         required
         :readonly="isUnspecifiedBudget">
         <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
           ¥
         </span>
-      </BaseInput>
+      </BaseNumberInput>
       <InputCheckBox
         v-model="isUnspecifiedBudget"
         class="mt-1"

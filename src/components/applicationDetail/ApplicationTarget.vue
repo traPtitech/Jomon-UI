@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import BaseInput from '@/components/shared/BaseInput.vue'
+import BaseNumberInput from '@/components/shared/BaseNumberInput.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'
 import type { ApplicationDetail } from '@/features/application/entities'
@@ -73,11 +73,11 @@ const handleRemoveTarget = async () => {
         v-model="targetModel.target"
         :options="targetOptions"
         label="対象者" />
-      <BaseInput v-model="targetModel.amount" type="number" label="金額">
+      <BaseNumberInput v-model="targetModel.amount" label="金額">
         <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
           ¥
         </span>
-      </BaseInput>
+      </BaseNumberInput>
       <button @click="handleRemoveTarget">
         <TrashIcon class="w-6 cursor-pointer text-error-primary" />
       </button>

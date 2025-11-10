@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BaseInput from './BaseInput.vue'
+import BaseTextInput from './BaseTextInput.vue'
 import {
   CheckIcon,
   ChevronDownIcon,
@@ -197,7 +197,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
 <template>
   <div ref="dropdownRef" class="relative">
     <div class="relative">
-      <BaseInput
+      <BaseTextInput
         v-model="searchTerm"
         :label="label"
         :class="['pr-8', disabled && 'cursor-not-allowed opacity-50']"
@@ -207,7 +207,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
         @input="handleChange"
         @keydown="handleKeyDown">
         <MagnifyingGlassIcon class="ml-3 w-6 text-text-secondary" />
-      </BaseInput>
+      </BaseTextInput>
       <button
         type="button"
         class="absolute inset-y-0 right-0 flex items-center pr-2"

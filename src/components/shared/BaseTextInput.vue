@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseInputFrame from './BaseInputFrame.vue'
-import { computed, getCurrentInstance, useAttrs } from 'vue'
+import { computed, useAttrs, useId } from 'vue'
 
 interface Props {
   label: string
@@ -49,10 +49,7 @@ const forwardedAttrs = computed(() => {
   return rest
 })
 
-const instanceId = getCurrentInstance()?.uid ?? Math.random()
-const inputId = computed(
-  () => props.id ?? `base-text-input-${String(instanceId)}`
-)
+const inputId = computed(() => props.id ?? useId())
 const hasValue = computed(() => model.value !== '')
 const isFieldRequired = computed(
   () => props.required && !(props.readonly || props.disabled)

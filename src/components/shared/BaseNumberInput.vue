@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseInputFrame from './BaseInputFrame.vue'
-import { computed, getCurrentInstance, useAttrs } from 'vue'
+import { computed, useAttrs, useId } from 'vue'
 
 interface Props {
   label: string
@@ -41,10 +41,7 @@ const forwardedAttrs = computed(() => {
   return rest
 })
 
-const instanceId = getCurrentInstance()?.uid ?? Math.random()
-const inputId = computed(
-  () => props.id ?? `base-number-input-${String(instanceId)}`
-)
+const inputId = computed(() => props.id ?? useId())
 
 const displayValue = computed(() =>
   model.value === null || Number.isNaN(model.value) ? '' : String(model.value)

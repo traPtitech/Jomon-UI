@@ -16,9 +16,16 @@
     "paths": { "@/*": ["src/*"] },
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
-    "types": ["vite/client"],
+    "types": ["vite/client", "node", "vitest"],
     "noEmit": true
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/**/*.ts",
+    "vitest.config.ts"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

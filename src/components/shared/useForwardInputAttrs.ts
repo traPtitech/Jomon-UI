@@ -1,16 +1,58 @@
 import { computed, useAttrs } from 'vue'
+import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'vue'
 
 type Attrs = Record<string, unknown>
+type ControlHTMLAttrs = Partial<
+  Omit<InputHTMLAttributes & TextareaHTMLAttributes, 'value' | 'id'>
+>
+
+export interface ForwardInputAttrsOptions {
+  frameKeys?: string[]
+}
+
+export interface ForwardedInputAttrs {
+  frameAttrs: Attrs
+  inputAttrs: ControlHTMLAttrs
+}
 
 const listenerPattern = /^on[A-Z]/
-const frameSpecificKeys = new Set(['role', 'tabindex'])
+const defaultFrameKeys = ['role', 'tabindex'] as const
 
-const shouldStayOnFrame = (key: string) =>
-  key.startsWith('data-') ||
-  key.startsWith('aria-') ||
-  frameSpecificKeys.has(key)
+const shouldStayOnFrame = (key: string, frameKeySet: Set<string>) =>
+  key.startsWith('data-') || key.startsWith('aria-') || frameKeySet.has(key)
 
-export const useForwardInputAttrs = () => {
+export const partitionForwardInputAttrs = (
+  attrs: Attrs,
+  frameKeySet: Set<string>
+): ForwardedInputAttrs => {
+  const frameEntries: [string, unknown][] = []
+  const inputEntries: [string, unknown][] = []
+
+  Object.entries(attrs).forEach(([key, value]) => {
+    if (listenerPattern.test(key)) {
+      inputEntries.push([key, value])
+      return
+    }
+
+    if (shouldStayOnFrame(key, frameKeySet)) {
+      frameEntries.push([key, value])
+      return
+    }
+
+    if (key === 'id' || key === 'value') {
+      return
+    }
+
+    inputEntries.push([key, value])
+  })
+
+  return {
+    frameAttrs: Object.fromEntries(frameEntries),
+    inputAttrs: Object.fromEntries(inputEntries) as ControlHTMLAttrs
+  }
+}
+
+export const useForwardInputAttrs = (options?: ForwardInputAttrsOptions) => {
   const attrs = useAttrs()
 
   const containerClass = computed(() => attrs.class)
@@ -18,6 +60,11 @@ export const useForwardInputAttrs = () => {
   const describedByAttr = computed(
     () => attrs['aria-describedby'] as string | undefined
   )
+
+  const frameKeySet = new Set([
+    ...defaultFrameKeys,
+    ...(options?.frameKeys ?? [])
+  ])
 
   const baseForwardedAttrs = computed<Attrs>(() => {
     const rest = { ...(attrs as Attrs) }
@@ -27,23 +74,13 @@ export const useForwardInputAttrs = () => {
     return rest
   })
 
-  const frameAttrs = computed<Attrs>(() =>
-    Object.fromEntries(
-      Object.entries(baseForwardedAttrs.value).filter(([key]) => {
-        if (listenerPattern.test(key)) return false
-        return shouldStayOnFrame(key)
-      })
-    )
+  const forwardedAttrs = computed(() =>
+    partitionForwardInputAttrs(baseForwardedAttrs.value, frameKeySet)
   )
 
-  const inputAttrs = computed<Attrs>(() =>
-    Object.fromEntries(
-      Object.entries(baseForwardedAttrs.value).filter(([key]) => {
-        if (listenerPattern.test(key)) return false
-        if (shouldStayOnFrame(key)) return false
-        return key !== 'id' && key !== 'value'
-      })
-    )
+  const frameAttrs = computed<Attrs>(() => forwardedAttrs.value.frameAttrs)
+  const inputAttrs = computed<ControlHTMLAttrs>(
+    () => forwardedAttrs.value.inputAttrs
   )
 
   return {

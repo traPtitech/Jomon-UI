@@ -10,6 +10,7 @@
     "lint": "eslint --fix --cache .",
     "lint:nofix": "eslint --cache .",
     "type-check": "vue-tsc --noEmit",
+    "test:unit": "vitest run",
     "gen-api": "esno ./scripts/generate-apis.ts",
     "clean": "rimraf src/lib/apis/generated",
     "postinstall": "npm run gen-api",
@@ -61,6 +62,7 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.2",
     "vite": "^7.1.12",
+    "vitest": "^4.0.8",
     "vue-axe": "^3.1.2",
     "vue-tsc": "^3.1.2"
   },

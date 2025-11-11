@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BaseInputFrame from './BaseInputFrame.vue'
-import { computed, useAttrs, useId } from 'vue'
+import { useForwardInputAttrs } from './useForwardInputAttrs'
+import { computed, useId } from 'vue'
 
 defineOptions({ inheritAttrs: false })
 
@@ -46,37 +47,13 @@ const emit = defineEmits<{
   (e: 'input' | 'change', value: Event): void
 }>()
 
-const attrs = useAttrs()
-const containerClass = computed(() => attrs.class)
-const containerStyle = computed(() => attrs.style)
-const describedByAttr = computed(
-  () => attrs['aria-describedby'] as string | undefined
-)
-
-const baseForwardedAttrs = computed<Record<string, unknown>>(() => {
-  const rest = { ...(attrs as Record<string, unknown>) }
-  delete rest.class
-  delete rest.style
-  delete rest['aria-describedby']
-  return rest
-})
-
-const isListenerAttr = (key: string) => /^on[A-Z]/.test(key)
-
-const frameAttrs = computed(() =>
-  Object.fromEntries(
-    Object.entries(baseForwardedAttrs.value).filter(
-      ([key]) => !isListenerAttr(key)
-    )
-  )
-)
-
-const inputAttrs = computed<Record<string, unknown>>(() => {
-  const rest = { ...baseForwardedAttrs.value }
-  delete rest.id
-  delete rest.value
-  return rest
-})
+const {
+  containerClass,
+  containerStyle,
+  describedByAttr,
+  frameAttrs,
+  inputAttrs
+} = useForwardInputAttrs()
 
 const generatedId = useId()
 const inputId = computed(() => props.id ?? generatedId)

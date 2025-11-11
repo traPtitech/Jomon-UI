@@ -11,6 +11,7 @@ interface Props {
   hasValue?: boolean
   inputId: string
   errorMessage?: string
+  errorMessageId?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -20,7 +21,8 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   isTextarea: false,
   hasValue: false,
-  errorMessage: ''
+  errorMessage: '',
+  errorMessageId: ''
 })
 
 const attrs = useAttrs()
@@ -82,7 +84,10 @@ const handleFocusOut = () => {
         {{ label }}
         <span v-if="isRequired" class="text-red-500">*</span>
       </label>
-      <p v-if="errorMessage" class="px-3 pb-2 text-sm text-error-primary">
+      <p
+        v-if="errorMessage"
+        :id="errorMessageId || undefined"
+        class="px-3 pb-2 text-sm text-error-primary">
         {{ errorMessage }}
       </p>
     </div>

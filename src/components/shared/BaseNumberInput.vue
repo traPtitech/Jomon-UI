@@ -2,6 +2,8 @@
 import BaseInputFrame from './BaseInputFrame.vue'
 import { computed, useAttrs, useId } from 'vue'
 
+defineOptions({ inheritAttrs: false })
+
 interface Props {
   label: string
   required?: boolean
@@ -14,6 +16,7 @@ interface Props {
   allowEmpty?: boolean
   inputmode?: 'decimal' | 'numeric'
   id?: string
+  errorMessage?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -23,7 +26,8 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   step: 1,
   allowEmpty: true,
-  inputmode: 'decimal'
+  inputmode: 'decimal',
+  errorMessage: ''
 })
 
 const model = defineModel<number | null>({ required: true })
@@ -35,13 +39,19 @@ const emit = defineEmits<{
 }>()
 
 const attrs = useAttrs()
+const componentClass = computed(() => attrs.class)
+const describedByAttr = computed(
+  () => attrs['aria-describedby'] as string | undefined
+)
 const forwardedAttrs = computed(() => {
   const rest = { ...(attrs as Record<string, unknown>) }
   delete rest.class
+  delete rest['aria-describedby']
   return rest
 })
 
-const inputId = computed(() => props.id ?? useId())
+const generatedId = useId()
+const inputId = computed(() => props.id ?? generatedId)
 
 const displayValue = computed(() =>
   model.value === null || Number.isNaN(model.value) ? '' : String(model.value)
@@ -50,6 +60,15 @@ const hasValue = computed(() => displayValue.value !== '')
 const isFieldRequired = computed(
   () => props.required && !(props.readonly || props.disabled)
 )
+const errorMessageId = computed(() =>
+  props.errorMessage ? `${inputId.value}-error` : undefined
+)
+const describedBy = computed(() => {
+  const ids = [describedByAttr.value, errorMessageId.value].filter(
+    Boolean
+  ) as string[]
+  return ids.length ? ids.join(' ') : undefined
+})
 
 const handleInput = (event: Event) => {
   const target = event.target as HTMLInputElement
@@ -95,6 +114,9 @@ const handleChange = (event: Event) => {
     :placeholder="placeholder"
     :has-value="hasValue"
     :input-id="inputId"
+    :error-message="errorMessage"
+    :error-message-id="errorMessageId"
+    :class="componentClass"
     v-bind="forwardedAttrs">
     <template v-if="$slots.default" #prefix>
       <slot />
@@ -117,6 +139,8 @@ const handleChange = (event: Event) => {
         :inputmode="inputmode"
         :required="isFieldRequired"
         :aria-required="isFieldRequired ? 'true' : undefined"
+        :aria-invalid="errorMessage ? 'true' : undefined"
+        :aria-describedby="describedBy"
         :value="displayValue"
         @input="handleInput"
         @focus="handleFocus"

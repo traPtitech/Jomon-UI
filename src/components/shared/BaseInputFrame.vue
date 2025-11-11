@@ -32,14 +32,6 @@ const forwardedAttrs = computed(() => {
   return rest
 })
 
-const rootClasses = computed(() => [
-  'flex rounded-lg border border-surface-secondary !ring-offset-2 transition-all duration-200 ease-in-out focus-within:!ring-2 focus-within:!ring-blue-500 focus-within:outline-none',
-  props.readonly || props.disabled
-    ? 'cursor-not-allowed bg-surface-secondary'
-    : 'bg-white',
-  attrs.class
-])
-
 const isRequired = computed(
   () => props.required && !(props.readonly || props.disabled)
 )
@@ -67,7 +59,13 @@ const handleFocusOut = () => {
 
 <template>
   <div
-    :class="rootClasses"
+    :class="[
+      'flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none',
+      readonly || disabled
+        ? 'cursor-not-allowed bg-surface-secondary'
+        : 'bg-white',
+      attrs.class
+    ]"
     @focusin="handleFocusIn"
     @focusout="handleFocusOut"
     v-bind="forwardedAttrs">

@@ -55,13 +55,6 @@ const isFieldRequired = computed(
   () => props.required && !(props.readonly || props.disabled)
 )
 
-const fieldClasses = computed(() => [
-  'peer w-full border-none bg-transparent px-3 pb-2 ring-0 outline-none [&:not(:focus-visible)]:placeholder:text-transparent',
-  props.label ? 'pt-6' : 'pt-2',
-  props.readonly || props.disabled ? 'cursor-not-allowed' : '',
-  props.textarea ? 'resize-none' : ''
-])
-
 const handleInput = (event: Event) => {
   const target = event.target as HTMLInputElement | HTMLTextAreaElement
   model.value = target.value
@@ -103,7 +96,12 @@ const handleChange = (event: Event) => {
       <textarea
         v-if="textarea"
         :id="inputId"
-        :class="fieldClasses"
+        :class="[
+          'peer w-full border-none bg-transparent px-3 pb-2 ring-0 outline-none not-focus-visible:placeholder:text-transparent',
+          label ? 'pt-6' : 'pt-2',
+          readonly || disabled ? 'cursor-not-allowed' : '',
+          'resize-none'
+        ]"
         :placeholder="placeholder"
         :readonly="readonly"
         :disabled="disabled"
@@ -121,7 +119,11 @@ const handleChange = (event: Event) => {
       <input
         v-else
         :id="inputId"
-        :class="fieldClasses"
+        :class="[
+          'peer w-full border-none bg-transparent px-3 pb-2 ring-0 outline-none not-focus-visible:placeholder:text-transparent',
+          label ? 'pt-6' : 'pt-2',
+          readonly || disabled ? 'cursor-not-allowed' : ''
+        ]"
         :placeholder="placeholder"
         :readonly="readonly"
         :disabled="disabled"

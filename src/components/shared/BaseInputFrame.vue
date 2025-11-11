@@ -9,7 +9,7 @@ interface Props {
   disabled?: boolean
   isTextarea?: boolean
   hasValue?: boolean
-  inputId?: string
+  inputId: string
   errorMessage?: string
 }
 
@@ -46,8 +46,6 @@ const isRequired = computed(
 const isLabelFloating = computed(
   () => !!props.label && (isFocused.value || props.hasValue)
 )
-const computedInputId = computed(() => props.inputId ?? `input-${props.label}`)
-
 const labelPositionClass = computed(() => {
   if (!props.label) return ''
   if (isLabelFloating.value) {
@@ -78,7 +76,7 @@ const handleFocusOut = () => {
       <slot />
       <label
         v-if="label"
-        :for="computedInputId"
+        :for="inputId"
         :class="[
           'pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out peer-focus:text-blue-500',
           labelPositionClass

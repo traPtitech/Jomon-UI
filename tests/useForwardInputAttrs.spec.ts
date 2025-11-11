@@ -3,6 +3,9 @@ import { describe, expect, it } from 'vitest'
 
 type Attrs = Record<string, unknown>
 
+const baseFrameSet = new Set(['role', 'tabindex'])
+const baseBlocklistSet = new Set(['id', 'value'])
+
 const buildAttrs = (overrides: Attrs = {}): Attrs => ({
   'data-testid': 'frame',
   'aria-label': 'Frame label',
@@ -17,38 +20,46 @@ const buildAttrs = (overrides: Attrs = {}): Attrs => ({
 })
 
 describe('partitionForwardInputAttrs', () => {
-  const defaultSet = new Set(['role', 'tabindex'])
-
   it('keeps structural attrs on frame and listeners on control', () => {
-    const result = partitionForwardInputAttrs(buildAttrs(), defaultSet)
+    const result = partitionForwardInputAttrs(
+      buildAttrs(),
+      baseFrameSet,
+      baseBlocklistSet,
+      'input'
+    )
 
     expect(result.frameAttrs).toEqual({
       'data-testid': 'frame',
       'aria-label': 'Frame label'
     })
-    expect(result.inputAttrs.min).toBe(1)
-    expect(result.inputAttrs.max).toBe(3)
-    expect(result.inputAttrs).toHaveProperty('onPaste')
-    expect(result.inputAttrs).toHaveProperty('onCompositionstart')
-    expect(result.inputAttrs).not.toHaveProperty('id')
-    expect(result.inputAttrs).not.toHaveProperty('value')
+    expect(result.controlAttrs.min).toBe(1)
+    expect(result.controlAttrs.max).toBe(3)
+    expect(result.controlAttrs).toHaveProperty('onPaste')
+    expect(result.controlAttrs).toHaveProperty('onCompositionstart')
+    expect(result.controlAttrs).not.toHaveProperty('id')
+    expect(result.controlAttrs).not.toHaveProperty('value')
   })
 
   it('respects custom frame key overrides', () => {
     const result = partitionForwardInputAttrs(
       buildAttrs({ title: 'Heading' }),
-      new Set(['role', 'tabindex', 'title'])
+      new Set(['role', 'tabindex', 'title']),
+      baseBlocklistSet,
+      'input'
     )
     expect(result.frameAttrs.title).toBe('Heading')
-    expect(result.inputAttrs).not.toHaveProperty('title')
+    expect(result.controlAttrs).not.toHaveProperty('title')
   })
 
-  it('filters optionally undefined aria/data attrs from input', () => {
+  it('supports textarea control typing and blocklist overrides', () => {
+    const blocklist = new Set(['id', 'value', 'placeholder'])
     const result = partitionForwardInputAttrs(
-      buildAttrs({ 'aria-controls': undefined, 'data-qa': undefined }),
-      defaultSet
+      buildAttrs({ rows: 5 }),
+      baseFrameSet,
+      blocklist,
+      'textarea'
     )
-    expect(result.inputAttrs).not.toHaveProperty('aria-controls')
-    expect(result.inputAttrs).not.toHaveProperty('data-qa')
+    expect(result.controlAttrs).toHaveProperty('rows')
+    expect(result.controlAttrs).not.toHaveProperty('placeholder')
   })
 })

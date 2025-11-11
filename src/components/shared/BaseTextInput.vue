@@ -52,8 +52,11 @@ const {
   containerStyle,
   describedByAttr,
   frameAttrs,
-  inputAttrs
+  inputAttrs,
+  getControlAttrs
 } = useForwardInputAttrs()
+
+const textareaAttrs = computed(() => getControlAttrs('textarea'))
 
 const generatedId = useId()
 const inputId = computed(() => props.id ?? generatedId)
@@ -122,7 +125,7 @@ const handleChange = (event: Event) => {
           readonly || disabled ? 'cursor-not-allowed' : '',
           'resize-none'
         ]"
-        v-bind="inputAttrs"
+        v-bind="textareaAttrs"
         :placeholder="placeholder"
         :readonly="readonly"
         :disabled="disabled"

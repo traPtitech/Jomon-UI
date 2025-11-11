@@ -45,7 +45,7 @@ const {
   describedByAttr,
   frameAttrs,
   inputAttrs
-} = useForwardInputAttrs()
+} = useForwardInputAttrs({ controlType: 'input' })
 
 const generatedId = useId()
 const inputId = computed(() => props.id ?? generatedId)

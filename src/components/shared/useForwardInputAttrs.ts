@@ -2,35 +2,42 @@ import { computed, useAttrs } from 'vue'
 import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'vue'
 
 type Attrs = Record<string, unknown>
-type ControlHTMLAttrs = Partial<
-  Omit<InputHTMLAttributes & TextareaHTMLAttributes, 'value' | 'id'>
->
+type ControlType = 'input' | 'textarea'
+type ControlHTMLAttrs<T extends ControlType> = T extends 'textarea'
+  ? Partial<Omit<TextareaHTMLAttributes, 'value' | 'id'>>
+  : Partial<Omit<InputHTMLAttributes, 'value' | 'id'>>
 
-export interface ForwardInputAttrsOptions {
+export interface ForwardInputAttrsOptions<T extends ControlType = 'input'> {
   frameKeys?: string[]
+  blocklistKeys?: string[]
+  controlType?: T
 }
 
-export interface ForwardedInputAttrs {
+export interface ForwardedInputAttrs<T extends ControlType> {
   frameAttrs: Attrs
-  inputAttrs: ControlHTMLAttrs
+  controlAttrs: ControlHTMLAttrs<T>
 }
 
 const listenerPattern = /^on[A-Z]/
 const defaultFrameKeys = ['role', 'tabindex'] as const
+const defaultBlocklistKeys = ['id', 'value'] as const
 
 const shouldStayOnFrame = (key: string, frameKeySet: Set<string>) =>
   key.startsWith('data-') || key.startsWith('aria-') || frameKeySet.has(key)
 
-export const partitionForwardInputAttrs = (
+export const partitionForwardInputAttrs = <T extends ControlType>(
   attrs: Attrs,
-  frameKeySet: Set<string>
-): ForwardedInputAttrs => {
+  frameKeySet: Set<string>,
+  blocklistSet: Set<string>,
+  controlType: T
+): ForwardedInputAttrs<T> => {
+  void controlType
   const frameEntries: [string, unknown][] = []
-  const inputEntries: [string, unknown][] = []
+  const controlEntries: [string, unknown][] = []
 
   Object.entries(attrs).forEach(([key, value]) => {
     if (listenerPattern.test(key)) {
-      inputEntries.push([key, value])
+      controlEntries.push([key, value])
       return
     }
 
@@ -39,20 +46,22 @@ export const partitionForwardInputAttrs = (
       return
     }
 
-    if (key === 'id' || key === 'value') {
+    if (blocklistSet.has(key)) {
       return
     }
 
-    inputEntries.push([key, value])
+    controlEntries.push([key, value])
   })
 
   return {
     frameAttrs: Object.fromEntries(frameEntries),
-    inputAttrs: Object.fromEntries(inputEntries) as ControlHTMLAttrs
+    controlAttrs: Object.fromEntries(controlEntries) as ControlHTMLAttrs<T>
   }
 }
 
-export const useForwardInputAttrs = (options?: ForwardInputAttrsOptions) => {
+export const useForwardInputAttrs = <T extends ControlType = 'input'>(
+  options?: ForwardInputAttrsOptions<T>
+) => {
   const attrs = useAttrs()
 
   const containerClass = computed(() => attrs.class)
@@ -65,6 +74,11 @@ export const useForwardInputAttrs = (options?: ForwardInputAttrsOptions) => {
     ...defaultFrameKeys,
     ...(options?.frameKeys ?? [])
   ])
+  const blocklistSet = new Set([
+    ...defaultBlocklistKeys,
+    ...(options?.blocklistKeys ?? [])
+  ])
+  const controlType = (options?.controlType ?? 'input') as T
 
   const baseForwardedAttrs = computed<Attrs>(() => {
     const rest = { ...(attrs as Attrs) }
@@ -75,12 +89,30 @@ export const useForwardInputAttrs = (options?: ForwardInputAttrsOptions) => {
   })
 
   const forwardedAttrs = computed(() =>
-    partitionForwardInputAttrs(baseForwardedAttrs.value, frameKeySet)
+    partitionForwardInputAttrs<T>(
+      baseForwardedAttrs.value,
+      frameKeySet,
+      blocklistSet,
+      controlType
+    )
   )
 
+  const getControlAttrs = <K extends ControlType = T>(
+    overrideType?: K,
+    extraBlocklistKeys: string[] = []
+  ): ControlHTMLAttrs<K> => {
+    const finalBlocklist = new Set([...blocklistSet, ...extraBlocklistKeys])
+    return partitionForwardInputAttrs<K>(
+      baseForwardedAttrs.value,
+      frameKeySet,
+      finalBlocklist,
+      overrideType ?? (controlType as unknown as K)
+    ).controlAttrs
+  }
+
   const frameAttrs = computed<Attrs>(() => forwardedAttrs.value.frameAttrs)
-  const inputAttrs = computed<ControlHTMLAttrs>(
-    () => forwardedAttrs.value.inputAttrs
+  const inputAttrs = computed<ControlHTMLAttrs<T>>(
+    () => forwardedAttrs.value.controlAttrs
   )
 
   return {
@@ -88,6 +120,7 @@ export const useForwardInputAttrs = (options?: ForwardInputAttrsOptions) => {
     containerStyle,
     describedByAttr,
     frameAttrs,
-    inputAttrs
+    inputAttrs,
+    getControlAttrs
   }
 }

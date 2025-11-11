@@ -1,23 +1,19 @@
 import { computed, useAttrs } from 'vue'
-import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'vue'
 
 type Attrs = Record<string, unknown>
 type ControlType = 'input' | 'textarea'
-type ControlHTMLAttrs<T extends ControlType> = T extends 'textarea'
-  ? Partial<Omit<TextareaHTMLAttributes, 'value' | 'id'>>
-  : Partial<Omit<InputHTMLAttributes, 'value' | 'id'>>
 
-export interface ForwardInputAttrsOptions<T extends ControlType = 'input'> {
+export interface ForwardInputAttrsOptions {
   frameKeys?: string[]
   frameKeyPrefixes?: string[]
   frameListenerKeys?: string[]
   blocklistKeys?: string[]
-  controlType?: T
+  controlType?: ControlType
 }
 
-export interface ForwardedInputAttrs<T extends ControlType> {
+export interface ForwardedInputAttrs {
   frameAttrs: Attrs
-  controlAttrs: ControlHTMLAttrs<T>
+  controlAttrs: Attrs
 }
 
 const listenerPattern = /^on[A-Z]/
@@ -38,8 +34,8 @@ const defaultFrameListenerKeys = [
   'onMousemove',
   'onTouchstart',
   'onTouchend'
-] as const
-const defaultBlocklistKeys = ['id', 'value'] as const
+] satisfies readonly string[]
+const defaultBlocklistKeys = ['id', 'value'] satisfies readonly string[]
 
 const shouldStayOnFrame = (
   key: string,
@@ -49,14 +45,14 @@ const shouldStayOnFrame = (
   frameKeySet.has(key) ||
   frameKeyPrefixes.some(prefix => key.startsWith(prefix))
 
-export const partitionForwardInputAttrs = <T extends ControlType>(
+export const partitionForwardInputAttrs = (
   attrs: Attrs,
   frameKeySet: Set<string>,
   blocklistSet: Set<string>,
-  controlType: T,
+  controlType: ControlType,
   frameKeyPrefixes: readonly string[] = [],
   frameListenerSet: Set<string> = new Set(defaultFrameListenerKeys)
-): ForwardedInputAttrs<T> => {
+): ForwardedInputAttrs => {
   void controlType
   const frameEntries: [string, unknown][] = []
   const controlEntries: [string, unknown][] = []
@@ -85,20 +81,19 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
 
   return {
     frameAttrs: Object.fromEntries(frameEntries),
-    controlAttrs: Object.fromEntries(controlEntries) as ControlHTMLAttrs<T>
+    controlAttrs: Object.fromEntries(controlEntries)
   }
 }
 
-export const useForwardInputAttrs = <T extends ControlType = 'input'>(
-  options?: ForwardInputAttrsOptions<T>
-) => {
+export const useForwardInputAttrs = (options?: ForwardInputAttrsOptions) => {
   const attrs = useAttrs()
 
   const containerClass = computed(() => attrs.class)
   const containerStyle = computed(() => attrs.style)
-  const describedByAttr = computed(
-    () => attrs['aria-describedby'] as string | undefined
-  )
+  const describedByAttr = computed(() => {
+    const value = attrs['aria-describedby']
+    return typeof value === 'string' ? value : undefined
+  })
 
   const frameKeySet = new Set([
     ...defaultFrameKeys,
@@ -116,18 +111,21 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
     ...defaultBlocklistKeys,
     ...(options?.blocklistKeys ?? [])
   ])
-  const controlType = (options?.controlType ?? 'input') as T
+  const controlType: ControlType = options?.controlType ?? 'input'
 
   const baseForwardedAttrs = computed<Attrs>(() => {
-    const rest = { ...(attrs as Attrs) }
-    delete rest.class
-    delete rest.style
-    delete rest['aria-describedby']
+    const rest: Attrs = {}
+    Object.entries(attrs).forEach(([key, value]) => {
+      if (key === 'class' || key === 'style' || key === 'aria-describedby') {
+        return
+      }
+      rest[key] = value
+    })
     return rest
   })
 
   const forwardedAttrs = computed(() =>
-    partitionForwardInputAttrs<T>(
+    partitionForwardInputAttrs(
       baseForwardedAttrs.value,
       frameKeySet,
       blocklistSet,
@@ -137,25 +135,23 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
     )
   )
 
-  const getControlAttrs = <K extends ControlType = T>(
-    overrideType?: K,
+  const getControlAttrs = (
+    overrideType?: ControlType,
     extraBlocklistKeys: string[] = []
-  ): ControlHTMLAttrs<K> => {
+  ): Attrs => {
     const finalBlocklist = new Set([...blocklistSet, ...extraBlocklistKeys])
-    return partitionForwardInputAttrs<K>(
+    return partitionForwardInputAttrs(
       baseForwardedAttrs.value,
       frameKeySet,
       finalBlocklist,
-      overrideType ?? (controlType as unknown as K),
+      overrideType ?? controlType,
       frameKeyPrefixes,
       frameListenerSet
     ).controlAttrs
   }
 
   const frameAttrs = computed<Attrs>(() => forwardedAttrs.value.frameAttrs)
-  const inputAttrs = computed<ControlHTMLAttrs<T>>(
-    () => forwardedAttrs.value.controlAttrs
-  )
+  const inputAttrs = computed<Attrs>(() => forwardedAttrs.value.controlAttrs)
 
   return {
     containerClass,

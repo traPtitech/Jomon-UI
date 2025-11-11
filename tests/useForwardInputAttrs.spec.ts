@@ -29,8 +29,8 @@ describe('partitionForwardInputAttrs', () => {
     )
 
     expect(result.frameAttrs).toEqual({})
-    expect((result.controlAttrs as Attrs)['data-testid']).toBe('frame')
-    expect((result.controlAttrs as Attrs)['aria-label']).toBe('Frame label')
+    expect(result.controlAttrs['data-testid']).toBe('frame')
+    expect(result.controlAttrs['aria-label']).toBe('Frame label')
     expect(result.controlAttrs.min).toBe(1)
     expect(result.controlAttrs.max).toBe(3)
     expect(result.controlAttrs).toHaveProperty('onPaste')

@@ -61,14 +61,21 @@ const errorMessageId = computed(() =>
   props.errorMessage ? `${inputId.value}-error` : undefined
 )
 const describedBy = computed(() => {
-  const ids = [describedByAttr.value, errorMessageId.value].filter(
-    Boolean
-  ) as string[]
+  const ids: string[] = []
+  if (typeof describedByAttr.value === 'string' && describedByAttr.value) {
+    ids.push(describedByAttr.value)
+  }
+  if (errorMessageId.value) {
+    ids.push(errorMessageId.value)
+  }
   return ids.length ? ids.join(' ') : undefined
 })
 
 const handleInput = (event: Event) => {
-  const target = event.target as HTMLInputElement
+  const target = event.target
+  if (!(target instanceof HTMLInputElement)) {
+    return
+  }
   const rawValue = target.value
 
   if (rawValue === '') {

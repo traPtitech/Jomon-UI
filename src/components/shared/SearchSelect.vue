@@ -70,7 +70,11 @@ const getPlaceholderText = computed(() => {
 
 // Handle click outside
 const handleClickOutside = (event: MouseEvent) => {
-  if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
+  const target = event.target
+  if (!(target instanceof Node)) {
+    return
+  }
+  if (dropdownRef.value && !dropdownRef.value.contains(target)) {
     menuState.value = 'close'
     if (!props.multiple && model.value) {
       const selectedOption = props.options.find(

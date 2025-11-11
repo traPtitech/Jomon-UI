@@ -29,8 +29,13 @@ const attrs = useAttrs()
 const isFocused = ref(false)
 
 const forwardedAttrs = computed(() => {
-  const rest = { ...(attrs as Record<string, unknown>) }
-  delete rest.class
+  const rest: Record<string, unknown> = {}
+  Object.entries(attrs).forEach(([key, value]) => {
+    if (key === 'class') {
+      return
+    }
+    rest[key] = value
+  })
   return rest
 })
 

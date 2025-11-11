@@ -52,18 +52,27 @@ const containerStyle = computed(() => attrs.style)
 const describedByAttr = computed(
   () => attrs['aria-describedby'] as string | undefined
 )
-const frameAttrs = computed(() => {
+
+const baseForwardedAttrs = computed<Record<string, unknown>>(() => {
   const rest = { ...(attrs as Record<string, unknown>) }
   delete rest.class
   delete rest.style
   delete rest['aria-describedby']
   return rest
 })
+
+const isListenerAttr = (key: string) => /^on[A-Z]/.test(key)
+
+const frameAttrs = computed(() =>
+  Object.fromEntries(
+    Object.entries(baseForwardedAttrs.value).filter(
+      ([key]) => !isListenerAttr(key)
+    )
+  )
+)
+
 const inputAttrs = computed<Record<string, unknown>>(() => {
-  const rest = { ...(attrs as Record<string, unknown>) }
-  delete rest.class
-  delete rest.style
-  delete rest['aria-describedby']
+  const rest = { ...baseForwardedAttrs.value }
   delete rest.id
   delete rest.value
   return rest

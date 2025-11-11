@@ -2,16 +2,16 @@
 import BaseNumberInput from '@/components/shared/BaseNumberInput.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
+import type { ApplicationTargetDraft } from '@/features/applicationTarget/entities'
 import { useUserStore } from '@/features/user/store'
-import type { ApplicationTargetInput } from '@/lib/apis'
 import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
-const model = defineModel<ApplicationTargetInput[]>({ required: true })
+const model = defineModel<ApplicationTargetDraft[]>({ required: true })
 
 const { userOptions } = useUserStore()
 
 function handleAddTarget() {
-  model.value = [...model.value, { target: '', amount: 0 }]
+  model.value = [...model.value, { target: '', amount: null }]
 }
 function handleRemoveTarget(index: number) {
   model.value = model.value.filter((_, i) => i !== index)

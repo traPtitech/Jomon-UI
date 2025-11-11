@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 type Attrs = Record<string, unknown>
 
-const baseFrameSet = new Set(['role', 'tabindex'])
+const baseFrameSet = new Set<string>()
 const baseBlocklistSet = new Set(['id', 'value'])
 
 const buildAttrs = (overrides: Attrs = {}): Attrs => ({
@@ -20,7 +20,7 @@ const buildAttrs = (overrides: Attrs = {}): Attrs => ({
 })
 
 describe('partitionForwardInputAttrs', () => {
-  it('keeps structural attrs on frame and listeners on control', () => {
+  it('sends data/aria attrs to control by default and keeps listeners', () => {
     const result = partitionForwardInputAttrs(
       buildAttrs(),
       baseFrameSet,
@@ -28,10 +28,9 @@ describe('partitionForwardInputAttrs', () => {
       'input'
     )
 
-    expect(result.frameAttrs).toEqual({
-      'data-testid': 'frame',
-      'aria-label': 'Frame label'
-    })
+    expect(result.frameAttrs).toEqual({})
+    expect((result.controlAttrs as Attrs)['data-testid']).toBe('frame')
+    expect((result.controlAttrs as Attrs)['aria-label']).toBe('Frame label')
     expect(result.controlAttrs.min).toBe(1)
     expect(result.controlAttrs.max).toBe(3)
     expect(result.controlAttrs).toHaveProperty('onPaste')
@@ -43,12 +42,35 @@ describe('partitionForwardInputAttrs', () => {
   it('respects custom frame key overrides', () => {
     const result = partitionForwardInputAttrs(
       buildAttrs({ title: 'Heading' }),
-      new Set(['role', 'tabindex', 'title']),
+      new Set(['title']),
       baseBlocklistSet,
       'input'
     )
     expect(result.frameAttrs.title).toBe('Heading')
     expect(result.controlAttrs).not.toHaveProperty('title')
+  })
+
+  it('supports frame key prefixes when needed', () => {
+    const result = partitionForwardInputAttrs(
+      buildAttrs(),
+      baseFrameSet,
+      baseBlocklistSet,
+      'input',
+      ['data-']
+    )
+    expect(result.frameAttrs['data-testid']).toBe('frame')
+    expect(result.controlAttrs).not.toHaveProperty('data-testid')
+  })
+
+  it('keeps pointer/mouse listeners on frame by default', () => {
+    const result = partitionForwardInputAttrs(
+      { ...buildAttrs(), onClick: () => undefined },
+      baseFrameSet,
+      baseBlocklistSet,
+      'input'
+    )
+    expect(result.frameAttrs).toHaveProperty('onClick')
+    expect(result.controlAttrs).not.toHaveProperty('onClick')
   })
 
   it('supports textarea control typing and blocklist overrides', () => {

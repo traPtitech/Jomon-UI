@@ -1,5 +1,6 @@
 import type { ApplicationSeed } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
+import type { ApplicationTargetDraft } from '@/features/applicationTarget/entities'
 import type { FileSeed } from '@/features/file/entities'
 import { createFiles } from '@/features/file/services'
 import type { Tag } from '@/features/tag/entities'
@@ -18,10 +19,14 @@ export const useNewApplication = () => {
 
   const isSending = ref(false)
 
-  const application = ref<ApplicationSeed>({
+  type ApplicationForm = Omit<ApplicationSeed, 'targets'> & {
+    targets: ApplicationTargetDraft[]
+  }
+
+  const application = ref<ApplicationForm>({
     createdBy: me.value?.id ?? '',
     title: '',
-    targets: [{ target: '', amount: 0 }],
+    targets: [{ target: '', amount: null }],
     content: '',
     tags: [],
     partition: ''
@@ -43,7 +48,8 @@ export const useNewApplication = () => {
     }
     if (
       application.value.targets.some(
-        target => target.target === '' || target.amount === 0
+        target =>
+          target.target === '' || target.amount === null || target.amount === 0
       )
     ) {
       toast.warning('対象者の選択と金額の入力は必須です')
@@ -65,9 +71,18 @@ export const useNewApplication = () => {
     }
 
     try {
-      const applicationSeedWithNewTags = {
-        ...application.value,
-        tags
+      const normalizedTargets = application.value.targets.map(target => ({
+        target: target.target,
+        amount: target.amount ?? 0
+      }))
+
+      const applicationSeedWithNewTags: ApplicationSeed = {
+        createdBy: application.value.createdBy,
+        title: application.value.title,
+        content: application.value.content,
+        tags,
+        partition: application.value.partition,
+        targets: normalizedTargets
       }
       const res = await createApplication(applicationSeedWithNewTags)
       try {

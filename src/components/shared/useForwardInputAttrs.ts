@@ -9,6 +9,8 @@ type ControlHTMLAttrs<T extends ControlType> = T extends 'textarea'
 
 export interface ForwardInputAttrsOptions<T extends ControlType = 'input'> {
   frameKeys?: string[]
+  frameKeyPrefixes?: string[]
+  frameListenerKeys?: string[]
   blocklistKeys?: string[]
   controlType?: T
 }
@@ -19,17 +21,41 @@ export interface ForwardedInputAttrs<T extends ControlType> {
 }
 
 const listenerPattern = /^on[A-Z]/
-const defaultFrameKeys = ['role', 'tabindex'] as const
+const defaultFrameKeys: readonly string[] = []
+const defaultFrameKeyPrefixes: readonly string[] = []
+const defaultFrameListenerKeys = [
+  'onClick',
+  'onDblclick',
+  'onPointerdown',
+  'onPointerup',
+  'onPointerenter',
+  'onPointerleave',
+  'onPointercancel',
+  'onMousedown',
+  'onMouseup',
+  'onMouseenter',
+  'onMouseleave',
+  'onMousemove',
+  'onTouchstart',
+  'onTouchend'
+] as const
 const defaultBlocklistKeys = ['id', 'value'] as const
 
-const shouldStayOnFrame = (key: string, frameKeySet: Set<string>) =>
-  key.startsWith('data-') || key.startsWith('aria-') || frameKeySet.has(key)
+const shouldStayOnFrame = (
+  key: string,
+  frameKeySet: Set<string>,
+  frameKeyPrefixes: readonly string[]
+) =>
+  frameKeySet.has(key) ||
+  frameKeyPrefixes.some(prefix => key.startsWith(prefix))
 
 export const partitionForwardInputAttrs = <T extends ControlType>(
   attrs: Attrs,
   frameKeySet: Set<string>,
   blocklistSet: Set<string>,
-  controlType: T
+  controlType: T,
+  frameKeyPrefixes: readonly string[] = [],
+  frameListenerSet: Set<string> = new Set(defaultFrameListenerKeys)
 ): ForwardedInputAttrs<T> => {
   void controlType
   const frameEntries: [string, unknown][] = []
@@ -37,11 +63,15 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
 
   Object.entries(attrs).forEach(([key, value]) => {
     if (listenerPattern.test(key)) {
-      controlEntries.push([key, value])
+      if (frameListenerSet.has(key)) {
+        frameEntries.push([key, value])
+      } else {
+        controlEntries.push([key, value])
+      }
       return
     }
 
-    if (shouldStayOnFrame(key, frameKeySet)) {
+    if (shouldStayOnFrame(key, frameKeySet, frameKeyPrefixes)) {
       frameEntries.push([key, value])
       return
     }
@@ -74,6 +104,14 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
     ...defaultFrameKeys,
     ...(options?.frameKeys ?? [])
   ])
+  const frameKeyPrefixes = [
+    ...defaultFrameKeyPrefixes,
+    ...(options?.frameKeyPrefixes ?? [])
+  ]
+  const frameListenerSet = new Set([
+    ...defaultFrameListenerKeys,
+    ...(options?.frameListenerKeys ?? [])
+  ])
   const blocklistSet = new Set([
     ...defaultBlocklistKeys,
     ...(options?.blocklistKeys ?? [])
@@ -93,7 +131,9 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
       baseForwardedAttrs.value,
       frameKeySet,
       blocklistSet,
-      controlType
+      controlType,
+      frameKeyPrefixes,
+      frameListenerSet
     )
   )
 
@@ -106,7 +146,9 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
       baseForwardedAttrs.value,
       frameKeySet,
       finalBlocklist,
-      overrideType ?? (controlType as unknown as K)
+      overrideType ?? (controlType as unknown as K),
+      frameKeyPrefixes,
+      frameListenerSet
     ).controlAttrs
   }
 

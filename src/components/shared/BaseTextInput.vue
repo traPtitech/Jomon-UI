@@ -122,8 +122,7 @@ const handleChange = (event: Event) => {
         :class="[
           'peer w-full border-none bg-transparent px-3 pb-2 ring-0 outline-none not-focus-visible:placeholder:text-transparent',
           label ? 'pt-6' : 'pt-2',
-          readonly || disabled ? 'cursor-not-allowed' : '',
-          'resize-none'
+          readonly || disabled ? 'cursor-not-allowed' : ''
         ]"
         v-bind="textareaAttrs"
         :placeholder="placeholder"

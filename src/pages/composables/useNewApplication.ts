@@ -1,6 +1,9 @@
 import type { ApplicationSeed } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
-import type { ApplicationTargetDraft } from '@/features/applicationTarget/entities'
+import type {
+  ApplicationTarget,
+  ApplicationTargetDraft
+} from '@/features/applicationTarget/entities'
 import type { FileSeed } from '@/features/file/entities'
 import { createFiles } from '@/features/file/services'
 import type { Tag } from '@/features/tag/entities'
@@ -22,6 +25,14 @@ export const useNewApplication = () => {
   type ApplicationForm = Omit<ApplicationSeed, 'targets'> & {
     targets: ApplicationTargetDraft[]
   }
+
+  const hasFilledTargets = (
+    targets: ApplicationTargetDraft[]
+  ): targets is ApplicationTarget[] =>
+    targets.every(
+      target =>
+        target.target !== '' && target.amount !== null && target.amount > 0
+    )
 
   const application = ref<ApplicationForm>({
     createdBy: me.value?.id ?? '',
@@ -46,12 +57,8 @@ export const useNewApplication = () => {
       toast.warning('パーティションは必須です')
       return
     }
-    if (
-      application.value.targets.some(
-        target =>
-          target.target === '' || target.amount === null || target.amount === 0
-      )
-    ) {
+    const { targets } = application.value
+    if (!hasFilledTargets(targets)) {
       toast.warning('対象者の選択と金額の入力は必須です')
       return
     }
@@ -71,18 +78,13 @@ export const useNewApplication = () => {
     }
 
     try {
-      const normalizedTargets = application.value.targets.map(target => ({
-        target: target.target,
-        amount: target.amount ?? 0
-      }))
-
       const applicationSeedWithNewTags: ApplicationSeed = {
         createdBy: application.value.createdBy,
         title: application.value.title,
         content: application.value.content,
         tags,
         partition: application.value.partition,
-        targets: normalizedTargets
+        targets
       }
       const res = await createApplication(applicationSeedWithNewTags)
       try {

@@ -87,6 +87,9 @@ const handleFocusOut = () => {
       <p
         v-if="errorMessage"
         :id="errorMessageId || undefined"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
         class="px-3 pb-2 text-sm text-error-primary">
         {{ errorMessage }}
       </p>

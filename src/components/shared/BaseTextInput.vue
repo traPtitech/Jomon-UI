@@ -47,14 +47,25 @@ const emit = defineEmits<{
 }>()
 
 const attrs = useAttrs()
-const componentClass = computed(() => attrs.class)
+const containerClass = computed(() => attrs.class)
+const containerStyle = computed(() => attrs.style)
 const describedByAttr = computed(
   () => attrs['aria-describedby'] as string | undefined
 )
-const forwardedAttrs = computed(() => {
+const frameAttrs = computed(() => {
   const rest = { ...(attrs as Record<string, unknown>) }
   delete rest.class
+  delete rest.style
   delete rest['aria-describedby']
+  return rest
+})
+const inputAttrs = computed<Record<string, unknown>>(() => {
+  const rest = { ...(attrs as Record<string, unknown>) }
+  delete rest.class
+  delete rest.style
+  delete rest['aria-describedby']
+  delete rest.id
+  delete rest.value
   return rest
 })
 
@@ -109,8 +120,9 @@ const handleChange = (event: Event) => {
     :input-id="inputId"
     :error-message="errorMessage"
     :error-message-id="errorMessageId"
-    :class="componentClass"
-    v-bind="forwardedAttrs">
+    :class="containerClass"
+    :style="containerStyle"
+    v-bind="frameAttrs">
     <template v-if="$slots.default" #prefix>
       <slot />
     </template>
@@ -124,6 +136,7 @@ const handleChange = (event: Event) => {
           readonly || disabled ? 'cursor-not-allowed' : '',
           'resize-none'
         ]"
+        v-bind="inputAttrs"
         :placeholder="placeholder"
         :readonly="readonly"
         :disabled="disabled"
@@ -148,6 +161,7 @@ const handleChange = (event: Event) => {
           label ? 'pt-6' : 'pt-2',
           readonly || disabled ? 'cursor-not-allowed' : ''
         ]"
+        v-bind="inputAttrs"
         :placeholder="placeholder"
         :readonly="readonly"
         :disabled="disabled"

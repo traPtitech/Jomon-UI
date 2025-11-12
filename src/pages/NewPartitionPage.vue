@@ -2,9 +2,13 @@
 import { useNewPartition } from './composables/useNewPartition'
 import BaseInput from '@/components/shared/BaseInput.vue'
 import InputCheckBox from '@/components/shared/InputCheckBox.vue'
+import SearchSelect from '@/components/shared/SearchSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
+import { usePartitionGroupStore } from '@/features/partitionGroup/store'
 import { useUserStore } from '@/features/user/store'
 import { ref, watch } from 'vue'
+
+const { partitionGroupOptions } = usePartitionGroupStore()
 
 const { isUserFetched, fetchUsers } = useUserStore()
 
@@ -33,6 +37,14 @@ watch(isUnspecifiedBudget, newVal => {
   </div>
   <form class="flex flex-col gap-6">
     <BaseInput v-model="partition.name" label="パーティション名" required />
+    <div>
+      <SearchSelect
+        v-model="partition.partitionGroupId"
+        class="w-full"
+        :options="partitionGroupOptions"
+        required
+        label="パーティショングループ" />
+    </div>
     <div>
       <BaseInput
         v-model="partition.budget"

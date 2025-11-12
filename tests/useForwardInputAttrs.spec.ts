@@ -84,4 +84,27 @@ describe('partitionForwardInputAttrs', () => {
     expect(result.controlAttrs).toHaveProperty('rows')
     expect(result.controlAttrs).not.toHaveProperty('placeholder')
   })
+
+  it('accepts lowercase aliases like enterkeyhint', () => {
+    const result = partitionForwardInputAttrs(
+      buildAttrs({ enterkeyhint: 'search' }),
+      baseFrameSet,
+      baseBlocklistSet,
+      'input'
+    )
+
+    expect(result.controlAttrs).toHaveProperty('enterKeyHint', 'search')
+  })
+
+  it('prefers the first canonical key when duplicates exist', () => {
+    const result = partitionForwardInputAttrs(
+      buildAttrs({ PLACEHOLDER: 'value', rows: 3 }),
+      baseFrameSet,
+      baseBlocklistSet,
+      'textarea'
+    )
+
+    expect(result.controlAttrs).toHaveProperty('placeholder', 'value')
+    expect(result.controlAttrs).toHaveProperty('rows', 3)
+  })
 })

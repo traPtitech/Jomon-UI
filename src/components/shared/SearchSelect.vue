@@ -70,6 +70,9 @@ const getPlaceholderText = computed(() => {
 
 // Handle click outside
 const handleClickOutside = (event: MouseEvent) => {
+  if (typeof Node === 'undefined') {
+    return
+  }
   const target = event.target
   if (!(target instanceof Node)) {
     return

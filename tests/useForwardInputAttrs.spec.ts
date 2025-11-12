@@ -1,10 +1,35 @@
+import { __setAttrAliasMapForTesting } from '../src/components/shared/runtimeAttrMap'
 import { partitionForwardInputAttrs } from '../src/components/shared/useForwardInputAttrs'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 
 type Attrs = Record<string, unknown>
 
 const baseFrameSet = new Set<string>()
 const baseBlocklistSet = new Set(['id', 'value'])
+
+const toKebab = (value: string) =>
+  value.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
+
+const buildAliasMap = (keys: string[]) => {
+  const map: Record<string, string> = Object.create(null)
+  keys.forEach(key => {
+    map[key] = key
+    map[key.toLowerCase()] = key
+    map[toKebab(key)] = key
+  })
+  return map
+}
+
+beforeEach(() => {
+  __setAttrAliasMapForTesting(
+    'input',
+    buildAliasMap(['placeholder', 'enterKeyHint', 'maxlength', 'min', 'max'])
+  )
+  __setAttrAliasMapForTesting(
+    'textarea',
+    buildAliasMap(['placeholder', 'rows'])
+  )
+})
 
 const buildAttrs = (overrides: Attrs = {}): Attrs => ({
   'data-testid': 'frame',

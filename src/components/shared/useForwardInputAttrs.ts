@@ -1,12 +1,14 @@
+import {
+  getAttrAliasMap,
+  isAriaAttributeKey,
+  isDataAttributeKey,
+  normalizeAttributeKey,
+  type ControlType
+} from './runtimeAttrMap'
 import { computed, useAttrs } from 'vue'
-import type {
-  AriaAttributes,
-  InputHTMLAttributes,
-  TextareaHTMLAttributes
-} from 'vue'
+import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'vue'
 
 type Attrs = Record<string, unknown>
-type ControlType = 'input' | 'textarea'
 
 type BaseControlAttrs<T extends ControlType> = T extends 'textarea'
   ? Partial<Omit<TextareaHTMLAttributes, 'id' | 'value'>>
@@ -53,180 +55,15 @@ const defaultFrameListenerKeys = [
 ] satisfies readonly string[]
 const defaultBlocklistKeys = ['id', 'value'] satisfies readonly string[]
 
-const htmlAttributeKeys = [
-  'innerHTML',
-  'class',
-  'style',
-  'accesskey',
-  'contenteditable',
-  'contextmenu',
-  'dir',
-  'draggable',
-  'hidden',
-  'id',
-  'inert',
-  'lang',
-  'placeholder',
-  'spellcheck',
-  'tabindex',
-  'title',
-  'translate',
-  'radiogroup',
-  'role',
-  'about',
-  'datatype',
-  'inlist',
-  'prefix',
-  'property',
-  'resource',
-  'typeof',
-  'vocab',
-  'autocapitalize',
-  'autocorrect',
-  'autosave',
-  'color',
-  'itemprop',
-  'itemscope',
-  'itemtype',
-  'itemid',
-  'itemref',
-  'results',
-  'security',
-  'unselectable',
-  'inputmode',
-  'is'
-] as const satisfies readonly string[]
-
-const inputSpecificAttributeKeys = [
-  'accept',
-  'alt',
-  'autocomplete',
-  'autofocus',
-  'capture',
-  'checked',
-  'crossorigin',
-  'disabled',
-  'enterKeyHint',
-  'form',
-  'formaction',
-  'formenctype',
-  'formmethod',
-  'formnovalidate',
-  'formtarget',
-  'height',
-  'indeterminate',
-  'list',
-  'max',
-  'maxlength',
-  'min',
-  'minlength',
-  'multiple',
-  'name',
-  'pattern',
-  'readonly',
-  'required',
-  'size',
-  'src',
-  'step',
-  'type',
-  'width'
-] as const satisfies readonly string[]
-
-const textareaSpecificAttributeKeys = [
-  'autocomplete',
-  'autofocus',
-  'cols',
-  'dirname',
-  'disabled',
-  'form',
-  'maxlength',
-  'minlength',
-  'name',
-  'placeholder',
-  'readonly',
-  'required',
-  'rows',
-  'wrap'
-] as const satisfies readonly string[]
-
-const inputAttributeSet = new Set<string>([
-  ...htmlAttributeKeys,
-  ...inputSpecificAttributeKeys
-])
-const textareaAttributeSet = new Set<string>([
-  ...htmlAttributeKeys,
-  ...textareaSpecificAttributeKeys
-])
-
-type HtmlAttributeKey = (typeof htmlAttributeKeys)[number]
-type InputSpecificAttributeKey = (typeof inputSpecificAttributeKeys)[number]
-type TextareaSpecificAttributeKey =
-  (typeof textareaSpecificAttributeKeys)[number]
-type DataAttributeKey = `data-${string}`
-type AriaAttributeKey = Extract<keyof AriaAttributes, `aria-${string}`>
-
-interface ControlAttrKeyMap {
-  input:
-    | HtmlAttributeKey
-    | InputSpecificAttributeKey
-    | AriaAttributeKey
-    | DataAttributeKey
-  textarea:
-    | HtmlAttributeKey
-    | TextareaSpecificAttributeKey
-    | AriaAttributeKey
-    | DataAttributeKey
-}
-
-const createAttributeAliasMap = (keys: readonly string[]) =>
-  keys.reduce<Record<string, string>>((map, key) => {
-    const lowerKey = key.toLowerCase()
-    if (lowerKey === key) {
-      return map
-    }
-    if (!(lowerKey in map)) {
-      map[lowerKey] = key
-    }
-    return map
-  }, {})
-
-const attributeKeyAliases: Record<string, string> = {
-  ...createAttributeAliasMap(htmlAttributeKeys),
-  ...createAttributeAliasMap(inputSpecificAttributeKeys),
-  ...createAttributeAliasMap(textareaSpecificAttributeKeys)
-}
-
-const isDataAttributeKey = (key: string): key is DataAttributeKey =>
-  key.startsWith('data-')
-
-const isAriaAttributeKey = (key: string): key is AriaAttributeKey =>
-  key.startsWith('aria-')
-
-const getControlAttrKey = <T extends ControlType>(
-  key: string,
-  controlType: T
-): ControlAttrKeyMap[T] | null => {
-  const lowerKey = normalizeAttributeKey(key)
-  const canonicalKey = attributeKeyAliases[lowerKey] ?? key
-  if (isDataAttributeKey(lowerKey) || isAriaAttributeKey(lowerKey)) {
-    const finalKey = isDataAttributeKey(lowerKey) ? lowerKey : canonicalKey
-    return finalKey as ControlAttrKeyMap[T]
-  }
-  if (controlType === 'input') {
-    return inputAttributeSet.has(canonicalKey)
-      ? (canonicalKey as ControlAttrKeyMap[T])
-      : null
-  }
-  return textareaAttributeSet.has(canonicalKey)
-    ? (canonicalKey as ControlAttrKeyMap[T])
-    : null
-}
-
-const normalizeAttributeKey = (key: string) => key.toLowerCase()
+const toKebabCase = (value: string) =>
+  value
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
+    .toLowerCase()
 
 const assignControlAttr = <T extends ControlType>(
   target: ControlHTMLAttrs<T>,
-  key: ControlAttrKeyMap[T],
+  key: string,
   value: unknown
 ) => {
   ;(target as Record<string, unknown>)[key] = value
@@ -240,6 +77,21 @@ const shouldStayOnFrame = (
   frameKeySet.has(key) ||
   frameKeyPrefixes.some(prefix => key.startsWith(prefix))
 
+const getControlAttrKey = (
+  key: string,
+  aliasMap: Record<string, string | undefined>
+): string => {
+  const lowerKey = normalizeAttributeKey(key)
+  if (isDataAttributeKey(lowerKey)) {
+    return lowerKey
+  }
+  if (isAriaAttributeKey(lowerKey)) {
+    return key
+  }
+  const kebabKey = toKebabCase(key)
+  return aliasMap[lowerKey] ?? aliasMap[kebabKey] ?? aliasMap[key] ?? key
+}
+
 export const partitionForwardInputAttrs = <T extends ControlType>(
   attrs: Attrs,
   frameKeySet: Set<string>,
@@ -250,8 +102,10 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
 ): ForwardedInputAttrs<T> => {
   const frameEntries: [string, unknown][] = []
   const controlAttrs = {} as ControlHTMLAttrs<T>
+  const aliasMap = getAttrAliasMap(controlType)
 
   Object.entries(attrs).forEach(([key, value]) => {
+    const normalizedKey = normalizeAttributeKey(key)
     if (listenerPattern.test(key)) {
       if (frameListenerSet.has(key)) {
         frameEntries.push([key, value])
@@ -266,17 +120,12 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
       return
     }
 
-    if (blocklistSet.has(key)) {
+    if (blocklistSet.has(normalizedKey)) {
       return
     }
 
-    const controlKey = getControlAttrKey(key, controlType)
-    if (controlKey) {
-      assignControlAttr(controlAttrs, controlKey, value)
-      return
-    }
-
-    frameEntries.push([key, value])
+    const controlKey = getControlAttrKey(key, aliasMap)
+    assignControlAttr(controlAttrs, controlKey, value)
   })
 
   return {
@@ -309,10 +158,11 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
     ...defaultFrameListenerKeys,
     ...(options?.frameListenerKeys ?? [])
   ])
-  const blocklistSet = new Set([
-    ...defaultBlocklistKeys,
-    ...(options?.blocklistKeys ?? [])
-  ])
+  const blocklistSet = new Set(
+    [...defaultBlocklistKeys, ...(options?.blocklistKeys ?? [])].map(
+      normalizeAttributeKey
+    )
+  )
   const controlType: T = options?.controlType ?? ('input' as T)
 
   const baseForwardedAttrs = computed<Attrs>(() => {
@@ -341,7 +191,10 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
     overrideType?: K,
     extraBlocklistKeys: string[] = []
   ): ControlHTMLAttrs<K> => {
-    const finalBlocklist = new Set([...blocklistSet, ...extraBlocklistKeys])
+    const finalBlocklist = new Set(blocklistSet)
+    extraBlocklistKeys.forEach(key =>
+      finalBlocklist.add(normalizeAttributeKey(key))
+    )
     const targetType = (overrideType ?? controlType) as K
     return partitionForwardInputAttrs(
       baseForwardedAttrs.value,

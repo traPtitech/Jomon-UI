@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import PartitionBudget from '@/components/partitionDetail/PartitionBudget.vue'
+import PartitionGroup from '@/components/partitionDetail/PartitionGroup.vue'
 import PartitionName from '@/components/partitionDetail/PartitionName.vue'
 import { usePartitionInformation } from '@/components/partitionDetail/composables/usePartitionInformation'
 import { usePartitionStore } from '@/features/partition/store'
@@ -28,6 +29,13 @@ if (!isUserFetched.value) {
       <PartitionName
         class="grow"
         :is-edit-mode="editMode === 'name'"
+        :is-sending="isSending"
+        @change-edit-mode="changeEditMode($event)"
+        @finish-editing="finishEditing" />
+    </div>
+    <div class="flex grow flex-col gap-6">
+      <PartitionGroup
+        :is-edit-mode="editMode === 'partitionGroup'"
         :is-sending="isSending"
         @change-edit-mode="changeEditMode($event)"
         @finish-editing="finishEditing" />

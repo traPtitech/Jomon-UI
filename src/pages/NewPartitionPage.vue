@@ -44,7 +44,7 @@ watch(isUnspecifiedBudget, newVal => {
     <BaseInput v-model="partition.name" label="パーティション名" required />
     <div>
       <SearchSelect
-        v-model="partition.partitionGroupId"
+        v-model="partition.parentPartitionGroupId"
         class="w-full"
         :options="partitionGroupOptions"
         required

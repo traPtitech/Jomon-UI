@@ -4,7 +4,7 @@ import { http, HttpResponse } from 'msw'
 
 export const mockPartitionGroup: PartitionGroup = {
   id: 'group-1',
-  name: 'テストパーティショングループ',
+  name: 'mock-group',
   parent_partition_group: null,
   depth: 1,
   created_at: '2024-01-01T00:00:00Z',

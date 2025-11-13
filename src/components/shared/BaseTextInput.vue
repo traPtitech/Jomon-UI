@@ -105,8 +105,8 @@ const handleChange = (event: Event) => {
       <slot />
     </template>
     <template #default="{ inputProps }">
-      <textarea
-        v-if="textarea"
+      <component
+        :is="textarea ? 'textarea' : 'input'"
         :id="inputId"
         :class="[
           inputProps.class,
@@ -114,37 +114,12 @@ const handleChange = (event: Event) => {
           label ? 'pt-6' : 'pt-2',
           readonly || disabled ? 'cursor-not-allowed' : ''
         ]"
-        v-bind="textareaAttrs"
+        v-bind="textarea ? textareaAttrs : inputAttrs"
         :placeholder="placeholder"
         :readonly="readonly"
         :disabled="disabled"
-        :required="isFieldRequired"
-        :aria-required="isFieldRequired ? 'true' : undefined"
-        :aria-invalid="errorMessage ? 'true' : undefined"
-        :aria-describedby="describedBy"
-        :rows="rows"
-        :autocomplete="autocomplete"
-        :inputmode="inputmode"
-        :value="model"
-        @input="handleInput"
-        @focus="handleFocus"
-        @blur="handleBlur"
-        @keydown="handleKeydown"
-        @change="handleChange" />
-      <input
-        v-else
-        :id="inputId"
-        :class="[
-          inputProps.class,
-          'w-full border-none bg-transparent px-3 pb-2 ring-0 outline-none not-focus-visible:placeholder:text-transparent',
-          label ? 'pt-6' : 'pt-2',
-          readonly || disabled ? 'cursor-not-allowed' : ''
-        ]"
-        v-bind="inputAttrs"
-        :placeholder="placeholder"
-        :readonly="readonly"
-        :disabled="disabled"
-        :type="type"
+        :type="textarea ? undefined : type"
+        :rows="textarea ? rows : undefined"
         :required="isFieldRequired"
         :aria-required="isFieldRequired ? 'true' : undefined"
         :aria-invalid="errorMessage ? 'true' : undefined"

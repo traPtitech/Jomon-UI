@@ -103,6 +103,55 @@ const getControlAttrKey = (
   return aliasMap[lowerKey] ?? aliasMap[kebabKey] ?? aliasMap[key] ?? key
 }
 
+interface ProcessAttributeContext<T extends ControlType> {
+  frameEntries: [string, unknown][]
+  controlAttrs: ControlHTMLAttrs<T>
+  frameKeySet: Set<string>
+  blocklistSet: Set<string>
+  frameKeyPrefixes: readonly string[]
+  frameListenerSet: Set<string>
+  aliasMap: Record<string, string | undefined>
+}
+
+const processAttribute = <T extends ControlType>(
+  [key, value]: [string, unknown],
+  {
+    frameEntries,
+    controlAttrs,
+    frameKeySet,
+    blocklistSet,
+    frameKeyPrefixes,
+    frameListenerSet,
+    aliasMap
+  }: ProcessAttributeContext<T>
+) => {
+  const normalizedKey = normalizeAttributeKey(key)
+  if (listenerPattern.test(key)) {
+    const normalizedListenerKey = stripListenerModifiers(key)
+    if (
+      frameListenerSet.has(key) ||
+      frameListenerSet.has(normalizedListenerKey)
+    ) {
+      frameEntries.push([key, value])
+    } else {
+      assignControlAttr(controlAttrs, key, value)
+    }
+    return
+  }
+
+  if (shouldStayOnFrame(key, frameKeySet, frameKeyPrefixes)) {
+    frameEntries.push([key, value])
+    return
+  }
+
+  if (blocklistSet.has(normalizedKey)) {
+    return
+  }
+
+  const controlKey = getControlAttrKey(key, aliasMap)
+  assignControlAttr(controlAttrs, controlKey, value)
+}
+
 export const partitionForwardInputAttrs = <T extends ControlType>(
   attrs: Attrs,
   frameKeySet: Set<string>,
@@ -115,32 +164,18 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
   const controlAttrs = {} as ControlHTMLAttrs<T>
   const aliasMap = getAttrAliasMap(controlType)
 
-  Object.entries(attrs).forEach(([key, value]) => {
-    const normalizedKey = normalizeAttributeKey(key)
-    if (listenerPattern.test(key)) {
-      const normalizedListenerKey = stripListenerModifiers(key)
-      if (
-        frameListenerSet.has(key) ||
-        frameListenerSet.has(normalizedListenerKey)
-      ) {
-        frameEntries.push([key, value])
-      } else {
-        ;(controlAttrs as Record<string, unknown>)[key] = value
-      }
-      return
-    }
+  const context: ProcessAttributeContext<T> = {
+    frameEntries,
+    controlAttrs,
+    frameKeySet,
+    blocklistSet,
+    frameKeyPrefixes,
+    frameListenerSet,
+    aliasMap
+  }
 
-    if (shouldStayOnFrame(key, frameKeySet, frameKeyPrefixes)) {
-      frameEntries.push([key, value])
-      return
-    }
-
-    if (blocklistSet.has(normalizedKey)) {
-      return
-    }
-
-    const controlKey = getControlAttrKey(key, aliasMap)
-    assignControlAttr(controlAttrs, controlKey, value)
+  Object.entries(attrs).forEach(entry => {
+    processAttribute(entry, context)
   })
 
   return {

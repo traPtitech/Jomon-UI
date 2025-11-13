@@ -15,7 +15,6 @@ interface Props {
   min?: number
   max?: number
   step?: number
-  allowEmpty?: boolean
   inputmode?: 'decimal' | 'numeric'
   id?: string
   errorMessage?: string
@@ -27,7 +26,6 @@ const props = withDefaults(defineProps<Props>(), {
   readonly: false,
   disabled: false,
   step: 1,
-  allowEmpty: true,
   inputmode: 'decimal',
   errorMessage: ''
 })
@@ -62,7 +60,7 @@ const handleInput = (event: Event) => {
   const rawValue = target.value
 
   if (rawValue === '') {
-    model.value = props.allowEmpty ? null : 0
+    model.value = null
     emit('input', event)
     return
   }

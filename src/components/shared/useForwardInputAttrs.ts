@@ -35,6 +35,11 @@ export interface ForwardedInputAttrs<T extends ControlType> {
   controlAttrs: ControlHTMLAttrs<T>
 }
 
+export interface PartitionedForwardInputAttrs<T extends ControlType>
+  extends ForwardedInputAttrs<T> {
+  describedBy?: string
+}
+
 const listenerPattern = /^on[A-Z]/
 const listenerModifierPattern =
   /(Once|Capture|Passive|Self|Ctrl|Shift|Alt|Meta|Stop|Prevent|Left|Middle|Right|Exact)+$/
@@ -77,11 +82,14 @@ const stripListenerModifiers = (key: string): string =>
 
 const shouldStayOnFrame = (
   key: string,
+  normalizedKey: string,
   frameKeySet: Set<string>,
-  frameKeyPrefixes: readonly string[]
+  normalizedFrameKeySet: Set<string>,
+  normalizedFrameKeyPrefixes: readonly string[]
 ) =>
   frameKeySet.has(key) ||
-  frameKeyPrefixes.some(prefix => key.startsWith(prefix))
+  normalizedFrameKeySet.has(normalizedKey) ||
+  normalizedFrameKeyPrefixes.some(prefix => normalizedKey.startsWith(prefix))
 
 const getControlAttrKey = (
   key: string,
@@ -105,13 +113,27 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
   controlType: T,
   frameKeyPrefixes: readonly string[] = [],
   frameListenerSet: Set<string> = new Set(defaultFrameListenerKeys)
-): ForwardedInputAttrs<T> => {
+): PartitionedForwardInputAttrs<T> => {
   const frameEntries: [string, unknown][] = []
   const controlAttrs = {} as ControlHTMLAttrs<T>
   const aliasMap = getAttrAliasMap(controlType)
+  const normalizedFrameKeySet =
+    frameKeySet.size > 0
+      ? new Set(Array.from(frameKeySet).map(normalizeAttributeKey))
+      : frameKeySet
+  const normalizedFrameKeyPrefixes =
+    frameKeyPrefixes.length > 0
+      ? frameKeyPrefixes.map(normalizeAttributeKey)
+      : frameKeyPrefixes
+  let describedBy: string | undefined
 
   const processAttribute = ([key, value]: [string, unknown]) => {
     if (matchesDescribedByKey(key)) {
+      if (typeof value === 'string') {
+        describedBy ??= value
+        return
+      }
+      assignControlAttr(controlAttrs, describedByAttrName, value)
       return
     }
 
@@ -129,7 +151,15 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
       return
     }
 
-    if (shouldStayOnFrame(key, frameKeySet, frameKeyPrefixes)) {
+    if (
+      shouldStayOnFrame(
+        key,
+        normalizedKey,
+        frameKeySet,
+        normalizedFrameKeySet,
+        normalizedFrameKeyPrefixes
+      )
+    ) {
       frameEntries.push([key, value])
       return
     }
@@ -146,7 +176,8 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
 
   return {
     frameAttrs: Object.fromEntries(frameEntries),
-    controlAttrs
+    controlAttrs,
+    describedBy
   }
 }
 
@@ -154,23 +185,18 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
   options?: ForwardInputAttrsOptions<T>
 ) => {
   const attrs = useAttrs()
-  const attrsEntries = computed(() => Object.entries(attrs))
 
-  const describedByAttr = computed(() => {
-    for (const [key, value] of attrsEntries.value) {
-      if (matchesDescribedByKey(key) && typeof value === 'string') {
-        return value
-      }
-    }
-    return undefined
-  })
-
-  const frameKeySet = new Set([
+  const frameKeySet = new Set<string>()
+  const frameKeyCandidates = [
     'class',
     'style',
     ...defaultFrameKeys,
     ...(options?.frameKeys ?? [])
-  ])
+  ]
+  frameKeyCandidates.forEach(key => {
+    frameKeySet.add(key)
+    frameKeySet.add(normalizeAttributeKey(key))
+  })
   const frameKeyPrefixes = [
     ...defaultFrameKeyPrefixes,
     ...(options?.frameKeyPrefixes ?? [])
@@ -186,7 +212,7 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
   )
   const controlType: T = options?.controlType ?? ('input' as T)
 
-  const forwardedAttrs = computed(() =>
+  const forwardedAttrs = computed<PartitionedForwardInputAttrs<T>>(() =>
     partitionForwardInputAttrs(
       attrs,
       frameKeySet,
@@ -197,10 +223,15 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
     )
   )
 
+  const describedByAttr = computed(() => forwardedAttrs.value.describedBy)
+
   const getControlAttrs = <K extends ControlType = T>(
     overrideType?: K,
     extraBlocklistKeys: string[] = []
   ): ControlHTMLAttrs<K> => {
+    if (!overrideType && extraBlocklistKeys.length === 0) {
+      return forwardedAttrs.value.controlAttrs as ControlHTMLAttrs<K>
+    }
     const finalBlocklist = new Set(blocklistSet)
     extraBlocklistKeys.forEach(key =>
       finalBlocklist.add(normalizeAttributeKey(key))

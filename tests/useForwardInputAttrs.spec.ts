@@ -72,6 +72,35 @@ describe('partitionForwardInputAttrs', () => {
     expect(result.controlAttrs).toHaveProperty('onCompositionstart')
     expect(result.controlAttrs).not.toHaveProperty('id')
     expect(result.controlAttrs).not.toHaveProperty('value')
+    expect(result.describedBy).toBeUndefined()
+  })
+
+  it('extracts string aria-describedby values and ignores duplicates', () => {
+    const result = partitionForwardInputAttrs(
+      buildAttrs({
+        'aria-describedby': 'helper-text',
+        ariaDescribedby: 'fallback'
+      }),
+      baseFrameSet,
+      baseBlocklistSet,
+      'input'
+    )
+
+    expect(result.describedBy).toBe('helper-text')
+    expect(result.controlAttrs).not.toHaveProperty('aria-describedby')
+  })
+
+  it('keeps non-string aria-describedby values on the control', () => {
+    const nonStringValue = ['id1', 'id2']
+    const result = partitionForwardInputAttrs(
+      buildAttrs({ ariaDescribedby: nonStringValue }),
+      baseFrameSet,
+      baseBlocklistSet,
+      'input'
+    )
+
+    expect(result.describedBy).toBeUndefined()
+    expect(result.controlAttrs['aria-describedby']).toEqual(nonStringValue)
   })
 
   it('respects custom frame key overrides', () => {

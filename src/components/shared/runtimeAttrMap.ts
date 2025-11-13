@@ -135,7 +135,7 @@ const buildAliasMap = (controlType: ControlType): AttrAliasMap | null => {
 
 export const getAttrAliasMap = (controlType: ControlType): AttrAliasMap => {
   const cached = aliasCache[controlType]
-  if (cached && Object.keys(cached).length > 0) {
+  if (cached) {
     return cached
   }
   const built = buildAliasMap(controlType)

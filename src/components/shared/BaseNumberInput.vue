@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseInputFrame from './BaseInputFrame.vue'
 import { useBaseInput } from './composables/useBaseInput'
-import { useForwardInputAttrs } from './useForwardInputAttrs'
+import { useForwardInputAttrs } from './composables/useForwardInputAttrs'
 import { computed } from 'vue'
 
 defineOptions({ inheritAttrs: false })

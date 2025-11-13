@@ -1,8 +1,8 @@
-import { __setAttrAliasMapForTesting } from '../src/components/shared/runtimeAttrMap'
+import { __setAttrAliasMapForTesting } from '../src/components/shared/composables/runtimeAttrMap'
 import {
   partitionForwardInputAttrs,
   __useForwardInputAttrsTestUtils
-} from '../src/components/shared/useForwardInputAttrs'
+} from '../src/components/shared/composables/useForwardInputAttrs'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 type Attrs = Record<string, unknown>

@@ -97,7 +97,7 @@ const getControlAttrKey = (
     return lowerKey
   }
   if (isAriaAttributeKey(lowerKey)) {
-    return key
+    return lowerKey
   }
   const kebabKey = toKebabCase(key)
   return aliasMap[lowerKey] ?? aliasMap[kebabKey] ?? aliasMap[key] ?? key

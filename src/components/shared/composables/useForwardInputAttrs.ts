@@ -10,11 +10,15 @@ import {
 import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'vue'
 import { computed, useAttrs } from 'vue'
 
-type Attrs = Record<string, unknown>
+type Attrs = Readonly<Record<string, unknown>>
 
-type BaseControlAttrs<T extends ControlType> = T extends 'textarea'
-  ? Partial<Omit<TextareaHTMLAttributes, 'id' | 'value'>>
-  : Partial<Omit<InputHTMLAttributes, 'id' | 'value'>>
+type NativeControlAttrs<T extends ControlType> = T extends 'textarea'
+  ? TextareaHTMLAttributes
+  : InputHTMLAttributes
+
+type BaseControlAttrs<T extends ControlType> = Partial<
+  Omit<NativeControlAttrs<T>, 'id' | 'value'>
+>
 
 type DataAttributeValue = string | number | boolean | null | undefined
 
@@ -81,12 +85,27 @@ const buildFrameKeySet = (keys: readonly string[]) => {
 
 const describedByAttrName = 'aria-describedby'
 
+/**
+ * 与えられたキーが aria-describedby を表すかどうかを判定する。
+ *
+ * 対応する入力例:
+ * - "aria-describedby"        // 推奨されるケバブケース
+ * - "ariaDescribedby"         // camelCase / 大文字小文字違い
+ *
+ * 判定には
+ * - normalizeAttributeKey (小文字化)
+ * - toKebabCase
+ * を使い、実質的に "aria-describedby" かどうかを見ている。
+ *
+ * 他の aria-* 属性はここでは扱わない。
+ * aria-describedby だけを特別扱いし、複数値の集約などを行うためのヘルパ。
+ */
 const matchesDescribedByKey = (key: string) =>
   normalizeAttributeKey(key) === describedByAttrName ||
   toKebabCase(key) === describedByAttrName
 
 const stripListenerModifiers = (key: string): string =>
-  listenerPattern.test(key) ? key.replace(listenerModifierPattern, '') : key
+  key.replace(listenerModifierPattern, '')
 
 const shouldStayOnFrame = (
   key: string,
@@ -98,6 +117,22 @@ const shouldStayOnFrame = (
   frameKeySet.has(normalizedKey) ||
   normalizedFrameKeyPrefixes.some(prefix => normalizedKey.startsWith(prefix))
 
+/**
+ * テンプレート上の属性名から、コントロール要素に渡す属性名を決定する。
+ *
+ * 前提:
+ * - aliasMap は runtimeAttrMap.registerAlias() で構築されている
+ * - aliasMap には以下のキーで canonical 名が登録されている:
+ *   - 小文字化されたキー
+ *   - canonical そのもの
+ *   - canonical を kebab-case にしたもの
+ *
+ * 動作:
+ * - data-* / aria-* はそのままの属性名で返す
+ * - それ以外は aliasMap を使って canonical なプロパティ名に揃える
+ *   (例: "maxlength" / "max-length" / "maxLength" → "maxLength")
+ * - aliasMap に存在しないキーは、そのままの key を返す
+ */
 const getControlAttrKey = (key: string, aliasMap: AttrAliasMap): string => {
   const lowerKey = normalizeAttributeKey(key)
   if (isDataAttributeKey(lowerKey)) {
@@ -110,15 +145,45 @@ const getControlAttrKey = (key: string, aliasMap: AttrAliasMap): string => {
   return aliasMap[lowerKey] ?? aliasMap[kebabKey] ?? aliasMap[key] ?? key
 }
 
+const createDefaultFrameListenerSet = () =>
+  new Set(defaultFrameListenerKeys.map(stripListenerModifiers))
+
+const normalizeDescribedByValue = (value: unknown): string | undefined => {
+  if (typeof value === 'string') {
+    const trimmed = value.trim()
+    return trimmed === '' ? undefined : trimmed
+  }
+
+  if (Array.isArray(value)) {
+    const ids = value
+      .filter((v): v is string => typeof v === 'string')
+      .map(v => v.trim())
+      .filter(v => v.length > 0)
+
+    if (ids.length === 0) {
+      return undefined
+    }
+
+    return ids.join(' ')
+  }
+
+  if (import.meta.env.DEV && import.meta.env.MODE !== 'test') {
+    console.warn(
+      '[useForwardInputAttrs] aria-describedby expects string or string[], got:',
+      value
+    )
+  }
+
+  return undefined
+}
+
 export const partitionForwardInputAttrs = <T extends ControlType>(
   attrs: Attrs,
   frameKeySet: Set<string>,
   blocklistSet: Set<string>,
   controlType: T,
-  frameKeyPrefixes: readonly string[] = [],
-  frameListenerSet: Set<string> = new Set(
-    defaultFrameListenerKeys.map(stripListenerModifiers)
-  )
+  frameKeyPrefixes: readonly string[],
+  frameListenerSet: Set<string>
 ): PartitionedForwardInputAttrs<T> => {
   const frameEntries: [string, unknown][] = []
   const controlAttrs = {} as ControlHTMLAttrs<T>
@@ -128,12 +193,17 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
 
   for (const [key, value] of Object.entries(attrs)) {
     if (matchesDescribedByKey(key)) {
-      if (typeof value === 'string') {
-        describedBy = describedBy ? `${describedBy} ${value}` : value
+      const normalized = normalizeDescribedByValue(value)
+
+      if (normalized !== undefined) {
+        // 既存 describedBy と結合
+        describedBy = describedBy ? `${describedBy} ${normalized}` : normalized
+
+        // control 側にも同じ値を反映
         assignControlAttr(controlAttrs, describedByAttrName, describedBy)
-      } else {
-        assignControlAttr(controlAttrs, describedByAttrName, value)
       }
+
+      // 変換できなかった値は無視
       continue
     }
 
@@ -251,5 +321,6 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
 
 export const __useForwardInputAttrsTestUtils = {
   stripListenerModifiers,
-  matchesDescribedByKey
+  matchesDescribedByKey,
+  createDefaultFrameListenerSet
 }

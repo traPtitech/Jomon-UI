@@ -46,11 +46,30 @@ export const toKebabCase = (value: string) =>
     .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
     .toLowerCase()
 
-const normalizeKey = (key: string) => key.toLowerCase()
+export const normalizeAttributeKey = (key: string) => key.toLowerCase()
 
+/**
+ * 属性名エイリアス用マップにエントリーを登録するヘルパ。
+ *
+ * - `key` はエイリアスとして渡される任意の文字列
+ * - `canonical` は最終的に使いたい正規化済みプロパティ名
+ *
+ * この関数は getControlAttrKey とペアで使うことを前提にしており、
+ * 次のキーで canonical 名へのマッピングを登録する:
+ *
+ * - `key` を小文字化したもの  (例: "maxlength" → "maxLength")
+ * - `canonical` そのもの       (例: "maxLength" → "maxLength")
+ * - `canonical` を kebab-case にしたもの (例: "maxLength" → "max-length")
+ *
+ * これにより、テンプレート上の属性名が
+ * - 小文字
+ * - camelCase
+ * - kebab-case
+ * のいずれで書かれていても、同じ canonical 名に解決される。
+ */
 const registerAlias = (map: AttrAliasMap, key: string, canonical: string) => {
   if (!key) return
-  const lower = normalizeKey(key)
+  const lower = normalizeAttributeKey(key)
   if (!(lower in map)) {
     map[lower] = canonical
   }
@@ -147,7 +166,6 @@ export const getAttrAliasMap = (controlType: ControlType) => {
   return finalMap
 }
 
-export const normalizeAttributeKey = normalizeKey
 export const isDataAttributeKey = (key: string): boolean =>
   key.startsWith('data-')
 export const isAriaAttributeKey = (key: string): boolean =>

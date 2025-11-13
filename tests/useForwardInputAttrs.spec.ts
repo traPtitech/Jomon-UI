@@ -10,8 +10,11 @@ type Attrs = Record<string, unknown>
 const baseFrameSet = new Set<string>()
 const baseBlocklistSet = new Set(['id', 'value'])
 
-const { stripListenerModifiers, matchesDescribedByKey } =
-  __useForwardInputAttrsTestUtils
+const {
+  stripListenerModifiers,
+  matchesDescribedByKey,
+  createDefaultFrameListenerSet
+} = __useForwardInputAttrsTestUtils
 
 const toKebab = (value: string) =>
   value.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
@@ -56,7 +59,9 @@ describe('partitionForwardInputAttrs', () => {
       buildAttrs(),
       baseFrameSet,
       baseBlocklistSet,
-      'input'
+      'input',
+      [],
+      createDefaultFrameListenerSet()
     )
 
     expect(result.frameAttrs).toEqual({})
@@ -79,24 +84,42 @@ describe('partitionForwardInputAttrs', () => {
       }),
       baseFrameSet,
       baseBlocklistSet,
-      'input'
+      'input',
+      [],
+      createDefaultFrameListenerSet()
     )
 
     expect(result.describedBy).toBe('helper-text fallback')
     expect(result.controlAttrs['aria-describedby']).toBe('helper-text fallback')
   })
 
-  it('keeps non-string aria-describedby values on the control', () => {
+  it('normalizes string[] aria-describedby values to space-separated string', () => {
     const nonStringValue = ['id1', 'id2']
     const result = partitionForwardInputAttrs(
       buildAttrs({ ariaDescribedby: nonStringValue }),
       baseFrameSet,
       baseBlocklistSet,
-      'input'
+      'input',
+      [],
+      createDefaultFrameListenerSet()
+    )
+
+    expect(result.describedBy).toBe('id1 id2')
+    expect(result.controlAttrs['aria-describedby']).toBe('id1 id2')
+  })
+
+  it('ignores non-string aria-describedby values that cannot be normalized', () => {
+    const result = partitionForwardInputAttrs(
+      buildAttrs({ ariaDescribedby: 123 }),
+      baseFrameSet,
+      baseBlocklistSet,
+      'input',
+      [],
+      createDefaultFrameListenerSet()
     )
 
     expect(result.describedBy).toBeUndefined()
-    expect(result.controlAttrs['aria-describedby']).toEqual(nonStringValue)
+    expect(result.controlAttrs['aria-describedby']).toBeUndefined()
   })
 
   it('respects custom frame key overrides', () => {
@@ -104,7 +127,9 @@ describe('partitionForwardInputAttrs', () => {
       buildAttrs({ title: 'Heading' }),
       new Set(['title']),
       baseBlocklistSet,
-      'input'
+      'input',
+      [],
+      createDefaultFrameListenerSet()
     )
     expect(result.frameAttrs.title).toBe('Heading')
     expect(result.controlAttrs).not.toHaveProperty('title')
@@ -116,7 +141,8 @@ describe('partitionForwardInputAttrs', () => {
       baseFrameSet,
       baseBlocklistSet,
       'input',
-      ['data-']
+      ['data-'],
+      createDefaultFrameListenerSet()
     )
     expect(result.frameAttrs['data-testid']).toBe('frame')
     expect(result.controlAttrs).not.toHaveProperty('data-testid')
@@ -127,7 +153,9 @@ describe('partitionForwardInputAttrs', () => {
       { ...buildAttrs(), onClick: () => undefined },
       baseFrameSet,
       baseBlocklistSet,
-      'input'
+      'input',
+      [],
+      createDefaultFrameListenerSet()
     )
     expect(result.frameAttrs).toHaveProperty('onClick')
     expect(result.controlAttrs).not.toHaveProperty('onClick')
@@ -138,7 +166,9 @@ describe('partitionForwardInputAttrs', () => {
       { ...buildAttrs(), onPointerdownCaptureOnce: () => undefined },
       baseFrameSet,
       baseBlocklistSet,
-      'input'
+      'input',
+      [],
+      createDefaultFrameListenerSet()
     )
     expect(result.frameAttrs).toHaveProperty('onPointerdownCaptureOnce')
     expect(result.controlAttrs).not.toHaveProperty('onPointerdownCaptureOnce')
@@ -150,7 +180,9 @@ describe('partitionForwardInputAttrs', () => {
       buildAttrs({ rows: 5 }),
       baseFrameSet,
       blocklist,
-      'textarea'
+      'textarea',
+      [],
+      createDefaultFrameListenerSet()
     )
     expect(result.controlAttrs).toHaveProperty('rows')
     expect(result.controlAttrs).not.toHaveProperty('placeholder')
@@ -161,7 +193,9 @@ describe('partitionForwardInputAttrs', () => {
       buildAttrs({ enterkeyhint: 'search' }),
       baseFrameSet,
       baseBlocklistSet,
-      'input'
+      'input',
+      [],
+      createDefaultFrameListenerSet()
     )
 
     expect(result.controlAttrs).toHaveProperty('enterKeyHint', 'search')
@@ -172,7 +206,9 @@ describe('partitionForwardInputAttrs', () => {
       buildAttrs({ PLACEHOLDER: 'value', rows: 3 }),
       baseFrameSet,
       baseBlocklistSet,
-      'textarea'
+      'textarea',
+      [],
+      createDefaultFrameListenerSet()
     )
 
     expect(result.controlAttrs).toHaveProperty('placeholder', 'value')

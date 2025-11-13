@@ -37,7 +37,7 @@ const manualAliases: Record<string, string> = {
   inputmode: 'inputMode'
 }
 
-const toKebabCase = (value: string) =>
+export const toKebabCase = (value: string) =>
   value
     .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
     .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
@@ -72,6 +72,31 @@ const isCallable = (target: unknown): target is () => void =>
 const collectPrototypeNames = (proto: object | null | undefined) =>
   proto ? Object.getOwnPropertyNames(proto) : []
 
+const getPrototypes = (controlType: ControlType): object[] => {
+  const basePrototypes: (object | undefined)[] = []
+
+  if (typeof Element !== 'undefined') {
+    basePrototypes.push(Element.prototype)
+  }
+
+  if (typeof HTMLElement !== 'undefined') {
+    basePrototypes.push(HTMLElement.prototype)
+  }
+
+  const controlSpecificPrototype =
+    controlType === 'input'
+      ? typeof HTMLInputElement === 'undefined'
+        ? undefined
+        : HTMLInputElement.prototype
+      : typeof HTMLTextAreaElement === 'undefined'
+        ? undefined
+        : HTMLTextAreaElement.prototype
+
+  basePrototypes.push(controlSpecificPrototype)
+
+  return basePrototypes.filter((proto): proto is object => Boolean(proto))
+}
+
 const buildAliasMap = (controlType: ControlType): AttrAliasMap | null => {
   if (typeof window === 'undefined' || typeof document === 'undefined') {
     // NOTE:
@@ -86,24 +111,7 @@ const buildAliasMap = (controlType: ControlType): AttrAliasMap | null => {
   )
   const map: AttrAliasMap = Object.create(null)
 
-  const elementProto =
-    typeof Element === 'undefined' ? undefined : Element.prototype
-  const htmlElementProto =
-    typeof HTMLElement === 'undefined' ? undefined : HTMLElement.prototype
-  const inputProto =
-    typeof HTMLInputElement === 'undefined'
-      ? undefined
-      : HTMLInputElement.prototype
-  const textareaProto =
-    typeof HTMLTextAreaElement === 'undefined'
-      ? undefined
-      : HTMLTextAreaElement.prototype
-
-  const prototypes = [
-    elementProto,
-    htmlElementProto,
-    controlType === 'input' ? inputProto : textareaProto
-  ].filter(Boolean) as object[]
+  const prototypes = getPrototypes(controlType)
 
   const elementRecord = element as unknown as Record<string, unknown>
 

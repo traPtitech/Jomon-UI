@@ -125,6 +125,10 @@ const processAttribute = <T extends ControlType>(
     aliasMap
   }: ProcessAttributeContext<T>
 ) => {
+  if (matchesDescribedByKey(key)) {
+    return
+  }
+
   const normalizedKey = normalizeAttributeKey(key)
   if (listenerPattern.test(key)) {
     const normalizedListenerKey = stripListenerModifiers(key)
@@ -220,20 +224,9 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
   )
   const controlType: T = options?.controlType ?? ('input' as T)
 
-  const baseForwardedAttrs = computed<Attrs>(() => {
-    const rest: Attrs = {}
-    attrsEntries.value.forEach(([key, value]) => {
-      if (matchesDescribedByKey(key)) {
-        return
-      }
-      rest[key] = value
-    })
-    return rest
-  })
-
   const forwardedAttrs = computed(() =>
     partitionForwardInputAttrs(
-      baseForwardedAttrs.value,
+      attrs,
       frameKeySet,
       blocklistSet,
       controlType,
@@ -252,7 +245,7 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
     )
     const targetType = (overrideType ?? controlType) as K
     return partitionForwardInputAttrs(
-      baseForwardedAttrs.value,
+      attrs,
       frameKeySet,
       finalBlocklist,
       targetType,

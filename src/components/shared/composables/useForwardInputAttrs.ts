@@ -7,7 +7,11 @@ import {
   type AttrAliasMap,
   type ControlType
 } from './runtimeAttrMap'
-import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'vue'
+import type {
+  ComputedRef,
+  InputHTMLAttributes,
+  TextareaHTMLAttributes
+} from 'vue'
 import { computed, useAttrs } from 'vue'
 
 type Attrs = Readonly<Record<string, unknown>>
@@ -27,12 +31,22 @@ type DataAttributeRecord = Record<`data-${string}`, DataAttributeValue>
 export type ControlHTMLAttrs<T extends ControlType> = BaseControlAttrs<T> &
   Partial<DataAttributeRecord>
 
-export interface ForwardInputAttrsOptions<T extends ControlType = 'input'> {
+export interface ForwardInputAttrsOptions {
   frameKeys?: string[]
   frameKeyPrefixes?: string[]
   frameListenerKeys?: string[]
   blocklistKeys?: string[]
-  controlType?: T
+  controlType?: ControlType
+}
+
+interface UseForwardInputAttrsReturn<T extends ControlType> {
+  describedByAttr: ComputedRef<string | undefined>
+  frameAttrs: ComputedRef<Attrs>
+  inputAttrs: ComputedRef<ControlHTMLAttrs<T>>
+  getControlAttrs: <K extends ControlType = T>(
+    overrideType?: K,
+    extraBlocklistKeys?: string[]
+  ) => ControlHTMLAttrs<K>
 }
 
 export interface ForwardedInputAttrs<T extends ControlType> {
@@ -107,6 +121,9 @@ const matchesDescribedByKey = (key: string) =>
 const stripListenerModifiers = (key: string): string =>
   key.replace(listenerModifierPattern, '')
 
+const normalizeListenerKey = (key: string) =>
+  normalizeAttributeKey(stripListenerModifiers(key))
+
 const shouldStayOnFrame = (
   key: string,
   normalizedKey: string,
@@ -146,7 +163,7 @@ const getControlAttrKey = (key: string, aliasMap: AttrAliasMap): string => {
 }
 
 const createDefaultFrameListenerSet = () =>
-  new Set(defaultFrameListenerKeys.map(stripListenerModifiers))
+  new Set(defaultFrameListenerKeys.map(normalizeListenerKey))
 
 const normalizeDescribedByValue = (value: unknown): string | undefined => {
   if (value == null) {
@@ -213,7 +230,7 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
     const normalizedKey = normalizeAttributeKey(key)
 
     if (listenerPattern.test(key)) {
-      const normalizedListenerKey = stripListenerModifiers(key)
+      const normalizedListenerKey = normalizeListenerKey(key)
       if (frameListenerSet.has(normalizedListenerKey)) {
         frameEntries.push([key, value])
       } else {
@@ -249,9 +266,15 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
   }
 }
 
-export const useForwardInputAttrs = <T extends ControlType = 'input'>(
-  options?: ForwardInputAttrsOptions<T>
-) => {
+export function useForwardInputAttrs(
+  options?: ForwardInputAttrsOptions & { controlType?: 'input' }
+): UseForwardInputAttrsReturn<'input'>
+export function useForwardInputAttrs(
+  options: ForwardInputAttrsOptions & { controlType: 'textarea' }
+): UseForwardInputAttrsReturn<'textarea'>
+export function useForwardInputAttrs(
+  options?: ForwardInputAttrsOptions
+): UseForwardInputAttrsReturn<ControlType> {
   const attrs = useAttrs()
 
   const frameKeySet = buildFrameKeySet([
@@ -265,7 +288,7 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
 
   const frameListenerSet = new Set(
     [...defaultFrameListenerKeys, ...(options?.frameListenerKeys ?? [])].map(
-      stripListenerModifiers
+      normalizeListenerKey
     )
   )
 
@@ -275,9 +298,9 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
     )
   )
 
-  const controlType: T = options?.controlType ?? ('input' as T)
+  const controlType = options?.controlType ?? 'input'
 
-  const runPartition = <K extends ControlType = T>(
+  const runPartition = <K extends ControlType = ControlType>(
     overrideType?: K,
     overrideBlocklist?: Set<string>
   ): PartitionedForwardInputAttrs<K> =>
@@ -290,13 +313,11 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
       frameListenerSet
     )
 
-  const forwardedAttrs = computed<PartitionedForwardInputAttrs<T>>(() =>
-    runPartition()
-  )
+  const forwardedAttrs = computed(() => runPartition(controlType))
 
   const describedByAttr = computed(() => forwardedAttrs.value.describedBy)
 
-  const getControlAttrs = <K extends ControlType = T>(
+  const getControlAttrs = <K extends ControlType = ControlType>(
     overrideType?: K,
     extraBlocklistKeys: string[] = []
   ): ControlHTMLAttrs<K> => {
@@ -307,11 +328,14 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
     extraBlocklistKeys.forEach(key =>
       finalBlocklist.add(normalizeAttributeKey(key))
     )
-    return runPartition(overrideType, finalBlocklist).controlAttrs
+
+    const finalType = (overrideType ?? controlType) as K
+
+    return runPartition(finalType, finalBlocklist).controlAttrs
   }
 
   const frameAttrs = computed<Attrs>(() => forwardedAttrs.value.frameAttrs)
-  const inputAttrs = computed<ControlHTMLAttrs<T>>(
+  const inputAttrs = computed<ControlHTMLAttrs<ControlType>>(
     () => forwardedAttrs.value.controlAttrs
   )
 

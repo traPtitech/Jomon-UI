@@ -6,7 +6,7 @@ type AliasCache = Partial<Record<ControlType, AttrAliasMap>>
 
 const aliasCache: AliasCache = {}
 
-const denyList = new Set([
+const blocklist = new Set([
   'attributes',
   'childElementCount',
   'children',
@@ -24,7 +24,7 @@ const denyList = new Set([
   'previousElementSibling',
   'nextElementSibling',
   'style',
-  'tabStop',
+  'tabIndex',
   'tagName',
   'textContent'
 ])
@@ -145,7 +145,7 @@ const buildAliasMap = (controlType: ControlType): AttrAliasMap | null => {
   prototypes.forEach(proto => {
     collectPrototypeNames(proto).forEach(prop => {
       if (!prop || prop.startsWith('on')) return
-      if (denyList.has(prop)) return
+      if (blocklist.has(prop)) return
       try {
         const value = elementRecord[prop]
         if (isCallable(value)) return
@@ -172,9 +172,9 @@ export const getAttrAliasMap = (controlType: ControlType) => {
 }
 
 export const isDataAttributeKey = (key: string): boolean =>
-  key.startsWith('data-')
+  normalizeAttributeKey(key).startsWith('data-')
 export const isAriaAttributeKey = (key: string): boolean =>
-  key.startsWith('aria-')
+  normalizeAttributeKey(key).startsWith('aria-')
 
 export const __setAttrAliasMapForTesting = (
   controlType: ControlType,

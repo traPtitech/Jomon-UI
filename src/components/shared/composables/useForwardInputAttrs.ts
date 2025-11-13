@@ -149,6 +149,10 @@ const createDefaultFrameListenerSet = () =>
   new Set(defaultFrameListenerKeys.map(stripListenerModifiers))
 
 const normalizeDescribedByValue = (value: unknown): string | undefined => {
+  if (value == null) {
+    return undefined
+  }
+
   if (typeof value === 'string') {
     const trimmed = value.trim()
     return trimmed === '' ? undefined : trimmed
@@ -182,13 +186,12 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
   frameKeySet: Set<string>,
   blocklistSet: Set<string>,
   controlType: T,
-  frameKeyPrefixes: readonly string[],
+  normalizedFrameKeyPrefixes: readonly string[],
   frameListenerSet: Set<string>
 ): PartitionedForwardInputAttrs<T> => {
   const frameEntries: [string, unknown][] = []
   const controlAttrs = {} as ControlHTMLAttrs<T>
   const aliasMap = getAttrAliasMap(controlType)
-  const normalizedFrameKeyPrefixes = frameKeyPrefixes.map(normalizeAttributeKey)
   let describedBy: string | undefined
 
   for (const [key, value] of Object.entries(attrs)) {
@@ -258,6 +261,7 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
   ])
 
   const frameKeyPrefixes = options?.frameKeyPrefixes ?? []
+  const normalizedFrameKeyPrefixes = frameKeyPrefixes.map(normalizeAttributeKey)
 
   const frameListenerSet = new Set(
     [...defaultFrameListenerKeys, ...(options?.frameListenerKeys ?? [])].map(
@@ -282,7 +286,7 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
       frameKeySet,
       overrideBlocklist ?? blocklistSet,
       (overrideType ?? controlType) as K,
-      frameKeyPrefixes,
+      normalizedFrameKeyPrefixes,
       frameListenerSet
     )
 

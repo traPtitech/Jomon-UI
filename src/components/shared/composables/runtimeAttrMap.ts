@@ -125,6 +125,11 @@ const buildAliasMap = (controlType: ControlType): AttrAliasMap | null => {
     // この実装はクライアント専用のDOMプロトタイプ列挙に依存している。
     // 現状のJomon UIはSSRを想定していないため、サーバー環境では空マップを返す実装となっている。
     // 将来的にSSRを導入する場合は追加の実装が必要。
+    if (import.meta.env.DEV) {
+      console.warn(
+        '[runtimeAttrMap] getAttrAliasMap was called in a non-DOM environment; returning empty alias map.'
+      )
+    }
     return null
   }
 

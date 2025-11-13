@@ -64,7 +64,7 @@ const handleFocusOut = () => {
     @focusout="handleFocusOut">
     <slot name="prefix" />
     <div class="relative w-full">
-      <slot />
+      <slot :input-props="{ class: 'peer' }" />
       <label
         v-if="label"
         :for="inputId"

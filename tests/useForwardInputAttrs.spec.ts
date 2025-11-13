@@ -10,6 +10,10 @@ type Attrs = Record<string, unknown>
 const baseFrameSet = new Set<string>()
 const baseBlocklistSet = new Set(['id', 'value'])
 
+if (!__useForwardInputAttrsTestUtils) {
+  throw new Error('Test utils are unavailable outside test mode')
+}
+
 const { stripListenerModifiers, matchesDescribedByKey } =
   __useForwardInputAttrsTestUtils
 

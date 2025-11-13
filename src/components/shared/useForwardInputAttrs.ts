@@ -35,22 +35,8 @@ export interface ForwardedInputAttrs<T extends ControlType> {
 }
 
 const listenerPattern = /^on[A-Z]/
-const listenerModifierSuffixes = [
-  'Once',
-  'Capture',
-  'Passive',
-  'Self',
-  'Ctrl',
-  'Shift',
-  'Alt',
-  'Meta',
-  'Stop',
-  'Prevent',
-  'Left',
-  'Middle',
-  'Right',
-  'Exact'
-] as const
+const listenerModifierPattern =
+  /(Once|Capture|Passive|Self|Ctrl|Shift|Alt|Meta|Stop|Prevent|Left|Middle|Right|Exact)+$/
 const defaultFrameKeys: readonly string[] = []
 const defaultFrameKeyPrefixes: readonly string[] = []
 const defaultFrameListenerKeys = [
@@ -91,24 +77,8 @@ const matchesDescribedByKey = (key: string) =>
   normalizeAttributeKey(key) === describedByAttrName ||
   toKebabCase(key) === describedByAttrName
 
-const stripListenerModifiers = (key: string): string => {
-  if (!listenerPattern.test(key)) {
-    return key
-  }
-  let normalizedKey = key
-  let didStrip = true
-  while (didStrip) {
-    didStrip = false
-    for (const suffix of listenerModifierSuffixes) {
-      if (normalizedKey.endsWith(suffix)) {
-        normalizedKey = normalizedKey.slice(0, -suffix.length)
-        didStrip = true
-        break
-      }
-    }
-  }
-  return normalizedKey
-}
+const stripListenerModifiers = (key: string): string =>
+  listenerPattern.test(key) ? key.replace(listenerModifierPattern, '') : key
 
 const shouldStayOnFrame = (
   key: string,
@@ -183,9 +153,10 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
   options?: ForwardInputAttrsOptions<T>
 ) => {
   const attrs = useAttrs()
+  const attrsEntries = computed(() => Object.entries(attrs))
 
   const describedByAttr = computed(() => {
-    for (const [key, value] of Object.entries(attrs)) {
+    for (const [key, value] of attrsEntries.value) {
       if (matchesDescribedByKey(key) && typeof value === 'string') {
         return value
       }
@@ -216,7 +187,7 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
 
   const baseForwardedAttrs = computed<Attrs>(() => {
     const rest: Attrs = {}
-    Object.entries(attrs).forEach(([key, value]) => {
+    attrsEntries.value.forEach(([key, value]) => {
       if (matchesDescribedByKey(key)) {
         return
       }
@@ -268,7 +239,17 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
   }
 }
 
-export const __useForwardInputAttrsTestUtils = {
-  stripListenerModifiers,
-  matchesDescribedByKey
-}
+const globalProcess = (
+  globalThis as {
+    process?: { env?: Record<string, string | undefined> }
+  }
+).process
+
+const isTestEnv = !!globalProcess && globalProcess.env?.VITEST === 'true'
+
+export const __useForwardInputAttrsTestUtils = isTestEnv
+  ? {
+      stripListenerModifiers,
+      matchesDescribedByKey
+    }
+  : undefined

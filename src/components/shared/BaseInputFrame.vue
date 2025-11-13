@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useAttrs } from 'vue'
+import { computed, ref } from 'vue'
 
 interface Props {
   label: string
@@ -25,19 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
   errorMessageId: ''
 })
 
-const attrs = useAttrs()
 const isFocused = ref(false)
-
-const forwardedAttrs = computed(() => {
-  const rest: Record<string, unknown> = {}
-  Object.entries(attrs).forEach(([key, value]) => {
-    if (key === 'class') {
-      return
-    }
-    rest[key] = value
-  })
-  return rest
-})
 
 const isRequired = computed(
   () => props.required && !(props.readonly || props.disabled)
@@ -70,12 +58,10 @@ const handleFocusOut = () => {
       'flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none',
       readonly || disabled
         ? 'cursor-not-allowed bg-surface-secondary'
-        : 'bg-white',
-      attrs.class
+        : 'bg-white'
     ]"
     @focusin="handleFocusIn"
-    @focusout="handleFocusOut"
-    v-bind="forwardedAttrs">
+    @focusout="handleFocusOut">
     <slot name="prefix" />
     <div class="relative w-full">
       <slot />

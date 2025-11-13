@@ -71,6 +71,23 @@ const assignControlAttr = <T extends ControlType>(
   ;(target as Record<string, unknown>)[key] = value
 }
 
+const buildFrameKeySet = (
+  baseKeys: readonly string[],
+  extraKeys: readonly string[] = []
+) => {
+  const set = new Set<string>()
+  ;[...baseKeys, ...extraKeys].forEach(key => {
+    set.add(key)
+    set.add(normalizeAttributeKey(key))
+  })
+  return set
+}
+
+const buildFrameListenerSet = (
+  baseKeys: readonly string[],
+  extraKeys: readonly string[] = []
+) => new Set([...baseKeys, ...extraKeys].map(stripListenerModifiers))
+
 const describedByAttrName = 'aria-describedby'
 
 const matchesDescribedByKey = (key: string) =>
@@ -112,7 +129,9 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
   blocklistSet: Set<string>,
   controlType: T,
   frameKeyPrefixes: readonly string[] = [],
-  frameListenerSet: Set<string> = new Set(defaultFrameListenerKeys)
+  frameListenerSet: Set<string> = new Set(
+    defaultFrameListenerKeys.map(stripListenerModifiers)
+  )
 ): PartitionedForwardInputAttrs<T> => {
   const frameEntries: [string, unknown][] = []
   const controlAttrs = {} as ControlHTMLAttrs<T>
@@ -130,7 +149,8 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
   const processAttribute = ([key, value]: [string, unknown]) => {
     if (matchesDescribedByKey(key)) {
       if (typeof value === 'string') {
-        describedBy ??= value
+        describedBy = describedBy ? `${describedBy} ${value}` : value
+        assignControlAttr(controlAttrs, describedByAttrName, describedBy)
         return
       }
       assignControlAttr(controlAttrs, describedByAttrName, value)
@@ -140,10 +160,7 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
     const normalizedKey = normalizeAttributeKey(key)
     if (listenerPattern.test(key)) {
       const normalizedListenerKey = stripListenerModifiers(key)
-      if (
-        frameListenerSet.has(key) ||
-        frameListenerSet.has(normalizedListenerKey)
-      ) {
+      if (frameListenerSet.has(normalizedListenerKey)) {
         frameEntries.push([key, value])
       } else {
         assignControlAttr(controlAttrs, key, value)
@@ -186,25 +203,18 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
 ) => {
   const attrs = useAttrs()
 
-  const frameKeySet = new Set<string>()
-  const frameKeyCandidates = [
-    'class',
-    'style',
-    ...defaultFrameKeys,
-    ...(options?.frameKeys ?? [])
-  ]
-  frameKeyCandidates.forEach(key => {
-    frameKeySet.add(key)
-    frameKeySet.add(normalizeAttributeKey(key))
-  })
+  const frameKeySet = buildFrameKeySet(
+    ['class', 'style', ...defaultFrameKeys],
+    options?.frameKeys ?? []
+  )
   const frameKeyPrefixes = [
     ...defaultFrameKeyPrefixes,
     ...(options?.frameKeyPrefixes ?? [])
   ]
-  const frameListenerSet = new Set([
-    ...defaultFrameListenerKeys,
-    ...(options?.frameListenerKeys ?? [])
-  ])
+  const frameListenerSet = buildFrameListenerSet(
+    defaultFrameListenerKeys,
+    options?.frameListenerKeys ?? []
+  )
   const blocklistSet = new Set(
     [...defaultBlocklistKeys, ...(options?.blocklistKeys ?? [])].map(
       normalizeAttributeKey
@@ -212,15 +222,21 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
   )
   const controlType: T = options?.controlType ?? ('input' as T)
 
-  const forwardedAttrs = computed<PartitionedForwardInputAttrs<T>>(() =>
+  const runPartition = <K extends ControlType = T>(
+    overrideType?: K,
+    overrideBlocklist?: Set<string>
+  ): PartitionedForwardInputAttrs<K> =>
     partitionForwardInputAttrs(
       attrs,
       frameKeySet,
-      blocklistSet,
-      controlType,
+      overrideBlocklist ?? blocklistSet,
+      (overrideType ?? controlType) as K,
       frameKeyPrefixes,
       frameListenerSet
     )
+
+  const forwardedAttrs = computed<PartitionedForwardInputAttrs<T>>(() =>
+    runPartition()
   )
 
   const describedByAttr = computed(() => forwardedAttrs.value.describedBy)
@@ -236,15 +252,7 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
     extraBlocklistKeys.forEach(key =>
       finalBlocklist.add(normalizeAttributeKey(key))
     )
-    const targetType = (overrideType ?? controlType) as K
-    return partitionForwardInputAttrs(
-      attrs,
-      frameKeySet,
-      finalBlocklist,
-      targetType,
-      frameKeyPrefixes,
-      frameListenerSet
-    ).controlAttrs
+    return runPartition(overrideType, finalBlocklist).controlAttrs
   }
 
   const frameAttrs = computed<Attrs>(() => forwardedAttrs.value.frameAttrs)
@@ -260,17 +268,7 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
   }
 }
 
-const globalProcess = (
-  globalThis as {
-    process?: { env?: Record<string, string | undefined> }
-  }
-).process
-
-const isTestEnv = !!globalProcess && globalProcess.env?.VITEST === 'true'
-
-export const __useForwardInputAttrsTestUtils = isTestEnv
-  ? {
-      stripListenerModifiers,
-      matchesDescribedByKey
-    }
-  : undefined
+export const __useForwardInputAttrsTestUtils = {
+  stripListenerModifiers,
+  matchesDescribedByKey
+}

@@ -10,10 +10,6 @@ type Attrs = Record<string, unknown>
 const baseFrameSet = new Set<string>()
 const baseBlocklistSet = new Set(['id', 'value'])
 
-if (!__useForwardInputAttrsTestUtils) {
-  throw new Error('Test utils are unavailable outside test mode')
-}
-
 const { stripListenerModifiers, matchesDescribedByKey } =
   __useForwardInputAttrsTestUtils
 
@@ -75,7 +71,7 @@ describe('partitionForwardInputAttrs', () => {
     expect(result.describedBy).toBeUndefined()
   })
 
-  it('extracts string aria-describedby values and ignores duplicates', () => {
+  it('aggregates string aria-describedby values and mirrors them on control attrs', () => {
     const result = partitionForwardInputAttrs(
       buildAttrs({
         'aria-describedby': 'helper-text',
@@ -86,8 +82,8 @@ describe('partitionForwardInputAttrs', () => {
       'input'
     )
 
-    expect(result.describedBy).toBe('helper-text')
-    expect(result.controlAttrs).not.toHaveProperty('aria-describedby')
+    expect(result.describedBy).toBe('helper-text fallback')
+    expect(result.controlAttrs['aria-describedby']).toBe('helper-text fallback')
   })
 
   it('keeps non-string aria-describedby values on the control', () => {

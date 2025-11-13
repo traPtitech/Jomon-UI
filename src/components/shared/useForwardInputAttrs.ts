@@ -5,8 +5,8 @@ import {
   normalizeAttributeKey,
   type ControlType
 } from './runtimeAttrMap'
-import { computed, useAttrs } from 'vue'
 import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'vue'
+import { computed, useAttrs } from 'vue'
 
 type Attrs = Record<string, unknown>
 

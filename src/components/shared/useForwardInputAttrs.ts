@@ -136,10 +136,9 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
   const frameEntries: [string, unknown][] = []
   const controlAttrs = {} as ControlHTMLAttrs<T>
   const aliasMap = getAttrAliasMap(controlType)
-  const normalizedFrameKeySet =
-    frameKeySet.size > 0
-      ? new Set(Array.from(frameKeySet).map(normalizeAttributeKey))
-      : frameKeySet
+  const normalizedFrameKeySet = new Set(
+    Array.from(frameKeySet).map(normalizeAttributeKey)
+  )
   const normalizedFrameKeyPrefixes =
     frameKeyPrefixes.length > 0
       ? frameKeyPrefixes.map(normalizeAttributeKey)

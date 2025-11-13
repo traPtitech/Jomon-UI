@@ -35,6 +35,22 @@ export interface ForwardedInputAttrs<T extends ControlType> {
 }
 
 const listenerPattern = /^on[A-Z]/
+const listenerModifierSuffixes = [
+  'Once',
+  'Capture',
+  'Passive',
+  'Self',
+  'Ctrl',
+  'Shift',
+  'Alt',
+  'Meta',
+  'Stop',
+  'Prevent',
+  'Left',
+  'Middle',
+  'Right',
+  'Exact'
+] as const
 const defaultFrameKeys: readonly string[] = []
 const defaultFrameKeyPrefixes: readonly string[] = []
 const defaultFrameListenerKeys = [
@@ -67,6 +83,31 @@ const assignControlAttr = <T extends ControlType>(
   value: unknown
 ) => {
   ;(target as Record<string, unknown>)[key] = value
+}
+
+const describedByAttrName = 'aria-describedby'
+
+const matchesDescribedByKey = (key: string) =>
+  normalizeAttributeKey(key) === describedByAttrName ||
+  toKebabCase(key) === describedByAttrName
+
+const stripListenerModifiers = (key: string): string => {
+  if (!listenerPattern.test(key)) {
+    return key
+  }
+  let normalizedKey = key
+  let didStrip = true
+  while (didStrip) {
+    didStrip = false
+    for (const suffix of listenerModifierSuffixes) {
+      if (normalizedKey.endsWith(suffix)) {
+        normalizedKey = normalizedKey.slice(0, -suffix.length)
+        didStrip = true
+        break
+      }
+    }
+  }
+  return normalizedKey
 }
 
 const shouldStayOnFrame = (
@@ -107,7 +148,11 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
   Object.entries(attrs).forEach(([key, value]) => {
     const normalizedKey = normalizeAttributeKey(key)
     if (listenerPattern.test(key)) {
-      if (frameListenerSet.has(key)) {
+      const normalizedListenerKey = stripListenerModifiers(key)
+      if (
+        frameListenerSet.has(key) ||
+        frameListenerSet.has(normalizedListenerKey)
+      ) {
         frameEntries.push([key, value])
       } else {
         ;(controlAttrs as Record<string, unknown>)[key] = value
@@ -140,8 +185,12 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
   const attrs = useAttrs()
 
   const describedByAttr = computed(() => {
-    const value = attrs['aria-describedby']
-    return typeof value === 'string' ? value : undefined
+    for (const [key, value] of Object.entries(attrs)) {
+      if (matchesDescribedByKey(key) && typeof value === 'string') {
+        return value
+      }
+    }
+    return undefined
   })
 
   const frameKeySet = new Set([
@@ -168,7 +217,7 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
   const baseForwardedAttrs = computed<Attrs>(() => {
     const rest: Attrs = {}
     Object.entries(attrs).forEach(([key, value]) => {
-      if (key === 'aria-describedby') {
+      if (matchesDescribedByKey(key)) {
         return
       }
       rest[key] = value
@@ -217,4 +266,9 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
     inputAttrs,
     getControlAttrs
   }
+}
+
+export const __useForwardInputAttrsTestUtils = {
+  stripListenerModifiers,
+  matchesDescribedByKey
 }

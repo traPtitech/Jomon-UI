@@ -1,11 +1,17 @@
 import { __setAttrAliasMapForTesting } from '../src/components/shared/runtimeAttrMap'
-import { partitionForwardInputAttrs } from '../src/components/shared/useForwardInputAttrs'
+import {
+  partitionForwardInputAttrs,
+  __useForwardInputAttrsTestUtils
+} from '../src/components/shared/useForwardInputAttrs'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 type Attrs = Record<string, unknown>
 
 const baseFrameSet = new Set<string>()
 const baseBlocklistSet = new Set(['id', 'value'])
+
+const { stripListenerModifiers, matchesDescribedByKey } =
+  __useForwardInputAttrsTestUtils
 
 const toKebab = (value: string) =>
   value.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
@@ -98,6 +104,17 @@ describe('partitionForwardInputAttrs', () => {
     expect(result.controlAttrs).not.toHaveProperty('onClick')
   })
 
+  it('keeps pointer/mouse listeners with modifiers on frame', () => {
+    const result = partitionForwardInputAttrs(
+      { ...buildAttrs(), onPointerdownCaptureOnce: () => undefined },
+      baseFrameSet,
+      baseBlocklistSet,
+      'input'
+    )
+    expect(result.frameAttrs).toHaveProperty('onPointerdownCaptureOnce')
+    expect(result.controlAttrs).not.toHaveProperty('onPointerdownCaptureOnce')
+  })
+
   it('supports textarea control typing and blocklist overrides', () => {
     const blocklist = new Set(['id', 'value', 'placeholder'])
     const result = partitionForwardInputAttrs(
@@ -131,5 +148,18 @@ describe('partitionForwardInputAttrs', () => {
 
     expect(result.controlAttrs).toHaveProperty('placeholder', 'value')
     expect(result.controlAttrs).toHaveProperty('rows', 3)
+  })
+})
+
+describe('useForwardInputAttrs test utilities', () => {
+  it('strips known listener modifiers', () => {
+    expect(stripListenerModifiers('onClickOnceCapturePassive')).toBe('onClick')
+    expect(stripListenerModifiers('onPointerdown')).toBe('onPointerdown')
+  })
+
+  it('matches aria-describedby regardless of casing', () => {
+    expect(matchesDescribedByKey('aria-describedby')).toBe(true)
+    expect(matchesDescribedByKey('ariaDescribedby')).toBe(true)
+    expect(matchesDescribedByKey('aria-label')).toBe(false)
   })
 })

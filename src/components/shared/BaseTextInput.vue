@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import BaseInputFrame from './BaseInputFrame.vue'
+import { useBaseInput } from './composables/useBaseInput'
 import { useForwardInputAttrs } from './useForwardInputAttrs'
-import { computed, useId } from 'vue'
+import { computed } from 'vue'
 
 defineOptions({ inheritAttrs: false })
 
@@ -47,36 +48,16 @@ const emit = defineEmits<{
   (e: 'input' | 'change', value: Event): void
 }>()
 
-const {
-  containerClass,
-  containerStyle,
-  describedByAttr,
-  frameAttrs,
-  inputAttrs,
-  getControlAttrs
-} = useForwardInputAttrs()
+const { describedByAttr, frameAttrs, inputAttrs, getControlAttrs } =
+  useForwardInputAttrs()
 
 const textareaAttrs = computed(() => getControlAttrs('textarea'))
 
-const generatedId = useId()
-const inputId = computed(() => props.id ?? generatedId)
+const { inputId, isFieldRequired, errorMessageId, describedBy } = useBaseInput(
+  props,
+  describedByAttr
+)
 const hasValue = computed(() => model.value !== '')
-const isFieldRequired = computed(
-  () => props.required && !(props.readonly || props.disabled)
-)
-const errorMessageId = computed(() =>
-  props.errorMessage ? `${inputId.value}-error` : undefined
-)
-const describedBy = computed(() => {
-  const ids: string[] = []
-  if (typeof describedByAttr.value === 'string' && describedByAttr.value) {
-    ids.push(describedByAttr.value)
-  }
-  if (errorMessageId.value) {
-    ids.push(errorMessageId.value)
-  }
-  return ids.length ? ids.join(' ') : undefined
-})
 
 const handleInput = (event: Event) => {
   const target = event.target
@@ -119,8 +100,6 @@ const handleChange = (event: Event) => {
     :input-id="inputId"
     :error-message="errorMessage"
     :error-message-id="errorMessageId"
-    :class="containerClass"
-    :style="containerStyle"
     v-bind="frameAttrs">
     <template v-if="$slots.default" #prefix>
       <slot />

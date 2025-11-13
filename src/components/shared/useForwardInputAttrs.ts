@@ -139,14 +139,14 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
 ) => {
   const attrs = useAttrs()
 
-  const containerClass = computed(() => attrs.class)
-  const containerStyle = computed(() => attrs.style)
   const describedByAttr = computed(() => {
     const value = attrs['aria-describedby']
     return typeof value === 'string' ? value : undefined
   })
 
   const frameKeySet = new Set([
+    'class',
+    'style',
     ...defaultFrameKeys,
     ...(options?.frameKeys ?? [])
   ])
@@ -168,7 +168,7 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
   const baseForwardedAttrs = computed<Attrs>(() => {
     const rest: Attrs = {}
     Object.entries(attrs).forEach(([key, value]) => {
-      if (key === 'class' || key === 'style' || key === 'aria-describedby') {
+      if (key === 'aria-describedby') {
         return
       }
       rest[key] = value
@@ -212,8 +212,6 @@ export const useForwardInputAttrs = <T extends ControlType = 'input'>(
   )
 
   return {
-    containerClass,
-    containerStyle,
     describedByAttr,
     frameAttrs,
     inputAttrs,

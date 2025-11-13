@@ -105,11 +105,12 @@ const handleChange = (event: Event) => {
     <template v-if="$slots.default" #prefix>
       <slot />
     </template>
-    <template #default>
+    <template #default="{ inputProps }">
       <input
         :id="inputId"
         :class="[
-          'peer w-full border-none bg-transparent px-3 pb-2 ring-0 outline-none not-focus-visible:placeholder:text-transparent',
+          inputProps.class,
+          'w-full border-none bg-transparent px-3 pb-2 ring-0 outline-none not-focus-visible:placeholder:text-transparent',
           label ? 'pt-6' : 'pt-2',
           readonly || disabled ? 'cursor-not-allowed' : ''
         ]"

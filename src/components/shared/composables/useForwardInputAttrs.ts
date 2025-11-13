@@ -4,6 +4,7 @@ import {
   isDataAttributeKey,
   normalizeAttributeKey,
   toKebabCase,
+  type AttrAliasMap,
   type ControlType
 } from './runtimeAttrMap'
 import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'vue'
@@ -108,10 +109,7 @@ const shouldStayOnFrame = (
   normalizedFrameKeySet.has(normalizedKey) ||
   normalizedFrameKeyPrefixes.some(prefix => normalizedKey.startsWith(prefix))
 
-const getControlAttrKey = (
-  key: string,
-  aliasMap: Record<string, string | undefined>
-): string => {
+const getControlAttrKey = (key: string, aliasMap: AttrAliasMap): string => {
   const lowerKey = normalizeAttributeKey(key)
   if (isDataAttributeKey(lowerKey)) {
     return lowerKey

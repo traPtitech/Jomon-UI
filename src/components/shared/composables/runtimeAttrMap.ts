@@ -1,6 +1,6 @@
 export type ControlType = 'input' | 'textarea'
 
-type AttrAliasMap = Record<string, string | undefined>
+export type AttrAliasMap = Record<string, string | undefined>
 
 type AliasCache = Partial<Record<ControlType, AttrAliasMap>>
 
@@ -29,7 +29,10 @@ const denyList = new Set([
   'textContent'
 ])
 
-const manualAliases: Record<string, string> = {
+const manualAliases: Record<
+  string,
+  keyof HTMLInputElement | keyof HTMLTextAreaElement
+> = {
   maxlength: 'maxLength',
   minlength: 'minLength',
   readonly: 'readOnly',
@@ -133,13 +136,13 @@ const buildAliasMap = (controlType: ControlType): AttrAliasMap | null => {
   return map
 }
 
-export const getAttrAliasMap = (controlType: ControlType): AttrAliasMap => {
+export const getAttrAliasMap = (controlType: ControlType) => {
   const cached = aliasCache[controlType]
   if (cached) {
     return cached
   }
   const built = buildAliasMap(controlType)
-  const finalMap = built ?? Object.create(null)
+  const finalMap: AttrAliasMap = built ?? Object.create(null)
   aliasCache[controlType] = finalMap
   return finalMap
 }

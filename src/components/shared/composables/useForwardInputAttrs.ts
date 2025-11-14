@@ -32,17 +32,51 @@ export type ControlHTMLAttrs<T extends ControlType> = BaseControlAttrs<T> &
   Partial<DataAttributeRecord>
 
 export interface ForwardInputAttrsOptions {
+  /**
+   * 常にフレーム要素側へ残す属性キー。
+   * ここで指定したキーと、その normalizeAttributeKey() 結果が対象。
+   */
   frameKeys?: string[]
+  /**
+   * 接頭辞マッチでフレーム要素側へ残す属性キー。
+   * 例: ["data-frame-"] を渡すと "data-frame-*" 系をフレームに残す。
+   */
   frameKeyPrefixes?: string[]
+  /**
+   * フレーム要素側に残すイベントリスナーキー。
+   * デフォルトの defaultFrameListenerKeys に追加される。
+   */
   frameListenerKeys?: string[]
+  /**
+   * コントロール要素側には渡さない属性キー。
+   * normalizeAttributeKey() 済みのキーと比較する。
+   */
   blocklistKeys?: string[]
+  /**
+   * コントロール要素の型。
+   * 未指定時は 'input' を前提としたエイリアス解決を行う。
+   */
   controlType?: ControlType
 }
 
 interface UseForwardInputAttrsReturn<T extends ControlType> {
+  /**
+   * aria-describedby に集約した値。
+   * 複数の aria-describedby が指定された場合は空白区切りで連結される。
+   */
   describedByAttr: ComputedRef<string | undefined>
+  /**
+   * ラッパー要素 (フレーム) に渡す属性。
+   */
   frameAttrs: ComputedRef<Attrs>
+  /**
+   * input / textarea に渡す属性。
+   */
   inputAttrs: ComputedRef<ControlHTMLAttrs<T>>
+  /**
+   * 必要に応じて controlType や blocklist を上書きして
+   * コントロール側の属性だけを取得するヘルパ。
+   */
   getControlAttrs: <K extends ControlType = T>(
     overrideType?: K,
     extraBlocklistKeys?: string[]
@@ -102,17 +136,13 @@ const describedByAttrName = 'aria-describedby'
 /**
  * 与えられたキーが aria-describedby を表すかどうかを判定する。
  *
- * 対応する入力例:
- * - "aria-describedby"        // 推奨されるケバブケース
- * - "ariaDescribedby"         // camelCase / 大文字小文字違い
+ * 入力例:
+ * - "aria-describedby" (ケバブケース)
+ * - "ariaDescribedby"  (camelCase)
  *
- * 判定には
- * - normalizeAttributeKey (小文字化)
- * - toKebabCase
- * を使い、実質的に "aria-describedby" かどうかを見ている。
- *
- * 他の aria-* 属性はここでは扱わない。
- * aria-describedby だけを特別扱いし、複数値の集約などを行うためのヘルパ。
+ * normalizeAttributeKey と toKebabCase の両方で比較し、
+ * 実質的に "aria-describedby" を意味しているキーかどうかだけを判定する。
+ * 他の aria-* 属性は対象外。
  */
 const matchesDescribedByKey = (key: string) =>
   normalizeAttributeKey(key) === describedByAttrName ||
@@ -138,7 +168,7 @@ const shouldStayOnFrame = (
  * テンプレート上の属性名から、コントロール要素に渡す属性名を決定する。
  *
  * 前提:
- * - aliasMap は runtimeAttrMap.registerAlias() で構築されている
+ * - aliasMap は registerAlias() で構築されている
  * - aliasMap には以下のキーで canonical 名が登録されている:
  *   - 小文字化されたキー
  *   - canonical そのもの
@@ -165,6 +195,14 @@ const getControlAttrKey = (key: string, aliasMap: AttrAliasMap): string => {
 const createDefaultFrameListenerSet = () =>
   new Set(defaultFrameListenerKeys.map(normalizeListenerKey))
 
+/**
+ * aria-describedby に渡された値を標準化する。
+ *
+ * - null / undefined: undefined を返す
+ * - string: 前後の空白を削除し、空文字列なら undefined を返す
+ * - string[]: 文字列要素のみをトリムし、空でない要素を空白区切りで連結して返す
+ * - それ以外の型: 開発時 (テスト以外) は警告を出し、undefined を返す
+ */
 const normalizeDescribedByValue = (value: unknown): string | undefined => {
   if (value == null) {
     return undefined
@@ -198,6 +236,19 @@ const normalizeDescribedByValue = (value: unknown): string | undefined => {
   return undefined
 }
 
+/**
+ * 親コンポーネントから渡された attrs を
+ * - フレーム要素に付与する属性 (frameAttrs)
+ * - input / textarea に付与する属性 (controlAttrs)
+ * に振り分ける。
+ *
+ * 以下のルールを一括で扱う:
+ * - aria-describedby の集約とコントロール側への反映
+ * - フレーム用キー / 接頭辞によるフレーム側への固定
+ * - イベントリスナーのフレーム / コントロール振り分け
+ * - ブロックリストによる除外
+ * - AttrAliasMap を用いた属性名の正規化
+ */
 export const partitionForwardInputAttrs = <T extends ControlType>(
   attrs: Attrs,
   frameKeySet: Set<string>,
@@ -216,14 +267,14 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
       const normalized = normalizeDescribedByValue(value)
 
       if (normalized !== undefined) {
-        // 既存 describedBy と結合
+        // 既存値があれば空白区切りで連結して集約する
         describedBy = describedBy ? `${describedBy} ${normalized}` : normalized
 
-        // control 側にも同じ値を反映
+        // コントロール側にも集約済みの値を反映する
         assignControlAttr(controlAttrs, describedByAttrName, describedBy)
       }
 
-      // 変換できなかった値は無視
+      // 変換できなかった値は無視する
       continue
     }
 
@@ -266,6 +317,17 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
   }
 }
 
+/**
+ * 親コンポーネントから渡された属性を、
+ * ラッパー要素と input / textarea へ安全に振り分けるための composable。
+ *
+ * 主な挙動:
+ * - class / style などの見た目関連をフレーム側に転送
+ * - id / value などの管理対象の属性をコントロール側から除外
+ * - data-* / aria-* 属性をそのままコントロール側へ転送
+ * - AttrAliasMap を用いて input / textarea のプロパティ名のゆらぎを吸収
+ * - aria-describedby を集約し、computed の describedByAttr として公開
+ */
 export function useForwardInputAttrs(
   options?: ForwardInputAttrsOptions & { controlType?: 'input' }
 ): UseForwardInputAttrsReturn<'input'>
@@ -347,6 +409,10 @@ export function useForwardInputAttrs(
   }
 }
 
+/**
+ * テスト専用のユーティリティ。
+ * 外部から直接利用することは想定していない。
+ */
 export const __useForwardInputAttrsTestUtils = {
   stripListenerModifiers,
   matchesDescribedByKey,

@@ -6,6 +6,11 @@ type AliasCache = Partial<Record<ControlType, AttrAliasMap>>
 
 const aliasCache: AliasCache = {}
 
+/**
+ * エイリアス構築時に無視する DOM プロパティの一覧。
+ *
+ * dataset や style など、属性転送の対象にしたくないプロパティを含める。
+ */
 const blocklist = new Set([
   'attributes',
   'childElementCount',
@@ -29,6 +34,13 @@ const blocklist = new Set([
   'textContent'
 ])
 
+/**
+ * 自動検出だけではカバーしづらいプロパティの手動エイリアス。
+ *
+ * 例:
+ * - "maxlength" → "maxLength"
+ * - "readonly"  → "readOnly"
+ */
 const manualAliases: Record<
   string,
   keyof HTMLInputElement | keyof HTMLTextAreaElement
@@ -54,12 +66,10 @@ export const normalizeAttributeKey = (key: string) => key.toLowerCase()
  * - `key` はエイリアスとして渡される任意の文字列
  * - `canonical` は最終的に使いたい正規化済みプロパティ名
  *
- * この関数は getControlAttrKey とペアで使うことを前提にしており、
  * 次のキーで canonical 名へのマッピングを登録する:
- *
- * - `key` を小文字化したもの  (例: "maxlength" → "maxLength")
- * - `canonical` そのもの       (例: "maxLength" → "maxLength")
- * - `canonical` を kebab-case にしたもの (例: "maxLength" → "max-length")
+ * - `key` を小文字化したもの
+ * - `canonical` そのもの
+ * - `canonical` を kebab-case にしたもの
  *
  * これにより、テンプレート上の属性名が
  * - 小文字
@@ -82,6 +92,9 @@ const registerAlias = (map: AttrAliasMap, key: string, canonical: string) => {
   }
 }
 
+/**
+ * 手動エイリアスをマップに追加する。
+ */
 const addManualAliases = (map: AttrAliasMap) => {
   Object.entries(manualAliases).forEach(([alias, canonical]) => {
     registerAlias(map, alias, canonical)
@@ -94,6 +107,12 @@ const isCallable = (target: unknown): target is () => void =>
 const collectPrototypeNames = (proto: object | null | undefined) =>
   proto ? Object.getOwnPropertyNames(proto) : []
 
+/**
+ * controlType に応じて、属性検出に利用するプロトタイプの一覧を返す。
+ *
+ * Element / HTMLElement / HTMLInputElement or HTMLTextAreaElement
+ * を順に列挙する。
+ */
 const getPrototypes = (controlType: ControlType): object[] => {
   const basePrototypes: (object | undefined)[] = []
 
@@ -119,12 +138,24 @@ const getPrototypes = (controlType: ControlType): object[] => {
   return basePrototypes.filter((proto): proto is object => Boolean(proto))
 }
 
+/**
+ * 指定された controlType 向けの AttrAliasMap を構築する。
+ *
+ * DOM プロトタイプを列挙し、以下の条件を満たすプロパティを canonical 名として登録する:
+ * - prop が空文字列でない
+ * - "on" で始まらない (イベントリスナーを除外)
+ * - blocklist に含まれていない
+ * - アクセス時に例外を投げない
+ * - 関数ではない
+ *
+ * SSR 環境など DOM が存在しない場合は null を返す。
+ */
 const buildAliasMap = (controlType: ControlType): AttrAliasMap | null => {
   if (typeof window === 'undefined' || typeof document === 'undefined') {
     // NOTE:
-    // この実装はクライアント専用のDOMプロトタイプ列挙に依存している。
-    // 現状のJomon UIはSSRを想定していないため、サーバー環境では空マップを返す実装となっている。
-    // 将来的にSSRを導入する場合は追加の実装が必要。
+    // この実装は DOM プロトタイプ列挙に依存するためブラウザ環境専用。
+    // サーバーサイドレンダリング環境では空マップを返す前提で設計している。
+    // SSR を正式にサポートする場合は、別経路でエイリアスを構築する実装が必要。
     if (import.meta.env.DEV) {
       console.warn(
         '[runtimeAttrMap] getAttrAliasMap was called in a non-DOM environment; returning empty alias map.'
@@ -151,7 +182,7 @@ const buildAliasMap = (controlType: ControlType): AttrAliasMap | null => {
         if (isCallable(value)) return
         registerAlias(map, prop, prop)
       } catch {
-        // ignore props that throw on access
+        // アクセス時に例外を投げるプロパティは無視する
       }
     })
   })
@@ -160,6 +191,12 @@ const buildAliasMap = (controlType: ControlType): AttrAliasMap | null => {
   return map
 }
 
+/**
+ * controlType ごとの AttrAliasMap を取得する。
+ *
+ * - 初回呼び出し時は buildAliasMap() でマップを構築してキャッシュする
+ * - DOM が存在しない環境では空マップをキャッシュして返す
+ */
 export const getAttrAliasMap = (controlType: ControlType) => {
   const cached = aliasCache[controlType]
   if (cached) {
@@ -171,11 +208,21 @@ export const getAttrAliasMap = (controlType: ControlType) => {
   return finalMap
 }
 
+/**
+ * 小文字化したキーが data-* で始まるかどうかを判定する。
+ */
 export const isDataAttributeKey = (key: string): boolean =>
   normalizeAttributeKey(key).startsWith('data-')
+
+/**
+ * 小文字化したキーが aria-* で始まるかどうかを判定する。
+ */
 export const isAriaAttributeKey = (key: string): boolean =>
   normalizeAttributeKey(key).startsWith('aria-')
 
+/**
+ * テスト用に、指定した controlType の AttrAliasMap を差し替える。
+ */
 export const __setAttrAliasMapForTesting = (
   controlType: ControlType,
   map: AttrAliasMap

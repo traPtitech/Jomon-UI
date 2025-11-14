@@ -34,6 +34,14 @@ watch(isUnspecifiedBudget, newVal => {
     partition.value.budget = savedBudgetBeforeUnspecified.value
   }
 })
+const inputPartitionGroupName = ref<string | null>(null)
+watch(inputPartitionGroupName, (newName) => {
+  if (newName === null){
+    partition.value.parentPartitionGroupId = null
+    return
+  }
+  partition.value.parentPartitionGroupId = partitionGroupOptions.get(newName) ?? null
+})
 </script>
 
 <template>

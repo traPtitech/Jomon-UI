@@ -28,10 +28,10 @@ type DataAttributeValue = string | number | boolean | null | undefined
 
 type DataAttributeRecord = Record<`data-${string}`, DataAttributeValue>
 
-export type ControlHTMLAttrs<T extends ControlType> = BaseControlAttrs<T> &
+type ControlHTMLAttrs<T extends ControlType> = BaseControlAttrs<T> &
   Partial<DataAttributeRecord>
 
-export interface ForwardInputAttrsOptions {
+interface ForwardInputAttrsOptions {
   /**
    * 常にフレーム要素側へ残す属性キー。
    * ここで指定したキーと、その normalizeAttributeKey() 結果が対象。
@@ -83,12 +83,12 @@ interface UseForwardInputAttrsReturn<T extends ControlType> {
   ) => ControlHTMLAttrs<K>
 }
 
-export interface ForwardedInputAttrs<T extends ControlType> {
+interface ForwardedInputAttrs<T extends ControlType> {
   frameAttrs: Attrs
   controlAttrs: ControlHTMLAttrs<T>
 }
 
-export interface PartitionedForwardInputAttrs<T extends ControlType>
+interface PartitionedForwardInputAttrs<T extends ControlType>
   extends ForwardedInputAttrs<T> {
   describedBy?: string
 }

@@ -11,7 +11,7 @@ const aliasCache: AliasCache = {}
  *
  * dataset や style など、属性転送の対象にしたくないプロパティを含める。
  */
-const blocklist = new Set([
+const aliasSourceBlocklist = new Set([
   'attributes',
   'childElementCount',
   'children',
@@ -144,7 +144,7 @@ const getPrototypes = (controlType: ControlType): object[] => {
  * DOM プロトタイプを列挙し、以下の条件を満たすプロパティを canonical 名として登録する:
  * - prop が空文字列でない
  * - "on" で始まらない (イベントリスナーを除外)
- * - blocklist に含まれていない
+ * - aliasSourceBlocklist に含まれていない
  * - アクセス時に例外を投げない
  * - 関数ではない
  *
@@ -176,7 +176,7 @@ const buildAliasMap = (controlType: ControlType): AttrAliasMap | null => {
   prototypes.forEach(proto => {
     collectPrototypeNames(proto).forEach(prop => {
       if (!prop || prop.startsWith('on')) return
-      if (blocklist.has(prop)) return
+      if (aliasSourceBlocklist.has(prop)) return
       try {
         const value = elementRecord[prop]
         if (isCallable(value)) return

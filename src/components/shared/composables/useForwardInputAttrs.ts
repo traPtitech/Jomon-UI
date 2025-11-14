@@ -31,11 +31,11 @@ type DataAttributeRecord = Record<`data-${string}`, DataAttributeValue>
 type ControlHTMLAttrs<T extends ControlType> = BaseControlAttrs<T> &
   Partial<DataAttributeRecord>
 
-interface ForwardInputAttrsOptions {
+interface ForwardInputAttrsOptions<T extends ControlType = ControlType> {
   /**
    * コントロール要素の型。
    */
-  controlType: ControlType
+  controlType: T
 }
 
 interface UseForwardInputAttrsReturn<T extends ControlType> {
@@ -166,9 +166,6 @@ const getControlAttrKey = (key: string, aliasMap: AttrAliasMap): string => {
   return aliasMap[lowerKey] ?? aliasMap[kebabKey] ?? aliasMap[key] ?? key
 }
 
-const createDefaultFrameListenerSet = () =>
-  new Set(defaultFrameListenerKeys.map(normalizeListenerKey))
-
 /**
  * aria-describedby に渡された値を標準化する。
  *
@@ -210,9 +207,13 @@ const normalizeDescribedByValue = (value: unknown): string | undefined => {
   return undefined
 }
 
-const FRAME_KEY_SET = buildFrameKeySet(['class', 'style'])
-const BLOCKLIST_SET = new Set(['id', 'value'].map(normalizeAttributeKey))
-const FRAME_LISTENER_SET = createDefaultFrameListenerSet()
+const frameKeySet = buildFrameKeySet(['class', 'style'])
+const controlAttrBlocklistSet = new Set(
+  ['id', 'value'].map(normalizeAttributeKey)
+)
+const frameListenerSet = new Set(
+  defaultFrameListenerKeys.map(normalizeListenerKey)
+)
 
 /**
  * 親コンポーネントから渡された attrs を
@@ -221,9 +222,9 @@ const FRAME_LISTENER_SET = createDefaultFrameListenerSet()
  * に振り分ける低レベルユーティリティ。
  *
  * 前提:
- * - フレーム側に残す属性は FRAME_KEY_SET（class / style を含む）で管理する。
- * - コントロール側に渡さない属性は BLOCKLIST_SET（id / value を含む）で管理する。
- * - フレーム側に残すイベントリスナーは FRAME_LISTENER_SET で管理する。
+ * - フレーム側に残す属性は frameKeySet（class / style を含む）で管理する。
+ * - コントロール側に渡さない属性は controlAttrBlocklistSet（id / value を含む）で管理する。
+ * - フレーム側に残すイベントリスナーは frameListenerSet で管理する。
  * - controlType は 'input' または 'textarea' で、AttrAliasMap の解決に使用する。
  *
  * 挙動の概要:
@@ -240,7 +241,7 @@ const FRAME_LISTENER_SET = createDefaultFrameListenerSet()
  *
  * - その他の属性:
  *   - shouldStayOnFrame(...) が true の場合は frameAttrs に入れる。
- *   - blocklistSet に含まれるキーは controlAttrs には入れない。
+ *   - controlAttrBlocklistSet に含まれるキーは controlAttrs には入れない。
  *   - それ以外は getControlAttrKey(...) でキーを正規化し、controlAttrs に入れる。
  */
 export const partitionForwardInputAttrs = <T extends ControlType>(
@@ -266,7 +267,7 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
 
     if (listenerPattern.test(key)) {
       const normalizedListenerKey = normalizeListenerKey(key)
-      if (FRAME_LISTENER_SET.has(normalizedListenerKey)) {
+      if (frameListenerSet.has(normalizedListenerKey)) {
         frameEntries.push([key, value])
       } else {
         assignControlAttr(controlAttrs, key, value)
@@ -274,12 +275,12 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
       continue
     }
 
-    if (shouldStayOnFrame(key, normalizedKey, FRAME_KEY_SET)) {
+    if (shouldStayOnFrame(key, normalizedKey, frameKeySet)) {
       frameEntries.push([key, value])
       continue
     }
 
-    if (BLOCKLIST_SET.has(normalizedKey)) {
+    if (controlAttrBlocklistSet.has(normalizedKey)) {
       continue
     }
 
@@ -306,35 +307,32 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
  * - aria-describedby を集約し、computed の describedByAttr として公開
  */
 export function useForwardInputAttrs(
-  options: ForwardInputAttrsOptions & { controlType: 'input' }
+  options: ForwardInputAttrsOptions<'input'>
 ): UseForwardInputAttrsReturn<'input'>
 export function useForwardInputAttrs(
-  options: ForwardInputAttrsOptions & { controlType: 'textarea' }
+  options: ForwardInputAttrsOptions<'textarea'>
 ): UseForwardInputAttrsReturn<'textarea'>
-export function useForwardInputAttrs(
-  options: ForwardInputAttrsOptions
-): UseForwardInputAttrsReturn<ControlType> {
+export function useForwardInputAttrs<T extends ControlType>(
+  options: ForwardInputAttrsOptions<T>
+): UseForwardInputAttrsReturn<T> {
   const attrs = useAttrs()
-
   const { controlType } = options
 
-  const runPartition = <K extends ControlType = ControlType>(
+  const runPartition = <K extends ControlType = T>(
     overrideType?: K
   ): PartitionedForwardInputAttrs<K> =>
     partitionForwardInputAttrs(attrs, (overrideType ?? controlType) as K)
 
-  const forwardedAttrs = computed(() => runPartition(controlType))
+  const forwardedAttrs = computed(() => runPartition())
 
   const describedByAttr = computed(() => forwardedAttrs.value.describedBy)
 
-  const getControlAttrs = <K extends ControlType = ControlType>(
+  const getControlAttrs = <K extends ControlType = T>(
     overrideType?: K
-  ): ControlHTMLAttrs<K> => {
-    return runPartition(overrideType).controlAttrs
-  }
+  ): ControlHTMLAttrs<K> => runPartition(overrideType).controlAttrs
 
   const frameAttrs = computed<Attrs>(() => forwardedAttrs.value.frameAttrs)
-  const inputAttrs = computed<ControlHTMLAttrs<ControlType>>(
+  const inputAttrs = computed<ControlHTMLAttrs<T>>(
     () => forwardedAttrs.value.controlAttrs
   )
 

@@ -1,20 +1,14 @@
 import { __setAttrAliasMapForTesting } from '../src/components/shared/composables/runtimeAttrMap'
 import {
-  partitionForwardInputAttrs,
-  __useForwardInputAttrsTestUtils
+  __useForwardInputAttrsTestUtils,
+  partitionForwardInputAttrs
 } from '../src/components/shared/composables/useForwardInputAttrs'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 type Attrs = Record<string, unknown>
 
-const baseFrameSet = new Set<string>()
-const baseBlocklistSet = new Set(['id', 'value'])
-
-const {
-  stripListenerModifiers,
-  matchesDescribedByKey,
-  createDefaultFrameListenerSet
-} = __useForwardInputAttrsTestUtils
+const { stripListenerModifiers, matchesDescribedByKey } =
+  __useForwardInputAttrsTestUtils
 
 const toKebab = (value: string) =>
   value.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
@@ -55,14 +49,7 @@ const buildAttrs = (overrides: Attrs = {}): Attrs => ({
 
 describe('partitionForwardInputAttrs', () => {
   it('sends data/aria attrs to control by default and keeps listeners', () => {
-    const result = partitionForwardInputAttrs(
-      buildAttrs(),
-      baseFrameSet,
-      baseBlocklistSet,
-      'input',
-      [],
-      createDefaultFrameListenerSet()
-    )
+    const result = partitionForwardInputAttrs(buildAttrs(), 'input')
 
     expect(result.frameAttrs).toEqual({})
     expect(result.controlAttrs['data-testid']).toBe('frame')
@@ -82,11 +69,7 @@ describe('partitionForwardInputAttrs', () => {
         'aria-describedby': 'helper-text',
         ariaDescribedby: 'fallback'
       }),
-      baseFrameSet,
-      baseBlocklistSet,
-      'input',
-      [],
-      createDefaultFrameListenerSet()
+      'input'
     )
 
     expect(result.describedBy).toBe('helper-text fallback')
@@ -97,11 +80,7 @@ describe('partitionForwardInputAttrs', () => {
     const nonStringValue = ['id1', 'id2']
     const result = partitionForwardInputAttrs(
       buildAttrs({ ariaDescribedby: nonStringValue }),
-      baseFrameSet,
-      baseBlocklistSet,
-      'input',
-      [],
-      createDefaultFrameListenerSet()
+      'input'
     )
 
     expect(result.describedBy).toBe('id1 id2')
@@ -111,51 +90,17 @@ describe('partitionForwardInputAttrs', () => {
   it('ignores non-string aria-describedby values that cannot be normalized', () => {
     const result = partitionForwardInputAttrs(
       buildAttrs({ ariaDescribedby: 123 }),
-      baseFrameSet,
-      baseBlocklistSet,
-      'input',
-      [],
-      createDefaultFrameListenerSet()
+      'input'
     )
 
     expect(result.describedBy).toBeUndefined()
     expect(result.controlAttrs['aria-describedby']).toBeUndefined()
   })
 
-  it('respects custom frame key overrides', () => {
-    const result = partitionForwardInputAttrs(
-      buildAttrs({ title: 'Heading' }),
-      new Set(['title']),
-      baseBlocklistSet,
-      'input',
-      [],
-      createDefaultFrameListenerSet()
-    )
-    expect(result.frameAttrs.title).toBe('Heading')
-    expect(result.controlAttrs).not.toHaveProperty('title')
-  })
-
-  it('supports frame key prefixes when needed', () => {
-    const result = partitionForwardInputAttrs(
-      buildAttrs(),
-      baseFrameSet,
-      baseBlocklistSet,
-      'input',
-      ['data-'],
-      createDefaultFrameListenerSet()
-    )
-    expect(result.frameAttrs['data-testid']).toBe('frame')
-    expect(result.controlAttrs).not.toHaveProperty('data-testid')
-  })
-
   it('keeps pointer/mouse listeners on frame by default', () => {
     const result = partitionForwardInputAttrs(
       { ...buildAttrs(), onClick: () => undefined },
-      baseFrameSet,
-      baseBlocklistSet,
-      'input',
-      [],
-      createDefaultFrameListenerSet()
+      'input'
     )
     expect(result.frameAttrs).toHaveProperty('onClick')
     expect(result.controlAttrs).not.toHaveProperty('onClick')
@@ -164,38 +109,16 @@ describe('partitionForwardInputAttrs', () => {
   it('keeps pointer/mouse listeners with modifiers on frame', () => {
     const result = partitionForwardInputAttrs(
       { ...buildAttrs(), onPointerdownCaptureOnce: () => undefined },
-      baseFrameSet,
-      baseBlocklistSet,
-      'input',
-      [],
-      createDefaultFrameListenerSet()
+      'input'
     )
     expect(result.frameAttrs).toHaveProperty('onPointerdownCaptureOnce')
     expect(result.controlAttrs).not.toHaveProperty('onPointerdownCaptureOnce')
   })
 
-  it('supports textarea control typing and blocklist overrides', () => {
-    const blocklist = new Set(['id', 'value', 'placeholder'])
-    const result = partitionForwardInputAttrs(
-      buildAttrs({ rows: 5 }),
-      baseFrameSet,
-      blocklist,
-      'textarea',
-      [],
-      createDefaultFrameListenerSet()
-    )
-    expect(result.controlAttrs).toHaveProperty('rows')
-    expect(result.controlAttrs).not.toHaveProperty('placeholder')
-  })
-
   it('accepts lowercase aliases like enterkeyhint', () => {
     const result = partitionForwardInputAttrs(
       buildAttrs({ enterkeyhint: 'search' }),
-      baseFrameSet,
-      baseBlocklistSet,
-      'input',
-      [],
-      createDefaultFrameListenerSet()
+      'input'
     )
 
     expect(result.controlAttrs).toHaveProperty('enterKeyHint', 'search')
@@ -204,11 +127,7 @@ describe('partitionForwardInputAttrs', () => {
   it('prefers the first canonical key when duplicates exist', () => {
     const result = partitionForwardInputAttrs(
       buildAttrs({ PLACEHOLDER: 'value', rows: 3 }),
-      baseFrameSet,
-      baseBlocklistSet,
-      'textarea',
-      [],
-      createDefaultFrameListenerSet()
+      'textarea'
     )
 
     expect(result.controlAttrs).toHaveProperty('placeholder', 'value')

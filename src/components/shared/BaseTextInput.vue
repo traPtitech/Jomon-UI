@@ -49,7 +49,7 @@ const emit = defineEmits<{
 }>()
 
 const { describedByAttr, frameAttrs, inputAttrs, getControlAttrs } =
-  useForwardInputAttrs()
+  useForwardInputAttrs({ controlType: 'input' })
 
 const textareaAttrs = computed(() => getControlAttrs('textarea'))
 

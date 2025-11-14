@@ -33,30 +33,9 @@ type ControlHTMLAttrs<T extends ControlType> = BaseControlAttrs<T> &
 
 interface ForwardInputAttrsOptions {
   /**
-   * 常にフレーム要素側へ残す属性キー。
-   * ここで指定したキーと、その normalizeAttributeKey() 結果が対象。
-   */
-  frameKeys?: string[]
-  /**
-   * 接頭辞マッチでフレーム要素側へ残す属性キー。
-   * 例: ["data-frame-"] を渡すと "data-frame-*" 系をフレームに残す。
-   */
-  frameKeyPrefixes?: string[]
-  /**
-   * フレーム要素側に残すイベントリスナーキー。
-   * デフォルトの defaultFrameListenerKeys に追加される。
-   */
-  frameListenerKeys?: string[]
-  /**
-   * コントロール要素側には渡さない属性キー。
-   * normalizeAttributeKey() 済みのキーと比較する。
-   */
-  blocklistKeys?: string[]
-  /**
    * コントロール要素の型。
-   * 未指定時は 'input' を前提としたエイリアス解決を行う。
    */
-  controlType?: ControlType
+  controlType: ControlType
 }
 
 interface UseForwardInputAttrsReturn<T extends ControlType> {
@@ -74,12 +53,11 @@ interface UseForwardInputAttrsReturn<T extends ControlType> {
    */
   inputAttrs: ComputedRef<ControlHTMLAttrs<T>>
   /**
-   * 必要に応じて controlType や blocklist を上書きして
+   * 必要に応じて controlType を上書きして
    * コントロール側の属性だけを取得するヘルパ。
    */
   getControlAttrs: <K extends ControlType = T>(
-    overrideType?: K,
-    extraBlocklistKeys?: string[]
+    overrideType?: K
   ) => ControlHTMLAttrs<K>
 }
 
@@ -157,12 +135,8 @@ const normalizeListenerKey = (key: string) =>
 const shouldStayOnFrame = (
   key: string,
   normalizedKey: string,
-  frameKeySet: Set<string>,
-  normalizedFrameKeyPrefixes: readonly string[]
-) =>
-  frameKeySet.has(key) ||
-  frameKeySet.has(normalizedKey) ||
-  normalizedFrameKeyPrefixes.some(prefix => normalizedKey.startsWith(prefix))
+  frameKeySet: Set<string>
+) => frameKeySet.has(key) || frameKeySet.has(normalizedKey)
 
 /**
  * テンプレート上の属性名から、コントロール要素に渡す属性名を決定する。
@@ -236,26 +210,42 @@ const normalizeDescribedByValue = (value: unknown): string | undefined => {
   return undefined
 }
 
+const FRAME_KEY_SET = buildFrameKeySet(['class', 'style'])
+const BLOCKLIST_SET = new Set(['id', 'value'].map(normalizeAttributeKey))
+const FRAME_LISTENER_SET = createDefaultFrameListenerSet()
+
 /**
  * 親コンポーネントから渡された attrs を
  * - フレーム要素に付与する属性 (frameAttrs)
  * - input / textarea に付与する属性 (controlAttrs)
- * に振り分ける。
+ * に振り分ける低レベルユーティリティ。
  *
- * 以下のルールを一括で扱う:
- * - aria-describedby の集約とコントロール側への反映
- * - フレーム用キー / 接頭辞によるフレーム側への固定
- * - イベントリスナーのフレーム / コントロール振り分け
- * - ブロックリストによる除外
- * - AttrAliasMap を用いた属性名の正規化
+ * 前提:
+ * - フレーム側に残す属性は FRAME_KEY_SET（class / style を含む）で管理する。
+ * - コントロール側に渡さない属性は BLOCKLIST_SET（id / value を含む）で管理する。
+ * - フレーム側に残すイベントリスナーは FRAME_LISTENER_SET で管理する。
+ * - controlType は 'input' または 'textarea' で、AttrAliasMap の解決に使用する。
+ *
+ * 挙動の概要:
+ * - aria-describedby:
+ *   - matchesDescribedByKey(key) に該当する属性を集約し、空白区切りの文字列にまとめる。
+ *   - 正規化に成功した場合のみ describedBy として保持し、
+ *     controlAttrs['aria-describedby'] に反映する。
+ *   - 元の aria-describedby 系の属性は frameAttrs / controlAttrs には残さない。
+ *
+ * - イベントリスナー:
+ *   - listenerPattern (/^on[A-Z]/) にマッチするキーをリスナーとみなす。
+ *   - normalizeListenerKey(key) が frameListenerSet に含まれる場合は frameAttrs に入れる。
+ *   - それ以外のリスナーは controlAttrs に入れる。
+ *
+ * - その他の属性:
+ *   - shouldStayOnFrame(...) が true の場合は frameAttrs に入れる。
+ *   - blocklistSet に含まれるキーは controlAttrs には入れない。
+ *   - それ以外は getControlAttrKey(...) でキーを正規化し、controlAttrs に入れる。
  */
 export const partitionForwardInputAttrs = <T extends ControlType>(
   attrs: Attrs,
-  frameKeySet: Set<string>,
-  blocklistSet: Set<string>,
-  controlType: T,
-  normalizedFrameKeyPrefixes: readonly string[],
-  frameListenerSet: Set<string>
+  controlType: T
 ): PartitionedForwardInputAttrs<T> => {
   const frameEntries: [string, unknown][] = []
   const controlAttrs = {} as ControlHTMLAttrs<T>
@@ -265,16 +255,10 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
   for (const [key, value] of Object.entries(attrs)) {
     if (matchesDescribedByKey(key)) {
       const normalized = normalizeDescribedByValue(value)
-
       if (normalized !== undefined) {
-        // 既存値があれば空白区切りで連結して集約する
         describedBy = describedBy ? `${describedBy} ${normalized}` : normalized
-
-        // コントロール側にも集約済みの値を反映する
         assignControlAttr(controlAttrs, describedByAttrName, describedBy)
       }
-
-      // 変換できなかった値は無視する
       continue
     }
 
@@ -282,7 +266,7 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
 
     if (listenerPattern.test(key)) {
       const normalizedListenerKey = normalizeListenerKey(key)
-      if (frameListenerSet.has(normalizedListenerKey)) {
+      if (FRAME_LISTENER_SET.has(normalizedListenerKey)) {
         frameEntries.push([key, value])
       } else {
         assignControlAttr(controlAttrs, key, value)
@@ -290,19 +274,12 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
       continue
     }
 
-    if (
-      shouldStayOnFrame(
-        key,
-        normalizedKey,
-        frameKeySet,
-        normalizedFrameKeyPrefixes
-      )
-    ) {
+    if (shouldStayOnFrame(key, normalizedKey, FRAME_KEY_SET)) {
       frameEntries.push([key, value])
       continue
     }
 
-    if (blocklistSet.has(normalizedKey)) {
+    if (BLOCKLIST_SET.has(normalizedKey)) {
       continue
     }
 
@@ -329,71 +306,31 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
  * - aria-describedby を集約し、computed の describedByAttr として公開
  */
 export function useForwardInputAttrs(
-  options?: ForwardInputAttrsOptions & { controlType?: 'input' }
+  options: ForwardInputAttrsOptions & { controlType: 'input' }
 ): UseForwardInputAttrsReturn<'input'>
 export function useForwardInputAttrs(
   options: ForwardInputAttrsOptions & { controlType: 'textarea' }
 ): UseForwardInputAttrsReturn<'textarea'>
 export function useForwardInputAttrs(
-  options?: ForwardInputAttrsOptions
+  options: ForwardInputAttrsOptions
 ): UseForwardInputAttrsReturn<ControlType> {
   const attrs = useAttrs()
 
-  const frameKeySet = buildFrameKeySet([
-    'class',
-    'style',
-    ...(options?.frameKeys ?? [])
-  ])
-
-  const frameKeyPrefixes = options?.frameKeyPrefixes ?? []
-  const normalizedFrameKeyPrefixes = frameKeyPrefixes.map(normalizeAttributeKey)
-
-  const frameListenerSet = new Set(
-    [...defaultFrameListenerKeys, ...(options?.frameListenerKeys ?? [])].map(
-      normalizeListenerKey
-    )
-  )
-
-  const blocklistSet = new Set(
-    ['id', 'value', ...(options?.blocklistKeys ?? [])].map(
-      normalizeAttributeKey
-    )
-  )
-
-  const controlType = options?.controlType ?? 'input'
+  const { controlType } = options
 
   const runPartition = <K extends ControlType = ControlType>(
-    overrideType?: K,
-    overrideBlocklist?: Set<string>
+    overrideType?: K
   ): PartitionedForwardInputAttrs<K> =>
-    partitionForwardInputAttrs(
-      attrs,
-      frameKeySet,
-      overrideBlocklist ?? blocklistSet,
-      (overrideType ?? controlType) as K,
-      normalizedFrameKeyPrefixes,
-      frameListenerSet
-    )
+    partitionForwardInputAttrs(attrs, (overrideType ?? controlType) as K)
 
   const forwardedAttrs = computed(() => runPartition(controlType))
 
   const describedByAttr = computed(() => forwardedAttrs.value.describedBy)
 
   const getControlAttrs = <K extends ControlType = ControlType>(
-    overrideType?: K,
-    extraBlocklistKeys: string[] = []
+    overrideType?: K
   ): ControlHTMLAttrs<K> => {
-    if (!overrideType && extraBlocklistKeys.length === 0) {
-      return forwardedAttrs.value.controlAttrs as ControlHTMLAttrs<K>
-    }
-    const finalBlocklist = new Set(blocklistSet)
-    extraBlocklistKeys.forEach(key =>
-      finalBlocklist.add(normalizeAttributeKey(key))
-    )
-
-    const finalType = (overrideType ?? controlType) as K
-
-    return runPartition(finalType, finalBlocklist).controlAttrs
+    return runPartition(overrideType).controlAttrs
   }
 
   const frameAttrs = computed<Attrs>(() => forwardedAttrs.value.frameAttrs)
@@ -415,6 +352,5 @@ export function useForwardInputAttrs(
  */
 export const __useForwardInputAttrsTestUtils = {
   stripListenerModifiers,
-  matchesDescribedByKey,
-  createDefaultFrameListenerSet
+  matchesDescribedByKey
 }

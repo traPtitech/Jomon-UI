@@ -34,14 +34,16 @@ watch(isUnspecifiedBudget, newVal => {
     partition.value.budget = savedBudgetBeforeUnspecified.value
   }
 })
-const inputPartitionGroupName = ref<string | null>(null)
+const inputPartitionGroupName = ref<string>('')
 watch(inputPartitionGroupName, newName => {
-  if (newName === null) {
-    partition.value.parentPartitionGroupId = null
+  if (newName === '') {
+    partition.value.parentPartitionGroupId = ''
     return
   }
-  partition.value.parentPartitionGroupId =
-    partitionGroupOptions.get(newName) ?? null
+  const id =
+    partitionGroupOptions.value.find(group => group.key === newName)?.value ??
+    ''
+  partition.value.parentPartitionGroupId = id
 })
 </script>
 

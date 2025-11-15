@@ -2,9 +2,14 @@
 import { useNewPartition } from './composables/useNewPartition'
 import BaseInput from '@/components/shared/BaseInput.vue'
 import InputCheckBox from '@/components/shared/InputCheckBox.vue'
+import SearchSelect from '@/components/shared/SearchSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
+import { usePartitionGroupStore } from '@/features/partitionGroup/store'
 import { useUserStore } from '@/features/user/store'
 import { ref, watch } from 'vue'
+
+const { partitionGroupOptions, isPartitionGroupFetched, fetchPartitionGroups } =
+  usePartitionGroupStore()
 
 const { isUserFetched, fetchUsers } = useUserStore()
 
@@ -12,6 +17,10 @@ const { isSending, partition, handleCreatePartition } = useNewPartition()
 
 if (!isUserFetched.value) {
   await fetchUsers()
+}
+
+if (!isPartitionGroupFetched.value) {
+  await fetchPartitionGroups()
 }
 
 const isUnspecifiedBudget = ref(false)
@@ -25,6 +34,17 @@ watch(isUnspecifiedBudget, newVal => {
     partition.value.budget = savedBudgetBeforeUnspecified.value
   }
 })
+const inputPartitionGroupName = ref<string>('')
+watch(inputPartitionGroupName, newName => {
+  if (newName === '') {
+    partition.value.parentPartitionGroupId = ''
+    return
+  }
+  const id =
+    partitionGroupOptions.value.find(group => group.key === newName)?.value ??
+    ''
+  partition.value.parentPartitionGroupId = id
+})
 </script>
 
 <template>
@@ -33,6 +53,14 @@ watch(isUnspecifiedBudget, newVal => {
   </div>
   <form class="flex flex-col gap-6">
     <BaseInput v-model="partition.name" label="パーティション名" required />
+    <div>
+      <SearchSelect
+        v-model="partition.parentPartitionGroupId"
+        class="w-full"
+        :options="partitionGroupOptions"
+        required
+        label="パーティショングループ" />
+    </div>
     <div>
       <BaseInput
         v-model="partition.budget"

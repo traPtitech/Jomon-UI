@@ -2,7 +2,7 @@
 import { useNewApplication } from './composables/useNewApplication'
 import NewApplicationFileForm from '@/components/newApplication/NewApplicationFileForm.vue'
 import NewApplicationTargets from '@/components/newApplication/NewApplicationTargets.vue'
-import BaseInput from '@/components/shared/BaseInput.vue'
+import BaseTextInput from '@/components/shared/BaseTextInput.vue'
 import MarkdownTextarea from '@/components/shared/MarkdownTextarea.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import SearchSelectTag from '@/components/shared/SearchSelectTag.vue'
@@ -52,7 +52,7 @@ if (!isUserFetched.value) {
       <h2 class="text-sm font-medium">申請者</h2>
       <span>{{ me?.name }}</span>
     </div>
-    <BaseInput v-model="application.title" label="タイトル" />
+    <BaseTextInput v-model="application.title" label="タイトル" />
     <MarkdownTextarea
       v-model="application.content"
       label="詳細"

@@ -17,6 +17,13 @@ Jomon UIはViteとVue 3 + TypeScriptで構築されています。`src/`配下�
 
 すべてのアプリコードはTypeScript標準（`strict`）に従い、Composition APIベースで記述してください。Prettier既定設定（2スペースインデント・シングルクォート）を保つため、保存前後に`npm run format`を活用します。ESLintは`plugin:vue/strongly-recommended`とアクセシビリティルールを適用しているため、ARIA属性とラベルの対応を必ず確認してください。ファイル名はケバブケース、TypeScriptの型・インターフェースはパスカルケース、storeやComposableは`useXxx`プレフィックスで統一します。
 
+### Tailwind CSS v4ポリシー
+
+- このリポジトリはTailwind CSS v4系を基準とします。スタイルはCSSファースト構成を採用し、`@import "tailwindcss";` と `@theme` / `@utility` / `@variant` を使ってカスタマイズしてください。従来の `@tailwind base;` などv3専用ディレクティブや`bg-opacity-*`系ユーティリティは使用禁止です。
+- 別CSS（Vue SFCの`<style>`やCSS Modules）で`@apply`を使う場合、必ず`@reference`でグローバルスタイルを参照し、コンパイラがv4テーマを解決できるようにします。`@layer`ではなく`@utility`に載せ替え、`not-*`や`starting:*`などv4の新バリアントを優先的に使ってください。
+- 既存コードにv3シンタックスが混在しないよう、PRではTailwind v4チェックリストを確認し、CIで`npx @tailwindcss/upgrade --verify`（Node 20+）を実行して差分を検証します。クラス名の`!`サフィックスや`not-focus-visible:`などv4固有表現が壊れていないかも併せて確認します。
+- 開発やコードレビューの前に、Context7（`/tailwindlabs/tailwindcss`ライブラリ）または公式ドキュメントから最新v4ガイドを取り込み、エージェントが共有プロンプトに貼り付けてから作業を開始してください。これにより旧バージョン知識での提案を防ぎます。
+
 ## テストガイドライン
 
 現状の自動テストは型検証とESLintが中心です。UIロジックにテストを追加する場合はVue Test Utilsとmswを利用し、HTTP通信は`src/features/<feature>/mock`のハンドラを再利用してください。テストファイルは対象モジュール近くに`*.spec.ts`として配置し、シナリオ単位で命名します。アクセシビリティ回帰を防ぐため、主要なフォーム・ダイアログでは`vue-axe`を併用した手動検証を行ってください。

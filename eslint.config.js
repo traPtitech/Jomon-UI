@@ -29,6 +29,7 @@ export default defineConfig([
     files: [
       'scripts/**/*.{js,mjs,cjs,ts,mts,cts}',
       'vite.config.ts',
+      'vitest.config.ts',
       '**/*.config.{js,mjs,cjs,ts,mts,cts}'
     ],
     languageOptions: {
@@ -36,7 +37,7 @@ export default defineConfig([
       parserOptions: {
         projectService: {
           defaultProject: './tsconfig.node.json',
-          allowDefaultProject: ['eslint.config.js']
+          allowDefaultProject: ['eslint.config.js', 'vitest.config.ts']
         },
         tsconfigRootDir
       }
@@ -72,5 +73,19 @@ export default defineConfig([
       }
     }
   ),
+  {
+    files: ['tests/**/*.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.jest
+      },
+      parserOptions: {
+        project: './tsconfig.vitest.json',
+        projectService: false,
+        tsconfigRootDir
+      }
+    }
+  },
   eslintConfigPrettier
 ])

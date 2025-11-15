@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import BaseInput from '@/components/shared/BaseInput.vue'
+import BaseTextInput from '@/components/shared/BaseTextInput.vue'
 import EditButton from '@/components/shared/EditButton.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useApplication } from '@/features/application/composables'
@@ -46,7 +46,11 @@ const handleUpdateTitle = async () => {
 <template>
   <div class="flex gap-2">
     <h1 v-if="!isEditMode" class="text-2xl">{{ application.title }}</h1>
-    <BaseInput v-else v-model="editedTitle" label="タイトル" class="flex-1" />
+    <BaseTextInput
+      v-else
+      v-model="editedTitle"
+      label="タイトル"
+      class="flex-1" />
     <SimpleButton
       v-if="isEditMode"
       font-size="base"

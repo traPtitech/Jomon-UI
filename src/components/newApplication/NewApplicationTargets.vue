@@ -5,10 +5,18 @@ import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useUserStore } from '@/features/user/store'
 import type { ApplicationTargetInput } from '@/lib/apis'
 import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
+import { computed } from 'vue'
 
 const model = defineModel<ApplicationTargetInput[]>({ required: true })
 
 const { userOptions } = useUserStore()
+
+const selectedUser = computed(() => model.value.map(target => target.target))
+const filteredUserOptions = computed(() => {
+  return userOptions.value.filter(
+    user => !selectedUser.value.includes(user.value)
+  )
+})
 
 function handleAddTarget() {
   model.value = [...model.value, { target: '', amount: 0 }]
@@ -25,6 +33,7 @@ function handleRemoveTarget(index: number) {
         <SearchSelect
           v-model="target.target"
           :options="userOptions"
+          :display-options="filteredUserOptions"
           class="grow"
           label="払い戻し対象者" />
         <BaseInput v-model="target.amount" type="number" label="金額">

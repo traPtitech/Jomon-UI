@@ -1,16 +1,15 @@
 <script lang="ts" setup>
 import type { Partition } from '@/features/partition/entities'
 import { isBudgetSet } from '@/features/partition/lib/isBudgetSet'
-import { loadPartitionGroupNames } from '@/features/partitionGroup/lib/loadPartitionGroupNames'
+import { usePartitionGroupStore } from '@/features/partitionGroup/store'
 import router from '@/router'
 
+const { partitionGroupIdNameToMap } = usePartitionGroupStore()
 interface Props {
   page: number
   partitions: Partition[]
 }
 const props = defineProps<Props>()
-
-const partitionGroupNames = await loadPartitionGroupNames()
 
 const slicePartitionsAt = (index: number, n: number) => {
   const start = (index - 1) * n
@@ -55,7 +54,7 @@ const navigateToPartition = async (partitionId: string) => {
           {{ partition.name }}
         </td>
         <td class="px-1 py-4">
-          {{ partitionGroupNames.get(partition.parentPartitionGroupId) }}
+          {{ partitionGroupIdNameToMap.get(partition.parentPartitionGroupId) }}
         </td>
         <td class="px-1 py-4 pr-6">
           {{

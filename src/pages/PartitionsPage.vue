@@ -3,6 +3,7 @@ import PartitionTable from '@/components/partitions/PartitionTable.vue'
 import PaginationBar from '@/components/shared/PaginationBar.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { usePartitionStore } from '@/features/partition/store'
+import { usePartitionGroupStore } from '@/features/partitionGroup/store'
 import { useUserStore } from '@/features/user/store'
 import { toPage } from '@/lib/parseQueryParams'
 import { ref, watch } from 'vue'
@@ -12,8 +13,13 @@ const route = useRoute()
 const page = ref(toPage(route.query.page))
 
 const { partitions, isPartitionFetched, fetchPartitions } = usePartitionStore()
+const { isPartitionGroupFetched, fetchPartitionGroups } =
+  usePartitionGroupStore()
 const { isAccountManager } = useUserStore()
 
+if (!isPartitionGroupFetched.value) {
+  await fetchPartitionGroups()
+}
 if (!isPartitionFetched.value) {
   await fetchPartitions()
 }

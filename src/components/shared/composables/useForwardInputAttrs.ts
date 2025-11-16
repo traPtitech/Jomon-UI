@@ -56,8 +56,8 @@ interface UseForwardInputAttrsReturn<T extends ControlType> {
    * 必要に応じて controlType を上書きして
    * コントロール側の属性だけを取得するヘルパ。
    */
-  getControlAttrs: <K extends ControlType = T>(
-    overrideType?: K
+  getControlAttrs: <K extends ControlType>(
+    overrideType: K
   ) => ControlHTMLAttrs<K>
 }
 
@@ -306,30 +306,22 @@ export const partitionForwardInputAttrs = <T extends ControlType>(
  * - AttrAliasMap を用いて input / textarea のプロパティ名のゆらぎを吸収
  * - aria-describedby を集約し、computed の describedByAttr として公開
  */
-export function useForwardInputAttrs(
-  options: ForwardInputAttrsOptions<'input'>
-): UseForwardInputAttrsReturn<'input'>
-export function useForwardInputAttrs(
-  options: ForwardInputAttrsOptions<'textarea'>
-): UseForwardInputAttrsReturn<'textarea'>
 export function useForwardInputAttrs<T extends ControlType>(
   options: ForwardInputAttrsOptions<T>
 ): UseForwardInputAttrsReturn<T> {
   const attrs = useAttrs()
   const { controlType } = options
 
-  const runPartition = <K extends ControlType = T>(
-    overrideType?: K
-  ): PartitionedForwardInputAttrs<K> =>
-    partitionForwardInputAttrs(attrs, (overrideType ?? controlType) as K)
-
-  const forwardedAttrs = computed(() => runPartition())
+  const forwardedAttrs = computed(() =>
+    partitionForwardInputAttrs(attrs, controlType)
+  )
 
   const describedByAttr = computed(() => forwardedAttrs.value.describedBy)
 
-  const getControlAttrs = <K extends ControlType = T>(
-    overrideType?: K
-  ): ControlHTMLAttrs<K> => runPartition(overrideType).controlAttrs
+  const getControlAttrs = <K extends ControlType>(
+    overrideType: K
+  ): ControlHTMLAttrs<K> =>
+    partitionForwardInputAttrs(attrs, overrideType).controlAttrs
 
   const frameAttrs = computed<Attrs>(() => forwardedAttrs.value.frameAttrs)
   const inputAttrs = computed<ControlHTMLAttrs<T>>(

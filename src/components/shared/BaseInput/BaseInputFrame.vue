@@ -4,7 +4,6 @@ import { computed, ref } from 'vue'
 interface Props {
   label: string
   required?: boolean
-  placeholder?: string
   readonly?: boolean
   disabled?: boolean
   isTextarea?: boolean
@@ -16,7 +15,6 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   required: false,
-  placeholder: '',
   readonly: false,
   disabled: false,
   isTextarea: false,

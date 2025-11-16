@@ -79,7 +79,6 @@ const handleChange = (event: Event) => {
     :required="required"
     :readonly="readonly"
     :disabled="disabled"
-    :placeholder="placeholder"
     :has-value="hasValue"
     :input-id="inputId"
     :error-message="errorMessage"

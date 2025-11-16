@@ -1,17 +1,12 @@
-import { computed, useId, type Ref } from 'vue'
+import type { BaseInputCommonProps } from './BaseInput.types'
+import { computed, useId } from 'vue'
 
-interface UseBaseInputProps {
-  id?: string
-  required?: boolean
-  readonly?: boolean
-  disabled?: boolean
-  errorMessage?: string
-}
+type UseBaseInputProps = Pick<
+  BaseInputCommonProps,
+  'id' | 'required' | 'readonly' | 'disabled' | 'errorMessage' | 'describedById'
+>
 
-export function useBaseInput(
-  props: UseBaseInputProps,
-  describedByAttr: Ref<string | undefined>
-) {
+export function useBaseInput(props: UseBaseInputProps) {
   const generatedId = useId()
   const inputId = computed(() => props.id ?? generatedId)
 
@@ -25,8 +20,8 @@ export function useBaseInput(
 
   const describedBy = computed(() => {
     const ids: string[] = []
-    if (describedByAttr.value) {
-      ids.push(describedByAttr.value)
+    if (props.describedById) {
+      ids.push(props.describedById)
     }
     if (errorMessageId.value) {
       ids.push(errorMessageId.value)

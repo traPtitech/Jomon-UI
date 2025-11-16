@@ -1,23 +1,14 @@
 <script setup lang="ts">
+import type { BaseInputCommonProps } from './BaseInput.types'
 import BaseInputFrame from './BaseInputFrame.vue'
-import { useBaseInput } from './composables/useBaseInput'
-import { useForwardInputAttrs } from './composables/useForwardInputAttrs'
+import { useBaseInput } from './useBaseInput'
 import { computed } from 'vue'
 
-defineOptions({ inheritAttrs: false })
-
-interface Props {
-  label: string
-  required?: boolean
-  placeholder?: string
-  readonly?: boolean
-  disabled?: boolean
+interface Props extends BaseInputCommonProps {
   min?: number
   max?: number
   step?: number
   inputmode?: 'decimal' | 'numeric'
-  id?: string
-  errorMessage?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -38,14 +29,8 @@ const emit = defineEmits<{
   (e: 'input' | 'change', value: Event): void
 }>()
 
-const { describedByAttr, frameAttrs, inputAttrs } = useForwardInputAttrs({
-  controlType: 'input'
-})
-
-const { inputId, isFieldRequired, errorMessageId, describedBy } = useBaseInput(
-  props,
-  describedByAttr
-)
+const { inputId, isFieldRequired, errorMessageId, describedBy } =
+  useBaseInput(props)
 
 const displayValue = computed(() =>
   model.value === null || Number.isNaN(model.value) ? '' : String(model.value)
@@ -54,9 +39,8 @@ const hasValue = computed(() => displayValue.value !== '')
 
 const handleInput = (event: Event) => {
   const target = event.target
-  if (!(target instanceof HTMLInputElement)) {
-    return
-  }
+  if (!(target instanceof HTMLInputElement)) return
+
   const rawValue = target.value
 
   if (rawValue === '') {
@@ -66,9 +50,8 @@ const handleInput = (event: Event) => {
   }
 
   const parsedValue = Number(rawValue)
-  if (Number.isNaN(parsedValue)) {
-    return
-  }
+  if (Number.isNaN(parsedValue)) return
+
   model.value = parsedValue
   emit('input', event)
 }
@@ -100,8 +83,7 @@ const handleChange = (event: Event) => {
     :has-value="hasValue"
     :input-id="inputId"
     :error-message="errorMessage"
-    :error-message-id="errorMessageId"
-    v-bind="frameAttrs">
+    :error-message-id="errorMessageId">
     <template v-if="$slots.default" #prefix>
       <slot />
     </template>
@@ -114,7 +96,6 @@ const handleChange = (event: Event) => {
           label ? 'pt-6' : 'pt-2',
           readonly || disabled ? 'cursor-not-allowed' : ''
         ]"
-        v-bind="inputAttrs"
         :placeholder="placeholder"
         :readonly="readonly"
         :disabled="disabled"

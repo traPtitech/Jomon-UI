@@ -1,32 +1,20 @@
 <script setup lang="ts">
+import {
+  type BaseInputCommonProps,
+  type TextAutocomplete,
+  type TextInputMode,
+  type TextInputType
+} from './BaseInput.types'
 import BaseInputFrame from './BaseInputFrame.vue'
-import { useBaseInput } from './composables/useBaseInput'
-import { useForwardInputAttrs } from './composables/useForwardInputAttrs'
+import { useBaseInput } from './useBaseInput'
 import { computed } from 'vue'
 
-defineOptions({ inheritAttrs: false })
-
-interface Props {
-  label: string
-  required?: boolean
-  placeholder?: string
-  type?: string
-  readonly?: boolean
-  disabled?: boolean
+interface Props extends BaseInputCommonProps {
+  type?: TextInputType
   textarea?: boolean
   rows?: number
-  inputmode?:
-    | 'none'
-    | 'text'
-    | 'tel'
-    | 'url'
-    | 'email'
-    | 'numeric'
-    | 'decimal'
-    | 'search'
-  autocomplete?: string
-  id?: string
-  errorMessage?: string
+  inputmode?: TextInputMode
+  autocomplete?: TextAutocomplete
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -48,15 +36,9 @@ const emit = defineEmits<{
   (e: 'input' | 'change', value: Event): void
 }>()
 
-const { describedByAttr, frameAttrs, inputAttrs, getControlAttrs } =
-  useForwardInputAttrs({ controlType: 'input' })
+const { inputId, isFieldRequired, errorMessageId, describedBy } =
+  useBaseInput(props)
 
-const textareaAttrs = computed(() => getControlAttrs('textarea'))
-
-const { inputId, isFieldRequired, errorMessageId, describedBy } = useBaseInput(
-  props,
-  describedByAttr
-)
 const hasValue = computed(() => model.value !== '')
 
 const handleInput = (event: Event) => {
@@ -99,8 +81,7 @@ const handleChange = (event: Event) => {
     :is-textarea="textarea"
     :input-id="inputId"
     :error-message="errorMessage"
-    :error-message-id="errorMessageId"
-    v-bind="frameAttrs">
+    :error-message-id="errorMessageId">
     <template v-if="$slots.default" #prefix>
       <slot />
     </template>
@@ -114,7 +95,6 @@ const handleChange = (event: Event) => {
           label ? 'pt-6' : 'pt-2',
           readonly || disabled ? 'cursor-not-allowed' : ''
         ]"
-        v-bind="textarea ? textareaAttrs : inputAttrs"
         :placeholder="placeholder"
         :readonly="readonly"
         :disabled="disabled"

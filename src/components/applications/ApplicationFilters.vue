@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import BaseTextInput from '@/components/shared/BaseTextInput.vue'
+import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import { useApplicationStore } from '@/features/application/store'
 import { applicationStatusOptions } from '@/features/applicationStatus/entities'

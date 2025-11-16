@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import BaseTextInput from '@/components/shared/BaseTextInput.vue'
+import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
 import EditButton from '@/components/shared/EditButton.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useApplication } from '@/features/application/composables'

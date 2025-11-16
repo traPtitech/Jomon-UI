@@ -2,7 +2,7 @@
 import { useNewApplication } from './composables/useNewApplication'
 import NewApplicationFileForm from '@/components/newApplication/NewApplicationFileForm.vue'
 import NewApplicationTargets from '@/components/newApplication/NewApplicationTargets.vue'
-import BaseTextInput from '@/components/shared/BaseTextInput.vue'
+import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
 import MarkdownTextarea from '@/components/shared/MarkdownTextarea.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import SearchSelectTag from '@/components/shared/SearchSelectTag.vue'

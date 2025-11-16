@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BaseTextInput from './BaseTextInput.vue'
+import BaseTextInput from './BaseInput/BaseTextInput.vue'
 import {
   CheckIcon,
   ChevronDownIcon,

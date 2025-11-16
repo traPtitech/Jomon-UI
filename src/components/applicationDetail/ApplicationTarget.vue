@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import BaseNumberInput from '@/components/shared/BaseNumberInput.vue'
+import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'
 import type { ApplicationDetail } from '@/features/application/entities'

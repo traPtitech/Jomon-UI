@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import BaseNumberInput from '@/components/shared/BaseNumberInput.vue'
+import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import type { ApplicationTargetDraft } from '@/features/applicationTarget/entities'

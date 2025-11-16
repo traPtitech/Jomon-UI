@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useNewPartition } from './composables/useNewPartition'
-import BaseNumberInput from '@/components/shared/BaseNumberInput.vue'
-import BaseTextInput from '@/components/shared/BaseTextInput.vue'
+import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
+import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
 import InputCheckBox from '@/components/shared/InputCheckBox.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useUserStore } from '@/features/user/store'

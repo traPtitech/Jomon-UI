@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { EditMode } from '@/components/partitionDetail/composables/usePartitionInformation'
-import BaseTextInput from '@/components/shared/BaseTextInput.vue'
+import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
 import EditButton from '@/components/shared/EditButton.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { usePartitionStore } from '@/features/partition/store'

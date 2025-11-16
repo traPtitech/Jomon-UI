@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import BaseTextInput from './BaseTextInput.vue'
+import BaseTextInput from './BaseInput/BaseTextInput.vue'
 import MarkdownIt from './MarkdownIt.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import { EyeIcon, PencilSquareIcon } from '@heroicons/vue/24/outline'

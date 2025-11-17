@@ -54,7 +54,10 @@ const navigateToPartition = async (partitionId: string) => {
           {{ partition.name }}
         </td>
         <td class="px-1 py-4">
-          {{ partitionGroupIdNameToMap.get(partition.parentPartitionGroupId) }}
+          {{
+            partitionGroupIdNameToMap.get(partition.parentPartitionGroupId) ??
+            '指定なし'
+          }}
         </td>
         <td class="px-1 py-4 pr-6">
           {{

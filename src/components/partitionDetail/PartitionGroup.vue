@@ -9,6 +9,11 @@ const { partitionGroupIdNameToMap } = usePartitionGroupStore()
 <template>
   <div v-if="partition" class="flex flex-col gap-3">
     <h2 class="text-xl">パーティショングループ</h2>
-    <p>{{ partitionGroupIdNameToMap.get(partition.parentPartitionGroupId) }}</p>
+    <p>
+      {{
+        partitionGroupIdNameToMap.get(partition.parentPartitionGroupId) ??
+        '指定なし'
+      }}
+    </p>
   </div>
 </template>

@@ -2,7 +2,7 @@ import { usePartitionStore } from '@/features/partition/store'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-export type EditMode = 'name' | 'PartitionGroup' | 'description' | 'budget' | ''
+export type EditMode = 'name' | 'partitionGroup' | 'description' | 'budget' | ''
 
 export const usePartitionInformation = () => {
   const toast = useToast()

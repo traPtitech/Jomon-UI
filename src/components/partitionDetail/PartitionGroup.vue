@@ -52,7 +52,7 @@ const { partitionGroupIdNameToMap, partitionGroupOptions } =
       @click="
         props.isEditMode
           ? emit('changeEditMode', '')
-          : emit('changeEditMode', 'PartitionGroup')
+          : emit('changeEditMode', 'partitionGroup')
       " />
   </div>
 </template>

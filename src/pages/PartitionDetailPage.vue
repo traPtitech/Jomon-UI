@@ -39,7 +39,7 @@ if (!isPartitionGroupFetched.value) {
     </div>
     <div class="flex grow flex-col gap-6">
       <PartitionGroup
-        :is-edit-mode="editMode === 'PartitionGroup'"
+        :is-edit-mode="editMode === 'partitionGroup'"
         :is-sending="isSending"
         @change-edit-mode="changeEditMode($event)"
         @finish-editing="finishEditing" />

@@ -1,4 +1,4 @@
-import { useBaseInput } from '../../src/components/shared/BaseInput/useBaseInput'
+import { useBaseInput } from '@/components/shared/BaseInput/useBaseInput'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { defineComponent } from 'vue'
@@ -82,5 +82,21 @@ describe('useBaseInput', () => {
       errorMessage: undefined
     })
     expect(wrapper.vm.describedBy).toBeUndefined()
+  })
+
+  it('describedById がなくても errorMessage があれば errorMessageId のみを返す', () => {
+    const wrapper = mount(TestComponent, {
+      props: { errorMessage: 'エラーです' }
+    })
+
+    const errorId = wrapper.vm.errorMessageId
+
+    expect(errorId).toBeDefined()
+
+    if (!errorId) {
+      throw new Error('errorMessageId must be defined when errorMessage is set')
+    }
+
+    expect(wrapper.vm.describedBy).toBe(errorId)
   })
 })

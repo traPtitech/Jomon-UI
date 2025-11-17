@@ -1,4 +1,4 @@
-import BaseNumberInput from '../../src/components/shared/BaseInput/BaseNumberInput.vue'
+import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
@@ -39,6 +39,28 @@ describe('BaseNumberInput', () => {
     }
 
     expect(input.attributes('aria-describedby')).toBe(`helper-id ${errorId}`)
+  })
+
+  it('required でも readonly/disabled のときは required/aria-required を付与しない', async () => {
+    const wrapper = mount(BaseNumberInput, {
+      props: {
+        label: '数量',
+        modelValue: null,
+        required: true,
+        readonly: true
+      }
+    })
+
+    const input = wrapper.get('input')
+
+    expect(input.attributes('required')).toBeUndefined()
+    expect(input.attributes('aria-required')).toBeUndefined()
+
+    await wrapper.setProps({ readonly: false, disabled: true })
+    await nextTick()
+
+    expect(input.attributes('required')).toBeUndefined()
+    expect(input.attributes('aria-required')).toBeUndefined()
   })
 
   it('modelValue が null や NaN のときは空文字を表示する', async () => {

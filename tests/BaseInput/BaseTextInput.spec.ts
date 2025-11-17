@@ -1,4 +1,4 @@
-import BaseTextInput from '../../src/components/shared/BaseInput/BaseTextInput.vue'
+import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 
@@ -31,6 +31,24 @@ describe('BaseTextInput', () => {
     }
 
     expect(input.attributes('aria-describedby')).toBe(`helper-id ${errorId}`)
+  })
+
+  it('type/inputmode/autocomplete を input に反映する', () => {
+    const wrapper = mount(BaseTextInput, {
+      props: {
+        label: 'メールアドレス',
+        modelValue: '',
+        type: 'email',
+        inputmode: 'email',
+        autocomplete: 'email'
+      }
+    })
+
+    const input = wrapper.get('input')
+
+    expect(input.attributes('type')).toBe('email')
+    expect(input.attributes('inputmode')).toBe('email')
+    expect(input.attributes('autocomplete')).toBe('email')
   })
 
   it('textarea=true の場合は textarea を描画し、type 属性は付与しない', () => {

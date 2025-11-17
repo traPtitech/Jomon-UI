@@ -1,6 +1,6 @@
-import BaseInputFrame from '../../src/components/shared/BaseInput/BaseInputFrame.vue'
+import BaseInputFrame from '@/components/shared/BaseInput/BaseInputFrame.vue'
 import { mount } from '@vue/test-utils'
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 
 describe('BaseInputFrame', () => {
@@ -30,7 +30,9 @@ describe('BaseInputFrame', () => {
     })
 
     // required=true
-    expect(wrapper.find('label span.text-red-500').exists()).toBe(true)
+    const requiredMark = wrapper.find('label span.text-red-500')
+    expect(requiredMark.exists()).toBe(true)
+    expect(requiredMark.text()).toBe('*')
 
     // readonly -> 必須扱いしない
     await wrapper.setProps({ readonly: true })
@@ -57,6 +59,28 @@ describe('BaseInputFrame', () => {
 
     // 値あり: 浮遊ラベル
     expect(label.classes()).toContain('top-1')
+  })
+
+  it('focusin/out でフォーカス状態に応じてラベル位置を切り替える', async () => {
+    const wrapper = mount(BaseInputFrame, {
+      props: { ...baseProps, hasValue: false },
+      slots: { default: '<input />' }
+    })
+
+    const label = wrapper.get('label')
+
+    // 初期状態: 非浮遊
+    expect(label.classes()).toContain('top-1/2')
+
+    // focusin でラベルが浮遊する
+    await wrapper.trigger('focusin')
+    await nextTick()
+    expect(label.classes()).toContain('top-1')
+
+    // focusout で元に戻る
+    await wrapper.trigger('focusout')
+    await nextTick()
+    expect(label.classes()).toContain('top-1/2')
   })
 
   it('isTextarea=true かつ hasValue=false のとき textarea 用の位置クラスを使う', () => {

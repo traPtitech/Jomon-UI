@@ -55,7 +55,6 @@ watch(inputPartitionGroupName, newName => {
   <form class="flex flex-col gap-6">
     <BaseTextInput v-model="partition.name" label="パーティション名" required />
     <div>
-
       <SearchSelect
         v-model="partition.parentPartitionGroupId"
         class="w-full"

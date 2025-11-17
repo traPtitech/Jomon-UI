@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { EditMode } from '@/components/partitionDetail/composables/usePartitionInformation'
-import BaseInput from '@/components/shared/BaseInput.vue'
+import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
 import EditButton from '@/components/shared/EditButton.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { usePartitionStore } from '@/features/partition/store'
@@ -30,7 +30,7 @@ const {
     <h1 v-if="!props.isEditMode" class="grow text-2xl">
       {{ partition.name }}
     </h1>
-    <BaseInput
+    <BaseTextInput
       v-else
       v-model="editedValue.name"
       label="パーティション名"

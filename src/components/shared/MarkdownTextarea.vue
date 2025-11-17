@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import BaseInput from './BaseInput.vue'
+import BaseTextInput from './BaseInput/BaseTextInput.vue'
 import MarkdownIt from './MarkdownIt.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import { EyeIcon, PencilSquareIcon } from '@heroicons/vue/24/outline'
@@ -83,10 +83,10 @@ function changeCurrentTab(tab: TabType) {
         @update:model-value="setTemplate($event)" />
     </div>
     <div class="h-3/5 px-5 py-3">
-      <BaseInput
+      <BaseTextInput
         v-if="currentTab === 'input'"
         v-model="model"
-        type="textarea"
+        textarea
         :label="props.label"
         class="h-full w-full resize-none overflow-y-auto"
         :placeholder="placeholder" />

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import BaseInput from '@/components/shared/BaseInput.vue'
+import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import { useApplicationStore } from '@/features/application/store'
 import { applicationStatusOptions } from '@/features/applicationStatus/entities'
@@ -39,14 +39,14 @@ function sortByCreatedAt() {
       <ChevronUpIcon v-if="filterParams.sort === '-created_at'" class="w-4" />
     </button>
     <div>
-      <BaseInput
+      <BaseTextInput
         v-model="filterParams.since"
         label="開始日"
         class="w-28"
         placeholder="yyyy-MM-dd"
         @blur="fetchApplications" />
       ～
-      <BaseInput
+      <BaseTextInput
         v-model="filterParams.until"
         label="終了日"
         class="w-28"

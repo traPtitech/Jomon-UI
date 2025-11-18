@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import PartitionGroup from '@/components/partitionDetail/PartitionGroup.vue'
 import PartitionName from '@/components/partitionDetail/PartitionName.vue'
+import PartitionBudget from '@/components/partitionDetail/PartitionBudget.vue'
 import { usePartitionInformation } from '@/components/partitionDetail/composables/usePartitionInformation'
 import { usePartitionStore } from '@/features/partition/store'
 import { usePartitionGroupStore } from '@/features/partitionGroup/store'

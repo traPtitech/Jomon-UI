@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 import type { EditMode } from '@/components/partitionDetail/composables/usePartitionInformation'
-import BaseInput from '@/components/shared/BaseInput.vue'
+import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
 import EditButton from '@/components/shared/EditButton.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { isBudgetSet } from '@/features/partition/lib/isBudgetSet'
 import { usePartitionStore } from '@/features/partition/store'
-import { defineProps, defineEmits } from 'vue'
 
 interface Props {
   isEditMode: boolean
@@ -30,7 +29,7 @@ const { currentPartition: partition, editedValue } = usePartitionStore()
       <span v-else>指定なし</span>
     </h2>
 
-    <BaseInput
+    <BaseNumberInput
       v-else
       v-model="editedValue.budget"
       type="number"

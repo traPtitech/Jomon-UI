@@ -18,7 +18,8 @@ watch(
     } catch {
       document.location = 'https://jomon-dev.trapti.tech/api/auth/genpkce'
     }
-  }
+  },
+  { immediate: true }
 )
 </script>
 

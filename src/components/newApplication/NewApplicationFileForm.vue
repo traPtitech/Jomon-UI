@@ -3,12 +3,11 @@ import type { FileSeed } from '@/features/file/entities'
 import { isImageByType } from '@/lib/checkFileType'
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
-import { onUnmounted, ref, watch } from 'vue'
+import { computed, onUnmounted, ref } from 'vue'
 
 const files = defineModel<FileSeed[]>({ required: true })
 
 const inputRef = ref()
-const filePreviewUrls = ref<string[]>([])
 const previewUrlCache = new Map<File, string>()
 
 function handleFileChange(e: Event) {
@@ -33,25 +32,18 @@ function removeFile(index: number) {
   files.value.splice(index, 1)
 }
 
-watch(
-  files,
-  files => {
-    filePreviewUrls.value = files.map(({ file }) => {
-      if (previewUrlCache.has(file)) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return previewUrlCache.get(file)!
-      }
+const filePreviewUrls = computed(() => {
+  return files.value.map(({ file }) => {
+    if (previewUrlCache.has(file)) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return previewUrlCache.get(file)!
+    }
 
-      const previewUrl = URL.createObjectURL(file)
-      previewUrlCache.set(file, previewUrl)
-      return previewUrl
-    })
-  },
-  {
-    immediate: true,
-    deep: true
-  }
-)
+    const previewUrl = URL.createObjectURL(file)
+    previewUrlCache.set(file, previewUrl)
+    return previewUrl
+  })
+})
 
 onUnmounted(() => {
   previewUrlCache.forEach(value => {

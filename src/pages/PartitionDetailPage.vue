@@ -30,22 +30,24 @@ if (!isPartitionGroupFetched.value) {
 
 <template>
   <div v-if="partition !== undefined" class="flex flex-col gap-6">
-    <div class="flex">
+    <div class="flex grow flex-col">
+      <p>パーティション名</p>
       <PartitionName
-        class="grow"
         :is-edit-mode="editMode === 'name'"
         :is-sending="isSending"
         @change-edit-mode="changeEditMode($event)"
         @finish-editing="finishEditing" />
     </div>
-    <div class="flex grow flex-col gap-6">
+    <div class="flex grow flex-col">
+      <p>パーティショングループ</p>
       <PartitionGroup
         :is-edit-mode="editMode === 'partitionGroup'"
         :is-sending="isSending"
         @change-edit-mode="changeEditMode($event)"
         @finish-editing="finishEditing" />
     </div>
-    <div class="flex grow flex-col gap-6">
+    <div class="flex grow flex-col">
+      <p>予算</p>
       <PartitionBudget
         :is-edit-mode="editMode === 'budget'"
         :is-sending="isSending"

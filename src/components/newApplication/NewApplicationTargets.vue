@@ -33,7 +33,12 @@ function handleRemoveTarget(index: number) {
         <SearchSelect
           v-model="target.target"
           :options="userOptions"
-          :display-options="filteredUserOptions"
+          :display-options="
+            [
+              ...filteredUserOptions,
+              userOptions.find(({ value }) => value === target.target)
+            ].filter(option => !!option)
+          "
           class="grow"
           label="払い戻し対象者" />
         <BaseInput v-model="target.amount" type="number" label="金額">

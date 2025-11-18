@@ -25,19 +25,18 @@ const { partitionGroupIdNameToMap, partitionGroupOptions } =
 
 <template>
   <div v-if="partition" class="flex items-center gap-3">
-    <h2 v-if="!props.isEditMode" class="grow text-xl">
+    <SearchSelect
+      v-if="props.isEditMode"
+      v-model="editedValue.parentPartitionGroupId"
+      class="grow"
+      :options="partitionGroupOptions"
+      label="パーティショングループ" />
+    <h2 v-else class="grow text-xl">
       {{
         partitionGroupIdNameToMap.get(partition.parentPartitionGroupId) ??
         '指定なし'
       }}
     </h2>
-
-    <SearchSelect
-      v-else
-      v-model="editedValue.parentPartitionGroupId"
-      class="grow"
-      :options="partitionGroupOptions"
-      label="パーティショングループ" />
 
     <SimpleButton
       v-if="props.isEditMode"

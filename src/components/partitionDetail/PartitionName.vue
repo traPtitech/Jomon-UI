@@ -27,14 +27,14 @@ const {
 
 <template>
   <div v-if="partition" class="flex items-center gap-3">
-    <h1 v-if="!props.isEditMode" class="grow text-2xl">
-      {{ partition.name }}
-    </h1>
     <BaseTextInput
-      v-else
+      v-if="props.isEditMode"
       v-model="editedValue.name"
       label="パーティション名"
       class="grow" />
+    <h1 v-else class="grow text-2xl">
+      {{ partition.name }}
+    </h1>
     <SimpleButton
       v-if="isEditMode"
       font-size="base"

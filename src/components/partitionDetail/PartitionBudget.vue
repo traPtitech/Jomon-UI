@@ -22,19 +22,19 @@ const { currentPartition: partition, editedValue } = usePartitionStore()
 
 <template>
   <div v-if="partition" class="flex items-center gap-3">
-    <h2 v-if="!props.isEditMode" class="grow text-xl">
+    <BaseNumberInput
+      v-if="props.isEditMode"
+      v-model="editedValue.budget"
+      type="number"
+      label="予算"
+      class="grow" />
+
+    <h2 v-else class="grow text-xl">
       <span v-if="isBudgetSet(partition.budget)">
         {{ partition.budget }} 円
       </span>
       <span v-else>指定なし</span>
     </h2>
-
-    <BaseNumberInput
-      v-else
-      v-model="editedValue.budget"
-      type="number"
-      label="予算"
-      class="grow" />
 
     <SimpleButton
       v-if="props.isEditMode"

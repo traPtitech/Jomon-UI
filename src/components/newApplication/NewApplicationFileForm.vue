@@ -3,42 +3,54 @@ import type { FileSeed } from '@/features/file/entities'
 import { isImageByType } from '@/lib/checkFileType'
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
-import { ref } from 'vue'
+import { computed, onUnmounted, ref } from 'vue'
 
-interface Props {
-  files: FileSeed[]
-}
-
-const props = defineProps<Props>()
-const emit = defineEmits<(e: 'input', value: FileSeed[]) => void>()
+const files = defineModel<FileSeed[]>({ required: true })
 
 const inputRef = ref()
+const previewUrlCache = new Map<File, string>()
 
 function handleFileChange(e: Event) {
   if (!(e.target instanceof HTMLInputElement) || !e.target.files) {
     return
   }
-  for (const file of Array.from(e.target.files)) {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => {
-      emit('input', [
-        ...props.files,
-        { name: file.name, file: file } as FileSeed
-      ])
-    }
-  }
+
+  const newFiles = Array.from(e.target.files).map(file => {
+    return { name: file.name, file: file }
+  })
+  files.value.push(...newFiles)
   if (inputRef.value) {
     inputRef.value.value = null
   }
 }
 
 function removeFile(index: number) {
-  emit(
-    'input',
-    props.files.filter((_, i) => index !== i)
-  )
+  const { file } = files.value[index]
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  URL.revokeObjectURL(previewUrlCache.get(file)!)
+  previewUrlCache.delete(file)
+  files.value.splice(index, 1)
 }
+
+const filePreviewUrls = computed(() => {
+  return files.value.map(({ file }) => {
+    if (previewUrlCache.has(file)) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return previewUrlCache.get(file)!
+    }
+
+    const previewUrl = URL.createObjectURL(file)
+    previewUrlCache.set(file, previewUrl)
+    return previewUrl
+  })
+})
+
+onUnmounted(() => {
+  previewUrlCache.forEach(value => {
+    URL.revokeObjectURL(value)
+  })
+  previewUrlCache.clear()
+})
 </script>
 
 <template>
@@ -65,7 +77,7 @@ function removeFile(index: number) {
           v-if="isImageByType(file.file.type)"
           :alt="file.name"
           class="h-32"
-          :src="file.name" />
+          :src="filePreviewUrls[index]" />
         <DocumentIcon v-else class="h-32" />
         <button
           aria-label="ファイルを削除"

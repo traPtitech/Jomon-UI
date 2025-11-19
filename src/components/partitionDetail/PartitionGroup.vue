@@ -1,10 +1,11 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { EditMode } from '@/components/partitionDetail/composables/usePartitionInformation'
-import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
 import EditButton from '@/components/shared/EditButton.vue'
+import SearchSelect from '@/components/shared/SearchSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { usePartitionStore } from '@/features/partition/store'
-import { useUserStore } from '@/features/user/store'
+import { usePartitionGroupStore } from '@/features/partitionGroup/store'
+import { defineProps, defineEmits } from 'vue'
 
 interface Props {
   isEditMode: boolean
@@ -17,38 +18,40 @@ const emit = defineEmits<{
   (e: 'finishEditing'): void
 }>()
 
-const { me } = useUserStore()
-const {
-  canEditPartition,
-  currentPartition: partition,
-  editedValue
-} = usePartitionStore()
+const { currentPartition: partition, editedValue } = usePartitionStore()
+const { partitionGroupIdNameToMap, partitionGroupOptions } =
+  usePartitionGroupStore()
 </script>
 
 <template>
   <div v-if="partition" class="flex items-center gap-3">
-    <BaseTextInput
+    <SearchSelect
       v-if="props.isEditMode"
-      v-model="editedValue.name"
-      label="パーティション名"
-      class="grow" />
-    <h1 v-else class="grow text-2xl">
-      {{ partition.name }}
-    </h1>
+      v-model="editedValue.parentPartitionGroupId"
+      class="grow"
+      :options="partitionGroupOptions"
+      label="パーティショングループ" />
+    <h2 v-else class="grow text-xl">
+      {{
+        partitionGroupIdNameToMap.get(partition.parentPartitionGroupId) ??
+        '指定なし'
+      }}
+    </h2>
+
     <SimpleButton
-      v-if="isEditMode"
+      v-if="props.isEditMode"
       font-size="base"
       padding="sm"
       @click="emit('finishEditing')">
       完了
     </SimpleButton>
+
     <EditButton
-      v-if="canEditPartition(me)"
       :is-edit-mode="props.isEditMode"
       @click="
         props.isEditMode
           ? emit('changeEditMode', '')
-          : emit('changeEditMode', 'name')
+          : emit('changeEditMode', 'partitionGroup')
       " />
   </div>
 </template>

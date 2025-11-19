@@ -6,7 +6,7 @@ export const mockPartition: Partition = {
   id: '1',
   name: 'テストパーティション',
   budget: 10000,
-  parent_partition_group: 'mock-group',
+  parent_partition_group: 'group-1',
   management: {
     category: 'manual',
     state: 'available'
@@ -18,7 +18,7 @@ export const mockPartitionWithoutBudget: Partition = {
   id: '2',
   name: 'テストパーティション(指定なし)',
   budget: null,
-  parent_partition_group: 'mock-group2',
+  parent_partition_group: 'group-2',
   management: {
     category: 'manual',
     state: 'available'

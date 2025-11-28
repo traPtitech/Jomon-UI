@@ -5,7 +5,6 @@ import SearchSelect from '@/components/shared/SearchSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { usePartitionStore } from '@/features/partition/store'
 import { usePartitionGroupStore } from '@/features/partitionGroup/store'
-import { defineProps, defineEmits } from 'vue'
 
 interface Props {
   isEditMode: boolean

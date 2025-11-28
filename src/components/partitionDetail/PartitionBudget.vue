@@ -25,7 +25,6 @@ const { currentPartition: partition, editedValue } = usePartitionStore()
     <BaseNumberInput
       v-if="props.isEditMode"
       v-model="editedValue.budget"
-      type="number"
       label="予算"
       class="grow" />
 

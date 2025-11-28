@@ -36,7 +36,7 @@ const {
       {{ partition.name }}
     </h1>
     <SimpleButton
-      v-if="isEditMode"
+      v-if="props.isEditMode"
       font-size="base"
       padding="sm"
       @click="emit('finishEditing')">

@@ -5,6 +5,7 @@ import SearchSelect from '@/components/shared/SearchSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { usePartitionStore } from '@/features/partition/store'
 import { usePartitionGroupStore } from '@/features/partitionGroup/store'
+import { useUserStore } from '@/features/user/store'
 
 interface Props {
   isEditMode: boolean
@@ -17,7 +18,12 @@ const emit = defineEmits<{
   (e: 'finishEditing'): void
 }>()
 
-const { currentPartition: partition, editedValue } = usePartitionStore()
+const { me } = useUserStore()
+const {
+  canEditPartition,
+  currentPartition: partition,
+  editedValue
+} = usePartitionStore()
 const { partitionGroupIdNameToMap, partitionGroupOptions } =
   usePartitionGroupStore()
 </script>
@@ -46,6 +52,7 @@ const { partitionGroupIdNameToMap, partitionGroupOptions } =
     </SimpleButton>
 
     <EditButton
+      v-if="canEditPartition(me)"
       :is-edit-mode="props.isEditMode"
       @click="
         props.isEditMode

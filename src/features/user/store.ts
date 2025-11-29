@@ -28,16 +28,7 @@ export const useUserStore = defineStoreComposable('user', () => {
     }, {})
   )
 
-  const getUserName = (id: string): string | undefined => {
-    const name = userMap.value[id]
-    if (name === undefined) {
-      if (status.value === 'success') {
-        console.warn(`User not found: ${id}`)
-      }
-      return undefined
-    }
-    return name
-  }
+  const getUserName = (id: string): string | undefined => userMap.value[id]
 
   const isUserFetched = computed(() => status.value === 'success')
 

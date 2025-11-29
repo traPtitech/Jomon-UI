@@ -22,7 +22,9 @@ const toast = useToast()
 const hasAuthority = isApplicationCreator.value(me.value)
 
 const isEditMode = ref(false)
-const editedTargets = ref<ApplicationTargetDetail[]>(props.application.targets)
+const editedTargets = ref<ApplicationTargetDetail[]>(
+  props.application.targets.map(t => ({ ...t }))
+)
 
 const handleDeleteTarget = (targetId: string) => {
   editedTargets.value = editedTargets.value.filter(
@@ -31,7 +33,7 @@ const handleDeleteTarget = (targetId: string) => {
 }
 
 const toggleEditTargets = () => {
-  editedTargets.value = props.application.targets
+  editedTargets.value = props.application.targets.map(t => ({ ...t }))
   isEditMode.value = !isEditMode.value
 }
 

@@ -45,13 +45,26 @@ Install dependencies.
 npm install
 ```
 
-### Development Server
+### Development Flow
 
-Start the development server (defaults to `http://localhost:5173` with hot module replacement enabled).
+**Local Development**
 
-```sh
-npm run dev
-```
+- Start dev server: `npm run dev`
+- Type check in parallel: `npm run type-check` (keep running to catch errors early)
+- Format & Lint:
+  - Run `npm run format` and `npm run lint` before committing.
+  - CI uses `lint:nofix` and `format:check` to ensure quality without modifying code.
+
+**CI (Pull Request)**
+
+1. `npm ci`
+2. `npm run gen-api` (Ensure generated code matches schema)
+3. `npm run lint:nofix`
+4. `npm run format:check`
+5. `npm run type-check`
+6. `npm run type-check:tests`
+7. `npm run test:unit`
+8. `npm run build`
 
 ### Scripts
 
@@ -79,36 +92,42 @@ npm run dev
 src/
   components/            Reusable UI components
   features/
-    <feature>/
+    <feature>/           Domain feature modules
       entities.ts        Domain entities and seed types
-      store.ts           Pinia store (added per feature as needed)
-      composables.ts     Composition API utilities (optional)
+      store.ts           Pinia store (Setup Store pattern)
+      composables.ts     Composition API utilities
       data/              Layer handling OpenAPI data
         repository.ts    API access using the generated client
         converter.ts     Mapping between generated and domain models
         *.ts             Feature-specific utilities
       __mocks__/         MSW handlers and mock data
-  lib/apis/generated/     Auto-generated OpenAPI client (Do not edit)
+  lib/apis/generated/    Auto-generated OpenAPI client (Do not edit)
   pages/                 Page-level Vue components
-  styles/                Global styles
+  styles/                Global styles (Tailwind CSS v4)
+tests/
+  features/              Unit tests mirroring src/features
+  components/            Component tests
 ```
 
-GET flows convert generated models to domain models in `data/converter.ts`, while POST/PUT requests transform domain models back to generated schemas in `data/repository.ts`. Each feature includes only the stores or composables it truly needs.
+### Best Practices
 
-### Coding Guidelines
+**Vue Components**
 
-- Implement with the Composition API under TypeScript `strict` mode.
-- Use kebab-case for file names, PascalCase for types/interfaces, and prefix composables with `use`.
-- Keep formatting consistent with Prettier (2 spaces, single quotes); run `npm run format` before committing.
-- Rely on ESLint (`plugin:vue/strongly-recommended`, `vuejs-accessibility`) and verify ARIA attribute/label pairing.
-- Perform manual accessibility checks with `vue-axe` for key forms and dialogs.
+- Use `<script setup lang="ts">` for all new components.
+- Define typed props/emits using `defineProps<Props>()` and `defineEmits<Events>()`.
+- Keep components focused; extract logic to composables or sub-components when complex.
 
-### Testing & Quality
+**State Management (Pinia)**
 
-- Static checks: `npm run lint`, `npm run type-check`, `npm run type-check:tests`
-- Unit tests: `npm run test:unit`
-- For UI logic tests, use Vue Test Utils with MSW, reusing handlers under `src/features/<feature>/__mocks__`.
-- Conduct accessibility validation on major forms/dialogs with `vue-axe` during manual testing.
+- Split stores by domain (e.g., `useAuthStore`, `useApplicationStore`).
+- Use the Setup Store pattern (`defineStoreComposable`) for better type inference and flexibility.
+- Keep UI state (like modal open/close) local to components unless shared globally.
+
+**Testing**
+
+- **Unit Tests (Vitest)**: Test behavior, not implementation details.
+- **API Mocking (MSW)**: Use `src/mocks/handlers.ts` or feature-specific mocks.
+- **Accessibility**: Use `vue-axe` for manual checks during development.
 
 ### API Client Workflow
 
@@ -159,13 +178,26 @@ Node.js 環境は [Volta](https://volta.sh/) や [fnm](https://github.com/Schniz
 npm install
 ```
 
-### 開発サーバーの起動
+### 開発フロー
 
-`npm run dev` で Vite の開発サーバーが立ち上がり、デフォルトで `http://localhost:5173` が開きます。
+**ローカル開発**
 
-```sh
-npm run dev
-```
+- 開発サーバー: `npm run dev`
+- 型チェック並行実行: `npm run type-check` (エラーを早期発見するため常時実行推奨)
+- フォーマット・Lint:
+  - コミット前に `npm run format` と `npm run lint` を実行
+  - CI では `lint:nofix` と `format:check` を使い、コードを書き換えずに品質をチェックします
+
+**CI (Pull Request)**
+
+1. `npm ci`
+2. `npm run gen-api` (生成コードが最新か確認)
+3. `npm run lint:nofix`
+4. `npm run format:check`
+5. `npm run type-check`
+6. `npm run type-check:tests`
+7. `npm run test:unit`
+8. `npm run build`
 
 ### 主要スクリプト
 
@@ -193,36 +225,42 @@ npm run dev
 src/
   components/            再利用可能な UI コンポーネント
   features/
-    <feature>/
+    <feature>/           ドメイン機能モジュール
       entities.ts        ドメインエンティティとシード型
-      store.ts           Pinia ストア (必要な機能のみ配置)
-      composables.ts     Composition API ベースのユーティリティ (任意)
+      store.ts           Pinia ストア (Setup Store パターン)
+      composables.ts     Composition API ベースのユーティリティ
       data/              OpenAPI 由来データを扱う層
         repository.ts    生成クライアントを利用した API アクセス
         converter.ts     生成型とドメイン型の相互変換
         *.ts             feature 固有の補助ロジック
       __mocks__/         MSW 用のモックハンドラとデータ
-  lib/apis/generated/     OpenAPI から自動生成されたクライアント (編集禁止)
+  lib/apis/generated/    OpenAPI から自動生成されたクライアント (編集禁止)
   pages/                 画面単位の Vue コンポーネント
-  styles/                グローバルスタイル
+  styles/                グローバルスタイル (Tailwind CSS v4)
+tests/
+  features/              src/features に対応する単体テスト
+  components/            コンポーネントテスト
 ```
 
-GET 系データは `data/converter.ts` で生成型からドメイン型へ、POST/PUT 時は `data/repository.ts` でドメイン型から生成型へ変換しながら送信する設計です。`store.ts` や `composables.ts` は feature ごとに必要なもののみ配置しています。
+### ベストプラクティス
 
-### コーディング規約
+**Vue コンポーネント**
 
-- TypeScript `strict` 設定のもとで Composition API を用いて実装します。
-- ファイル命名はケバブケース、型・インターフェースはパスカルケース、Composable は `use` プレフィックスで統一します。
-- Prettier (2 スペース・シングルクォート) で整形し、コミット前に `npm run format` を推奨します。
-- ESLint (`plugin:vue/strongly-recommended`, `vuejs-accessibility`) を活用し、ARIA 属性とラベルの対応を確認します。
-- 主要フォームやダイアログでは `vue-axe` を活用した手動アクセシビリティ検証を行います。
+- 新規コンポーネントは `<script setup lang="ts">` で記述する。
+- props/emits は `defineProps<Props>()` / `defineEmits<Events>()` で型定義する。
+- コンポーネントの責務を絞り、複雑なロジックは composable やサブコンポーネントに切り出す。
 
-### テストと品質
+**状態管理 (Pinia)**
 
-- 静的解析: `npm run lint`, `npm run type-check`, `npm run type-check:tests`
-- 単体テスト: `npm run test:unit`
-- UI ロジックの自動テストを追加する場合は Vue Test Utils と MSW を利用し、モックは `src/features/<feature>/__mocks__` を再利用します。
-- 主要なフォーム・ダイアログでは `vue-axe` を併用してアクセシビリティ検証を行ってください。
+- ストアはドメイン単位（例: `useAuthStore`, `useApplicationStore`）で分割する。
+- Setup Store パターン (`defineStoreComposable`) を採用し、型推論と柔軟性を高める。
+- モーダル開閉などの一時的な UI 状態は、共有不要ならコンポーネント内に閉じる。
+
+**テスト**
+
+- **単体テスト (Vitest)**: 実装詳細ではなく「振る舞い」をテストする。
+- **API モック (MSW)**: `src/mocks/handlers.ts` や各 feature の mock を活用する。
+- **アクセシビリティ**: 開発中に `vue-axe` で手動チェックを行う。
 
 ### API クライアント運用
 

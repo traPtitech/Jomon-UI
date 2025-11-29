@@ -28,6 +28,7 @@ const {
 <template>
   <div v-if="partition" class="flex items-center gap-3">
     <BaseTextInput
+      required
       v-if="props.isEditMode"
       v-model="editedValue.name"
       label="パーティション名"

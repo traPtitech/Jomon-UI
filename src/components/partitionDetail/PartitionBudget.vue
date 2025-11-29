@@ -28,11 +28,7 @@ const {
 
 <template>
   <div v-if="partition" class="flex items-center gap-3">
-    <BaseNumberInput
-      v-if="props.isEditMode"
-      v-model="editedValue.budget"
-      label="予算"
-      class="grow" />
+    <BaseNumberInput required v-if="props.isEditMode" v-model="editedValue.budget" label="予算" class="grow" />
 
     <h2 v-else class="grow text-xl">
       <span v-if="isBudgetSet(partition.budget)">
@@ -41,21 +37,14 @@ const {
       <span v-else>指定なし</span>
     </h2>
 
-    <SimpleButton
-      v-if="props.isEditMode"
-      font-size="base"
-      padding="sm"
-      @click="emit('finishEditing')">
+    <SimpleButton v-if="props.isEditMode" font-size="base" padding="sm" @click="emit('finishEditing')">
       完了
     </SimpleButton>
 
-    <EditButton
-      v-if="canEditPartition(me)"
-      :is-edit-mode="props.isEditMode"
-      @click="
-        props.isEditMode
-          ? emit('changeEditMode', '')
-          : emit('changeEditMode', 'budget')
+    <EditButton v-if="canEditPartition(me)" :is-edit-mode="props.isEditMode" @click="
+      props.isEditMode
+        ? emit('changeEditMode', '')
+        : emit('changeEditMode', 'budget')
       " />
   </div>
 </template>

@@ -31,6 +31,7 @@ const { partitionGroupIdNameToMap, partitionGroupOptions } =
 <template>
   <div v-if="partition" class="flex items-center gap-3">
     <SearchSelect
+      required
       v-if="props.isEditMode"
       v-model="editedValue.parentPartitionGroupId"
       class="grow"

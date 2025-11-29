@@ -1,14 +1,16 @@
 <script lang="ts" setup>
-import type { ApplicationStatus } from '@/features/applicationStatus/entities'
+import { computed } from 'vue'
+
 import {
   CheckCircleIcon,
   ChevronDownIcon,
   CloudArrowUpIcon,
   ExclamationTriangleIcon,
   HandThumbUpIcon,
-  XCircleIcon
+  XCircleIcon,
 } from '@heroicons/vue/24/solid'
-import { computed } from 'vue'
+
+import type { ApplicationStatus } from '@/features/applicationStatus/entities'
 
 interface Props {
   status: ApplicationStatus
@@ -18,7 +20,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   hasText: false,
-  hasMenu: false
+  hasMenu: false,
 })
 
 const statusToJpn = computed(() => (status: ApplicationStatus) => {

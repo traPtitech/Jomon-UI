@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
+import { useToast } from 'vue-toastification'
+
 import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import { useApplicationStore } from '@/features/application/store'
@@ -6,8 +9,6 @@ import { applicationStatusOptions } from '@/features/applicationStatus/entities'
 import { usePartitionStore } from '@/features/partition/store'
 import { useTagStore } from '@/features/tag/store'
 import { useUserStore } from '@/features/user/store'
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
-import { useToast } from 'vue-toastification'
 
 const { applications, filterParams, fetchApplications } = useApplicationStore()
 const { userOptions } = useUserStore()

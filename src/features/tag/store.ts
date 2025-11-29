@@ -1,8 +1,11 @@
-import type { Tag } from './entities'
-import { TagRepositoryKey } from '@/di'
-import { defineStoreComposable } from '@/lib/store'
-import type { AsyncStatus } from '@/types'
 import { computed, inject, ref } from 'vue'
+
+import { defineStoreComposable } from '@/lib/store'
+
+import { TagRepositoryKey } from '@/di'
+import type { AsyncStatus } from '@/types'
+
+import type { Tag } from './entities'
 
 export const useTagStore = defineStoreComposable('tag', () => {
   const repository = inject(TagRepositoryKey)
@@ -15,14 +18,14 @@ export const useTagStore = defineStoreComposable('tag', () => {
   const tagOptions = computed(() =>
     tags.value.map(tag => ({
       key: tag.name,
-      value: tag
+      value: tag,
     }))
   )
 
   const tagIdOptions = computed(() =>
     tags.value.map(tag => ({
       key: tag.name,
-      value: tag.id
+      value: tag.id,
     }))
   )
 
@@ -90,7 +93,7 @@ export const useTagStore = defineStoreComposable('tag', () => {
     fetchTags,
     ensureTags,
     deleteTags,
-    reset
+    reset,
   }
 })
 

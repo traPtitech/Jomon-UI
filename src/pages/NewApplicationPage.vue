@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { useNewApplication } from './composables/useNewApplication'
+import { useToast } from 'vue-toastification'
+
 import NewApplicationFileForm from '@/components/newApplication/NewApplicationFileForm.vue'
 import NewApplicationTargets from '@/components/newApplication/NewApplicationTargets.vue'
 import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
@@ -11,7 +12,8 @@ import { applicationTemplates } from '@/features/applicationTemplate/entities'
 import { usePartitionStore } from '@/features/partition/store'
 import { useTagStore } from '@/features/tag/store'
 import { useUserStore } from '@/features/user/store'
-import { useToast } from 'vue-toastification'
+
+import { useNewApplication } from './composables/useNewApplication'
 
 const { isTagFetched, fetchTags } = useTagStore()
 const { isUserFetched, fetchUsers, me } = useUserStore()

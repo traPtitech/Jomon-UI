@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-import SearchSelect from './SearchSelect.vue'
+import { computed, ref, watch } from 'vue'
+
 import type { Tag } from '@/features/tag/entities'
 import { useTagStore } from '@/features/tag/store'
-import { computed, ref, watch } from 'vue'
+
+import SearchSelect from './SearchSelect.vue'
 
 const model = defineModel<Tag[]>({ required: true })
 
@@ -12,7 +14,7 @@ const selectedValue = ref(model.value.map(tag => tag.name))
 const searchOptions = computed(() =>
   tagOptions.value.map(tag => ({
     key: tag.key,
-    value: tag.value.name
+    value: tag.value.name,
   }))
 )
 
@@ -21,7 +23,7 @@ watch(selectedValue, () => {
     name =>
       tagOptions.value.find(tag => tag.value.name === name)?.value ?? {
         id: '',
-        name
+        name,
       }
   )
 })

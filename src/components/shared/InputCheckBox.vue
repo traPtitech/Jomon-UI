@@ -7,7 +7,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  required: false
+  required: false,
 })
 
 const model = defineModel<boolean>({ required: true })
@@ -29,7 +29,7 @@ const inputId = useId()
       <label
         :for="inputId"
         :class="[
-          'pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out peer-focus:text-blue-500'
+          'pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out peer-focus:text-blue-500',
         ]">
         {{ props.label }}
         <span v-if="props.required" class="text-red-500">*</span>

@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+import { computed } from 'vue'
+
+import { TrashIcon } from '@heroicons/vue/24/solid'
+import { useToast } from 'vue-toastification'
+
 import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'
@@ -6,12 +11,9 @@ import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import type {
   ApplicationTarget,
-  ApplicationTargetDetail
+  ApplicationTargetDetail,
 } from '@/features/applicationTarget/entities'
 import { useUserStore } from '@/features/user/store'
-import { TrashIcon } from '@heroicons/vue/24/solid'
-import { computed } from 'vue'
-import { useToast } from 'vue-toastification'
 
 const props = defineProps<{
   application: ApplicationDetail
@@ -56,7 +58,7 @@ const handleRemoveTarget = async () => {
       partition: props.application.partition.id,
       targets: props.application.targets.filter(
         target => target.id !== props.target.id
-      )
+      ),
     })
   } catch {
     toast.error('削除に失敗しました')

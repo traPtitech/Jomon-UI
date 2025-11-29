@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+import { computed, ref } from 'vue'
+
+import { useToast } from 'vue-toastification'
+
 import ApplicationTarget from '@/components/applicationDetail/ApplicationTarget.vue'
 import EditButton from '@/components/shared/EditButton.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
@@ -7,8 +11,6 @@ import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import type { ApplicationTargetDetail } from '@/features/applicationTarget/entities'
 import { useUserStore } from '@/features/user/store'
-import { computed, ref } from 'vue'
-import { useToast } from 'vue-toastification'
 
 const props = defineProps<{
   application: ApplicationDetail
@@ -50,7 +52,7 @@ const handleUpdateTargets = async () => {
     await editApplication(props.application.id, {
       ...props.application,
       partition: props.application.partition.id,
-      targets: editedTargets.value
+      targets: editedTargets.value,
     })
     toast.success('更新しました')
   } catch {

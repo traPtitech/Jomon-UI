@@ -9,7 +9,7 @@ const props = defineProps<Props>()
 
 const md = MarkdownIt({
   breaks: true,
-  linkify: true
+  linkify: true,
 })
 </script>
 

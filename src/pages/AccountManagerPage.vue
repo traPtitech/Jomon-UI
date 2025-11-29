@@ -1,25 +1,28 @@
 <script lang="ts" setup>
-import { useAccountManager } from './composables/useAccountManager'
+import { ref } from 'vue'
+
+import { useToast } from 'vue-toastification'
+
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useAccountManagerStore } from '@/features/accountManager/store'
 import { useTagStore } from '@/features/tag/store'
 import { useUserStore } from '@/features/user/store'
-import { ref } from 'vue'
-import { useToast } from 'vue-toastification'
+
+import { useAccountManager } from './composables/useAccountManager'
 
 const {
   isAccountManagerFetched,
   accountManagers,
   accountManagerOptions,
-  fetchAccountManagers
+  fetchAccountManagers,
 } = useAccountManagerStore()
 const {
   me,
   isUserFetched,
   isAccountManager,
   getUserNameWithFallback,
-  fetchUsers
+  fetchUsers,
 } = useUserStore()
 const { isTagFetched, tagIdOptions, deleteTags, fetchTags } = useTagStore()
 const toast = useToast()

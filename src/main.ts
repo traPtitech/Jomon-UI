@@ -1,3 +1,21 @@
+import { Fragment, createApp, h } from 'vue'
+
+import { createPinia } from 'pinia'
+
+import { setupWorker } from 'msw/browser'
+import Toast, { POSITION } from 'vue-toastification'
+import type { PluginOptions } from 'vue-toastification'
+import 'vue-toastification/dist/index.css'
+
+import { handlers } from '@/lib/msw'
+
+import { useAccountManagerRepository } from '@/features/accountManager/data/repository'
+import { useApplicationRepository } from '@/features/application/data/repository'
+import { usePartitionRepository } from '@/features/partition/data/repository'
+import { usePartitionGroupRepository } from '@/features/partitionGroup/data/repository'
+import { useTagRepository } from '@/features/tag/data/repository'
+import { useUserRepository } from '@/features/user/data/repository'
+
 import App from './App.vue'
 import {
   AccountManagerRepositoryKey,
@@ -5,22 +23,9 @@ import {
   PartitionGroupRepositoryKey,
   PartitionRepositoryKey,
   TagRepositoryKey,
-  UserRepositoryKey
+  UserRepositoryKey,
 } from './di'
 import router from './router'
-import { useAccountManagerRepository } from '@/features/accountManager/data/repository'
-import { useApplicationRepository } from '@/features/application/data/repository'
-import { usePartitionRepository } from '@/features/partition/data/repository'
-import { usePartitionGroupRepository } from '@/features/partitionGroup/data/repository'
-import { useTagRepository } from '@/features/tag/data/repository'
-import { useUserRepository } from '@/features/user/data/repository'
-import { handlers } from '@/lib/msw'
-import { setupWorker } from 'msw/browser'
-import { createPinia } from 'pinia'
-import { Fragment, createApp, h } from 'vue'
-import type { PluginOptions } from 'vue-toastification'
-import Toast, { POSITION } from 'vue-toastification'
-import 'vue-toastification/dist/index.css'
 
 if (
   import.meta.env.MODE === 'development' &&
@@ -28,7 +33,7 @@ if (
 ) {
   const worker = setupWorker(...handlers)
   await worker.start({
-    onUnhandledRequest: 'bypass'
+    onUnhandledRequest: 'bypass',
   })
 }
 
@@ -40,7 +45,7 @@ const setup = async () => {
   // NOTE: 開発環境では vue-axe を読み込む
   const VueAxe = await import('vue-axe')
   const app = createApp({
-    render: () => h(Fragment, [h(App), h(VueAxe.VueAxePopup)])
+    render: () => h(Fragment, [h(App), h(VueAxe.VueAxePopup)]),
   })
   app.use(VueAxe.default)
 
@@ -53,7 +58,7 @@ const options: PluginOptions = {
   timeout: 3000,
   closeButton: false,
   pauseOnHover: false,
-  hideProgressBar: true
+  hideProgressBar: true,
 }
 
 await setup().then(app => {

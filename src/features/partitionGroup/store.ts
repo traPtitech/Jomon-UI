@@ -1,17 +1,19 @@
+import { computed, inject, ref } from 'vue'
+
+import { defineStoreComposable } from '@/lib/store'
+
 import { PartitionGroupRepositoryKey } from '@/di'
 import type {
   PartitionGroup,
-  PartitionGroupSeed
+  PartitionGroupSeed,
 } from '@/features/partitionGroup/entities'
 import type { User } from '@/features/user/entities'
-import { defineStoreComposable } from '@/lib/store'
 import type { AsyncStatus } from '@/types'
-import { computed, inject, ref } from 'vue'
 
 const createDefaultPartitionGroupSeed = (): PartitionGroupSeed => ({
   name: '',
   parentPartitionGroupId: null,
-  depth: 0
+  depth: 0,
 })
 
 export const usePartitionGroupStore = defineStoreComposable(
@@ -31,7 +33,7 @@ export const usePartitionGroupStore = defineStoreComposable(
     const partitionGroupOptions = computed(() =>
       partitionGroups.value.map(group => ({
         key: group.name,
-        value: group.id
+        value: group.id,
       }))
     )
 
@@ -69,7 +71,7 @@ export const usePartitionGroupStore = defineStoreComposable(
         editedValue.value = {
           name: partitionGroup.name,
           parentPartitionGroupId: partitionGroup.parentPartitionGroupId,
-          depth: partitionGroup.depth
+          depth: partitionGroup.depth,
         }
       } catch {
         throw new Error('パーティショングループの取得に失敗しました')
@@ -104,7 +106,7 @@ export const usePartitionGroupStore = defineStoreComposable(
           name: currentPartitionGroup.value.name,
           parentPartitionGroupId:
             currentPartitionGroup.value.parentPartitionGroupId,
-          depth: currentPartitionGroup.value.depth
+          depth: currentPartitionGroup.value.depth,
         }
         throw new Error('パーティショングループの更新に失敗しました')
       }
@@ -142,7 +144,7 @@ export const usePartitionGroupStore = defineStoreComposable(
       createPartitionGroup,
       editPartitionGroup,
       deletePartitionGroup,
-      resetDetail
+      resetDetail,
     }
   }
 )

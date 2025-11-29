@@ -1,7 +1,10 @@
-import type { ApplicationStatusDetail } from '../entities'
-import { convertApplicationCommentFromData } from '@/features/applicationComment/data/converter'
-import type { StatusDetail as ApplicationStatusData } from '@/lib/apis'
 import { DateTime } from 'luxon'
+
+import type { StatusDetail as ApplicationStatusData } from '@/lib/apis'
+
+import { convertApplicationCommentFromData } from '@/features/applicationComment/data/converter'
+
+import type { ApplicationStatusDetail } from '../entities'
 
 export const convertApplicationStatusDetailFromData = (
   status: ApplicationStatusData
@@ -11,5 +14,5 @@ export const convertApplicationStatusDetailFromData = (
   comment: status.comment
     ? convertApplicationCommentFromData(status.comment)
     : undefined,
-  createdAt: DateTime.fromISO(status.created_at)
+  createdAt: DateTime.fromISO(status.created_at),
 })

@@ -1,8 +1,11 @@
-import type { User } from './entities'
-import { UserRepositoryKey } from '@/di'
-import { defineStoreComposable } from '@/lib/store'
-import type { AsyncStatus } from '@/types'
 import { computed, inject, ref } from 'vue'
+
+import { defineStoreComposable } from '@/lib/store'
+
+import { UserRepositoryKey } from '@/di'
+import type { AsyncStatus } from '@/types'
+
+import type { User } from './entities'
 
 export const useUserStore = defineStoreComposable('user', () => {
   const repository = inject(UserRepositoryKey)
@@ -18,7 +21,7 @@ export const useUserStore = defineStoreComposable('user', () => {
   const userOptions = computed(() =>
     users.value.map(user => ({
       key: user.name,
-      value: user.id
+      value: user.id,
     }))
   )
   const userMap = computed(() =>
@@ -83,7 +86,7 @@ export const useUserStore = defineStoreComposable('user', () => {
     getUserNameWithFallback,
     fetchUsers,
     fetchMe,
-    reset
+    reset,
   }
 })
 

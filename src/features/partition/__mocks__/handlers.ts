@@ -1,6 +1,8 @@
-import type { PartitionSeed } from '../entities'
+import { HttpResponse, http } from 'msw'
+
 import type { Partition } from '@/lib/apis'
-import { http, HttpResponse } from 'msw'
+
+import type { PartitionSeed } from '../entities'
 
 export const mockPartition: Partition = {
   id: '1',
@@ -9,10 +11,10 @@ export const mockPartition: Partition = {
   parent_partition_group: 'group-1',
   management: {
     category: 'manual',
-    state: 'available'
+    state: 'available',
   },
   created_at: '2024-01-01T00:00:00Z',
-  updated_at: '2024-01-01T00:00:00Z'
+  updated_at: '2024-01-01T00:00:00Z',
 }
 export const mockPartitionWithoutBudget: Partition = {
   id: '2',
@@ -21,14 +23,14 @@ export const mockPartitionWithoutBudget: Partition = {
   parent_partition_group: 'group-2',
   management: {
     category: 'manual',
-    state: 'available'
+    state: 'available',
   },
   created_at: '2024-01-02T00:00:00Z',
-  updated_at: '2024-01-02T00:00:00Z'
+  updated_at: '2024-01-02T00:00:00Z',
 }
 const mockPartitions: Partition[] = [
   ...Array(5).fill(mockPartition),
-  ...Array(5).fill(mockPartitionWithoutBudget)
+  ...Array(5).fill(mockPartitionWithoutBudget),
 ]
 
 export const partitionHandlers = [
@@ -54,7 +56,7 @@ export const partitionHandlers = [
       budget: seed.budget,
       parent_partition_group:
         seed.parentPartitionGroupId || mockPartition.parent_partition_group,
-      management: seed.management
+      management: seed.management,
     }
     return HttpResponse.json(partition)
   }),
@@ -67,12 +69,12 @@ export const partitionHandlers = [
       budget: seed.budget,
       parent_partition_group:
         seed.parentPartitionGroupId || mockPartition.parent_partition_group,
-      management: seed.management
+      management: seed.management,
     }
     return HttpResponse.json(partition)
   }),
 
   http.delete('/api/partitions/:id', () => {
     return new HttpResponse(null, { status: 204 })
-  })
+  }),
 ]

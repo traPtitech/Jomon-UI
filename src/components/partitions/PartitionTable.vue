@@ -31,7 +31,7 @@ const navigateToPartition = async (partitionId: string) => {
           v-for="key in [
             'パーティション名',
             'パーティショングループ名',
-            '予算'
+            '予算',
           ]"
           :key="key"
           scope="col"

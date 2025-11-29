@@ -1,9 +1,12 @@
+import { createApp } from 'vue'
+
+import { createPinia, setActivePinia } from 'pinia'
+
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
 import { TagRepositoryKey } from '@/di'
 import type { Tag } from '@/features/tag/entities'
 import { useTagStore } from '@/features/tag/store'
-import { createPinia, setActivePinia } from 'pinia'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { createApp } from 'vue'
 
 describe('Tag Store', () => {
   let app: ReturnType<typeof createApp>
@@ -18,13 +21,13 @@ describe('Tag Store', () => {
 
   const mockTag: Tag = {
     id: 'tag-1',
-    name: 'Tag 1'
+    name: 'Tag 1',
   }
 
   const createMockRepository = () => ({
     fetchTags: vi.fn(),
     createTag: vi.fn(),
-    deleteTag: vi.fn()
+    deleteTag: vi.fn(),
   })
 
   describe('actions', () => {
@@ -32,7 +35,7 @@ describe('Tag Store', () => {
       const mockFetchTags = vi.fn().mockResolvedValue([mockTag])
       const mockRepo = {
         ...createMockRepository(),
-        fetchTags: mockFetchTags
+        fetchTags: mockFetchTags,
       }
       app.provide(TagRepositoryKey, mockRepo)
 
@@ -51,7 +54,7 @@ describe('Tag Store', () => {
         .mockRejectedValue(new Error('Network error'))
       const mockRepo = {
         ...createMockRepository(),
-        fetchTags: mockFetchTags
+        fetchTags: mockFetchTags,
       }
       app.provide(TagRepositoryKey, mockRepo)
 
@@ -70,7 +73,7 @@ describe('Tag Store', () => {
       const mockCreateTag = vi.fn().mockResolvedValue(newTag)
       const mockRepo = {
         ...createMockRepository(),
-        createTag: mockCreateTag
+        createTag: mockCreateTag,
       }
       app.provide(TagRepositoryKey, mockRepo)
 
@@ -79,7 +82,7 @@ describe('Tag Store', () => {
 
       const result = await store.ensureTags([
         existingTag,
-        { id: '', name: 'New' } as Tag
+        { id: '', name: 'New' } as Tag,
       ])
 
       expect(mockCreateTag).toHaveBeenCalledWith('New')
@@ -91,7 +94,7 @@ describe('Tag Store', () => {
       const mockDeleteTag = vi.fn().mockResolvedValue(undefined)
       const mockRepo = {
         ...createMockRepository(),
-        deleteTag: mockDeleteTag
+        deleteTag: mockDeleteTag,
       }
       app.provide(TagRepositoryKey, mockRepo)
 
@@ -112,7 +115,7 @@ describe('Tag Store', () => {
       store.tags.value = [mockTag]
 
       expect(store.tagOptions.value).toEqual([
-        { key: mockTag.name, value: mockTag }
+        { key: mockTag.name, value: mockTag },
       ])
     })
 
@@ -122,7 +125,7 @@ describe('Tag Store', () => {
       store.tags.value = [mockTag]
 
       expect(store.tagIdOptions.value).toEqual([
-        { key: mockTag.name, value: mockTag.id }
+        { key: mockTag.name, value: mockTag.id },
       ])
     })
   })

@@ -1,13 +1,16 @@
+import { computed, createApp } from 'vue'
+
+import { createPinia, setActivePinia } from 'pinia'
+
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
 import { AccountManagerRepositoryKey } from '@/di'
 import { useAccountManagerStore } from '@/features/accountManager/store'
 import { useUserStore } from '@/features/user/store'
-import { createPinia, setActivePinia } from 'pinia'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { computed, createApp } from 'vue'
 
 // Mock user store
 vi.mock('@/features/user/store', () => ({
-  useUserStore: vi.fn()
+  useUserStore: vi.fn(),
 }))
 
 describe('AccountManager Store', () => {
@@ -24,7 +27,7 @@ describe('AccountManager Store', () => {
     vi.mocked(useUserStore).mockReturnValue({
       userMap: computed(() => ({})),
       getUserName: () => undefined,
-      getUserNameWithFallback: () => '不明なユーザー'
+      getUserNameWithFallback: () => '不明なユーザー',
     } as unknown as ReturnType<typeof useUserStore>)
   })
 
@@ -33,7 +36,7 @@ describe('AccountManager Store', () => {
   const createMockRepository = () => ({
     fetchAccountManagers: vi.fn(),
     addAccountManagers: vi.fn(),
-    removeAccountManagers: vi.fn()
+    removeAccountManagers: vi.fn(),
   })
 
   describe('actions', () => {
@@ -43,7 +46,7 @@ describe('AccountManager Store', () => {
         .mockResolvedValue(mockAccountManagers)
       const mockRepo = {
         ...createMockRepository(),
-        fetchAccountManagers: mockFetchAccountManagers
+        fetchAccountManagers: mockFetchAccountManagers,
       }
       app.provide(AccountManagerRepositoryKey, mockRepo)
 
@@ -62,7 +65,7 @@ describe('AccountManager Store', () => {
         .mockRejectedValue(new Error('Network error'))
       const mockRepo = {
         ...createMockRepository(),
-        fetchAccountManagers: mockFetchAccountManagers
+        fetchAccountManagers: mockFetchAccountManagers,
       }
       app.provide(AccountManagerRepositoryKey, mockRepo)
 
@@ -78,7 +81,7 @@ describe('AccountManager Store', () => {
       const mockAddAccountManagers = vi.fn().mockResolvedValue(undefined)
       const mockRepo = {
         ...createMockRepository(),
-        addAccountManagers: mockAddAccountManagers
+        addAccountManagers: mockAddAccountManagers,
       }
       app.provide(AccountManagerRepositoryKey, mockRepo)
 
@@ -95,7 +98,7 @@ describe('AccountManager Store', () => {
       const mockRemoveAccountManagers = vi.fn().mockResolvedValue(undefined)
       const mockRepo = {
         ...createMockRepository(),
-        removeAccountManagers: mockRemoveAccountManagers
+        removeAccountManagers: mockRemoveAccountManagers,
       }
       app.provide(AccountManagerRepositoryKey, mockRepo)
 
@@ -113,14 +116,14 @@ describe('AccountManager Store', () => {
     it('accountManagerOptions returns formatted options', () => {
       const mockUserMap: Record<string, string> = {
         'user-1': 'User 1',
-        'user-2': 'User 2'
+        'user-2': 'User 2',
       }
 
       vi.mocked(useUserStore).mockReturnValue({
         userMap: computed(() => mockUserMap),
         getUserName: (id: string) => mockUserMap[id],
         getUserNameWithFallback: (id: string) =>
-          mockUserMap[id] ?? '不明なユーザー'
+          mockUserMap[id] ?? '不明なユーザー',
       } as unknown as ReturnType<typeof useUserStore>)
 
       app.provide(AccountManagerRepositoryKey, createMockRepository())
@@ -129,7 +132,7 @@ describe('AccountManager Store', () => {
 
       expect(store.accountManagerOptions.value).toEqual([
         { key: 'User 1', value: 'user-1' },
-        { key: 'User 2', value: 'user-2' }
+        { key: 'User 2', value: 'user-2' },
       ])
     })
   })

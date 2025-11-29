@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { ref } from 'vue'
+
 import ModalWrapper from '@/components/modal/ModalWrapper.vue'
 import StatusChangeModal from '@/components/modal/StatusChangeModal.vue'
 import { useModal } from '@/components/modal/composables/useModal'
@@ -7,7 +9,6 @@ import StatusChip from '@/components/shared/StatusChip.vue'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useStatusOptions } from '@/features/applicationStatus/composables'
 import type { ApplicationStatus } from '@/features/applicationStatus/entities'
-import { ref } from 'vue'
 
 const props = defineProps<{
   application: ApplicationDetail

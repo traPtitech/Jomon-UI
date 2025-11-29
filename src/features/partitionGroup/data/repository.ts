@@ -1,6 +1,7 @@
+import apis, { type PartitionGroupInput } from '@/lib/apis'
+
 import type { PartitionGroup, PartitionGroupSeed } from '../entities'
 import { convertPartitionGroupFromData } from './converter'
-import apis, { type PartitionGroupInput } from '@/lib/apis'
 
 export const usePartitionGroupRepository = () => {
   return createPartitionGroupRepository()
@@ -11,7 +12,7 @@ const toPartitionGroupInput = (
 ): PartitionGroupInput => ({
   name: partitionGroup.name,
   parent_partition_group: partitionGroup.parentPartitionGroupId,
-  depth: partitionGroup.depth
+  depth: partitionGroup.depth,
 })
 
 const createPartitionGroupRepository = () => ({
@@ -45,5 +46,5 @@ const createPartitionGroupRepository = () => ({
   },
   deletePartitionGroup: async (id: string) => {
     await apis.deletePartitionGroup(id)
-  }
+  },
 })

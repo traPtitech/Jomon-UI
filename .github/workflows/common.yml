@@ -75,7 +75,7 @@ jobs:
         with:
           name: apis
           path: ./src/lib/apis/generated
-      - run: npm run lint:nofix -- --max-warnings=0
+      - run: npm run lint:ci
   format:
     name: Format
     runs-on: ubuntu-latest

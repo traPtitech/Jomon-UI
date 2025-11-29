@@ -1,13 +1,14 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 import {
   type BaseInputCommonProps,
   type TextAutocomplete,
   type TextInputMode,
-  type TextInputType
+  type TextInputType,
 } from './BaseInput.types'
 import BaseInputFrame from './BaseInputFrame.vue'
 import { useBaseInput } from './useBaseInput'
-import { computed } from 'vue'
 
 interface Props extends BaseInputCommonProps {
   type?: TextInputType
@@ -25,7 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   textarea: false,
   rows: 6,
-  errorMessage: ''
+  errorMessage: '',
 })
 
 const model = defineModel<string>({ required: true })
@@ -92,7 +93,7 @@ const handleChange = (event: Event) => {
           inputProps.class,
           'w-full border-none bg-transparent px-3 pb-2 ring-0 outline-none not-focus-visible:placeholder:text-transparent',
           label ? 'pt-6' : 'pt-2',
-          readonly || disabled ? 'cursor-not-allowed' : ''
+          readonly || disabled ? 'cursor-not-allowed' : '',
         ]"
         :placeholder="placeholder"
         :readonly="readonly"

@@ -11,7 +11,7 @@ const props = defineProps<{
 
 const formattedDateAndTime = formatDateAndTime(props.comment.createdAt)
 
-const { getUserName } = useUserStore()
+const { getUserName, getUserNameWithFallback } = useUserStore()
 </script>
 
 <template>
@@ -21,7 +21,7 @@ const { getUserName } = useUserStore()
         <UserIcon class="w-12" :name="getUserName(comment.user)" />
         <div>
           <span class="font-bold">{{
-            getUserName(comment.user) ?? '不明なユーザー'
+            getUserNameWithFallback(comment.user)
           }}</span>
           がコメントしました
         </div>

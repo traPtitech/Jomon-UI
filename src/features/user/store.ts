@@ -28,7 +28,11 @@ export const useUserStore = defineStoreComposable('user', () => {
     }, {})
   )
 
+  const UNKNOWN_USER_FALLBACK = '不明なユーザー'
+
   const getUserName = (id: string): string | undefined => userMap.value[id]
+  const getUserNameWithFallback = (id: string): string =>
+    userMap.value[id] ?? UNKNOWN_USER_FALLBACK
 
   const isUserFetched = computed(() => status.value === 'success')
 
@@ -76,6 +80,7 @@ export const useUserStore = defineStoreComposable('user', () => {
     userOptions,
     userMap,
     getUserName,
+    getUserNameWithFallback,
     fetchUsers,
     fetchMe,
     reset

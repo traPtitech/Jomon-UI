@@ -10,7 +10,7 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const { getUserName } = useUserStore()
+const { getUserName, getUserNameWithFallback } = useUserStore()
 
 const formattedDateAndTime = formatDateAndTime(props.log.createdAt)
 </script>
@@ -21,7 +21,7 @@ const formattedDateAndTime = formatDateAndTime(props.log.createdAt)
       <UserIcon class="w-12" :name="getUserName(log.createdBy)" />
       <p class="flex flex-wrap items-center gap-2">
         <span class="font-bold">{{
-          getUserName(log.createdBy) ?? '不明なユーザー'
+          getUserNameWithFallback(log.createdBy)
         }}</span>
         が申請の状態を
         <StatusChip has-text :status="log.status" />

@@ -14,7 +14,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { getUserName } = useUserStore()
+const { getUserName, getUserNameWithFallback } = useUserStore()
 
 const formattedDate = formatDate(props.application.createdAt)
 
@@ -41,9 +41,7 @@ const totalAmount = computed(() =>
             <UserIcon
               class="max-w-7"
               :name="getUserName(application.createdBy)" />
-            <span>{{
-              getUserName(application.createdBy) ?? '不明なユーザー'
-            }}</span>
+            <span>{{ getUserNameWithFallback(application.createdBy) }}</span>
           </div>
           <span v-if="application.partition">
             {{ application.partition.name }}

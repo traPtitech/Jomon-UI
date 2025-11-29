@@ -22,7 +22,7 @@ const formattedDateAndTime = formatDateAndTime(props.application.createdAt)
 const toast = useToast()
 const { isApplicationCreator } = useApplication(props.application)
 
-const { me, getUserName } = useUserStore()
+const { me, getUserName, getUserNameWithFallback } = useUserStore()
 const { editApplication } = useApplicationStore()
 
 const hasAuthority = isApplicationCreator.value(me.value)
@@ -56,7 +56,7 @@ const handleUpdateContent = async () => {
         <UserIcon class="w-12" :name="getUserName(application.createdBy)" />
         <div>
           <span class="font-bold">{{
-            getUserName(application.createdBy) ?? '不明なユーザー'
+            getUserNameWithFallback(application.createdBy)
           }}</span>
           がこの申請を作成しました
         </div>

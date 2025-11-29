@@ -1,20 +1,22 @@
-import BaseInputFrame from '@/components/shared/BaseInput/BaseInputFrame.vue'
+import { nextTick } from 'vue'
+
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import { nextTick } from 'vue'
+
+import BaseInputFrame from '@/components/shared/BaseInput/BaseInputFrame.vue'
 
 describe('BaseInputFrame', () => {
   const baseProps = {
     label: 'ラベル',
-    inputId: 'field-id'
+    inputId: 'field-id',
   }
 
   it('label を表示し、for 属性で inputId と関連付ける', () => {
     const wrapper = mount(BaseInputFrame, {
       props: baseProps,
       slots: {
-        default: '<input />'
-      }
+        default: '<input />',
+      },
     })
 
     const label = wrapper.get('label')
@@ -26,7 +28,7 @@ describe('BaseInputFrame', () => {
   it('required かつ readonly/disabled でないときだけ * を表示する', async () => {
     const wrapper = mount(BaseInputFrame, {
       props: { ...baseProps, required: true },
-      slots: { default: '<input />' }
+      slots: { default: '<input />' },
     })
 
     // required=true
@@ -46,7 +48,7 @@ describe('BaseInputFrame', () => {
   it('hasValue に応じてラベルの位置クラスを切り替える', async () => {
     const wrapper = mount(BaseInputFrame, {
       props: { ...baseProps, hasValue: false },
-      slots: { default: '<input />' }
+      slots: { default: '<input />' },
     })
 
     const label = wrapper.get('label')
@@ -64,7 +66,7 @@ describe('BaseInputFrame', () => {
   it('focusin/out でフォーカス状態に応じてラベル位置を切り替える', async () => {
     const wrapper = mount(BaseInputFrame, {
       props: { ...baseProps, hasValue: false },
-      slots: { default: '<input />' }
+      slots: { default: '<input />' },
     })
 
     const label = wrapper.get('label')
@@ -86,7 +88,7 @@ describe('BaseInputFrame', () => {
   it('isTextarea=true かつ hasValue=false のとき textarea 用の位置クラスを使う', () => {
     const wrapper = mount(BaseInputFrame, {
       props: { ...baseProps, isTextarea: true, hasValue: false },
-      slots: { default: '<textarea />' }
+      slots: { default: '<textarea />' },
     })
 
     const label = wrapper.get('label')
@@ -99,9 +101,9 @@ describe('BaseInputFrame', () => {
       props: {
         ...baseProps,
         errorMessage: 'エラーです',
-        errorMessageId: 'field-id-error'
+        errorMessageId: 'field-id-error',
       },
-      slots: { default: '<input />' }
+      slots: { default: '<input />' },
     })
 
     const error = wrapper.get('[role="alert"]')
@@ -117,8 +119,8 @@ describe('BaseInputFrame', () => {
       props: baseProps,
       slots: {
         prefix: '<span class="prefix">P</span>',
-        default: '<input />'
-      }
+        default: '<input />',
+      },
     })
 
     expect(wrapper.find('.prefix').exists()).toBe(true)

@@ -1,16 +1,12 @@
 {
-  "plugins": [
-    "@trivago/prettier-plugin-sort-imports",
-    "prettier-plugin-tailwindcss"
-  ],
+  "singleQuote": true,
+  "trailingComma": "es5",
   "printWidth": 80,
   "tabWidth": 2,
   "useTabs": false,
   "semi": false,
-  "singleQuote": true,
   "quoteProps": "as-needed",
   "jsxSingleQuote": false,
-  "trailingComma": "none",
   "bracketSpacing": true,
   "bracketSameLine": true,
   "arrowParens": "avoid",
@@ -20,8 +16,23 @@
   "proseWrap": "preserve",
   "htmlWhitespaceSensitivity": "css",
   "vueIndentScriptAndStyle": false,
-  "endOfLine": "auto",
+  "endOfLine": "lf",
   "tailwindStylesheet": "./src/styles/main.css",
+  "plugins": [
+    "@trivago/prettier-plugin-sort-imports",
+    "prettier-plugin-tailwindcss"
+  ],
+  "importOrder": [
+    "^vue$",
+    "^pinia$",
+    "^vue-router$",
+    "<THIRD_PARTY_MODULES>",
+    "^@/lib/(.*)$",
+    "^@/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
   "overrides": [
     {
       "files": [".prettierrc", ".prettierrc.json"],

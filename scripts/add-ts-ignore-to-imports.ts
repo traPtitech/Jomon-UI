@@ -23,7 +23,7 @@ const addTsIgnoreToImportsToFile = async (sourceFile: SourceFile) => {
   sourceFile.applyTextChanges(
     insertPos.map(pos => ({
       span: { start: pos, length: 0 },
-      newText: '// @ts-ignore error happens by importsNotUsedAsValues\n'
+      newText: '// @ts-ignore error happens by importsNotUsedAsValues\n',
     }))
   )
 

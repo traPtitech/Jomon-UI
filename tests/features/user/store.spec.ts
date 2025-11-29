@@ -1,9 +1,12 @@
+import { createApp } from 'vue'
+
+import { createPinia, setActivePinia } from 'pinia'
+
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
 import { UserRepositoryKey } from '@/di'
 import type { User } from '@/features/user/entities'
 import { useUserStore } from '@/features/user/store'
-import { createPinia, setActivePinia } from 'pinia'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { createApp } from 'vue'
 
 describe('User Store', () => {
   let app: ReturnType<typeof createApp>
@@ -20,14 +23,14 @@ describe('User Store', () => {
     id: 'user-1',
     name: 'test-user',
     displayName: 'Test User',
-    accountManager: false
+    accountManager: false,
   }
 
   const mockAdminUser: User = {
     id: 'admin-1',
     name: 'admin-user',
     displayName: 'Admin User',
-    accountManager: true
+    accountManager: true,
   }
 
   describe('actions', () => {
@@ -37,7 +40,7 @@ describe('User Store', () => {
         .mockResolvedValue([mockUser, mockAdminUser])
       app.provide(UserRepositoryKey, {
         fetchUsers: mockFetchUsers,
-        fetchMe: vi.fn()
+        fetchMe: vi.fn(),
       })
 
       const store = app.runWithContext(() => useUserStore())
@@ -55,7 +58,7 @@ describe('User Store', () => {
         .mockRejectedValue(new Error('Network error'))
       app.provide(UserRepositoryKey, {
         fetchUsers: mockFetchUsers,
-        fetchMe: vi.fn()
+        fetchMe: vi.fn(),
       })
 
       const store = app.runWithContext(() => useUserStore())
@@ -70,7 +73,7 @@ describe('User Store', () => {
       const mockFetchMe = vi.fn().mockResolvedValue(mockUser)
       app.provide(UserRepositoryKey, {
         fetchUsers: vi.fn(),
-        fetchMe: mockFetchMe
+        fetchMe: mockFetchMe,
       })
 
       const store = app.runWithContext(() => useUserStore())
@@ -85,7 +88,7 @@ describe('User Store', () => {
       const mockFetchMe = vi.fn().mockResolvedValue(mockUser)
       app.provide(UserRepositoryKey, {
         fetchUsers: vi.fn(),
-        fetchMe: mockFetchMe
+        fetchMe: mockFetchMe,
       })
 
       const store = app.runWithContext(() => useUserStore())
@@ -99,7 +102,7 @@ describe('User Store', () => {
       const mockFetchMe = vi.fn().mockRejectedValue(new Error('Network error'))
       app.provide(UserRepositoryKey, {
         fetchUsers: vi.fn(),
-        fetchMe: mockFetchMe
+        fetchMe: mockFetchMe,
       })
 
       const store = app.runWithContext(() => useUserStore())
@@ -111,7 +114,7 @@ describe('User Store', () => {
     it('reset clears state', () => {
       app.provide(UserRepositoryKey, {
         fetchUsers: vi.fn(),
-        fetchMe: vi.fn()
+        fetchMe: vi.fn(),
       })
       const store = app.runWithContext(() => useUserStore())
       store.me.value = mockUser
@@ -133,7 +136,7 @@ describe('User Store', () => {
     it('isAccountManager returns correct value', () => {
       app.provide(UserRepositoryKey, {
         fetchUsers: vi.fn(),
-        fetchMe: vi.fn()
+        fetchMe: vi.fn(),
       })
       const store = app.runWithContext(() => useUserStore())
 
@@ -150,28 +153,28 @@ describe('User Store', () => {
     it('userOptions returns formatted options', () => {
       app.provide(UserRepositoryKey, {
         fetchUsers: vi.fn(),
-        fetchMe: vi.fn()
+        fetchMe: vi.fn(),
       })
       const store = app.runWithContext(() => useUserStore())
       store.users.value = [mockUser, mockAdminUser]
 
       expect(store.userOptions.value).toEqual([
         { key: mockUser.name, value: mockUser.id },
-        { key: mockAdminUser.name, value: mockAdminUser.id }
+        { key: mockAdminUser.name, value: mockAdminUser.id },
       ])
     })
 
     it('userMap returns id-name map', () => {
       app.provide(UserRepositoryKey, {
         fetchUsers: vi.fn(),
-        fetchMe: vi.fn()
+        fetchMe: vi.fn(),
       })
       const store = app.runWithContext(() => useUserStore())
       store.users.value = [mockUser, mockAdminUser]
 
       expect(store.userMap.value).toEqual({
         [mockUser.id]: mockUser.name,
-        [mockAdminUser.id]: mockAdminUser.name
+        [mockAdminUser.id]: mockAdminUser.name,
       })
     })
   })

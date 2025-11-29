@@ -1,10 +1,11 @@
+import type { InjectionKey } from 'vue'
+
 import type { useAccountManagerRepository } from '@/features/accountManager/data/repository'
 import type { useApplicationRepository } from '@/features/application/data/repository'
 import type { usePartitionRepository } from '@/features/partition/data/repository'
 import type { usePartitionGroupRepository } from '@/features/partitionGroup/data/repository'
 import type { useTagRepository } from '@/features/tag/data/repository'
 import type { useUserRepository } from '@/features/user/data/repository'
-import type { InjectionKey } from 'vue'
 
 export type UserRepository = ReturnType<typeof useUserRepository>
 export type ApplicationRepository = ReturnType<typeof useApplicationRepository>

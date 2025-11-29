@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import BaseTextInput from './BaseInput/BaseTextInput.vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+
 import {
   CheckIcon,
   ChevronDownIcon,
   MagnifyingGlassIcon,
   PlusIcon,
-  XMarkIcon
+  XMarkIcon,
 } from '@heroicons/vue/24/outline'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+
+import BaseTextInput from './BaseInput/BaseTextInput.vue'
 
 interface Option {
   key: string
@@ -30,7 +32,7 @@ const props = withDefaults(defineProps<Props>(), {
   multiple: false,
   allowCustom: false,
   disabled: false,
-  required: false
+  required: false,
 })
 
 const emit = defineEmits<{
@@ -229,7 +231,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
         <ChevronDownIcon
           :class="[
             'h-4 w-4 text-text-secondary transition-transform',
-            menuState !== 'close' && 'rotate-180'
+            menuState !== 'close' && 'rotate-180',
           ]" />
       </button>
     </div>
@@ -266,7 +268,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
             'hover:bg-blue-100 hover:text-blue-500',
             highlightedIndex === index && 'bg-blue-100 text-blue-500',
             option.disabled && 'cursor-not-allowed opacity-50',
-            selectedValues.includes(option.value) && 'bg-blue-100'
+            selectedValues.includes(option.value) && 'bg-blue-100',
           ]"
           :disabled="option.disabled"
           @click="!option.disabled && handleSelect(option.value)">
@@ -293,7 +295,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
           type="button"
           :class="[
             'relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm outline-none select-none',
-            'border-t hover:bg-blue-100 hover:text-blue-500'
+            'border-t hover:bg-blue-100 hover:text-blue-500',
           ]"
           @click="handleAddCustom">
           <PlusIcon class="mr-2 h-4 w-4" />

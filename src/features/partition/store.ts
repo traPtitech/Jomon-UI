@@ -1,9 +1,12 @@
-import type { Partition, PartitionSeed } from './entities'
+import { computed, inject, ref } from 'vue'
+
+import { defineStoreComposable } from '@/lib/store'
+
 import { PartitionRepositoryKey } from '@/di'
 import type { User } from '@/features/user/entities'
-import { defineStoreComposable } from '@/lib/store'
 import type { AsyncStatus } from '@/types'
-import { computed, inject, ref } from 'vue'
+
+import type { Partition, PartitionSeed } from './entities'
 
 const createDefaultPartitionSeed = (): PartitionSeed => ({
   name: '',
@@ -11,8 +14,8 @@ const createDefaultPartitionSeed = (): PartitionSeed => ({
   parentPartitionGroupId: '',
   management: {
     category: 'manual',
-    state: 'available'
-  }
+    state: 'available',
+  },
 })
 
 export const usePartitionStore = defineStoreComposable('partition', () => {
@@ -28,7 +31,7 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
   const partitionOptions = computed(() =>
     partitions.value.map(partition => ({
       key: partition.name,
-      value: partition.id
+      value: partition.id,
     }))
   )
 
@@ -63,7 +66,7 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
         name: partition.name,
         budget: partition.budget,
         parentPartitionGroupId: partition.parentPartitionGroupId,
-        management: { ...partition.management }
+        management: { ...partition.management },
       }
     } catch {
       throw new Error('パーティションの取得に失敗しました')
@@ -95,7 +98,7 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
         name: currentPartition.value.name,
         budget: currentPartition.value.budget,
         parentPartitionGroupId: currentPartition.value.parentPartitionGroupId,
-        management: { ...currentPartition.value.management }
+        management: { ...currentPartition.value.management },
       }
       throw new Error('パーティションの更新に失敗しました')
     }
@@ -132,7 +135,7 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
     createPartition,
     editPartition,
     deletePartition,
-    resetDetail
+    resetDetail,
   }
 })
 

@@ -1,13 +1,16 @@
+import { createApp } from 'vue'
+
+import { createPinia, setActivePinia } from 'pinia'
+
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
 import { PartitionGroupRepositoryKey } from '@/di'
 import type {
   PartitionGroup,
-  PartitionGroupSeed
+  PartitionGroupSeed,
 } from '@/features/partitionGroup/entities'
 import { usePartitionGroupStore } from '@/features/partitionGroup/store'
 import type { User } from '@/features/user/entities'
-import { createPinia, setActivePinia } from 'pinia'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { createApp } from 'vue'
 
 describe('PartitionGroup Store', () => {
   let app: ReturnType<typeof createApp>
@@ -26,13 +29,13 @@ describe('PartitionGroup Store', () => {
     parentPartitionGroupId: null,
     depth: 0,
     createdAt: '2023-01-01T00:00:00Z',
-    updatedAt: '2023-01-01T00:00:00Z'
+    updatedAt: '2023-01-01T00:00:00Z',
   }
 
   const mockSeed: PartitionGroupSeed = {
     name: 'New Group',
     parentPartitionGroupId: null,
-    depth: 0
+    depth: 0,
   }
 
   const createMockRepository = () => ({
@@ -40,7 +43,7 @@ describe('PartitionGroup Store', () => {
     fetchPartitionGroup: vi.fn(),
     createPartitionGroup: vi.fn(),
     editPartitionGroup: vi.fn(),
-    deletePartitionGroup: vi.fn()
+    deletePartitionGroup: vi.fn(),
   })
 
   describe('actions', () => {
@@ -50,7 +53,7 @@ describe('PartitionGroup Store', () => {
         .mockResolvedValue([mockPartitionGroup])
       const mockRepo = {
         ...createMockRepository(),
-        fetchPartitionGroups: mockFetchPartitionGroups
+        fetchPartitionGroups: mockFetchPartitionGroups,
       }
       app.provide(PartitionGroupRepositoryKey, mockRepo)
 
@@ -69,7 +72,7 @@ describe('PartitionGroup Store', () => {
         .mockRejectedValue(new Error('Network error'))
       const mockRepo = {
         ...createMockRepository(),
-        fetchPartitionGroups: mockFetchPartitionGroups
+        fetchPartitionGroups: mockFetchPartitionGroups,
       }
       app.provide(PartitionGroupRepositoryKey, mockRepo)
 
@@ -89,7 +92,7 @@ describe('PartitionGroup Store', () => {
         .mockResolvedValue(mockPartitionGroup)
       const mockRepo = {
         ...createMockRepository(),
-        fetchPartitionGroup: mockFetchPartitionGroup
+        fetchPartitionGroup: mockFetchPartitionGroup,
       }
       app.provide(PartitionGroupRepositoryKey, mockRepo)
 
@@ -101,7 +104,7 @@ describe('PartitionGroup Store', () => {
       expect(store.editedValue.value).toEqual({
         name: mockPartitionGroup.name,
         parentPartitionGroupId: mockPartitionGroup.parentPartitionGroupId,
-        depth: mockPartitionGroup.depth
+        depth: mockPartitionGroup.depth,
       })
     })
 
@@ -111,7 +114,7 @@ describe('PartitionGroup Store', () => {
         .mockResolvedValue(mockPartitionGroup)
       const mockRepo = {
         ...createMockRepository(),
-        createPartitionGroup: mockCreatePartitionGroup
+        createPartitionGroup: mockCreatePartitionGroup,
       }
       app.provide(PartitionGroupRepositoryKey, mockRepo)
 
@@ -125,12 +128,12 @@ describe('PartitionGroup Store', () => {
     it('editPartitionGroup updates group and list', async () => {
       const mockUpdatedGroup: PartitionGroup = {
         ...mockPartitionGroup,
-        name: 'Updated Group'
+        name: 'Updated Group',
       }
       const mockEditPartitionGroup = vi.fn().mockResolvedValue(mockUpdatedGroup)
       const mockRepo = {
         ...createMockRepository(),
-        editPartitionGroup: mockEditPartitionGroup
+        editPartitionGroup: mockEditPartitionGroup,
       }
       app.provide(PartitionGroupRepositoryKey, mockRepo)
 
@@ -149,7 +152,7 @@ describe('PartitionGroup Store', () => {
       const mockDeletePartitionGroup = vi.fn().mockResolvedValue(undefined)
       const mockRepo = {
         ...createMockRepository(),
-        deletePartitionGroup: mockDeletePartitionGroup
+        deletePartitionGroup: mockDeletePartitionGroup,
       }
       app.provide(PartitionGroupRepositoryKey, mockRepo)
 
@@ -170,7 +173,7 @@ describe('PartitionGroup Store', () => {
       store.partitionGroups.value = [mockPartitionGroup]
 
       expect(store.partitionGroupOptions.value).toEqual([
-        { key: mockPartitionGroup.name, value: mockPartitionGroup.id }
+        { key: mockPartitionGroup.name, value: mockPartitionGroup.id },
       ])
     })
 

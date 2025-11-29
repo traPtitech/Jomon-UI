@@ -1,15 +1,17 @@
+import { computed, inject, ref } from 'vue'
+
+import { defineStoreComposable } from '@/lib/store'
+
 import { ApplicationRepositoryKey } from '@/di'
 import type {
   Application,
   ApplicationDetail,
   ApplicationQuerySeed,
-  ApplicationSeed
+  ApplicationSeed,
 } from '@/features/application/entities'
 import type { ApplicationStatus } from '@/features/applicationStatus/entities'
 import { useTagStore } from '@/features/tag/store'
-import { defineStoreComposable } from '@/lib/store'
 import type { AsyncStatus } from '@/types'
-import { computed, inject, ref } from 'vue'
 
 const createDefaultParams = (): ApplicationQuerySeed => ({
   sort: 'created_at',
@@ -20,7 +22,7 @@ const createDefaultParams = (): ApplicationQuerySeed => ({
   limit: 10,
   offset: 0,
   tags: [],
-  partition: ''
+  partition: '',
 })
 
 const dateRule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
@@ -167,7 +169,7 @@ export const useApplicationStore = defineStoreComposable('application', () => {
     createApplication,
     editApplication,
     createComment,
-    changeStatus
+    changeStatus,
   }
 })
 

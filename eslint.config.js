@@ -1,9 +1,11 @@
 import pluginJs from '@eslint/js'
+import vitest from '@vitest/eslint-plugin'
+import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 import {
   defineConfigWithVueTs,
-  vueTsConfigs
+  vueTsConfigs,
 } from '@vue/eslint-config-typescript'
-import eslintConfigPrettier from 'eslint-config-prettier'
+import unusedImports from 'eslint-plugin-unused-imports'
 import pluginVue from 'eslint-plugin-vue'
 import pluginVueA11y from 'eslint-plugin-vuejs-accessibility'
 import { defineConfig, globalIgnores } from 'eslint/config'
@@ -17,31 +19,48 @@ export default defineConfig([
   globalIgnores([
     '**/dist/**',
     'public/mockServiceWorker.js',
-    'src/lib/apis/generated/**'
+    'src/lib/apis/generated/**',
   ]),
   {
     files: ['src/**/*.{js,ts,tsx,vue}'],
     languageOptions: {
-      globals: globals.browser
-    }
+      globals: globals.browser,
+    },
+    plugins: {
+      'unused-imports': unusedImports,
+    },
+    rules: {
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      'unused-imports/no-unused-imports': 'error',
+      'unused-imports/no-unused-vars': [
+        'warn',
+        {
+          vars: 'all',
+          varsIgnorePattern: '^_',
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+        },
+      ],
+    },
   },
   {
     files: [
       'scripts/**/*.{js,mjs,cjs,ts,mts,cts}',
       'vite.config.ts',
       'vitest.config.ts',
-      '**/*.config.{js,mjs,cjs,ts,mts,cts}'
+      '**/*.config.{js,mjs,cjs,ts,mts,cts}',
     ],
     languageOptions: {
       globals: globals.node,
       parserOptions: {
         projectService: {
           defaultProject: './tsconfig.node.json',
-          allowDefaultProject: ['eslint.config.js', 'vitest.config.ts']
+          allowDefaultProject: ['eslint.config.js', 'vitest.config.ts'],
         },
-        tsconfigRootDir
-      }
-    }
+        tsconfigRootDir,
+      },
+    },
   },
   pluginJs.configs.recommended,
   ...defineConfigWithVueTs(
@@ -52,12 +71,11 @@ export default defineConfig([
       languageOptions: {
         parserOptions: {
           projectService: true,
-          tsconfigRootDir
-        }
-      }
+          tsconfigRootDir,
+        },
+      },
     },
     vueTsConfigs.strictTypeChecked,
-    vueTsConfigs.stylisticTypeChecked,
     {
       files: ['src/**/*.vue'],
       rules: {
@@ -66,26 +84,22 @@ export default defineConfig([
           'error',
           {
             required: {
-              some: ['nesting', 'id']
-            }
-          }
-        ]
-      }
+              some: ['nesting', 'id'],
+            },
+          },
+        ],
+      },
     }
   ),
   {
     files: ['tests/**/*.ts'],
+    ...vitest.configs.recommended,
     languageOptions: {
       globals: {
+        ...vitest.environments.env.globals,
         ...globals.node,
-        ...globals.jest
       },
-      parserOptions: {
-        project: './tsconfig.vitest.json',
-        projectService: false,
-        tsconfigRootDir
-      }
-    }
+    },
   },
-  eslintConfigPrettier
+  skipFormatting,
 ])

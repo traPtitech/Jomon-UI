@@ -1,8 +1,10 @@
+import { computed, inject, ref } from 'vue'
+
+import { defineStoreComposable } from '@/lib/store'
+
 import { AccountManagerRepositoryKey } from '@/di'
 import { useUserStore } from '@/features/user/store'
-import { defineStoreComposable } from '@/lib/store'
 import type { AsyncStatus } from '@/types'
-import { computed, inject, ref } from 'vue'
 
 export const useAccountManagerStore = defineStoreComposable(
   'accountManager',
@@ -18,7 +20,7 @@ export const useAccountManagerStore = defineStoreComposable(
       const { getUserNameWithFallback } = useUserStore()
       return accountManagers.value.map(accountManager => ({
         key: getUserNameWithFallback(accountManager),
-        value: accountManager
+        value: accountManager,
       }))
     })
 
@@ -81,7 +83,7 @@ export const useAccountManagerStore = defineStoreComposable(
       fetchAccountManagers,
       addAccountManagers,
       removeAccountManagers,
-      reset
+      reset,
     }
   }
 )

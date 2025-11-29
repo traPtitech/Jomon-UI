@@ -1,6 +1,7 @@
-import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
+
+import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
 
 describe('BaseTextInput', () => {
   it('デフォルトでは input[type=text] を描画し、基本的な ARIA を設定する', () => {
@@ -10,8 +11,8 @@ describe('BaseTextInput', () => {
         modelValue: '',
         required: true,
         errorMessage: 'エラーです',
-        describedById: 'helper-id'
-      }
+        describedById: 'helper-id',
+      },
     })
 
     const input = wrapper.get('input')
@@ -40,8 +41,8 @@ describe('BaseTextInput', () => {
         modelValue: '',
         type: 'email',
         inputmode: 'email',
-        autocomplete: 'email'
-      }
+        autocomplete: 'email',
+      },
     })
 
     const input = wrapper.get('input')
@@ -57,8 +58,8 @@ describe('BaseTextInput', () => {
         label: 'メモ',
         modelValue: '',
         textarea: true,
-        rows: 4
-      }
+        rows: 4,
+      },
     })
 
     expect(wrapper.find('textarea').exists()).toBe(true)
@@ -73,8 +74,8 @@ describe('BaseTextInput', () => {
     const wrapper = mount(BaseTextInput, {
       props: {
         label: '名前',
-        modelValue: 'initial'
-      }
+        modelValue: 'initial',
+      },
     })
 
     const input = wrapper.get('input')
@@ -93,8 +94,8 @@ describe('BaseTextInput', () => {
     const wrapper = mount(BaseTextInput, {
       props: {
         label: '名前',
-        modelValue: ''
-      }
+        modelValue: '',
+      },
     })
 
     const input = wrapper.get('input')

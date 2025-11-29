@@ -1,21 +1,24 @@
+import { createApp } from 'vue'
+
+import { createPinia, setActivePinia } from 'pinia'
+
+import { DateTime } from 'luxon'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
 import { ApplicationRepositoryKey } from '@/di'
 import type {
   Application,
   ApplicationDetail,
-  ApplicationSeed
+  ApplicationSeed,
 } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import type { ApplicationComment } from '@/features/applicationComment/entities'
 import type { ApplicationStatusDetail } from '@/features/applicationStatus/entities'
 import { useTagStore } from '@/features/tag/store'
-import { DateTime } from 'luxon'
-import { createPinia, setActivePinia } from 'pinia'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { createApp } from 'vue'
 
 // Mock tag store
 vi.mock('@/features/tag/store', () => ({
-  useTagStore: vi.fn()
+  useTagStore: vi.fn(),
 }))
 
 describe('Application Store', () => {
@@ -44,17 +47,17 @@ describe('Application Store', () => {
       parentPartitionGroupId: 'group-1',
       management: { category: 'manual', state: 'available' },
       createdAt: '2023-01-01T00:00:00Z',
-      updatedAt: '2023-01-01T00:00:00Z'
+      updatedAt: '2023-01-01T00:00:00Z',
     },
     createdAt: DateTime.fromISO('2023-01-01T00:00:00Z'),
-    updatedAt: DateTime.fromISO('2023-01-01T00:00:00Z')
+    updatedAt: DateTime.fromISO('2023-01-01T00:00:00Z'),
   }
 
   const mockApplicationDetail: ApplicationDetail = {
     ...mockApplication,
     files: [],
     comments: [],
-    statuses: []
+    statuses: [],
   }
 
   const mockSeed: ApplicationSeed = {
@@ -63,7 +66,7 @@ describe('Application Store', () => {
     content: 'New Content',
     tags: [],
     partition: 'part-1',
-    targets: []
+    targets: [],
   }
 
   const createMockRepository = () => ({
@@ -72,7 +75,7 @@ describe('Application Store', () => {
     createApplication: vi.fn(),
     editApplication: vi.fn(),
     createComment: vi.fn(),
-    editStatus: vi.fn()
+    editStatus: vi.fn(),
   })
 
   describe('actions', () => {
@@ -80,7 +83,7 @@ describe('Application Store', () => {
       const mockFetchApplications = vi.fn().mockResolvedValue([mockApplication])
       const mockRepo = {
         ...createMockRepository(),
-        fetchApplications: mockFetchApplications
+        fetchApplications: mockFetchApplications,
       }
       app.provide(ApplicationRepositoryKey, mockRepo)
 
@@ -99,7 +102,7 @@ describe('Application Store', () => {
         .mockRejectedValue(new Error('Network error'))
       const mockRepo = {
         ...createMockRepository(),
-        fetchApplications: mockFetchApplications
+        fetchApplications: mockFetchApplications,
       }
       app.provide(ApplicationRepositoryKey, mockRepo)
 
@@ -117,7 +120,7 @@ describe('Application Store', () => {
         .mockResolvedValue(mockApplicationDetail)
       const mockRepo = {
         ...createMockRepository(),
-        fetchApplication: mockFetchApplication
+        fetchApplication: mockFetchApplication,
       }
       app.provide(ApplicationRepositoryKey, mockRepo)
 
@@ -134,7 +137,7 @@ describe('Application Store', () => {
         .mockResolvedValue(mockApplicationDetail)
       const mockRepo = {
         ...createMockRepository(),
-        createApplication: mockCreateApplication
+        createApplication: mockCreateApplication,
       }
       app.provide(ApplicationRepositoryKey, mockRepo)
 
@@ -148,17 +151,17 @@ describe('Application Store', () => {
     it('editApplication updates application and list', async () => {
       const mockUpdatedApp: ApplicationDetail = {
         ...mockApplicationDetail,
-        title: 'Updated Title'
+        title: 'Updated Title',
       }
       const mockEditApplication = vi.fn().mockResolvedValue(mockUpdatedApp)
       const mockRepo = {
         ...createMockRepository(),
-        editApplication: mockEditApplication
+        editApplication: mockEditApplication,
       }
       app.provide(ApplicationRepositoryKey, mockRepo)
 
       vi.mocked(useTagStore).mockReturnValue({
-        ensureTags: vi.fn().mockResolvedValue([])
+        ensureTags: vi.fn().mockResolvedValue([]),
       } as any) // eslint-disable-line @typescript-eslint/no-explicit-any
 
       const store = app.runWithContext(() => useApplicationStore())
@@ -178,12 +181,12 @@ describe('Application Store', () => {
         comment: 'Test Comment',
         user: 'user-1',
         createdAt: DateTime.fromISO('2023-01-01T00:00:00Z'),
-        updatedAt: DateTime.fromISO('2023-01-01T00:00:00Z')
+        updatedAt: DateTime.fromISO('2023-01-01T00:00:00Z'),
       }
       const mockCreateComment = vi.fn().mockResolvedValue(mockComment)
       const mockRepo = {
         ...createMockRepository(),
-        createComment: mockCreateComment
+        createComment: mockCreateComment,
       }
       app.provide(ApplicationRepositoryKey, mockRepo)
 
@@ -202,12 +205,12 @@ describe('Application Store', () => {
       const mockStatusDetail: ApplicationStatusDetail = {
         status: 'approved',
         createdBy: 'user-1',
-        createdAt: DateTime.fromISO('2023-01-01T00:00:00Z')
+        createdAt: DateTime.fromISO('2023-01-01T00:00:00Z'),
       }
       const mockEditStatus = vi.fn().mockResolvedValue(mockStatusDetail)
       const mockRepo = {
         ...createMockRepository(),
-        editStatus: mockEditStatus
+        editStatus: mockEditStatus,
       }
       app.provide(ApplicationRepositoryKey, mockRepo)
 

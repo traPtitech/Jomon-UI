@@ -11,7 +11,7 @@ const props = withDefaults(defineProps<Props>(), {
   type: 'plain',
   disabled: false,
   fontSize: 'base',
-  padding: 'md'
+  padding: 'md',
 })
 
 const typeClass = computed(() => {

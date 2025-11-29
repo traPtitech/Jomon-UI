@@ -1,6 +1,8 @@
-import type { ApplicationComment } from '@/features/applicationComment/entities'
-import type { StatusEnum } from '@/lib/apis'
 import type { DateTime } from 'luxon'
+
+import type { StatusEnum } from '@/lib/apis'
+
+import type { ApplicationComment } from '@/features/applicationComment/entities'
 
 export interface ApplicationStatusDetail {
   createdBy: string
@@ -14,7 +16,7 @@ export const applicationStatusOptions = [
   { value: 'change_requested', key: '要修正' },
   { value: 'approved', key: '承認済み' },
   { value: 'rejected', key: '却下' },
-  { value: 'payment_finished', key: '支払い済み' }
+  { value: 'payment_finished', key: '支払い済み' },
 ] as const
 
 export type ApplicationStatus = (typeof StatusEnum)[keyof typeof StatusEnum]

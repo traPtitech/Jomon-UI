@@ -15,5 +15,5 @@ export const accountManagerHandlers = [
   ),
   http.delete('/api/account-managers', () => {
     return HttpResponse.json(null)
-  })
+  }),
 ]

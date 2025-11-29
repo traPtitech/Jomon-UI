@@ -13,5 +13,5 @@ export const handlers = [
   accountManagerHandlers,
   tagHandlers,
   userHandlers,
-  fileHandlers
+  fileHandlers,
 ].flat()

@@ -1,7 +1,9 @@
 <script lang="ts" setup>
-import PageLink from './PageLink.vue'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
 import { computed } from 'vue'
+
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
+
+import PageLink from './PageLink.vue'
 
 interface Props {
   path: string
@@ -47,7 +49,7 @@ const pages = computed(() => {
       ),
       [last - 1, last].filter(page => 1 <= page && page <= last)
     ),
-    mergePages([1], [current], [last])
+    mergePages([1], [current], [last]),
   ]
 })
 </script>

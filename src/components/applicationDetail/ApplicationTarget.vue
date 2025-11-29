@@ -16,24 +16,23 @@ const props = defineProps<{
   application: ApplicationDetail
   isEditMode: boolean
   target: ApplicationTargetDetail
+  selectedUserIds: string[]
 }>()
 
 const { getUserName, getUserNameWithFallback, userOptions } = useUserStore()
 const { editApplication } = useApplicationStore()
 
-const targets = computed(() =>
-  props.application.targets.map(target => target.target)
-)
 const targetOptions = computed(() =>
   userOptions.value.filter(
     user =>
-      user.value === props.target.target || !targets.value.includes(user.value)
+      user.value === props.target.target ||
+      !props.selectedUserIds.includes(user.value)
   )
 )
 
 const targetModel = defineModel<ApplicationTarget>('targetModel')
 
-const emit = defineEmits<(e: 'delete', targetId: string) => void>()
+const emit = defineEmits<(e: 'delete', id: string) => void>()
 
 const handleRemoveTarget = async () => {
   const result = confirm('本当に削除しますか？')
@@ -43,7 +42,7 @@ const handleRemoveTarget = async () => {
 
   // 編集モード中はローカル削除のみ（親で処理）
   if (props.isEditMode) {
-    emit('delete', props.target.target)
+    emit('delete', props.target.id)
     return
   }
 
@@ -53,7 +52,7 @@ const handleRemoveTarget = async () => {
       ...props.application,
       partition: props.application.partition.id,
       targets: props.application.targets.filter(
-        target => target.target !== props.target.target
+        target => target.id !== props.target.id
       )
     })
   } catch {

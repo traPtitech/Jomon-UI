@@ -79,7 +79,7 @@ if (me.value?.accountManager) {
       <ul class="flex gap-3" aria-labelledby="accountManager-list">
         <li v-for="accountManager in accountManagers" :key="accountManager">
           <div class="rounded-sm border border-text-primary px-2 text-center">
-            {{ getUserName(accountManager) }}
+            {{ getUserName(accountManager) ?? '不明なユーザー' }}
           </div>
         </li>
       </ul>

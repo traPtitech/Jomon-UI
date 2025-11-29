@@ -20,7 +20,9 @@ const { getUserName } = useUserStore()
       <div class="flex flex-1 items-center gap-4">
         <UserIcon class="w-12" :name="getUserName(comment.user)" />
         <div>
-          <span class="font-bold">{{ getUserName(comment.user) }}</span>
+          <span class="font-bold">{{
+            getUserName(comment.user) ?? '不明なユーザー'
+          }}</span>
           がコメントしました
         </div>
       </div>

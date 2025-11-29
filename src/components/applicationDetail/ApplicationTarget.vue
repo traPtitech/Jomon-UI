@@ -60,7 +60,7 @@ const handleRemoveTarget = async () => {
     <div class="flex items-center gap-1">
       <UserIcon class="w-10" :name="getUserName(target.target)" />
       <div class="flex flex-col gap-1 break-all">
-        <div>{{ getUserName(target.target) }}</div>
+        <div>{{ getUserName(target.target) ?? '不明なユーザー' }}</div>
         <div>{{ target.amount }}円</div>
       </div>
     </div>

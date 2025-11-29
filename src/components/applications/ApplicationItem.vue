@@ -41,7 +41,9 @@ const totalAmount = computed(() =>
             <UserIcon
               class="max-w-7"
               :name="getUserName(application.createdBy)" />
-            <span>{{ getUserName(application.createdBy) }}</span>
+            <span>{{
+              getUserName(application.createdBy) ?? '不明なユーザー'
+            }}</span>
           </div>
           <span v-if="application.partition">
             {{ application.partition.name }}

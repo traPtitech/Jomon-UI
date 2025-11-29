@@ -28,11 +28,13 @@ export const useUserStore = defineStoreComposable('user', () => {
     }, {})
   )
 
-  const getUserName = (id: string): string => {
+  const getUserName = (id: string): string | undefined => {
     const name = userMap.value[id]
     if (name === undefined) {
-      console.error(`[BUG] User not found: ${id}`)
-      return '不明なユーザー'
+      if (status.value === 'success') {
+        console.error(`[BUG] User not found: ${id}`)
+      }
+      return undefined
     }
     return name
   }

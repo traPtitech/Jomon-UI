@@ -20,7 +20,9 @@ const formattedDateAndTime = formatDateAndTime(props.log.createdAt)
     <div class="flex flex-1 items-center gap-4">
       <UserIcon class="w-12" :name="getUserName(log.createdBy)" />
       <p class="flex flex-wrap items-center gap-2">
-        <span class="font-bold">{{ getUserName(log.createdBy) }}</span>
+        <span class="font-bold">{{
+          getUserName(log.createdBy) ?? '不明なユーザー'
+        }}</span>
         が申請の状態を
         <StatusChip has-text :status="log.status" />
         にしました

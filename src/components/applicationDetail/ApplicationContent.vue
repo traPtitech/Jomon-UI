@@ -56,7 +56,7 @@ const handleUpdateContent = async () => {
         <UserIcon class="w-12" :name="getUserName(application.createdBy)" />
         <div>
           <span class="font-bold">{{
-            getUserName(application.createdBy)
+            getUserName(application.createdBy) ?? '不明なユーザー'
           }}</span>
           がこの申請を作成しました
         </div>

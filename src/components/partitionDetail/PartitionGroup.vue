@@ -48,7 +48,8 @@ const { partitionGroupIdNameToMap, partitionGroupOptions } =
       v-if="props.isEditMode"
       font-size="base"
       padding="sm"
-      @click="emit('finishEditing')">
+      @click="emit('finishEditing')"
+      :disabled="props.isSending">
       完了
     </SimpleButton>
 

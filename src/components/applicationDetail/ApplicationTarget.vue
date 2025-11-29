@@ -11,6 +11,7 @@ import type {
 import { useUserStore } from '@/features/user/store'
 import { TrashIcon } from '@heroicons/vue/24/solid'
 import { computed } from 'vue'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps<{
   application: ApplicationDetail
@@ -21,6 +22,7 @@ const props = defineProps<{
 
 const { getUserName, getUserNameWithFallback, userOptions } = useUserStore()
 const { editApplication } = useApplicationStore()
+const toast = useToast()
 
 const targetOptions = computed(() =>
   userOptions.value.filter(
@@ -56,7 +58,7 @@ const handleRemoveTarget = async () => {
       )
     })
   } catch {
-    alert('削除に失敗しました')
+    toast.error('削除に失敗しました')
   }
 }
 </script>

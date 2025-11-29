@@ -40,7 +40,7 @@ const { partitionGroupIdNameToMap, partitionGroupOptions } =
     <h2 v-else class="grow text-xl">
       {{
         partitionGroupIdNameToMap.get(partition.parentPartitionGroupId) ??
-        '指定なし'
+        '不明なパーティショングループ'
       }}
     </h2>
 

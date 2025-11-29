@@ -11,6 +11,8 @@ Jomon UIはViteとVue 3 + TypeScriptで構築されています。`src/`配下�
 - `npm run serve`: ビルド成果物を`vite preview`で確認します。
 - `npm run lint` / `npm run format:check`: ESLintとPrettierで静的解析とフォーマット確認を行います。
 - `npm run type-check`: `vue-tsc --noEmit`による型検証のみを実行します。
+- `npm run type-check:tests`: テストファイルの型検証のみを実行します。
+- `npm run test:unit`: Vitestによる単体テストを実行します。
 - `npm run gen-api` / `npm run clean`: OpenAPIコード生成と生成物のクリーニングに使用します。
 
 ## コーディングスタイルと命名規約
@@ -26,7 +28,7 @@ Jomon UIはViteとVue 3 + TypeScriptで構築されています。`src/`配下�
 
 ## テストガイドライン
 
-現状の自動テストは型検証とESLintが中心です。UIロジックにテストを追加する場合はVue Test Utilsとmswを利用し、HTTP通信は`src/features/<feature>/mock`のハンドラを再利用してください。テストファイルは対象モジュール近くに`*.spec.ts`として配置し、シナリオ単位で命名します。アクセシビリティ回帰を防ぐため、主要なフォーム・ダイアログでは`vue-axe`を併用した手動検証を行ってください。
+現状の自動テストは型検証とESLint、およびVitestによる単体テストが中心です。UIロジックにテストを追加する場合はVue Test Utilsとmswを利用し、HTTP通信は`src/features/<feature>/mock`のハンドラを再利用してください。テストファイルは対象モジュール近くに`*.spec.ts`として配置し、シナリオ単位で命名します。アクセシビリティ回帰を防ぐため、主要なフォーム・ダイアログでは`vue-axe`を併用した手動検証を行ってください。
 
 ## コミットとPull Requestガイドライン
 

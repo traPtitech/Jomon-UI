@@ -47,7 +47,7 @@ const handleOpenDrawer = () => {
           tabindex="0">
           ヘルプ
         </a>
-        <UserIcon v-if="me !== undefined" :name="me.name" />
+        <UserIcon v-if="me !== undefined" class="w-10" :name="me.name" />
       </div>
     </div>
   </header>

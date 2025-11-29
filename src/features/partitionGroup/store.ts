@@ -25,6 +25,9 @@ const createPartitionGroupStore = defineStore('partitionGroup', {
     canEditPartitionGroup: () => (user: User | undefined) => {
       if (!user) return false
       return user.accountManager
+    },
+    partitionGroupIdNameToMap: state => {
+      return new Map(state.partitionGroups.map(group => [group.id, group.name]))
     }
   },
   actions: {

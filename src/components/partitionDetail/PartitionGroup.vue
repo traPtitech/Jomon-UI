@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import type { EditMode } from '@/components/partitionDetail/composables/usePartitionInformation'
-import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
 import EditButton from '@/components/shared/EditButton.vue'
+import SearchSelect from '@/components/shared/SearchSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
-import { isBudgetSet } from '@/features/partition/lib/isBudgetSet'
 import { usePartitionStore } from '@/features/partition/store'
+import { usePartitionGroupStore } from '@/features/partitionGroup/store'
 import { useUserStore } from '@/features/user/store'
 
 interface Props {
@@ -24,21 +24,24 @@ const {
   currentPartition: partition,
   editedValue
 } = usePartitionStore()
+const { partitionGroupIdNameToMap, partitionGroupOptions } =
+  usePartitionGroupStore()
 </script>
 
 <template>
   <div v-if="partition" class="flex items-center gap-3">
-    <BaseNumberInput
+    <SearchSelect
+      required
       v-if="props.isEditMode"
-      v-model="editedValue.budget"
-      label="予算"
-      class="grow" />
-
+      v-model="editedValue.parentPartitionGroupId"
+      class="grow"
+      :options="partitionGroupOptions"
+      label="パーティショングループ" />
     <h2 v-else class="grow text-xl">
-      <span v-if="isBudgetSet(partition.budget)">
-        {{ partition.budget }} 円
-      </span>
-      <span v-else>指定なし</span>
+      {{
+        partitionGroupIdNameToMap.get(partition.parentPartitionGroupId) ??
+        '不明なパーティショングループ'
+      }}
     </h2>
 
     <SimpleButton
@@ -56,7 +59,7 @@ const {
       @click="
         props.isEditMode
           ? emit('changeEditMode', '')
-          : emit('changeEditMode', 'budget')
+          : emit('changeEditMode', 'partitionGroup')
       " />
   </div>
 </template>

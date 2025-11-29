@@ -22,13 +22,15 @@ interface Props {
   multiple?: boolean
   allowCustom?: boolean
   disabled?: boolean
+  required?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   placeholder: '検索',
   multiple: false,
   allowCustom: false,
-  disabled: false
+  disabled: false,
+  required: false
 })
 
 const emit = defineEmits<{
@@ -210,6 +212,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
         :class="['pr-8', disabled && 'cursor-not-allowed opacity-50']"
         :placeholder="getPlaceholderText"
         :disabled="disabled"
+        :required="required"
         @focus="handleInputFocus"
         @input="handleChange"
         @keydown="handleKeyDown">

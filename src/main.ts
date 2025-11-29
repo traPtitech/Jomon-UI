@@ -1,5 +1,19 @@
 import App from './App.vue'
+import {
+  AccountManagerRepositoryKey,
+  ApplicationRepositoryKey,
+  PartitionGroupRepositoryKey,
+  PartitionRepositoryKey,
+  TagRepositoryKey,
+  UserRepositoryKey
+} from './di'
 import router from './router'
+import { useAccountManagerRepository } from '@/features/accountManager/data/repository'
+import { useApplicationRepository } from '@/features/application/data/repository'
+import { usePartitionRepository } from '@/features/partition/data/repository'
+import { usePartitionGroupRepository } from '@/features/partitionGroup/data/repository'
+import { useTagRepository } from '@/features/tag/data/repository'
+import { useUserRepository } from '@/features/user/data/repository'
 import { handlers } from '@/lib/msw'
 import { setupWorker } from 'msw/browser'
 import { createPinia } from 'pinia'
@@ -42,6 +56,13 @@ const options: PluginOptions = {
   hideProgressBar: true
 }
 
-await setup().then(app =>
+await setup().then(app => {
+  app.provide(UserRepositoryKey, useUserRepository())
+  app.provide(ApplicationRepositoryKey, useApplicationRepository())
+  app.provide(PartitionRepositoryKey, usePartitionRepository())
+  app.provide(PartitionGroupRepositoryKey, usePartitionGroupRepository())
+  app.provide(TagRepositoryKey, useTagRepository())
+  app.provide(AccountManagerRepositoryKey, useAccountManagerRepository())
+
   app.use(router).use(createPinia()).use(Toast, options).mount('#app')
-)
+})

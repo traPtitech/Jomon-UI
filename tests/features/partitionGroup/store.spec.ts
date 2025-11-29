@@ -1,4 +1,4 @@
-import { usePartitionGroupRepository } from '@/features/partitionGroup/data/repository'
+import { PartitionGroupRepositoryKey } from '@/di'
 import type {
   PartitionGroup,
   PartitionGroupSeed
@@ -7,15 +7,16 @@ import { usePartitionGroupStore } from '@/features/partitionGroup/store'
 import type { User } from '@/features/user/entities'
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-
-// Mock repository
-vi.mock('@/features/partitionGroup/data/repository', () => ({
-  usePartitionGroupRepository: vi.fn()
-}))
+import { createApp } from 'vue'
 
 describe('PartitionGroup Store', () => {
+  let app: ReturnType<typeof createApp>
+
   beforeEach(() => {
-    setActivePinia(createPinia())
+    const pinia = createPinia()
+    app = createApp({})
+    app.use(pinia)
+    setActivePinia(pinia)
     vi.clearAllMocks()
   })
 
@@ -34,24 +35,31 @@ describe('PartitionGroup Store', () => {
     depth: 0
   }
 
+  const createMockRepository = () => ({
+    fetchPartitionGroups: vi.fn(),
+    fetchPartitionGroup: vi.fn(),
+    createPartitionGroup: vi.fn(),
+    editPartitionGroup: vi.fn(),
+    deletePartitionGroup: vi.fn()
+  })
+
   describe('actions', () => {
     it('fetchPartitionGroups fetches groups and updates state', async () => {
       const mockFetchPartitionGroups = vi
         .fn()
         .mockResolvedValue([mockPartitionGroup])
-      vi.mocked(usePartitionGroupRepository).mockReturnValue({
-        fetchPartitionGroups: mockFetchPartitionGroups,
-        fetchPartitionGroup: vi.fn(),
-        createPartitionGroup: vi.fn(),
-        editPartitionGroup: vi.fn(),
-        deletePartitionGroup: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        fetchPartitionGroups: mockFetchPartitionGroups
+      }
+      app.provide(PartitionGroupRepositoryKey, mockRepo)
 
-      const store = usePartitionGroupStore()
+      const store = app.runWithContext(() => usePartitionGroupStore())
       await store.fetchPartitionGroups()
 
       expect(mockFetchPartitionGroups).toHaveBeenCalled()
       expect(store.partitionGroups.value).toEqual([mockPartitionGroup])
+      expect(store.status.value).toBe('success')
       expect(store.isPartitionGroupFetched.value).toBe(true)
     })
 
@@ -59,16 +67,18 @@ describe('PartitionGroup Store', () => {
       const mockFetchPartitionGroups = vi
         .fn()
         .mockRejectedValue(new Error('Network error'))
-      vi.mocked(usePartitionGroupRepository).mockReturnValue({
-        fetchPartitionGroups: mockFetchPartitionGroups,
-        fetchPartitionGroup: vi.fn(),
-        createPartitionGroup: vi.fn(),
-        editPartitionGroup: vi.fn(),
-        deletePartitionGroup: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        fetchPartitionGroups: mockFetchPartitionGroups
+      }
+      app.provide(PartitionGroupRepositoryKey, mockRepo)
 
-      const store = usePartitionGroupStore()
+      const store = app.runWithContext(() => usePartitionGroupStore())
       await expect(store.fetchPartitionGroups()).rejects.toThrow(
+        'パーティショングループ一覧の取得に失敗しました'
+      )
+      expect(store.status.value).toBe('error')
+      expect(store.error.value).toContain(
         'パーティショングループ一覧の取得に失敗しました'
       )
     })
@@ -77,15 +87,13 @@ describe('PartitionGroup Store', () => {
       const mockFetchPartitionGroup = vi
         .fn()
         .mockResolvedValue(mockPartitionGroup)
-      vi.mocked(usePartitionGroupRepository).mockReturnValue({
-        fetchPartitionGroups: vi.fn(),
-        fetchPartitionGroup: mockFetchPartitionGroup,
-        createPartitionGroup: vi.fn(),
-        editPartitionGroup: vi.fn(),
-        deletePartitionGroup: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        fetchPartitionGroup: mockFetchPartitionGroup
+      }
+      app.provide(PartitionGroupRepositoryKey, mockRepo)
 
-      const store = usePartitionGroupStore()
+      const store = app.runWithContext(() => usePartitionGroupStore())
       await store.fetchPartitionGroup('group-1')
 
       expect(mockFetchPartitionGroup).toHaveBeenCalledWith('group-1')
@@ -101,15 +109,13 @@ describe('PartitionGroup Store', () => {
       const mockCreatePartitionGroup = vi
         .fn()
         .mockResolvedValue(mockPartitionGroup)
-      vi.mocked(usePartitionGroupRepository).mockReturnValue({
-        fetchPartitionGroups: vi.fn(),
-        fetchPartitionGroup: vi.fn(),
-        createPartitionGroup: mockCreatePartitionGroup,
-        editPartitionGroup: vi.fn(),
-        deletePartitionGroup: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        createPartitionGroup: mockCreatePartitionGroup
+      }
+      app.provide(PartitionGroupRepositoryKey, mockRepo)
 
-      const store = usePartitionGroupStore()
+      const store = app.runWithContext(() => usePartitionGroupStore())
       await store.createPartitionGroup(mockSeed)
 
       expect(mockCreatePartitionGroup).toHaveBeenCalledWith(mockSeed)
@@ -122,15 +128,13 @@ describe('PartitionGroup Store', () => {
         name: 'Updated Group'
       }
       const mockEditPartitionGroup = vi.fn().mockResolvedValue(mockUpdatedGroup)
-      vi.mocked(usePartitionGroupRepository).mockReturnValue({
-        fetchPartitionGroups: vi.fn(),
-        fetchPartitionGroup: vi.fn(),
-        createPartitionGroup: vi.fn(),
-        editPartitionGroup: mockEditPartitionGroup,
-        deletePartitionGroup: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        editPartitionGroup: mockEditPartitionGroup
+      }
+      app.provide(PartitionGroupRepositoryKey, mockRepo)
 
-      const store = usePartitionGroupStore()
+      const store = app.runWithContext(() => usePartitionGroupStore())
       store.currentPartitionGroup.value = mockPartitionGroup
       store.partitionGroups.value = [mockPartitionGroup]
 
@@ -143,15 +147,13 @@ describe('PartitionGroup Store', () => {
 
     it('deletePartitionGroup deletes group and removes from list', async () => {
       const mockDeletePartitionGroup = vi.fn().mockResolvedValue(undefined)
-      vi.mocked(usePartitionGroupRepository).mockReturnValue({
-        fetchPartitionGroups: vi.fn(),
-        fetchPartitionGroup: vi.fn(),
-        createPartitionGroup: vi.fn(),
-        editPartitionGroup: vi.fn(),
+      const mockRepo = {
+        ...createMockRepository(),
         deletePartitionGroup: mockDeletePartitionGroup
-      })
+      }
+      app.provide(PartitionGroupRepositoryKey, mockRepo)
 
-      const store = usePartitionGroupStore()
+      const store = app.runWithContext(() => usePartitionGroupStore())
       store.partitionGroups.value = [mockPartitionGroup]
 
       await store.deletePartitionGroup('group-1')
@@ -163,7 +165,8 @@ describe('PartitionGroup Store', () => {
 
   describe('getters', () => {
     it('partitionGroupOptions returns formatted options', () => {
-      const store = usePartitionGroupStore()
+      app.provide(PartitionGroupRepositoryKey, createMockRepository())
+      const store = app.runWithContext(() => usePartitionGroupStore())
       store.partitionGroups.value = [mockPartitionGroup]
 
       expect(store.partitionGroupOptions.value).toEqual([
@@ -172,7 +175,8 @@ describe('PartitionGroup Store', () => {
     })
 
     it('canEditPartitionGroup returns correct value', () => {
-      const store = usePartitionGroupStore()
+      app.provide(PartitionGroupRepositoryKey, createMockRepository())
+      const store = app.runWithContext(() => usePartitionGroupStore())
       const canEdit = store.canEditPartitionGroup.value
 
       expect(canEdit(undefined)).toBe(false)
@@ -181,7 +185,8 @@ describe('PartitionGroup Store', () => {
     })
 
     it('partitionGroupIdNameToMap returns id-name map', () => {
-      const store = usePartitionGroupStore()
+      app.provide(PartitionGroupRepositoryKey, createMockRepository())
+      const store = app.runWithContext(() => usePartitionGroupStore())
       store.partitionGroups.value = [mockPartitionGroup]
 
       const map = store.partitionGroupIdNameToMap.value

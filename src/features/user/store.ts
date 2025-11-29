@@ -1,12 +1,17 @@
-import { useUserRepository } from './data/repository'
 import type { User } from './entities'
-import { defineStore, storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
+import { UserRepositoryKey } from '@/di'
+import { defineStoreComposable } from '@/lib/store'
+import type { AsyncStatus } from '@/types'
+import { computed, inject, ref } from 'vue'
 
-const createUserStore = defineStore('user', () => {
+export const useUserStore = defineStoreComposable('user', () => {
+  const repository = inject(UserRepositoryKey)
+  if (!repository) throw new Error('UserRepository is not provided')
+
   const me = ref<User | undefined>(undefined)
   const users = ref<User[]>([])
-  const isUserFetched = ref(false)
+  const status = ref<AsyncStatus>('idle')
+  const error = ref<string | null>(null)
   const isMeFetched = ref(false)
 
   const isAccountManager = computed(() => Boolean(me.value?.accountManager))
@@ -23,21 +28,24 @@ const createUserStore = defineStore('user', () => {
     }, {})
   )
 
+  const isUserFetched = computed(() => status.value === 'success')
+
   const fetchUsers = async () => {
-    const repository = useUserRepository()
+    status.value = 'loading'
+    error.value = null
 
     try {
       users.value = await repository.fetchUsers()
-      isUserFetched.value = true
+      status.value = 'success'
     } catch (e) {
-      throw new Error('ユーザー一覧の取得に失敗しました: ' + String(e))
+      status.value = 'error'
+      error.value = 'ユーザー一覧の取得に失敗しました: ' + String(e)
+      throw new Error(error.value)
     }
   }
 
   const fetchMe = async () => {
     if (isMeFetched.value) return
-
-    const repository = useUserRepository()
 
     try {
       me.value = await repository.fetchMe()
@@ -50,13 +58,16 @@ const createUserStore = defineStore('user', () => {
   const reset = () => {
     me.value = undefined
     users.value = []
-    isUserFetched.value = false
+    status.value = 'idle'
+    error.value = null
     isMeFetched.value = false
   }
 
   return {
     me,
     users,
+    status,
+    error,
     isUserFetched,
     isMeFetched,
     isAccountManager,
@@ -67,17 +78,5 @@ const createUserStore = defineStore('user', () => {
     reset
   }
 })
-
-export const useUserStore = () => {
-  const store = createUserStore()
-  const refs = storeToRefs(store)
-
-  return {
-    ...refs,
-    fetchUsers: store.fetchUsers,
-    fetchMe: store.fetchMe,
-    reset: store.reset
-  }
-}
 
 export type UserStore = ReturnType<typeof useUserStore>

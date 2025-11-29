@@ -1,17 +1,18 @@
-import { useUserRepository } from '@/features/user/data/repository'
+import { UserRepositoryKey } from '@/di'
 import type { User } from '@/features/user/entities'
 import { useUserStore } from '@/features/user/store'
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-
-// Mock repository
-vi.mock('@/features/user/data/repository', () => ({
-  useUserRepository: vi.fn()
-}))
+import { createApp } from 'vue'
 
 describe('User Store', () => {
+  let app: ReturnType<typeof createApp>
+
   beforeEach(() => {
-    setActivePinia(createPinia())
+    const pinia = createPinia()
+    app = createApp({})
+    app.use(pinia)
+    setActivePinia(pinia)
     vi.clearAllMocks()
   })
 
@@ -34,16 +35,17 @@ describe('User Store', () => {
       const mockFetchUsers = vi
         .fn()
         .mockResolvedValue([mockUser, mockAdminUser])
-      vi.mocked(useUserRepository).mockReturnValue({
+      app.provide(UserRepositoryKey, {
         fetchUsers: mockFetchUsers,
         fetchMe: vi.fn()
       })
 
-      const store = useUserStore()
+      const store = app.runWithContext(() => useUserStore())
       await store.fetchUsers()
 
       expect(mockFetchUsers).toHaveBeenCalled()
       expect(store.users.value).toEqual([mockUser, mockAdminUser])
+      expect(store.status.value).toBe('success')
       expect(store.isUserFetched.value).toBe(true)
     })
 
@@ -51,25 +53,27 @@ describe('User Store', () => {
       const mockFetchUsers = vi
         .fn()
         .mockRejectedValue(new Error('Network error'))
-      vi.mocked(useUserRepository).mockReturnValue({
+      app.provide(UserRepositoryKey, {
         fetchUsers: mockFetchUsers,
         fetchMe: vi.fn()
       })
 
-      const store = useUserStore()
+      const store = app.runWithContext(() => useUserStore())
       await expect(store.fetchUsers()).rejects.toThrow(
         'ユーザー一覧の取得に失敗しました'
       )
+      expect(store.status.value).toBe('error')
+      expect(store.error.value).toContain('ユーザー一覧の取得に失敗しました')
     })
 
     it('fetchMe fetches current user and updates state', async () => {
       const mockFetchMe = vi.fn().mockResolvedValue(mockUser)
-      vi.mocked(useUserRepository).mockReturnValue({
+      app.provide(UserRepositoryKey, {
         fetchUsers: vi.fn(),
         fetchMe: mockFetchMe
       })
 
-      const store = useUserStore()
+      const store = app.runWithContext(() => useUserStore())
       await store.fetchMe()
 
       expect(mockFetchMe).toHaveBeenCalled()
@@ -79,12 +83,12 @@ describe('User Store', () => {
 
     it('fetchMe does not fetch if already fetched', async () => {
       const mockFetchMe = vi.fn().mockResolvedValue(mockUser)
-      vi.mocked(useUserRepository).mockReturnValue({
+      app.provide(UserRepositoryKey, {
         fetchUsers: vi.fn(),
         fetchMe: mockFetchMe
       })
 
-      const store = useUserStore()
+      const store = app.runWithContext(() => useUserStore())
       store.isMeFetched.value = true
       await store.fetchMe()
 
@@ -93,28 +97,33 @@ describe('User Store', () => {
 
     it('fetchMe handles error', async () => {
       const mockFetchMe = vi.fn().mockRejectedValue(new Error('Network error'))
-      vi.mocked(useUserRepository).mockReturnValue({
+      app.provide(UserRepositoryKey, {
         fetchUsers: vi.fn(),
         fetchMe: mockFetchMe
       })
 
-      const store = useUserStore()
+      const store = app.runWithContext(() => useUserStore())
       await expect(store.fetchMe()).rejects.toThrow(
         'ユーザーの取得に失敗しました'
       )
     })
 
     it('reset clears state', () => {
-      const store = useUserStore()
+      app.provide(UserRepositoryKey, {
+        fetchUsers: vi.fn(),
+        fetchMe: vi.fn()
+      })
+      const store = app.runWithContext(() => useUserStore())
       store.me.value = mockUser
       store.users.value = [mockUser]
-      store.isUserFetched.value = true
+      store.status.value = 'success'
       store.isMeFetched.value = true
 
       store.reset()
 
       expect(store.me.value).toBeUndefined()
       expect(store.users.value).toEqual([])
+      expect(store.status.value).toBe('idle')
       expect(store.isUserFetched.value).toBe(false)
       expect(store.isMeFetched.value).toBe(false)
     })
@@ -122,7 +131,11 @@ describe('User Store', () => {
 
   describe('getters', () => {
     it('isAccountManager returns correct value', () => {
-      const store = useUserStore()
+      app.provide(UserRepositoryKey, {
+        fetchUsers: vi.fn(),
+        fetchMe: vi.fn()
+      })
+      const store = app.runWithContext(() => useUserStore())
 
       store.me.value = mockUser
       expect(store.isAccountManager.value).toBe(false)
@@ -135,7 +148,11 @@ describe('User Store', () => {
     })
 
     it('userOptions returns formatted options', () => {
-      const store = useUserStore()
+      app.provide(UserRepositoryKey, {
+        fetchUsers: vi.fn(),
+        fetchMe: vi.fn()
+      })
+      const store = app.runWithContext(() => useUserStore())
       store.users.value = [mockUser, mockAdminUser]
 
       expect(store.userOptions.value).toEqual([
@@ -145,7 +162,11 @@ describe('User Store', () => {
     })
 
     it('userMap returns id-name map', () => {
-      const store = useUserStore()
+      app.provide(UserRepositoryKey, {
+        fetchUsers: vi.fn(),
+        fetchMe: vi.fn()
+      })
+      const store = app.runWithContext(() => useUserStore())
       store.users.value = [mockUser, mockAdminUser]
 
       expect(store.userMap.value).toEqual({

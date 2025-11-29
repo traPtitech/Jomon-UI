@@ -1,4 +1,4 @@
-import { useApplicationRepository } from '@/features/application/data/repository'
+import { ApplicationRepositoryKey } from '@/di'
 import type {
   Application,
   ApplicationDetail,
@@ -11,11 +11,7 @@ import { useTagStore } from '@/features/tag/store'
 import { DateTime } from 'luxon'
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-
-// Mock repository
-vi.mock('@/features/application/data/repository', () => ({
-  useApplicationRepository: vi.fn()
-}))
+import { createApp } from 'vue'
 
 // Mock tag store
 vi.mock('@/features/tag/store', () => ({
@@ -23,8 +19,13 @@ vi.mock('@/features/tag/store', () => ({
 }))
 
 describe('Application Store', () => {
+  let app: ReturnType<typeof createApp>
+
   beforeEach(() => {
-    setActivePinia(createPinia())
+    const pinia = createPinia()
+    app = createApp({})
+    app.use(pinia)
+    setActivePinia(pinia)
     vi.clearAllMocks()
   })
 
@@ -65,23 +66,30 @@ describe('Application Store', () => {
     targets: []
   }
 
+  const createMockRepository = () => ({
+    fetchApplications: vi.fn(),
+    fetchApplication: vi.fn(),
+    createApplication: vi.fn(),
+    editApplication: vi.fn(),
+    createComment: vi.fn(),
+    editStatus: vi.fn()
+  })
+
   describe('actions', () => {
     it('fetchApplications fetches applications and updates state', async () => {
       const mockFetchApplications = vi.fn().mockResolvedValue([mockApplication])
-      vi.mocked(useApplicationRepository).mockReturnValue({
-        fetchApplications: mockFetchApplications,
-        fetchApplication: vi.fn(),
-        createApplication: vi.fn(),
-        editApplication: vi.fn(),
-        createComment: vi.fn(),
-        editStatus: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        fetchApplications: mockFetchApplications
+      }
+      app.provide(ApplicationRepositoryKey, mockRepo)
 
-      const store = useApplicationStore()
+      const store = app.runWithContext(() => useApplicationStore())
       await store.fetchApplications()
 
       expect(mockFetchApplications).toHaveBeenCalled()
       expect(store.applications.value).toEqual([mockApplication])
+      expect(store.status.value).toBe('success')
       expect(store.isApplicationFetched.value).toBe(true)
     })
 
@@ -89,35 +97,31 @@ describe('Application Store', () => {
       const mockFetchApplications = vi
         .fn()
         .mockRejectedValue(new Error('Network error'))
-      vi.mocked(useApplicationRepository).mockReturnValue({
-        fetchApplications: mockFetchApplications,
-        fetchApplication: vi.fn(),
-        createApplication: vi.fn(),
-        editApplication: vi.fn(),
-        createComment: vi.fn(),
-        editStatus: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        fetchApplications: mockFetchApplications
+      }
+      app.provide(ApplicationRepositoryKey, mockRepo)
 
-      const store = useApplicationStore()
+      const store = app.runWithContext(() => useApplicationStore())
       await expect(store.fetchApplications()).rejects.toThrow(
         '申請一覧の取得に失敗しました'
       )
+      expect(store.status.value).toBe('error')
+      expect(store.error.value).toContain('申請一覧の取得に失敗しました')
     })
 
     it('fetchApplication fetches application detail and updates state', async () => {
       const mockFetchApplication = vi
         .fn()
         .mockResolvedValue(mockApplicationDetail)
-      vi.mocked(useApplicationRepository).mockReturnValue({
-        fetchApplications: vi.fn(),
-        fetchApplication: mockFetchApplication,
-        createApplication: vi.fn(),
-        editApplication: vi.fn(),
-        createComment: vi.fn(),
-        editStatus: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        fetchApplication: mockFetchApplication
+      }
+      app.provide(ApplicationRepositoryKey, mockRepo)
 
-      const store = useApplicationStore()
+      const store = app.runWithContext(() => useApplicationStore())
       await store.fetchApplication('app-1')
 
       expect(mockFetchApplication).toHaveBeenCalledWith('app-1')
@@ -128,16 +132,13 @@ describe('Application Store', () => {
       const mockCreateApplication = vi
         .fn()
         .mockResolvedValue(mockApplicationDetail)
-      vi.mocked(useApplicationRepository).mockReturnValue({
-        fetchApplications: vi.fn(),
-        fetchApplication: vi.fn(),
-        createApplication: mockCreateApplication,
-        editApplication: vi.fn(),
-        createComment: vi.fn(),
-        editStatus: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        createApplication: mockCreateApplication
+      }
+      app.provide(ApplicationRepositoryKey, mockRepo)
 
-      const store = useApplicationStore()
+      const store = app.runWithContext(() => useApplicationStore())
       await store.createApplication(mockSeed)
 
       expect(mockCreateApplication).toHaveBeenCalledWith(mockSeed)
@@ -150,20 +151,17 @@ describe('Application Store', () => {
         title: 'Updated Title'
       }
       const mockEditApplication = vi.fn().mockResolvedValue(mockUpdatedApp)
-      vi.mocked(useApplicationRepository).mockReturnValue({
-        fetchApplications: vi.fn(),
-        fetchApplication: vi.fn(),
-        createApplication: vi.fn(),
-        editApplication: mockEditApplication,
-        createComment: vi.fn(),
-        editStatus: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        editApplication: mockEditApplication
+      }
+      app.provide(ApplicationRepositoryKey, mockRepo)
 
       vi.mocked(useTagStore).mockReturnValue({
         ensureTags: vi.fn().mockResolvedValue([])
       } as any) // eslint-disable-line @typescript-eslint/no-explicit-any
 
-      const store = useApplicationStore()
+      const store = app.runWithContext(() => useApplicationStore())
       store.currentApplication.value = mockApplicationDetail
       store.applications.value = [mockApplication]
 
@@ -183,16 +181,13 @@ describe('Application Store', () => {
         updatedAt: DateTime.fromISO('2023-01-01T00:00:00Z')
       }
       const mockCreateComment = vi.fn().mockResolvedValue(mockComment)
-      vi.mocked(useApplicationRepository).mockReturnValue({
-        fetchApplications: vi.fn(),
-        fetchApplication: vi.fn(),
-        createApplication: vi.fn(),
-        editApplication: vi.fn(),
-        createComment: mockCreateComment,
-        editStatus: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        createComment: mockCreateComment
+      }
+      app.provide(ApplicationRepositoryKey, mockRepo)
 
-      const store = useApplicationStore()
+      const store = app.runWithContext(() => useApplicationStore())
       store.currentApplication.value = mockApplicationDetail
 
       await store.createComment('app-1', 'Test Comment')
@@ -210,16 +205,13 @@ describe('Application Store', () => {
         createdAt: DateTime.fromISO('2023-01-01T00:00:00Z')
       }
       const mockEditStatus = vi.fn().mockResolvedValue(mockStatusDetail)
-      vi.mocked(useApplicationRepository).mockReturnValue({
-        fetchApplications: vi.fn(),
-        fetchApplication: vi.fn(),
-        createApplication: vi.fn(),
-        editApplication: vi.fn(),
-        createComment: vi.fn(),
+      const mockRepo = {
+        ...createMockRepository(),
         editStatus: mockEditStatus
-      })
+      }
+      app.provide(ApplicationRepositoryKey, mockRepo)
 
-      const store = useApplicationStore()
+      const store = app.runWithContext(() => useApplicationStore())
       store.currentApplication.value = mockApplicationDetail
       store.applications.value = [mockApplication]
 
@@ -240,7 +232,8 @@ describe('Application Store', () => {
 
   describe('getters', () => {
     it('hasApplicationDetail returns correct value', () => {
-      const store = useApplicationStore()
+      app.provide(ApplicationRepositoryKey, createMockRepository())
+      const store = app.runWithContext(() => useApplicationStore())
 
       store.currentApplication.value = null
       expect(store.hasApplicationDetail.value).toBe(false)

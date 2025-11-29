@@ -14,7 +14,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { userMap } = useUserStore()
+const { getUserName, getUserNameWithFallback } = useUserStore()
 
 const formattedDate = formatDate(props.application.createdAt)
 
@@ -38,8 +38,10 @@ const totalAmount = computed(() =>
       <div class="flex flex-col gap-2">
         <div class="flex flex-wrap items-center justify-end gap-x-4">
           <div class="flex items-center gap-1">
-            <UserIcon class="max-w-7" :name="userMap[application.createdBy]" />
-            <span>{{ userMap[application.createdBy] }}</span>
+            <UserIcon
+              class="max-w-7"
+              :name="getUserName(application.createdBy)" />
+            <span>{{ getUserNameWithFallback(application.createdBy) }}</span>
           </div>
           <span v-if="application.partition">
             {{ application.partition.name }}

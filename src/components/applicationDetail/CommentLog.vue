@@ -11,16 +11,18 @@ const props = defineProps<{
 
 const formattedDateAndTime = formatDateAndTime(props.comment.createdAt)
 
-const { userMap } = useUserStore()
+const { getUserName, getUserNameWithFallback } = useUserStore()
 </script>
 
 <template>
   <div :id="comment.id" class="flex w-full flex-col gap-3">
     <div class="flex w-full items-center">
       <div class="flex flex-1 items-center gap-4">
-        <UserIcon class="w-12" :name="userMap[comment.user]" />
+        <UserIcon class="w-12" :name="getUserName(comment.user)" />
         <div>
-          <span class="font-bold">{{ userMap[comment.user] }}</span>
+          <span class="font-bold">{{
+            getUserNameWithFallback(comment.user)
+          }}</span>
           がコメントしました
         </div>
       </div>

@@ -226,7 +226,7 @@ describe('Application Store', () => {
       expect(store.currentApplication.value.statuses).toContainEqual(
         mockStatusDetail
       )
-      expect(store.applications.value[0].status).toBe('approved')
+      expect(store.applications.value[0]?.status).toBe('approved')
     })
   })
 

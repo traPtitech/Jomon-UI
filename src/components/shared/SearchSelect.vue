@@ -174,17 +174,16 @@ const handleKeyDown = (e: KeyboardEvent) => {
           ? highlightedIndex.value - 1
           : highlightedIndex.value
       break
-    case 'Enter':
+    case 'Enter': {
       e.preventDefault()
-      if (
-        highlightedIndex.value >= 0 &&
-        highlightedIndex.value < filteredOptions.value.length
-      ) {
-        handleSelect(filteredOptions.value[highlightedIndex.value].value)
+      const option = filteredOptions.value[highlightedIndex.value]
+      if (option) {
+        handleSelect(option.value)
       } else if (props.allowCustom && searchTerm.value) {
         handleAddCustom()
       }
       break
+    }
     case 'Escape':
       menuState.value = 'close'
       if (!props.multiple && model.value) {

@@ -7,7 +7,7 @@ import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import type { ApplicationTargetDetail } from '@/features/applicationTarget/entities'
 import { useUserStore } from '@/features/user/store'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
 const props = defineProps<{
@@ -22,9 +22,22 @@ const toast = useToast()
 const hasAuthority = isApplicationCreator.value(me.value)
 
 const isEditMode = ref(false)
-const editedTargets = ref<ApplicationTargetDetail[]>(props.application.targets)
+const editedTargets = ref<ApplicationTargetDetail[]>(
+  props.application.targets.map(t => ({ ...t }))
+)
+
+const selectedUserIds = computed(() =>
+  isEditMode.value
+    ? editedTargets.value.map(t => t.target)
+    : props.application.targets.map(t => t.target)
+)
+
+const handleDeleteTarget = (id: string) => {
+  editedTargets.value = editedTargets.value.filter(target => target.id !== id)
+}
+
 const toggleEditTargets = () => {
-  editedTargets.value = props.application.targets
+  editedTargets.value = props.application.targets.map(t => ({ ...t }))
   isEditMode.value = !isEditMode.value
 }
 
@@ -66,13 +79,26 @@ const handleUpdateTargets = async () => {
       </div>
     </div>
     <div v-if="application" class="flex flex-col gap-2">
-      <ApplicationTarget
-        v-for="(target, i) in application.targets"
-        :key="target.id"
-        v-model:target-model="editedTargets[i]"
-        :is-edit-mode="isEditMode"
-        :application="application"
-        :target="target" />
+      <template v-if="isEditMode">
+        <ApplicationTarget
+          v-for="(target, i) in editedTargets"
+          :key="target.id"
+          v-model:target-model="editedTargets[i]"
+          :is-edit-mode="isEditMode"
+          :application="application"
+          :target="target"
+          :selected-user-ids="selectedUserIds"
+          @delete="handleDeleteTarget" />
+      </template>
+      <template v-else>
+        <ApplicationTarget
+          v-for="target in application.targets"
+          :key="target.id"
+          :is-edit-mode="isEditMode"
+          :application="application"
+          :target="target"
+          :selected-user-ids="selectedUserIds" />
+      </template>
     </div>
   </div>
 </template>

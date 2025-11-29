@@ -22,7 +22,9 @@ describe('AccountManager Store', () => {
 
     // Default mock for useUserStore to prevent crash during store initialization
     vi.mocked(useUserStore).mockReturnValue({
-      userMap: computed(() => ({}))
+      userMap: computed(() => ({})),
+      getUserName: () => undefined,
+      getUserNameWithFallback: () => '不明なユーザー'
     } as unknown as ReturnType<typeof useUserStore>)
   })
 
@@ -109,13 +111,16 @@ describe('AccountManager Store', () => {
 
   describe('getters', () => {
     it('accountManagerOptions returns formatted options', () => {
-      const mockUserMap = {
+      const mockUserMap: Record<string, string> = {
         'user-1': 'User 1',
         'user-2': 'User 2'
       }
 
       vi.mocked(useUserStore).mockReturnValue({
-        userMap: computed(() => mockUserMap)
+        userMap: computed(() => mockUserMap),
+        getUserName: (id: string) => mockUserMap[id],
+        getUserNameWithFallback: (id: string) =>
+          mockUserMap[id] ?? '不明なユーザー'
       } as unknown as ReturnType<typeof useUserStore>)
 
       app.provide(AccountManagerRepositoryKey, createMockRepository())

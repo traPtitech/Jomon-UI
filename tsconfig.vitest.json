@@ -1,9 +1,10 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "./tsconfig.app.json",
+  "include": ["src/env.d.ts", "src/**/*", "src/**/*.vue", "tests/**/*.ts"],
+  "exclude": [],
   "compilerOptions": {
-    "types": ["vite/client", "vitest", "node"],
-    "isolatedModules": false,
-    "noEmit": true
-  },
-  "include": ["tests/**/*.ts"]
+    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.vitest.tsbuildinfo",
+    "types": ["vite/client", "vitest/globals"]
+  }
 }

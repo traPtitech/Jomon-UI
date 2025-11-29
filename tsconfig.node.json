@@ -1,16 +1,19 @@
 {
+  "extends": "@tsconfig/node24/tsconfig.json",
+  "include": [
+    "vite.config.*",
+    "vitest.config.*",
+    "scripts/**/*.ts",
+    "scripts/types.d.ts",
+    "eslint.config.*"
+  ],
   "compilerOptions": {
     "composite": true,
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "strict": true,
-    "types": ["node"]
-  },
-  "include": [
-    "vite.config.ts",
-    "vitest.config.ts",
-    "scripts/**/*.ts",
-    "scripts/**/*.mts",
-    "scripts/**/*.cts"
-  ]
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "noEmit": true,
+    "types": ["node"],
+    "verbatimModuleSyntax": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true
+  }
 }

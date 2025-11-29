@@ -138,12 +138,10 @@ export const useApplicationStore = defineStoreComposable('application', () => {
       const res = await repository.editStatus(id, status, comment)
       currentApplication.value.status = res.status
       currentApplication.value.statuses.push(res)
-      const listIndex = applications.value.findIndex(app => app.id === id)
-      if (listIndex !== -1) {
-        applications.value[listIndex] = {
-          ...applications.value[listIndex],
-          status: res.status
-        }
+      // 一覧にも反映（詳細ページを直接開いた場合は一覧に存在しないので何もしない）
+      const existingApp = applications.value.find(app => app.id === id)
+      if (existingApp) {
+        existingApp.status = res.status
       }
       if (res.comment !== undefined) {
         currentApplication.value.comments.push(res.comment)

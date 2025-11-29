@@ -1,12 +1,19 @@
 <script lang="ts" setup>
 import { UserCircleIcon } from '@heroicons/vue/24/solid'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 const props = defineProps<{
   name?: string
 }>()
 
 const hasImageError = ref(false)
+
+watch(
+  () => props.name,
+  () => {
+    hasImageError.value = false
+  }
+)
 </script>
 
 <template>

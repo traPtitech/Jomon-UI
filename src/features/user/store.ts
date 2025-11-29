@@ -1,56 +1,70 @@
 import { useUserRepository } from './data/repository'
 import type { User } from './entities'
 import { defineStore, storeToRefs } from 'pinia'
+import { computed, ref } from 'vue'
 
-const createUserStore = defineStore('user', {
-  state: () => ({
-    me: undefined as User | undefined,
-    users: [] as User[],
-    isUserFetched: false,
-    isMeFetched: false
-  }),
-  getters: {
-    isAccountManager: state => Boolean(state.me?.accountManager),
-    userOptions: state =>
-      state.users.map(user => ({
-        key: user.name,
-        value: user.id
-      })),
-    userMap: state =>
-      state.users.reduce<Record<string, string>>((acc, user) => {
-        acc[user.id] = user.name
-        return acc
-      }, {})
-  },
-  actions: {
-    async fetchUsers() {
-      const repository = useUserRepository()
+const createUserStore = defineStore('user', () => {
+  const me = ref<User | undefined>(undefined)
+  const users = ref<User[]>([])
+  const isUserFetched = ref(false)
+  const isMeFetched = ref(false)
 
-      try {
-        this.users = await repository.fetchUsers()
-        this.isUserFetched = true
-      } catch (e) {
-        throw new Error('ユーザー一覧の取得に失敗しました: ' + String(e))
-      }
-    },
-    async fetchMe() {
-      if (this.isMeFetched) return
+  const isAccountManager = computed(() => Boolean(me.value?.accountManager))
+  const userOptions = computed(() =>
+    users.value.map(user => ({
+      key: user.name,
+      value: user.id
+    }))
+  )
+  const userMap = computed(() =>
+    users.value.reduce<Record<string, string>>((acc, user) => {
+      acc[user.id] = user.name
+      return acc
+    }, {})
+  )
 
-      const repository = useUserRepository()
+  const fetchUsers = async () => {
+    const repository = useUserRepository()
 
-      try {
-        this.me = await repository.fetchMe()
-        this.isMeFetched = true
-      } catch {
-        throw new Error('ユーザーの取得に失敗しました')
-      }
-    },
-    reset() {
-      this.me = undefined
-      this.users = []
-      this.isUserFetched = false
-      this.isMeFetched = false
+    try {
+      users.value = await repository.fetchUsers()
+      isUserFetched.value = true
+    } catch (e) {
+      throw new Error('ユーザー一覧の取得に失敗しました: ' + String(e))
     }
+  }
+
+  const fetchMe = async () => {
+    if (isMeFetched.value) return
+
+    const repository = useUserRepository()
+
+    try {
+      me.value = await repository.fetchMe()
+      isMeFetched.value = true
+    } catch {
+      throw new Error('ユーザーの取得に失敗しました')
+    }
+  }
+
+  const reset = () => {
+    me.value = undefined
+    users.value = []
+    isUserFetched.value = false
+    isMeFetched.value = false
+  }
+
+  return {
+    me,
+    users,
+    isUserFetched,
+    isMeFetched,
+    isAccountManager,
+    userOptions,
+    userMap,
+    fetchUsers,
+    fetchMe,
+    reset
   }
 })
 
@@ -60,9 +74,9 @@ export const useUserStore = () => {
 
   return {
     ...refs,
-    fetchUsers: store.fetchUsers.bind(store),
-    fetchMe: store.fetchMe.bind(store),
-    reset: store.reset.bind(store)
+    fetchUsers: store.fetchUsers,
+    fetchMe: store.fetchMe,
+    reset: store.reset
   }
 }
 

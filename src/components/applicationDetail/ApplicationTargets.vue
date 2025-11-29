@@ -7,7 +7,7 @@ import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import type { ApplicationTargetDetail } from '@/features/applicationTarget/entities'
 import { useUserStore } from '@/features/user/store'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useToast } from 'vue-toastification'
 
 const props = defineProps<{
@@ -23,6 +23,15 @@ const hasAuthority = isApplicationCreator.value(me.value)
 
 const isEditMode = ref(false)
 const editedTargets = ref<ApplicationTargetDetail[]>(props.application.targets)
+
+// application.targets が更新されたら editedTargets を同期（編集中の削除対応）
+watch(
+  () => props.application.targets,
+  newTargets => {
+    editedTargets.value = newTargets
+  }
+)
+
 const toggleEditTargets = () => {
   editedTargets.value = props.application.targets
   isEditMode.value = !isEditMode.value

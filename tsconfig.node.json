@@ -4,12 +4,12 @@
     "vite.config.*",
     "vitest.config.*",
     "scripts/**/*.ts",
+    "scripts/types.d.ts",
     "eslint.config.*"
   ],
   "compilerOptions": {
     "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-    "moduleResolution": "bundler", // @tsconfig/node24 は node16、Vite に合わせて上書き
     "noEmit": true,
     "types": ["node"],
     "verbatimModuleSyntax": true,

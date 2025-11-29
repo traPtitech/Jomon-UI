@@ -5,11 +5,11 @@
   "scripts": {
     "dev": "vite",
     "serve": "vite preview",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vue-tsc --build && vite build",
     "build:watch": "vite build --watch",
     "lint": "eslint --fix --cache .",
     "lint:nofix": "eslint --cache .",
-    "type-check": "vue-tsc --noEmit",
+    "type-check": "vue-tsc --build --noEmit",
     "type-check:tests": "vue-tsc --project tsconfig.vitest.json --noEmit",
     "test:unit": "vitest run",
     "gen-api": "esno ./scripts/generate-apis.ts",

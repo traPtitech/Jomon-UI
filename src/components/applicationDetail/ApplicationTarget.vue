@@ -33,12 +33,21 @@ const targetOptions = computed(() =>
 
 const targetModel = defineModel<ApplicationTarget>('targetModel')
 
+const emit = defineEmits<(e: 'delete', targetId: string) => void>()
+
 const handleRemoveTarget = async () => {
   const result = confirm('本当に削除しますか？')
   if (!result) {
     return
   }
 
+  // 編集モード中はローカル削除のみ（親で処理）
+  if (props.isEditMode) {
+    emit('delete', props.target.target)
+    return
+  }
+
+  // 表示モードでは即座にAPI呼び出し
   try {
     await editApplication(props.application.id, {
       ...props.application,

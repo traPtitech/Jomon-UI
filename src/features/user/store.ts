@@ -32,7 +32,7 @@ export const useUserStore = defineStoreComposable('user', () => {
     const name = userMap.value[id]
     if (name === undefined) {
       if (status.value === 'success') {
-        console.error(`[BUG] User not found: ${id}`)
+        console.warn(`User not found: ${id}`)
       }
       return undefined
     }

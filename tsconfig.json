@@ -1,30 +1,11 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "strict": true,
-    "jsx": "preserve",
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "lib": ["esnext", "dom"],
-    "noUnusedLocals": true,
-    "baseUrl": ".",
-    "paths": { "@/*": ["src/*"] },
-    "isolatedModules": true,
-    "verbatimModuleSyntax": true,
-    "types": ["vite/client"],
-    "noEmit": true
-  },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "tests/**/*.ts"
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.node.json" },
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.vitest.json" }
   ],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "compilerOptions": {
+    "module": "NodeNext"
+  }
 }

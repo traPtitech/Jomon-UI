@@ -10,3 +10,13 @@ declare module '*.vue' {
 declare const _APP_VERSION: string
 
 declare module 'vue-axe'
+
+// プロジェクト固有の環境変数
+interface ImportMetaEnv {
+  readonly VITE_SERVER_HOST?: string
+  // 必要に応じて追加
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv
+}

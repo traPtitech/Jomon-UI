@@ -19,6 +19,8 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@tsconfig/node24": "^24.0.3",
+    "@vue/tsconfig": "^0.8.1",
     "axios": "^1.12.2",
     "luxon": "^3.7.2",
     "markdown-it": "^14.1.0",

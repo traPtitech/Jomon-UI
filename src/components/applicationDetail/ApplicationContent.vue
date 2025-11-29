@@ -22,7 +22,7 @@ const formattedDateAndTime = formatDateAndTime(props.application.createdAt)
 const toast = useToast()
 const { isApplicationCreator } = useApplication(props.application)
 
-const { me, userMap } = useUserStore()
+const { me, getUserName } = useUserStore()
 const { editApplication } = useApplicationStore()
 
 const hasAuthority = isApplicationCreator.value(me.value)
@@ -53,9 +53,11 @@ const handleUpdateContent = async () => {
   <div class="flex w-full flex-col gap-3">
     <div class="flex w-full items-center">
       <div class="flex flex-1 items-center gap-4">
-        <UserIcon class="w-12" :name="userMap[application.createdBy]" />
+        <UserIcon class="w-12" :name="getUserName(application.createdBy)" />
         <div>
-          <span class="font-bold">{{ userMap[application.createdBy] }}</span>
+          <span class="font-bold">{{
+            getUserName(application.createdBy)
+          }}</span>
           がこの申請を作成しました
         </div>
       </div>

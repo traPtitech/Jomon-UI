@@ -13,8 +13,14 @@ export const convertFileAndMeta = (
   files: File[],
   fileMetas: FileMeta[]
 ): FileData[] =>
-  files.map((file, index) => ({
-    id: fileMetas[index].id,
-    file: file,
-    name: fileMetas[index].name
-  }))
+  files.map((file, index) => {
+    const meta = fileMetas[index]
+    if (!meta) {
+      throw new Error(`FileMeta not found at index ${String(index)}`)
+    }
+    return {
+      id: meta.id,
+      file: file,
+      name: meta.name
+    }
+  })

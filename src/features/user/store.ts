@@ -28,6 +28,15 @@ export const useUserStore = defineStoreComposable('user', () => {
     }, {})
   )
 
+  const getUserName = (id: string): string => {
+    const name = userMap.value[id]
+    if (name === undefined) {
+      console.error(`[BUG] User not found: ${id}`)
+      return '不明なユーザー'
+    }
+    return name
+  }
+
   const isUserFetched = computed(() => status.value === 'success')
 
   const fetchUsers = async () => {
@@ -73,6 +82,7 @@ export const useUserStore = defineStoreComposable('user', () => {
     isAccountManager,
     userOptions,
     userMap,
+    getUserName,
     fetchUsers,
     fetchMe,
     reset

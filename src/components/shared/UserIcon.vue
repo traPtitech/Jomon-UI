@@ -1,17 +1,24 @@
 <script lang="ts" setup>
-withDefaults(
+import { UserCircleIcon } from '@heroicons/vue/24/solid'
+
+const props = withDefaults(
   defineProps<{
     size?: number
-    name: string
+    name?: string
   }>(),
-  { size: 12 }
+  { size: 12, name: '' }
 )
 </script>
 
 <template>
   <img
-    :alt="name"
-    :class="`h-full rounded-full p-1 w-${size}`"
-    :src="`https://q.trap.jp/api/v3/public/icon/${name}`"
-    :title="name" />
+    v-if="props.name"
+    :alt="props.name"
+    :class="`h-full rounded-full p-1 w-${props.size}`"
+    :src="`https://q.trap.jp/api/v3/public/icon/${props.name}`"
+    :title="props.name" />
+  <UserCircleIcon
+    v-else
+    :class="`w-${props.size} h-${props.size} text-gray-400`"
+    title="不明なユーザー" />
 </template>

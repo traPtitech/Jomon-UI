@@ -14,7 +14,7 @@ const {
   accountManagerOptions,
   fetchAccountManagers
 } = useAccountManagerStore()
-const { me, isUserFetched, isAccountManager, userMap, fetchUsers } =
+const { me, isUserFetched, isAccountManager, getUserName, fetchUsers } =
   useUserStore()
 const { isTagFetched, tagIdOptions, deleteTags, fetchTags } = useTagStore()
 const toast = useToast()
@@ -79,7 +79,7 @@ if (me.value?.accountManager) {
       <ul class="flex gap-3" aria-labelledby="accountManager-list">
         <li v-for="accountManager in accountManagers" :key="accountManager">
           <div class="rounded-sm border border-text-primary px-2 text-center">
-            {{ userMap[accountManager] }}
+            {{ getUserName(accountManager) }}
           </div>
         </li>
       </ul>

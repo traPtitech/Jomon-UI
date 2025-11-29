@@ -66,13 +66,23 @@ const handleUpdateTargets = async () => {
       </div>
     </div>
     <div v-if="application" class="flex flex-col gap-2">
-      <ApplicationTarget
-        v-for="(target, i) in application.targets"
-        :key="target.id"
-        v-model:target-model="editedTargets[i]"
-        :is-edit-mode="isEditMode"
-        :application="application"
-        :target="target" />
+      <template v-if="isEditMode">
+        <ApplicationTarget
+          v-for="(target, i) in editedTargets"
+          :key="target.id"
+          v-model:target-model="editedTargets[i]"
+          :is-edit-mode="isEditMode"
+          :application="application"
+          :target="target" />
+      </template>
+      <template v-else>
+        <ApplicationTarget
+          v-for="target in application.targets"
+          :key="target.id"
+          :is-edit-mode="isEditMode"
+          :application="application"
+          :target="target" />
+      </template>
     </div>
   </div>
 </template>

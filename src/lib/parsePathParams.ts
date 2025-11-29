@@ -1,7 +1,7 @@
-export const toId = (v: string | string[]) => {
+export const toId = (v: string | string[] | undefined) => {
+  if (v === undefined) return ''
   if (Array.isArray(v)) {
-    v = v[0]
+    return v[0] ?? ''
   }
-  if (!v) return ''
   return v
 }

@@ -10,7 +10,7 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const { userMap } = useUserStore()
+const { getUserName } = useUserStore()
 
 const formattedDateAndTime = formatDateAndTime(props.log.createdAt)
 </script>
@@ -18,9 +18,9 @@ const formattedDateAndTime = formatDateAndTime(props.log.createdAt)
 <template>
   <div class="flex w-full items-center">
     <div class="flex flex-1 items-center gap-4">
-      <UserIcon class="w-12" :name="userMap[log.createdBy]" />
+      <UserIcon class="w-12" :name="getUserName(log.createdBy)" />
       <p class="flex flex-wrap items-center gap-2">
-        <span class="font-bold">{{ userMap[log.createdBy] }}</span>
+        <span class="font-bold">{{ getUserName(log.createdBy) }}</span>
         が申請の状態を
         <StatusChip has-text :status="log.status" />
         にしました

@@ -9,7 +9,6 @@
     "paths": { "@/*": ["./src/*"] }, // vite.config.ts の resolve.alias と対応
     "types": ["vite/client"],
     "noImplicitOverride": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": false // @vue/tsconfig では true、既存コード互換のため無効化
+    "noFallthroughCasesInSwitch": true
   }
 }

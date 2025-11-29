@@ -18,7 +18,7 @@ const props = defineProps<{
   target: ApplicationTargetDetail
 }>()
 
-const { userMap, userOptions } = useUserStore()
+const { getUserName, userOptions } = useUserStore()
 const { editApplication } = useApplicationStore()
 
 const targets = computed(() =>
@@ -31,9 +31,7 @@ const targetOptions = computed(() =>
   )
 )
 
-const targetModel = defineModel<ApplicationTarget>('targetModel', {
-  required: true
-})
+const targetModel = defineModel<ApplicationTarget>('targetModel')
 
 const handleRemoveTarget = async () => {
   const result = confirm('本当に削除しますか？')
@@ -60,14 +58,14 @@ const handleRemoveTarget = async () => {
     v-if="!props.isEditMode"
     class="flex flex-wrap items-center justify-between gap-2 md:gap-0">
     <div class="flex items-center gap-1">
-      <UserIcon class="w-10" :name="userMap[target.target]" />
+      <UserIcon class="w-10" :name="getUserName(target.target)" />
       <div class="flex flex-col gap-1 break-all">
-        <div>{{ userMap[target.target] }}</div>
+        <div>{{ getUserName(target.target) }}</div>
         <div>{{ target.amount }}円</div>
       </div>
     </div>
   </div>
-  <div v-else class="flex items-center justify-between">
+  <div v-else-if="targetModel" class="flex items-center justify-between">
     <div class="flex gap-1">
       <SearchSelect
         v-model="targetModel.target"
@@ -82,5 +80,8 @@ const handleRemoveTarget = async () => {
         <TrashIcon class="w-6 cursor-pointer text-error-primary" />
       </button>
     </div>
+  </div>
+  <div v-else class="text-error-primary">
+    [エラー] 対象者データの読み込みに失敗しました
   </div>
 </template>

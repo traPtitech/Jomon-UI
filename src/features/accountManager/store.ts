@@ -15,9 +15,9 @@ export const useAccountManagerStore = defineStoreComposable(
     const error = ref<string | null>(null)
 
     const accountManagerOptions = computed(() => {
-      const { userMap } = useUserStore()
+      const { getUserName } = useUserStore()
       return accountManagers.value.map(accountManager => ({
-        key: userMap.value[accountManager],
+        key: getUserName(accountManager),
         value: accountManager
       }))
     })

@@ -1,11 +1,16 @@
-import { useTagRepository } from './data/repository'
 import type { Tag } from './entities'
-import { defineStore, storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
+import { TagRepositoryKey } from '@/di'
+import { defineStoreComposable } from '@/lib/store'
+import type { AsyncStatus } from '@/types'
+import { computed, inject, ref } from 'vue'
 
-const createTagStore = defineStore('tag', () => {
+export const useTagStore = defineStoreComposable('tag', () => {
+  const repository = inject(TagRepositoryKey)
+  if (!repository) throw new Error('TagRepository is not provided')
+
   const tags = ref<Tag[]>([])
-  const isTagFetched = ref(false)
+  const status = ref<AsyncStatus>('idle')
+  const error = ref<string | null>(null)
 
   const tagOptions = computed(() =>
     tags.value.map(tag => ({
@@ -21,21 +26,25 @@ const createTagStore = defineStore('tag', () => {
     }))
   )
 
+  const isTagFetched = computed(() => status.value === 'success')
+
   const fetchTags = async () => {
-    const repository = useTagRepository()
+    status.value = 'loading'
+    error.value = null
+
     try {
       tags.value = await repository.fetchTags()
-      isTagFetched.value = true
+      status.value = 'success'
     } catch (e) {
-      throw new Error(
+      status.value = 'error'
+      error.value =
         'タグの取得に失敗しました: ' +
-          (e instanceof Error ? e.message : String(e))
-      )
+        (e instanceof Error ? e.message : String(e))
+      throw new Error(error.value)
     }
   }
 
   const ensureTags = async (containNewTags: Tag[]): Promise<Tag[]> => {
-    const repository = useTagRepository()
     const alreadyExists: Tag[] = []
     const promises: Promise<Tag>[] = []
 
@@ -57,7 +66,6 @@ const createTagStore = defineStore('tag', () => {
   }
 
   const deleteTags = async (ids: string[]) => {
-    const repository = useTagRepository()
     try {
       await Promise.all(ids.map(repository.deleteTag))
       tags.value = tags.value.filter(tag => !ids.includes(tag.id))
@@ -68,11 +76,14 @@ const createTagStore = defineStore('tag', () => {
 
   const reset = () => {
     tags.value = []
-    isTagFetched.value = false
+    status.value = 'idle'
+    error.value = null
   }
 
   return {
     tags,
+    status,
+    error,
     isTagFetched,
     tagOptions,
     tagIdOptions,
@@ -82,18 +93,5 @@ const createTagStore = defineStore('tag', () => {
     reset
   }
 })
-
-export const useTagStore = () => {
-  const store = createTagStore()
-  const refs = storeToRefs(store)
-
-  return {
-    ...refs,
-    fetchTags: store.fetchTags,
-    ensureTags: store.ensureTags,
-    deleteTags: store.deleteTags,
-    reset: store.reset
-  }
-}
 
 export type TagStore = ReturnType<typeof useTagStore>

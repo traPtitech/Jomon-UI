@@ -1,17 +1,18 @@
-import { usePartitionRepository } from '@/features/partition/data/repository'
+import { PartitionRepositoryKey } from '@/di'
 import type { Partition, PartitionSeed } from '@/features/partition/entities'
 import { usePartitionStore } from '@/features/partition/store'
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-
-// Mock repository
-vi.mock('@/features/partition/data/repository', () => ({
-  usePartitionRepository: vi.fn()
-}))
+import { createApp } from 'vue'
 
 describe('Partition Store', () => {
+  let app: ReturnType<typeof createApp>
+
   beforeEach(() => {
-    setActivePinia(createPinia())
+    const pinia = createPinia()
+    app = createApp({})
+    app.use(pinia)
+    setActivePinia(pinia)
     vi.clearAllMocks()
   })
 
@@ -38,22 +39,29 @@ describe('Partition Store', () => {
     }
   }
 
+  const createMockRepository = () => ({
+    fetchPartitions: vi.fn(),
+    fetchPartition: vi.fn(),
+    createPartition: vi.fn(),
+    editPartition: vi.fn(),
+    deletePartition: vi.fn()
+  })
+
   describe('actions', () => {
     it('fetchPartitions fetches partitions and updates state', async () => {
       const mockFetchPartitions = vi.fn().mockResolvedValue([mockPartition])
-      vi.mocked(usePartitionRepository).mockReturnValue({
-        fetchPartitions: mockFetchPartitions,
-        fetchPartition: vi.fn(),
-        createPartition: vi.fn(),
-        editPartition: vi.fn(),
-        deletePartition: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        fetchPartitions: mockFetchPartitions
+      }
+      app.provide(PartitionRepositoryKey, mockRepo)
 
-      const store = usePartitionStore()
+      const store = app.runWithContext(() => usePartitionStore())
       await store.fetchPartitions()
 
       expect(mockFetchPartitions).toHaveBeenCalled()
       expect(store.partitions.value).toEqual([mockPartition])
+      expect(store.status.value).toBe('success')
       expect(store.isPartitionFetched.value).toBe(true)
     })
 
@@ -61,31 +69,31 @@ describe('Partition Store', () => {
       const mockFetchPartitions = vi
         .fn()
         .mockRejectedValue(new Error('Network error'))
-      vi.mocked(usePartitionRepository).mockReturnValue({
-        fetchPartitions: mockFetchPartitions,
-        fetchPartition: vi.fn(),
-        createPartition: vi.fn(),
-        editPartition: vi.fn(),
-        deletePartition: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        fetchPartitions: mockFetchPartitions
+      }
+      app.provide(PartitionRepositoryKey, mockRepo)
 
-      const store = usePartitionStore()
+      const store = app.runWithContext(() => usePartitionStore())
       await expect(store.fetchPartitions()).rejects.toThrow(
+        'パーティション一覧の取得に失敗しました'
+      )
+      expect(store.status.value).toBe('error')
+      expect(store.error.value).toContain(
         'パーティション一覧の取得に失敗しました'
       )
     })
 
     it('fetchPartition fetches partition and updates state', async () => {
       const mockFetchPartition = vi.fn().mockResolvedValue(mockPartition)
-      vi.mocked(usePartitionRepository).mockReturnValue({
-        fetchPartitions: vi.fn(),
-        fetchPartition: mockFetchPartition,
-        createPartition: vi.fn(),
-        editPartition: vi.fn(),
-        deletePartition: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        fetchPartition: mockFetchPartition
+      }
+      app.provide(PartitionRepositoryKey, mockRepo)
 
-      const store = usePartitionStore()
+      const store = app.runWithContext(() => usePartitionStore())
       await store.fetchPartition('partition-1')
 
       expect(mockFetchPartition).toHaveBeenCalledWith('partition-1')
@@ -100,15 +108,13 @@ describe('Partition Store', () => {
 
     it('createPartition creates partition and adds to list', async () => {
       const mockCreatePartition = vi.fn().mockResolvedValue(mockPartition)
-      vi.mocked(usePartitionRepository).mockReturnValue({
-        fetchPartitions: vi.fn(),
-        fetchPartition: vi.fn(),
-        createPartition: mockCreatePartition,
-        editPartition: vi.fn(),
-        deletePartition: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        createPartition: mockCreatePartition
+      }
+      app.provide(PartitionRepositoryKey, mockRepo)
 
-      const store = usePartitionStore()
+      const store = app.runWithContext(() => usePartitionStore())
       await store.createPartition(mockSeed)
 
       expect(mockCreatePartition).toHaveBeenCalledWith(mockSeed)
@@ -121,15 +127,13 @@ describe('Partition Store', () => {
         name: 'Updated Partition'
       }
       const mockEditPartition = vi.fn().mockResolvedValue(mockUpdatedPartition)
-      vi.mocked(usePartitionRepository).mockReturnValue({
-        fetchPartitions: vi.fn(),
-        fetchPartition: vi.fn(),
-        createPartition: vi.fn(),
-        editPartition: mockEditPartition,
-        deletePartition: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        editPartition: mockEditPartition
+      }
+      app.provide(PartitionRepositoryKey, mockRepo)
 
-      const store = usePartitionStore()
+      const store = app.runWithContext(() => usePartitionStore())
       store.currentPartition.value = mockPartition
       store.partitions.value = [mockPartition]
 
@@ -142,15 +146,13 @@ describe('Partition Store', () => {
 
     it('deletePartition deletes partition and removes from list', async () => {
       const mockDeletePartition = vi.fn().mockResolvedValue(undefined)
-      vi.mocked(usePartitionRepository).mockReturnValue({
-        fetchPartitions: vi.fn(),
-        fetchPartition: vi.fn(),
-        createPartition: vi.fn(),
-        editPartition: vi.fn(),
+      const mockRepo = {
+        ...createMockRepository(),
         deletePartition: mockDeletePartition
-      })
+      }
+      app.provide(PartitionRepositoryKey, mockRepo)
 
-      const store = usePartitionStore()
+      const store = app.runWithContext(() => usePartitionStore())
       store.partitions.value = [mockPartition]
 
       await store.deletePartition('partition-1')
@@ -162,7 +164,8 @@ describe('Partition Store', () => {
 
   describe('getters', () => {
     it('partitionOptions returns formatted options', () => {
-      const store = usePartitionStore()
+      app.provide(PartitionRepositoryKey, createMockRepository())
+      const store = app.runWithContext(() => usePartitionStore())
       store.partitions.value = [mockPartition]
 
       expect(store.partitionOptions.value).toEqual([

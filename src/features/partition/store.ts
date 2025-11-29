@@ -1,8 +1,9 @@
-import { usePartitionRepository } from './data/repository'
 import type { Partition, PartitionSeed } from './entities'
+import { PartitionRepositoryKey } from '@/di'
 import type { User } from '@/features/user/entities'
-import { defineStore, storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
+import { defineStoreComposable } from '@/lib/store'
+import type { AsyncStatus } from '@/types'
+import { computed, inject, ref } from 'vue'
 
 const createDefaultPartitionSeed = (): PartitionSeed => ({
   name: '',
@@ -14,9 +15,13 @@ const createDefaultPartitionSeed = (): PartitionSeed => ({
   }
 })
 
-const createPartitionStore = defineStore('partition', () => {
+export const usePartitionStore = defineStoreComposable('partition', () => {
+  const repository = inject(PartitionRepositoryKey)
+  if (!repository) throw new Error('PartitionRepository is not provided')
+
   const partitions = ref<Partition[]>([])
-  const isPartitionFetched = ref(false)
+  const status = ref<AsyncStatus>('idle')
+  const error = ref<string | null>(null)
   const currentPartition = ref<Partition | undefined>(undefined)
   const editedValue = ref<PartitionSeed>(createDefaultPartitionSeed())
 
@@ -32,21 +37,25 @@ const createPartitionStore = defineStore('partition', () => {
     return user.accountManager
   })
 
+  const isPartitionFetched = computed(() => status.value === 'success')
+
   const fetchPartitions = async () => {
-    const repository = usePartitionRepository()
+    status.value = 'loading'
+    error.value = null
+
     try {
       partitions.value = await repository.fetchPartitions()
-      isPartitionFetched.value = true
+      status.value = 'success'
     } catch (e) {
-      throw new Error(
+      status.value = 'error'
+      error.value =
         'パーティション一覧の取得に失敗しました: ' +
-          (e instanceof Error ? e.message : String(e))
-      )
+        (e instanceof Error ? e.message : String(e))
+      throw new Error(error.value)
     }
   }
 
   const fetchPartition = async (id: string) => {
-    const repository = usePartitionRepository()
     try {
       const partition = await repository.fetchPartition(id)
       currentPartition.value = partition
@@ -62,7 +71,6 @@ const createPartitionStore = defineStore('partition', () => {
   }
 
   const createPartition = async (partition: PartitionSeed) => {
-    const repository = usePartitionRepository()
     try {
       const res = await repository.createPartition(partition)
       partitions.value.unshift(res)
@@ -73,7 +81,6 @@ const createPartitionStore = defineStore('partition', () => {
 
   const editPartition = async (id: string, partitionSeed: PartitionSeed) => {
     if (!currentPartition.value) return
-    const repository = usePartitionRepository()
     try {
       const res = await repository.editPartition(id, partitionSeed)
       currentPartition.value = res
@@ -95,7 +102,6 @@ const createPartitionStore = defineStore('partition', () => {
   }
 
   const deletePartition = async (id: string) => {
-    const repository = usePartitionRepository()
     try {
       await repository.deletePartition(id)
       const index = partitions.value.findIndex(partition => partition.id === id)
@@ -114,6 +120,8 @@ const createPartitionStore = defineStore('partition', () => {
 
   return {
     partitions,
+    status,
+    error,
     isPartitionFetched,
     currentPartition,
     editedValue,
@@ -127,20 +135,5 @@ const createPartitionStore = defineStore('partition', () => {
     resetDetail
   }
 })
-
-export const usePartitionStore = () => {
-  const store = createPartitionStore()
-  const refs = storeToRefs(store)
-
-  return {
-    ...refs,
-    fetchPartitions: store.fetchPartitions,
-    fetchPartition: store.fetchPartition,
-    createPartition: store.createPartition,
-    editPartition: store.editPartition,
-    deletePartition: store.deletePartition,
-    resetDetail: store.resetDetail
-  }
-}
 
 export type PartitionStore = ReturnType<typeof usePartitionStore>

@@ -1,14 +1,15 @@
-import { useApplicationRepository } from './data/repository'
+import { ApplicationRepositoryKey } from '@/di'
 import type {
   Application,
   ApplicationDetail,
   ApplicationQuerySeed,
   ApplicationSeed
-} from './entities'
+} from '@/features/application/entities'
 import type { ApplicationStatus } from '@/features/applicationStatus/entities'
 import { useTagStore } from '@/features/tag/store'
-import { defineStore, storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
+import { defineStoreComposable } from '@/lib/store'
+import type { AsyncStatus } from '@/types'
+import { computed, inject, ref } from 'vue'
 
 const createDefaultParams = (): ApplicationQuerySeed => ({
   sort: 'created_at',
@@ -24,13 +25,20 @@ const createDefaultParams = (): ApplicationQuerySeed => ({
 
 const dateRule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
 
-const createApplicationStore = defineStore('application', () => {
+export const useApplicationStore = defineStoreComposable('application', () => {
+  const repository = inject(ApplicationRepositoryKey)
+  if (!repository) throw new Error('ApplicationRepository is not provided')
+
+  const tagStore = useTagStore()
+
   const applications = ref<Application[]>([])
-  const isApplicationFetched = ref(false)
+  const status = ref<AsyncStatus>('idle')
+  const error = ref<string | null>(null)
   const filterParams = ref<ApplicationQuerySeed>(createDefaultParams())
   const currentApplication = ref<ApplicationDetail | null>(null)
 
   const hasApplicationDetail = computed(() => currentApplication.value !== null)
+  const isApplicationFetched = computed(() => status.value === 'success')
 
   const resetFilters = () => {
     filterParams.value = createDefaultParams()
@@ -41,23 +49,26 @@ const createApplicationStore = defineStore('application', () => {
   }
 
   const fetchApplications = async () => {
-    const repository = useApplicationRepository()
     const { since, until } = filterParams.value
 
     if ((since && !dateRule.test(since)) || (until && !dateRule.test(until))) {
       throw new Error('日付はyyyy-MM-ddの形式で入力してください')
     }
 
+    status.value = 'loading'
+    error.value = null
+
     try {
       applications.value = await repository.fetchApplications(
         filterParams.value
       )
-      isApplicationFetched.value = true
+      status.value = 'success'
     } catch (e) {
-      throw new Error(
+      status.value = 'error'
+      error.value =
         '申請一覧の取得に失敗しました: ' +
-          (e instanceof Error ? e.message : String(e))
-      )
+        (e instanceof Error ? e.message : String(e))
+      throw new Error(error.value)
     }
   }
 
@@ -69,7 +80,6 @@ const createApplicationStore = defineStore('application', () => {
   }
 
   const fetchApplication = async (id: string) => {
-    const repository = useApplicationRepository()
     try {
       const application = await repository.fetchApplication(id)
       currentApplication.value = application
@@ -80,7 +90,6 @@ const createApplicationStore = defineStore('application', () => {
   }
 
   const createApplication = async (applicationSeed: ApplicationSeed) => {
-    const repository = useApplicationRepository()
     try {
       const application = await repository.createApplication(applicationSeed)
       applications.value.unshift(application)
@@ -93,10 +102,8 @@ const createApplicationStore = defineStore('application', () => {
   const editApplication = async (id: string, seed: ApplicationSeed) => {
     if (!currentApplication.value) return
 
-    const tagStore = useTagStore()
     const tags = await tagStore.ensureTags(seed.tags)
 
-    const repository = useApplicationRepository()
     try {
       const updated = await repository.editApplication(id, { ...seed, tags })
       currentApplication.value = updated
@@ -112,7 +119,6 @@ const createApplicationStore = defineStore('application', () => {
   const createComment = async (id: string, comment: string) => {
     if (!currentApplication.value) return
 
-    const repository = useApplicationRepository()
     try {
       const newComment = await repository.createComment(id, comment)
       currentApplication.value.comments.push(newComment)
@@ -128,7 +134,6 @@ const createApplicationStore = defineStore('application', () => {
   ) => {
     if (!currentApplication.value) return
 
-    const repository = useApplicationRepository()
     try {
       const res = await repository.editStatus(id, status, comment)
       currentApplication.value.status = res.status
@@ -150,6 +155,8 @@ const createApplicationStore = defineStore('application', () => {
 
   return {
     applications,
+    status,
+    error,
     isApplicationFetched,
     filterParams,
     currentApplication,
@@ -165,23 +172,5 @@ const createApplicationStore = defineStore('application', () => {
     changeStatus
   }
 })
-
-export const useApplicationStore = () => {
-  const store = createApplicationStore()
-  const refs = storeToRefs(store)
-
-  return {
-    ...refs,
-    resetFilters: store.resetFilters,
-    clearCurrentApplication: store.clearCurrentApplication,
-    fetchApplications: store.fetchApplications,
-    ensureApplication: store.ensureApplication,
-    fetchApplication: store.fetchApplication,
-    createApplication: store.createApplication,
-    editApplication: store.editApplication,
-    createComment: store.createComment,
-    changeStatus: store.changeStatus
-  }
-}
 
 export type ApplicationStore = ReturnType<typeof useApplicationStore>

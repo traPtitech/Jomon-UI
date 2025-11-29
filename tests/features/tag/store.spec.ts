@@ -1,17 +1,18 @@
-import { useTagRepository } from '@/features/tag/data/repository'
+import { TagRepositoryKey } from '@/di'
 import type { Tag } from '@/features/tag/entities'
 import { useTagStore } from '@/features/tag/store'
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-
-// Mock repository
-vi.mock('@/features/tag/data/repository', () => ({
-  useTagRepository: vi.fn()
-}))
+import { createApp } from 'vue'
 
 describe('Tag Store', () => {
+  let app: ReturnType<typeof createApp>
+
   beforeEach(() => {
-    setActivePinia(createPinia())
+    const pinia = createPinia()
+    app = createApp({})
+    app.use(pinia)
+    setActivePinia(pinia)
     vi.clearAllMocks()
   })
 
@@ -20,20 +21,27 @@ describe('Tag Store', () => {
     name: 'Tag 1'
   }
 
+  const createMockRepository = () => ({
+    fetchTags: vi.fn(),
+    createTag: vi.fn(),
+    deleteTag: vi.fn()
+  })
+
   describe('actions', () => {
     it('fetchTags fetches tags and updates state', async () => {
       const mockFetchTags = vi.fn().mockResolvedValue([mockTag])
-      vi.mocked(useTagRepository).mockReturnValue({
-        fetchTags: mockFetchTags,
-        createTag: vi.fn(),
-        deleteTag: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        fetchTags: mockFetchTags
+      }
+      app.provide(TagRepositoryKey, mockRepo)
 
-      const store = useTagStore()
+      const store = app.runWithContext(() => useTagStore())
       await store.fetchTags()
 
       expect(mockFetchTags).toHaveBeenCalled()
       expect(store.tags.value).toEqual([mockTag])
+      expect(store.status.value).toBe('success')
       expect(store.isTagFetched.value).toBe(true)
     })
 
@@ -41,16 +49,18 @@ describe('Tag Store', () => {
       const mockFetchTags = vi
         .fn()
         .mockRejectedValue(new Error('Network error'))
-      vi.mocked(useTagRepository).mockReturnValue({
-        fetchTags: mockFetchTags,
-        createTag: vi.fn(),
-        deleteTag: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        fetchTags: mockFetchTags
+      }
+      app.provide(TagRepositoryKey, mockRepo)
 
-      const store = useTagStore()
+      const store = app.runWithContext(() => useTagStore())
       await expect(store.fetchTags()).rejects.toThrow(
         'タグの取得に失敗しました'
       )
+      expect(store.status.value).toBe('error')
+      expect(store.error.value).toContain('タグの取得に失敗しました')
     })
 
     it('ensureTags creates missing tags and returns all tags', async () => {
@@ -58,13 +68,13 @@ describe('Tag Store', () => {
       const newTag: Tag = { id: 'tag-2', name: 'New' }
 
       const mockCreateTag = vi.fn().mockResolvedValue(newTag)
-      vi.mocked(useTagRepository).mockReturnValue({
-        fetchTags: vi.fn(),
-        createTag: mockCreateTag,
-        deleteTag: vi.fn()
-      })
+      const mockRepo = {
+        ...createMockRepository(),
+        createTag: mockCreateTag
+      }
+      app.provide(TagRepositoryKey, mockRepo)
 
-      const store = useTagStore()
+      const store = app.runWithContext(() => useTagStore())
       store.tags.value = [existingTag]
 
       const result = await store.ensureTags([
@@ -79,13 +89,13 @@ describe('Tag Store', () => {
 
     it('deleteTags deletes tags and removes from list', async () => {
       const mockDeleteTag = vi.fn().mockResolvedValue(undefined)
-      vi.mocked(useTagRepository).mockReturnValue({
-        fetchTags: vi.fn(),
-        createTag: vi.fn(),
+      const mockRepo = {
+        ...createMockRepository(),
         deleteTag: mockDeleteTag
-      })
+      }
+      app.provide(TagRepositoryKey, mockRepo)
 
-      const store = useTagStore()
+      const store = app.runWithContext(() => useTagStore())
       store.tags.value = [mockTag]
 
       await store.deleteTags(['tag-1'])
@@ -97,7 +107,8 @@ describe('Tag Store', () => {
 
   describe('getters', () => {
     it('tagOptions returns formatted options', () => {
-      const store = useTagStore()
+      app.provide(TagRepositoryKey, createMockRepository())
+      const store = app.runWithContext(() => useTagStore())
       store.tags.value = [mockTag]
 
       expect(store.tagOptions.value).toEqual([
@@ -106,7 +117,8 @@ describe('Tag Store', () => {
     })
 
     it('tagIdOptions returns formatted options with id', () => {
-      const store = useTagStore()
+      app.provide(TagRepositoryKey, createMockRepository())
+      const store = app.runWithContext(() => useTagStore())
       store.tags.value = [mockTag]
 
       expect(store.tagIdOptions.value).toEqual([

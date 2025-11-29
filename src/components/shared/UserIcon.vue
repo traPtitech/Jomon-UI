@@ -13,5 +13,8 @@ const props = defineProps<{
     class="h-full rounded-full p-1"
     :src="`https://q.trap.jp/api/v3/public/icon/${props.name}`"
     :title="props.name" />
-  <UserCircleIcon v-else class="h-full p-1 text-gray-400" title="不明なユーザー" />
+  <UserCircleIcon
+    v-else
+    class="h-full p-1 text-gray-400"
+    title="不明なユーザー" />
 </template>

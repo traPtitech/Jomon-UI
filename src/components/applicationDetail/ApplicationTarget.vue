@@ -37,6 +37,7 @@ const targetModel = defineModel<ApplicationTarget>('targetModel')
 const emit = defineEmits<(e: 'delete', id: string) => void>()
 
 const handleRemoveTarget = async () => {
+  // TODO: confirmをカスタムモーダルに置き換える
   const result = confirm('本当に削除しますか？')
   if (!result) {
     return

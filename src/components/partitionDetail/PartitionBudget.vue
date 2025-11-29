@@ -29,7 +29,6 @@ const {
 <template>
   <div v-if="partition" class="flex items-center gap-3">
     <BaseNumberInput
-      required
       v-if="props.isEditMode"
       v-model="editedValue.budget"
       label="予算"

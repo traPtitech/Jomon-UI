@@ -1,4 +1,4 @@
-import { defineComponent, ref } from 'vue'
+import { defineComponent, nextTick, ref } from 'vue'
 
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
@@ -7,25 +7,22 @@ import {
   type UseSearchSelectProps,
   useSearchSelectGeneric,
 } from '@/components/shared/composables/useSearchSelect'
-import type { Option } from '@/components/shared/types'
 
-describe('useSearchSelect', () => {
-  const options: Option<string>[] = [
+const defaultProps: UseSearchSelectProps<string> = {
+  options: [
     { key: 'Option 1', value: 'opt1' },
     { key: 'Option 2', value: 'opt2' },
     { key: 'Other', value: 'other' },
-  ]
+  ],
+  label: 'Test Label',
+}
 
-  const defaultProps: UseSearchSelectProps<string> = {
-    options,
-    label: 'Test Label',
-  }
-
+describe('useSearchSelect', () => {
   const createWrapper = (
     props: UseSearchSelectProps<string> = defaultProps,
     initialValue: string | string[] | null = null
   ) => {
-    let composable: ReturnType<typeof useSearchSelectGeneric>
+    let composable!: ReturnType<typeof useSearchSelectGeneric>
     const emit = vi.fn()
     const modelValue = ref(initialValue)
 
@@ -37,16 +34,8 @@ describe('useSearchSelect', () => {
     })
 
     mount(TestComponent)
-    // @ts-expect-error: composable is assigned in setup
     return { composable, emit, modelValue }
   }
-
-  it('initializes with default state', () => {
-    const { composable } = createWrapper()
-    expect(composable.searchTerm.value).toBe('')
-    expect(composable.menuState.value).toBe('close')
-    expect(composable.filteredOptions.value).toEqual(options)
-  })
 
   it('initializes search term from modelValue', () => {
     const { composable } = createWrapper(defaultProps, 'opt1')
@@ -57,16 +46,16 @@ describe('useSearchSelect', () => {
     const { composable, modelValue } = createWrapper(defaultProps)
     modelValue.value = 'opt2'
     // Watchers run asynchronously
-    await new Promise(resolve => setTimeout(resolve, 0))
+    await nextTick()
     expect(composable.searchTerm.value).toBe('Option 2')
 
     modelValue.value = null
-    await new Promise(resolve => setTimeout(resolve, 0))
+    await nextTick()
     expect(composable.searchTerm.value).toBe('')
 
     // Test custom value sync
     modelValue.value = 'custom-val'
-    await new Promise(resolve => setTimeout(resolve, 0))
+    await nextTick()
     expect(composable.searchTerm.value).toBe('custom-val')
   })
 

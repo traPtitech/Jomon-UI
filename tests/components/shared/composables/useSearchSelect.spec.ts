@@ -49,11 +49,7 @@ describe('useSearchSelect', () => {
   })
 
   it('initializes search term from modelValue', () => {
-    // This test might fail if onMounted is not called
     const { composable } = createWrapper(defaultProps, 'opt1')
-    // We might need to wait for nextTick or similar if onMounted was async, but it's synchronous hook registration.
-    // However, without a component mount, onMounted callback won't fire.
-    // Let's see if it fails.
     expect(composable.searchTerm.value).toBe('Option 1')
   })
 

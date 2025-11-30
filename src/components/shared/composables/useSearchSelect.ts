@@ -39,6 +39,19 @@ export function useSearchSelectGeneric<T extends string>(
     )
   })
 
+  const resetSearchTerm = () => {
+    if (!Array.isArray(modelValue.value)) {
+      if (modelValue.value) {
+        const selectedOption = props.options.find(
+          opt => opt.value === modelValue.value
+        )
+        searchTerm.value = selectedOption?.key ?? ''
+      } else {
+        searchTerm.value = ''
+      }
+    }
+  }
+
   // Handle click outside
   const handleClickOutside = (event: MouseEvent) => {
     if (typeof Node === 'undefined') {
@@ -50,30 +63,15 @@ export function useSearchSelectGeneric<T extends string>(
     }
     if (dropdownRef.value && !dropdownRef.value.contains(target)) {
       menuState.value = 'close'
-      // Reset search term if single select and has value
-      if (!Array.isArray(modelValue.value) && modelValue.value) {
-        const selectedOption = props.options.find(
-          opt => opt.value === modelValue.value
-        )
-        searchTerm.value = selectedOption?.key ?? ''
-      } else if (!Array.isArray(modelValue.value)) {
-        searchTerm.value = ''
-      }
+      resetSearchTerm()
     }
   }
 
   onMounted(() => {
     document.addEventListener('mousedown', handleClickOutside)
     // Initialize search term for single select
-    if (
-      !Array.isArray(modelValue.value) &&
-      modelValue.value &&
-      !searchTerm.value
-    ) {
-      const selectedOption = props.options.find(
-        opt => opt.value === modelValue.value
-      )
-      searchTerm.value = selectedOption?.key ?? ''
+    if (!searchTerm.value) {
+      resetSearchTerm()
     }
   })
 
@@ -88,12 +86,7 @@ export function useSearchSelectGeneric<T extends string>(
   const handleInputFocus = () => {
     emit('focus')
     menuState.value = 'presearch'
-    if (!Array.isArray(modelValue.value) && modelValue.value) {
-      const selectedOption = props.options.find(
-        opt => opt.value === modelValue.value
-      )
-      searchTerm.value = selectedOption?.key ?? ''
-    }
+    resetSearchTerm()
   }
 
   const handleChange = () => {
@@ -143,14 +136,7 @@ export function useSearchSelectGeneric<T extends string>(
       }
       case 'Escape':
         menuState.value = 'close'
-        if (!Array.isArray(modelValue.value) && modelValue.value) {
-          const selectedOption = props.options.find(
-            opt => opt.value === modelValue.value
-          )
-          searchTerm.value = selectedOption?.key ?? ''
-        } else {
-          searchTerm.value = ''
-        }
+        resetSearchTerm()
         break
       case 'Tab':
         menuState.value = 'close'

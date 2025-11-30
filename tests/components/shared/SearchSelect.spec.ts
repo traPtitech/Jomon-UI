@@ -35,16 +35,6 @@ describe('SearchSelect', () => {
     await wrapper.find('input').trigger('focus')
     await wrapper.find('input').setValue('Option 1')
 
-    // Wait for computed property to update
-    expect(wrapper.text()).toContain('Option 1')
-    // Option 2 should be filtered out (assuming logic works, but text might still be in DOM if not re-rendered, checking filteredOptions length via internal state if possible or DOM elements)
-    // Since we can't easily access internal state without exposing it, we check DOM.
-    // However, the dropdown renders based on filteredOptions.
-    // We need to ensure the dropdown is open.
-    // The component opens dropdown on focus.
-
-    // Check if Option 2 is NOT visible/rendered in the list
-    // Note: The component renders all filtered options.
     const buttons = wrapper.findAll('button.relative.flex')
     const texts = buttons.map(b => b.text())
     expect(texts).toContain('Option 1')

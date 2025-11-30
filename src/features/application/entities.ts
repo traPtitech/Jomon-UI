@@ -48,6 +48,6 @@ export interface ApplicationSeed {
   title: string
   content: string
   tags: Tag[]
-  partition: string | null
+  partition: string
   targets: ApplicationTarget[]
 }

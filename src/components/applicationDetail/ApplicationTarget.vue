@@ -71,9 +71,9 @@ const handleRemoveTarget = async () => {
     v-if="!props.isEditMode"
     class="flex flex-wrap items-center justify-between gap-2 md:gap-0">
     <div class="flex items-center gap-1">
-      <UserIcon class="w-10" :name="getUserName(target.target ?? '')" />
+      <UserIcon class="w-10" :name="getUserName(target.target)" />
       <div class="flex flex-col gap-1 break-all">
-        <div>{{ getUserNameWithFallback(target.target ?? '') }}</div>
+        <div>{{ getUserNameWithFallback(target.target) }}</div>
         <div>{{ target.amount }}円</div>
       </div>
     </div>

@@ -29,7 +29,7 @@ const toApplicationTargetInput = (
   target: ApplicationSeed['targets'][number]
 ): ApplicationTargetInput => ({
   amount: target.amount,
-  target: target.target ?? '',
+  target: target.target,
 })
 
 const toApplicationInput = (
@@ -39,7 +39,7 @@ const toApplicationInput = (
   title: application.title,
   content: application.content,
   tags: application.tags.map(tag => tag.id),
-  partition: application.partition ?? '',
+  partition: application.partition,
   targets: application.targets.map(toApplicationTargetInput),
 })
 

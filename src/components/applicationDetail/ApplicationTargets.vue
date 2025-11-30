@@ -30,12 +30,8 @@ const editedTargets = ref<ApplicationTargetDetail[]>(
 
 const selectedUserIds = computed(() =>
   isEditMode.value
-    ? editedTargets.value
-        .map(t => t.target)
-        .filter((t): t is string => t !== null)
-    : props.application.targets
-        .map(t => t.target)
-        .filter((t): t is string => t !== null)
+    ? editedTargets.value.map(t => t.target)
+    : props.application.targets.map(t => t.target)
 )
 
 const handleDeleteTarget = (id: string) => {

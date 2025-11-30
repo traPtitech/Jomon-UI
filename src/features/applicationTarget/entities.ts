@@ -2,7 +2,7 @@ import type { DateTime } from 'luxon'
 
 export interface ApplicationTarget {
   amount: number
-  target: string | null
+  target: string
 }
 
 export interface ApplicationTargetDetail extends ApplicationTarget {
@@ -13,5 +13,5 @@ export interface ApplicationTargetDetail extends ApplicationTarget {
 
 export interface ApplicationTargetDraft {
   amount: number | null
-  target: string | null
+  target: string
 }

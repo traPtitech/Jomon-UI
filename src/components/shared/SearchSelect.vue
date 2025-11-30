@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T extends string">
+<script setup lang="ts" generic="U extends string | null">
 import {
   CheckIcon,
   ChevronDownIcon,
@@ -15,10 +15,10 @@ import type { Option } from './types'
 
 const props = withDefaults(
   defineProps<{
-    options: Option<T>[]
+    options: Option<NonNullable<U>>[]
     label: string
     placeholder?: string
-    allowCustom?: AllowCustom<T>
+    allowCustom?: AllowCustom<NonNullable<U>>
     disabled?: boolean
     required?: boolean
   }>(),
@@ -33,7 +33,7 @@ const emit = defineEmits<{
   (e: 'focus' | 'close'): void
   (e: 'keydown', value: KeyboardEvent): void
 }>()
-const model = defineModel<T | null>({ required: true })
+const model = defineModel<U>({ required: true })
 
 const {
   menuState,
@@ -44,16 +44,16 @@ const {
   handleInputFocus,
   handleChange,
   handleKeyDown: baseHandleKeyDown,
-} = useSearchSelect<T>(props, emit, model)
+} = useSearchSelect<NonNullable<U>>(props, emit, model)
 
 const isCustomAllowed = (
   val: string,
-  allowed: AllowCustom<T> | undefined
-): val is T => {
+  allowed: AllowCustom<NonNullable<U>> | undefined
+): val is NonNullable<U> => {
   return (allowed ?? false) && typeof val === 'string'
 }
 
-const handleSelect = (selectedValue: T) => {
+const handleSelect = (selectedValue: NonNullable<U>) => {
   model.value = selectedValue
   const selectedOption = props.options.find(opt => opt.value === selectedValue)
   searchTerm.value = selectedOption?.key ?? selectedValue

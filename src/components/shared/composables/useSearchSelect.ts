@@ -21,7 +21,7 @@ export type SearchSelectEmit = {
 export function useSearchSelectGeneric<T extends string>(
   props: UseSearchSelectProps<T>,
   emit: SearchSelectEmit,
-  modelValue: { value: T | T[] | null }
+  modelValue: { readonly value: T | T[] | null }
 ) {
   type MenuState = 'close' | 'presearch' | 'searched'
   const menuState = ref<MenuState>('close')

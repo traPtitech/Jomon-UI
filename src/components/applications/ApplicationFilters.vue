@@ -63,11 +63,10 @@ function sortByCreatedAt() {
       label="申請者"
       @close="fetchApplications" />
     <SearchSelect
-      :model-value="filterParams.currentStatus"
+      v-model="filterParams.currentStatus"
       class="w-full sm:w-auto"
       :options="[...applicationStatusOptions]"
       label="申請の状態"
-      @update:model-value="v => (filterParams.currentStatus = v)"
       @close="fetchApplications" />
     <SearchSelect
       v-model="filterParams.partition"

@@ -18,6 +18,17 @@ const searchOptions = computed(() =>
   }))
 )
 
+watch(
+  () => model.value,
+  newVal => {
+    const newNames = newVal.map(tag => tag.name)
+    if (JSON.stringify(newNames) !== JSON.stringify(selectedValue.value)) {
+      selectedValue.value = newNames
+    }
+  },
+  { deep: true }
+)
+
 watch(selectedValue, () => {
   model.value = selectedValue.value.map(
     name =>

@@ -33,7 +33,7 @@ export interface ApplicationDetail extends Application {
 
 export interface ApplicationQuerySeed {
   sort: string
-  currentStatus: ApplicationStatus | '' | null
+  currentStatus: ApplicationStatus | null
   target: string | null
   since: string
   until: string

@@ -118,6 +118,46 @@ describe('useSearchSelect', () => {
       expect(composable.highlightedIndex.value).toBe(0)
     })
 
+    it('resets highlightedIndex when search term changes', async () => {
+      const { composable } = createWrapper()
+      composable.handleInputFocus()
+      composable.searchTerm.value = 'Option'
+      await nextTick()
+
+      // Move selection down
+      const event = new KeyboardEvent('keydown', { key: 'ArrowDown' })
+      composable.handleKeyDown(event, vi.fn())
+      expect(composable.highlightedIndex.value).toBe(0)
+
+      // Change search term to filter results
+      composable.searchTerm.value = 'Option 1'
+      composable.handleChange()
+      await nextTick()
+
+      // highlightedIndex should be reset to -1
+      expect(composable.highlightedIndex.value).toBe(-1)
+    })
+
+    it('resets highlightedIndex when menu opens', () => {
+      const { composable } = createWrapper()
+      composable.handleInputFocus()
+
+      // Move selection down
+      const event = new KeyboardEvent('keydown', { key: 'ArrowDown' })
+      composable.handleKeyDown(event, vi.fn())
+      expect(composable.highlightedIndex.value).toBe(0)
+
+      // Close menu
+      const escEvent = new KeyboardEvent('keydown', { key: 'Escape' })
+      composable.handleKeyDown(escEvent, vi.fn())
+
+      // Open menu again
+      composable.handleInputFocus()
+
+      // highlightedIndex should be reset to -1
+      expect(composable.highlightedIndex.value).toBe(-1)
+    })
+
     it('selects option with Enter', () => {
       const { composable } = createWrapper()
       composable.menuState.value = 'presearch'

@@ -39,6 +39,13 @@ export function useSearchSelectGeneric<T extends string>(
     )
   })
 
+  watch(
+    () => filteredOptions.value,
+    () => {
+      highlightedIndex.value = -1
+    }
+  )
+
   const resetSearchTerm = () => {
     if (!Array.isArray(modelValue.value)) {
       if (modelValue.value) {
@@ -96,6 +103,7 @@ export function useSearchSelectGeneric<T extends string>(
     emit('focus')
     menuState.value = 'presearch'
     resetSearchTerm()
+    highlightedIndex.value = -1
   }
 
   const handleChange = () => {

@@ -57,7 +57,6 @@ const handleSelect = (selectedValue: string) => {
   model.value = model.value.includes(selectedValue)
     ? model.value.filter(v => v !== selectedValue)
     : [...model.value, selectedValue]
-  searchTerm.value = '' // Clear search after selection
 }
 
 const handleAddCustom = () => {

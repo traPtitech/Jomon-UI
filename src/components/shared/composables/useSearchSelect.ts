@@ -49,8 +49,17 @@ export function useSearchSelectGeneric<T extends string>(
       } else {
         searchTerm.value = ''
       }
+    } else {
+      searchTerm.value = ''
     }
   }
+
+  watch(
+    () => modelValue.value,
+    () => {
+      resetSearchTerm()
+    }
+  )
 
   // Handle click outside
   const handleClickOutside = (event: MouseEvent) => {

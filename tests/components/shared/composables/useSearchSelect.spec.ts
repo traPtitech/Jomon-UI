@@ -53,6 +53,18 @@ describe('useSearchSelect', () => {
     expect(composable.searchTerm.value).toBe('Option 1')
   })
 
+  it('updates search term when modelValue changes', async () => {
+    const { composable, modelValue } = createWrapper(defaultProps)
+    modelValue.value = 'opt2'
+    // Watchers run asynchronously
+    await new Promise(resolve => setTimeout(resolve, 0))
+    expect(composable.searchTerm.value).toBe('Option 2')
+
+    modelValue.value = null
+    await new Promise(resolve => setTimeout(resolve, 0))
+    expect(composable.searchTerm.value).toBe('')
+  })
+
   it('filters options based on search term', () => {
     const { composable } = createWrapper()
     composable.menuState.value = 'searched'

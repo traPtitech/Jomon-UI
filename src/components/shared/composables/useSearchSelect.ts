@@ -2,11 +2,13 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 import type { Option } from '../types'
 
+export type AllowCustom<T> = string extends T ? boolean : never
+
 export interface UseSearchSelectProps<T> {
   options: Option<T>[]
   label: string
   placeholder?: string | undefined
-  allowCustom?: boolean | undefined
+  allowCustom?: AllowCustom<T> | undefined
   disabled?: boolean | undefined
   required?: boolean | undefined
 }

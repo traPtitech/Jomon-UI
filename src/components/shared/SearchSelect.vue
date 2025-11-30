@@ -7,7 +7,10 @@ import {
 } from '@heroicons/vue/24/outline'
 
 import BaseTextInput from './BaseInput/BaseTextInput.vue'
-import { useSearchSelectGeneric as useSearchSelect } from './composables/useSearchSelect'
+import {
+  type AllowCustom,
+  useSearchSelectGeneric as useSearchSelect,
+} from './composables/useSearchSelect'
 import type { Option } from './types'
 
 const props = withDefaults(
@@ -15,7 +18,7 @@ const props = withDefaults(
     options: Option<T>[]
     label: string
     placeholder?: string
-    allowCustom?: string extends T ? boolean : never
+    allowCustom?: AllowCustom<T>
     disabled?: boolean
     required?: boolean
   }>(),
@@ -45,7 +48,7 @@ const {
 
 const isCustomAllowed = (
   val: string,
-  allowed: boolean | undefined
+  allowed: AllowCustom<T> | undefined
 ): val is T => {
   return (allowed ?? false) && typeof val === 'string'
 }

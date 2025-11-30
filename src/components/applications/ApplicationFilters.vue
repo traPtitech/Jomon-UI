@@ -17,8 +17,6 @@ const { userOptions } = useUserStore()
 const { tagIdOptions } = useTagStore()
 const { partitionOptions } = usePartitionStore()
 
-const statusOptions = applicationStatusOptions
-
 const toast = useToast()
 
 function sortByCreatedAt() {
@@ -67,7 +65,7 @@ function sortByCreatedAt() {
     <SearchSelect
       :model-value="filterParams.currentStatus"
       class="w-full sm:w-auto"
-      :options="[...statusOptions]"
+      :options="[...applicationStatusOptions]"
       label="申請の状態"
       @update:model-value="v => (filterParams.currentStatus = v)"
       @close="fetchApplications" />

@@ -15,14 +15,14 @@ import type { AsyncStatus } from '@/types'
 
 const createDefaultParams = (): ApplicationQuerySeed => ({
   sort: 'created_at',
-  currentStatus: '',
-  target: '',
+  currentStatus: null,
+  target: null,
   since: '',
   until: '',
   limit: 10,
   offset: 0,
   tags: [],
-  partition: '',
+  partition: null,
 })
 
 const dateRule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/

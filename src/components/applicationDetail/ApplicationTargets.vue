@@ -30,8 +30,12 @@ const editedTargets = ref<ApplicationTargetDetail[]>(
 
 const selectedUserIds = computed(() =>
   isEditMode.value
-    ? editedTargets.value.map(t => t.target)
-    : props.application.targets.map(t => t.target)
+    ? editedTargets.value
+        .map(t => t.target)
+        .filter((t): t is string => t !== null)
+    : props.application.targets
+        .map(t => t.target)
+        .filter((t): t is string => t !== null)
 )
 
 const handleDeleteTarget = (id: string) => {
@@ -44,7 +48,7 @@ const toggleEditTargets = () => {
 }
 
 const handleUpdateTargets = async () => {
-  if (editedTargets.value.some(target => target.target === '')) {
+  if (editedTargets.value.some(target => !target.target)) {
     toast.error('払い戻し対象者を選択してください')
     return
   }
@@ -82,15 +86,16 @@ const handleUpdateTargets = async () => {
     </div>
     <div v-if="application" class="flex flex-col gap-2">
       <template v-if="isEditMode">
-        <ApplicationTarget
-          v-for="(target, i) in editedTargets"
-          :key="target.id"
-          v-model:target-model="editedTargets[i]"
-          :is-edit-mode="isEditMode"
-          :application="application"
-          :target="target"
-          :selected-user-ids="selectedUserIds"
-          @delete="handleDeleteTarget" />
+        <div v-for="(target, i) in editedTargets" :key="target.id">
+          <ApplicationTarget
+            v-if="editedTargets[i]"
+            v-model:target-model="editedTargets[i]"
+            :is-edit-mode="isEditMode"
+            :application="application"
+            :target="target"
+            :selected-user-ids="selectedUserIds"
+            @delete="handleDeleteTarget" />
+        </div>
       </template>
       <template v-else>
         <ApplicationTarget
@@ -99,6 +104,7 @@ const handleUpdateTargets = async () => {
           :is-edit-mode="isEditMode"
           :application="application"
           :target="target"
+          :target-model="target"
           :selected-user-ids="selectedUserIds" />
       </template>
     </div>

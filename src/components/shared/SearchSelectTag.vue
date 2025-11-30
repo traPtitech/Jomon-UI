@@ -4,7 +4,7 @@ import { computed, ref, watch } from 'vue'
 import type { Tag } from '@/features/tag/entities'
 import { useTagStore } from '@/features/tag/store'
 
-import SearchSelect from './SearchSelect.vue'
+import SearchMultiSelect from './SearchMultiSelect.vue'
 
 const model = defineModel<Tag[]>({ required: true })
 
@@ -30,9 +30,8 @@ watch(selectedValue, () => {
 </script>
 
 <template>
-  <SearchSelect
+  <SearchMultiSelect
     v-model="selectedValue"
     :options="searchOptions"
-    label="タグ"
-    multiple />
+    label="タグ" />
 </template>

@@ -1,36 +1,39 @@
-<script setup lang="ts" generic="T extends string">
+<script setup lang="ts">
+import { computed } from 'vue'
+
 import {
   CheckIcon,
   ChevronDownIcon,
   MagnifyingGlassIcon,
   PlusIcon,
+  XMarkIcon,
 } from '@heroicons/vue/24/outline'
 
 import BaseTextInput from './BaseInput/BaseTextInput.vue'
 import { useSearchSelectGeneric as useSearchSelect } from './composables/useSearchSelect'
 import type { Option } from './types'
 
-const props = withDefaults(
-  defineProps<{
-    options: Option<T>[]
-    label: string
-    placeholder?: string
-    allowCustom?: string extends T ? boolean : never
-    disabled?: boolean
-    required?: boolean
-  }>(),
-  {
-    placeholder: '検索',
-    disabled: false,
-    required: false,
-  }
-)
+export interface Props {
+  options: Option<string>[]
+  label: string
+  placeholder?: string
+  allowCustom?: boolean
+  disabled?: boolean
+  required?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  placeholder: '検索',
+  allowCustom: false,
+  disabled: false,
+  required: false,
+})
 
 const emit = defineEmits<{
   (e: 'focus' | 'close'): void
   (e: 'keydown', value: KeyboardEvent): void
 }>()
-const model = defineModel<T | null>({ required: true })
+const model = defineModel<string[]>({ required: true, default: () => [] })
 
 const {
   menuState,
@@ -41,28 +44,24 @@ const {
   handleInputFocus,
   handleChange,
   handleKeyDown: baseHandleKeyDown,
-} = useSearchSelect<T>(props, emit, model)
+} = useSearchSelect<string>(props, emit, model)
 
-const isCustomAllowed = (
-  val: string,
-  allowed: boolean | undefined
-): val is T => {
-  return (allowed ?? false) && typeof val === 'string'
-}
+const getPlaceholderText = computed(() => {
+  if (model.value.length > 0) {
+    return `${String(model.value.length)}個選択中...`
+  }
+  return props.placeholder
+})
 
-const handleSelect = (selectedValue: T) => {
-  model.value = selectedValue
-  const selectedOption = props.options.find(opt => opt.value === selectedValue)
-  searchTerm.value = selectedOption?.key ?? selectedValue
-  menuState.value = 'close'
+const handleSelect = (selectedValue: string) => {
+  model.value = model.value.includes(selectedValue)
+    ? model.value.filter(v => v !== selectedValue)
+    : [...model.value, selectedValue]
+  searchTerm.value = '' // Clear search after selection
 }
 
 const handleAddCustom = () => {
-  const option = props.options.find(opt => opt.value === searchTerm.value)
-  if (option) {
-    handleSelect(option.value)
-  } else if (
-    isCustomAllowed(searchTerm.value, props.allowCustom) &&
+  if (
     searchTerm.value &&
     !props.options.find(opt => opt.value === searchTerm.value)
   ) {
@@ -86,7 +85,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
         v-model="searchTerm"
         :label="label"
         :class="['pr-8', disabled && 'cursor-not-allowed opacity-50']"
-        :placeholder="placeholder"
+        :placeholder="getPlaceholderText"
         :disabled="disabled"
         :required="required"
         @focus="handleInputFocus"
@@ -111,6 +110,19 @@ const handleKeyDown = (e: KeyboardEvent) => {
       </button>
     </div>
 
+    <!-- Selected items for multiple selection -->
+    <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1">
+      <div v-for="val in model" :key="val" class="text-xs">
+        {{ options.find(opt => opt.value === val)?.key || val }}
+        <button
+          type="button"
+          class="ml-1 rounded-full hover:bg-blue-100"
+          @click.stop="handleSelect(val)">
+          <XMarkIcon class="h-3 w-3" />
+        </button>
+      </div>
+    </div>
+
     <div
       v-if="menuState !== 'close'"
       class="absolute z-50 mt-1 w-full rounded-md border bg-white shadow-lg">
@@ -128,12 +140,14 @@ const handleKeyDown = (e: KeyboardEvent) => {
             'hover:bg-blue-100 hover:text-blue-500',
             highlightedIndex === index && 'bg-blue-100 text-blue-500',
             option.disabled && 'cursor-not-allowed opacity-50',
-            model === option.value && 'bg-blue-100',
+            model.includes(option.value) && 'bg-blue-100',
           ]"
           :disabled="option.disabled"
           @click="!option.disabled && handleSelect(option.value)">
+          <div class="mr-2 flex h-4 w-4 items-center justify-center">
+            <CheckIcon v-if="model.includes(option.value)" class="h-4 w-4" />
+          </div>
           <span class="truncate">{{ option.key }}</span>
-          <CheckIcon v-if="model === option.value" class="ml-auto h-4 w-4" />
         </button>
 
         <!-- Add custom option -->

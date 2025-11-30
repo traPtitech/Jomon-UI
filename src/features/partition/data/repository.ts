@@ -10,7 +10,7 @@ export const usePartitionRepository = () => {
 const toPartitionInput = (partition: PartitionSeed): PartitionInput => ({
   name: partition.name,
   budget: partition.budget,
-  parent_partition_group: partition.parentPartitionGroupId,
+  parent_partition_group: partition.parentPartitionGroupId ?? '',
   management: partition.management,
 })
 

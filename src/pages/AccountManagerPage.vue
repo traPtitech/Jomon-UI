@@ -3,7 +3,7 @@ import { ref } from 'vue'
 
 import { useToast } from 'vue-toastification'
 
-import SearchSelect from '@/components/shared/SearchSelect.vue'
+import SearchMultiSelect from '@/components/shared/SearchMultiSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useAccountManagerStore } from '@/features/accountManager/store'
 import { useTagStore } from '@/features/tag/store'
@@ -95,10 +95,9 @@ if (me.value?.accountManager) {
     <div class="flex flex-col gap-3">
       <h2 class="text-base font-medium">会計管理者の操作</h2>
       <div class="flex flex-wrap gap-3">
-        <SearchSelect
+        <SearchMultiSelect
           v-model="addList"
           class="w-auto grow"
-          multiple
           :options="absentMembers"
           label="追加する会計管理者" />
         <SimpleButton
@@ -116,10 +115,9 @@ if (me.value?.accountManager) {
         </SimpleButton>
       </div>
       <div class="flex flex-wrap gap-3">
-        <SearchSelect
+        <SearchMultiSelect
           v-model="removeList"
           class="w-auto grow"
-          multiple
           :options="accountManagerOptions"
           label="削除する会計管理者" />
         <SimpleButton
@@ -140,12 +138,11 @@ if (me.value?.accountManager) {
     <div class="flex flex-col gap-3">
       <h2 class="text-base font-medium">タグの操作</h2>
       <div class="flex flex-wrap gap-3">
-        <SearchSelect
+        <SearchMultiSelect
           v-model="deleteTagList"
-          label="削除するタグ"
           class="w-auto grow"
-          multiple
-          :options="tagIdOptions" />
+          :options="tagIdOptions"
+          label="削除するタグ" />
         <SimpleButton
           :disabled="deleteTagList.length === 0 || isSending"
           font-size="lg"

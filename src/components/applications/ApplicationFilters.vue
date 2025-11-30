@@ -10,10 +10,14 @@ import { usePartitionStore } from '@/features/partition/store'
 import { useTagStore } from '@/features/tag/store'
 import { useUserStore } from '@/features/user/store'
 
+import SearchMultiSelect from '../shared/SearchMultiSelect.vue'
+
 const { applications, filterParams, fetchApplications } = useApplicationStore()
 const { userOptions } = useUserStore()
 const { tagIdOptions } = useTagStore()
 const { partitionOptions } = usePartitionStore()
+
+const statusOptions = applicationStatusOptions
 
 const toast = useToast()
 
@@ -56,24 +60,26 @@ function sortByCreatedAt() {
     </div>
     <SearchSelect
       v-model="filterParams.target"
+      class="w-full sm:w-auto"
       :options="userOptions"
       label="申請者"
       @close="fetchApplications" />
     <SearchSelect
-      v-model="filterParams.currentStatus"
-      :options="[...applicationStatusOptions]"
+      :model-value="filterParams.currentStatus"
+      class="w-full sm:w-auto"
+      :options="[...statusOptions]"
       label="申請の状態"
+      @update:model-value="v => (filterParams.currentStatus = v)"
       @close="fetchApplications" />
     <SearchSelect
       v-model="filterParams.partition"
       :options="partitionOptions"
       label="パーティション"
       @close="fetchApplications" />
-    <SearchSelect
+    <SearchMultiSelect
       v-model="filterParams.tags"
       :options="tagIdOptions"
       label="タグ"
-      multiple
       @close="fetchApplications" />
   </div>
   <span v-if="applications && applications.length !== 0" class="ml-1/6">

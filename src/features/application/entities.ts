@@ -33,14 +33,14 @@ export interface ApplicationDetail extends Application {
 
 export interface ApplicationQuerySeed {
   sort: string
-  currentStatus: ApplicationStatus | ''
-  target: string
+  currentStatus: ApplicationStatus | '' | null
+  target: string | null
   since: string
   until: string
   limit: number
   offset: number
   tags: string[]
-  partition: string
+  partition: string | null
 }
 
 export interface ApplicationSeed {
@@ -48,6 +48,6 @@ export interface ApplicationSeed {
   title: string
   content: string
   tags: Tag[]
-  partition: string
+  partition: string | null
   targets: ApplicationTarget[]
 }

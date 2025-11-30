@@ -14,7 +14,7 @@ export interface Partition {
 export interface PartitionSeed {
   name: string
   budget: number | null
-  parentPartitionGroupId: string
+  parentPartitionGroupId: string | null
   management: {
     category: 'manual'
     state: 'available' | 'unavailable'

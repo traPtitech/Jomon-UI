@@ -22,7 +22,7 @@ function handleRemoveTarget(index: number) {
 <template>
   <div class="flex flex-col gap-2">
     <ul class="flex flex-col gap-2">
-      <li v-for="(target, i) in model" :key="target.target" class="flex gap-3">
+      <li v-for="(target, i) in model" :key="i" class="flex gap-3">
         <SearchSelect
           v-model="target.target"
           :options="userOptions"

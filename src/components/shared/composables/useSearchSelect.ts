@@ -45,7 +45,7 @@ export function useSearchSelectGeneric<T extends string>(
         const selectedOption = props.options.find(
           opt => opt.value === modelValue.value
         )
-        searchTerm.value = selectedOption?.key ?? ''
+        searchTerm.value = selectedOption?.key ?? modelValue.value
       } else {
         searchTerm.value = ''
       }

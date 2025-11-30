@@ -63,6 +63,11 @@ describe('useSearchSelect', () => {
     modelValue.value = null
     await new Promise(resolve => setTimeout(resolve, 0))
     expect(composable.searchTerm.value).toBe('')
+
+    // Test custom value sync
+    modelValue.value = 'custom-val'
+    await new Promise(resolve => setTimeout(resolve, 0))
+    expect(composable.searchTerm.value).toBe('custom-val')
   })
 
   it('filters options based on search term', () => {

@@ -7,12 +7,17 @@ export const usePartitionRepository = () => {
   return createPartitionRepository()
 }
 
-const toPartitionInput = (partition: PartitionSeed): PartitionInput => ({
-  name: partition.name,
-  budget: partition.budget,
-  parent_partition_group: partition.parentPartitionGroupId ?? '',
-  management: partition.management,
-})
+const toPartitionInput = (partition: PartitionSeed): PartitionInput => {
+  if (!partition.parentPartitionGroupId) {
+    throw new Error('Parent partition group ID is required')
+  }
+  return {
+    name: partition.name,
+    budget: partition.budget,
+    parent_partition_group: partition.parentPartitionGroupId,
+    management: partition.management,
+  }
+}
 
 const createPartitionRepository = () => ({
   fetchPartitions: async (): Promise<Partition[]> => {

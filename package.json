@@ -32,7 +32,7 @@
     "vue-toastification": "^2.0.0-rc.5"
   },
   "devDependencies": {
-    "@eslint/js": "^9.37.0",
+    "@eslint/js": "^9.39.1",
     "@heroicons/vue": "^2.2.0",
     "@openapitools/openapi-generator-cli": "^2.25.1",
     "@tailwindcss/postcss": "^4.1.16",

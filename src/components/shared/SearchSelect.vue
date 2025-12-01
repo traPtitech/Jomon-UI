@@ -38,11 +38,11 @@ const {
 } = useSearchSelect<NonNullable<T>>(props, emit, model)
 
 const handleSelect = (val: T) => {
-  if (val === null) return
+  // Allow null to be processed so the model can be updated to null
   const selectedValue = val
   model.value = selectedValue
   const selectedOption = props.options.find(opt => opt.value === selectedValue)
-  searchTerm.value = selectedOption?.key ?? selectedValue
+  searchTerm.value = selectedOption?.key ?? selectedValue ?? ''
   menuState.value = 'close'
 }
 
@@ -51,7 +51,7 @@ const handleAddCustom = () => {
   if (option) {
     handleSelect(option.value)
   } else if (
-    isCustomAllowed(searchTerm.value, props.allowCustom) &&
+    isCustomAllowed<NonNullable<T>>(searchTerm.value, props.allowCustom) &&
     searchTerm.value &&
     !props.options.find(opt => opt.value === searchTerm.value)
   ) {

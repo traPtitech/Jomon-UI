@@ -72,6 +72,7 @@ describe('SearchSelect', () => {
     const option3Button = wrapper
       .findAll('button.relative.flex')
       .find(b => b.text() === 'Option 3')
+    expect(option3Button?.exists()).toBe(true)
     await option3Button?.trigger('click')
 
     expect(wrapper.emitted('update:modelValue')).toBeUndefined()

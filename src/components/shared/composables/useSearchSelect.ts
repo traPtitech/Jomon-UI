@@ -142,10 +142,7 @@ export function useSearchSelectGeneric<T extends string>(
     handleSelect: (value: T) => void,
     handleAddCustom?: () => void
   ) => {
-    if (
-      menuState.value === 'close' &&
-      (e.key === 'ArrowDown' || e.key === 'Enter')
-    ) {
+    if (menuState.value === 'close' && e.key === 'ArrowDown') {
       e.preventDefault()
       menuState.value = 'presearch'
       return

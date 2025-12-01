@@ -1,28 +1,17 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends string">
 import { computed } from 'vue'
 
+import { CheckIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+
+import SearchSelectDropdown from './SearchSelectDropdown.vue'
+import SearchSelectInput from './SearchSelectInput.vue'
 import {
-  CheckIcon,
-  ChevronDownIcon,
-  MagnifyingGlassIcon,
-  PlusIcon,
-  XMarkIcon,
-} from '@heroicons/vue/24/outline'
+  type SearchSelectCommonProps,
+  isCustomAllowed,
+  useSearchSelectGeneric as useSearchSelect,
+} from './composables/useSearchSelect'
 
-import BaseTextInput from './BaseInput/BaseTextInput.vue'
-import { useSearchSelectGeneric as useSearchSelect } from './composables/useSearchSelect'
-import type { Option } from './types'
-
-export interface Props {
-  options: Option<string>[]
-  label: string
-  placeholder?: string
-  allowCustom?: boolean
-  disabled?: boolean
-  required?: boolean
-}
-
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<SearchSelectCommonProps<T>>(), {
   placeholder: '検索',
   allowCustom: false,
   disabled: false,
@@ -33,18 +22,20 @@ const emit = defineEmits<{
   (e: 'focus' | 'close'): void
   (e: 'keydown', value: KeyboardEvent): void
 }>()
-const model = defineModel<string[]>({ required: true, default: () => [] })
+const model = defineModel<T[]>({ required: true, default: () => [] })
 
 const {
   menuState,
   searchTerm,
   highlightedIndex,
-  dropdownRef,
   filteredOptions,
   handleInputFocus,
   handleChange,
   handleKeyDown: baseHandleKeyDown,
-} = useSearchSelect<string>(props, emit, model)
+  listboxId,
+  activeOptionId,
+  toggleMenu,
+} = useSearchSelect<T>(props, emit, model)
 
 const getPlaceholderText = computed(() => {
   if (model.value.length > 0) {
@@ -53,7 +44,7 @@ const getPlaceholderText = computed(() => {
   return props.placeholder
 })
 
-const handleSelect = (selectedValue: string) => {
+const handleSelect = (selectedValue: T) => {
   model.value = model.value.includes(selectedValue)
     ? model.value.filter(v => v !== selectedValue)
     : [...model.value, selectedValue]
@@ -61,7 +52,7 @@ const handleSelect = (selectedValue: string) => {
 
 const handleAddCustom = () => {
   if (
-    searchTerm.value &&
+    isCustomAllowed<T>(searchTerm.value, props.allowCustom) &&
     !props.options.find(opt => opt.value === searchTerm.value)
   ) {
     handleSelect(searchTerm.value)
@@ -79,35 +70,20 @@ const handleKeyDown = (e: KeyboardEvent) => {
 
 <template>
   <div ref="dropdownRef" class="relative">
-    <div class="relative">
-      <BaseTextInput
-        v-model="searchTerm"
-        :label="label"
-        :class="['pr-8', disabled && 'cursor-not-allowed opacity-50']"
-        :placeholder="getPlaceholderText"
-        :disabled="disabled"
-        :required="required"
-        @focus="handleInputFocus"
-        @input="handleChange"
-        @keydown="handleKeyDown">
-        <MagnifyingGlassIcon class="ml-3 w-6 text-text-secondary" />
-      </BaseTextInput>
-      <button
-        type="button"
-        class="absolute inset-y-0 right-0 flex items-center pr-2"
-        :disabled="disabled"
-        @click="
-          !disabled && menuState === 'close'
-            ? (menuState = 'presearch')
-            : (menuState = 'close')
-        ">
-        <ChevronDownIcon
-          :class="[
-            'h-4 w-4 text-text-secondary transition-transform',
-            menuState !== 'close' && 'rotate-180',
-          ]" />
-      </button>
-    </div>
+    <SearchSelectInput
+      v-model="searchTerm"
+      :label="label"
+      :placeholder="getPlaceholderText"
+      :disabled="disabled"
+      :required="required"
+      :menu-state="menuState"
+      @focus="handleInputFocus"
+      @input="handleChange"
+      @keydown="handleKeyDown"
+      @toggle-menu="toggleMenu"
+      :aria-expanded="menuState !== 'close'"
+      :aria-controls="listboxId"
+      :aria-activedescendant="activeOptionId" />
 
     <!-- Selected items for multiple selection -->
     <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1">
@@ -122,50 +98,23 @@ const handleKeyDown = (e: KeyboardEvent) => {
       </div>
     </div>
 
-    <div
+    <SearchSelectDropdown
       v-if="menuState !== 'close'"
-      class="absolute z-50 mt-1 w-full rounded-md border bg-white shadow-lg">
-      <!-- Options list -->
-      <div class="max-h-[200px] overflow-auto p-1">
-        <div v-if="filteredOptions.length === 0" class="px-2 py-1.5 text-sm">
-          {{ searchTerm ? '該当する項目がありません' : '項目がありません' }}
+      :id="listboxId"
+      :filtered-options="filteredOptions"
+      :search-term="searchTerm"
+      :highlighted-index="highlightedIndex"
+      :model-value="model"
+      :allow-custom="!!allowCustom"
+      :options="options"
+      @select-option="handleSelect"
+      @add-custom="handleAddCustom">
+      <template #option-content="{ option, isSelected }">
+        <div class="mr-2 flex h-4 w-4 items-center justify-center">
+          <CheckIcon v-if="isSelected" class="h-4 w-4" />
         </div>
-        <button
-          v-for="(option, index) in filteredOptions"
-          :key="option.value"
-          type="button"
-          :class="[
-            'relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm outline-none select-none',
-            'hover:bg-blue-100 hover:text-blue-500',
-            highlightedIndex === index && 'bg-blue-100 text-blue-500',
-            option.disabled && 'cursor-not-allowed opacity-50',
-            model.includes(option.value) && 'bg-blue-100',
-          ]"
-          :disabled="option.disabled"
-          @click="!option.disabled && handleSelect(option.value)">
-          <div class="mr-2 flex h-4 w-4 items-center justify-center">
-            <CheckIcon v-if="model.includes(option.value)" class="h-4 w-4" />
-          </div>
-          <span class="truncate">{{ option.key }}</span>
-        </button>
-
-        <!-- Add custom option -->
-        <button
-          v-if="
-            allowCustom &&
-            searchTerm &&
-            !options.find(opt => opt.value === searchTerm)
-          "
-          type="button"
-          :class="[
-            'relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm outline-none select-none',
-            'border-t hover:bg-blue-100 hover:text-blue-500',
-          ]"
-          @click="handleAddCustom">
-          <PlusIcon class="mr-2 h-4 w-4" />
-          <span>"{{ searchTerm }}" を追加</span>
-        </button>
-      </div>
-    </div>
+        <span class="truncate">{{ option.key }}</span>
+      </template>
+    </SearchSelectDropdown>
   </div>
 </template>

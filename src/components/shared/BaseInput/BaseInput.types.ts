@@ -1,3 +1,5 @@
+import type { InputHTMLAttributes } from 'vue'
+
 export interface BaseInputCommonProps {
   label: string
   required?: boolean | undefined
@@ -7,6 +9,7 @@ export interface BaseInputCommonProps {
   id?: string | undefined
   errorMessage?: string | undefined
   describedById?: string | undefined
+  inputAttrs?: InputHTMLAttributes | undefined
 }
 
 export type TextInputType =

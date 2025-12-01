@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
+import { computed } from 'vue'
 
 import type { Tag } from '@/features/tag/entities'
 import { useTagStore } from '@/features/tag/store'
@@ -10,7 +10,6 @@ const model = defineModel<Tag[]>({ required: true })
 
 const { tagOptions } = useTagStore()
 
-const selectedValue = ref(model.value.map(tag => tag.name))
 const searchOptions = computed(() =>
   tagOptions.value.map(tag => ({
     key: tag.key,
@@ -18,25 +17,20 @@ const searchOptions = computed(() =>
   }))
 )
 
-watch(
-  () => model.value,
-  newVal => {
-    const newNames = newVal.map(tag => tag.name)
-    if (JSON.stringify(newNames) !== JSON.stringify(selectedValue.value)) {
-      selectedValue.value = newNames
-    }
+const selectedValue = computed({
+  get: () => model.value.map(tag => tag.name),
+  set: (newNames: string[]) => {
+    const currentTags = model.value
+    model.value = newNames
+      .map(name => {
+        const optionTag = tagOptions.value.find(
+          t => t.value.name === name
+        )?.value
+        if (optionTag) return optionTag
+        return currentTags.find(t => t.name === name)
+      })
+      .filter(tag => tag !== undefined)
   },
-  { deep: true }
-)
-
-watch(selectedValue, () => {
-  model.value = selectedValue.value.map(
-    name =>
-      tagOptions.value.find(tag => tag.value.name === name)?.value ?? {
-        id: '',
-        name,
-      }
-  )
 })
 </script>
 

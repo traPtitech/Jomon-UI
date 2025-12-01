@@ -1,10 +1,30 @@
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import {
+  computed,
+  onMounted,
+  onUnmounted,
+  ref,
+  useId,
+  useTemplateRef,
+  watch,
+} from 'vue'
 
 import type { Option } from '../types'
 
-export type AllowCustom<T> = string extends T ? boolean : never
+// IMPORTANT: This type must ensure that it resolves to false if T is not compatible with string input.
+// The isCustomAllowed type guard relies on this behavior.
+export type AllowCustom<T> = string extends T ? boolean : false
 
-export interface UseSearchSelectProps<T> {
+// CAUTION: This type guard relies on the AllowCustom<T> type definition.
+// AllowCustom<T> ensures that allowCustom can only be true if string extends T.
+// If AllowCustom<T> is changed to be less strict, this type guard may become unsafe.
+export const isCustomAllowed = <T extends string>(
+  val: string,
+  allowCustom: AllowCustom<T> | undefined
+): val is T => {
+  return (allowCustom ?? false) && !!val
+}
+
+export interface SearchSelectCommonProps<T> {
   options: Option<T>[]
   label: string
   placeholder?: string | undefined
@@ -18,16 +38,23 @@ export type SearchSelectEmit = {
   (e: 'keydown', value: KeyboardEvent): void
 }
 
+export type MenuState = 'close' | 'presearch' | 'searched'
+
 export function useSearchSelectGeneric<T extends string>(
-  props: UseSearchSelectProps<T>,
+  props: SearchSelectCommonProps<T>,
   emit: SearchSelectEmit,
   modelValue: { readonly value: T | T[] | null }
 ) {
-  type MenuState = 'close' | 'presearch' | 'searched'
   const menuState = ref<MenuState>('close')
   const searchTerm = ref('')
   const highlightedIndex = ref(-1)
-  const dropdownRef = ref<HTMLElement | null>(null)
+  const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
+  const listboxId = useId()
+
+  const activeOptionId = computed(() => {
+    if (highlightedIndex.value === -1) return undefined
+    return `${listboxId}-option-${String(highlightedIndex.value)}`
+  })
 
   const filteredOptions = computed(() => {
     if (menuState.value === 'presearch') {
@@ -161,14 +188,25 @@ export function useSearchSelectGeneric<T extends string>(
     }
   }
 
+  const toggleMenu = () => {
+    if (props.disabled) return
+    if (menuState.value === 'close') {
+      menuState.value = 'presearch'
+    } else {
+      menuState.value = 'close'
+    }
+  }
+
   return {
     menuState,
     searchTerm,
     highlightedIndex,
-    dropdownRef,
     filteredOptions,
     handleInputFocus,
     handleChange,
     handleKeyDown,
+    listboxId,
+    activeOptionId,
+    toggleMenu,
   }
 }

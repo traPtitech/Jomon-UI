@@ -4,11 +4,11 @@ import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 
 import {
-  type UseSearchSelectProps,
+  type SearchSelectCommonProps,
   useSearchSelectGeneric,
 } from '@/components/shared/composables/useSearchSelect'
 
-const defaultProps: UseSearchSelectProps<string> = {
+const defaultProps: SearchSelectCommonProps<string> = {
   options: [
     { key: 'Option 1', value: 'opt1' },
     { key: 'Option 2', value: 'opt2' },
@@ -19,7 +19,7 @@ const defaultProps: UseSearchSelectProps<string> = {
 
 describe('useSearchSelect', () => {
   const createWrapper = (
-    props: UseSearchSelectProps<string> = defaultProps,
+    props: SearchSelectCommonProps<string> = defaultProps,
     initialValue: string | string[] | null = null
   ) => {
     let composable!: ReturnType<typeof useSearchSelectGeneric>

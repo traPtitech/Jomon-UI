@@ -27,6 +27,7 @@ const props = withDefaults(defineProps<Props>(), {
   textarea: false,
   rows: 6,
   errorMessage: '',
+  inputAttrs: () => ({}),
 })
 
 const model = defineModel<string>({ required: true })
@@ -107,6 +108,7 @@ const handleChange = (event: Event) => {
         :inputmode="inputmode"
         :autocomplete="autocomplete"
         :value="model"
+        v-bind="inputAttrs"
         @input="handleInput"
         @focus="handleFocus"
         @blur="handleBlur"

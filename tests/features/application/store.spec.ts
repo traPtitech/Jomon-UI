@@ -161,7 +161,6 @@ describe('Application Store', () => {
       app.provide(ApplicationRepositoryKey, mockRepo)
 
       vi.mocked(useTagStore).mockReturnValue({
-        ensureTags: vi.fn().mockResolvedValue([]),
         tags: ref([]),
         status: ref('success'),
         error: ref(null),
@@ -170,6 +169,7 @@ describe('Application Store', () => {
         isTagFetched: computed(() => true),
         tagOptions: computed(() => []),
         tagIdOptions: computed(() => []),
+        createTag: vi.fn(),
         deleteTags: vi.fn(),
       })
 

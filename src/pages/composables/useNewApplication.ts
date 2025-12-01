@@ -12,8 +12,6 @@ import type {
 } from '@/features/applicationTarget/entities'
 import type { FileSeed } from '@/features/file/entities'
 import { createFiles } from '@/features/file/services'
-import type { Tag } from '@/features/tag/entities'
-import { useTagStore } from '@/features/tag/store'
 import { useUserStore } from '@/features/user/store'
 
 export const useNewApplication = () => {
@@ -21,7 +19,6 @@ export const useNewApplication = () => {
   const router = useRouter()
   const { me } = useUserStore()
   const { createApplication } = useApplicationStore()
-  const { ensureTags } = useTagStore()
 
   const isSending = ref(false)
 
@@ -67,25 +64,12 @@ export const useNewApplication = () => {
     }
     isSending.value = true
 
-    let tags: Tag[]
-    try {
-      tags = await ensureTags(application.value.tags)
-    } catch (e) {
-      if (e instanceof Error && e.message) {
-        toast.error(e.message)
-      } else {
-        toast.error('新規タグの作成に失敗しました')
-      }
-      isSending.value = false
-      return
-    }
-
     try {
       const applicationSeedWithNewTags: ApplicationSeed = {
         createdBy: application.value.createdBy,
         title: application.value.title,
         content: application.value.content,
-        tags,
+        tags: application.value.tags,
         partition: application.value.partition,
         targets,
       }

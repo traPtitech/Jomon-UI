@@ -10,7 +10,6 @@ import type {
   ApplicationSeed,
 } from '@/features/application/entities'
 import type { ApplicationStatus } from '@/features/applicationStatus/entities'
-import { useTagStore } from '@/features/tag/store'
 import type { AsyncStatus } from '@/types'
 
 const createDefaultParams = (): ApplicationQuerySeed => ({
@@ -30,8 +29,6 @@ const dateRule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
 export const useApplicationStore = defineStoreComposable('application', () => {
   const repository = inject(ApplicationRepositoryKey)
   if (!repository) throw new Error('ApplicationRepository is not provided')
-
-  const tagStore = useTagStore()
 
   const applications = ref<Application[]>([])
   const status = ref<AsyncStatus>('idle')
@@ -104,10 +101,8 @@ export const useApplicationStore = defineStoreComposable('application', () => {
   const editApplication = async (id: string, seed: ApplicationSeed) => {
     if (!currentApplication.value) return
 
-    const tags = await tagStore.ensureTags(seed.tags)
-
     try {
-      const updated = await repository.editApplication(id, { ...seed, tags })
+      const updated = await repository.editApplication(id, seed)
       currentApplication.value = updated
       const index = applications.value.findIndex(app => app.id === updated.id)
       if (index !== -1) {

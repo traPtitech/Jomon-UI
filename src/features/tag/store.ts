@@ -47,24 +47,13 @@ export const useTagStore = defineStoreComposable('tag', () => {
     }
   }
 
-  const ensureTags = async (containNewTags: Tag[]): Promise<Tag[]> => {
-    const alreadyExists: Tag[] = []
-    const promises: Promise<Tag>[] = []
-
-    for (const tag of containNewTags) {
-      if (tag.id === '') {
-        promises.push(repository.createTag(tag.name))
-      } else {
-        alreadyExists.push(tag)
-      }
-    }
-
+  const createTag = async (name: string): Promise<Tag> => {
     try {
-      const created = await Promise.all(promises)
-      tags.value.push(...created)
-      return [...alreadyExists, ...created]
+      const newTag = await repository.createTag(name)
+      tags.value.push(newTag)
+      return newTag
     } catch {
-      throw new Error('新規タグの作成に失敗しました')
+      throw new Error('タグの作成に失敗しました')
     }
   }
 
@@ -91,7 +80,7 @@ export const useTagStore = defineStoreComposable('tag', () => {
     tagOptions,
     tagIdOptions,
     fetchTags,
-    ensureTags,
+    createTag,
     deleteTags,
     reset,
   }

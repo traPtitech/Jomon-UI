@@ -36,6 +36,13 @@ const targetOptions = computed(() =>
 
 const targetModel = defineModel<T>('targetModel', { required: true })
 
+const amountModel = computed<number | null>({
+  get: () => targetModel.value.amount,
+  set: (val: number | null) => {
+    targetModel.value.amount = val ?? 0
+  },
+})
+
 const emit = defineEmits<(e: 'delete', id: string) => void>()
 
 const handleRemoveTarget = async () => {
@@ -84,11 +91,7 @@ const handleRemoveTarget = async () => {
         v-model="targetModel.target"
         :options="targetOptions"
         label="対象者" />
-      <BaseNumberInput
-        :model-value="targetModel.amount"
-        label="金額"
-        :min="0"
-        @update:model-value="val => (targetModel.amount = val ?? 0)">
+      <BaseNumberInput v-model="amountModel" label="金額" :min="0">
         <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
           ¥
         </span>

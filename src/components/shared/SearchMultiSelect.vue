@@ -62,6 +62,17 @@ const handleAddCustom = () => {
 }
 
 const handleKeyDown = (e: KeyboardEvent) => {
+  if (
+    searchTerm.value === '' &&
+    e.key === 'Backspace' &&
+    model.value.length > 0
+  ) {
+    const newModel = [...model.value]
+    newModel.pop()
+    model.value = newModel
+    return
+  }
+
   baseHandleKeyDown(
     e,
     handleSelect,

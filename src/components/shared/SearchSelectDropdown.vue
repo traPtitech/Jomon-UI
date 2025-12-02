@@ -69,13 +69,14 @@ onMounted(() => {
         role="option"
         :aria-selected="isSelected(option.value, modelValue)"
         :class="[
-          'relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm outline-none select-none',
+          'relative flex w-full cursor-pointer items-center rounded-sm px-2 py-2 text-left text-sm outline-none select-none',
           'hover:bg-blue-100 hover:text-blue-500',
           highlightedIndex === index && 'bg-blue-100 text-blue-500',
           option.disabled && 'cursor-not-allowed opacity-50',
           isSelected(option.value, modelValue) && 'bg-blue-100',
         ]"
         :disabled="option.disabled"
+        @mousedown.prevent
         @click="!option.disabled && emit('select-option', option.value)">
         <slot
           name="option-content"

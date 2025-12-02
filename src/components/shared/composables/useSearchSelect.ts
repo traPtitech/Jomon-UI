@@ -74,15 +74,16 @@ export function useSearchSelectGeneric<T extends string>(
   )
 
   const resetSearchTerm = () => {
-    if (!Array.isArray(modelValue.value)) {
-      if (modelValue.value) {
-        const selectedOption = props.options.find(
-          opt => opt.value === modelValue.value
-        )
-        searchTerm.value = selectedOption?.key ?? modelValue.value
-      } else {
-        searchTerm.value = ''
-      }
+    if (Array.isArray(modelValue.value)) {
+      searchTerm.value = ''
+      return
+    }
+
+    if (modelValue.value != null) {
+      const selectedOption = props.options.find(
+        opt => opt.value === modelValue.value
+      )
+      searchTerm.value = selectedOption?.key ?? modelValue.value
     } else {
       searchTerm.value = ''
     }

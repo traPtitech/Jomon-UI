@@ -61,7 +61,7 @@ const createApplicationRepository = () => ({
   ): Promise<Application[]> => {
     const { data } = await apis.getApplications(
       querySeed.sort,
-      querySeed.currentStatus ? querySeed.currentStatus : undefined,
+      querySeed.currentStatus ?? undefined,
       querySeed.target ?? undefined,
       querySeed.since,
       querySeed.until,

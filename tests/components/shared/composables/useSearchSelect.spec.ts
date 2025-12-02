@@ -25,10 +25,16 @@ describe('useSearchSelect', () => {
     let composable!: ReturnType<typeof useSearchSelectGeneric>
     const emit = vi.fn()
     const modelValue = ref(initialValue)
+    const dropdownRef = ref<HTMLElement | null>(null)
 
     const TestComponent = defineComponent({
       setup() {
-        composable = useSearchSelectGeneric(props, emit, modelValue)
+        composable = useSearchSelectGeneric(
+          props,
+          emit,
+          modelValue,
+          dropdownRef
+        )
         return () => null
       },
     })

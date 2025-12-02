@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends string">
-import { computed } from 'vue'
+import { computed, useTemplateRef } from 'vue'
 
 import { CheckIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 
@@ -24,6 +24,8 @@ const emit = defineEmits<{
 }>()
 const model = defineModel<T[]>({ required: true, default: () => [] })
 
+const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
+
 const {
   menuState,
   searchTerm,
@@ -35,7 +37,7 @@ const {
   listboxId,
   activeOptionId,
   toggleMenu,
-} = useSearchSelect<T>(props, emit, model)
+} = useSearchSelect<T>(props, emit, model, dropdownRef)
 
 const getPlaceholderText = computed(() => {
   if (model.value.length > 0) {

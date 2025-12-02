@@ -1,4 +1,6 @@
 <script setup lang="ts" generic="T extends string | null">
+import { useTemplateRef } from 'vue'
+
 import { CheckIcon } from '@heroicons/vue/24/outline'
 
 import SearchSelectDropdown from './SearchSelectDropdown.vue'
@@ -24,6 +26,8 @@ const emit = defineEmits<{
 }>()
 const model = defineModel<T>({ required: true })
 
+const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
+
 const {
   menuState,
   searchTerm,
@@ -35,7 +39,7 @@ const {
   listboxId,
   activeOptionId,
   toggleMenu,
-} = useSearchSelect<NonNullable<T>>(props, emit, model)
+} = useSearchSelect<NonNullable<T>>(props, emit, model, dropdownRef)
 
 const handleSelect = (val: T) => {
   // Allow null to be processed so the model can be updated to null

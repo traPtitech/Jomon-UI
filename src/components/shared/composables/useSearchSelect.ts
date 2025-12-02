@@ -1,10 +1,10 @@
 import {
+  type Ref,
   computed,
   onMounted,
   onUnmounted,
   ref,
   useId,
-  useTemplateRef,
   watch,
 } from 'vue'
 
@@ -43,12 +43,12 @@ export type MenuState = 'close' | 'presearch' | 'searched'
 export function useSearchSelectGeneric<T extends string>(
   props: SearchSelectCommonProps<T>,
   emit: SearchSelectEmit,
-  modelValue: { readonly value: T | T[] | null }
+  modelValue: { readonly value: T | T[] | null },
+  dropdownRef: Ref<HTMLElement | null>
 ) {
   const menuState = ref<MenuState>('close')
   const searchTerm = ref('')
   const highlightedIndex = ref(-1)
-  const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
   const listboxId = useId()
 
   const activeOptionId = computed(() => {
@@ -142,6 +142,8 @@ export function useSearchSelectGeneric<T extends string>(
     handleSelect: (value: T) => void,
     handleAddCustom?: () => void
   ) => {
+    if (e.isComposing) return
+
     if (menuState.value === 'close' && e.key === 'ArrowDown') {
       e.preventDefault()
       menuState.value = 'presearch'

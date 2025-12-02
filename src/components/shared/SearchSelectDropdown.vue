@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends string | null">
-import { nextTick, useTemplateRef, watch } from 'vue'
+import { nextTick, onMounted, useTemplateRef, watch } from 'vue'
 
 import { PlusIcon } from '@heroicons/vue/24/outline'
 
@@ -29,18 +29,26 @@ const isSelected = (value: T, model: T | T[] | null): boolean => {
 
 const listRef = useTemplateRef<HTMLElement>('listRef')
 
+const scrollToHighlighted = async (index: number) => {
+  if (index === -1 || !listRef.value) return
+  await nextTick()
+  const options = listRef.value.querySelectorAll('[role="option"]')
+  const highlightedOption = options[index] as HTMLElement | undefined
+  if (highlightedOption) {
+    highlightedOption.scrollIntoView({ block: 'nearest' })
+  }
+}
+
 watch(
   () => props.highlightedIndex,
-  async index => {
-    if (index === -1 || !listRef.value) return
-    await nextTick()
-    const options = listRef.value.querySelectorAll('[role="option"]')
-    const highlightedOption = options[index] as HTMLElement | undefined
-    if (highlightedOption) {
-      highlightedOption.scrollIntoView({ block: 'nearest' })
-    }
+  index => {
+    void scrollToHighlighted(index)
   }
 )
+
+onMounted(() => {
+  void scrollToHighlighted(props.highlightedIndex)
+})
 </script>
 
 <template>

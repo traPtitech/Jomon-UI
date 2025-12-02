@@ -20,15 +20,12 @@ const searchOptions = computed(() =>
 const selectedValue = computed({
   get: () => model.value.map(tag => tag.name),
   set: (newNames: string[]) => {
-    const currentTags = model.value
     model.value = newNames
-      .map(name => {
-        const optionTag = tagOptions.value.find(
-          t => t.value.name === name
-        )?.value
-        if (optionTag) return optionTag
-        return currentTags.find(t => t.name === name)
-      })
+      .map(
+        name =>
+          tagOptions.value.find(t => t.value.name === name)?.value ??
+          model.value.find(t => t.name === name)
+      )
       .filter(tag => tag !== undefined)
   },
 })

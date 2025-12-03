@@ -76,15 +76,21 @@ onMounted(() => {
         :id="`${id}-option-${index}`"
         :key="String(option.value)"
         role="option"
-        :aria-selected="!option.disabled && isSelected(option.value, modelValue)"
+        :aria-selected="
+          !option.disabled && isSelected(option.value, modelValue)
+        "
         :aria-disabled="option.disabled || undefined"
         :class="[
           'relative flex w-full cursor-pointer items-center rounded-sm px-2 py-2 text-left text-sm outline-none select-none',
           option.disabled
-            ? 'cursor-not-allowed opacity-50 text-gray-400'
+            ? 'cursor-not-allowed text-gray-400 opacity-50'
             : 'hover:bg-blue-100 hover:text-blue-500',
-          highlightedIndex === index && !option.disabled && 'bg-blue-100 text-blue-500',
-          !option.disabled && isSelected(option.value, modelValue) && 'bg-blue-100',
+          highlightedIndex === index &&
+            !option.disabled &&
+            'bg-blue-100 text-blue-500',
+          !option.disabled &&
+            isSelected(option.value, modelValue) &&
+            'bg-blue-100',
         ]"
         tabindex="-1"
         @mousedown.prevent

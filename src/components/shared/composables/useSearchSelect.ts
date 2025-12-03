@@ -158,6 +158,7 @@ export function useSearchSelectGeneric<T extends string | number>(
     if (menuState.value === 'close' && e.key === 'ArrowDown') {
       e.preventDefault()
       menuState.value = 'presearch'
+      highlightedIndex.value = filteredOptions.value.length > 0 ? 0 : -1
       return
     }
     if (menuState.value === 'close') return
@@ -181,6 +182,8 @@ export function useSearchSelectGeneric<T extends string | number>(
       case 'Enter': {
         e.preventDefault()
         const option = filteredOptions.value[highlightedIndex.value]
+        // If an option is highlighted, select it.
+        // Otherwise, if custom values are allowed and there is a search term, try to add it.
         if (option) {
           handleSelect(option.value)
         } else if (handleAddCustom && searchTerm.value) {
@@ -201,7 +204,7 @@ export function useSearchSelectGeneric<T extends string | number>(
   const toggleMenu = () => {
     if (props.disabled) return
     if (menuState.value === 'close') {
-      menuState.value = 'presearch'
+      handleInputFocus()
     } else {
       menuState.value = 'close'
     }

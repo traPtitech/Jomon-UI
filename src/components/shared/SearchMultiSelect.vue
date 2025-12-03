@@ -41,6 +41,10 @@ const {
   toggleMenu,
 } = useSearchSelect<T>(props, emit, model, dropdownRef)
 
+const optionMap = computed(() => {
+  return new Map(props.options.map(opt => [opt.value, opt.key]))
+})
+
 const getPlaceholderText = computed(() => {
   if (model.value.length > 0) {
     return `${String(model.value.length)}個選択中...`
@@ -65,7 +69,8 @@ const handleSelect = (selectedValue: T) => {
 const handleAddCustom = () => {
   if (
     isCustomAllowed<T>(searchTerm.value, props.allowCustom) &&
-    !props.options.find(opt => opt.key === searchTerm.value)
+    !props.options.find(opt => opt.key === searchTerm.value) &&
+    !model.value.includes(searchTerm.value)
   ) {
     handleSelect(searchTerm.value)
   }
@@ -114,7 +119,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
     <!-- Selected items for multiple selection -->
     <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1">
       <div v-for="val in model" :key="val" class="text-xs">
-        {{ options.find(opt => opt.value === val)?.key || val }}
+        {{ optionMap.get(val) ?? val }}
         <button
           type="button"
           class="ml-1 rounded-full hover:bg-blue-100"

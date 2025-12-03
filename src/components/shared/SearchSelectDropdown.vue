@@ -13,6 +13,7 @@ const props = defineProps<{
   allowCustom?: boolean
   options: Option<T>[]
   id?: string
+  multiple?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -58,7 +59,8 @@ onMounted(() => {
       :id="id"
       ref="listRef"
       class="max-h-[200px] overflow-auto p-1"
-      role="listbox">
+      role="listbox"
+      :aria-multiselectable="multiple || undefined">
       <li v-if="filteredOptions.length === 0" class="px-2 py-1.5 text-sm">
         {{ searchTerm ? '該当する項目がありません' : '項目がありません' }}
       </li>
@@ -74,13 +76,15 @@ onMounted(() => {
         :id="`${id}-option-${index}`"
         :key="String(option.value)"
         role="option"
-        :aria-selected="isSelected(option.value, modelValue)"
+        :aria-selected="!option.disabled && isSelected(option.value, modelValue)"
+        :aria-disabled="option.disabled || undefined"
         :class="[
           'relative flex w-full cursor-pointer items-center rounded-sm px-2 py-2 text-left text-sm outline-none select-none',
-          'hover:bg-blue-100 hover:text-blue-500',
-          highlightedIndex === index && 'bg-blue-100 text-blue-500',
-          option.disabled && 'cursor-not-allowed opacity-50',
-          isSelected(option.value, modelValue) && 'bg-blue-100',
+          option.disabled
+            ? 'cursor-not-allowed opacity-50 text-gray-400'
+            : 'hover:bg-blue-100 hover:text-blue-500',
+          highlightedIndex === index && !option.disabled && 'bg-blue-100 text-blue-500',
+          !option.disabled && isSelected(option.value, modelValue) && 'bg-blue-100',
         ]"
         tabindex="-1"
         @mousedown.prevent

@@ -7,6 +7,7 @@ import SearchSelectDropdown from './SearchSelectDropdown.vue'
 import SearchSelectInput from './SearchSelectInput.vue'
 import {
   type SearchSelectCommonProps,
+  type SearchSelectEmit,
   isCustomAllowed,
   useSearchSelectGeneric as useSearchSelect,
 } from './composables/useSearchSelect'
@@ -20,10 +21,7 @@ const props = withDefaults(
   }
 )
 
-const emit = defineEmits<{
-  (e: 'focus' | 'close'): void
-  (e: 'keydown', value: KeyboardEvent): void
-}>()
+const emit = defineEmits<SearchSelectEmit>()
 const model = defineModel<T>({ required: true })
 
 const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')

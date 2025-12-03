@@ -3,8 +3,3 @@ export interface Option<T> {
   value: T
   disabled?: boolean
 }
-
-export type SearchSelectEmit = {
-  (e: 'focus' | 'close'): void
-  (e: 'keydown', value: KeyboardEvent): void
-}

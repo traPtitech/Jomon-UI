@@ -38,6 +38,7 @@ export interface SearchSelectCommonProps<T> {
 export type SearchSelectEmit = {
   (e: 'focus' | 'close'): void
   (e: 'keydown', value: KeyboardEvent): void
+  (e: 'search-input', value: string): void
 }
 
 export type MenuState = 'close' | 'presearch' | 'searched'
@@ -46,63 +47,182 @@ export interface RefLike<V> {
   readonly value: V
 }
 
-export function useSearchSelectGeneric<T extends string | number>(
+export const useSearchSelect = <T>(
   props: SearchSelectCommonProps<T>,
   emit: SearchSelectEmit,
-  modelValue: RefLike<T | T[] | null>,
+  model: RefLike<T | T[] | null>,
   dropdownRef: Ref<HTMLElement | null>
-) {
+) => {
+  const listboxId = useId()
   const menuState = ref<MenuState>('close')
   const searchTerm = ref('')
   const highlightedIndex = ref(-1)
-  const listboxId = useId()
-
-  const activeOptionId = computed(() => {
-    if (highlightedIndex.value === -1) return undefined
-    return `${listboxId}-option-${String(highlightedIndex.value)}`
-  })
 
   const filteredOptions = computed(() => {
-    if (menuState.value === 'presearch') {
+    if (!searchTerm.value) {
       return props.options
     }
-
-    return props.options.filter(option =>
-      option.key.toLowerCase().includes(searchTerm.value.toLowerCase())
+    const lowerTerm = searchTerm.value.toLowerCase()
+    return props.options.filter(
+      opt =>
+        opt.key.toLowerCase().includes(lowerTerm) ||
+        String(opt.value).toLowerCase().includes(lowerTerm)
     )
   })
 
-  watch(
-    () => filteredOptions.value,
-    () => {
-      highlightedIndex.value = -1
-    }
-  )
+  const activeOptionId = computed(() => {
+    if (highlightedIndex.value === -1) return undefined
+    return `${listboxId}-option-${highlightedIndex.value}`
+  })
 
   const resetSearchTerm = () => {
-    if (Array.isArray(modelValue.value)) {
-      searchTerm.value = ''
-      return
-    }
+    searchTerm.value = ''
+    highlightedIndex.value = -1
+  }
 
-    if (modelValue.value != null) {
-      const selectedOption = props.options.find(
-        opt => opt.value === modelValue.value
-      )
-      searchTerm.value = selectedOption?.key ?? String(modelValue.value)
+  // Initialize highlightedIndex when menu opens or options change
+  watch(menuState, newVal => {
+    if (newVal !== 'close') {
+      highlightedIndex.value = -1
     } else {
-      searchTerm.value = ''
+      resetSearchTerm()
+    }
+  })
+
+  watch(filteredOptions, () => {
+    highlightedIndex.value = -1
+  })
+
+  // Sync searchTerm with modelValue for single select
+  if (!Array.isArray(model.value)) {
+    watch(
+      model,
+      newVal => {
+        const selectedOption = props.options.find(opt => opt.value === newVal)
+        if (selectedOption) {
+          searchTerm.value = selectedOption.key
+        } else if (newVal !== null && newVal !== undefined) {
+          searchTerm.value = String(newVal)
+        } else {
+          searchTerm.value = ''
+        }
+      },
+      { immediate: true }
+    )
+  }
+
+  const toggleMenu = () => {
+    if (props.disabled) return
+    if (menuState.value === 'close') {
+      menuState.value = 'presearch'
+    } else {
+      menuState.value = 'close'
     }
   }
 
-  watch(
-    () => modelValue.value,
-    () => {
-      resetSearchTerm()
+  const handleInputFocus = () => {
+    if (props.disabled) return
+    if (menuState.value === 'close') {
+      menuState.value = 'presearch'
     }
-  )
+  }
 
-  // Handle click outside
+  const handleSearchInput = () => {
+    menuState.value = 'searched'
+    emit('search-input', searchTerm.value)
+  }
+
+  // IME handling
+  const isComposing = ref(false)
+  const handleCompositionStart = () => {
+    isComposing.value = true
+  }
+  const handleCompositionEnd = () => {
+    isComposing.value = false
+  }
+
+  const handleKeyDown = (
+    e: KeyboardEvent,
+    handleSelect: (val: T) => void,
+    handleAddCustom?: () => void
+  ) => {
+    if (isComposing.value || e.isComposing) return
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault()
+        if (menuState.value === 'close') {
+          menuState.value = 'presearch'
+          highlightedIndex.value = 0
+        } else {
+          highlightedIndex.value =
+            (highlightedIndex.value + 1) % filteredOptions.value.length
+        }
+        break
+      case 'ArrowUp':
+        e.preventDefault()
+        if (menuState.value === 'close') {
+          menuState.value = 'presearch'
+          highlightedIndex.value = filteredOptions.value.length - 1
+        } else {
+          highlightedIndex.value =
+            (highlightedIndex.value - 1 + filteredOptions.value.length) %
+            filteredOptions.value.length
+        }
+        break
+      case 'Home':
+        e.preventDefault()
+        if (menuState.value !== 'close' && filteredOptions.value.length > 0) {
+          highlightedIndex.value = 0
+        }
+        break
+      case 'End':
+        e.preventDefault()
+        if (menuState.value !== 'close' && filteredOptions.value.length > 0) {
+          highlightedIndex.value = filteredOptions.value.length - 1
+        }
+        break
+      case 'Enter': {
+        e.preventDefault()
+        if (menuState.value === 'close') {
+          menuState.value = 'presearch'
+          return
+        }
+
+        // If an item is highlighted, select it
+        if (highlightedIndex.value !== -1) {
+          const option = filteredOptions.value[highlightedIndex.value]
+          if (option) {
+            handleSelect(option.value)
+          }
+          return
+        }
+
+        // If no item is highlighted but there are filtered options, select the first one
+        if (filteredOptions.value.length > 0) {
+          const option = filteredOptions.value[0]
+          if (option) {
+            handleSelect(option.value)
+          }
+          return
+        }
+
+        // If no options match and custom is allowed, add custom
+        if (handleAddCustom && searchTerm.value) {
+          handleAddCustom()
+        }
+        break
+      }
+      case 'Escape':
+        e.preventDefault()
+        menuState.value = 'close'
+        break
+      case 'Tab':
+        menuState.value = 'close'
+        break
+    }
+  }
+
   const handleClickOutside = (event: MouseEvent) => {
     if (typeof Node === 'undefined') {
       return
@@ -111,122 +231,20 @@ export function useSearchSelectGeneric<T extends string | number>(
     if (!(target instanceof Node)) {
       return
     }
+    // Note: This check assumes the dropdown is not Teleported elsewhere in the DOM.
+    // If Teleport is used, we need to check if the target is contained within the teleported content as well.
     if (dropdownRef.value && !dropdownRef.value.contains(target)) {
       menuState.value = 'close'
-      resetSearchTerm()
     }
   }
 
   onMounted(() => {
-    document.addEventListener('mousedown', handleClickOutside)
-    // Initialize search term for single select
-    if (!searchTerm.value) {
-      resetSearchTerm()
-    }
+    document.addEventListener('click', handleClickOutside)
   })
 
   onUnmounted(() => {
-    document.removeEventListener('mousedown', handleClickOutside)
+    document.removeEventListener('click', handleClickOutside)
   })
-
-  watch(menuState, newVal => {
-    if (newVal === 'close') emit('close')
-  })
-
-  const handleInputFocus = () => {
-    emit('focus')
-    menuState.value = 'presearch'
-    resetSearchTerm()
-    highlightedIndex.value = -1
-  }
-
-  const handleSearchInput = () => {
-    menuState.value = 'searched'
-  }
-
-  const isComposing = ref(false)
-
-  const handleCompositionStart = () => {
-    isComposing.value = true
-  }
-
-  const handleCompositionEnd = () => {
-    isComposing.value = false
-  }
-
-  const handleKeyDown = (
-    e: KeyboardEvent,
-    handleSelect: (value: T) => void,
-    handleAddCustom?: () => void
-  ) => {
-    if (e.isComposing || isComposing.value) return
-
-    if (menuState.value === 'close' && e.key === 'ArrowDown') {
-      e.preventDefault()
-      menuState.value = 'presearch'
-      highlightedIndex.value = filteredOptions.value.length > 0 ? 0 : -1
-      return
-    }
-    if (menuState.value === 'close') return
-    emit('keydown', e)
-
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault()
-        highlightedIndex.value =
-          highlightedIndex.value < filteredOptions.value.length - 1
-            ? highlightedIndex.value + 1
-            : highlightedIndex.value
-        break
-      case 'ArrowUp':
-        e.preventDefault()
-        highlightedIndex.value =
-          highlightedIndex.value > 0
-            ? highlightedIndex.value - 1
-            : highlightedIndex.value
-        break
-      case 'Home':
-        e.preventDefault()
-        highlightedIndex.value = filteredOptions.value.length > 0 ? 0 : -1
-        break
-      case 'End':
-        e.preventDefault()
-        highlightedIndex.value =
-          filteredOptions.value.length > 0
-            ? filteredOptions.value.length - 1
-            : -1
-        break
-      case 'Enter': {
-        e.preventDefault()
-        const option = filteredOptions.value[highlightedIndex.value]
-        // If an option is highlighted, select it.
-        // Otherwise, if custom values are allowed and there is a search term, try to add it.
-        if (option) {
-          handleSelect(option.value)
-        } else if (handleAddCustom && searchTerm.value) {
-          handleAddCustom()
-        }
-        break
-      }
-      case 'Escape':
-        menuState.value = 'close'
-        resetSearchTerm()
-        break
-      case 'Tab':
-        menuState.value = 'close'
-        resetSearchTerm()
-        break
-    }
-  }
-
-  const toggleMenu = () => {
-    if (props.disabled) return
-    if (menuState.value === 'close') {
-      handleInputFocus()
-    } else {
-      menuState.value = 'close'
-    }
-  }
 
   return {
     menuState,
@@ -243,3 +261,5 @@ export function useSearchSelectGeneric<T extends string | number>(
     toggleMenu,
   }
 }
+
+export const useSearchSelectGeneric = useSearchSelect

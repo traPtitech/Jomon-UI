@@ -20,8 +20,10 @@ defineProps<{
 const model = defineModel<string>({ required: true })
 
 const emit = defineEmits<{
-  (e: 'focus' | 'input' | 'toggle-menu'): void
+  (e: 'focus'): void
+  (e: 'input', value: Event): void
   (e: 'keydown', value: KeyboardEvent): void
+  (e: 'toggle-menu'): void
 }>()
 
 const inputRef = useTemplateRef<InstanceType<typeof BaseTextInput>>('inputRef')
@@ -51,7 +53,7 @@ defineExpose({
         'aria-activedescendant': ariaActivedescendant,
       }"
       @focus="emit('focus')"
-      @input="emit('input')"
+      @input="emit('input', $event)"
       @keydown="emit('keydown', $event)">
       <MagnifyingGlassIcon class="ml-3 w-6 text-text-secondary" />
     </BaseTextInput>

@@ -113,17 +113,14 @@ onMounted(() => {
         role="option"
         :aria-selected="false"
         tabindex="-1"
-        @mousedown.prevent>
-        <button
-          type="button"
-          :class="[
-            'relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm outline-none select-none',
-            'border-t hover:bg-blue-100 hover:text-blue-500',
-          ]"
-          @click="emit('add-custom')">
-          <PlusIcon class="mr-2 h-4 w-4" />
-          <span>"{{ searchTerm }}" を追加</span>
-        </button>
+        :class="[
+          'relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm outline-none select-none',
+          'border-t hover:bg-blue-100 hover:text-blue-500',
+        ]"
+        @mousedown.prevent
+        @click="emit('add-custom')">
+        <PlusIcon class="mr-2 h-4 w-4" />
+        <span>"{{ searchTerm }}" を追加</span>
       </li>
     </ul>
   </div>

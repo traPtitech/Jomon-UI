@@ -47,6 +47,8 @@ export const useTagStore = defineStoreComposable('tag', () => {
     }
   }
 
+  // TODO: Implement a dedicated UI for administrators to create, edit, and delete tags.
+  // This function is currently unused in the application creation flow but will be needed for tag management.
   const createTag = async (name: string): Promise<Tag> => {
     try {
       const newTag = await repository.createTag(name)

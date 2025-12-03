@@ -32,16 +32,19 @@ const toApplicationTargetInput = (
   target: target.target,
 })
 
-const toApplicationInput = (
-  application: ApplicationSeed
-): ApplicationInput => ({
-  created_by: application.createdBy,
-  title: application.title,
-  content: application.content,
-  tags: application.tags.map(tag => tag.id),
-  partition: application.partition,
-  targets: application.targets.map(toApplicationTargetInput),
-})
+const toApplicationInput = (application: ApplicationSeed): ApplicationInput => {
+  if (application.tags.some(tag => !tag.id)) {
+    throw new Error('Invalid tag: Tag ID cannot be empty')
+  }
+  return {
+    created_by: application.createdBy,
+    title: application.title,
+    content: application.content,
+    tags: application.tags.map(tag => tag.id),
+    partition: application.partition,
+    targets: application.targets.map(toApplicationTargetInput),
+  }
+}
 
 const toCommentInput = (comment: string): CommentInput => ({
   comment,
@@ -59,6 +62,10 @@ const createApplicationRepository = () => ({
   fetchApplications: async (
     querySeed: ApplicationQuerySeed
   ): Promise<Application[]> => {
+    if (querySeed.tags.some(tag => !tag)) {
+      throw new Error('Invalid tag: Tag ID cannot be empty')
+    }
+
     const { data } = await apis.getApplications(
       querySeed.sort,
       querySeed.currentStatus ?? undefined,

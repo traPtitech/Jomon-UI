@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useTemplateRef } from 'vue'
 
 import {
   type BaseInputCommonProps,
@@ -43,6 +43,10 @@ const { inputId, isFieldRequired, errorMessageId, describedBy } =
 
 const hasValue = computed(() => model.value !== '')
 
+const inputRef = useTemplateRef<HTMLInputElement | HTMLTextAreaElement>(
+  'inputRef'
+)
+
 const handleInput = (event: Event) => {
   const target = event.target
   if (
@@ -70,6 +74,12 @@ const handleKeydown = (event: KeyboardEvent) => {
 const handleChange = (event: Event) => {
   emit('change', event)
 }
+
+defineExpose({
+  focus: () => {
+    inputRef.value?.focus()
+  },
+})
 </script>
 
 <template>
@@ -90,6 +100,7 @@ const handleChange = (event: Event) => {
       <component
         :is="textarea ? 'textarea' : 'input'"
         :id="inputId"
+        ref="inputRef"
         :class="[
           inputProps.class,
           'w-full border-none bg-transparent px-3 pb-2 ring-0 outline-none not-focus-visible:placeholder:text-transparent',

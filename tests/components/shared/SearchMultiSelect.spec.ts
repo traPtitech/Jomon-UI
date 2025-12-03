@@ -35,7 +35,7 @@ describe('SearchMultiSelect', () => {
     await wrapper.find('input').trigger('focus')
 
     const option1Button = wrapper
-      .findAll('button.relative.flex')
+      .findAll('li[role="option"]')
       .find(b => b.text() === 'Option 1')
     await option1Button?.trigger('click')
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([['opt1']])
@@ -43,7 +43,7 @@ describe('SearchMultiSelect', () => {
     await wrapper.setProps({ modelValue: ['opt1'] })
 
     const option2Button = wrapper
-      .findAll('button.relative.flex')
+      .findAll('li[role="option"]')
       .find(b => b.text() === 'Option 2')
     await option2Button?.trigger('click')
     expect(wrapper.emitted('update:modelValue')?.[1]).toEqual([
@@ -63,7 +63,7 @@ describe('SearchMultiSelect', () => {
     await wrapper.find('input').trigger('focus')
 
     const option1Button = wrapper
-      .findAll('button.relative.flex')
+      .findAll('li[role="option"]')
       .find(b => b.text() === 'Option 1')
     await option1Button?.trigger('click')
 

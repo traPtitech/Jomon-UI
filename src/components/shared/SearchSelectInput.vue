@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useTemplateRef } from 'vue'
+
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 
 import BaseTextInput from './BaseInput/BaseTextInput.vue'
@@ -21,11 +23,20 @@ const emit = defineEmits<{
   (e: 'focus' | 'input' | 'toggle-menu'): void
   (e: 'keydown', value: KeyboardEvent): void
 }>()
+
+const inputRef = useTemplateRef<InstanceType<typeof BaseTextInput>>('inputRef')
+
+defineExpose({
+  focus: () => {
+    inputRef.value?.focus()
+  },
+})
 </script>
 
 <template>
   <div class="relative">
     <BaseTextInput
+      ref="inputRef"
       v-model="model"
       :label="label"
       :class="['pr-8', disabled && 'cursor-not-allowed opacity-50']"

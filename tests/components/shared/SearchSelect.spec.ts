@@ -35,7 +35,7 @@ describe('SearchSelect', () => {
     await wrapper.find('input').trigger('focus')
     await wrapper.find('input').setValue('Option 1')
 
-    const buttons = wrapper.findAll('button.relative.flex')
+    const buttons = wrapper.findAll('li[role="option"]')
     const texts = buttons.map(b => b.text())
     expect(texts).toContain('Option 1')
     expect(texts).not.toContain('Option 2')
@@ -52,7 +52,7 @@ describe('SearchSelect', () => {
 
     await wrapper.find('input').trigger('focus')
     const option1Button = wrapper
-      .findAll('button.relative.flex')
+      .findAll('li[role="option"]')
       .find(b => b.text() === 'Option 1')
     await option1Button?.trigger('click')
 
@@ -70,7 +70,7 @@ describe('SearchSelect', () => {
 
     await wrapper.find('input').trigger('focus')
     const option3Button = wrapper
-      .findAll('button.relative.flex')
+      .findAll('li[role="option"]')
       .find(b => b.text() === 'Option 3')
     expect(option3Button?.exists()).toBe(true)
     await option3Button?.trigger('click')

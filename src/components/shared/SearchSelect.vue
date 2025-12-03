@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T extends string | null">
+<script setup lang="ts" generic="T extends string | number | null">
 import { useTemplateRef } from 'vue'
 
 import { CheckIcon } from '@heroicons/vue/24/outline'
@@ -46,7 +46,7 @@ const handleSelect = (val: T) => {
   const selectedValue = val
   model.value = selectedValue
   const selectedOption = props.options.find(opt => opt.value === selectedValue)
-  searchTerm.value = selectedOption?.key ?? selectedValue ?? ''
+  searchTerm.value = selectedOption?.key ?? String(selectedValue ?? '')
   menuState.value = 'close'
 }
 

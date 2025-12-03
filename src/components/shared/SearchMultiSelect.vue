@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T extends string">
+<script setup lang="ts" generic="T extends string | number">
 import { computed, useTemplateRef } from 'vue'
 
 import { CheckIcon, XMarkIcon } from '@heroicons/vue/24/outline'
@@ -46,10 +46,18 @@ const getPlaceholderText = computed(() => {
   return props.placeholder
 })
 
+const inputRef =
+  useTemplateRef<InstanceType<typeof SearchSelectInput>>('inputRef')
+
 const handleSelect = (selectedValue: T) => {
   model.value = model.value.includes(selectedValue)
     ? model.value.filter(v => v !== selectedValue)
     : [...model.value, selectedValue]
+
+  // Focus input if item was removed via click
+  if (!model.value.includes(selectedValue)) {
+    inputRef.value?.focus()
+  }
 }
 
 const handleAddCustom = () => {
@@ -84,6 +92,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
 <template>
   <div ref="dropdownRef" class="relative">
     <SearchSelectInput
+      ref="inputRef"
       v-model="searchTerm"
       :label="label"
       :placeholder="getPlaceholderText"

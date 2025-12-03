@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T extends string | null">
+<script setup lang="ts" generic="T extends string | number | null">
 import { nextTick, onMounted, useTemplateRef, watch } from 'vue'
 
 import { PlusIcon } from '@heroicons/vue/24/outline'
@@ -52,20 +52,27 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    :id="id"
-    class="absolute z-50 mt-1 w-full rounded-md border bg-white shadow-lg"
-    role="listbox">
+  <div class="absolute z-50 mt-1 w-full rounded-md border bg-white shadow-lg">
     <!-- Options list -->
-    <div ref="listRef" class="max-h-[200px] overflow-auto p-1">
-      <div v-if="filteredOptions.length === 0" class="px-2 py-1.5 text-sm">
+    <ul
+      :id="id"
+      ref="listRef"
+      class="max-h-[200px] overflow-auto p-1"
+      role="listbox">
+      <li v-if="filteredOptions.length === 0" class="px-2 py-1.5 text-sm">
         {{ searchTerm ? '該当する項目がありません' : '項目がありません' }}
-      </div>
-      <button
+      </li>
+      <!--
+        This component implements the Combobox (Active Descendant) pattern.
+        Focus remains on the input element, and key events are handled there.
+        The 'li' elements are not focusable (tabindex="-1") and do not need key handlers.
+        We disable the lint rule because it doesn't understand this pattern.
+      -->
+      <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events -->
+      <li
         v-for="(option, index) in filteredOptions"
         :id="`${id}-option-${index}`"
         :key="String(option.value)"
-        type="button"
         role="option"
         :aria-selected="isSelected(option.value, modelValue)"
         :class="[
@@ -75,7 +82,7 @@ onMounted(() => {
           option.disabled && 'cursor-not-allowed opacity-50',
           isSelected(option.value, modelValue) && 'bg-blue-100',
         ]"
-        :disabled="option.disabled"
+        tabindex="-1"
         @mousedown.prevent
         @click="!option.disabled && emit('select-option', option.value)">
         <slot
@@ -84,24 +91,26 @@ onMounted(() => {
           :is-selected="isSelected(option.value, modelValue)">
           <span class="truncate">{{ option.key }}</span>
         </slot>
-      </button>
+      </li>
 
       <!-- Add custom option -->
-      <button
+      <li
         v-if="
           allowCustom &&
           searchTerm &&
           !options.find(opt => opt.value === searchTerm)
-        "
-        type="button"
-        :class="[
-          'relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm outline-none select-none',
-          'border-t hover:bg-blue-100 hover:text-blue-500',
-        ]"
-        @click="emit('add-custom')">
-        <PlusIcon class="mr-2 h-4 w-4" />
-        <span>"{{ searchTerm }}" を追加</span>
-      </button>
-    </div>
+        ">
+        <button
+          type="button"
+          :class="[
+            'relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm outline-none select-none',
+            'border-t hover:bg-blue-100 hover:text-blue-500',
+          ]"
+          @click="emit('add-custom')">
+          <PlusIcon class="mr-2 h-4 w-4" />
+          <span>"{{ searchTerm }}" を追加</span>
+        </button>
+      </li>
+    </ul>
   </div>
 </template>

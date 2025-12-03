@@ -17,10 +17,10 @@ export type AllowCustom<T> = string extends T ? boolean : false
 // CAUTION: This type guard relies on the AllowCustom<T> type definition.
 // AllowCustom<T> ensures that allowCustom can only be true if string extends T.
 // If AllowCustom<T> is changed to be less strict, this type guard may become unsafe.
-export const isCustomAllowed = <T extends string>(
+export const isCustomAllowed = <T extends string | number>(
   val: string,
   allowCustom: AllowCustom<T> | undefined
-): val is T => {
+): val is T & string => {
   return (allowCustom ?? false) && !!val
 }
 
@@ -40,7 +40,7 @@ export type SearchSelectEmit = {
 
 export type MenuState = 'close' | 'presearch' | 'searched'
 
-export function useSearchSelectGeneric<T extends string>(
+export function useSearchSelectGeneric<T extends string | number>(
   props: SearchSelectCommonProps<T>,
   emit: SearchSelectEmit,
   modelValue: { readonly value: T | T[] | null },
@@ -83,7 +83,7 @@ export function useSearchSelectGeneric<T extends string>(
       const selectedOption = props.options.find(
         opt => opt.value === modelValue.value
       )
-      searchTerm.value = selectedOption?.key ?? modelValue.value
+      searchTerm.value = selectedOption?.key ?? String(modelValue.value)
     } else {
       searchTerm.value = ''
     }

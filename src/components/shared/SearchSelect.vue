@@ -18,6 +18,7 @@ const props = withDefaults(
     placeholder: '検索',
     disabled: false,
     required: false,
+    // allowCustom: false,
   }
 )
 
@@ -32,7 +33,7 @@ const {
   highlightedIndex,
   filteredOptions,
   handleInputFocus,
-  handleChange,
+  handleSearchInput,
   handleKeyDown: baseHandleKeyDown,
   handleCompositionStart,
   handleCompositionEnd,
@@ -82,7 +83,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
       :required="required"
       :menu-state="menuState"
       @focus="handleInputFocus"
-      @input="handleChange"
+      @input="handleSearchInput"
       @keydown="handleKeyDown"
       @compositionstart="handleCompositionStart"
       @compositionend="handleCompositionEnd"

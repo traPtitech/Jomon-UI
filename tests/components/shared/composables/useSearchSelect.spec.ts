@@ -87,7 +87,7 @@ describe('useSearchSelect', () => {
 
   it('handles change', () => {
     const { composable } = createWrapper()
-    composable.handleChange()
+    composable.handleSearchInput()
     expect(composable.menuState.value).toBe('searched')
   })
 
@@ -137,7 +137,7 @@ describe('useSearchSelect', () => {
 
       // Change search term to filter results
       composable.searchTerm.value = 'Option 1'
-      composable.handleChange()
+      composable.handleSearchInput()
       await nextTick()
 
       // highlightedIndex should be reset to -1

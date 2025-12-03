@@ -12,6 +12,8 @@ import type { Option } from '../types'
 
 // IMPORTANT: This type must ensure that it resolves to false if T is not compatible with string input.
 // The isCustomAllowed type guard relies on this behavior.
+// If T is a string literal union (e.g. 'foo' | 'bar'), string extends T will be false,
+// so allowCustom will be false. This effectively prevents custom values for strict enum-like types.
 export type AllowCustom<T> = string extends T ? boolean : false
 
 // CAUTION: This type guard relies on the AllowCustom<T> type definition.
@@ -40,10 +42,14 @@ export type SearchSelectEmit = {
 
 export type MenuState = 'close' | 'presearch' | 'searched'
 
+export interface RefLike<V> {
+  readonly value: V
+}
+
 export function useSearchSelectGeneric<T extends string | number>(
   props: SearchSelectCommonProps<T>,
   emit: SearchSelectEmit,
-  modelValue: { readonly value: T | T[] | null },
+  modelValue: RefLike<T | T[] | null>,
   dropdownRef: Ref<HTMLElement | null>
 ) {
   const menuState = ref<MenuState>('close')
@@ -123,8 +129,8 @@ export function useSearchSelectGeneric<T extends string | number>(
     document.removeEventListener('mousedown', handleClickOutside)
   })
 
-  watch(menuState, () => {
-    if (menuState.value === 'close') emit('close')
+  watch(menuState, newVal => {
+    if (newVal === 'close') emit('close')
   })
 
   const handleInputFocus = () => {
@@ -134,7 +140,7 @@ export function useSearchSelectGeneric<T extends string | number>(
     highlightedIndex.value = -1
   }
 
-  const handleChange = () => {
+  const handleSearchInput = () => {
     menuState.value = 'searched'
   }
 
@@ -179,6 +185,17 @@ export function useSearchSelectGeneric<T extends string | number>(
             ? highlightedIndex.value - 1
             : highlightedIndex.value
         break
+      case 'Home':
+        e.preventDefault()
+        highlightedIndex.value = filteredOptions.value.length > 0 ? 0 : -1
+        break
+      case 'End':
+        e.preventDefault()
+        highlightedIndex.value =
+          filteredOptions.value.length > 0
+            ? filteredOptions.value.length - 1
+            : -1
+        break
       case 'Enter': {
         e.preventDefault()
         const option = filteredOptions.value[highlightedIndex.value]
@@ -197,6 +214,7 @@ export function useSearchSelectGeneric<T extends string | number>(
         break
       case 'Tab':
         menuState.value = 'close'
+        resetSearchTerm()
         break
     }
   }
@@ -216,7 +234,7 @@ export function useSearchSelectGeneric<T extends string | number>(
     highlightedIndex,
     filteredOptions,
     handleInputFocus,
-    handleChange,
+    handleSearchInput,
     handleKeyDown,
     handleCompositionStart,
     handleCompositionEnd,

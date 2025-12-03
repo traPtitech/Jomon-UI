@@ -32,7 +32,7 @@ const {
   highlightedIndex,
   filteredOptions,
   handleInputFocus,
-  handleChange,
+  handleSearchInput,
   handleKeyDown: baseHandleKeyDown,
   handleCompositionStart,
   handleCompositionEnd,
@@ -76,6 +76,7 @@ const handleAddCustom = () => {
   }
 }
 
+// Handle Backspace to remove the last selected item when search term is empty
 const handleKeyDown = (e: KeyboardEvent) => {
   if (
     searchTerm.value === '' &&
@@ -107,7 +108,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
       :required="required"
       :menu-state="menuState"
       @focus="handleInputFocus"
-      @input="handleChange"
+      @input="handleSearchInput"
       @keydown="handleKeyDown"
       @compositionstart="handleCompositionStart"
       @compositionend="handleCompositionEnd"
@@ -138,6 +139,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
       :model-value="model"
       :allow-custom="!!allowCustom"
       :options="options"
+      multiple
       @select-option="handleSelect"
       @add-custom="handleAddCustom">
       <template #option-content="{ option, isSelected }">

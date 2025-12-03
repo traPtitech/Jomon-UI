@@ -33,8 +33,8 @@ const listRef = useTemplateRef<HTMLElement>('listRef')
 const scrollToHighlighted = async (index: number) => {
   if (index === -1 || !listRef.value) return
   await nextTick()
-  const options = listRef.value.querySelectorAll('[role="option"]')
-  const highlightedOption = options[index] as HTMLElement | undefined
+  const optionEls = listRef.value.querySelectorAll('[role="option"]')
+  const highlightedOption = optionEls[index] as HTMLElement | undefined
   if (highlightedOption) {
     highlightedOption.scrollIntoView({ block: 'nearest' })
   }
@@ -109,7 +109,11 @@ onMounted(() => {
           allowCustom &&
           searchTerm &&
           !options.find(opt => opt.key === searchTerm)
-        ">
+        "
+        role="option"
+        :aria-selected="false"
+        tabindex="-1"
+        @mousedown.prevent>
         <button
           type="button"
           :class="[

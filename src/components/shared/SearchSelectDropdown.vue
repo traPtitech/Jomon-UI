@@ -98,7 +98,7 @@ onMounted(() => {
         v-if="
           allowCustom &&
           searchTerm &&
-          !options.find(opt => opt.value === searchTerm)
+          !options.find(opt => opt.key === searchTerm)
         ">
         <button
           type="button"

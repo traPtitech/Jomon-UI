@@ -63,7 +63,7 @@ const handleSelect = (selectedValue: T) => {
 const handleAddCustom = () => {
   if (
     isCustomAllowed<T>(searchTerm.value, props.allowCustom) &&
-    !props.options.find(opt => opt.value === searchTerm.value)
+    !props.options.find(opt => opt.key === searchTerm.value)
   ) {
     handleSelect(searchTerm.value)
   }

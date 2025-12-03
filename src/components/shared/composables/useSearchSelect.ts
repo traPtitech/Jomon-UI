@@ -138,12 +138,22 @@ export function useSearchSelectGeneric<T extends string | number>(
     menuState.value = 'searched'
   }
 
+  const isComposing = ref(false)
+
+  const handleCompositionStart = () => {
+    isComposing.value = true
+  }
+
+  const handleCompositionEnd = () => {
+    isComposing.value = false
+  }
+
   const handleKeyDown = (
     e: KeyboardEvent,
     handleSelect: (value: T) => void,
     handleAddCustom?: () => void
   ) => {
-    if (e.isComposing) return
+    if (e.isComposing || isComposing.value) return
 
     if (menuState.value === 'close' && e.key === 'ArrowDown') {
       e.preventDefault()
@@ -205,6 +215,8 @@ export function useSearchSelectGeneric<T extends string | number>(
     handleInputFocus,
     handleChange,
     handleKeyDown,
+    handleCompositionStart,
+    handleCompositionEnd,
     listboxId,
     activeOptionId,
     toggleMenu,

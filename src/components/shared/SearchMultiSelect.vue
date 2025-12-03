@@ -34,6 +34,8 @@ const {
   handleInputFocus,
   handleChange,
   handleKeyDown: baseHandleKeyDown,
+  handleCompositionStart,
+  handleCompositionEnd,
   listboxId,
   activeOptionId,
   toggleMenu,
@@ -102,6 +104,8 @@ const handleKeyDown = (e: KeyboardEvent) => {
       @focus="handleInputFocus"
       @input="handleChange"
       @keydown="handleKeyDown"
+      @compositionstart="handleCompositionStart"
+      @compositionend="handleCompositionEnd"
       @toggle-menu="toggleMenu"
       :aria-expanded="menuState !== 'close'"
       :aria-controls="listboxId"

@@ -120,4 +120,36 @@ describe('SearchSelect', () => {
       .find(b => b.text().includes('"Custom Value" を追加'))
     expect(addButton).toBeUndefined()
   })
+
+  it('navigates options with keyboard', async () => {
+    const wrapper = mount(SearchSelect, {
+      props: {
+        options,
+        label: 'Test Label',
+        modelValue: null,
+      },
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('focus')
+    await wrapper.vm.$nextTick() // Wait for watcher to update highlightedIndex
+    await new Promise(resolve => setTimeout(resolve, 0)) // Wait for macro task just in case
+
+    const optionsList = wrapper.findAll('li[role="option"]')
+
+    // Focus should automatically highlight the first option
+    expect(optionsList[0]?.classes()).toContain('bg-blue-100')
+    expect(optionsList[0]?.classes()).toContain('text-blue-500')
+
+    // ArrowDown to highlight second option
+    await input.trigger('keydown', { key: 'ArrowDown' })
+    expect(optionsList[1]?.classes()).toContain('bg-blue-100')
+    expect(optionsList[1]?.classes()).toContain('text-blue-500')
+    expect(optionsList[0]?.classes()).not.toContain('bg-blue-100')
+
+    // Enter to select
+    await input.trigger('keydown', { key: 'Enter' })
+
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['opt2'])
+  })
 })

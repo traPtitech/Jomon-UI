@@ -20,10 +20,9 @@ defineProps<{
 const model = defineModel<string>({ required: true })
 
 const emit = defineEmits<{
-  (e: 'focus'): void
+  (e: 'focus' | 'toggle-menu'): void
   (e: 'input', value: Event): void
   (e: 'keydown', value: KeyboardEvent): void
-  (e: 'toggle-menu'): void
 }>()
 
 const inputRef = useTemplateRef<InstanceType<typeof BaseTextInput>>('inputRef')

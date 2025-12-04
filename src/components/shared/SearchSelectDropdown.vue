@@ -104,6 +104,7 @@ onMounted(() => {
       </li>
 
       <!-- Add custom option -->
+      <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events -->
       <li
         v-if="
           allowCustom &&

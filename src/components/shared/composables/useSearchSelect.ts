@@ -72,7 +72,7 @@ export const useSearchSelect = <T>(
 
   const activeOptionId = computed(() => {
     if (highlightedIndex.value === -1) return undefined
-    return `${listboxId}-option-${highlightedIndex.value}`
+    return `${listboxId}-option-${String(highlightedIndex.value)}`
   })
 
   const resetSearchTerm = () => {
@@ -94,22 +94,21 @@ export const useSearchSelect = <T>(
   })
 
   // Sync searchTerm with modelValue for single select
-  if (!Array.isArray(model.value)) {
-    watch(
-      model,
-      newVal => {
-        const selectedOption = props.options.find(opt => opt.value === newVal)
-        if (selectedOption) {
-          searchTerm.value = selectedOption.key
-        } else if (newVal !== null && newVal !== undefined) {
-          searchTerm.value = String(newVal)
-        } else {
-          searchTerm.value = ''
-        }
-      },
-      { immediate: true }
-    )
-  }
+  watch(
+    () => model.value,
+    newVal => {
+      if (Array.isArray(newVal)) return
+      const selectedOption = props.options.find(opt => opt.value === newVal)
+      if (selectedOption) {
+        searchTerm.value = selectedOption.key
+      } else if (newVal !== null && newVal !== undefined) {
+        searchTerm.value = String(newVal)
+      } else {
+        searchTerm.value = ''
+      }
+    },
+    { immediate: true }
+  )
 
   const toggleMenu = () => {
     if (props.disabled) return

@@ -92,6 +92,24 @@ describe('useSearchSelect', () => {
     expect(composable.menuState.value).toBe('searched')
   })
 
+  it('does not emit search-input during IME composition', () => {
+    const { composable, emit } = createWrapper()
+
+    // Start composition
+    composable.handleCompositionStart()
+    composable.searchTerm.value = 'te'
+    composable.handleSearchInput()
+
+    expect(emit).not.toHaveBeenCalledWith('search-input', expect.anything())
+
+    // End composition
+    composable.handleCompositionEnd()
+    composable.searchTerm.value = 'test'
+    composable.handleSearchInput()
+
+    expect(emit).toHaveBeenCalledWith('search-input', 'test')
+  })
+
   describe('keyboard navigation', () => {
     it('opens menu on ArrowDown when closed', () => {
       const { composable } = createWrapper()

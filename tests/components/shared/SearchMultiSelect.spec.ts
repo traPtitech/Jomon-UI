@@ -94,4 +94,39 @@ describe('SearchMultiSelect', () => {
       ['Custom Value'],
     ])
   })
+
+  it('removes last item on Backspace when search term is empty', async () => {
+    const wrapper = mount(SearchMultiSelect, {
+      props: {
+        options,
+        label: 'Test Label',
+        modelValue: ['opt1', 'opt2'],
+      },
+    })
+
+    await wrapper.find('input').trigger('focus')
+    // Ensure search term is empty (default)
+    await wrapper.find('input').trigger('keydown', { key: 'Backspace' })
+
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([['opt1']])
+  })
+
+  it('removes item when chip delete button is clicked', async () => {
+    const wrapper = mount(SearchMultiSelect, {
+      props: {
+        options,
+        label: 'Test Label',
+        modelValue: ['opt1', 'opt2'],
+      },
+    })
+
+    // Find the delete button for the first item (opt1)
+    // The template renders items in order of modelValue
+    const deleteButtons = wrapper.findAll('button.rounded-full')
+    expect(deleteButtons).toHaveLength(2)
+
+    await deleteButtons[0]?.trigger('click')
+
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([['opt2']])
+  })
 })

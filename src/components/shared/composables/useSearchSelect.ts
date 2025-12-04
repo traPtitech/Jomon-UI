@@ -36,7 +36,7 @@ export interface SearchSelectCommonProps<T> {
 }
 
 export type SearchSelectEmit = {
-  (e: 'focus'): void
+  (e: 'focus' | 'close'): void
   (e: 'keydown', value: KeyboardEvent): void
   (e: 'search-input', value: string): void
 }
@@ -84,6 +84,7 @@ export const useSearchSelect = <T>(
   // Initialize highlightedIndex when menu opens or options change
   watch(menuState, newVal => {
     if (newVal === 'close') {
+      emit('close')
       resetSearchTerm()
       highlightedIndex.value = -1
     } else if (filteredOptions.value.length > 0) {

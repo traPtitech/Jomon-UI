@@ -152,4 +152,30 @@ describe('SearchSelect', () => {
 
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['opt2'])
   })
+
+  it('closes menu when clicking outside', async () => {
+    const wrapper = mount(SearchSelect, {
+      props: {
+        options,
+        label: 'Test Label',
+        modelValue: null,
+      },
+      attachTo: document.body, // Needed for document click listener
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('focus')
+
+    // Menu should be open
+    expect(wrapper.find('ul[role="listbox"]').exists()).toBe(true)
+
+    // Click outside
+    document.body.click()
+    await wrapper.vm.$nextTick()
+
+    // Menu should be closed
+    expect(wrapper.find('ul[role="listbox"]').exists()).toBe(false)
+
+    wrapper.unmount()
+  })
 })

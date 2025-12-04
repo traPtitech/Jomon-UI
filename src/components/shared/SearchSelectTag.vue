@@ -8,10 +8,6 @@ import SearchMultiSelect from './SearchMultiSelect.vue'
 
 const model = defineModel<Tag[]>({ required: true })
 
-const emit = defineEmits<{
-  (e: 'close'): void
-}>()
-
 const { tagOptions } = useTagStore()
 
 const searchOptions = computed(() =>
@@ -39,6 +35,5 @@ const selectedValue = computed({
   <SearchMultiSelect
     v-model="selectedValue"
     :options="searchOptions"
-    label="タグ"
-    @close="emit('close')" />
+    label="タグ" />
 </template>

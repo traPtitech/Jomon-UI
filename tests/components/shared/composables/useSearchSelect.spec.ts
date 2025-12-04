@@ -137,13 +137,13 @@ describe('useSearchSelect', () => {
       expect(composable.highlightedIndex.value).toBe(-1)
     })
 
-    it('skips disabled options on keyboard navigation', async () => {
+    it('skips disabled options on keyboard navigation', () => {
       const options = [
         { key: '1', value: '1' },
         { key: '2', value: '2', disabled: true },
         { key: '3', value: '3' },
       ]
-      const { composable: vm } = createWrapper({ options })
+      const { composable: vm } = createWrapper({ ...defaultProps, options })
       const handleSelect = vi.fn()
 
       // Open menu
@@ -178,12 +178,12 @@ describe('useSearchSelect', () => {
       expect(vm.highlightedIndex.value).toBe(2)
     })
 
-    it('selects first non-disabled option on Enter if nothing highlighted', async () => {
+    it('selects first non-disabled option on Enter if nothing highlighted', () => {
       const options = [
         { key: '1', value: '1', disabled: true },
         { key: '2', value: '2' },
       ]
-      const { composable: vm } = createWrapper({ options })
+      const { composable: vm } = createWrapper({ ...defaultProps, options })
       const handleSelect = vi.fn()
 
       // Open menu

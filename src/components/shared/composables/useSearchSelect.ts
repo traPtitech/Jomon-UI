@@ -211,7 +211,7 @@ export const useSearchSelect = <T>(
         if (menuState.value !== 'close' && filteredOptions.value.length > 0) {
           // Find last non-disabled option
           for (let i = filteredOptions.value.length - 1; i >= 0; i--) {
-            if (!filteredOptions.value[i].disabled) {
+            if (!filteredOptions.value[i]?.disabled) {
               highlightedIndex.value = i
               break
             }

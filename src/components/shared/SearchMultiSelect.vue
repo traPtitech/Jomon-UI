@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<T>>(), {
 })
 
 const emit = defineEmits<SearchSelectEmit>()
-const model = defineModel<T[]>({ required: true, default: () => [] })
+const model = defineModel<T[]>({ required: true })
 
 const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
 
@@ -107,6 +107,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
         <button
           type="button"
           class="ml-1 rounded-full hover:bg-blue-100"
+          :aria-label="`${optionMap.get(val) ?? val} を削除`"
           @click.stop="handleSelect(val)">
           <XMarkIcon class="h-3 w-3" />
         </button>

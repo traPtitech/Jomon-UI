@@ -58,6 +58,15 @@ onMounted(() => {
       class="max-h-[200px] overflow-auto p-1"
       role="listbox"
       :aria-multiselectable="multiple || undefined">
+      <div role="status" aria-live="polite" class="sr-only">
+        {{
+          filteredOptions.length === 0
+            ? searchTerm
+              ? '該当する項目がありません'
+              : '項目がありません'
+            : ''
+        }}
+      </div>
       <li v-if="filteredOptions.length === 0" class="px-2 py-1.5 text-sm">
         {{ searchTerm ? '該当する項目がありません' : '項目がありません' }}
       </li>

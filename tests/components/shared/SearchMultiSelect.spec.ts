@@ -104,4 +104,21 @@ describe('SearchMultiSelect', () => {
 
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([['opt2']])
   })
+
+  it('shows dynamic placeholder when items are selected', async () => {
+    const wrapper = mount(SearchMultiSelect, {
+      props: {
+        options,
+        label: 'Test Label',
+        modelValue: ['opt1', 'opt2'],
+        placeholder: 'Default Placeholder',
+      },
+    })
+
+    const input = wrapper.find('input')
+    expect(input.attributes('placeholder')).toBe('2個選択中...')
+
+    await wrapper.setProps({ modelValue: [] })
+    expect(input.attributes('placeholder')).toBe('Default Placeholder')
+  })
 })

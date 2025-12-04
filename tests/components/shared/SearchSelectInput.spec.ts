@@ -28,9 +28,61 @@ describe('SearchSelectInput', () => {
     expect(wrapper.emitted('input')?.[0]).toEqual([inputEvent])
   })
 
-  // Note: It's hard to simulate a non-InputEvent 'input' event in a way that triggers the handler naturally
-  // without manually calling the handler or dispatching a custom event.
-  // But we can verify that if we dispatch a generic Event, it might be ignored if our logic works.
-  // However, JSDOM/Vue might wrap events.
-  // Let's try dispatching a generic Event named 'input'.
+  it('emits events correctly', async () => {
+    const wrapper = mount(SearchSelectInput, {
+      props: defaultProps,
+    })
+
+    const input = wrapper.find('input')
+
+    await input.trigger('focus')
+    expect(wrapper.emitted('focus')).toBeTruthy()
+
+    await input.trigger('keydown', { key: 'Enter' })
+    expect(wrapper.emitted('keydown')).toBeTruthy()
+
+    await input.trigger('compositionstart')
+    expect(wrapper.emitted('compositionstart')).toBeTruthy()
+
+    await input.trigger('compositionend')
+    expect(wrapper.emitted('compositionend')).toBeTruthy()
+
+    const toggleButton = wrapper.find('button')
+    await toggleButton.trigger('click')
+    expect(wrapper.emitted('toggle-menu')).toBeTruthy()
+  })
+
+  it('applies disabled styles', () => {
+    const wrapper = mount(SearchSelectInput, {
+      props: {
+        ...defaultProps,
+        disabled: true,
+      },
+    })
+
+    const inputWrapper = wrapper.findComponent({ name: 'BaseTextInput' })
+    expect(inputWrapper.classes()).toContain('cursor-not-allowed')
+    expect(inputWrapper.classes()).toContain('opacity-50')
+
+    const toggleButton = wrapper.find('button')
+    expect(toggleButton.attributes('disabled')).toBeDefined()
+  })
+
+  it('rotates chevron icon based on menuState', async () => {
+    const wrapper = mount(SearchSelectInput, {
+      props: {
+        ...defaultProps,
+        menuState: 'close',
+      },
+    })
+
+    const chevron = wrapper.find('svg.transition-transform')
+    expect(chevron.classes()).not.toContain('rotate-180')
+
+    await wrapper.setProps({ menuState: 'presearch' })
+    expect(chevron.classes()).toContain('rotate-180')
+
+    await wrapper.setProps({ menuState: 'searched' })
+    expect(chevron.classes()).toContain('rotate-180')
+  })
 })

@@ -244,5 +244,60 @@ describe('useSearchSelect', () => {
       expect(composable.menuState.value).toBe('close')
       expect(composable.searchTerm.value).toBe('')
     })
+
+    it('highlights first non-disabled option on Home', () => {
+      const options = [
+        { key: '1', value: '1', disabled: true },
+        { key: '2', value: '2' },
+        { key: '3', value: '3' },
+      ]
+      const { composable: vm } = createWrapper({ ...defaultProps, options })
+      const handleSelect = vi.fn()
+
+      // Open menu and highlight last option
+      vm.menuState.value = 'presearch'
+      vm.highlightedIndex.value = 2
+
+      vm.handleKeyDown(
+        new KeyboardEvent('keydown', { key: 'Home' }),
+        handleSelect
+      )
+
+      expect(vm.highlightedIndex.value).toBe(1) // Index 1 is the first non-disabled
+    })
+
+    it('highlights last non-disabled option on End', () => {
+      const options = [
+        { key: '1', value: '1' },
+        { key: '2', value: '2' },
+        { key: '3', value: '3', disabled: true },
+      ]
+      const { composable: vm } = createWrapper({ ...defaultProps, options })
+      const handleSelect = vi.fn()
+
+      // Open menu and highlight first option
+      vm.menuState.value = 'presearch'
+      vm.highlightedIndex.value = 0
+
+      vm.handleKeyDown(
+        new KeyboardEvent('keydown', { key: 'End' }),
+        handleSelect
+      )
+
+      expect(vm.highlightedIndex.value).toBe(1) // Index 1 is the last non-disabled (Index 2 is disabled)
+    })
+
+    it('closes menu on Tab', () => {
+      const { composable } = createWrapper()
+      composable.menuState.value = 'presearch'
+      const handleSelect = vi.fn()
+
+      composable.handleKeyDown(
+        new KeyboardEvent('keydown', { key: 'Tab' }),
+        handleSelect
+      )
+
+      expect(composable.menuState.value).toBe('close')
+    })
   })
 })

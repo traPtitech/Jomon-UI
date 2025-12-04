@@ -1,4 +1,4 @@
-import { defineComponent, h, nextTick, ref } from 'vue'
+import { defineComponent, h, nextTick, reactive, ref } from 'vue'
 
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
@@ -19,13 +19,14 @@ const defaultProps: SearchSelectCommonProps<string> = {
 
 describe('useSearchSelect', () => {
   const createWrapper = (
-    props: SearchSelectCommonProps<string> = defaultProps,
+    initialProps: SearchSelectCommonProps<string> = defaultProps,
     initialValue: string | string[] | null = null
   ) => {
     let composable!: ReturnType<typeof useSearchSelectGeneric>
     const emit = vi.fn()
     const modelValue = ref(initialValue)
     const dropdownRef = ref<HTMLElement | null>(null)
+    const props = reactive(initialProps)
 
     const TestComponent = defineComponent({
       setup() {
@@ -126,18 +127,10 @@ describe('useSearchSelect', () => {
 
     it('resets highlightedIndex when search term changes', async () => {
       const { composable } = createWrapper()
-      composable.handleInputFocus()
-      composable.searchTerm.value = 'Option'
-      await nextTick()
+      composable.menuState.value = 'presearch'
+      composable.highlightedIndex.value = 2
 
-      // Move selection down
-      const event = new KeyboardEvent('keydown', { key: 'ArrowDown' })
-      composable.handleKeyDown(event, vi.fn())
-      expect(composable.highlightedIndex.value).toBe(0)
-
-      // Change search term to filter results
-      composable.searchTerm.value = 'Option 1'
-      composable.handleSearchInput()
+      composable.searchTerm.value = 'new search'
       await nextTick()
 
       // highlightedIndex should be reset to -1
@@ -146,23 +139,19 @@ describe('useSearchSelect', () => {
 
     it('resets highlightedIndex when menu opens', async () => {
       const { composable } = createWrapper()
-      composable.handleInputFocus()
+      composable.handleInputFocus() // opens menu
+      await new Promise(resolve => setTimeout(resolve, 10))
 
-      // Move selection down
-      const event = new KeyboardEvent('keydown', { key: 'ArrowDown' })
-      composable.handleKeyDown(event, vi.fn())
-      expect(composable.highlightedIndex.value).toBe(0)
-
-      // Close menu
-      const escEvent = new KeyboardEvent('keydown', { key: 'Escape' })
-      composable.handleKeyDown(escEvent, vi.fn())
+      composable.highlightedIndex.value = 2
+      composable.menuState.value = 'close'
+      await new Promise(resolve => setTimeout(resolve, 10))
 
       // Open menu again
       composable.handleInputFocus()
-      await nextTick()
+      await new Promise(resolve => setTimeout(resolve, 10))
 
-      // highlightedIndex should be reset to -1
-      expect(composable.highlightedIndex.value).toBe(-1)
+      // highlightedIndex should be reset to 0 (first item)
+      expect(composable.highlightedIndex.value).toBe(0)
     })
 
     it('selects option with Enter', () => {

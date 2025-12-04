@@ -55,10 +55,12 @@ const handleAddCustom = () => {
   const option = props.options.find(opt => opt.key === searchTerm.value)
   if (option) {
     handleSelect(option.value)
-  } else if (
+    return
+  }
+
+  if (
     isCustomAllowed<NonNullable<T>>(searchTerm.value, props.allowCustom) &&
-    searchTerm.value &&
-    !props.options.find(opt => opt.key === searchTerm.value)
+    searchTerm.value
   ) {
     handleSelect(searchTerm.value)
   }

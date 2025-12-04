@@ -65,6 +65,8 @@ const handleSelect = (selectedValue: T) => {
 }
 
 const handleAddCustom = () => {
+  // isCustomAllowed<T> ensures searchTerm.value is T & string
+  // AllowCustom<T> ensures allowCustom can only be true if string extends T
   if (
     isCustomAllowed<T>(searchTerm.value, props.allowCustom) &&
     !props.options.find(opt => opt.key === searchTerm.value) &&

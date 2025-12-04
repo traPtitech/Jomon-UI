@@ -20,7 +20,7 @@ defineProps<{
 const model = defineModel<string>({ required: true })
 
 const emit = defineEmits<{
-  (e: 'focus' | 'toggle-menu'): void
+  (e: 'focus' | 'toggle-menu' | 'compositionstart' | 'compositionend'): void
   (e: 'input', value: Event): void
   (e: 'keydown', value: KeyboardEvent): void
 }>()
@@ -53,7 +53,9 @@ defineExpose({
       }"
       @focus="emit('focus')"
       @input="emit('input', $event)"
-      @keydown="emit('keydown', $event)">
+      @keydown="emit('keydown', $event)"
+      @compositionstart="emit('compositionstart')"
+      @compositionend="emit('compositionend')">
       <MagnifyingGlassIcon class="ml-3 w-6 text-text-secondary" />
     </BaseTextInput>
     <button

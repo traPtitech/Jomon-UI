@@ -36,7 +36,7 @@ export interface SearchSelectCommonProps<T> {
 }
 
 export type SearchSelectEmit = {
-  (e: 'focus' | 'close'): void
+  (e: 'focus'): void
   (e: 'keydown', value: KeyboardEvent): void
   (e: 'search-input', value: string): void
 }
@@ -81,14 +81,21 @@ export const useSearchSelect = <T>(
   }
 
   // Initialize highlightedIndex when menu opens or options change
+  // Initialize highlightedIndex when menu opens or options change
   watch(menuState, newVal => {
-    if (newVal !== 'close') {
-      highlightedIndex.value = -1
-    } else {
+    if (newVal === 'close') {
       resetSearchTerm()
+      highlightedIndex.value = -1
+    } else if (filteredOptions.value.length > 0) {
+      if (highlightedIndex.value === -1) {
+        highlightedIndex.value = 0
+      }
+    } else {
+      highlightedIndex.value = -1
     }
   })
 
+  // Reset highlight when options change (e.g. typing)
   watch(filteredOptions, () => {
     highlightedIndex.value = -1
   })
@@ -151,6 +158,12 @@ export const useSearchSelect = <T>(
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault()
+        if (filteredOptions.value.length === 0) {
+          if (menuState.value === 'close') {
+            menuState.value = 'presearch'
+          }
+          return
+        }
         if (menuState.value === 'close') {
           menuState.value = 'presearch'
           highlightedIndex.value = 0
@@ -161,6 +174,12 @@ export const useSearchSelect = <T>(
         break
       case 'ArrowUp':
         e.preventDefault()
+        if (filteredOptions.value.length === 0) {
+          if (menuState.value === 'close') {
+            menuState.value = 'presearch'
+          }
+          return
+        }
         if (menuState.value === 'close') {
           menuState.value = 'presearch'
           highlightedIndex.value = filteredOptions.value.length - 1

@@ -10,30 +10,11 @@ import {
 
 import type { Option } from '../types'
 
-// IMPORTANT: This type must ensure that it resolves to false if T is not compatible with string input.
-// The isCustomAllowed type guard relies on this behavior.
-// If T is a string literal union (e.g. 'foo' | 'bar'), string extends T will be false,
-// so allowCustom will be false. This effectively prevents custom values for strict enum-like types.
-//
-// NOTE: When using allowCustom, T must include string type (e.g. string | number).
-// If T is only number, allowCustom will be forced to false.
-export type AllowCustom<T> = string extends T ? boolean : false
-
-// CAUTION: This type guard relies on the AllowCustom<T> type definition.
-// AllowCustom<T> ensures that allowCustom can only be true if string extends T.
-// If AllowCustom<T> is changed to be less strict, this type guard may become unsafe.
-export const isCustomAllowed = <T extends string | number>(
-  val: string,
-  allowCustom: AllowCustom<T> | undefined
-): val is T & string => {
-  return (allowCustom ?? false) && !!val
-}
-
 export interface SearchSelectCommonProps<T> {
   options: Option<T>[]
   label: string
   placeholder?: string | undefined
-  allowCustom?: AllowCustom<T> | undefined
+
   disabled?: boolean | undefined
   required?: boolean | undefined
 }
@@ -153,11 +134,7 @@ export const useSearchSelect = <T>(
     isComposing.value = false
   }
 
-  const handleKeyDown = (
-    e: KeyboardEvent,
-    handleSelect: (val: T) => void,
-    handleAddCustom?: () => void
-  ) => {
+  const handleKeyDown = (e: KeyboardEvent, handleSelect: (val: T) => void) => {
     if (isComposing.value || e.isComposing) return
 
     const moveHighlight = (direction: 1 | -1) => {
@@ -245,10 +222,6 @@ export const useSearchSelect = <T>(
           }
         }
 
-        // 4. If no options match and custom is allowed, add custom
-        if (handleAddCustom && searchTerm.value) {
-          handleAddCustom()
-        }
         break
       }
       case 'Escape':

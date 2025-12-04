@@ -70,31 +70,6 @@ describe('SearchMultiSelect', () => {
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([['opt2']])
   })
 
-  it('allows adding custom value when allowCustom is true', async () => {
-    const wrapper = mount(SearchMultiSelect, {
-      props: {
-        options,
-        label: 'Test Label',
-        modelValue: [],
-        allowCustom: true,
-      },
-    })
-
-    await wrapper.find('input').trigger('focus')
-    await wrapper.find('input').setValue('Custom Value')
-
-    const addButton = wrapper
-      .findAll('li[role="option"]')
-      .find(b => b.text().includes('"Custom Value" を追加'))
-    expect(addButton?.exists()).toBe(true)
-
-    await addButton?.trigger('click')
-
-    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([
-      ['Custom Value'],
-    ])
-  })
-
   it('removes last item on Backspace when search term is empty', async () => {
     const wrapper = mount(SearchMultiSelect, {
       props: {

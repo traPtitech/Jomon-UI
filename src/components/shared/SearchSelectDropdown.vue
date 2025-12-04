@@ -1,8 +1,6 @@
 <script setup lang="ts" generic="T extends string | number | null">
 import { nextTick, onMounted, useTemplateRef, watch } from 'vue'
 
-import { PlusIcon } from '@heroicons/vue/24/outline'
-
 import type { Option } from './types'
 
 const props = defineProps<{
@@ -10,7 +8,7 @@ const props = defineProps<{
   searchTerm: string
   highlightedIndex: number
   modelValue: T | T[] | null
-  allowCustom?: boolean
+
   options: Option<T>[]
   id?: string
   multiple?: boolean
@@ -18,7 +16,6 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'select-option', value: T): void
-  (e: 'add-custom'): void
 }>()
 
 const isSelected = (value: T, model: T | T[] | null): boolean => {
@@ -101,27 +98,6 @@ onMounted(() => {
           :is-selected="isSelected(option.value, modelValue)">
           <span class="truncate">{{ option.key }}</span>
         </slot>
-      </li>
-
-      <!-- Add custom option -->
-      <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events -->
-      <li
-        v-if="
-          allowCustom &&
-          searchTerm &&
-          !options.find(opt => opt.key === searchTerm)
-        "
-        role="option"
-        :aria-selected="false"
-        tabindex="-1"
-        :class="[
-          'relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm outline-none select-none',
-          'border-t hover:bg-blue-100 hover:text-blue-500',
-        ]"
-        @mousedown.prevent
-        @click="emit('add-custom')">
-        <PlusIcon class="mr-2 h-4 w-4" />
-        <span>"{{ searchTerm }}" を追加</span>
       </li>
     </ul>
   </div>

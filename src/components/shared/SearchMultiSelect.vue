@@ -8,13 +8,11 @@ import SearchSelectInput from './SearchSelectInput.vue'
 import {
   type SearchSelectCommonProps,
   type SearchSelectEmit,
-  isCustomAllowed,
   useSearchSelectGeneric as useSearchSelect,
 } from './composables/useSearchSelect'
 
 const props = withDefaults(defineProps<SearchSelectCommonProps<T>>(), {
   placeholder: '検索',
-  allowCustom: false,
   disabled: false,
   required: false,
 })
@@ -64,18 +62,6 @@ const handleSelect = (selectedValue: T) => {
   }
 }
 
-const handleAddCustom = () => {
-  // isCustomAllowed<T> ensures searchTerm.value is T & string
-  // AllowCustom<T> ensures allowCustom can only be true if string extends T
-  if (
-    isCustomAllowed<T>(searchTerm.value, props.allowCustom) &&
-    !props.options.find(opt => opt.key === searchTerm.value) &&
-    !model.value.includes(searchTerm.value)
-  ) {
-    handleSelect(searchTerm.value)
-  }
-}
-
 // Handle Backspace to remove the last selected item when search term is empty
 // This behavior is enabled regardless of menu state (open/closed) for better UX
 const handleKeyDown = (e: KeyboardEvent) => {
@@ -90,11 +76,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
     return
   }
 
-  baseHandleKeyDown(
-    e,
-    handleSelect,
-    props.allowCustom ? handleAddCustom : undefined
-  )
+  baseHandleKeyDown(e, handleSelect)
 }
 </script>
 
@@ -138,11 +120,9 @@ const handleKeyDown = (e: KeyboardEvent) => {
       :search-term="searchTerm"
       :highlighted-index="highlightedIndex"
       :model-value="model"
-      :allow-custom="!!allowCustom"
       :options="options"
       multiple
-      @select-option="handleSelect"
-      @add-custom="handleAddCustom">
+      @select-option="handleSelect">
       <template #option-content="{ option, isSelected }">
         <div class="mr-2 flex h-4 w-4 items-center justify-center">
           <CheckIcon v-if="isSelected" class="h-4 w-4" />

@@ -8,7 +8,6 @@ import SearchSelectInput from './SearchSelectInput.vue'
 import {
   type SearchSelectCommonProps,
   type SearchSelectEmit,
-  isCustomAllowed,
   useSearchSelectGeneric as useSearchSelect,
 } from './composables/useSearchSelect'
 
@@ -18,7 +17,6 @@ const props = withDefaults(
     placeholder: '検索',
     disabled: false,
     required: false,
-    allowCustom: false,
   }
 )
 
@@ -51,27 +49,8 @@ const handleSelect = (val: T) => {
   menuState.value = 'close'
 }
 
-const handleAddCustom = () => {
-  const option = props.options.find(opt => opt.key === searchTerm.value)
-  if (option) {
-    handleSelect(option.value)
-    return
-  }
-
-  if (
-    isCustomAllowed<NonNullable<T>>(searchTerm.value, props.allowCustom) &&
-    searchTerm.value
-  ) {
-    handleSelect(searchTerm.value)
-  }
-}
-
 const handleKeyDown = (e: KeyboardEvent) => {
-  baseHandleKeyDown(
-    e,
-    handleSelect,
-    props.allowCustom ? handleAddCustom : undefined
-  )
+  baseHandleKeyDown(e, handleSelect)
 }
 </script>
 
@@ -101,10 +80,8 @@ const handleKeyDown = (e: KeyboardEvent) => {
       :search-term="searchTerm"
       :highlighted-index="highlightedIndex"
       :model-value="model"
-      :allow-custom="!!allowCustom"
       :options="options"
-      @select-option="handleSelect"
-      @add-custom="handleAddCustom">
+      @select-option="handleSelect">
       <template #option-content="{ option, isSelected }">
         <span class="truncate">{{ option.key }}</span>
         <CheckIcon v-if="isSelected" class="ml-auto h-4 w-4" />

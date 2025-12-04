@@ -78,49 +78,6 @@ describe('SearchSelect', () => {
     expect(wrapper.emitted('update:modelValue')).toBeUndefined()
   })
 
-  it('allows adding custom value when allowCustom is true', async () => {
-    const wrapper = mount(SearchSelect, {
-      props: {
-        options,
-        label: 'Test Label',
-        modelValue: null,
-        allowCustom: true,
-      },
-    })
-
-    await wrapper.find('input').trigger('focus')
-    await wrapper.find('input').setValue('Custom Value')
-
-    // Find the "Add custom" button
-    const addButton = wrapper
-      .findAll('li[role="option"]')
-      .find(b => b.text().includes('"Custom Value" を追加'))
-    expect(addButton?.exists()).toBe(true)
-
-    await addButton?.trigger('click')
-
-    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['Custom Value'])
-  })
-
-  it('does not allow adding custom value when allowCustom is false', async () => {
-    const wrapper = mount(SearchSelect, {
-      props: {
-        options,
-        label: 'Test Label',
-        modelValue: null,
-        allowCustom: false,
-      },
-    })
-
-    await wrapper.find('input').trigger('focus')
-    await wrapper.find('input').setValue('Custom Value')
-
-    const addButton = wrapper
-      .findAll('button')
-      .find(b => b.text().includes('"Custom Value" を追加'))
-    expect(addButton).toBeUndefined()
-  })
-
   it('navigates options with keyboard', async () => {
     const wrapper = mount(SearchSelect, {
       props: {

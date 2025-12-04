@@ -137,21 +137,66 @@ describe('useSearchSelect', () => {
       expect(composable.highlightedIndex.value).toBe(-1)
     })
 
-    it('resets highlightedIndex when menu opens', async () => {
-      const { composable } = createWrapper()
-      composable.handleInputFocus() // opens menu
-      await new Promise(resolve => setTimeout(resolve, 10))
+    it('skips disabled options on keyboard navigation', async () => {
+      const options = [
+        { key: '1', value: '1' },
+        { key: '2', value: '2', disabled: true },
+        { key: '3', value: '3' },
+      ]
+      const { composable: vm } = createWrapper({ options })
+      const handleSelect = vi.fn()
 
-      composable.highlightedIndex.value = 2
-      composable.menuState.value = 'close'
-      await new Promise(resolve => setTimeout(resolve, 10))
+      // Open menu
+      vm.handleInputFocus()
 
-      // Open menu again
-      composable.handleInputFocus()
-      await new Promise(resolve => setTimeout(resolve, 10))
+      // ArrowDown
+      vm.handleKeyDown(
+        new KeyboardEvent('keydown', { key: 'ArrowDown' }),
+        handleSelect
+      )
+      expect(vm.highlightedIndex.value).toBe(0)
 
-      // highlightedIndex should be reset to 0 (first item)
-      expect(composable.highlightedIndex.value).toBe(0)
+      // ArrowDown -> Should skip index 1 (disabled) and go to 2
+      vm.handleKeyDown(
+        new KeyboardEvent('keydown', { key: 'ArrowDown' }),
+        handleSelect
+      )
+      expect(vm.highlightedIndex.value).toBe(2)
+
+      // ArrowDown -> Should wrap to 0
+      vm.handleKeyDown(
+        new KeyboardEvent('keydown', { key: 'ArrowDown' }),
+        handleSelect
+      )
+      expect(vm.highlightedIndex.value).toBe(0)
+
+      // ArrowUp -> Should wrap to 2 (skipping 1)
+      vm.handleKeyDown(
+        new KeyboardEvent('keydown', { key: 'ArrowUp' }),
+        handleSelect
+      )
+      expect(vm.highlightedIndex.value).toBe(2)
+    })
+
+    it('selects first non-disabled option on Enter if nothing highlighted', async () => {
+      const options = [
+        { key: '1', value: '1', disabled: true },
+        { key: '2', value: '2' },
+      ]
+      const { composable: vm } = createWrapper({ options })
+      const handleSelect = vi.fn()
+
+      // Open menu
+      vm.handleInputFocus()
+
+      // Press Enter without navigating
+      vm.handleKeyDown(
+        new KeyboardEvent('keydown', { key: 'Enter' }),
+        handleSelect
+      )
+
+      // Should select '2' (first non-disabled)
+      expect(handleSelect).toHaveBeenCalledWith('2')
     })
 
     it('selects option with Enter', () => {

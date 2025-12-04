@@ -37,7 +37,6 @@ export interface SearchSelectCommonProps<T> {
 
 export type SearchSelectEmit = {
   (e: 'focus' | 'close'): void
-  (e: 'keydown', value: KeyboardEvent): void
   (e: 'search-input', value: string): void
 }
 
@@ -80,7 +79,6 @@ export const useSearchSelect = <T>(
     highlightedIndex.value = -1
   }
 
-  // Initialize highlightedIndex when menu opens or options change
   // Initialize highlightedIndex when menu opens or options change
   watch(menuState, newVal => {
     if (newVal === 'close') {
@@ -156,50 +154,63 @@ export const useSearchSelect = <T>(
   ) => {
     if (isComposing.value || e.isComposing) return
 
+    const moveHighlight = (direction: 1 | -1) => {
+      if (filteredOptions.value.length === 0) return
+
+      let next = highlightedIndex.value
+      // Adjust starting point for ArrowUp when nothing is highlighted
+      if (next === -1 && direction === -1) {
+        next = 0
+      }
+
+      for (let i = 0; i < filteredOptions.value.length; i++) {
+        next =
+          (next + direction + filteredOptions.value.length) %
+          filteredOptions.value.length
+        if (!filteredOptions.value[next]?.disabled) {
+          highlightedIndex.value = next
+          return
+        }
+      }
+    }
+
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault()
-        if (filteredOptions.value.length === 0) {
-          if (menuState.value === 'close') {
-            menuState.value = 'presearch'
-          }
-          return
-        }
         if (menuState.value === 'close') {
           menuState.value = 'presearch'
-          highlightedIndex.value = 0
-        } else {
-          highlightedIndex.value =
-            (highlightedIndex.value + 1) % filteredOptions.value.length
         }
+        moveHighlight(1)
         break
       case 'ArrowUp':
         e.preventDefault()
-        if (filteredOptions.value.length === 0) {
-          if (menuState.value === 'close') {
-            menuState.value = 'presearch'
-          }
-          return
-        }
         if (menuState.value === 'close') {
           menuState.value = 'presearch'
-          highlightedIndex.value = filteredOptions.value.length - 1
-        } else {
-          highlightedIndex.value =
-            (highlightedIndex.value - 1 + filteredOptions.value.length) %
-            filteredOptions.value.length
         }
+        moveHighlight(-1)
         break
       case 'Home':
         e.preventDefault()
         if (menuState.value !== 'close' && filteredOptions.value.length > 0) {
-          highlightedIndex.value = 0
+          // Find first non-disabled option
+          const firstIndex = filteredOptions.value.findIndex(
+            opt => !opt.disabled
+          )
+          if (firstIndex !== -1) {
+            highlightedIndex.value = firstIndex
+          }
         }
         break
       case 'End':
         e.preventDefault()
         if (menuState.value !== 'close' && filteredOptions.value.length > 0) {
-          highlightedIndex.value = filteredOptions.value.length - 1
+          // Find last non-disabled option
+          for (let i = filteredOptions.value.length - 1; i >= 0; i--) {
+            if (!filteredOptions.value[i].disabled) {
+              highlightedIndex.value = i
+              break
+            }
+          }
         }
         break
       case 'Enter': {
@@ -209,22 +220,22 @@ export const useSearchSelect = <T>(
           return
         }
 
-        // If an item is highlighted, select it
+        // If an item is highlighted, select it if not disabled
         if (highlightedIndex.value !== -1) {
           const option = filteredOptions.value[highlightedIndex.value]
-          if (option) {
+          if (option && !option.disabled) {
             handleSelect(option.value)
           }
           return
         }
 
-        // If no item is highlighted but there are filtered options, select the first one
+        // If no item is highlighted but there are filtered options, select the first non-disabled one
         if (filteredOptions.value.length > 0) {
-          const option = filteredOptions.value[0]
+          const option = filteredOptions.value.find(opt => !opt.disabled)
           if (option) {
             handleSelect(option.value)
+            return
           }
-          return
         }
 
         // If no options match and custom is allowed, add custom

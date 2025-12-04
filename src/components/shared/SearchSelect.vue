@@ -18,7 +18,7 @@ const props = withDefaults(
     placeholder: '検索',
     disabled: false,
     required: false,
-    // allowCustom: false,
+    allowCustom: false,
   }
 )
 

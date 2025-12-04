@@ -98,6 +98,7 @@ export const useSearchSelect = <T>(
   })
 
   // Reset highlight when options change (e.g. typing)
+  // We don't auto-highlight the first option during search to avoid accidental selection
   watch(filteredOptions, () => {
     highlightedIndex.value = -1
   })

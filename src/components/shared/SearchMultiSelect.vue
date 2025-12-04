@@ -77,6 +77,7 @@ const handleAddCustom = () => {
 }
 
 // Handle Backspace to remove the last selected item when search term is empty
+// This behavior is enabled regardless of menu state (open/closed) for better UX
 const handleKeyDown = (e: KeyboardEvent) => {
   if (
     searchTerm.value === '' &&

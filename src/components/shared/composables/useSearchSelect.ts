@@ -14,6 +14,9 @@ import type { Option } from '../types'
 // The isCustomAllowed type guard relies on this behavior.
 // If T is a string literal union (e.g. 'foo' | 'bar'), string extends T will be false,
 // so allowCustom will be false. This effectively prevents custom values for strict enum-like types.
+//
+// NOTE: When using allowCustom, T must include string type (e.g. string | number).
+// If T is only number, allowCustom will be forced to false.
 export type AllowCustom<T> = string extends T ? boolean : false
 
 // CAUTION: This type guard relies on the AllowCustom<T> type definition.
@@ -135,7 +138,9 @@ export const useSearchSelect = <T>(
 
   const handleSearchInput = () => {
     menuState.value = 'searched'
-    emit('search-input', searchTerm.value)
+    if (!isComposing.value) {
+      emit('search-input', searchTerm.value)
+    }
   }
 
   // IME handling
@@ -215,12 +220,13 @@ export const useSearchSelect = <T>(
         break
       case 'Enter': {
         e.preventDefault()
+        // 1. If menu is closed, just open it
         if (menuState.value === 'close') {
           menuState.value = 'presearch'
           return
         }
 
-        // If an item is highlighted, select it if not disabled
+        // 2. If an item is highlighted, select it if not disabled
         if (highlightedIndex.value !== -1) {
           const option = filteredOptions.value[highlightedIndex.value]
           if (option && !option.disabled) {
@@ -229,7 +235,7 @@ export const useSearchSelect = <T>(
           return
         }
 
-        // If no item is highlighted but there are filtered options, select the first non-disabled one
+        // 3. If no item is highlighted but there are filtered options, select the first non-disabled one
         if (filteredOptions.value.length > 0) {
           const option = filteredOptions.value.find(opt => !opt.disabled)
           if (option) {
@@ -238,7 +244,7 @@ export const useSearchSelect = <T>(
           }
         }
 
-        // If no options match and custom is allowed, add custom
+        // 4. If no options match and custom is allowed, add custom
         if (handleAddCustom && searchTerm.value) {
           handleAddCustom()
         }

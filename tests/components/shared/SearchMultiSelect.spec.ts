@@ -84,7 +84,7 @@ describe('SearchMultiSelect', () => {
     await wrapper.find('input').setValue('Custom Value')
 
     const addButton = wrapper
-      .findAll('button')
+      .findAll('li[role="option"]')
       .find(b => b.text().includes('"Custom Value" を追加'))
     expect(addButton?.exists()).toBe(true)
 

@@ -121,6 +121,7 @@ export const useSearchSelect = <T>(
 
   const handleInputFocus = () => {
     if (props.disabled) return
+    emit('focus')
     if (menuState.value === 'close') {
       menuState.value = 'presearch'
     }

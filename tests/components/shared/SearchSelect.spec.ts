@@ -93,7 +93,7 @@ describe('SearchSelect', () => {
 
     // Find the "Add custom" button
     const addButton = wrapper
-      .findAll('button')
+      .findAll('li[role="option"]')
       .find(b => b.text().includes('"Custom Value" を追加'))
     expect(addButton?.exists()).toBe(true)
 

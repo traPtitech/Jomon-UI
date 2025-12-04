@@ -1,4 +1,4 @@
-import { defineComponent, nextTick, ref } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
@@ -35,12 +35,12 @@ describe('useSearchSelect', () => {
           modelValue,
           dropdownRef
         )
-        return () => null
+        return () => h('div')
       },
     })
 
-    mount(TestComponent)
-    return { composable, emit, modelValue }
+    const wrapper = mount(TestComponent)
+    return { composable, emit, modelValue, wrapper }
   }
 
   it('initializes search term from modelValue', () => {
@@ -144,7 +144,7 @@ describe('useSearchSelect', () => {
       expect(composable.highlightedIndex.value).toBe(-1)
     })
 
-    it('resets highlightedIndex when menu opens', () => {
+    it('resets highlightedIndex when menu opens', async () => {
       const { composable } = createWrapper()
       composable.handleInputFocus()
 
@@ -159,6 +159,7 @@ describe('useSearchSelect', () => {
 
       // Open menu again
       composable.handleInputFocus()
+      await nextTick()
 
       // highlightedIndex should be reset to -1
       expect(composable.highlightedIndex.value).toBe(-1)
@@ -177,15 +178,21 @@ describe('useSearchSelect', () => {
       expect(handleSelect).toHaveBeenCalledWith('opt1')
     })
 
-    it('closes menu on Escape', () => {
+    it('closes menu on Escape', async () => {
       const { composable } = createWrapper()
       composable.menuState.value = 'presearch'
       composable.searchTerm.value = 'some search'
+      composable.highlightedIndex.value = 0
 
       const escape = new KeyboardEvent('keydown', { key: 'Escape' })
       const handleSelect = vi.fn()
 
+      // Force transition to ensure watcher triggers
+      composable.menuState.value = 'searched'
+      await new Promise(resolve => setTimeout(resolve, 10))
+
       composable.handleKeyDown(escape, handleSelect)
+      await new Promise(resolve => setTimeout(resolve, 10))
 
       expect(composable.menuState.value).toBe('close')
       expect(composable.searchTerm.value).toBe('')

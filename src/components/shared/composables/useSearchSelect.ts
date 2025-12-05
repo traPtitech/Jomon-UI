@@ -1,12 +1,6 @@
-import {
-  type Ref,
-  computed,
-  onMounted,
-  onUnmounted,
-  ref,
-  useId,
-  watch,
-} from 'vue'
+import { type Ref, computed, ref, useId, watch } from 'vue'
+
+import { onClickOutside } from '@vueuse/core'
 
 import type { Option } from '../types'
 
@@ -240,27 +234,8 @@ export const useSearchSelect = <T>(
     }
   }
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (typeof Node === 'undefined') {
-      return
-    }
-    const target = event.target
-    if (!(target instanceof Node)) {
-      return
-    }
-    // Note: This check assumes the dropdown is not Teleported elsewhere in the DOM.
-    // If Teleport is used, we need to check if the target is contained within the teleported content as well.
-    if (dropdownRef.value && !dropdownRef.value.contains(target)) {
-      menuState.value = 'close'
-    }
-  }
-
-  onMounted(() => {
-    document.addEventListener('click', handleClickOutside)
-  })
-
-  onUnmounted(() => {
-    document.removeEventListener('click', handleClickOutside)
+  onClickOutside(dropdownRef, () => {
+    menuState.value = 'close'
   })
 
   return {

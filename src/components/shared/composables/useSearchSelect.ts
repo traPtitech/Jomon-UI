@@ -1,15 +1,18 @@
 import { type Ref, computed, ref, useId, watch } from 'vue'
 
-import { onClickOutside } from '@vueuse/core'
-
-import type { Option } from '../types'
-import { toString } from '../utils'
+import { useSearchSelectHighlight } from '@/components/shared/composables/useSearchSelectHighlight'
+import { useSearchSelectKeyboard } from '@/components/shared/composables/useSearchSelectKeyboard'
+import {
+  type MenuState,
+  useSearchSelectMenu,
+} from '@/components/shared/composables/useSearchSelectMenu'
+import type { Option } from '@/components/shared/types'
+import { toString } from '@/components/shared/utils'
 
 export interface SearchSelectCommonProps<T> {
   options: Option<T>[]
   label: string
   placeholder?: string | undefined
-
   disabled?: boolean | undefined
   required?: boolean | undefined
 }
@@ -23,7 +26,7 @@ export type SearchSelectEmit = {
   (e: 'search-input', value: string): void
 }
 
-export type MenuState = 'close' | 'presearch' | 'searched'
+export type { MenuState }
 
 export interface RefLike<V> {
   readonly value: V
@@ -38,9 +41,18 @@ export const useSearchSelect = <T extends string | number | null>(
 ) => {
   const resetOnClose = options?.resetOnClose ?? Array.isArray(model.value)
   const listboxId = useId()
-  const menuState = ref<MenuState>('close')
   const searchTerm = ref('')
-  const highlightedIndex = ref(-1)
+
+  const { menuState, toggleMenu, openMenu } = useSearchSelectMenu(
+    props,
+    dropdownRef,
+    () => {
+      emit('close')
+      if (resetOnClose) {
+        resetSearchTerm()
+      }
+    }
+  )
 
   const filteredOptions = computed(() => {
     if (!searchTerm.value) {
@@ -55,38 +67,16 @@ export const useSearchSelect = <T extends string | number | null>(
     )
   })
 
-  const activeOptionId = computed(() => {
-    if (highlightedIndex.value === -1) return undefined
-    return `${listboxId}-option-${toString(highlightedIndex.value)}`
-  })
+  const { highlightedIndex, activeOptionId } = useSearchSelectHighlight(
+    filteredOptions,
+    menuState,
+    listboxId
+  )
 
   const resetSearchTerm = () => {
     searchTerm.value = ''
     highlightedIndex.value = -1
   }
-
-  // Initialize highlightedIndex when menu opens or options change
-  watch(menuState, newVal => {
-    if (newVal === 'close') {
-      emit('close')
-      if (resetOnClose) {
-        resetSearchTerm()
-      }
-      highlightedIndex.value = -1
-    } else if (filteredOptions.value.length > 0) {
-      if (highlightedIndex.value === -1) {
-        highlightedIndex.value = 0
-      }
-    } else {
-      highlightedIndex.value = -1
-    }
-  })
-
-  // Reset highlight when options change (e.g. typing)
-  // We don't auto-highlight the first option during search to avoid accidental selection
-  watch(filteredOptions, () => {
-    highlightedIndex.value = -1
-  })
 
   // Sync searchTerm with modelValue for single select
   watch(
@@ -105,29 +95,10 @@ export const useSearchSelect = <T extends string | number | null>(
     { immediate: true }
   )
 
-  const toggleMenu = () => {
-    if (props.disabled) return
-    if (menuState.value === 'close') {
-      menuState.value = 'presearch'
-    } else {
-      menuState.value = 'close'
-    }
-  }
-
   const handleInputFocus = () => {
     if (props.disabled) return
     emit('focus')
-    if (menuState.value === 'close') {
-      menuState.value = 'presearch'
-    }
-  }
-
-  // v-model handles the update, so we don't need to read the event
-  const handleSearchInput = () => {
-    menuState.value = 'searched'
-    if (!isComposing.value) {
-      emit('search-input', searchTerm.value)
-    }
+    openMenu()
   }
 
   // IME handling
@@ -139,109 +110,20 @@ export const useSearchSelect = <T extends string | number | null>(
     isComposing.value = false
   }
 
-  const handleKeyDown = (e: KeyboardEvent, handleSelect: (val: T) => void) => {
-    if (isComposing.value || e.isComposing) return
-
-    const moveHighlight = (direction: 1 | -1) => {
-      if (filteredOptions.value.length === 0) return
-
-      let next = highlightedIndex.value
-      // Adjust starting point for ArrowUp when nothing is highlighted
-      if (next === -1 && direction === -1) {
-        next = 0
-      }
-
-      for (let i = 0; i < filteredOptions.value.length; i++) {
-        next =
-          (next + direction + filteredOptions.value.length) %
-          filteredOptions.value.length
-        if (!filteredOptions.value[next]?.disabled) {
-          highlightedIndex.value = next
-          return
-        }
-      }
-    }
-
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault()
-        if (menuState.value === 'close') {
-          menuState.value = 'presearch'
-        }
-        moveHighlight(1)
-        break
-      case 'ArrowUp':
-        e.preventDefault()
-        if (menuState.value === 'close') {
-          menuState.value = 'presearch'
-        }
-        moveHighlight(-1)
-        break
-      case 'Home':
-        e.preventDefault()
-        if (menuState.value !== 'close' && filteredOptions.value.length > 0) {
-          // Find first non-disabled option
-          const firstIndex = filteredOptions.value.findIndex(
-            opt => !opt.disabled
-          )
-          if (firstIndex !== -1) {
-            highlightedIndex.value = firstIndex
-          }
-        }
-        break
-      case 'End':
-        e.preventDefault()
-        if (menuState.value !== 'close' && filteredOptions.value.length > 0) {
-          // Find last non-disabled option
-          for (let i = filteredOptions.value.length - 1; i >= 0; i--) {
-            if (!filteredOptions.value[i]?.disabled) {
-              highlightedIndex.value = i
-              break
-            }
-          }
-        }
-        break
-      case 'Enter': {
-        e.preventDefault()
-        // 1. If menu is closed, just open it
-        if (menuState.value === 'close') {
-          menuState.value = 'presearch'
-          return
-        }
-
-        // 2. If an item is highlighted, select it if not disabled
-        if (highlightedIndex.value !== -1) {
-          const option = filteredOptions.value[highlightedIndex.value]
-          if (option && !option.disabled) {
-            handleSelect(option.value)
-          }
-          return
-        }
-
-        // 3. If no item is highlighted but there are filtered options, select the first non-disabled one
-        if (filteredOptions.value.length > 0) {
-          const option = filteredOptions.value.find(opt => !opt.disabled)
-          if (option) {
-            handleSelect(option.value)
-            return
-          }
-        }
-
-        break
-      }
-      case 'Escape':
-        e.preventDefault()
-        menuState.value = 'close'
-        break
-      case 'Tab':
-        menuState.value = 'close'
-        break
+  // v-model handles the update, so we don't need to read the event
+  const handleSearchInput = () => {
+    menuState.value = 'searched'
+    if (!isComposing.value) {
+      emit('search-input', searchTerm.value)
     }
   }
 
-  onClickOutside(dropdownRef, () => {
-    menuState.value = 'close'
-  })
+  const { handleKeyDown } = useSearchSelectKeyboard(
+    menuState,
+    highlightedIndex,
+    filteredOptions,
+    isComposing
+  )
 
   return {
     menuState,

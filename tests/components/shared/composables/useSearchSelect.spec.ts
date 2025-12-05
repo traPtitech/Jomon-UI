@@ -20,7 +20,8 @@ const defaultProps: SearchSelectCommonProps<string> = {
 describe('useSearchSelect', () => {
   const createWrapper = (
     initialProps: SearchSelectCommonProps<string> = defaultProps,
-    initialValue: string | string[] | null = null
+    initialValue: string | string[] | null = null,
+    options?: { resetOnClose?: boolean }
   ) => {
     let composable!: ReturnType<typeof useSearchSelectGeneric>
     const emit = vi.fn()
@@ -34,7 +35,8 @@ describe('useSearchSelect', () => {
           props,
           emit,
           modelValue,
-          dropdownRef
+          dropdownRef,
+          options
         )
         return () => h('div')
       },
@@ -246,18 +248,9 @@ describe('useSearchSelect', () => {
     })
 
     it('resets search term on close when resetOnClose is true', async () => {
-      const emit = vi.fn()
-      const modelValue = ref(null)
-      const dropdownRef = ref(null)
-      const props = reactive(defaultProps)
-
-      const composable = useSearchSelectGeneric(
-        props,
-        emit,
-        modelValue,
-        dropdownRef,
-        { resetOnClose: true }
-      )
+      const { composable } = createWrapper(defaultProps, null, {
+        resetOnClose: true,
+      })
 
       composable.menuState.value = 'presearch'
       composable.searchTerm.value = 'some search'

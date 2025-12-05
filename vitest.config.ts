@@ -12,5 +12,11 @@ export default defineConfig({
   test: {
     include: ['tests/**/*.spec.ts'],
     environment: 'happy-dom',
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      include: ['src/**/*.{ts,vue}'],
+      exclude: ['src/**/*.d.ts', 'src/main.ts', 'src/App.vue'],
+    },
   },
 })

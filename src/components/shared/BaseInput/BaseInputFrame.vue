@@ -3,14 +3,14 @@ import { computed, ref } from 'vue'
 
 interface Props {
   label: string
-  required?: boolean
-  readonly?: boolean
-  disabled?: boolean
-  isTextarea?: boolean
-  hasValue?: boolean
+  required?: boolean | undefined
+  readonly?: boolean | undefined
+  disabled?: boolean | undefined
+  isTextarea?: boolean | undefined
+  hasValue?: boolean | undefined
   inputId: string
-  errorMessage?: string
-  errorMessageId?: string
+  errorMessage?: string | undefined
+  errorMessageId?: string | undefined
 }
 
 const props = withDefaults(defineProps<Props>(), {

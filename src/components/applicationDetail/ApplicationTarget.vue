@@ -1,11 +1,11 @@
-<script lang="ts" setup>
+<script lang="ts" setup generic="T extends ApplicationTarget">
 import { computed } from 'vue'
 
 import { TrashIcon } from '@heroicons/vue/24/solid'
 import { useToast } from 'vue-toastification'
 
 import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
-import SearchSelect from '@/components/shared/SearchSelect.vue'
+import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
@@ -34,7 +34,14 @@ const targetOptions = computed(() =>
   )
 )
 
-const targetModel = defineModel<ApplicationTarget>('targetModel')
+const targetModel = defineModel<T>('targetModel', { required: true })
+
+const amountModel = computed<number | null>({
+  get: () => targetModel.value.amount,
+  set: (val: number | null) => {
+    targetModel.value.amount = val ?? 0
+  },
+})
 
 const emit = defineEmits<(e: 'delete', id: string) => void>()
 
@@ -84,7 +91,7 @@ const handleRemoveTarget = async () => {
         v-model="targetModel.target"
         :options="targetOptions"
         label="対象者" />
-      <BaseNumberInput v-model="targetModel.amount" label="金額" :min="0">
+      <BaseNumberInput v-model="amountModel" label="金額" :min="0">
         <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
           ¥
         </span>

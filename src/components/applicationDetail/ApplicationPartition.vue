@@ -4,7 +4,7 @@ import { computed, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
 import EditButton from '@/components/shared/EditButton.vue'
-import SearchSelect from '@/components/shared/SearchSelect.vue'
+import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
 import { useApplication } from '@/features/application/composables'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'

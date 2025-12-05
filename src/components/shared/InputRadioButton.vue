@@ -1,10 +1,8 @@
 <script lang="ts" setup>
+import type { Option } from './types'
+
 interface Props {
-  options: Option[]
-}
-interface Option {
-  key: string
-  value: string
+  options: Option<string>[]
 }
 const model = defineModel<string>({ required: true })
 const props = defineProps<Props>()

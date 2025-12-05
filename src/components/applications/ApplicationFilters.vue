@@ -3,12 +3,14 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
 import { useToast } from 'vue-toastification'
 
 import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
-import SearchSelect from '@/components/shared/SearchSelect.vue'
+import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
 import { useApplicationStore } from '@/features/application/store'
 import { applicationStatusOptions } from '@/features/applicationStatus/entities'
 import { usePartitionStore } from '@/features/partition/store'
 import { useTagStore } from '@/features/tag/store'
 import { useUserStore } from '@/features/user/store'
+
+import SearchMultiSelect from '../shared/SearchSelect/SearchMultiSelect.vue'
 
 const { applications, filterParams, fetchApplications } = useApplicationStore()
 const { userOptions } = useUserStore()
@@ -56,11 +58,13 @@ function sortByCreatedAt() {
     </div>
     <SearchSelect
       v-model="filterParams.target"
+      class="w-full sm:w-auto"
       :options="userOptions"
       label="申請者"
       @close="fetchApplications" />
     <SearchSelect
       v-model="filterParams.currentStatus"
+      class="w-full sm:w-auto"
       :options="[...applicationStatusOptions]"
       label="申請の状態"
       @close="fetchApplications" />
@@ -69,11 +73,10 @@ function sortByCreatedAt() {
       :options="partitionOptions"
       label="パーティション"
       @close="fetchApplications" />
-    <SearchSelect
+    <SearchMultiSelect
       v-model="filterParams.tags"
       :options="tagIdOptions"
       label="タグ"
-      multiple
       @close="fetchApplications" />
   </div>
   <span v-if="applications && applications.length !== 0" class="ml-1/6">

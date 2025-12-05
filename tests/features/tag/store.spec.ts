@@ -66,8 +66,7 @@ describe('Tag Store', () => {
       expect(store.error.value).toContain('タグの取得に失敗しました')
     })
 
-    it('ensureTags creates missing tags and returns all tags', async () => {
-      const existingTag: Tag = { id: 'tag-1', name: 'Existing' }
+    it('createTag creates a new tag and adds it to the list', async () => {
       const newTag: Tag = { id: 'tag-2', name: 'New' }
 
       const mockCreateTag = vi.fn().mockResolvedValue(newTag)
@@ -78,15 +77,11 @@ describe('Tag Store', () => {
       app.provide(TagRepositoryKey, mockRepo)
 
       const store = app.runWithContext(() => useTagStore())
-      store.tags.value = [existingTag]
 
-      const result = await store.ensureTags([
-        existingTag,
-        { id: '', name: 'New' } as Tag,
-      ])
+      const result = await store.createTag('New')
 
       expect(mockCreateTag).toHaveBeenCalledWith('New')
-      expect(result).toEqual([existingTag, newTag])
+      expect(result).toEqual(newTag)
       expect(store.tags.value).toContainEqual(newTag)
     })
 

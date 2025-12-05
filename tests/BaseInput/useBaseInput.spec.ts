@@ -1,4 +1,4 @@
-import { defineComponent } from 'vue'
+import { type PropType, defineComponent } from 'vue'
 
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
@@ -7,12 +7,18 @@ import { useBaseInput } from '@/components/shared/BaseInput/useBaseInput'
 
 const TestComponent = defineComponent({
   props: {
-    id: { type: String, default: undefined },
+    id: { type: String as PropType<string | undefined>, default: undefined },
     required: { type: Boolean, default: false },
     readonly: { type: Boolean, default: false },
     disabled: { type: Boolean, default: false },
-    errorMessage: { type: String, default: '' },
-    describedById: { type: String, default: '' },
+    errorMessage: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
+    describedById: {
+      type: String as PropType<string | undefined>,
+      default: undefined,
+    },
   },
   setup(props) {
     const state = useBaseInput(props)

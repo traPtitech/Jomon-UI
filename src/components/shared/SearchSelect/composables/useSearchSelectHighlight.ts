@@ -1,0 +1,41 @@
+import { type Ref, computed, ref, watch } from 'vue'
+
+import type { Option } from '@/components/shared/types'
+import { toString } from '@/components/shared/utils'
+
+export const useSearchSelectHighlight = <T>(
+  filteredOptions: Ref<Option<T>[]>,
+  menuState: Ref<string>,
+  listboxId: string
+) => {
+  const highlightedIndex = ref(-1)
+
+  const activeOptionId = computed(() => {
+    if (highlightedIndex.value === -1) return undefined
+    return `${listboxId}-option-${toString(highlightedIndex.value)}`
+  })
+
+  // Initialize highlightedIndex when menu opens or options change
+  watch(menuState, newVal => {
+    if (newVal === 'close') {
+      highlightedIndex.value = -1
+    } else if (filteredOptions.value.length > 0) {
+      if (highlightedIndex.value === -1) {
+        highlightedIndex.value = 0
+      }
+    } else {
+      highlightedIndex.value = -1
+    }
+  })
+
+  // Reset highlight when options change (e.g. typing)
+  watch(filteredOptions, () => {
+    highlightedIndex.value = -1
+  })
+
+  return {
+    highlightedIndex,
+    activeOptionId,
+    listboxId,
+  }
+}

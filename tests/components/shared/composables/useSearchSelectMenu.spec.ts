@@ -97,7 +97,6 @@ describe('useSearchSelectMenu', () => {
     const { watch } = await import('vue')
     watch(menuState, () => {
       dummy++
-      console.log('Test watcher triggered')
     })
 
     menuState.value = 'presearch'

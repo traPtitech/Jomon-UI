@@ -8,7 +8,6 @@ const props = defineProps<{
   searchTerm: string
   highlightedIndex: number
   modelValue: T | T[] | null
-
   id?: string
   multiple?: boolean
 }>()

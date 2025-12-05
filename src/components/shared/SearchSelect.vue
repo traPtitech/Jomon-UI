@@ -42,9 +42,7 @@ const {
   resetOnClose: false,
 })
 
-const handleSelect = (val: T) => {
-  // Allow null to be processed so the model can be updated to null
-  const selectedValue = val
+const handleSelect = (selectedValue: T) => {
   model.value = selectedValue
   const selectedOption = props.options.find(opt => opt.value === selectedValue)
   searchTerm.value = selectedOption?.key ?? String(selectedValue ?? '')

@@ -46,6 +46,7 @@ defineExpose({
       :required="required"
       :input-attrs="{
         role: 'combobox',
+        'aria-haspopup': 'listbox',
         'aria-autocomplete': 'list',
         'aria-expanded': ariaExpanded,
         'aria-controls': ariaControls,

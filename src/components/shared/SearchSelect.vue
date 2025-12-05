@@ -22,6 +22,14 @@ const emit = defineEmits<SearchSelectEmit>()
 const model = defineModel<T>({ required: true })
 
 const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
+const inputRef =
+  useTemplateRef<InstanceType<typeof SearchSelectInput>>('inputRef')
+
+defineExpose({
+  focus: () => {
+    inputRef.value?.focus()
+  },
+})
 
 const {
   menuState,
@@ -57,6 +65,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
 <template>
   <div ref="dropdownRef" class="relative">
     <SearchSelectInput
+      ref="inputRef"
       v-model="searchTerm"
       :label="label"
       :placeholder="placeholder"

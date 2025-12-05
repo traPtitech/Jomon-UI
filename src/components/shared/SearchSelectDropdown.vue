@@ -49,22 +49,23 @@ onMounted(() => {
 
 <template>
   <div class="absolute z-50 mt-1 w-full rounded-md border bg-white shadow-lg">
+    <div role="status" aria-live="polite" class="sr-only" :id="`${id}-status`">
+      {{
+        filteredOptions.length === 0
+          ? searchTerm
+            ? '該当する項目がありません'
+            : '項目がありません'
+          : ''
+      }}
+    </div>
     <!-- Options list -->
     <ul
       :id="id"
       ref="listRef"
       class="max-h-[200px] overflow-auto p-1"
       role="listbox"
-      :aria-multiselectable="multiple || undefined">
-      <div role="status" aria-live="polite" class="sr-only">
-        {{
-          filteredOptions.length === 0
-            ? searchTerm
-              ? '該当する項目がありません'
-              : '項目がありません'
-            : ''
-        }}
-      </div>
+      :aria-multiselectable="multiple || undefined"
+      :aria-describedby="`${id}-status`">
       <li v-if="filteredOptions.length === 0" class="px-2 py-1.5 text-sm">
         {{ searchTerm ? '該当する項目がありません' : '項目がありません' }}
       </li>

@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends string | number | null">
-import { nextTick, onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, useTemplateRef, watch } from 'vue'
 
 import type { Option } from './types'
 
@@ -23,11 +23,12 @@ const isSelected = (value: T, model: T | T[] | null): boolean => {
   return model === value
 }
 
-const optionRefs = ref<HTMLElement[]>([])
+const optionRefs = useTemplateRef<HTMLElement[]>('optionRefs')
 
 const scrollToHighlighted = async (index: number) => {
   if (index === -1) return
   await nextTick()
+  if (!optionRefs.value) return
   const highlightedOption = optionRefs.value[index]
   if (highlightedOption) {
     highlightedOption.scrollIntoView({ block: 'nearest' })
@@ -78,11 +79,7 @@ onMounted(() => {
         v-for="(option, index) in filteredOptions"
         :id="`${id}-option-${index}`"
         :key="String(option.value)"
-        :ref="
-          el => {
-            if (el) optionRefs[index] = el as HTMLElement
-          }
-        "
+        ref="optionRefs"
         role="option"
         :aria-selected="
           !option.disabled && isSelected(option.value, modelValue)

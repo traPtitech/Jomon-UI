@@ -3,14 +3,13 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
 import { useToast } from 'vue-toastification'
 
 import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
+import SearchMultiSelect from '@/components/shared/SearchSelect/SearchMultiSelect.vue'
 import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
 import { useApplicationStore } from '@/features/application/store'
 import { applicationStatusOptions } from '@/features/applicationStatus/entities'
 import { usePartitionStore } from '@/features/partition/store'
 import { useTagStore } from '@/features/tag/store'
 import { useUserStore } from '@/features/user/store'
-
-import SearchMultiSelect from '../shared/SearchSelect/SearchMultiSelect.vue'
 
 const { applications, filterParams, fetchApplications } = useApplicationStore()
 const { userOptions } = useUserStore()

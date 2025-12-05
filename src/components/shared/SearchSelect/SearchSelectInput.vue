@@ -3,7 +3,7 @@ import { useTemplateRef } from 'vue'
 
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 
-import BaseTextInput from './BaseInput/BaseTextInput.vue'
+import BaseTextInput from '../BaseInput/BaseTextInput.vue'
 import type { MenuState } from './composables/useSearchSelect'
 
 defineProps<{

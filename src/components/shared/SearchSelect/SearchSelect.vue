@@ -3,6 +3,7 @@ import { useTemplateRef } from 'vue'
 
 import { CheckIcon } from '@heroicons/vue/24/outline'
 
+import { toString } from '../utils'
 import SearchSelectDropdown from './SearchSelectDropdown.vue'
 import SearchSelectInput from './SearchSelectInput.vue'
 import {
@@ -10,7 +11,6 @@ import {
   type SearchSelectEmit,
   useSearchSelectGeneric as useSearchSelect,
 } from './composables/useSearchSelect'
-import { toString } from './utils'
 
 const props = withDefaults(defineProps<SearchSelectCommonProps<T>>(), {
   placeholder: '検索',

@@ -2,7 +2,7 @@ import { nextTick, ref } from 'vue'
 
 import { describe, expect, it } from 'vitest'
 
-import { useSearchSelectHighlight } from '@/components/shared/composables/useSearchSelectHighlight'
+import { useSearchSelectHighlight } from '@/components/shared/SearchSelect/composables/useSearchSelectHighlight'
 import type { Option } from '@/components/shared/types'
 
 describe('useSearchSelectHighlight', () => {

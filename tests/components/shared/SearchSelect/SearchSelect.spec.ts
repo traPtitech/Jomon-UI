@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 
-import SearchSelect from '@/components/shared/SearchSelect.vue'
+import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
 import type { Option } from '@/components/shared/types'
 
 const options: Option<string>[] = [

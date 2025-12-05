@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 
 import { EyeIcon, PencilSquareIcon } from '@heroicons/vue/24/outline'
 
-import SearchSelect from '@/components/shared/SearchSelect.vue'
+import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
 
 import BaseTextInput from './BaseInput/BaseTextInput.vue'
 import MarkdownIt from './MarkdownIt.vue'

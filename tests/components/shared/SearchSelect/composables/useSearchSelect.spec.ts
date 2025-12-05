@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest'
 import {
   type SearchSelectCommonProps,
   useSearchSelectGeneric,
-} from '@/components/shared/composables/useSearchSelect'
+} from '@/components/shared/SearchSelect/composables/useSearchSelect'
 
 const defaultProps: SearchSelectCommonProps<string> = {
   options: [

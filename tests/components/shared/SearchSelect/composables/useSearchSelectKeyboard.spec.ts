@@ -2,8 +2,8 @@ import { ref } from 'vue'
 
 import { describe, expect, it, vi } from 'vitest'
 
-import { useSearchSelectKeyboard } from '@/components/shared/composables/useSearchSelectKeyboard'
-import type { MenuState } from '@/components/shared/composables/useSearchSelectMenu'
+import { useSearchSelectKeyboard } from '@/components/shared/SearchSelect/composables/useSearchSelectKeyboard'
+import type { MenuState } from '@/components/shared/SearchSelect/composables/useSearchSelectMenu'
 import type { Option } from '@/components/shared/types'
 
 describe('useSearchSelectKeyboard', () => {

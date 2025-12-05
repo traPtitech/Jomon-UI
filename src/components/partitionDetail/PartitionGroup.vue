@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { EditMode } from '@/components/partitionDetail/composables/usePartitionInformation'
 import EditButton from '@/components/shared/EditButton.vue'
-import SearchSelect from '@/components/shared/SearchSelect.vue'
+import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { usePartitionStore } from '@/features/partition/store'
 import { usePartitionGroupStore } from '@/features/partitionGroup/store'

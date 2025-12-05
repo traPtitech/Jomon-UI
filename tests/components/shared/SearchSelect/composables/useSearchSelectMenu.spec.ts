@@ -2,7 +2,7 @@ import { nextTick, ref } from 'vue'
 
 import { describe, expect, it, vi } from 'vitest'
 
-import { useSearchSelectMenu } from '@/components/shared/composables/useSearchSelectMenu'
+import { useSearchSelectMenu } from '@/components/shared/SearchSelect/composables/useSearchSelectMenu'
 
 vi.mock('@vueuse/core', () => ({
   onClickOutside: vi.fn(),

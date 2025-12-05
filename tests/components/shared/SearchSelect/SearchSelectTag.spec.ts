@@ -2,7 +2,7 @@ import { createTestingPinia } from '@pinia/testing'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 
-import SearchSelectTag from '@/components/shared/SearchSelectTag.vue'
+import SearchSelectTag from '@/components/shared/SearchSelect/SearchSelectTag.vue'
 import { TagRepositoryKey } from '@/di'
 import type { Tag } from '@/features/tag/entities'
 

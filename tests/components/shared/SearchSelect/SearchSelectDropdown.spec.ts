@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 
-import SearchSelectDropdown from '@/components/shared/SearchSelectDropdown.vue'
+import SearchSelectDropdown from '@/components/shared/SearchSelect/SearchSelectDropdown.vue'
 import type { Option } from '@/components/shared/types'
 
 describe('SearchSelectDropdown', () => {

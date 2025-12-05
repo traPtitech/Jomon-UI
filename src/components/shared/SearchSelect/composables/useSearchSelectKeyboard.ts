@@ -1,6 +1,6 @@
 import type { Ref } from 'vue'
 
-import type { MenuState } from '@/components/shared/composables/useSearchSelectMenu'
+import type { MenuState } from '@/components/shared/SearchSelect/composables/useSearchSelectMenu'
 import type { Option } from '@/components/shared/types'
 
 export const useSearchSelectKeyboard = <T>(

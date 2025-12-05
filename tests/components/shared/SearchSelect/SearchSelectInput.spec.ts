@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 
-import SearchSelectInput from '@/components/shared/SearchSelectInput.vue'
+import SearchSelectInput from '@/components/shared/SearchSelect/SearchSelectInput.vue'
 
 describe('SearchSelectInput', () => {
   const defaultProps = {

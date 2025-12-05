@@ -1,11 +1,11 @@
 import { type Ref, computed, ref, useId, watch } from 'vue'
 
-import { useSearchSelectHighlight } from '@/components/shared/composables/useSearchSelectHighlight'
-import { useSearchSelectKeyboard } from '@/components/shared/composables/useSearchSelectKeyboard'
+import { useSearchSelectHighlight } from '@/components/shared/SearchSelect/composables/useSearchSelectHighlight'
+import { useSearchSelectKeyboard } from '@/components/shared/SearchSelect/composables/useSearchSelectKeyboard'
 import {
   type MenuState,
   useSearchSelectMenu,
-} from '@/components/shared/composables/useSearchSelectMenu'
+} from '@/components/shared/SearchSelect/composables/useSearchSelectMenu'
 import type { Option } from '@/components/shared/types'
 import { toString } from '@/components/shared/utils'
 

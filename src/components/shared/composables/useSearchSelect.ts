@@ -3,6 +3,7 @@ import { type Ref, computed, ref, useId, watch } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 
 import type { Option } from '../types'
+import { toString } from '../utils'
 
 export interface SearchSelectCommonProps<T> {
   options: Option<T>[]
@@ -15,6 +16,10 @@ export interface SearchSelectCommonProps<T> {
 
 export type SearchSelectEmit = {
   (e: 'focus' | 'close'): void
+  /**
+   * Emitted when the search term changes.
+   * This event is not emitted during IME composition.
+   */
   (e: 'search-input', value: string): void
 }
 
@@ -24,7 +29,7 @@ export interface RefLike<V> {
   readonly value: V
 }
 
-export const useSearchSelect = <T>(
+export const useSearchSelect = <T extends string | number | null>(
   props: SearchSelectCommonProps<T>,
   emit: SearchSelectEmit,
   model: RefLike<T | T[] | null>,
@@ -45,13 +50,14 @@ export const useSearchSelect = <T>(
     return props.options.filter(
       opt =>
         opt.key.toLowerCase().includes(lowerTerm) ||
-        String(opt.value).toLowerCase().includes(lowerTerm)
+        (opt.value !== null &&
+          toString(opt.value).toLowerCase().includes(lowerTerm))
     )
   })
 
   const activeOptionId = computed(() => {
     if (highlightedIndex.value === -1) return undefined
-    return `${listboxId}-option-${String(highlightedIndex.value)}`
+    return `${listboxId}-option-${toString(highlightedIndex.value)}`
   })
 
   const resetSearchTerm = () => {
@@ -62,7 +68,6 @@ export const useSearchSelect = <T>(
   // Initialize highlightedIndex when menu opens or options change
   watch(menuState, newVal => {
     if (newVal === 'close') {
-      emit('close')
       emit('close')
       if (resetOnClose) {
         resetSearchTerm()
@@ -91,8 +96,8 @@ export const useSearchSelect = <T>(
       const selectedOption = props.options.find(opt => opt.value === newVal)
       if (selectedOption) {
         searchTerm.value = selectedOption.key
-      } else if (newVal !== null && newVal !== undefined) {
-        searchTerm.value = String(newVal)
+      } else if (newVal !== null) {
+        searchTerm.value = toString(newVal)
       } else {
         searchTerm.value = ''
       }
@@ -117,8 +122,8 @@ export const useSearchSelect = <T>(
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleSearchInput = (_e: Event) => {
+  // v-model handles the update, so we don't need to read the event
+  const handleSearchInput = () => {
     menuState.value = 'searched'
     if (!isComposing.value) {
       emit('search-input', searchTerm.value)

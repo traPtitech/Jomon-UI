@@ -85,7 +85,7 @@ describe('useSearchSelect', () => {
 
   it('handles change', () => {
     const { composable } = createWrapper()
-    composable.handleSearchInput(new Event('input'))
+    composable.handleSearchInput()
     expect(composable.menuState.value).toBe('searched')
   })
 
@@ -95,14 +95,14 @@ describe('useSearchSelect', () => {
     // Start composition
     composable.handleCompositionStart()
     composable.searchTerm.value = 'te'
-    composable.handleSearchInput(new Event('input'))
+    composable.handleSearchInput()
 
     expect(emit).not.toHaveBeenCalledWith('search-input', expect.anything())
 
     // End composition
     composable.handleCompositionEnd()
     composable.searchTerm.value = 'test'
-    composable.handleSearchInput(new Event('input'))
+    composable.handleSearchInput()
 
     expect(emit).toHaveBeenCalledWith('search-input', 'test')
   })

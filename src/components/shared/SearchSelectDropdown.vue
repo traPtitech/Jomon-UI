@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends string | number | null">
-import { nextTick, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
 
 import type { Option } from './types'
 
@@ -22,8 +22,6 @@ const isSelected = (value: T, model: T | T[] | null): boolean => {
   }
   return model === value
 }
-
-const listRef = useTemplateRef<HTMLElement>('listRef')
 
 const optionRefs = ref<HTMLElement[]>([])
 
@@ -62,7 +60,6 @@ onMounted(() => {
     <!-- Options list -->
     <ul
       :id="id"
-      ref="listRef"
       class="max-h-[200px] overflow-auto p-1"
       role="listbox"
       :aria-multiselectable="multiple || undefined"

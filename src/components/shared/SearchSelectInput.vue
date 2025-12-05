@@ -62,6 +62,7 @@ defineExpose({
       type="button"
       class="absolute inset-y-0 right-0 flex items-center pr-2"
       :disabled="disabled"
+      aria-label="候補の一覧を開閉"
       @click="emit('toggle-menu')">
       <ChevronDownIcon
         :class="[

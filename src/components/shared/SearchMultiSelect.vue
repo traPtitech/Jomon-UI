@@ -35,7 +35,7 @@ const {
   listboxId,
   activeOptionId,
   toggleMenu,
-} = useSearchSelect<T>(props, emit, model, dropdownRef)
+} = useSearchSelect<T>(props, emit, model, dropdownRef, { resetOnClose: true })
 
 const optionMap = computed(() => {
   return new Map(props.options.map(opt => [opt.value, opt.key]))
@@ -121,7 +121,6 @@ const handleKeyDown = (e: KeyboardEvent) => {
       :search-term="searchTerm"
       :highlighted-index="highlightedIndex"
       :model-value="model"
-      :options="options"
       multiple
       @select-option="handleSelect">
       <template #option-content="{ option, isSelected }">

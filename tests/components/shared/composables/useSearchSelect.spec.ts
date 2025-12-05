@@ -83,7 +83,7 @@ describe('useSearchSelect', () => {
 
   it('handles change', () => {
     const { composable } = createWrapper()
-    composable.handleSearchInput()
+    composable.handleSearchInput(new Event('input'))
     expect(composable.menuState.value).toBe('searched')
   })
 
@@ -93,14 +93,14 @@ describe('useSearchSelect', () => {
     // Start composition
     composable.handleCompositionStart()
     composable.searchTerm.value = 'te'
-    composable.handleSearchInput()
+    composable.handleSearchInput(new Event('input'))
 
     expect(emit).not.toHaveBeenCalledWith('search-input', expect.anything())
 
     // End composition
     composable.handleCompositionEnd()
     composable.searchTerm.value = 'test'
-    composable.handleSearchInput()
+    composable.handleSearchInput(new Event('input'))
 
     expect(emit).toHaveBeenCalledWith('search-input', 'test')
   })
@@ -237,6 +237,37 @@ describe('useSearchSelect', () => {
       // Force transition to ensure watcher triggers
       composable.menuState.value = 'searched'
       await new Promise(resolve => setTimeout(resolve, 10))
+
+      composable.handleKeyDown(escape, handleSelect)
+      await new Promise(resolve => setTimeout(resolve, 10))
+
+      expect(composable.menuState.value).toBe('close')
+      expect(composable.searchTerm.value).toBe('some search')
+    })
+
+    it('resets search term on close when resetOnClose is true', async () => {
+      const emit = vi.fn()
+      const modelValue = ref(null)
+      const dropdownRef = ref(null)
+      const props = reactive(defaultProps)
+
+      const composable = useSearchSelectGeneric(
+        props,
+        emit,
+        modelValue,
+        dropdownRef,
+        { resetOnClose: true }
+      )
+
+      composable.menuState.value = 'presearch'
+      composable.searchTerm.value = 'some search'
+
+      // Force transition
+      composable.menuState.value = 'searched'
+      await new Promise(resolve => setTimeout(resolve, 10))
+
+      const escape = new KeyboardEvent('keydown', { key: 'Escape' })
+      const handleSelect = vi.fn()
 
       composable.handleKeyDown(escape, handleSelect)
       await new Promise(resolve => setTimeout(resolve, 10))

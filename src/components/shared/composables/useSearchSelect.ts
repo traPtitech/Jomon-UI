@@ -34,8 +34,10 @@ export const useSearchSelect = <T>(
   props: SearchSelectCommonProps<T>,
   emit: SearchSelectEmit,
   model: RefLike<T | T[] | null>,
-  dropdownRef: Ref<HTMLElement | null>
+  dropdownRef: Ref<HTMLElement | null>,
+  options?: { resetOnClose?: boolean }
 ) => {
+  const resetOnClose = options?.resetOnClose ?? Array.isArray(model.value)
   const listboxId = useId()
   const menuState = ref<MenuState>('close')
   const searchTerm = ref('')
@@ -67,7 +69,10 @@ export const useSearchSelect = <T>(
   watch(menuState, newVal => {
     if (newVal === 'close') {
       emit('close')
-      resetSearchTerm()
+      emit('close')
+      if (resetOnClose) {
+        resetSearchTerm()
+      }
       highlightedIndex.value = -1
     } else if (filteredOptions.value.length > 0) {
       if (highlightedIndex.value === -1) {
@@ -118,7 +123,8 @@ export const useSearchSelect = <T>(
     }
   }
 
-  const handleSearchInput = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleSearchInput = (_e: Event) => {
     menuState.value = 'searched'
     if (!isComposing.value) {
       emit('search-input', searchTerm.value)

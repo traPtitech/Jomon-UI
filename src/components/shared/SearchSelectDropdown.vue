@@ -9,7 +9,6 @@ const props = defineProps<{
   highlightedIndex: number
   modelValue: T | T[] | null
 
-  options: Option<T>[]
   id?: string
   multiple?: boolean
 }>()

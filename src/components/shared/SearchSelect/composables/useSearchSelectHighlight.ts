@@ -1,12 +1,11 @@
 import { type Ref, computed, ref, watch } from 'vue'
 
-import type { MenuState } from '@/components/shared/SearchSelect/composables/useSearchSelectMenu'
 import type { Option } from '@/components/shared/types'
 import { toString } from '@/components/shared/utils'
 
 export const useSearchSelectHighlight = <T>(
   filteredOptions: Ref<Option<T>[]>,
-  menuState: Ref<MenuState>,
+  isOpen: Ref<boolean>,
   listboxId: string
 ) => {
   const highlightedIndex = ref(-1)
@@ -17,8 +16,8 @@ export const useSearchSelectHighlight = <T>(
   })
 
   // Initialize highlightedIndex when menu opens or options change
-  watch(menuState, newVal => {
-    if (newVal === 'close') {
+  watch(isOpen, newVal => {
+    if (!newVal) {
       highlightedIndex.value = -1
     } else if (filteredOptions.value.length > 0) {
       if (highlightedIndex.value === -1) {

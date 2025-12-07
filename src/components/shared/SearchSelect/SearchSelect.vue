@@ -32,7 +32,7 @@ defineExpose({
 })
 
 const {
-  menuState,
+  isOpen,
   searchTerm,
   highlightedIndex,
   filteredOptions,
@@ -54,7 +54,7 @@ const handleSelect = (selectedValue: T) => {
   searchTerm.value =
     selectedOption?.key ??
     (selectedValue !== null ? toString(selectedValue) : '')
-  menuState.value = 'close'
+  isOpen.value = false
 }
 
 const handleKeyDown = (e: KeyboardEvent) => {
@@ -71,19 +71,19 @@ const handleKeyDown = (e: KeyboardEvent) => {
       :placeholder="placeholder"
       :disabled="disabled"
       :required="required"
-      :menu-state="menuState"
+      :is-open="isOpen"
       @focus="handleInputFocus"
       @input="handleSearchInput"
       @keydown="handleKeyDown"
       @compositionstart="handleCompositionStart"
       @compositionend="handleCompositionEnd"
       @toggle-menu="toggleMenu"
-      :aria-expanded="menuState !== 'close'"
+      :aria-expanded="isOpen"
       :aria-controls="listboxId"
       :aria-activedescendant="activeOptionId" />
 
     <SearchSelectDropdown
-      v-if="menuState !== 'close'"
+      v-if="isOpen"
       :id="listboxId"
       :filtered-options="filteredOptions"
       :search-term="searchTerm"

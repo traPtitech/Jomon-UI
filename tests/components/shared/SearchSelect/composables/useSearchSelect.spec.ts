@@ -65,7 +65,7 @@ describe('useSearchSelect', () => {
 
   it('filters options based on search term', () => {
     const { composable } = createWrapper()
-    composable.menuState.value = 'searched'
+    composable.isOpen.value = true
     composable.searchTerm.value = 'opt'
     expect(composable.filteredOptions.value).toHaveLength(2)
     expect(composable.filteredOptions.value[0]?.key).toBe('Option 1')
@@ -80,13 +80,13 @@ describe('useSearchSelect', () => {
     const { composable, emit } = createWrapper()
     composable.handleInputFocus()
     expect(emit).toHaveBeenCalledWith('focus')
-    expect(composable.menuState.value).toBe('presearch')
+    expect(composable.isOpen.value).toBe(true)
   })
 
   it('handles change', () => {
     const { composable } = createWrapper()
     composable.handleSearchInput()
-    expect(composable.menuState.value).toBe('searched')
+    expect(composable.isOpen.value).toBe(true)
   })
 
   it('does not emit search-input during IME composition', () => {
@@ -117,12 +117,12 @@ describe('useSearchSelect', () => {
       composable.handleKeyDown(event, handleSelect)
 
       expect(preventDefault).toHaveBeenCalled()
-      expect(composable.menuState.value).toBe('presearch')
+      expect(composable.isOpen.value).toBe(true)
     })
 
     it('navigates options with ArrowDown and ArrowUp', () => {
       const { composable } = createWrapper()
-      composable.menuState.value = 'presearch'
+      composable.isOpen.value = true
 
       const arrowDown = new KeyboardEvent('keydown', { key: 'ArrowDown' })
       const arrowUp = new KeyboardEvent('keydown', { key: 'ArrowUp' })
@@ -142,7 +142,7 @@ describe('useSearchSelect', () => {
 
     it('resets highlightedIndex when search term changes', async () => {
       const { composable } = createWrapper()
-      composable.menuState.value = 'presearch'
+      composable.isOpen.value = true
       composable.highlightedIndex.value = 2
 
       composable.searchTerm.value = 'new search'
@@ -216,7 +216,7 @@ describe('useSearchSelect', () => {
 
     it('selects option with Enter', () => {
       const { composable } = createWrapper()
-      composable.menuState.value = 'presearch'
+      composable.isOpen.value = true
       composable.highlightedIndex.value = 0 // Option 1
 
       const enter = new KeyboardEvent('keydown', { key: 'Enter' })
@@ -229,7 +229,7 @@ describe('useSearchSelect', () => {
 
     it('closes menu on Escape', async () => {
       const { composable } = createWrapper()
-      composable.menuState.value = 'presearch'
+      composable.isOpen.value = true
       composable.searchTerm.value = 'some search'
       composable.highlightedIndex.value = 0
 
@@ -237,13 +237,12 @@ describe('useSearchSelect', () => {
       const handleSelect = vi.fn()
 
       // Force transition to ensure watcher triggers
-      composable.menuState.value = 'searched'
       await new Promise(resolve => setTimeout(resolve, 10))
 
       composable.handleKeyDown(escape, handleSelect)
       await new Promise(resolve => setTimeout(resolve, 10))
 
-      expect(composable.menuState.value).toBe('close')
+      expect(composable.isOpen.value).toBe(false)
       expect(composable.searchTerm.value).toBe('some search')
     })
 
@@ -252,11 +251,10 @@ describe('useSearchSelect', () => {
         resetOnClose: true,
       })
 
-      composable.menuState.value = 'presearch'
+      composable.isOpen.value = true
       composable.searchTerm.value = 'some search'
 
       // Force transition
-      composable.menuState.value = 'searched'
       await new Promise(resolve => setTimeout(resolve, 10))
 
       const escape = new KeyboardEvent('keydown', { key: 'Escape' })
@@ -265,7 +263,7 @@ describe('useSearchSelect', () => {
       composable.handleKeyDown(escape, handleSelect)
       await new Promise(resolve => setTimeout(resolve, 10))
 
-      expect(composable.menuState.value).toBe('close')
+      expect(composable.isOpen.value).toBe(false)
       expect(composable.searchTerm.value).toBe('')
     })
 
@@ -279,7 +277,7 @@ describe('useSearchSelect', () => {
       const handleSelect = vi.fn()
 
       // Open menu and highlight last option
-      vm.menuState.value = 'presearch'
+      vm.isOpen.value = true
       vm.highlightedIndex.value = 2
 
       vm.handleKeyDown(
@@ -300,7 +298,7 @@ describe('useSearchSelect', () => {
       const handleSelect = vi.fn()
 
       // Open menu and highlight first option
-      vm.menuState.value = 'presearch'
+      vm.isOpen.value = true
       vm.highlightedIndex.value = 0
 
       vm.handleKeyDown(
@@ -313,7 +311,7 @@ describe('useSearchSelect', () => {
 
     it('closes menu on Tab', () => {
       const { composable } = createWrapper()
-      composable.menuState.value = 'presearch'
+      composable.isOpen.value = true
       const handleSelect = vi.fn()
 
       composable.handleKeyDown(
@@ -321,7 +319,7 @@ describe('useSearchSelect', () => {
         handleSelect
       )
 
-      expect(composable.menuState.value).toBe('close')
+      expect(composable.isOpen.value).toBe(false)
     })
   })
 })

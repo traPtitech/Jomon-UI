@@ -6,7 +6,7 @@ import SearchSelectInput from '@/components/shared/SearchSelect/SearchSelectInpu
 describe('SearchSelectInput', () => {
   const defaultProps = {
     label: 'Test Label',
-    menuState: 'close' as const,
+    isOpen: false,
     modelValue: '',
   }
 
@@ -72,17 +72,14 @@ describe('SearchSelectInput', () => {
     const wrapper = mount(SearchSelectInput, {
       props: {
         ...defaultProps,
-        menuState: 'close',
+        isOpen: false,
       },
     })
 
     const chevron = wrapper.find('svg.transition-transform')
     expect(chevron.classes()).not.toContain('rotate-180')
 
-    await wrapper.setProps({ menuState: 'presearch' })
-    expect(chevron.classes()).toContain('rotate-180')
-
-    await wrapper.setProps({ menuState: 'searched' })
+    await wrapper.setProps({ isOpen: true })
     expect(chevron.classes()).toContain('rotate-180')
   })
 })

@@ -2,10 +2,7 @@ import { type Ref, computed, ref, useId, watch } from 'vue'
 
 import { useSearchSelectHighlight } from '@/components/shared/SearchSelect/composables/useSearchSelectHighlight'
 import { useSearchSelectKeyboard } from '@/components/shared/SearchSelect/composables/useSearchSelectKeyboard'
-import {
-  type MenuState,
-  useSearchSelectMenu,
-} from '@/components/shared/SearchSelect/composables/useSearchSelectMenu'
+import { useSearchSelectMenu } from '@/components/shared/SearchSelect/composables/useSearchSelectMenu'
 import type { Option } from '@/components/shared/types'
 import { toString } from '@/components/shared/utils'
 
@@ -26,8 +23,6 @@ export type SearchSelectEmit = {
    */
   (e: 'search-input', value: string): void
 }
-
-export type { MenuState }
 
 export interface RefLike<V> {
   readonly value: V
@@ -50,7 +45,7 @@ export const useSearchSelect = <T extends string | number | null>(
   const listboxId = useId()
   const searchTerm = ref('')
 
-  const { menuState, toggleMenu, openMenu } = useSearchSelectMenu(
+  const { isOpen, toggleMenu, openMenu } = useSearchSelectMenu(
     props,
     dropdownRef,
     () => {
@@ -75,7 +70,7 @@ export const useSearchSelect = <T extends string | number | null>(
 
   const { highlightedIndex, activeOptionId } = useSearchSelectHighlight(
     filteredOptions,
-    menuState,
+    isOpen,
     listboxId
   )
 
@@ -118,21 +113,21 @@ export const useSearchSelect = <T extends string | number | null>(
 
   // v-model handles the update, so we don't need to read the event
   const handleSearchInput = () => {
-    menuState.value = 'searched'
+    isOpen.value = true
     if (!isComposing.value) {
       emit('search-input', searchTerm.value)
     }
   }
 
   const { handleKeyDown } = useSearchSelectKeyboard(
-    menuState,
+    isOpen,
     highlightedIndex,
     filteredOptions,
     isComposing
   )
 
   return {
-    menuState,
+    isOpen,
     searchTerm,
     highlightedIndex,
     filteredOptions,

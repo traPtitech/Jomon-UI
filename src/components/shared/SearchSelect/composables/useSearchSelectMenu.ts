@@ -2,14 +2,6 @@ import { type Ref, ref, watch } from 'vue'
 
 import { onClickOutside } from '@vueuse/core'
 
-/**
- * State of the dropdown menu.
- * - 'close': Menu is closed.
- * - 'presearch': Menu is open but user hasn't typed a search term yet (or just opened).
- * - 'searched': Menu is open and user has typed/interacted with search.
- */
-export type MenuState = 'close' | 'presearch' | 'searched'
-
 export interface UseSearchSelectMenuProps {
   disabled?: boolean | undefined
 }
@@ -19,26 +11,20 @@ export const useSearchSelectMenu = (
   dropdownRef: Ref<HTMLElement | null>,
   emit: (e: 'close') => void
 ) => {
-  const menuState = ref<MenuState>('close')
+  const isOpen = ref(false)
 
   const toggleMenu = () => {
     if (props.disabled) return
-    if (menuState.value === 'close') {
-      menuState.value = 'presearch'
-    } else {
-      menuState.value = 'close'
-    }
+    isOpen.value = !isOpen.value
   }
 
   const openMenu = () => {
     if (props.disabled) return
-    if (menuState.value === 'close') {
-      menuState.value = 'presearch'
-    }
+    isOpen.value = true
   }
 
   const closeMenu = () => {
-    menuState.value = 'close'
+    isOpen.value = false
   }
 
   onClickOutside(dropdownRef, () => {
@@ -50,15 +36,15 @@ export const useSearchSelectMenu = (
     () => props.disabled,
     disabled => {
       if (disabled) {
-        menuState.value = 'close'
+        isOpen.value = false
       }
     }
   )
 
   watch(
-    menuState,
+    isOpen,
     newVal => {
-      if (newVal === 'close') {
+      if (!newVal) {
         emit('close')
       }
     },
@@ -66,7 +52,7 @@ export const useSearchSelectMenu = (
   )
 
   return {
-    menuState,
+    isOpen,
     toggleMenu,
     openMenu,
     closeMenu,

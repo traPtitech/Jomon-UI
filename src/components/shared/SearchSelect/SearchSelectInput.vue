@@ -4,14 +4,13 @@ import { useTemplateRef } from 'vue'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 
 import BaseTextInput from '../BaseInput/BaseTextInput.vue'
-import type { MenuState } from './composables/useSearchSelect'
 
 defineProps<{
   label: string
   placeholder?: string | undefined
   disabled?: boolean | undefined
   required?: boolean | undefined
-  menuState: MenuState
+  isOpen: boolean
   ariaExpanded?: boolean
   ariaControls?: string
   ariaActivedescendant?: string
@@ -77,7 +76,7 @@ const handleToggle = () => {
       <ChevronDownIcon
         :class="[
           'h-4 w-4 text-text-secondary transition-transform',
-          menuState !== 'close' && 'rotate-180',
+          isOpen && 'rotate-180',
         ]" />
     </button>
   </div>

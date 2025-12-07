@@ -3,7 +3,6 @@ import { nextTick, ref } from 'vue'
 import { describe, expect, it } from 'vitest'
 
 import { useSearchSelectHighlight } from '@/components/shared/SearchSelect/composables/useSearchSelectHighlight'
-import type { MenuState } from '@/components/shared/SearchSelect/composables/useSearchSelectMenu'
 import type { Option } from '@/components/shared/types'
 
 describe('useSearchSelectHighlight', () => {
@@ -15,10 +14,10 @@ describe('useSearchSelectHighlight', () => {
 
   it('should initialize with no highlight', () => {
     const filteredOptions = ref(options)
-    const menuState = ref<MenuState>('close')
+    const isOpen = ref(false)
     const { highlightedIndex } = useSearchSelectHighlight(
       filteredOptions,
-      menuState,
+      isOpen,
       listboxId
     )
     expect(highlightedIndex.value).toBe(-1)
@@ -26,39 +25,39 @@ describe('useSearchSelectHighlight', () => {
 
   it('should highlight first option when menu opens', async () => {
     const filteredOptions = ref(options)
-    const menuState = ref<MenuState>('close')
+    const isOpen = ref(false)
     const { highlightedIndex } = useSearchSelectHighlight(
       filteredOptions,
-      menuState,
+      isOpen,
       listboxId
     )
 
-    menuState.value = 'presearch'
+    isOpen.value = true
     await nextTick()
     expect(highlightedIndex.value).toBe(0)
   })
 
   it('should reset highlight when menu closes', async () => {
     const filteredOptions = ref(options)
-    const menuState = ref<MenuState>('presearch')
+    const isOpen = ref(true)
     const { highlightedIndex } = useSearchSelectHighlight(
       filteredOptions,
-      menuState,
+      isOpen,
       listboxId
     )
 
     highlightedIndex.value = 1
-    menuState.value = 'close'
+    isOpen.value = false
     await nextTick()
     expect(highlightedIndex.value).toBe(-1)
   })
 
   it('should reset highlight when options change', async () => {
     const filteredOptions = ref(options)
-    const menuState = ref<MenuState>('presearch')
+    const isOpen = ref(true)
     const { highlightedIndex } = useSearchSelectHighlight(
       filteredOptions,
-      menuState,
+      isOpen,
       listboxId
     )
 
@@ -70,10 +69,10 @@ describe('useSearchSelectHighlight', () => {
 
   it('should provide activeOptionId', () => {
     const filteredOptions = ref(options)
-    const menuState = ref<MenuState>('close')
+    const isOpen = ref(false)
     const { highlightedIndex, activeOptionId } = useSearchSelectHighlight(
       filteredOptions,
-      menuState,
+      isOpen,
       listboxId
     )
 

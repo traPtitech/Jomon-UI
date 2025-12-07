@@ -3,7 +3,6 @@ import { ref } from 'vue'
 import { describe, expect, it, vi } from 'vitest'
 
 import { useSearchSelectKeyboard } from '@/components/shared/SearchSelect/composables/useSearchSelectKeyboard'
-import type { MenuState } from '@/components/shared/SearchSelect/composables/useSearchSelectMenu'
 import type { Option } from '@/components/shared/types'
 
 describe('useSearchSelectKeyboard', () => {
@@ -14,12 +13,12 @@ describe('useSearchSelectKeyboard', () => {
   ]
 
   it('should handle ArrowDown', () => {
-    const menuState = ref<MenuState>('presearch')
+    const isOpen = ref(true)
     const highlightedIndex = ref(0)
     const filteredOptions = ref(options)
     const isComposing = ref(false)
     const { handleKeyDown } = useSearchSelectKeyboard(
-      menuState,
+      isOpen,
       highlightedIndex,
       filteredOptions,
       isComposing
@@ -33,12 +32,12 @@ describe('useSearchSelectKeyboard', () => {
   })
 
   it('should skip disabled options on ArrowDown', () => {
-    const menuState = ref<MenuState>('presearch')
+    const isOpen = ref(true)
     const highlightedIndex = ref(1)
     const filteredOptions = ref(options)
     const isComposing = ref(false)
     const { handleKeyDown } = useSearchSelectKeyboard(
-      menuState,
+      isOpen,
       highlightedIndex,
       filteredOptions,
       isComposing
@@ -53,12 +52,12 @@ describe('useSearchSelectKeyboard', () => {
   })
 
   it('should open menu on ArrowDown if closed', () => {
-    const menuState = ref<MenuState>('close')
+    const isOpen = ref(false)
     const highlightedIndex = ref(-1)
     const filteredOptions = ref(options)
     const isComposing = ref(false)
     const { handleKeyDown } = useSearchSelectKeyboard(
-      menuState,
+      isOpen,
       highlightedIndex,
       filteredOptions,
       isComposing
@@ -68,16 +67,16 @@ describe('useSearchSelectKeyboard', () => {
     const handleSelect = vi.fn()
     handleKeyDown(event, handleSelect)
 
-    expect(menuState.value).toBe('presearch')
+    expect(isOpen.value).toBe(true)
   })
 
   it('should select option on Enter', () => {
-    const menuState = ref<MenuState>('presearch')
+    const isOpen = ref(true)
     const highlightedIndex = ref(1)
     const filteredOptions = ref(options)
     const isComposing = ref(false)
     const { handleKeyDown } = useSearchSelectKeyboard(
-      menuState,
+      isOpen,
       highlightedIndex,
       filteredOptions,
       isComposing
@@ -91,12 +90,12 @@ describe('useSearchSelectKeyboard', () => {
   })
 
   it('should close menu on Escape', () => {
-    const menuState = ref<MenuState>('presearch')
+    const isOpen = ref(true)
     const highlightedIndex = ref(0)
     const filteredOptions = ref(options)
     const isComposing = ref(false)
     const { handleKeyDown } = useSearchSelectKeyboard(
-      menuState,
+      isOpen,
       highlightedIndex,
       filteredOptions,
       isComposing
@@ -106,6 +105,6 @@ describe('useSearchSelectKeyboard', () => {
     const handleSelect = vi.fn()
     handleKeyDown(event, handleSelect)
 
-    expect(menuState.value).toBe('close')
+    expect(isOpen.value).toBe(false)
   })
 })

@@ -1,10 +1,9 @@
 import type { Ref } from 'vue'
 
-import type { MenuState } from '@/components/shared/SearchSelect/composables/useSearchSelectMenu'
 import type { Option } from '@/components/shared/types'
 
 export const useSearchSelectKeyboard = <T>(
-  menuState: Ref<MenuState>,
+  isOpen: Ref<boolean>,
   highlightedIndex: Ref<number>,
   filteredOptions: Ref<Option<T>[]>,
   isComposing: Ref<boolean>
@@ -35,21 +34,17 @@ export const useSearchSelectKeyboard = <T>(
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault()
-        if (menuState.value === 'close') {
-          menuState.value = 'presearch'
-        }
+        isOpen.value = true
         moveHighlight(1)
         break
       case 'ArrowUp':
         e.preventDefault()
-        if (menuState.value === 'close') {
-          menuState.value = 'presearch'
-        }
+        isOpen.value = true
         moveHighlight(-1)
         break
       case 'Home':
         e.preventDefault()
-        if (menuState.value !== 'close' && filteredOptions.value.length > 0) {
+        if (isOpen.value && filteredOptions.value.length > 0) {
           // Find first non-disabled option
           const firstIndex = filteredOptions.value.findIndex(
             opt => !opt.disabled
@@ -61,7 +56,7 @@ export const useSearchSelectKeyboard = <T>(
         break
       case 'End':
         e.preventDefault()
-        if (menuState.value !== 'close' && filteredOptions.value.length > 0) {
+        if (isOpen.value && filteredOptions.value.length > 0) {
           // Find last non-disabled option
           for (let i = filteredOptions.value.length - 1; i >= 0; i--) {
             if (!filteredOptions.value[i]?.disabled) {
@@ -74,8 +69,8 @@ export const useSearchSelectKeyboard = <T>(
       case 'Enter': {
         e.preventDefault()
         // 1. If menu is closed, just open it
-        if (menuState.value === 'close') {
-          menuState.value = 'presearch'
+        if (!isOpen.value) {
+          isOpen.value = true
           return
         }
 
@@ -101,10 +96,10 @@ export const useSearchSelectKeyboard = <T>(
       }
       case 'Escape':
         e.preventDefault()
-        menuState.value = 'close'
+        isOpen.value = false
         break
       case 'Tab':
-        menuState.value = 'close'
+        isOpen.value = false
         break
     }
   }

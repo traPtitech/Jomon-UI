@@ -23,7 +23,7 @@ const model = defineModel<T[]>({ required: true })
 const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
 
 const {
-  menuState,
+  isOpen,
   searchTerm,
   highlightedIndex,
   filteredOptions,
@@ -91,14 +91,14 @@ const handleKeyDown = (e: KeyboardEvent) => {
       :placeholder="getPlaceholderText"
       :disabled="disabled"
       :required="required"
-      :menu-state="menuState"
+      :is-open="isOpen"
       @focus="handleInputFocus"
       @input="handleSearchInput"
       @keydown="handleKeyDown"
       @compositionstart="handleCompositionStart"
       @compositionend="handleCompositionEnd"
       @toggle-menu="toggleMenu"
-      :aria-expanded="menuState !== 'close'"
+      :aria-expanded="isOpen"
       :aria-controls="listboxId"
       :aria-activedescendant="activeOptionId" />
 
@@ -117,7 +117,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
     </div>
 
     <SearchSelectDropdown
-      v-if="menuState !== 'close'"
+      v-if="isOpen"
       :id="listboxId"
       :filtered-options="filteredOptions"
       :search-term="searchTerm"

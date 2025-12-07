@@ -12,75 +12,75 @@ describe('useSearchSelectMenu', () => {
   it('should initialize with closed state', () => {
     const dropdownRef = ref(null)
     const emit = vi.fn()
-    const { menuState } = useSearchSelectMenu({}, dropdownRef, emit)
-    expect(menuState.value).toBe('close')
+    const { isOpen } = useSearchSelectMenu({}, dropdownRef, emit)
+    expect(isOpen.value).toBe(false)
   })
 
   it('should toggle menu state', () => {
     const dropdownRef = ref(null)
     const emit = vi.fn()
-    const { menuState, toggleMenu } = useSearchSelectMenu({}, dropdownRef, emit)
+    const { isOpen, toggleMenu } = useSearchSelectMenu({}, dropdownRef, emit)
 
     toggleMenu()
-    expect(menuState.value).toBe('presearch')
+    expect(isOpen.value).toBe(true)
 
     toggleMenu()
-    expect(menuState.value).toBe('close')
+    expect(isOpen.value).toBe(false)
   })
 
   it('should not toggle if disabled', () => {
     const dropdownRef = ref(null)
     const emit = vi.fn()
-    const { menuState, toggleMenu } = useSearchSelectMenu(
+    const { isOpen, toggleMenu } = useSearchSelectMenu(
       { disabled: true },
       dropdownRef,
       emit
     )
 
     toggleMenu()
-    expect(menuState.value).toBe('close')
+    expect(isOpen.value).toBe(false)
   })
 
   it('should open menu', () => {
     const dropdownRef = ref(null)
     const emit = vi.fn()
-    const { menuState, openMenu } = useSearchSelectMenu({}, dropdownRef, emit)
+    const { isOpen, openMenu } = useSearchSelectMenu({}, dropdownRef, emit)
 
     openMenu()
-    expect(menuState.value).toBe('presearch')
+    expect(isOpen.value).toBe(true)
 
     // Should stay open (or presearch) if called again
     openMenu()
-    expect(menuState.value).toBe('presearch')
+    expect(isOpen.value).toBe(true)
   })
 
   it('should close menu', () => {
     const dropdownRef = ref(null)
     const emit = vi.fn()
-    const { menuState, openMenu, closeMenu } = useSearchSelectMenu(
+    const { isOpen, openMenu, closeMenu } = useSearchSelectMenu(
       {},
       dropdownRef,
       emit
     )
 
     openMenu()
-    expect(menuState.value).toBe('presearch')
+    expect(isOpen.value).toBe(true)
 
     closeMenu()
-    expect(menuState.value).toBe('close')
+    expect(isOpen.value).toBe(false)
   })
 
   it('should emit close event when menu closes', () => {
     const dropdownRef = ref(null)
     const emit = vi.fn()
-    const { menuState, openMenu, closeMenu } = useSearchSelectMenu(
+    const { isOpen, openMenu, closeMenu } = useSearchSelectMenu(
       {},
       dropdownRef,
       emit
     )
 
     openMenu()
-    expect(menuState.value).toBe('presearch')
+    expect(isOpen.value).toBe(true)
     expect(emit).not.toHaveBeenCalled()
 
     closeMenu()
@@ -90,16 +90,16 @@ describe('useSearchSelectMenu', () => {
   it('should be reactive', async () => {
     const dropdownRef = ref(null)
     const emit = vi.fn()
-    const { menuState } = useSearchSelectMenu({}, dropdownRef, emit)
+    const { isOpen } = useSearchSelectMenu({}, dropdownRef, emit)
 
     let dummy = 0
 
     const { watch } = await import('vue')
-    watch(menuState, () => {
+    watch(isOpen, () => {
       dummy++
     })
 
-    menuState.value = 'presearch'
+    isOpen.value = true
     await nextTick()
     expect(dummy).toBe(1)
   })
@@ -109,18 +109,18 @@ describe('useSearchSelectMenu', () => {
     const emit = vi.fn()
     const props = ref({ disabled: false })
 
-    const { menuState, openMenu } = useSearchSelectMenu(
+    const { isOpen, openMenu } = useSearchSelectMenu(
       props.value,
       dropdownRef,
       emit
     )
 
     openMenu()
-    expect(menuState.value).toBe('presearch')
+    expect(isOpen.value).toBe(true)
 
     // Simulate prop change
     props.value.disabled = true
     await nextTick()
-    expect(menuState.value).toBe('close')
+    expect(isOpen.value).toBe(false)
   })
 })

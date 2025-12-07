@@ -10,7 +10,7 @@ import type { Option } from '@/components/shared/types'
 import { toString } from '@/components/shared/utils'
 
 export interface SearchSelectCommonProps<T> {
-  options: Option<T>[]
+  options: Option<Exclude<T, null>>[]
   label: string
   placeholder?: string | undefined
   disabled?: boolean | undefined
@@ -69,8 +69,7 @@ export const useSearchSelect = <T extends string | number | null>(
     return props.options.filter(
       opt =>
         opt.key.toLowerCase().includes(lowerTerm) ||
-        (opt.value !== null &&
-          toString(opt.value).toLowerCase().includes(lowerTerm))
+        toString(opt.value).toLowerCase().includes(lowerTerm)
     )
   })
 

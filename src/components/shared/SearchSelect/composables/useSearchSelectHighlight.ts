@@ -1,11 +1,12 @@
 import { type Ref, computed, ref, watch } from 'vue'
 
+import type { MenuState } from '@/components/shared/SearchSelect/composables/useSearchSelectMenu'
 import type { Option } from '@/components/shared/types'
 import { toString } from '@/components/shared/utils'
 
 export const useSearchSelectHighlight = <T>(
   filteredOptions: Ref<Option<T>[]>,
-  menuState: Ref<string>,
+  menuState: Ref<MenuState>,
   listboxId: string
 ) => {
   const highlightedIndex = ref(-1)

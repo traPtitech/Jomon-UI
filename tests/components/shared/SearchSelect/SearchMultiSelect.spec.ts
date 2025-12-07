@@ -1,8 +1,34 @@
+import { computed } from 'vue'
+
 import { mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import SearchMultiSelect from '@/components/shared/SearchSelect/SearchMultiSelect.vue'
 import type { Option } from '@/components/shared/types'
+
+const { mockScrollTo } = vi.hoisted(() => ({ mockScrollTo: vi.fn() }))
+
+vi.mock('@vueuse/core', async importOriginal => {
+  const actual = await importOriginal<typeof import('@vueuse/core')>()
+  return {
+    ...actual,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    useVirtualList: (list: any) => {
+      const source = typeof list === 'function' ? computed(list) : list
+      const mappedList = computed(() => {
+        const val = source.value || []
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return val.map((item: any, index: number) => ({ data: item, index }))
+      })
+      return {
+        list: mappedList,
+        containerProps: {},
+        wrapperProps: {},
+        scrollTo: mockScrollTo,
+      }
+    },
+  }
+})
 
 const options: Option<string>[] = [
   { key: 'Option 1', value: 'opt1' },
@@ -35,7 +61,7 @@ describe('SearchMultiSelect', () => {
     await wrapper.find('input').trigger('focus')
 
     const option1Button = wrapper
-      .findAll('li[role="option"]')
+      .findAll('div[role="option"]')
       .find(b => b.text() === 'Option 1')
     await option1Button?.trigger('click')
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([['opt1']])
@@ -43,7 +69,7 @@ describe('SearchMultiSelect', () => {
     await wrapper.setProps({ modelValue: ['opt1'] })
 
     const option2Button = wrapper
-      .findAll('li[role="option"]')
+      .findAll('div[role="option"]')
       .find(b => b.text() === 'Option 2')
     await option2Button?.trigger('click')
     expect(wrapper.emitted('update:modelValue')?.[1]).toEqual([
@@ -63,7 +89,7 @@ describe('SearchMultiSelect', () => {
     await wrapper.find('input').trigger('focus')
 
     const option1Button = wrapper
-      .findAll('li[role="option"]')
+      .findAll('div[role="option"]')
       .find(b => b.text() === 'Option 1')
     await option1Button?.trigger('click')
 

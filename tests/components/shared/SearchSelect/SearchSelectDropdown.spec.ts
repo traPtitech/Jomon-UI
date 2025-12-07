@@ -1,8 +1,34 @@
+import { computed } from 'vue'
+
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 
 import SearchSelectDropdown from '@/components/shared/SearchSelect/SearchSelectDropdown.vue'
 import type { Option } from '@/components/shared/types'
+
+const { mockScrollTo } = vi.hoisted(() => ({ mockScrollTo: vi.fn() }))
+
+vi.mock('@vueuse/core', async importOriginal => {
+  const actual = await importOriginal<typeof import('@vueuse/core')>()
+  return {
+    ...actual,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    useVirtualList: (list: any) => {
+      const source = typeof list === 'function' ? computed(list) : list
+      const mappedList = computed(() => {
+        const val = source.value || []
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return val.map((item: any, index: number) => ({ data: item, index }))
+      })
+      return {
+        list: mappedList,
+        containerProps: {},
+        wrapperProps: {},
+        scrollTo: mockScrollTo,
+      }
+    },
+  }
+})
 
 describe('SearchSelectDropdown', () => {
   const options: Option<string>[] = [
@@ -24,7 +50,7 @@ describe('SearchSelectDropdown', () => {
       props: defaultProps,
     })
 
-    const items = wrapper.findAll('li[role="option"]')
+    const items = wrapper.findAll('div[role="option"]')
     expect(items).toHaveLength(3)
     expect(items[0]?.text()).toBe('Option 1')
     expect(items[2]?.classes()).toContain('cursor-not-allowed')
@@ -35,7 +61,7 @@ describe('SearchSelectDropdown', () => {
       props: defaultProps,
     })
 
-    const items = wrapper.findAll('li[role="option"]')
+    const items = wrapper.findAll('div[role="option"]')
     await items[0]?.trigger('click')
 
     expect(wrapper.emitted('select-option')).toBeTruthy()
@@ -47,7 +73,7 @@ describe('SearchSelectDropdown', () => {
       props: defaultProps,
     })
 
-    const items = wrapper.findAll('li[role="option"]')
+    const items = wrapper.findAll('div[role="option"]')
     await items[2]?.trigger('click')
 
     expect(wrapper.emitted('select-option')).toBeFalsy()
@@ -61,7 +87,7 @@ describe('SearchSelectDropdown', () => {
       },
     })
 
-    const items = wrapper.findAll('li[role="option"]')
+    const items = wrapper.findAll('div[role="option"]')
     expect(items[1]?.classes()).toContain('bg-blue-100')
     expect(items[1]?.classes()).toContain('text-blue-500')
   })
@@ -98,19 +124,14 @@ describe('SearchSelectDropdown', () => {
       },
     })
 
-    const items = wrapper.findAll('li[role="option"]')
+    const items = wrapper.findAll('div[role="option"]')
     expect(items[0]?.attributes('aria-selected')).toBe('true')
     expect(items[1]?.attributes('aria-selected')).toBe('false')
   })
 
   it('calls scrollIntoView when highlightedIndex changes', async () => {
-    // Mock scrollIntoView
-    const scrollIntoViewMock = vi.fn()
-    Element.prototype.scrollIntoView = scrollIntoViewMock
-
     const wrapper = mount(SearchSelectDropdown, {
       props: defaultProps,
-      attachTo: document.body, // Needed for scrolling to work potentially, or just to ensure elements are "visible" to jsdom
     })
 
     await wrapper.setProps({ highlightedIndex: 1 })
@@ -120,7 +141,7 @@ describe('SearchSelectDropdown', () => {
     // And potentially another one for the async function
     await new Promise(resolve => setTimeout(resolve, 0))
 
-    expect(scrollIntoViewMock).toHaveBeenCalled()
+    expect(mockScrollTo).toHaveBeenCalled()
 
     wrapper.unmount()
   })

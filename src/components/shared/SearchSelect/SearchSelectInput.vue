@@ -27,11 +27,18 @@ const emit = defineEmits<{
 
 const inputRef = useTemplateRef<InstanceType<typeof BaseTextInput>>('inputRef')
 
+const focus = () => {
+  inputRef.value?.focus()
+}
+
 defineExpose({
-  focus: () => {
-    inputRef.value?.focus()
-  },
+  focus,
 })
+
+const handleToggle = () => {
+  emit('toggle-menu')
+  focus()
+}
 </script>
 
 <template>
@@ -64,7 +71,7 @@ defineExpose({
       class="absolute inset-y-0 right-0 flex items-center pr-2"
       :disabled="disabled"
       aria-label="候補の一覧を開閉"
-      @click="emit('toggle-menu')">
+      @click="handleToggle">
       <ChevronDownIcon
         :class="[
           'h-4 w-4 text-text-secondary transition-transform',

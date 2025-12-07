@@ -103,4 +103,24 @@ describe('useSearchSelectMenu', () => {
     await nextTick()
     expect(dummy).toBe(1)
   })
+
+  it('should close menu when disabled prop changes to true', async () => {
+    const dropdownRef = ref(null)
+    const emit = vi.fn()
+    const props = ref({ disabled: false })
+
+    const { menuState, openMenu } = useSearchSelectMenu(
+      props.value,
+      dropdownRef,
+      emit
+    )
+
+    openMenu()
+    expect(menuState.value).toBe('presearch')
+
+    // Simulate prop change
+    props.value.disabled = true
+    await nextTick()
+    expect(menuState.value).toBe('close')
+  })
 })

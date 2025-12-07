@@ -37,6 +37,8 @@ const {
   toggleMenu,
 } = useSearchSelect<T>(props, emit, model, dropdownRef, { resetOnClose: true })
 
+// Note: This implementation assumes that all option values are unique.
+// If multiple options share the same value, the last one's key will be used for display.
 const optionMap = computed(() => {
   return new Map(props.options.map(opt => [opt.value, opt.key]))
 })

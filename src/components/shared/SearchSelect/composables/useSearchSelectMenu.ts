@@ -39,6 +39,16 @@ export const useSearchSelectMenu = (
     closeMenu()
   })
 
+  // Close menu if disabled prop changes to true
+  watch(
+    () => props.disabled,
+    disabled => {
+      if (disabled) {
+        menuState.value = 'close'
+      }
+    }
+  )
+
   watch(
     menuState,
     newVal => {

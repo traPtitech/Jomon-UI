@@ -21,7 +21,8 @@ export type SearchSelectEmit = {
   (e: 'focus' | 'close'): void
   /**
    * Emitted when the search term changes.
-   * This event is not emitted during IME composition.
+   * This event is NOT emitted during IME composition.
+   * It fires only after composition ends or on direct input.
    */
   (e: 'search-input', value: string): void
 }
@@ -39,6 +40,12 @@ export const useSearchSelect = <T extends string | number | null>(
   dropdownRef: Ref<HTMLElement | null>,
   options?: { resetOnClose?: boolean }
 ) => {
+  /**
+   * resetOnClose behavior:
+   * - If not specified, defaults to true if model is an array (multi-select), false otherwise (single-select).
+   * - If true: reset search term and highlight when menu closes.
+   * - If false: keep search term (useful for single select where term = selected label).
+   */
   const resetOnClose = options?.resetOnClose ?? Array.isArray(model.value)
   const listboxId = useId()
   const searchTerm = ref('')

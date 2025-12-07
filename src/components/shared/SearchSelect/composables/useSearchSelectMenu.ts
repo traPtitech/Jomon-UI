@@ -2,6 +2,12 @@ import { type Ref, ref, watch } from 'vue'
 
 import { onClickOutside } from '@vueuse/core'
 
+/**
+ * State of the dropdown menu.
+ * - 'close': Menu is closed.
+ * - 'presearch': Menu is open but user hasn't typed a search term yet (or just opened).
+ * - 'searched': Menu is open and user has typed/interacted with search.
+ */
 export type MenuState = 'close' | 'presearch' | 'searched'
 
 export interface UseSearchSelectMenuProps {

@@ -30,8 +30,12 @@ export const useSearchSelectHighlight = <T>(
   })
 
   // Reset highlight when options change (e.g. typing)
-  watch(filteredOptions, () => {
-    highlightedIndex.value = -1
+  watch(filteredOptions, newVal => {
+    if (newVal.length > 0) {
+      highlightedIndex.value = 0
+    } else {
+      highlightedIndex.value = -1
+    }
   })
 
   return {

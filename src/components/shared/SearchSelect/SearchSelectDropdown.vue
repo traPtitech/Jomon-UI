@@ -81,6 +81,10 @@ onMounted(() => {
           This component implements the Combobox (Active Descendant) pattern.
           Focus remains on the input element, and key events are handled there.
           The 'div' elements (options) represent the options but are not focusable.
+          WARNING: Since this uses a Virtual List, options outside the view port are NOT in the DOM.
+          `aria-activedescendant` may point to a missing ID if not careful.
+          However, `useSearchSelectHighlight` and `scrollToHighlighted` ensure the highlighted
+          item is scrolled into view (and thus rendered) whenever the index changes.
         -->
         <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events -->
         <div

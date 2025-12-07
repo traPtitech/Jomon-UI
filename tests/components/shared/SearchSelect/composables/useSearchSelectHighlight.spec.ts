@@ -65,7 +65,7 @@ describe('useSearchSelectHighlight', () => {
     highlightedIndex.value = 1
     filteredOptions.value = [{ key: 'Option 3', value: '3' }]
     await nextTick()
-    expect(highlightedIndex.value).toBe(-1)
+    expect(highlightedIndex.value).toBe(0)
   })
 
   it('should provide activeOptionId', () => {

@@ -52,6 +52,24 @@ watch(
 onMounted(() => {
   void scrollToHighlighted(props.highlightedIndex)
 })
+const getOptionClass = (option: Option<T>, index: number) => {
+  const baseClass =
+    'relative flex w-full cursor-pointer items-center rounded-sm px-2 py-2 text-left text-sm outline-none select-none'
+
+  if (option.disabled) {
+    return [baseClass, 'cursor-not-allowed text-gray-400 opacity-50']
+  }
+
+  const classes = [baseClass, 'hover:bg-blue-100 hover:text-blue-500']
+
+  if (props.highlightedIndex === index) {
+    classes.push('bg-blue-100 text-blue-500')
+  } else if (isSelected(option.value, props.modelValue)) {
+    classes.push('bg-blue-100')
+  }
+
+  return classes
+}
 </script>
 
 <template>
@@ -96,18 +114,7 @@ onMounted(() => {
             !option.disabled && isSelected(option.value, modelValue)
           "
           :aria-disabled="option.disabled || undefined"
-          :class="[
-            'relative flex w-full cursor-pointer items-center rounded-sm px-2 py-2 text-left text-sm outline-none select-none',
-            option.disabled
-              ? 'cursor-not-allowed text-gray-400 opacity-50'
-              : 'hover:bg-blue-100 hover:text-blue-500',
-            highlightedIndex === index &&
-              !option.disabled &&
-              'bg-blue-100 text-blue-500',
-            !option.disabled &&
-              isSelected(option.value, modelValue) &&
-              'bg-blue-100',
-          ]"
+          :class="getOptionClass(option, index)"
           tabindex="-1"
           @mousedown.prevent
           @click="!option.disabled && emit('select-option', option.value)">

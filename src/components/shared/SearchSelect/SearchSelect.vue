@@ -11,6 +11,17 @@ import {
 } from './composables/useSearchSelectBase'
 import { useSearchSelectSingle } from './composables/useSearchSelectSingle'
 
+/**
+ * Generic SearchSelect component for single selection.
+ * @template T - The type of the option value. Must be string | number | null.
+ * Note: Complex objects are not supported as values. Use primitive IDs or codes.
+ *
+ * Events:
+ * - search-input: Emitted when the search term changes.
+ *   - Fires on direct input or after IME composition ends found in modern browsers.
+ *   - Does NOT fire during IME composition.
+ */
+
 const props = withDefaults(defineProps<SearchSelectCommonProps<T>>(), {
   placeholder: '検索',
   disabled: false,

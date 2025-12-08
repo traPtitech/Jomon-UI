@@ -16,6 +16,8 @@ export const useSearchSelectHighlight = <T>(
   })
 
   // Initialize highlightedIndex when menu opens or options change
+  // Note: We respect the current highlightedIndex if it's already set (not -1) when opening,
+  // unless the options have changed (handled by the other watcher).
   watch(isOpen, newVal => {
     if (!newVal) {
       highlightedIndex.value = -1

@@ -19,7 +19,8 @@ defineProps<{
 const model = defineModel<string>({ required: true })
 
 const emit = defineEmits<{
-  (e: 'focus' | 'toggle-menu' | 'compositionstart' | 'compositionend'): void
+  (e: 'toggle-menu' | 'compositionstart' | 'compositionend'): void
+  (e: 'focus', value: FocusEvent): void
   (e: 'input', value: Event): void
   (e: 'keydown', value: KeyboardEvent): void
 }>()
@@ -58,7 +59,7 @@ const handleToggle = () => {
         'aria-controls': ariaControls,
         'aria-activedescendant': ariaActivedescendant,
       }"
-      @focus="emit('focus')"
+      @focus="emit('focus', $event)"
       @input="emit('input', $event)"
       @keydown="emit('keydown', $event)"
       @compositionstart="emit('compositionstart')"

@@ -11,6 +11,13 @@ export const useSearchSelectKeyboard = <T>(
   const handleKeyDown = (e: KeyboardEvent, handleSelect: (val: T) => void) => {
     if (isComposing.value || e.isComposing) return
 
+    // Key bindings:
+    // - ArrowUp/ArrowDown: Cycle through options (skipping disabled)
+    // - Home/End: Jump to first/last non-disabled option
+    // - Enter: Select highlighted option or first non-disabled option if none highlighted
+    // - Escape: Close menu
+    // - Tab: Close menu (allow default tab behavior)
+
     const moveHighlight = (direction: 1 | -1) => {
       if (filteredOptions.value.length === 0) return
 

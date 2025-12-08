@@ -31,6 +31,8 @@ export const useSearchSelectMulti = <T extends string | number>(
       : [...model.value, selectedValue]
 
     // Focus input if item was removed via click
+    // We restore focus on removal to allow continuous deletions or immediate search for replacement.
+    // On addition, we don't force focus back to input to keep the flow natural (or to allow other interactions).
     if (isSelected) {
       inputRef?.value?.focus()
     }

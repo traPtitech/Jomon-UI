@@ -19,14 +19,16 @@ export const useSearchSelectSingle = <T extends string | number | null>(
 
   const { searchTerm, isOpen, baseHandleKeyDown } = base
 
+  const getLabelFromValue = (val: T | null) => {
+    const selectedOption = props.options.find(opt => opt.value === val)
+    if (selectedOption) return selectedOption.key
+    if (val !== null) return toString(val)
+    return ''
+  }
+
   const handleSelect = (selectedValue: T) => {
     model.value = selectedValue
-    const selectedOption = props.options.find(
-      opt => opt.value === selectedValue
-    )
-    searchTerm.value =
-      selectedOption?.key ??
-      (selectedValue !== null ? toString(selectedValue) : '')
+    searchTerm.value = getLabelFromValue(selectedValue)
     isOpen.value = false
   }
 
@@ -38,14 +40,7 @@ export const useSearchSelectSingle = <T extends string | number | null>(
   watch(
     () => model.value,
     newVal => {
-      const selectedOption = props.options.find(opt => opt.value === newVal)
-      if (selectedOption) {
-        searchTerm.value = selectedOption.key
-      } else if (newVal !== null) {
-        searchTerm.value = toString(newVal)
-      } else {
-        searchTerm.value = ''
-      }
+      searchTerm.value = getLabelFromValue(newVal)
     },
     { immediate: true }
   )

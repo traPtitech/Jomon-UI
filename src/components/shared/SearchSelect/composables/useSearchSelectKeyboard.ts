@@ -50,8 +50,9 @@ export const useSearchSelectKeyboard = <T>(
         moveHighlight(-1)
         break
       case 'Home':
+        if (!isOpen.value) return
         e.preventDefault()
-        if (isOpen.value && filteredOptions.value.length > 0) {
+        if (filteredOptions.value.length > 0) {
           // Find first non-disabled option
           const firstIndex = filteredOptions.value.findIndex(
             opt => !opt.disabled
@@ -62,8 +63,9 @@ export const useSearchSelectKeyboard = <T>(
         }
         break
       case 'End':
+        if (!isOpen.value) return
         e.preventDefault()
-        if (isOpen.value && filteredOptions.value.length > 0) {
+        if (filteredOptions.value.length > 0) {
           // Find last non-disabled option
           for (let i = filteredOptions.value.length - 1; i >= 0; i--) {
             if (!filteredOptions.value[i]?.disabled) {

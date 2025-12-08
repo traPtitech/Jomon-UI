@@ -9,7 +9,7 @@ export interface UseSearchSelectMenuProps {
 export const useSearchSelectMenu = (
   props: UseSearchSelectMenuProps,
   dropdownRef: Ref<HTMLElement | null>,
-  emit: (e: 'close') => void
+  onClose: () => void
 ) => {
   const isOpen = ref(false)
 
@@ -45,7 +45,7 @@ export const useSearchSelectMenu = (
     isOpen,
     newVal => {
       if (!newVal) {
-        emit('close')
+        onClose()
       }
     },
     { flush: 'sync' }

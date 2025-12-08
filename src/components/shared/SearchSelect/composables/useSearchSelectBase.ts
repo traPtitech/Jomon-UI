@@ -89,8 +89,10 @@ export const useSearchSelectBase = <T extends string | number | null>(
     openMenu()
     // Note: We check both our internal isComposing state (from compositionstart/end)
     // and the native InputEvent.isComposing property for robustness.
+    const isNativeInputEvent =
+      typeof InputEvent !== 'undefined' && event instanceof InputEvent
     const composingNow =
-      isComposing.value || (event instanceof InputEvent && event.isComposing)
+      isComposing.value || (isNativeInputEvent && event.isComposing)
     if (!composingNow) {
       emit('search-input', searchTerm.value)
     }

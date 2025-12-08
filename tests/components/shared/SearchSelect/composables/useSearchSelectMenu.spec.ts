@@ -70,21 +70,21 @@ describe('useSearchSelectMenu', () => {
     expect(isOpen.value).toBe(false)
   })
 
-  it('should emit close event when menu closes', () => {
+  it('should call onClose callback when menu closes', () => {
     const dropdownRef = ref(null)
-    const emit = vi.fn()
+    const onClose = vi.fn()
     const { isOpen, openMenu, closeMenu } = useSearchSelectMenu(
       {},
       dropdownRef,
-      emit
+      onClose
     )
 
     openMenu()
     expect(isOpen.value).toBe(true)
-    expect(emit).not.toHaveBeenCalled()
+    expect(onClose).not.toHaveBeenCalled()
 
     closeMenu()
-    expect(emit).toHaveBeenCalledWith('close')
+    expect(onClose).toHaveBeenCalled()
   })
 
   it('should be reactive', async () => {

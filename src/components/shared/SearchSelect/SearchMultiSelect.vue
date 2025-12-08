@@ -52,6 +52,12 @@ const {
   optionMap,
   placeholderText,
 } = useSearchSelectMulti<T>(props, emit, model, dropdownRef, inputRef)
+
+defineExpose({
+  focus: () => {
+    inputRef.value?.focus()
+  },
+})
 </script>
 
 <template>

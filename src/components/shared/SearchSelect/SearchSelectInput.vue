@@ -71,8 +71,6 @@ const handleToggle = () => {
       class="absolute inset-y-0 right-0 flex items-center pr-2"
       :disabled="disabled"
       aria-label="候補の一覧を開閉"
-      :aria-expanded="ariaExpanded"
-      :aria-controls="ariaControls"
       @click="handleToggle">
       <ChevronDownIcon
         :class="[

@@ -57,9 +57,8 @@ export const useSearchSelectBase = <T extends string | number | null>(
     )
   })
 
-  // Note: We need to cast filteredOptions to Option<any>[] or similar because T might be T | null for Single
-  // but Option expect Exclude<T, null>. However, filteredOptions is derived from props.options which is Option<Exclude<T, null>>[]
-  // so safe.
+  // Note: filteredOptions is derived from props.options which is Option<Exclude<T, null>>[].
+  // Although T might include null for Single select, the filtered list is guaranteed to be compatible.
   const { highlightedIndex, activeOptionId } = useSearchSelectHighlight(
     filteredOptions,
     isOpen,

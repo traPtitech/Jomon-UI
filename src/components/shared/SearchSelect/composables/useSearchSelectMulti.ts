@@ -20,7 +20,7 @@ export const useSearchSelectMulti = <T extends string | number>(
   const base = useSearchSelectBase(props, emit, dropdownRef, {
     resetOnClose: true,
   })
-  const { searchTerm, baseHandleKeyDown } = base
+  const { searchTerm, baseHandleKeyDown, isComposing } = base
 
   const handleSelect = (selectedValue: T) => {
     // Check if the value is already selected.
@@ -40,6 +40,7 @@ export const useSearchSelectMulti = <T extends string | number>(
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (
+      !isComposing.value &&
       searchTerm.value === '' &&
       e.key === 'Backspace' &&
       model.value.length > 0

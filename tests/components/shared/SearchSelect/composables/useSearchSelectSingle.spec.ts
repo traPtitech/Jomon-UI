@@ -3,10 +3,8 @@ import { defineComponent, h, nextTick, reactive, ref } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 
-import {
-  type SearchSelectCommonProps,
-  useSearchSelectGeneric,
-} from '@/components/shared/SearchSelect/composables/useSearchSelect'
+import { type SearchSelectCommonProps } from '@/components/shared/SearchSelect/composables/useSearchSelectBase'
+import { useSearchSelectSingle } from '@/components/shared/SearchSelect/composables/useSearchSelectSingle'
 
 const defaultProps: SearchSelectCommonProps<string> = {
   options: [
@@ -17,13 +15,12 @@ const defaultProps: SearchSelectCommonProps<string> = {
   label: 'Test Label',
 }
 
-describe('useSearchSelect', () => {
+describe('useSearchSelectSingle', () => {
   const createWrapper = (
     initialProps: SearchSelectCommonProps<string> = defaultProps,
-    initialValue: string | string[] | null = null,
-    options?: { resetOnClose?: boolean }
+    initialValue: string | null = null
   ) => {
-    let composable!: ReturnType<typeof useSearchSelectGeneric>
+    let composable!: ReturnType<typeof useSearchSelectSingle<string>>
     const emit = vi.fn()
     const modelValue = ref(initialValue)
     const dropdownRef = ref<HTMLElement | null>(null)
@@ -31,12 +28,11 @@ describe('useSearchSelect', () => {
 
     const TestComponent = defineComponent({
       setup() {
-        composable = useSearchSelectGeneric(
+        composable = useSearchSelectSingle<string>(
           props,
           emit,
           modelValue,
-          dropdownRef,
-          options
+          dropdownRef
         )
         return () => h('div')
       },
@@ -112,9 +108,8 @@ describe('useSearchSelect', () => {
       const { composable } = createWrapper()
       const event = new KeyboardEvent('keydown', { key: 'ArrowDown' })
       const preventDefault = vi.spyOn(event, 'preventDefault')
-      const handleSelect = vi.fn()
 
-      composable.handleKeyDown(event, handleSelect)
+      composable.handleKeyDown(event)
 
       expect(preventDefault).toHaveBeenCalled()
       expect(composable.isOpen.value).toBe(true)
@@ -126,17 +121,16 @@ describe('useSearchSelect', () => {
 
       const arrowDown = new KeyboardEvent('keydown', { key: 'ArrowDown' })
       const arrowUp = new KeyboardEvent('keydown', { key: 'ArrowUp' })
-      const handleSelect = vi.fn()
 
       // Down
-      composable.handleKeyDown(arrowDown, handleSelect)
+      composable.handleKeyDown(arrowDown)
       expect(composable.highlightedIndex.value).toBe(0)
 
-      composable.handleKeyDown(arrowDown, handleSelect)
+      composable.handleKeyDown(arrowDown)
       expect(composable.highlightedIndex.value).toBe(1)
 
       // Up
-      composable.handleKeyDown(arrowUp, handleSelect)
+      composable.handleKeyDown(arrowUp)
       expect(composable.highlightedIndex.value).toBe(0)
     })
 
@@ -159,37 +153,24 @@ describe('useSearchSelect', () => {
         { key: '3', value: '3' },
       ]
       const { composable: vm } = createWrapper({ ...defaultProps, options })
-      const handleSelect = vi.fn()
 
       // Open menu
       vm.handleInputFocus()
 
       // ArrowDown
-      vm.handleKeyDown(
-        new KeyboardEvent('keydown', { key: 'ArrowDown' }),
-        handleSelect
-      )
+      vm.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown' }))
       expect(vm.highlightedIndex.value).toBe(0)
 
       // ArrowDown -> Should skip index 1 (disabled) and go to 2
-      vm.handleKeyDown(
-        new KeyboardEvent('keydown', { key: 'ArrowDown' }),
-        handleSelect
-      )
+      vm.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown' }))
       expect(vm.highlightedIndex.value).toBe(2)
 
       // ArrowDown -> Should wrap to 0
-      vm.handleKeyDown(
-        new KeyboardEvent('keydown', { key: 'ArrowDown' }),
-        handleSelect
-      )
+      vm.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown' }))
       expect(vm.highlightedIndex.value).toBe(0)
 
       // ArrowUp -> Should wrap to 2 (skipping 1)
-      vm.handleKeyDown(
-        new KeyboardEvent('keydown', { key: 'ArrowUp' }),
-        handleSelect
-      )
+      vm.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowUp' }))
       expect(vm.highlightedIndex.value).toBe(2)
     })
 
@@ -198,33 +179,31 @@ describe('useSearchSelect', () => {
         { key: '1', value: '1', disabled: true },
         { key: '2', value: '2' },
       ]
-      const { composable: vm } = createWrapper({ ...defaultProps, options })
-      const handleSelect = vi.fn()
+      const { composable: vm, modelValue } = createWrapper({
+        ...defaultProps,
+        options,
+      })
 
       // Open menu
       vm.handleInputFocus()
 
       // Press Enter without navigating
-      vm.handleKeyDown(
-        new KeyboardEvent('keydown', { key: 'Enter' }),
-        handleSelect
-      )
+      vm.handleKeyDown(new KeyboardEvent('keydown', { key: 'Enter' }))
 
       // Should select '2' (first non-disabled)
-      expect(handleSelect).toHaveBeenCalledWith('2')
+      expect(modelValue.value).toBe('2')
     })
 
     it('selects option with Enter', () => {
-      const { composable } = createWrapper()
+      const { composable, modelValue } = createWrapper()
       composable.isOpen.value = true
       composable.highlightedIndex.value = 0 // Option 1
 
       const enter = new KeyboardEvent('keydown', { key: 'Enter' })
-      const handleSelect = vi.fn()
 
-      composable.handleKeyDown(enter, handleSelect)
+      composable.handleKeyDown(enter)
 
-      expect(handleSelect).toHaveBeenCalledWith('opt1')
+      expect(modelValue.value).toBe('opt1')
     })
 
     it('closes menu on Escape', async () => {
@@ -234,37 +213,15 @@ describe('useSearchSelect', () => {
       composable.highlightedIndex.value = 0
 
       const escape = new KeyboardEvent('keydown', { key: 'Escape' })
-      const handleSelect = vi.fn()
 
       // Force transition to ensure watcher triggers
       await new Promise(resolve => setTimeout(resolve, 10))
 
-      composable.handleKeyDown(escape, handleSelect)
+      composable.handleKeyDown(escape)
       await new Promise(resolve => setTimeout(resolve, 10))
 
       expect(composable.isOpen.value).toBe(false)
       expect(composable.searchTerm.value).toBe('some search')
-    })
-
-    it('resets search term on close when resetOnClose is true', async () => {
-      const { composable } = createWrapper(defaultProps, null, {
-        resetOnClose: true,
-      })
-
-      composable.isOpen.value = true
-      composable.searchTerm.value = 'some search'
-
-      // Force transition
-      await new Promise(resolve => setTimeout(resolve, 10))
-
-      const escape = new KeyboardEvent('keydown', { key: 'Escape' })
-      const handleSelect = vi.fn()
-
-      composable.handleKeyDown(escape, handleSelect)
-      await new Promise(resolve => setTimeout(resolve, 10))
-
-      expect(composable.isOpen.value).toBe(false)
-      expect(composable.searchTerm.value).toBe('')
     })
 
     it('highlights first non-disabled option on Home', () => {
@@ -274,16 +231,12 @@ describe('useSearchSelect', () => {
         { key: '3', value: '3' },
       ]
       const { composable: vm } = createWrapper({ ...defaultProps, options })
-      const handleSelect = vi.fn()
 
       // Open menu and highlight last option
       vm.isOpen.value = true
       vm.highlightedIndex.value = 2
 
-      vm.handleKeyDown(
-        new KeyboardEvent('keydown', { key: 'Home' }),
-        handleSelect
-      )
+      vm.handleKeyDown(new KeyboardEvent('keydown', { key: 'Home' }))
 
       expect(vm.highlightedIndex.value).toBe(1) // Index 1 is the first non-disabled
     })
@@ -295,16 +248,12 @@ describe('useSearchSelect', () => {
         { key: '3', value: '3', disabled: true },
       ]
       const { composable: vm } = createWrapper({ ...defaultProps, options })
-      const handleSelect = vi.fn()
 
       // Open menu and highlight first option
       vm.isOpen.value = true
       vm.highlightedIndex.value = 0
 
-      vm.handleKeyDown(
-        new KeyboardEvent('keydown', { key: 'End' }),
-        handleSelect
-      )
+      vm.handleKeyDown(new KeyboardEvent('keydown', { key: 'End' }))
 
       expect(vm.highlightedIndex.value).toBe(1) // Index 1 is the last non-disabled (Index 2 is disabled)
     })
@@ -312,12 +261,8 @@ describe('useSearchSelect', () => {
     it('closes menu on Tab', () => {
       const { composable } = createWrapper()
       composable.isOpen.value = true
-      const handleSelect = vi.fn()
 
-      composable.handleKeyDown(
-        new KeyboardEvent('keydown', { key: 'Tab' }),
-        handleSelect
-      )
+      composable.handleKeyDown(new KeyboardEvent('keydown', { key: 'Tab' }))
 
       expect(composable.isOpen.value).toBe(false)
     })

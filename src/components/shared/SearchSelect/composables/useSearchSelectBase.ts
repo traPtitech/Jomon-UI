@@ -1,4 +1,4 @@
-import { type Ref, computed, ref, useId, watch } from 'vue'
+import { type Ref, computed, ref, useId } from 'vue'
 
 import { useSearchSelectHighlight } from '@/components/shared/SearchSelect/composables/useSearchSelectHighlight'
 import { useSearchSelectKeyboard } from '@/components/shared/SearchSelect/composables/useSearchSelectKeyboard'
@@ -24,24 +24,13 @@ export type SearchSelectEmit = {
   (e: 'search-input', value: string): void
 }
 
-export interface RefLike<V> {
-  readonly value: V
-}
-
-export const useSearchSelect = <T extends string | number | null>(
+export const useSearchSelectBase = <T extends string | number | null>(
   props: SearchSelectCommonProps<T>,
   emit: SearchSelectEmit,
-  model: RefLike<T | T[] | null>,
   dropdownRef: Ref<HTMLElement | null>,
   options?: { resetOnClose?: boolean }
 ) => {
-  /**
-   * resetOnClose behavior:
-   * - If not specified, defaults to true if model is an array (multi-select), false otherwise (single-select).
-   * - If true: reset search term and highlight when menu closes.
-   * - If false: keep search term (useful for single select where term = selected label).
-   */
-  const resetOnClose = options?.resetOnClose ?? Array.isArray(model.value)
+  const resetOnClose = options?.resetOnClose ?? true
   const listboxId = useId()
   const searchTerm = ref('')
 
@@ -68,6 +57,9 @@ export const useSearchSelect = <T extends string | number | null>(
     )
   })
 
+  // Note: We need to cast filteredOptions to Option<any>[] or similar because T might be T | null for Single
+  // but Option expect Exclude<T, null>. However, filteredOptions is derived from props.options which is Option<Exclude<T, null>>[]
+  // so safe.
   const { highlightedIndex, activeOptionId } = useSearchSelectHighlight(
     filteredOptions,
     isOpen,
@@ -78,23 +70,6 @@ export const useSearchSelect = <T extends string | number | null>(
     searchTerm.value = ''
     highlightedIndex.value = -1
   }
-
-  // Sync searchTerm with modelValue for single select
-  watch(
-    () => model.value,
-    newVal => {
-      if (Array.isArray(newVal)) return
-      const selectedOption = props.options.find(opt => opt.value === newVal)
-      if (selectedOption) {
-        searchTerm.value = selectedOption.key
-      } else if (newVal !== null) {
-        searchTerm.value = toString(newVal)
-      } else {
-        searchTerm.value = ''
-      }
-    },
-    { immediate: true }
-  )
 
   const handleInputFocus = () => {
     if (props.disabled) return
@@ -111,7 +86,6 @@ export const useSearchSelect = <T extends string | number | null>(
     isComposing.value = false
   }
 
-  // v-model handles the update, so we don't need to read the event
   const handleSearchInput = () => {
     isOpen.value = true
     if (!isComposing.value) {
@@ -119,7 +93,7 @@ export const useSearchSelect = <T extends string | number | null>(
     }
   }
 
-  const { handleKeyDown } = useSearchSelectKeyboard(
+  const { handleKeyDown: baseHandleKeyDown } = useSearchSelectKeyboard(
     isOpen,
     highlightedIndex,
     filteredOptions,
@@ -133,13 +107,13 @@ export const useSearchSelect = <T extends string | number | null>(
     filteredOptions,
     handleInputFocus,
     handleSearchInput,
-    handleKeyDown,
+    baseHandleKeyDown,
     handleCompositionStart,
     handleCompositionEnd,
     listboxId,
     activeOptionId,
     toggleMenu,
+    openMenu,
+    isComposing,
   }
 }
-
-export const useSearchSelectGeneric = useSearchSelect

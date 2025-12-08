@@ -8,8 +8,8 @@ import SearchSelectInput from './SearchSelectInput.vue'
 import {
   type SearchSelectCommonProps,
   type SearchSelectEmit,
-  useSearchSelectGeneric as useSearchSelect,
-} from './composables/useSearchSelect'
+} from './composables/useSearchSelectBase'
+import { useSearchSelectMulti } from './composables/useSearchSelectMulti'
 
 const props = withDefaults(defineProps<SearchSelectCommonProps<T>>(), {
   placeholder: '検索',
@@ -21,6 +21,8 @@ const emit = defineEmits<SearchSelectEmit>()
 const model = defineModel<T[]>({ required: true })
 
 const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
+const inputRef =
+  useTemplateRef<InstanceType<typeof SearchSelectInput>>('inputRef')
 
 const {
   isOpen,
@@ -29,13 +31,14 @@ const {
   filteredOptions,
   handleInputFocus,
   handleSearchInput,
-  handleKeyDown: baseHandleKeyDown,
+  handleKeyDown,
+  handleSelect,
   handleCompositionStart,
   handleCompositionEnd,
   listboxId,
   activeOptionId,
   toggleMenu,
-} = useSearchSelect<T>(props, emit, model, dropdownRef, { resetOnClose: true })
+} = useSearchSelectMulti<T>(props, emit, model, dropdownRef, inputRef)
 
 // Note: This implementation assumes that all option values are unique.
 // If multiple options share the same value, the last one's key will be used for display.
@@ -49,37 +52,6 @@ const getPlaceholderText = computed(() => {
   }
   return props.placeholder
 })
-
-const inputRef =
-  useTemplateRef<InstanceType<typeof SearchSelectInput>>('inputRef')
-
-const handleSelect = (selectedValue: T) => {
-  model.value = model.value.includes(selectedValue)
-    ? model.value.filter(v => v !== selectedValue)
-    : [...model.value, selectedValue]
-
-  // Focus input if item was removed via click
-  if (!model.value.includes(selectedValue)) {
-    inputRef.value?.focus()
-  }
-}
-
-// Handle Backspace to remove the last selected item when search term is empty
-// This behavior is enabled regardless of menu state (open/closed) for better UX
-const handleKeyDown = (e: KeyboardEvent) => {
-  if (
-    searchTerm.value === '' &&
-    e.key === 'Backspace' &&
-    model.value.length > 0
-  ) {
-    const newModel = [...model.value]
-    newModel.pop()
-    model.value = newModel
-    return
-  }
-
-  baseHandleKeyDown(e, handleSelect)
-}
 </script>
 
 <template>

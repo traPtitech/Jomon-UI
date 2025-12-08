@@ -3,14 +3,13 @@ import { useTemplateRef } from 'vue'
 
 import { CheckIcon } from '@heroicons/vue/24/outline'
 
-import { toString } from '../utils'
 import SearchSelectDropdown from './SearchSelectDropdown.vue'
 import SearchSelectInput from './SearchSelectInput.vue'
 import {
   type SearchSelectCommonProps,
   type SearchSelectEmit,
-  useSearchSelectGeneric as useSearchSelect,
-} from './composables/useSearchSelect'
+} from './composables/useSearchSelectBase'
+import { useSearchSelectSingle } from './composables/useSearchSelectSingle'
 
 const props = withDefaults(defineProps<SearchSelectCommonProps<T>>(), {
   placeholder: '検索',
@@ -38,28 +37,14 @@ const {
   filteredOptions,
   handleInputFocus,
   handleSearchInput,
-  handleKeyDown: baseHandleKeyDown,
+  handleKeyDown,
+  handleSelect,
   handleCompositionStart,
   handleCompositionEnd,
   listboxId,
   activeOptionId,
   toggleMenu,
-} = useSearchSelect<T>(props, emit, model, dropdownRef, {
-  resetOnClose: false,
-})
-
-const handleSelect = (selectedValue: T) => {
-  model.value = selectedValue
-  const selectedOption = props.options.find(opt => opt.value === selectedValue)
-  searchTerm.value =
-    selectedOption?.key ??
-    (selectedValue !== null ? toString(selectedValue) : '')
-  isOpen.value = false
-}
-
-const handleKeyDown = (e: KeyboardEvent) => {
-  baseHandleKeyDown(e, handleSelect)
-}
+} = useSearchSelectSingle<T>(props, emit, model, dropdownRef)
 </script>
 
 <template>

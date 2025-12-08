@@ -22,12 +22,9 @@ export const useSearchSelectSingle = <TModel extends string | number | null>(
   const getLabelFromValue = (val: TModel) => {
     // Determine strict value comparison for finding the option
     if (val === null) return ''
-    const valNonNullable = val as NonNullable<TModel>
-    const selectedOption = props.options.find(
-      opt => opt.value === valNonNullable
-    )
+    const selectedOption = props.options.find(opt => opt.value === val)
     if (selectedOption) return selectedOption.key
-    return toString(valNonNullable)
+    return toString(val)
   }
 
   const handleSelect = (selectedValue: TModel) => {
@@ -38,8 +35,6 @@ export const useSearchSelectSingle = <TModel extends string | number | null>(
   }
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    // We cast handleSelect because baseHandleKeyDown expects a callback taking NonNullable<TModel>
-    // effectively matching the item type in options.
     baseHandleKeyDown(e, handleSelect)
   }
 

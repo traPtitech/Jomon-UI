@@ -6,8 +6,10 @@ import { useSearchSelectMenu } from '@/components/shared/SearchSelect/composable
 import type { Option } from '@/components/shared/types'
 import { toString } from '@/components/shared/utils'
 
-export interface SearchSelectCommonProps<T> {
-  options: Option<Exclude<T, null>>[]
+export interface SearchSelectCommonProps<
+  TModel extends string | number | null,
+> {
+  options: Option<NonNullable<TModel>>[]
   label: string
   placeholder?: string | undefined
   disabled?: boolean | undefined
@@ -15,7 +17,8 @@ export interface SearchSelectCommonProps<T> {
 }
 
 export type SearchSelectEmit = {
-  (e: 'focus' | 'close'): void
+  (e: 'focus', event: FocusEvent): void
+  (e: 'close'): void
   /**
    * Emitted when the search term changes.
    * This event is NOT emitted during IME composition.
@@ -24,8 +27,8 @@ export type SearchSelectEmit = {
   (e: 'search-input', value: string): void
 }
 
-export const useSearchSelectBase = <T extends string | number | null>(
-  props: SearchSelectCommonProps<T>,
+export const useSearchSelectBase = <TModel extends string | number | null>(
+  props: SearchSelectCommonProps<TModel>,
   emit: SearchSelectEmit,
   dropdownRef: Ref<HTMLElement | null>,
   options?: { resetOnClose?: boolean }
@@ -57,8 +60,7 @@ export const useSearchSelectBase = <T extends string | number | null>(
     )
   })
 
-  // Note: filteredOptions is derived from props.options which is Option<Exclude<T, null>>[].
-  // Although T might include null for Single select, the filtered list is guaranteed to be compatible.
+  // Note: filteredOptions is derived from props.options which is Option<NonNullable<TModel>>[].
   const { highlightedIndex, activeOptionId } = useSearchSelectHighlight(
     filteredOptions,
     isOpen,
@@ -70,9 +72,9 @@ export const useSearchSelectBase = <T extends string | number | null>(
     highlightedIndex.value = -1
   }
 
-  const handleInputFocus = () => {
+  const handleInputFocus = (event: FocusEvent) => {
     if (props.disabled) return
-    emit('focus')
+    emit('focus', event)
     openMenu()
   }
 

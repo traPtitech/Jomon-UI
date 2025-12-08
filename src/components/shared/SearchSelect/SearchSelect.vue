@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T extends string | number | null">
+<script setup lang="ts" generic="TModel extends string | number | null">
 import { useTemplateRef } from 'vue'
 
 import { CheckIcon } from '@heroicons/vue/24/outline'
@@ -13,7 +13,8 @@ import { useSearchSelectSingle } from './composables/useSearchSelectSingle'
 
 /**
  * Generic SearchSelect component for single selection.
- * @template T - The type of the option value. Must be string | number | null.
+ * @template TModel - The type of the model value. Must be string | number | null.
+ * options will be automatically typed as Option<NonNullable<TModel>>.
  * Note: Complex objects are not supported as values. Use primitive IDs or codes.
  *
  * Events:
@@ -22,14 +23,14 @@ import { useSearchSelectSingle } from './composables/useSearchSelectSingle'
  *   - Does NOT fire during IME composition.
  */
 
-const props = withDefaults(defineProps<SearchSelectCommonProps<T>>(), {
+const props = withDefaults(defineProps<SearchSelectCommonProps<TModel>>(), {
   placeholder: '検索',
   disabled: false,
   required: false,
 })
 
 const emit = defineEmits<SearchSelectEmit>()
-const model = defineModel<T>({ required: true })
+const model = defineModel<TModel>({ required: true })
 
 const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
 const inputRef =
@@ -55,7 +56,7 @@ const {
   listboxId,
   activeOptionId,
   toggleMenu,
-} = useSearchSelectSingle<T>(props, emit, model, dropdownRef)
+} = useSearchSelectSingle<TModel>(props, emit, model, dropdownRef)
 </script>
 
 <template>

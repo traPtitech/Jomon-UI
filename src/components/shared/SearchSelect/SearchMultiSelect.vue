@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T extends string | number">
+<script setup lang="ts" generic="TValue extends string | number">
 import { useTemplateRef } from 'vue'
 
 import { CheckIcon, XMarkIcon } from '@heroicons/vue/24/outline'
@@ -13,7 +13,7 @@ import { useSearchSelectMulti } from './composables/useSearchSelectMulti'
 
 /**
  * Generic SearchSelect component for multiple selection.
- * @template T - The type of the option value. Must be string | number.
+ * @template TValue - The type of the option value. Must be string | number.
  * Note: Complex objects are not supported as values. Use primitive IDs or codes.
  *
  * Events:
@@ -22,14 +22,14 @@ import { useSearchSelectMulti } from './composables/useSearchSelectMulti'
  *   - Does NOT fire during IME composition.
  */
 
-const props = withDefaults(defineProps<SearchSelectCommonProps<T>>(), {
+const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
   placeholder: '検索',
   disabled: false,
   required: false,
 })
 
 const emit = defineEmits<SearchSelectEmit>()
-const model = defineModel<T[]>({ required: true })
+const model = defineModel<TValue[]>({ required: true })
 
 const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
 const inputRef =
@@ -51,7 +51,7 @@ const {
   toggleMenu,
   optionMap,
   placeholderText,
-} = useSearchSelectMulti<T>(props, emit, model, dropdownRef, inputRef)
+} = useSearchSelectMulti<TValue>(props, emit, model, dropdownRef, inputRef)
 
 defineExpose({
   focus: () => {

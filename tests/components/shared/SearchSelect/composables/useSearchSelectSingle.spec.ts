@@ -28,7 +28,7 @@ describe('useSearchSelectSingle', () => {
 
     const TestComponent = defineComponent({
       setup() {
-        composable = useSearchSelectSingle<string>(
+        composable = useSearchSelectSingle<string | null>(
           props,
           emit,
           modelValue,
@@ -74,8 +74,8 @@ describe('useSearchSelectSingle', () => {
 
   it('handles input focus', () => {
     const { composable, emit } = createWrapper()
-    composable.handleInputFocus()
-    expect(emit).toHaveBeenCalledWith('focus')
+    composable.handleInputFocus(new FocusEvent('focus'))
+    expect(emit).toHaveBeenCalledWith('focus', expect.any(FocusEvent))
     expect(composable.isOpen.value).toBe(true)
   })
 
@@ -155,7 +155,7 @@ describe('useSearchSelectSingle', () => {
       const { composable: vm } = createWrapper({ ...defaultProps, options })
 
       // Open menu
-      vm.handleInputFocus()
+      vm.handleInputFocus(new FocusEvent('focus'))
 
       // ArrowDown
       vm.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown' }))
@@ -185,7 +185,7 @@ describe('useSearchSelectSingle', () => {
       })
 
       // Open menu
-      vm.handleInputFocus()
+      vm.handleInputFocus(new FocusEvent('focus'))
 
       // Press Enter without navigating
       vm.handleKeyDown(new KeyboardEvent('keydown', { key: 'Enter' }))

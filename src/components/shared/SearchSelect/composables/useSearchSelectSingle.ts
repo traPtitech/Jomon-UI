@@ -7,10 +7,10 @@ import {
 } from '@/components/shared/SearchSelect/composables/useSearchSelectBase'
 import { toString } from '@/components/shared/utils'
 
-export const useSearchSelectSingle = <T extends string | number | null>(
-  props: SearchSelectCommonProps<T>,
+export const useSearchSelectSingle = <TModel extends string | number | null>(
+  props: SearchSelectCommonProps<TModel>,
   emit: SearchSelectEmit,
-  model: Ref<T | null>,
+  model: Ref<TModel>,
   dropdownRef: Ref<HTMLElement | null>
 ) => {
   const base = useSearchSelectBase(props, emit, dropdownRef, {
@@ -19,20 +19,27 @@ export const useSearchSelectSingle = <T extends string | number | null>(
 
   const { searchTerm, isOpen, baseHandleKeyDown } = base
 
-  const getLabelFromValue = (val: T | null) => {
-    const selectedOption = props.options.find(opt => opt.value === val)
+  const getLabelFromValue = (val: TModel) => {
+    // Determine strict value comparison for finding the option
+    if (val === null) return ''
+    const valNonNullable = val as NonNullable<TModel>
+    const selectedOption = props.options.find(
+      opt => opt.value === valNonNullable
+    )
     if (selectedOption) return selectedOption.key
-    if (val !== null) return toString(val)
-    return ''
+    return toString(valNonNullable)
   }
 
-  const handleSelect = (selectedValue: T) => {
+  const handleSelect = (selectedValue: TModel) => {
+    if (selectedValue === null) return
     model.value = selectedValue
     searchTerm.value = getLabelFromValue(selectedValue)
     isOpen.value = false
   }
 
   const handleKeyDown = (e: KeyboardEvent) => {
+    // We cast handleSelect because baseHandleKeyDown expects a callback taking NonNullable<TModel>
+    // effectively matching the item type in options.
     baseHandleKeyDown(e, handleSelect)
   }
 

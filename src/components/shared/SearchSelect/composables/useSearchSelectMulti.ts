@@ -6,25 +6,30 @@ import {
   useSearchSelectBase,
 } from '@/components/shared/SearchSelect/composables/useSearchSelectBase'
 
+// Exporting this type to be used in components if needed,
+// though ideally it should be in the Input component file.
 export interface SearchSelectInputRef {
   focus: () => void
 }
 
-export const useSearchSelectMulti = <T extends string | number>(
-  props: SearchSelectCommonProps<T>,
+export const useSearchSelectMulti = <TValue extends string | number>(
+  props: SearchSelectCommonProps<TValue>,
   emit: SearchSelectEmit,
-  model: Ref<T[]>,
+  model: Ref<TValue[]>,
   dropdownRef: Ref<HTMLElement | null>,
   inputRef?: Ref<SearchSelectInputRef | null>
 ) => {
-  const base = useSearchSelectBase(props, emit, dropdownRef, {
+  // For MultiSelect, TModel is effectively TValue because it doesn't support null in the array elements usually.
+  // However, SearchSelectCommonProps expects TModel.
+  // If we pass TValue as TModel, then options are Option<NonNullable<TValue>>[], which is Option<TValue>[] since TValue is string|number.
+  const base = useSearchSelectBase<TValue>(props, emit, dropdownRef, {
     resetOnClose: true,
   })
   const { searchTerm, baseHandleKeyDown, isComposing } = base
 
-  const handleSelect = (selectedValue: T) => {
+  const handleSelect = (selectedValue: TValue) => {
     // Check if the value is already selected.
-    // Note: We're assuming T is a primitive (string | number) so checking equality works fine.
+    // Note: We're assuming TValue is a primitive (string | number) so checking equality works fine.
     const isSelected = model.value.includes(selectedValue)
     model.value = isSelected
       ? model.value.filter(v => v !== selectedValue)

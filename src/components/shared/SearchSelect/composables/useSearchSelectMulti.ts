@@ -1,4 +1,4 @@
-import { type Ref } from 'vue'
+import { type Ref, computed } from 'vue'
 
 import {
   type SearchSelectCommonProps,
@@ -51,9 +51,24 @@ export const useSearchSelectMulti = <T extends string | number>(
     baseHandleKeyDown(e, handleSelect)
   }
 
+  // Note: This implementation assumes that all option values are unique.
+  // If multiple options share the same value, the last one's key will be used for display.
+  const optionMap = computed(() => {
+    return new Map(props.options.map(opt => [opt.value, opt.key]))
+  })
+
+  const placeholderText = computed(() => {
+    if (model.value.length > 0) {
+      return `${String(model.value.length)}個選択中...`
+    }
+    return props.placeholder ?? '検索'
+  })
+
   return {
     ...base,
     handleSelect,
     handleKeyDown,
+    optionMap,
+    placeholderText,
   }
 }

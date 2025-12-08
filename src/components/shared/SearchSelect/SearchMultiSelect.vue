@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends string | number">
-import { computed, useTemplateRef } from 'vue'
+import { useTemplateRef } from 'vue'
 
 import { CheckIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 
@@ -38,20 +38,9 @@ const {
   listboxId,
   activeOptionId,
   toggleMenu,
+  optionMap,
+  placeholderText,
 } = useSearchSelectMulti<T>(props, emit, model, dropdownRef, inputRef)
-
-// Note: This implementation assumes that all option values are unique.
-// If multiple options share the same value, the last one's key will be used for display.
-const optionMap = computed(() => {
-  return new Map(props.options.map(opt => [opt.value, opt.key]))
-})
-
-const getPlaceholderText = computed(() => {
-  if (model.value.length > 0) {
-    return `${String(model.value.length)}個選択中...`
-  }
-  return props.placeholder
-})
 </script>
 
 <template>
@@ -60,7 +49,7 @@ const getPlaceholderText = computed(() => {
       ref="inputRef"
       v-model="searchTerm"
       :label="label"
-      :placeholder="getPlaceholderText"
+      :placeholder="placeholderText"
       :disabled="disabled"
       :required="required"
       :is-open="isOpen"

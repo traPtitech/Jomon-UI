@@ -147,4 +147,30 @@ describe('useSearchSelectMulti', () => {
       expect(modelValue.value).toEqual([])
     })
   })
+
+  describe('UI helpers', () => {
+    it('creates optionMap correctly', () => {
+      const { composable } = createWrapper()
+      expect(composable.optionMap.value.get('opt1')).toBe('Option 1')
+      expect(composable.optionMap.value.get('opt2')).toBe('Option 2')
+    })
+
+    it('returns placeholder when no items selected', () => {
+      const { composable } = createWrapper({
+        ...defaultProps,
+        placeholder: 'Custom Placeholder',
+      })
+      expect(composable.placeholderText.value).toBe('Custom Placeholder')
+    })
+
+    it('returns selected count when items are selected', () => {
+      const { composable } = createWrapper(defaultProps, ['opt1', 'opt2'])
+      expect(composable.placeholderText.value).toBe('2個選択中...')
+    })
+
+    it('falls back to default placeholder if not provided', () => {
+      const { composable } = createWrapper({ options: [], label: 'Label' })
+      expect(composable.placeholderText.value).toBe('検索')
+    })
+  })
 })

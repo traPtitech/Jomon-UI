@@ -5,7 +5,7 @@ import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 
 import BaseTextInput from '../BaseInput/BaseTextInput.vue'
 
-defineProps<{
+const props = defineProps<{
   label: string
   placeholder?: string | undefined
   disabled?: boolean | undefined
@@ -37,7 +37,9 @@ defineExpose({
 
 const handleToggle = () => {
   emit('toggle-menu')
-  focus()
+  if (!props.isOpen) {
+    focus()
+  }
 }
 </script>
 

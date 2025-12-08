@@ -85,11 +85,13 @@ export const useSearchSelectBase = <T extends string | number | null>(
     isComposing.value = false
   }
 
-  const handleSearchInput = () => {
+  const handleSearchInput = (event?: Event) => {
     openMenu()
-    // Note: We rely on the fact that the 'input' event fires after 'compositionend' in modern browsers.
-    // So we don't need to manually emit 'search-input' in handleCompositionEnd.
-    if (!isComposing.value) {
+    // Note: We check both our internal isComposing state (from compositionstart/end)
+    // and the native InputEvent.isComposing property for robustness.
+    const composingNow =
+      isComposing.value || (event instanceof InputEvent && event.isComposing)
+    if (!composingNow) {
       emit('search-input', searchTerm.value)
     }
   }

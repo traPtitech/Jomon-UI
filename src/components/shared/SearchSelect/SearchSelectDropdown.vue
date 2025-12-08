@@ -108,7 +108,7 @@ const getOptionClass = (option: Option<T>, index: number) => {
         <div
           v-for="{ data: option, index } in list"
           :id="`${id}-option-${index}`"
-          :key="String(option.value)"
+          :key="index"
           role="option"
           :aria-selected="
             !option.disabled && isSelected(option.value, modelValue)

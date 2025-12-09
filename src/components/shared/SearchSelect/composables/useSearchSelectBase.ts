@@ -28,6 +28,16 @@ export interface SearchSelectCommonProps<
    * @default true
    */
   resetOnClose?: boolean | undefined
+  /**
+   * Text to display when no options match the search term.
+   * @default '該当する項目がありません。'
+   */
+  noResultsText?: string | undefined
+  /**
+   * Text to display when there are no options available at all.
+   * @default '項目がありません。'
+   */
+  noItemsText?: string | undefined
 }
 
 export type SearchSelectEmit = {
@@ -50,14 +60,11 @@ export interface SearchSelectInputRef {
 export const useSearchSelectBase = <TModel extends string | number | null>(
   props: SearchSelectCommonProps<TModel>,
   emit: SearchSelectEmit,
-  dropdownRef: Ref<HTMLElement | null>,
-  options?: { resetOnClose?: boolean }
+  dropdownRef: Ref<HTMLElement | null>
 ) => {
   // resetOnClose defaults to true.
-  // We respect props.resetOnClose first, then options.resetOnClose (for backward compat), then default.
-  // TODO: Remove options.resetOnClose in favor of props in the future.
   const resetOnClose = computed(() => {
-    return props.resetOnClose ?? options?.resetOnClose ?? true
+    return props.resetOnClose ?? true
   })
 
   const listboxId = useId()

@@ -105,6 +105,8 @@ defineExpose({
       :highlighted-index="highlightedIndex"
       :model-value="model"
       multiple
+      :no-results-text="noResultsText"
+      :no-items-text="noItemsText"
       @select-option="handleSelect">
       <template #option-content="{ option, isSelected }">
         <div class="mr-2 flex h-4 w-4 items-center justify-center">

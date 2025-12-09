@@ -5,15 +5,31 @@ import { useVirtualList } from '@vueuse/core'
 
 import type { Option } from '@/components/shared/types'
 
-const props = defineProps<{
-  filteredOptions: Option<T>[]
-  searchTerm: string
-  highlightedIndex: number
-  modelValue: T | T[] | null
-  id: string
-  multiple?: boolean
-  itemHeight?: number
-}>()
+const props = withDefaults(
+  defineProps<{
+    filteredOptions: Option<T>[]
+    searchTerm: string
+    highlightedIndex: number
+    modelValue: T | T[] | null
+    id: string
+    multiple?: boolean
+    itemHeight?: number
+    /**
+     * Text to display when no options match the search term.
+     * @default '該当する項目がありません。'
+     */
+    noResultsText?: string | undefined
+    /**
+     * Text to display when there are no options available at all.
+     * @default '項目がありません。'
+     */
+    noItemsText?: string | undefined
+  }>(),
+  {
+    noResultsText: '該当する項目がありません。',
+    noItemsText: '項目がありません。',
+  }
+)
 
 const emit = defineEmits<{
   (e: 'select-option', value: T): void
@@ -80,8 +96,8 @@ const getOptionClass = (option: Option<T>, index: number) => {
         filteredOptions.length > 0
           ? `${filteredOptions.length} 件の結果が見つかりました。`
           : searchTerm
-            ? '該当する項目がありません。'
-            : '項目がありません。'
+            ? noResultsText
+            : noItemsText
       }}
     </div>
     <!-- Options list -->
@@ -93,8 +109,12 @@ const getOptionClass = (option: Option<T>, index: number) => {
       :aria-multiselectable="multiple || undefined"
       :aria-describedby="`${id}-status`">
       <div v-bind="wrapperProps">
-        <div v-if="filteredOptions.length === 0" class="px-2 py-1.5 text-sm">
-          {{ searchTerm ? '該当する項目がありません' : '項目がありません' }}
+        <div
+          v-if="filteredOptions.length === 0"
+          class="p-2 text-sm text-text-secondary"
+          role="status"
+          aria-live="polite">
+          {{ searchTerm ? noResultsText : noItemsText }}
         </div>
         <!--
           This component implements the Combobox (Active Descendant) pattern.

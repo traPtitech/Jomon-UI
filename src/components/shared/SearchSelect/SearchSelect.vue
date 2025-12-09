@@ -89,6 +89,8 @@ const {
       :search-term="searchTerm"
       :highlighted-index="highlightedIndex"
       :model-value="model"
+      :no-results-text="noResultsText"
+      :no-items-text="noItemsText"
       @select-option="handleSelect">
       <template #option-content="{ option, isSelected }">
         <span class="truncate">{{ option.key }}</span>

@@ -15,8 +15,10 @@ export const useSearchSelectKeyboard = <T>(
     // - ArrowUp/ArrowDown: Cycle through options (skipping disabled)
     // - Home/End: Jump to first/last non-disabled option
     // - Enter: Select highlighted option or first non-disabled option if none highlighted
+    //   Note: This behavior ensures "something" is selected on Enter, not just closing the menu.
     // - Escape: Close menu
     // - Tab: Close menu (allow default tab behavior)
+    // - Space: Treated as normal input (no special handling)
 
     const moveHighlight = (direction: 1 | -1) => {
       if (filteredOptions.value.length === 0) return

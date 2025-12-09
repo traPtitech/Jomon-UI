@@ -3,7 +3,7 @@ import { computed, nextTick, onMounted, watch } from 'vue'
 
 import { useVirtualList } from '@vueuse/core'
 
-import type { Option } from '../types'
+import type { Option } from '@/components/shared/types'
 
 const props = defineProps<{
   filteredOptions: Option<T>[]
@@ -108,7 +108,7 @@ const getOptionClass = (option: Option<T>, index: number) => {
         <div
           v-for="{ data: option, index } in list"
           :id="`${id}-option-${index}`"
-          :key="index"
+          :key="option.value !== null ? option.value : index"
           role="option"
           :aria-selected="
             !option.disabled && isSelected(option.value, modelValue)

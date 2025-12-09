@@ -14,6 +14,13 @@ export interface SearchSelectCommonProps<
   placeholder?: string | undefined
   disabled?: boolean | undefined
   required?: boolean | undefined
+  /**
+   * Optional custom filter function.
+   * Return true to include the option in the filtered list.
+   */
+  filterFunction?:
+    | ((option: Option<NonNullable<TModel>>, searchTerm: string) => boolean)
+    | undefined
 }
 
 export type SearchSelectEmit = {
@@ -51,6 +58,10 @@ export const useSearchSelectBase = <TModel extends string | number | null>(
   const filteredOptions = computed(() => {
     if (!searchTerm.value) {
       return props.options
+    }
+    const filterFunc = props.filterFunction
+    if (filterFunc) {
+      return props.options.filter(opt => filterFunc(opt, searchTerm.value))
     }
     const lowerTerm = searchTerm.value.toLowerCase()
     return props.options.filter(

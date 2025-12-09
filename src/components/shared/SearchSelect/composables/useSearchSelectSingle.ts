@@ -47,6 +47,13 @@ export const useSearchSelectSingle = <TModel extends string | number | null>(
     { immediate: true }
   )
 
+  // Sync searchTerm when menu closes (to revert any unselected input)
+  watch(isOpen, newVal => {
+    if (!newVal) {
+      searchTerm.value = getLabelFromValue(model.value)
+    }
+  })
+
   return {
     ...base,
     handleSelect,

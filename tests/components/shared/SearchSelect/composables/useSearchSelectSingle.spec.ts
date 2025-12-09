@@ -221,7 +221,9 @@ describe('useSearchSelectSingle', () => {
       await new Promise(resolve => setTimeout(resolve, 10))
 
       expect(composable.isOpen.value).toBe(false)
-      expect(composable.searchTerm.value).toBe('some search')
+      expect(composable.isOpen.value).toBe(false)
+      // Expect searchTerm to reset to model label (empty string as model is null)
+      expect(composable.searchTerm.value).toBe('')
     })
 
     it('highlights first non-disabled option on Home', () => {

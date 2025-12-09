@@ -50,6 +50,7 @@ export const useSearchSelectMulti = <TValue extends string | number>(
       e.key === 'Backspace' &&
       model.value.length > 0
     ) {
+      e.preventDefault()
       const newModel = [...model.value]
       newModel.pop()
       model.value = newModel

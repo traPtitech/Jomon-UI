@@ -38,6 +38,7 @@ export type SearchSelectEmit = {
    * This event is NOT emitted during IME composition.
    * It fires only after composition ends or on direct input.
    * Note: This behavior assumes that the 'compositionend' event will reliably precede or accompany final input processing.
+   * Consumers should generally listen to 'search-input' for API calls rather than watching the search term directly.
    */
   (e: 'search-input', value: string): void
 }

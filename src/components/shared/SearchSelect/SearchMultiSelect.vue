@@ -8,6 +8,7 @@ import SearchSelectInput from './SearchSelectInput.vue'
 import {
   type SearchSelectCommonProps,
   type SearchSelectEmit,
+  type SearchSelectInputRef,
 } from './composables/useSearchSelectBase'
 import { useSearchSelectMulti } from './composables/useSearchSelectMulti'
 
@@ -36,8 +37,7 @@ const emit = defineEmits<SearchSelectEmit>()
 const model = defineModel<TValue[]>({ required: true })
 
 const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
-const inputRef =
-  useTemplateRef<InstanceType<typeof SearchSelectInput>>('inputRef')
+const inputRef = useTemplateRef<SearchSelectInputRef>('inputRef')
 
 const {
   isOpen,

@@ -25,7 +25,9 @@ export const useSearchSelectKeyboard = <T>(
       if (filteredOptions.value.length === 0) return
 
       let next = highlightedIndex.value
-      // Adjust starting point for ArrowUp when nothing is highlighted
+      // Adjust starting point for ArrowUp when nothing is highlighted:
+      // We want to jump to the last item, so we start at 0.
+      // 0 + (-1) + length = length - 1 (last index).
       if (next === -1 && direction === -1) {
         next = 0
       }

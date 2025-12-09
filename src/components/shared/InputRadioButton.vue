@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-interface Option<T> {
-  key: string
-  value: T
-}
-
 interface Props {
-  options: Option<string>[]
+  options: Option[]
+}
+interface Option {
+  key: string
+  value: string
 }
 const model = defineModel<string>({ required: true })
 const props = defineProps<Props>()

@@ -37,6 +37,9 @@ export const useSearchSelectMulti = <TValue extends string | number>(
   }
 
   const handleKeyDown = (e: KeyboardEvent) => {
+    // Backspace UX:
+    // If search term is empty and tags exist, the last tag is deleted.
+    // This allows users to delete selections without using the mouse or special delete buttons.
     if (
       !isComposing.value &&
       searchTerm.value === '' &&

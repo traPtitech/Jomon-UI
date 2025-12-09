@@ -53,6 +53,7 @@ const handleToggle = () => {
       :disabled="disabled"
       :required="required"
       :input-attrs="{
+        // Combobox Pattern Attributes
         role: 'combobox',
         'aria-haspopup': 'listbox',
         'aria-autocomplete': 'list',

@@ -11,15 +11,16 @@ export const useSearchSelectKeyboard = <T>(
   const handleKeyDown = (e: KeyboardEvent, handleSelect: (val: T) => void) => {
     if (isComposing.value || e.isComposing) return
 
-    // Key bindings:
-    // - ArrowUp/ArrowDown: Cycle through options (skipping disabled)
-    // - Home/End: Jump to first/last non-disabled option
-    // - Enter: Select highlighted option or first non-disabled option if none highlighted
-    //   Note: This behavior ensures "something" is selected on Enter, not just closing the menu.
-    // - Escape: Close menu
-    // - Tab: Close menu (allow default tab behavior)
-    // - Space: Treated as normal input (no special handling).
-    //   Note: Some users might expect Space to toggle selection, but we prioritize text input here.
+    // Key bindings Spec:
+    // - ArrowUp/ArrowDown: Cycle through options (skipping disabled). Auto-opens menu.
+    // - Home/End: Jump to first/last non-disabled option. Auto-opens menu.
+    // - Enter:
+    //    1. If menu closed -> Open menu.
+    //    2. If item highlighted -> Select it (if not disabled) & Close.
+    //    3. If nothing highlighted -> Select first non-disabled option (if any) & Close.
+    // - Escape: Close menu. Focus remains on input.
+    // - Tab: Close menu. Standard Tab behavior proceeds (focus moves to next element).
+    // - Space: Treated as normal text input. No toggle behavior.
 
     const moveHighlight = (direction: 1 | -1) => {
       if (filteredOptions.value.length === 0) return

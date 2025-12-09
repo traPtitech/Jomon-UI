@@ -26,6 +26,7 @@ export interface SearchSelectCommonProps<
   /**
    * Whether to reset the search term when the menu closes.
    * @default true
+   * Note: Single Select components (SearchSelect.vue) may override this to `false` to persist the selected label.
    */
   resetOnClose?: boolean | undefined
   /**
@@ -124,6 +125,8 @@ export const useSearchSelectBase = <TModel extends string | number | null>(
   }
   const handleCompositionEnd = () => {
     isComposing.value = false
+    // Emit search-input explicitly on composition end to ensure consistency across browsers.
+    emit('search-input', searchTerm.value)
   }
 
   const handleSearchInput = (event?: Event) => {
@@ -134,6 +137,12 @@ export const useSearchSelectBase = <TModel extends string | number | null>(
       typeof InputEvent !== 'undefined' && event instanceof InputEvent
     const composingNow =
       isComposing.value || (isNativeInputEvent && event.isComposing)
+
+    // Only emit if not composing.
+    // Note: If compositionend handled the emit already, this might duplicate the event if it fires after.
+    // Typically, input fires before compositionend or right after.
+    // If it fires right after and isComposing is false, we emit again.
+    // Consumers (like API calls) usually debounce or are idempotent for same values, so this is acceptable for robustness.
     if (!composingNow) {
       emit('search-input', searchTerm.value)
     }

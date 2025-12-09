@@ -18,7 +18,8 @@ export const useSearchSelectKeyboard = <T>(
     //   Note: This behavior ensures "something" is selected on Enter, not just closing the menu.
     // - Escape: Close menu
     // - Tab: Close menu (allow default tab behavior)
-    // - Space: Treated as normal input (no special handling)
+    // - Space: Treated as normal input (no special handling).
+    //   Note: Some users might expect Space to toggle selection, but we prioritize text input here.
 
     const moveHighlight = (direction: 1 | -1) => {
       if (filteredOptions.value.length === 0) return

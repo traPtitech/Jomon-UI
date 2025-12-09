@@ -28,6 +28,7 @@ export const useSearchSelectSingle = <TModel extends string | number | null>(
   }
 
   const handleSelect = (selectedValue: TModel) => {
+    // Fail-safe: Option values are NonNullable<TModel>, so we shouldn't get null here.
     if (selectedValue === null) return
     model.value = selectedValue
     searchTerm.value = getLabelFromValue(selectedValue)

@@ -11,7 +11,6 @@ const props = defineProps<{
   disabled?: boolean | undefined
   required?: boolean | undefined
   isOpen: boolean
-  ariaExpanded?: boolean
   ariaControls?: string
   ariaActivedescendant?: string
 }>()
@@ -57,7 +56,7 @@ const handleToggle = () => {
         role: 'combobox',
         'aria-haspopup': 'listbox',
         'aria-autocomplete': 'list',
-        'aria-expanded': ariaExpanded,
+        'aria-expanded': isOpen,
         'aria-controls': ariaControls,
         'aria-activedescendant': ariaActivedescendant,
       }"
@@ -73,6 +72,7 @@ const handleToggle = () => {
       class="absolute inset-y-0 right-0 flex items-center pr-2"
       :disabled="disabled"
       aria-label="候補の一覧を開閉"
+      @mousedown.prevent
       @click="handleToggle">
       <ChevronDownIcon
         :class="[

@@ -5,12 +5,7 @@ import {
   type SearchSelectEmit,
   useSearchSelectBase,
 } from '@/components/shared/SearchSelect/composables/useSearchSelectBase'
-
-// Exporting this type to be used in components if needed,
-// though ideally it should be in the Input component file.
-export interface SearchSelectInputRef {
-  focus: () => void
-}
+import { type SearchSelectInputRef } from '@/components/shared/SearchSelect/types'
 
 export const useSearchSelectMulti = <TValue extends string | number>(
   props: SearchSelectCommonProps<TValue>,

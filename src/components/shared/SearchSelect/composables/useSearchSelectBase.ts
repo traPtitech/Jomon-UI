@@ -17,10 +17,17 @@ export interface SearchSelectCommonProps<
   /**
    * Optional custom filter function.
    * Return true to include the option in the filtered list.
+   * @param option The option to test.
+   * @param searchTerm The current search term (not lower-cased).
    */
   filterFunction?:
     | ((option: Option<NonNullable<TModel>>, searchTerm: string) => boolean)
     | undefined
+  /**
+   * Whether to reset the search term when the menu closes.
+   * @default true
+   */
+  resetOnClose?: boolean | undefined
 }
 
 export type SearchSelectEmit = {
@@ -30,6 +37,7 @@ export type SearchSelectEmit = {
    * Emitted when the search term changes.
    * This event is NOT emitted during IME composition.
    * It fires only after composition ends or on direct input.
+   * Note: This behavior assumes that the 'compositionend' event will reliably precede or accompany final input processing.
    */
   (e: 'search-input', value: string): void
 }
@@ -40,7 +48,13 @@ export const useSearchSelectBase = <TModel extends string | number | null>(
   dropdownRef: Ref<HTMLElement | null>,
   options?: { resetOnClose?: boolean }
 ) => {
-  const resetOnClose = options?.resetOnClose ?? true
+  // resetOnClose defaults to true.
+  // We respect props.resetOnClose first, then options.resetOnClose (for backward compat), then default.
+  // TODO: Remove options.resetOnClose in favor of props in the future.
+  const resetOnClose = computed(() => {
+    return props.resetOnClose ?? options?.resetOnClose ?? true
+  })
+
   const listboxId = useId()
   const searchTerm = ref('')
 
@@ -51,12 +65,12 @@ export const useSearchSelectBase = <TModel extends string | number | null>(
 
   const handleCloseMenu = () => {
     emit('close')
-    if (resetOnClose) {
+    if (resetOnClose.value) {
       resetSearchTerm()
     }
   }
 
-  const { isOpen, toggleMenu, openMenu } = useSearchSelectMenu(
+  const { isOpen, toggleMenu, openMenu, closeMenu } = useSearchSelectMenu(
     props,
     dropdownRef,
     handleCloseMenu
@@ -134,6 +148,7 @@ export const useSearchSelectBase = <TModel extends string | number | null>(
     activeOptionId,
     toggleMenu,
     openMenu,
+    closeMenu,
     isComposing,
   }
 }

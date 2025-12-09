@@ -27,9 +27,13 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TModel>>(), {
   placeholder: '検索',
   disabled: false,
   required: false,
+  resetOnClose: false,
 })
 
 const emit = defineEmits<SearchSelectEmit>()
+// Note: 'close' event is emitted by useSearchSelectBase (via useSearchSelectSingle) when the menu closes.
+// The component itself does not handle 'close' in the template.
+
 const model = defineModel<TModel>({ required: true })
 
 const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
@@ -75,7 +79,6 @@ const {
       @compositionstart="handleCompositionStart"
       @compositionend="handleCompositionEnd"
       @toggle-menu="toggleMenu"
-      :aria-expanded="isOpen"
       :aria-controls="listboxId"
       :aria-activedescendant="activeOptionId" />
 

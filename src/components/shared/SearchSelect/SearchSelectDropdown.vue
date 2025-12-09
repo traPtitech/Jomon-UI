@@ -77,11 +77,11 @@ const getOptionClass = (option: Option<T>, index: number) => {
   <div class="absolute z-50 mt-1 w-full rounded-md border bg-white shadow-lg">
     <div role="status" aria-live="polite" class="sr-only" :id="`${id}-status`">
       {{
-        filteredOptions.length === 0
-          ? searchTerm
-            ? '該当する項目がありません'
-            : '項目がありません'
-          : ''
+        filteredOptions.length > 0
+          ? `${filteredOptions.length} 件の結果が見つかりました。`
+          : searchTerm
+            ? '該当する項目がありません。'
+            : '項目がありません。'
       }}
     </div>
     <!-- Options list -->

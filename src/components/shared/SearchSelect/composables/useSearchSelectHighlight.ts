@@ -47,6 +47,5 @@ export const useSearchSelectHighlight = <T>(
   return {
     highlightedIndex,
     activeOptionId,
-    listboxId,
   }
 }

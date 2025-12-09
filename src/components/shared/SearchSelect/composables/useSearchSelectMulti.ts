@@ -3,9 +3,9 @@ import { type Ref, computed } from 'vue'
 import {
   type SearchSelectCommonProps,
   type SearchSelectEmit,
+  type SearchSelectInputRef,
   useSearchSelectBase,
 } from '@/components/shared/SearchSelect/composables/useSearchSelectBase'
-import { type SearchSelectInputRef } from '@/components/shared/SearchSelect/types'
 
 export const useSearchSelectMulti = <TValue extends string | number>(
   props: SearchSelectCommonProps<TValue>,

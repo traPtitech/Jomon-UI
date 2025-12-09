@@ -42,6 +42,10 @@ export type SearchSelectEmit = {
   (e: 'search-input', value: string): void
 }
 
+export interface SearchSelectInputRef {
+  focus: () => void
+}
+
 export const useSearchSelectBase = <TModel extends string | number | null>(
   props: SearchSelectCommonProps<TModel>,
   emit: SearchSelectEmit,

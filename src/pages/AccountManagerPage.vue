@@ -24,7 +24,7 @@ const {
   getUserNameWithFallback,
   fetchUsers,
 } = useUserStore()
-const { isTagFetched, tagIdOptions, deleteTags, fetchTags } = useTagStore()
+const { isTagFetched, tagOptions, deleteTags, fetchTags } = useTagStore()
 const toast = useToast()
 
 const addList = ref<string[]>([])
@@ -141,7 +141,7 @@ if (me.value?.accountManager) {
         <SearchMultiSelect
           v-model="deleteTagList"
           class="w-auto grow"
-          :options="tagIdOptions"
+          :options="tagOptions"
           label="削除するタグ" />
         <SimpleButton
           :disabled="deleteTagList.length === 0 || isSending"

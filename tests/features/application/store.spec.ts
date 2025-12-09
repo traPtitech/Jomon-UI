@@ -168,7 +168,6 @@ describe('Application Store', () => {
         reset: vi.fn(),
         isTagFetched: computed(() => true),
         tagOptions: computed(() => []),
-        tagIdOptions: computed(() => []),
         createTag: vi.fn(),
         deleteTags: vi.fn(),
       })

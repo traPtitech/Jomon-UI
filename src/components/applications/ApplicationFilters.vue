@@ -13,7 +13,7 @@ import { useUserStore } from '@/features/user/store'
 
 const { applications, filterParams, fetchApplications } = useApplicationStore()
 const { userOptions } = useUserStore()
-const { tagIdOptions } = useTagStore()
+const { tagOptions } = useTagStore()
 const { partitionOptions } = usePartitionStore()
 
 const toast = useToast()
@@ -74,7 +74,7 @@ function sortByCreatedAt() {
       @close="fetchApplications" />
     <SearchMultiSelect
       v-model="filterParams.tags"
-      :options="tagIdOptions"
+      :options="tagOptions"
       label="タグ"
       @close="fetchApplications" />
   </div>

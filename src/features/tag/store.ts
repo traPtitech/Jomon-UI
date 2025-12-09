@@ -17,15 +17,8 @@ export const useTagStore = defineStoreComposable('tag', () => {
 
   const tagOptions = computed(() =>
     tags.value.map(tag => ({
-      key: tag.name,
-      value: tag,
-    }))
-  )
-
-  const tagIdOptions = computed(() =>
-    tags.value.map(tag => ({
-      key: tag.name,
-      value: tag.id,
+      label: tag.name,
+      key: tag.id,
     }))
   )
 
@@ -80,7 +73,6 @@ export const useTagStore = defineStoreComposable('tag', () => {
     error,
     isTagFetched,
     tagOptions,
-    tagIdOptions,
     fetchTags,
     createTag,
     deleteTags,

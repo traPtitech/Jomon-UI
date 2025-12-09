@@ -27,8 +27,8 @@ const templateOptions = computed(
   () =>
     props.templates?.map(template => {
       return {
+        label: template.name,
         key: template.name,
-        value: template.name,
       }
     }) ?? []
 )

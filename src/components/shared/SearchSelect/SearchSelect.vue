@@ -103,7 +103,7 @@ const {
       :no-items-text="noItemsText"
       @select-option="handleSelect">
       <template #option-content="{ option, isSelected }">
-        <span class="truncate">{{ option.key }}</span>
+        <span class="truncate">{{ option.label }}</span>
         <CheckIcon v-if="isSelected" class="ml-auto h-4 w-4" />
       </template>
     </SearchSelectDropdown>

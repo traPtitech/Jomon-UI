@@ -2,7 +2,7 @@ import type { Ref } from 'vue'
 
 import type { Option } from '../types'
 
-export const useSearchSelectKeyboard = <T>(
+export const useSearchSelectKeyboard = <T extends string | number>(
   isOpen: Ref<boolean>,
   highlightedIndex: Ref<number>,
   filteredOptions: Ref<Option<T>[]>,
@@ -93,7 +93,7 @@ export const useSearchSelectKeyboard = <T>(
         if (highlightedIndex.value !== -1) {
           const option = filteredOptions.value[highlightedIndex.value]
           if (option && !option.disabled) {
-            handleSelect(option.value)
+            handleSelect(option.key)
           }
           return
         }
@@ -102,7 +102,7 @@ export const useSearchSelectKeyboard = <T>(
         if (filteredOptions.value.length > 0) {
           const option = filteredOptions.value.find(opt => !opt.disabled)
           if (option) {
-            handleSelect(option.value)
+            handleSelect(option.key)
             return
           }
         }

@@ -19,8 +19,8 @@ export const useAccountManagerStore = defineStoreComposable(
     const accountManagerOptions = computed(() => {
       const { getUserNameWithFallback } = useUserStore()
       return accountManagers.value.map(accountManager => ({
-        key: getUserNameWithFallback(accountManager),
-        value: accountManager,
+        label: getUserNameWithFallback(accountManager),
+        key: accountManager,
       }))
     })
 

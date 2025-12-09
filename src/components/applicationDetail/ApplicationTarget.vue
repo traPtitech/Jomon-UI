@@ -29,8 +29,8 @@ const toast = useToast()
 const targetOptions = computed(() =>
   userOptions.value.filter(
     user =>
-      user.value === props.target.target ||
-      !props.selectedUserIds.includes(user.value)
+      user.key === props.target.target ||
+      !props.selectedUserIds.includes(user.key)
   )
 )
 

@@ -32,8 +32,8 @@ export const usePartitionGroupStore = defineStoreComposable(
 
     const partitionGroupOptions = computed(() =>
       partitionGroups.value.map(group => ({
-        key: group.name,
-        value: group.id,
+        label: group.name,
+        key: group.id,
       }))
     )
 

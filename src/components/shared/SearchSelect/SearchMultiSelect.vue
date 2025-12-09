@@ -123,7 +123,7 @@ defineExpose({
         <div class="mr-2 flex h-4 w-4 items-center justify-center">
           <CheckIcon v-if="isSelected" class="h-4 w-4" />
         </div>
-        <span class="truncate">{{ option.key }}</span>
+        <span class="truncate">{{ option.label }}</span>
       </template>
     </SearchSelectDropdown>
   </div>

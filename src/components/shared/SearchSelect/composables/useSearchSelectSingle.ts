@@ -21,8 +21,8 @@ export const useSearchSelectSingle = <TModel extends string | number | null>(
   const getLabelFromValue = (val: TModel) => {
     // Determine strict value comparison for finding the option
     if (val === null) return ''
-    const selectedOption = props.options.find(opt => opt.value === val)
-    if (selectedOption) return selectedOption.key
+    const selectedOption = props.options.find(opt => opt.key === val)
+    if (selectedOption) return selectedOption.label
     return toString(val)
   }
 

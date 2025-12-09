@@ -93,8 +93,8 @@ export const useSearchSelectBase = <TModel extends string | number | null>(
     const lowerTerm = searchTerm.value.toLowerCase()
     return props.options.filter(
       opt =>
-        opt.key.toLowerCase().includes(lowerTerm) ||
-        toString(opt.value).toLowerCase().includes(lowerTerm)
+        opt.label.toLowerCase().includes(lowerTerm) ||
+        toString(opt.key).toLowerCase().includes(lowerTerm)
     )
   })
 
@@ -150,12 +150,12 @@ export const useSearchSelectBase = <TModel extends string | number | null>(
   }
 
   if (import.meta.env.DEV) {
-    const values = props.options.map(o => o.value)
-    const uniqueSize = new Set(values).size
-    if (uniqueSize !== values.length) {
+    const keys = props.options.map(o => o.key)
+    const uniqueSize = new Set(keys).size
+    if (uniqueSize !== keys.length) {
       console.warn(
-        '[SearchSelect] option.value must be unique. Duplicates detected.',
-        values
+        '[SearchSelect] option.key must be unique. Duplicates detected.',
+        keys
       )
     }
   }

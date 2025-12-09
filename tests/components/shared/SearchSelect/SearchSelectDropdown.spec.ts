@@ -32,9 +32,9 @@ vi.mock('@vueuse/core', async importOriginal => {
 
 describe('SearchSelectDropdown', () => {
   const options: Option<string>[] = [
-    { key: 'Option 1', value: 'opt1' },
-    { key: 'Option 2', value: 'opt2' },
-    { key: 'Option 3', value: 'opt3', disabled: true },
+    { label: 'Option 1', key: 'opt1' },
+    { label: 'Option 2', key: 'opt2' },
+    { label: 'Option 3', key: 'opt3', disabled: true },
   ]
 
   const defaultProps = {

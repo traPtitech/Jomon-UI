@@ -93,7 +93,7 @@ const getOptionClass = (option: Option<T>, index: number) => {
 
   if (props.highlightedIndex === index) {
     classes.push('bg-blue-100 text-blue-500')
-  } else if (isSelected(option.value, props.modelValue)) {
+  } else if (isSelected(option.key, props.modelValue)) {
     classes.push('bg-blue-100')
   }
 
@@ -145,21 +145,21 @@ const getOptionClass = (option: Option<T>, index: number) => {
         <div
           v-for="{ data: option, index } in list"
           :id="`${listboxId}-option-${index}`"
-          :key="option.value !== null ? option.value : index"
+          :key="option.key !== null ? option.key : index"
           role="option"
           :aria-selected="
-            !option.disabled && isSelected(option.value, modelValue)
+            !option.disabled && isSelected(option.key, modelValue)
           "
           :aria-disabled="option.disabled || undefined"
           :class="getOptionClass(option, index)"
           tabindex="-1"
           @mousedown.prevent
-          @click="!option.disabled && emit('select-option', option.value)">
+          @click="!option.disabled && emit('select-option', option.key)">
           <slot
             name="option-content"
             :option="option"
-            :is-selected="isSelected(option.value, modelValue)">
-            <span class="truncate">{{ option.key }}</span>
+            :is-selected="isSelected(option.key, modelValue)">
+            <span class="truncate">{{ option.label }}</span>
           </slot>
         </div>
       </div>

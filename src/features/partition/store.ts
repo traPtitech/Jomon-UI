@@ -30,8 +30,8 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
 
   const partitionOptions = computed(() =>
     partitions.value.map(partition => ({
-      key: partition.name,
-      value: partition.id,
+      label: partition.name,
+      key: partition.id,
     }))
   )
 

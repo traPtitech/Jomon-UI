@@ -7,9 +7,9 @@ import type { Option } from '@/components/shared/SearchSelect/types'
 
 describe('useSearchSelectKeyboard', () => {
   const options: Option<string>[] = [
-    { key: 'Option 1', value: '1' },
-    { key: 'Option 2', value: '2' },
-    { key: 'Option 3', value: '3', disabled: true },
+    { label: 'Option 1', key: '1' },
+    { label: 'Option 2', key: '2' },
+    { label: 'Option 3', key: '3', disabled: true },
   ]
 
   it('should handle ArrowDown', () => {

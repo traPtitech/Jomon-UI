@@ -8,9 +8,9 @@ import { useSearchSelectSingle } from '@/components/shared/SearchSelect/composab
 
 const defaultProps: SearchSelectCommonProps<string> = {
   options: [
-    { key: 'Option 1', value: 'opt1' },
-    { key: 'Option 2', value: 'opt2' },
-    { key: 'Other', value: 'other' },
+    { label: 'Option 1', key: 'opt1' },
+    { label: 'Option 2', key: 'opt2' },
+    { label: 'Other', key: 'other' },
   ],
   label: 'Test Label',
 }
@@ -64,12 +64,12 @@ describe('useSearchSelectSingle', () => {
     composable.isOpen.value = true
     composable.searchTerm.value = 'opt'
     expect(composable.filteredOptions.value).toHaveLength(2)
-    expect(composable.filteredOptions.value[0]?.key).toBe('Option 1')
-    expect(composable.filteredOptions.value[1]?.key).toBe('Option 2')
+    expect(composable.filteredOptions.value[0]?.label).toBe('Option 1')
+    expect(composable.filteredOptions.value[1]?.label).toBe('Option 2')
 
     composable.searchTerm.value = 'other'
     expect(composable.filteredOptions.value).toHaveLength(1)
-    expect(composable.filteredOptions.value[0]?.key).toBe('Other')
+    expect(composable.filteredOptions.value[0]?.label).toBe('Other')
   })
 
   it('handles input focus', () => {
@@ -148,9 +148,9 @@ describe('useSearchSelectSingle', () => {
 
     it('skips disabled options on keyboard navigation', () => {
       const options = [
-        { key: '1', value: '1' },
-        { key: '2', value: '2', disabled: true },
-        { key: '3', value: '3' },
+        { label: '1', key: '1' },
+        { label: '2', key: '2', disabled: true },
+        { label: '3', key: '3' },
       ]
       const { composable: vm } = createWrapper({ ...defaultProps, options })
 
@@ -176,8 +176,8 @@ describe('useSearchSelectSingle', () => {
 
     it('selects first non-disabled option on Enter if nothing highlighted', () => {
       const options = [
-        { key: '1', value: '1', disabled: true },
-        { key: '2', value: '2' },
+        { label: '1', key: '1', disabled: true },
+        { label: '2', key: '2' },
       ]
       const { composable: vm, modelValue } = createWrapper({
         ...defaultProps,
@@ -228,9 +228,9 @@ describe('useSearchSelectSingle', () => {
 
     it('highlights first non-disabled option on Home', () => {
       const options = [
-        { key: '1', value: '1', disabled: true },
-        { key: '2', value: '2' },
-        { key: '3', value: '3' },
+        { label: '1', key: '1', disabled: true },
+        { label: '2', key: '2' },
+        { label: '3', key: '3' },
       ]
       const { composable: vm } = createWrapper({ ...defaultProps, options })
 
@@ -245,9 +245,9 @@ describe('useSearchSelectSingle', () => {
 
     it('highlights last non-disabled option on End', () => {
       const options = [
-        { key: '1', value: '1' },
-        { key: '2', value: '2' },
-        { key: '3', value: '3', disabled: true },
+        { label: '1', key: '1' },
+        { label: '2', key: '2' },
+        { label: '3', key: '3', disabled: true },
       ]
       const { composable: vm } = createWrapper({ ...defaultProps, options })
 

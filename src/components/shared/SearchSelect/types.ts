@@ -2,15 +2,15 @@
  * Represents an option in a selection list.
  * @template T - The type of the value.
  */
-export interface Option<T> {
-  /** Display label */
-  key: string
+export interface Option<T extends string | number> {
+  /** Display label shown in the UI */
+  label: string
   /**
    * Unique identifier for the option.
-   * Note: The UI assumes values are unique across the options list.
+   * Must be unique across the options list.
    * If duplicates exist, behavior (like selection mapping) may be incorrect.
    */
-  value: T
+  key: T
   disabled?: boolean
 }
 
@@ -20,6 +20,6 @@ export type SearchSelectBaseEmit = {
   (e: 'search-input', value: string): void
 }
 
-export type SearchSelectEmit<T = unknown> = SearchSelectBaseEmit & {
+export type SearchSelectEmit<T> = SearchSelectBaseEmit & {
   (e: 'update:modelValue', value: T): void
 }

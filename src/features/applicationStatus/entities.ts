@@ -12,11 +12,11 @@ export interface ApplicationStatusDetail {
 }
 
 export const applicationStatusOptions = [
-  { value: 'pending_review', key: '提出済み' },
-  { value: 'change_requested', key: '要修正' },
-  { value: 'approved', key: '承認済み' },
-  { value: 'rejected', key: '却下' },
-  { value: 'payment_finished', key: '支払い済み' },
+  { key: 'pending_review', label: '提出済み' },
+  { key: 'change_requested', label: '要修正' },
+  { key: 'approved', label: '承認済み' },
+  { key: 'rejected', label: '却下' },
+  { key: 'payment_finished', label: '支払い済み' },
 ] as const
 
 export type ApplicationStatus = (typeof StatusEnum)[keyof typeof StatusEnum]

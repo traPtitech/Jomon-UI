@@ -67,7 +67,7 @@ export const useSearchSelectMulti = <TValue extends string | number>(
   // If multiple options share the same value, the last one's key will be used for display.
   // It is strongly recommended to ensure option values are unique.
   const optionMap = computed(() => {
-    return new Map(props.options.map(opt => [opt.value, opt.key]))
+    return new Map(props.options.map(opt => [opt.key, opt.label]))
   })
 
   const placeholderText = computed(() => {

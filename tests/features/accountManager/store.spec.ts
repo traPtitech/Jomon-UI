@@ -131,8 +131,8 @@ describe('AccountManager Store', () => {
       store.accountManagers.value = ['user-1', 'user-2']
 
       expect(store.accountManagerOptions.value).toEqual([
-        { key: 'User 1', value: 'user-1' },
-        { key: 'User 2', value: 'user-2' },
+        { label: 'User 1', key: 'user-1' },
+        { label: 'User 2', key: 'user-2' },
       ])
     })
   })

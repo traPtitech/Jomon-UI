@@ -4,7 +4,7 @@ import { toString } from '@/components/shared/utils'
 
 import type { Option } from '../types'
 
-export const useSearchSelectHighlight = <T>(
+export const useSearchSelectHighlight = <T extends string | number>(
   filteredOptions: Ref<Option<T>[]>,
   isOpen: Ref<boolean>,
   listboxId: string

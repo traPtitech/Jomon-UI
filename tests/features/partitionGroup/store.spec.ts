@@ -173,7 +173,7 @@ describe('PartitionGroup Store', () => {
       store.partitionGroups.value = [mockPartitionGroup]
 
       expect(store.partitionGroupOptions.value).toEqual([
-        { key: mockPartitionGroup.name, value: mockPartitionGroup.id },
+        { label: mockPartitionGroup.name, key: mockPartitionGroup.id },
       ])
     })
 

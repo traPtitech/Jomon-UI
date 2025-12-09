@@ -48,7 +48,7 @@ describe('SearchSelectTag', () => {
     const searchMultiSelect = wrapper.findComponent({
       name: 'SearchMultiSelect',
     })
-    expect(searchMultiSelect.props('modelValue')).toEqual(['Tag 1'])
+    expect(searchMultiSelect.props('modelValue')).toEqual(['1'])
   })
 
   it('updates modelValue when selection changes', async () => {
@@ -58,7 +58,7 @@ describe('SearchSelectTag', () => {
     })
 
     // Simulate selection change in SearchMultiSelect
-    await searchMultiSelect.vm.$emit('update:modelValue', ['Tag 2'])
+    await searchMultiSelect.vm.$emit('update:modelValue', ['2'])
 
     // Check if SearchSelectTag emitted update:modelValue with correct Tag object
     expect(wrapper.emitted('update:modelValue')).toBeTruthy()
@@ -78,10 +78,10 @@ describe('SearchSelectTag', () => {
     })
 
     // Initial state should include unknown tag name
-    expect(searchMultiSelect.props('modelValue')).toEqual(['Unknown'])
+    expect(searchMultiSelect.props('modelValue')).toEqual(['unknown'])
 
     // Add a known tag
-    await searchMultiSelect.vm.$emit('update:modelValue', ['Unknown', 'Tag 1'])
+    await searchMultiSelect.vm.$emit('update:modelValue', ['unknown', '1'])
 
     // Should emit both unknown tag (preserved) and new tag
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([

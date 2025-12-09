@@ -8,9 +8,9 @@ import { useSearchSelectMulti } from '@/components/shared/SearchSelect/composabl
 
 const defaultProps: SearchSelectCommonProps<string> = {
   options: [
-    { key: 'Option 1', value: 'opt1' },
-    { key: 'Option 2', value: 'opt2' },
-    { key: 'Other', value: 'other' },
+    { label: 'Option 1', key: 'opt1' },
+    { label: 'Option 2', key: 'opt2' },
+    { label: 'Other', key: 'other' },
   ],
   label: 'Test Label',
 }

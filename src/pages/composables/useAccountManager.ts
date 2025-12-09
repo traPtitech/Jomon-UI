@@ -15,8 +15,8 @@ export const useAccountManager = () => {
     return users.value
       .filter(user => !accountManagers.value.includes(user.id))
       .map(user => ({
-        key: user.name,
-        value: user.id,
+        label: user.name,
+        key: user.id,
       }))
   })
 

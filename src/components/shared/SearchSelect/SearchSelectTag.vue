@@ -8,25 +8,18 @@ import SearchMultiSelect from './SearchMultiSelect.vue'
 
 const model = defineModel<Tag[]>({ required: true })
 
-const { tagOptions } = useTagStore()
-
-const searchOptions = computed(() =>
-  tagOptions.value.map(tag => ({
-    key: tag.key,
-    value: tag.value.name,
-  }))
-)
+const { tagOptions, tags } = useTagStore()
 
 const selectedValue = computed({
-  get: () => model.value.map(tag => tag.name),
-  set: (newNames: string[]) => {
-    model.value = newNames
+  get: () => model.value.map(tag => tag.id),
+  set: (newIds: string[]) => {
+    model.value = newIds
       .map(
-        name =>
-          tagOptions.value.find(t => t.value.name === name)?.value ??
-          model.value.find(t => t.name === name)
+        id =>
+          tags.value.find(t => t.id === id) ??
+          model.value.find(t => t.id === id)
       )
-      .filter(tag => tag !== undefined)
+      .filter((tag): tag is Tag => tag !== undefined)
   },
 })
 </script>
@@ -34,6 +27,6 @@ const selectedValue = computed({
 <template>
   <SearchMultiSelect
     v-model="selectedValue"
-    :options="searchOptions"
+    :options="tagOptions"
     label="タグ" />
 </template>

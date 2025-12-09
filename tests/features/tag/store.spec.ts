@@ -110,17 +110,7 @@ describe('Tag Store', () => {
       store.tags.value = [mockTag]
 
       expect(store.tagOptions.value).toEqual([
-        { key: mockTag.name, value: mockTag },
-      ])
-    })
-
-    it('tagIdOptions returns formatted options with id', () => {
-      app.provide(TagRepositoryKey, createMockRepository())
-      const store = app.runWithContext(() => useTagStore())
-      store.tags.value = [mockTag]
-
-      expect(store.tagIdOptions.value).toEqual([
-        { key: mockTag.name, value: mockTag.id },
+        { label: mockTag.name, key: mockTag.id },
       ])
     })
   })

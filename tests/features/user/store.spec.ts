@@ -159,8 +159,8 @@ describe('User Store', () => {
       store.users.value = [mockUser, mockAdminUser]
 
       expect(store.userOptions.value).toEqual([
-        { key: mockUser.name, value: mockUser.id },
-        { key: mockAdminUser.name, value: mockAdminUser.id },
+        { label: mockUser.name, key: mockUser.id },
+        { label: mockAdminUser.name, key: mockAdminUser.id },
       ])
     })
 

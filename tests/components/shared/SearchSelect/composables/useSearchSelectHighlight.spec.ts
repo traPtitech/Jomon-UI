@@ -7,8 +7,8 @@ import type { Option } from '@/components/shared/SearchSelect/types'
 
 describe('useSearchSelectHighlight', () => {
   const options: Option<string>[] = [
-    { key: 'Option 1', value: '1' },
-    { key: 'Option 2', value: '2' },
+    { label: 'Option 1', key: '1' },
+    { label: 'Option 2', key: '2' },
   ]
   const listboxId = 'test-id'
 
@@ -62,7 +62,7 @@ describe('useSearchSelectHighlight', () => {
     )
 
     highlightedIndex.value = 1
-    filteredOptions.value = [{ key: 'Option 3', value: '3' }]
+    filteredOptions.value = [{ label: 'Option 3', key: '3' }]
     await nextTick()
     expect(highlightedIndex.value).toBe(0)
   })

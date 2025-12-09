@@ -20,8 +20,8 @@ export const useUserStore = defineStoreComposable('user', () => {
   const isAccountManager = computed(() => Boolean(me.value?.accountManager))
   const userOptions = computed(() =>
     users.value.map(user => ({
-      key: user.name,
-      value: user.id,
+      label: user.name,
+      key: user.id,
     }))
   )
   const userMap = computed(() =>

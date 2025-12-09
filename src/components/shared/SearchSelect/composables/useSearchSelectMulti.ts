@@ -43,6 +43,7 @@ export const useSearchSelectMulti = <TValue extends string | number>(
     // This allows users to delete selections without using the mouse or special delete buttons.
     if (
       !isComposing.value &&
+      !e.isComposing &&
       searchTerm.value === '' &&
       e.key === 'Backspace' &&
       model.value.length > 0

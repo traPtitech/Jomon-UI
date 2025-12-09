@@ -1,4 +1,13 @@
 <script setup lang="ts" generic="TValue extends string | number">
+/**
+ * Multi-select component with search functionality.
+ *
+ * Emits:
+ * - `update:modelValue`: When the selected values change.
+ * - `search-input`: When the search input value changes (after IME composition).
+ * - `focus`: When the input receives focus.
+ * - `close`: When the dropdown menu closes.
+ */
 import { useTemplateRef } from 'vue'
 
 import { CheckIcon, XMarkIcon } from '@heroicons/vue/24/outline'

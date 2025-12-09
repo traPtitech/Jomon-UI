@@ -1,6 +1,6 @@
 import type { Ref } from 'vue'
 
-import type { Option } from '@/components/shared/types'
+import type { Option } from '../types'
 
 export const useSearchSelectKeyboard = <T>(
   isOpen: Ref<boolean>,

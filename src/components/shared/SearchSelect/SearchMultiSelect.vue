@@ -16,10 +16,10 @@ import SearchSelectDropdown from './SearchSelectDropdown.vue'
 import SearchSelectInput from './SearchSelectInput.vue'
 import {
   type SearchSelectCommonProps,
-  type SearchSelectEmit,
   type SearchSelectInputRef,
 } from './composables/useSearchSelectBase'
 import { useSearchSelectMulti } from './composables/useSearchSelectMulti'
+import { type SearchSelectEmit } from './types'
 
 /**
  * Generic SearchSelect component for multiple selection.
@@ -37,9 +37,10 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
   disabled: false,
   required: false,
   resetOnClose: true,
+  itemHeight: 36, // Default item height
 })
 
-const emit = defineEmits<SearchSelectEmit>()
+const emit = defineEmits<SearchSelectEmit<TValue[]>>()
 // Note: 'close' event is emitted by useSearchSelectBase (via useSearchSelectMulti) when the menu closes.
 // The component itself does not handle 'close' in the template.
 
@@ -108,12 +109,13 @@ defineExpose({
 
     <SearchSelectDropdown
       v-if="isOpen"
-      :id="listboxId"
+      :listbox-id="listboxId"
       :filtered-options="filteredOptions"
       :search-term="searchTerm"
       :highlighted-index="highlightedIndex"
       :model-value="model"
       multiple
+      :item-height="itemHeight"
       :no-results-text="noResultsText"
       :no-items-text="noItemsText"
       @select-option="handleSelect">

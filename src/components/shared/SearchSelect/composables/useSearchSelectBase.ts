@@ -3,8 +3,9 @@ import { type Ref, computed, ref, useId } from 'vue'
 import { useSearchSelectHighlight } from '@/components/shared/SearchSelect/composables/useSearchSelectHighlight'
 import { useSearchSelectKeyboard } from '@/components/shared/SearchSelect/composables/useSearchSelectKeyboard'
 import { useSearchSelectMenu } from '@/components/shared/SearchSelect/composables/useSearchSelectMenu'
-import type { Option } from '@/components/shared/types'
 import { toString } from '@/components/shared/utils'
+
+import type { Option, SearchSelectBaseEmit } from '../types'
 
 export interface SearchSelectCommonProps<
   TModel extends string | number | null,
@@ -39,19 +40,11 @@ export interface SearchSelectCommonProps<
    * @default '項目がありません。'
    */
   noItemsText?: string | undefined
-}
-
-export type SearchSelectEmit = {
-  (e: 'focus', event: FocusEvent): void
-  (e: 'close'): void
   /**
-   * Emitted when the search term changes.
-   * This event is NOT emitted during IME composition.
-   * It fires only after composition ends or on direct input.
-   * Note: This behavior assumes that the 'compositionend' event will reliably precede or accompany final input processing.
-   * Consumers should generally listen to 'search-input' for API calls rather than watching the search term directly.
+   * Height of each item in the virtual list (pixels).
+   * @default 36
    */
-  (e: 'search-input', value: string): void
+  itemHeight?: number | undefined
 }
 
 export interface SearchSelectInputRef {
@@ -60,7 +53,7 @@ export interface SearchSelectInputRef {
 
 export const useSearchSelectBase = <TModel extends string | number | null>(
   props: SearchSelectCommonProps<TModel>,
-  emit: SearchSelectEmit,
+  emit: SearchSelectBaseEmit,
   dropdownRef: Ref<HTMLElement | null>
 ) => {
   // resetOnClose defaults to true.

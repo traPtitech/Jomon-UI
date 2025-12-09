@@ -4,7 +4,7 @@ import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 
 import SearchSelectDropdown from '@/components/shared/SearchSelect/SearchSelectDropdown.vue'
-import type { Option } from '@/components/shared/types'
+import type { Option } from '@/components/shared/SearchSelect/types'
 
 const { mockScrollTo } = vi.hoisted(() => ({ mockScrollTo: vi.fn() }))
 
@@ -42,7 +42,7 @@ describe('SearchSelectDropdown', () => {
     searchTerm: '',
     highlightedIndex: -1,
     modelValue: null,
-    id: 'test-dropdown',
+    listboxId: 'test-dropdown',
   }
 
   it('renders options correctly', () => {

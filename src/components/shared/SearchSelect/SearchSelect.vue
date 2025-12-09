@@ -16,10 +16,10 @@ import SearchSelectDropdown from './SearchSelectDropdown.vue'
 import SearchSelectInput from './SearchSelectInput.vue'
 import {
   type SearchSelectCommonProps,
-  type SearchSelectEmit,
   type SearchSelectInputRef,
 } from './composables/useSearchSelectBase'
 import { useSearchSelectSingle } from './composables/useSearchSelectSingle'
+import type { SearchSelectEmit } from './types'
 
 /**
  * Generic SearchSelect component for single selection.
@@ -40,7 +40,7 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TModel>>(), {
   resetOnClose: false,
 })
 
-const emit = defineEmits<SearchSelectEmit>()
+const emit = defineEmits<SearchSelectEmit<TModel>>()
 // Note: 'close' event is emitted by useSearchSelectBase (via useSearchSelectSingle) when the menu closes.
 // The component itself does not handle 'close' in the template.
 
@@ -93,11 +93,12 @@ const {
 
     <SearchSelectDropdown
       v-if="isOpen"
-      :id="listboxId"
+      :listbox-id="listboxId"
       :filtered-options="filteredOptions"
       :search-term="searchTerm"
       :highlighted-index="highlightedIndex"
       :model-value="model"
+      :item-height="itemHeight"
       :no-results-text="noResultsText"
       :no-items-text="noItemsText"
       @select-option="handleSelect">

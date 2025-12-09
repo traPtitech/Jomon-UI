@@ -1,7 +1,8 @@
 import { type Ref, computed, ref, watch } from 'vue'
 
-import type { Option } from '@/components/shared/types'
 import { toString } from '@/components/shared/utils'
+
+import type { Option } from '../types'
 
 export const useSearchSelectHighlight = <T>(
   filteredOptions: Ref<Option<T>[]>,

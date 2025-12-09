@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { describe, expect, it, vi } from 'vitest'
 
 import { useSearchSelectKeyboard } from '@/components/shared/SearchSelect/composables/useSearchSelectKeyboard'
-import type { Option } from '@/components/shared/types'
+import type { Option } from '@/components/shared/SearchSelect/types'
 
 describe('useSearchSelectKeyboard', () => {
   const options: Option<string>[] = [

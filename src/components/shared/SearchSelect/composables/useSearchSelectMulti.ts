@@ -2,14 +2,15 @@ import { type Ref, computed } from 'vue'
 
 import {
   type SearchSelectCommonProps,
-  type SearchSelectEmit,
   type SearchSelectInputRef,
   useSearchSelectBase,
 } from '@/components/shared/SearchSelect/composables/useSearchSelectBase'
 
+import type { SearchSelectEmit } from '../types'
+
 export const useSearchSelectMulti = <TValue extends string | number>(
   props: SearchSelectCommonProps<TValue>,
-  emit: SearchSelectEmit,
+  emit: SearchSelectEmit<TValue[]>,
   model: Ref<TValue[]>,
   dropdownRef: Ref<HTMLElement | null>,
   inputRef?: Ref<SearchSelectInputRef | null>
@@ -28,6 +29,10 @@ export const useSearchSelectMulti = <TValue extends string | number>(
     model.value = isSelected
       ? model.value.filter(v => v !== selectedValue)
       : [...model.value, selectedValue]
+
+    // Note: detailed UX decision:
+    // For Multi Select, we keep the menu OPEN after selection to allow selecting multiple items.
+    // This contrasts with Single Select which typically closes on selection.
 
     // Focus input if item was removed via click
     // We restore focus on removal to allow continuous deletions or immediate search for replacement.

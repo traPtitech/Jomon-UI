@@ -1,5 +1,8 @@
 <script lang="ts" setup>
-import type { Option } from './types'
+interface Option<T> {
+  key: string
+  value: T
+}
 
 interface Props {
   options: Option<string>[]

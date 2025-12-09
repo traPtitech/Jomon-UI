@@ -2,14 +2,15 @@ import { type Ref, watch } from 'vue'
 
 import {
   type SearchSelectCommonProps,
-  type SearchSelectEmit,
   useSearchSelectBase,
 } from '@/components/shared/SearchSelect/composables/useSearchSelectBase'
 import { toString } from '@/components/shared/utils'
 
+import type { SearchSelectEmit } from '../types'
+
 export const useSearchSelectSingle = <TModel extends string | number | null>(
   props: SearchSelectCommonProps<TModel>,
-  emit: SearchSelectEmit,
+  emit: SearchSelectEmit<TModel>,
   model: Ref<TModel>,
   dropdownRef: Ref<HTMLElement | null>
 ) => {

@@ -4,7 +4,7 @@ import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 
 import SearchMultiSelect from '@/components/shared/SearchSelect/SearchMultiSelect.vue'
-import type { Option } from '@/components/shared/types'
+import type { Option } from '@/components/shared/SearchSelect/types'
 
 const { mockScrollTo } = vi.hoisted(() => ({ mockScrollTo: vi.fn() }))
 

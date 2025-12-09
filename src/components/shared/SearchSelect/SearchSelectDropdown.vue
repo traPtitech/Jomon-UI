@@ -1,19 +1,22 @@
-<script setup lang="ts" generic="T extends string | number | null">
+<script
+  setup
+  lang="ts"
+  generic="T extends string | number, TModel extends T | T[] | null">
 import { computed, nextTick, onMounted, watch } from 'vue'
 
 import { useVirtualList } from '@vueuse/core'
 
-import type { Option } from '@/components/shared/types'
+import type { Option } from './types'
 
 const props = withDefaults(
   defineProps<{
     filteredOptions: Option<T>[]
     searchTerm: string
     highlightedIndex: number
-    modelValue: T | T[] | null
-    id: string
+    modelValue: TModel
+    listboxId: string
     multiple?: boolean
-    itemHeight?: number
+    itemHeight?: number | undefined
     /**
      * Text to display when no options match the search term.
      * @default '該当する項目がありません。'
@@ -31,11 +34,17 @@ const props = withDefaults(
   }
 )
 
+// Use a fixed item height for the Virtual List.
+// If option content varies significantly, consider implementing dynamic height measurement
+// or requiring the parent to pass a specific `itemHeight`.
+const ITEM_HEIGHT = props.itemHeight ?? 36
+const OVERSCAN = 10
+
 const emit = defineEmits<{
   (e: 'select-option', value: T): void
 }>()
 
-const isSelected = (value: T, model: T | T[] | null): boolean => {
+const isSelected = (value: T, model: TModel): boolean => {
   if (Array.isArray(model)) {
     return model.includes(value)
   }
@@ -44,14 +53,15 @@ const isSelected = (value: T, model: T | T[] | null): boolean => {
 
 const optionsList = computed(() => props.filteredOptions)
 
-// Virtual Scroll setup
+// Note: We use useVirtualList for performance with large datasets.
+// This means only visible items are rendered in the DOM.
+// WE MUST ENSURE that the highlighted item (`aria-activedescendant`) is always scrolled into view
+// so that it exists in the DOM for screen readers to detect it.
 const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(
   optionsList,
   {
-    // Approximate height of each option (py-2 * 2 + text-sm + leading/border).
-    // Note: This relies on options having a fixed height. If option content varies significantly, this estimation might need adjustment.
-    itemHeight: props.itemHeight ?? 36,
-    overscan: 10,
+    itemHeight: ITEM_HEIGHT,
+    overscan: OVERSCAN,
   }
 )
 
@@ -93,7 +103,11 @@ const getOptionClass = (option: Option<T>, index: number) => {
 
 <template>
   <div class="absolute z-50 mt-1 w-full rounded-md border bg-white shadow-lg">
-    <div role="status" aria-live="polite" class="sr-only" :id="`${id}-status`">
+    <div
+      role="status"
+      aria-live="polite"
+      class="sr-only"
+      :id="`${listboxId}-status`">
       {{
         filteredOptions.length > 0
           ? `${filteredOptions.length} 件の結果が見つかりました。`
@@ -105,11 +119,11 @@ const getOptionClass = (option: Option<T>, index: number) => {
     <!-- Options list -->
     <div
       v-bind="containerProps"
-      :id="id"
+      :id="listboxId"
       class="max-h-[200px] p-1 focus:outline-none"
       role="listbox"
       :aria-multiselectable="multiple || undefined"
-      :aria-describedby="`${id}-status`">
+      :aria-describedby="`${listboxId}-status`">
       <div v-bind="wrapperProps">
         <div
           v-if="filteredOptions.length === 0"
@@ -130,7 +144,7 @@ const getOptionClass = (option: Option<T>, index: number) => {
         <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events -->
         <div
           v-for="{ data: option, index } in list"
-          :id="`${id}-option-${index}`"
+          :id="`${listboxId}-option-${index}`"
           :key="option.value !== null ? option.value : index"
           role="option"
           :aria-selected="

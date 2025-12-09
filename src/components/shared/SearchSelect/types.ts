@@ -13,3 +13,13 @@ export interface Option<T> {
   value: T
   disabled?: boolean
 }
+
+export type SearchSelectBaseEmit = {
+  (e: 'focus', event: FocusEvent): void
+  (e: 'close'): void
+  (e: 'search-input', value: string): void
+}
+
+export type SearchSelectEmit<T = unknown> = SearchSelectBaseEmit & {
+  (e: 'update:modelValue', value: T): void
+}

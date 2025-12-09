@@ -81,8 +81,8 @@ defineExpose({
       :aria-activedescendant="activeOptionId" />
 
     <!-- Selected items for multiple selection -->
-    <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1">
-      <div v-for="val in model" :key="val" class="text-xs">
+    <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1" role="list">
+      <div v-for="val in model" :key="val" class="text-xs" role="listitem">
         {{ optionMap.get(val) ?? val }}
         <button
           type="button"

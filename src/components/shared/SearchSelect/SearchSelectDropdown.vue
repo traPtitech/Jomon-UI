@@ -12,6 +12,7 @@ const props = defineProps<{
   modelValue: T | T[] | null
   id: string
   multiple?: boolean
+  itemHeight?: number
 }>()
 
 const emit = defineEmits<{
@@ -31,7 +32,7 @@ const optionsList = computed(() => props.filteredOptions)
 const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(
   optionsList,
   {
-    itemHeight: 36, // Approximate height of each option (py-2 * 2 + text-sm + leading/border)
+    itemHeight: props.itemHeight ?? 36, // Approximate height of each option (py-2 * 2 + text-sm + leading/border)
     overscan: 10,
   }
 )

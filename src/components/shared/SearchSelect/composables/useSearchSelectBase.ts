@@ -44,15 +44,22 @@ export const useSearchSelectBase = <TModel extends string | number | null>(
   const listboxId = useId()
   const searchTerm = ref('')
 
+  const resetSearchTerm = () => {
+    searchTerm.value = ''
+    // highlightedIndex is reset by useSearchSelectHighlight watcher on isOpen change
+  }
+
+  const handleCloseMenu = () => {
+    emit('close')
+    if (resetOnClose) {
+      resetSearchTerm()
+    }
+  }
+
   const { isOpen, toggleMenu, openMenu } = useSearchSelectMenu(
     props,
     dropdownRef,
-    () => {
-      emit('close')
-      if (resetOnClose) {
-        resetSearchTerm()
-      }
-    }
+    handleCloseMenu
   )
 
   const filteredOptions = computed(() => {
@@ -77,11 +84,6 @@ export const useSearchSelectBase = <TModel extends string | number | null>(
     isOpen,
     listboxId
   )
-
-  const resetSearchTerm = () => {
-    searchTerm.value = ''
-    highlightedIndex.value = -1
-  }
 
   const handleInputFocus = (event: FocusEvent) => {
     if (props.disabled) return

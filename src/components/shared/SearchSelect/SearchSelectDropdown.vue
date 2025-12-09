@@ -6,7 +6,7 @@ import { computed, nextTick, onMounted, watch } from 'vue'
 
 import { useVirtualList } from '@vueuse/core'
 
-import type { Option } from './types'
+import type { Option, SearchSelectTheme } from './types'
 
 const props = withDefaults(
   defineProps<{
@@ -26,11 +26,22 @@ const props = withDefaults(
      * Text to display when there are no options available at all.
      * @default '項目がありません。'
      */
+    /**
+     * Text to display when there are no options available at all.
+     * @default '項目がありません。'
+     */
     noItemsText?: string | undefined
+    /**
+     * Theming options.
+     */
+    theme?: SearchSelectTheme | undefined
   }>(),
   {
     noResultsText: '該当する項目がありません。',
     noItemsText: '項目がありません。',
+    theme: () => ({
+      themeColor: 'blue',
+    }),
   }
 )
 
@@ -89,12 +100,32 @@ const getOptionClass = (option: Option<T>, index: number) => {
     return [baseClass, 'cursor-not-allowed text-gray-400 opacity-50']
   }
 
-  const classes = [baseClass, 'hover:bg-blue-100 hover:text-blue-500']
+  // Determine styles based on theme or custom classes
+  const themeColor = props.theme.themeColor ?? 'blue'
+  const isGray = themeColor === 'gray'
+
+  const activeClass =
+    props.theme.activeOptionClass ??
+    (isGray ? 'bg-gray-100 text-gray-900' : 'bg-blue-100 text-blue-500')
+
+  const hoverClass =
+    props.theme.hoverOptionClass ??
+    (isGray
+      ? 'hover:bg-gray-100 hover:text-gray-900'
+      : 'hover:bg-blue-100 hover:text-blue-500')
+
+  const classes = [baseClass, hoverClass]
 
   if (props.highlightedIndex === index) {
-    classes.push('bg-blue-100 text-blue-500')
+    classes.push(activeClass)
   } else if (isSelected(option.key, props.modelValue)) {
-    classes.push('bg-blue-100')
+    // Selected options also get the active style (or maybe just bg, but standard behavior usually highlights selected)
+    // The original code applied `bg-blue-100` for selected, and `bg-blue-100 text-blue-500` for highlighted.
+    // Let's stick closer to original: Highlighted gets full active class.
+    // Selected gets background tint.
+    // But `activeClass` might be complex.
+    // Using `activeClass` for selected as well ensures consistency.
+    classes.push(activeClass)
   }
 
   return classes

@@ -38,6 +38,9 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
   required: false,
   resetOnClose: true,
   itemHeight: 36, // Default item height
+  theme: () => ({
+    themeColor: 'blue',
+  }),
 })
 
 const emit = defineEmits<SearchSelectEmit<TValue[]>>()
@@ -99,7 +102,12 @@ defineExpose({
         {{ optionMap.get(val) ?? val }}
         <button
           type="button"
-          class="ml-1 rounded-full hover:bg-blue-100"
+          :class="[
+            'ml-1 rounded-full',
+            theme?.themeColor === 'gray'
+              ? 'hover:bg-gray-100'
+              : 'hover:bg-blue-100',
+          ]"
           :aria-label="`${optionMap.get(val) ?? val} を削除`"
           @click.stop="handleSelect(val)">
           <XMarkIcon class="h-3 w-3" />
@@ -118,6 +126,7 @@ defineExpose({
       :item-height="itemHeight"
       :no-results-text="noResultsText"
       :no-items-text="noItemsText"
+      :theme="theme"
       @select-option="handleSelect">
       <template #option-content="{ option, isSelected }">
         <div class="mr-2 flex h-4 w-4 items-center justify-center">

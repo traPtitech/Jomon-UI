@@ -23,3 +23,21 @@ export type SearchSelectBaseEmit = {
 export type SearchSelectEmit<T> = SearchSelectBaseEmit & {
   (e: 'update:modelValue', value: T): void
 }
+
+export interface SearchSelectTheme {
+  /**
+   * Theme color for the component.
+   * @default 'blue'
+   */
+  themeColor?: 'blue' | 'gray'
+  /**
+   * Custom class for the active (highlighted) option.
+   * If provided, overrides default theme styles for the active state.
+   */
+  activeOptionClass?: string
+  /**
+   * Custom class for the hovered option.
+   * If provided, overrides default theme styles for the hover state.
+   */
+  hoverOptionClass?: string
+}

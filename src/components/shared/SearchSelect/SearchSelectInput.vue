@@ -30,8 +30,13 @@ const focus = () => {
   inputRef.value?.focus()
 }
 
+const select = () => {
+  inputRef.value?.select()
+}
+
 defineExpose({
   focus,
+  select,
 })
 
 const handleToggle = () => {

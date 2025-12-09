@@ -5,7 +5,7 @@ import { useSearchSelectKeyboard } from '@/components/shared/SearchSelect/compos
 import { useSearchSelectMenu } from '@/components/shared/SearchSelect/composables/useSearchSelectMenu'
 import { toString } from '@/components/shared/utils'
 
-import type { Option, SearchSelectBaseEmit } from '../types'
+import type { Option, SearchSelectBaseEmit, SearchSelectTheme } from '../types'
 
 export interface SearchSelectCommonProps<
   TModel extends string | number | null,
@@ -45,10 +45,15 @@ export interface SearchSelectCommonProps<
    * @default 36
    */
   itemHeight?: number | undefined
+  /**
+   * Theming options.
+   */
+  theme?: SearchSelectTheme | undefined
 }
 
 export interface SearchSelectInputRef {
   focus: () => void
+  select: () => void
 }
 
 export const useSearchSelectBase = <TModel extends string | number | null>(

@@ -38,6 +38,9 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TModel>>(), {
   disabled: false,
   required: false,
   resetOnClose: false,
+  theme: () => ({
+    themeColor: 'blue',
+  }),
 })
 
 const emit = defineEmits<SearchSelectEmit<TModel>>()
@@ -70,6 +73,11 @@ const {
   activeOptionId,
   toggleMenu,
 } = useSearchSelectSingle<TModel>(props, emit, model, dropdownRef)
+
+const handleFocus = (event: FocusEvent) => {
+  inputRef.value?.select()
+  handleInputFocus(event)
+}
 </script>
 
 <template>
@@ -82,7 +90,7 @@ const {
       :disabled="disabled"
       :required="required"
       :is-open="isOpen"
-      @focus="handleInputFocus"
+      @focus="handleFocus"
       @input="handleSearchInput"
       @keydown="handleKeyDown"
       @compositionstart="handleCompositionStart"
@@ -101,6 +109,7 @@ const {
       :item-height="itemHeight"
       :no-results-text="noResultsText"
       :no-items-text="noItemsText"
+      :theme="theme"
       @select-option="handleSelect">
       <template #option-content="{ option, isSelected }">
         <span class="truncate">{{ option.label }}</span>

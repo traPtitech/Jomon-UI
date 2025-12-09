@@ -79,6 +79,9 @@ defineExpose({
   focus: () => {
     inputRef.value?.focus()
   },
+  select: () => {
+    inputRef.value?.select()
+  },
 })
 </script>
 

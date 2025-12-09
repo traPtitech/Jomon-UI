@@ -15,7 +15,8 @@ export const useSearchSelectMulti = <TValue extends string | number>(
   inputRef?: Ref<SearchSelectInputRef | null>
 ) => {
   // For MultiSelect, TModel is effectively TValue because it doesn't support null in the array elements usually.
-  // However, SearchSelectCommonProps expects TModel.
+  // We assume that the model array does NOT contain null values (TValue extends string | number).
+  // However, SearchSelectCommonProps expects TModel, so strict types might mismatch if we passed TValue directly without checking.
   // If we pass TValue as TModel, then options are Option<NonNullable<TValue>>[], which is Option<TValue>[] since TValue is string|number.
   const base = useSearchSelectBase<TValue>(props, emit, dropdownRef)
   const { searchTerm, baseHandleKeyDown, isComposing } = base

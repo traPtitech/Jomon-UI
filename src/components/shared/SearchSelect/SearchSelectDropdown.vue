@@ -48,7 +48,9 @@ const optionsList = computed(() => props.filteredOptions)
 const { list, containerProps, wrapperProps, scrollTo } = useVirtualList(
   optionsList,
   {
-    itemHeight: props.itemHeight ?? 36, // Approximate height of each option (py-2 * 2 + text-sm + leading/border)
+    // Approximate height of each option (py-2 * 2 + text-sm + leading/border).
+    // Note: This relies on options having a fixed height. If option content varies significantly, this estimation might need adjustment.
+    itemHeight: props.itemHeight ?? 36,
     overscan: 10,
   }
 )

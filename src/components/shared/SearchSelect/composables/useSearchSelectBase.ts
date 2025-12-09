@@ -118,6 +118,14 @@ export const useSearchSelectBase = <TModel extends string | number | null>(
     openMenu()
   }
 
+  // Helper to deduplicate search-input events
+  const lastEmittedTerm = ref('')
+  const emitSearchInput = () => {
+    if (searchTerm.value === lastEmittedTerm.value) return
+    lastEmittedTerm.value = searchTerm.value
+    emit('search-input', searchTerm.value)
+  }
+
   // IME handling
   const isComposing = ref(false)
   const handleCompositionStart = () => {
@@ -126,7 +134,7 @@ export const useSearchSelectBase = <TModel extends string | number | null>(
   const handleCompositionEnd = () => {
     isComposing.value = false
     // Emit search-input explicitly on composition end to ensure consistency across browsers.
-    emit('search-input', searchTerm.value)
+    emitSearchInput()
   }
 
   const handleSearchInput = (event?: Event) => {
@@ -144,7 +152,18 @@ export const useSearchSelectBase = <TModel extends string | number | null>(
     // If it fires right after and isComposing is false, we emit again.
     // Consumers (like API calls) usually debounce or are idempotent for same values, so this is acceptable for robustness.
     if (!composingNow) {
-      emit('search-input', searchTerm.value)
+      emitSearchInput()
+    }
+  }
+
+  if (import.meta.env.DEV) {
+    const values = props.options.map(o => o.value)
+    const uniqueSize = new Set(values).size
+    if (uniqueSize !== values.length) {
+      console.warn(
+        '[SearchSelect] option.value must be unique. Duplicates detected.',
+        values
+      )
     }
   }
 

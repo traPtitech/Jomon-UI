@@ -7,7 +7,7 @@ import type { Option } from '../types'
 export function useSearchSelectFiltering<T extends string | number>(
   options: MaybeRefOrGetter<Option<T>[]>,
   query: Ref<string>,
-  filterFunction?: ((option: Option<T>, term: string) => boolean)  
+  filterFunction?: (option: Option<T>, term: string) => boolean
 ) {
   return computed(() => {
     const searchTerm = query.value

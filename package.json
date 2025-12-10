@@ -21,10 +21,12 @@
     "clean": "rimraf src/lib/apis/generated",
     "postinstall": "npm run gen-api",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@floating-ui/vue": "^1.1.9",
+    "@headlessui/vue": "^1.7.23",
     "@vueuse/core": "^14.1.0",
     "axios": "^1.12.2",
     "luxon": "^3.7.2",
@@ -39,6 +41,7 @@
     "@heroicons/vue": "^2.2.0",
     "@openapitools/openapi-generator-cli": "^2.25.2",
     "@pinia/testing": "^1.0.3",
+    "@playwright/test": "^1.57.0",
     "@tailwindcss/postcss": "^4.1.17",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.17",

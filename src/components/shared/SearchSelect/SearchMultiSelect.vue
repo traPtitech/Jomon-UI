@@ -1,126 +1,116 @@
 <script setup lang="ts" generic="TValue extends string | number">
-/**
- * Multi-select component with search functionality.
- *
- * Emits:
- * - `update:modelValue`: When the selected values change.
- * - `search-input`: When the search input value changes (after IME composition).
- * - `focus`: When the input receives focus.
- * - `close`: When the dropdown menu closes.
- */
-import { computed, useTemplateRef } from 'vue'
+import { computed, ref, useTemplateRef } from 'vue'
 
+import { Combobox } from '@headlessui/vue'
 import { CheckIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+
+import { toString } from '@/components/shared/utils'
 
 import SearchSelectDropdown from './SearchSelectDropdown.vue'
 import SearchSelectInput from './SearchSelectInput.vue'
-import {
-  type SearchSelectCommonProps,
-  type SearchSelectInputRef,
-} from './composables/useSearchSelectBase'
-import { useSearchSelectMulti } from './composables/useSearchSelectMulti'
-import { type SearchSelectEmit } from './types'
-
-/**
- * Generic SearchSelect component for multiple selection.
- * @template TValue - The type of the option value. Must be string | number.
- * Note: Complex objects are not supported as values. Use primitive IDs or codes.
- *
- * Events:
- * - search-input: Emitted when the search term changes.
- *   - Fires on direct input or after IME composition ends found in modern browsers.
- *   - Does NOT fire during IME composition.
- */
+import { type SearchSelectCommonProps } from './composables/useSearchSelectBase'
+import type { SearchSelectEmit } from './types'
 
 const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
   placeholder: '検索',
   disabled: false,
   required: false,
   resetOnClose: true,
-  itemHeight: 36, // Default item height
-  theme: () => ({
-    themeColor: 'blue',
-  }),
+  theme: () => ({ themeColor: 'blue' }),
 })
 
-const emit = defineEmits<SearchSelectEmit<TValue[]>>()
-// Note: 'close' event is emitted by useSearchSelectBase (via useSearchSelectMulti) when the menu closes.
-// The component itself does not handle 'close' in the template.
-
+defineEmits<SearchSelectEmit<TValue[]>>()
 const model = defineModel<TValue[]>({ required: true })
 
-const inputRef = useTemplateRef<SearchSelectInputRef>('inputRef')
+const query = ref('')
 
-// Use structural type for generic component ref to avoid TS2344
-const dropdownComponentRef = useTemplateRef<{ el: HTMLElement | null }>(
-  'dropdownComponentRef'
-)
-// Fix: Restore dropdownRef to reference the root wrapper element.
-// This wrapper contains both the input and the selected tags (chips).
-const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
+// Filtering logic
+const filteredOptions = computed(() => {
+  const searchTerm = query.value
+  if (!searchTerm) return props.options
 
-// Fix: We must ignore clicks on the entire component wrapper (input + chips)
-// so that interacting with chips (e.g., delete) doesn't close the menu.
-const outsideClickIgnoreRef = computed(() => dropdownRef.value || null)
+  const filterFunc = props.filterFunction
+  if (filterFunc) {
+    return props.options.filter(opt => filterFunc(opt, searchTerm))
+  }
 
-// Fix: Create a computed ref for the dropdown element so useSearchSelectBase
-// can set up onClickOutside correctly.
-const dropdownElementRef = computed(
-  () => dropdownComponentRef.value?.el || null
-)
+  const lowerTerm = searchTerm.toLowerCase()
+  return props.options.filter(
+    opt =>
+      opt.label.toLowerCase().includes(lowerTerm) ||
+      toString(opt.key).toLowerCase().includes(lowerTerm)
+  )
+})
 
-const {
-  isOpen,
-  searchTerm,
-  highlightedIndex,
-  filteredOptions,
-  handleInputFocus,
-  handleSearchInput,
-  handleCompositionStart,
-  handleCompositionEnd,
-  listboxId,
-  activeOptionId,
-  toggleMenu,
-  handleSelect,
-  handleKeyDown, // handleKeyDown wraps baseHandleKeyDown, so we use this one
-  optionMap,
-  placeholderText,
-} = useSearchSelectMulti<TValue>(
-  props,
-  emit,
-  model,
-  dropdownElementRef, // Use computed element ref
-  inputRef,
-  outsideClickIgnoreRef
-)
+const handleUpdate = (value: TValue[]) => {
+  model.value = value
+  if (props.resetOnClose) {
+    query.value = ''
+  }
+}
+
+const displayValue = () => {
+  return query.value // In multi-select, input displays query?
+}
+
+const inputComponentRef =
+  useTemplateRef<InstanceType<typeof SearchSelectInput>>('inputComponentRef')
 
 defineExpose({
   focus: () => {
-    inputRef.value?.focus()
+    inputComponentRef.value?.focus()
   },
 })
+
+const referenceElement = computed(() => {
+  return inputComponentRef.value?.el || null
+})
+
+// Option Map for Tags
+const optionMap = computed(() => {
+  const map = new Map<string | number, string>()
+  for (const option of props.options) {
+    map.set(option.key, option.label)
+  }
+  return map
+})
+
+const removeItem = (val: TValue) => {
+  model.value = model.value.filter(v => v !== val)
+}
+
+const handleKeyDown = (e: KeyboardEvent) => {
+  if (e.key === 'Backspace' && query.value === '' && model.value.length > 0) {
+    const newValue = [...model.value]
+    newValue.pop()
+    model.value = newValue
+  }
+}
 </script>
 
 <template>
-  <div ref="dropdownRef" class="relative">
+  <Combobox
+    :model-value="model"
+    :disabled="!!disabled"
+    multiple
+    nullable
+    as="div"
+    class="relative"
+    @update:model-value="handleUpdate"
+    v-slot="{ open }">
     <SearchSelectInput
-      ref="inputRef"
-      v-model="searchTerm"
+      ref="inputComponentRef"
       :label="label"
-      :placeholder="placeholderText"
-      :disabled="disabled"
+      :placeholder="model.length === 0 ? placeholder : ''"
       :required="required"
-      :is-open="isOpen"
-      @focus="handleInputFocus"
-      @input="handleSearchInput"
+      :disabled="disabled"
+      :display-value="displayValue"
+      :is-open="open"
+      :query="query"
       @keydown="handleKeyDown"
-      @compositionstart="handleCompositionStart"
-      @compositionend="handleCompositionEnd"
-      @toggle-menu="toggleMenu"
-      :aria-controls="listboxId"
-      :aria-activedescendant="activeOptionId" />
+      @change-query="query = $event" />
 
-    <!-- Selected items for multiple selection -->
+    <!-- Selected items (Tags) -->
     <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1" role="list">
       <div v-for="val in model" :key="val" class="text-xs" role="listitem">
         {{ optionMap.get(val) ?? val }}
@@ -133,33 +123,29 @@ defineExpose({
               : 'hover:bg-blue-100',
           ]"
           :aria-label="`${optionMap.get(val) ?? val} を削除`"
-          @click.stop="handleSelect(val)">
+          @click.stop="removeItem(val)">
           <XMarkIcon class="h-3 w-3" />
         </button>
       </div>
     </div>
 
     <SearchSelectDropdown
-      v-if="isOpen"
-      ref="dropdownComponentRef"
-      :listbox-id="listboxId"
+      v-if="open"
       :filtered-options="filteredOptions"
-      :search-term="searchTerm"
-      :highlighted-index="highlightedIndex"
-      :model-value="model"
-      :reference-element="inputRef?.el || null"
-      :multiple="true"
-      :item-height="itemHeight"
+      :search-term="query"
+      :theme="theme"
       :no-results-text="noResultsText"
       :no-items-text="noItemsText"
-      :theme="theme"
-      @select-option="handleSelect">
-      <template #option-content="{ option, isSelected }">
+      :item-height="itemHeight"
+      :reference-element="referenceElement">
+      <template #option-content="{ option, selected }">
         <div class="mr-2 flex h-4 w-4 items-center justify-center">
-          <CheckIcon v-if="isSelected" class="h-4 w-4" />
+          <CheckIcon v-if="selected" class="h-4 w-4" />
         </div>
-        <span class="truncate">{{ option.label }}</span>
+        <span class="truncate" :class="{ 'font-semibold': selected }">
+          {{ option.label }}
+        </span>
       </template>
     </SearchSelectDropdown>
-  </div>
+  </Combobox>
 </template>

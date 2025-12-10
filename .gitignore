@@ -11,3 +11,5 @@ debug.log
 !.vscode/extensions.json
 
 coverage
+test-results/
+playwright-report/

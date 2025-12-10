@@ -1,145 +1,117 @@
 <script setup lang="ts" generic="TModel extends string | number | null">
-/**
- * Single select component with search functionality.
- *
- * Emits:
- * - `update:modelValue`: When the selected value changes.
- * - `search-input`: When the search input value changes (after IME composition).
- * - `focus`: When the input receives focus.
- * - `close`: When the dropdown menu closes.
- */
-import { computed, useTemplateRef } from 'vue'
+import { computed, ref, useTemplateRef } from 'vue'
 
+import { Combobox } from '@headlessui/vue'
 import { CheckIcon } from '@heroicons/vue/24/outline'
+
+import { toString } from '@/components/shared/utils'
 
 import SearchSelectDropdown from './SearchSelectDropdown.vue'
 import SearchSelectInput from './SearchSelectInput.vue'
-import {
-  type SearchSelectCommonProps,
-  type SearchSelectInputRef,
-} from './composables/useSearchSelectBase'
-import { useSearchSelectSingle } from './composables/useSearchSelectSingle'
+import { type SearchSelectCommonProps } from './composables/useSearchSelectBase'
 import type { SearchSelectEmit } from './types'
-
-/**
- * Generic SearchSelect component for single selection.
- * @template TModel - The type of the model value. Must be string | number | null.
- * options will be automatically typed as Option<NonNullable<TModel>>.
- * Note: Complex objects are not supported as values. Use primitive IDs or codes.
- *
- * Events:
- * - search-input: Emitted when the search term changes.
- *   - Fires on direct input or after IME composition ends found in modern browsers.
- *   - Does NOT fire during IME composition.
- */
 
 const props = withDefaults(defineProps<SearchSelectCommonProps<TModel>>(), {
   placeholder: '検索',
   disabled: false,
   required: false,
   resetOnClose: false,
-  theme: () => ({
-    themeColor: 'blue',
-  }),
+  theme: () => ({ themeColor: 'blue' }),
 })
 
-const emit = defineEmits<SearchSelectEmit<TModel>>()
-// Note: 'close' event is emitted by useSearchSelectBase (via useSearchSelectSingle) when the menu closes.
-// The component itself does not handles 'close' in the template.
-
+defineEmits<SearchSelectEmit<TModel>>()
 const model = defineModel<TModel>({ required: true })
 
-const inputRef = useTemplateRef<SearchSelectInputRef>('inputRef')
+const query = ref('')
 
-// Use structural type for generic component ref to avoid TS2344
-const dropdownComponentRef = useTemplateRef<{ el: HTMLElement | null }>(
-  'dropdownComponentRef'
-)
-// Fix: Define the dropdownRef to match the template ref on the root wrapper.
-const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
+const filteredOptions = computed(() => {
+  const searchTerm = query.value
+  if (!searchTerm) return props.options
 
-// Fix: We must ignore clicks on the entire component wrapper so that its
-// own native click handlers (toggle) can work without interference from
-// onClickOutside (which would close the menu).
-const outsideClickIgnoreRef = computed(() => dropdownRef.value || null)
+  const filterFunc = props.filterFunction
+  if (filterFunc) {
+    return props.options.filter(opt => filterFunc(opt, searchTerm))
+  }
 
-// Fix: Create a computed ref for the dropdown element so useSearchSelectBase
-// can set up onClickOutside correctly.
-const dropdownElementRef = computed(
-  () => dropdownComponentRef.value?.el || null
-)
+  const lowerTerm = searchTerm.toLowerCase()
+  return props.options.filter(
+    opt =>
+      opt.label.toLowerCase().includes(lowerTerm) ||
+      toString(opt.key).toLowerCase().includes(lowerTerm)
+  )
+})
+
+const handleUpdate = (value: TModel) => {
+  model.value = value
+  // Force update query to reflect selected value, bypassing ComboxInput display-value issues
+  if (value !== null) {
+    query.value = displayValue(value)
+  }
+  if (props.resetOnClose) {
+    query.value = ''
+  }
+}
+
+const displayValue = (item: unknown) => {
+  if (item === null || item === undefined) return ''
+  const found = props.options.find(opt => opt.key === item)
+  if (found) return found.label
+  return typeof item === 'string' || typeof item === 'number'
+    ? toString(item)
+    : ''
+}
+
+const inputComponentRef =
+  useTemplateRef<InstanceType<typeof SearchSelectInput>>('inputComponentRef')
 
 defineExpose({
   focus: () => {
-    inputRef.value?.focus()
+    inputComponentRef.value?.focus()
   },
 })
 
-const {
-  isOpen,
-  searchTerm,
-  highlightedIndex,
-  filteredOptions,
-  handleInputFocus,
-  handleSearchInput,
-  handleKeyDown,
-  handleSelect,
-  handleCompositionStart,
-  handleCompositionEnd,
-  listboxId,
-  activeOptionId,
-  toggleMenu,
-} = useSearchSelectSingle<TModel>(
-  props,
-  emit,
-  model,
-  dropdownElementRef, // Use computed element ref
-  outsideClickIgnoreRef
-)
-
-const handleFocus = (event: FocusEvent) => {
-  inputRef.value?.select()
-  handleInputFocus(event)
-}
+const referenceElement = computed(() => {
+  return inputComponentRef.value?.el || null
+})
 </script>
 
 <template>
-  <div ref="dropdownRef" class="relative">
+  <Combobox
+    :model-value="model"
+    :disabled="!!disabled"
+    nullable
+    as="div"
+    class="relative"
+    @update:model-value="handleUpdate"
+    v-slot="{ open }">
     <SearchSelectInput
-      ref="inputRef"
-      v-model="searchTerm"
+      ref="inputComponentRef"
       :label="label"
       :placeholder="placeholder"
-      :disabled="disabled"
       :required="required"
-      :is-open="isOpen"
-      @focus="handleFocus"
-      @input="handleSearchInput"
-      @keydown="handleKeyDown"
-      @compositionstart="handleCompositionStart"
-      @compositionend="handleCompositionEnd"
-      @toggle-menu="toggleMenu"
-      :aria-controls="listboxId"
-      :aria-activedescendant="activeOptionId" />
+      :disabled="disabled"
+      :display-value="displayValue"
+      :is-open="open"
+      :query="query"
+      @change-query="query = $event" />
 
     <SearchSelectDropdown
-      v-if="isOpen"
-      ref="dropdownComponentRef"
-      :listbox-id="listboxId"
+      v-if="open"
       :filtered-options="filteredOptions"
-      :search-term="searchTerm"
-      :highlighted-index="highlightedIndex"
-      :model-value="model"
-      :reference-element="inputRef?.el || null"
-      :item-height="itemHeight"
+      :search-term="query"
+      :theme="theme"
       :no-results-text="noResultsText"
       :no-items-text="noItemsText"
-      :theme="theme"
-      @select-option="handleSelect">
-      <template #option-content="{ option, isSelected }">
-        <span class="truncate">{{ option.label }}</span>
-        <CheckIcon v-if="isSelected" class="ml-auto h-4 w-4" />
+      :item-height="itemHeight"
+      :reference-element="referenceElement">
+      <template #option-content="{ option, selected }">
+        <span
+          class="truncate"
+          :class="{ 'font-medium': selected, 'font-normal': !selected }">
+          {{ option.label }}
+        </span>
+        <CheckIcon v-if="selected" class="ml-auto h-4 w-4" />
       </template>
     </SearchSelectDropdown>
-  </div>
+  </Combobox>
 </template>

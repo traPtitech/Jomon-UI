@@ -29,8 +29,16 @@ export const mockPartitionWithoutBudget: Partition = {
   updated_at: '2024-01-02T00:00:00Z',
 }
 const mockPartitions: Partition[] = [
-  ...Array(5).fill(mockPartition),
-  ...Array(5).fill(mockPartitionWithoutBudget),
+  ...Array.from({ length: 5 }, (_, i) => ({
+    ...mockPartition,
+    id: `1-${String(i)}`,
+    name: `${mockPartition.name} ${String(i)}`,
+  })),
+  ...Array.from({ length: 5 }, (_, i) => ({
+    ...mockPartitionWithoutBudget,
+    id: `2-${String(i)}`,
+    name: `${mockPartitionWithoutBudget.name} ${String(i)}`,
+  })),
 ]
 
 export const partitionHandlers = [

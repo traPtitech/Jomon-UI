@@ -82,6 +82,13 @@ defineExpose({
   select: () => {
     inputRef.value?.select()
   },
+  setSelectionRange: (
+    start: number,
+    end: number,
+    direction?: 'forward' | 'backward' | 'none'
+  ) => {
+    inputRef.value?.setSelectionRange(start, end, direction)
+  },
 })
 </script>
 

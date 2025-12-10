@@ -7,7 +7,8 @@ import { autoUpdate, flip, offset, size, useFloating } from '@floating-ui/vue'
 import { ComboboxOption, ComboboxOptions } from '@headlessui/vue'
 import { useVirtualList } from '@vueuse/core'
 
-import { toString } from '../utils'
+import { toString } from '@/components/shared/utils'
+
 import type { Option, SearchSelectTheme } from './types'
 
 const props = withDefaults(
@@ -25,13 +26,14 @@ const props = withDefaults(
     noResultsText: '該当する項目がありません。',
     noItemsText: '項目がありません。',
     searchTerm: '',
+    itemHeight: 36,
   }
 )
 
 const floating = ref<HTMLElement | null>(null)
 
 // Use a fixed item height for the Virtual List.
-const ITEM_HEIGHT = props.itemHeight ?? 36
+const ITEM_HEIGHT = props.itemHeight
 const OVERSCAN = 10
 
 const { list, containerProps, wrapperProps } = useVirtualList(

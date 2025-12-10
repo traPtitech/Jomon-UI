@@ -18,7 +18,7 @@ export interface SearchSelectCommonProps<
     | ((option: Option<NonNullable<TModel>>, searchTerm: string) => boolean)
     | undefined
   /**
-   * Whether to reset the search term when the menu closes.
+   * Whether to reset the search term when an item is selected.
    * @default true
    * Note: Single Select components (SearchSelect.vue) may override this to `false` to persist the selected label.
    */

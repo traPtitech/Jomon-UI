@@ -9,6 +9,7 @@ import { toString } from '@/components/shared/utils'
 import SearchSelectDropdown from './SearchSelectDropdown.vue'
 import SearchSelectInput from './SearchSelectInput.vue'
 import { type SearchSelectCommonProps } from './composables/useSearchSelectBase'
+import { useSearchSelectFiltering } from './composables/useSearchSelectFiltering'
 import type { SearchSelectEmit } from './types'
 
 const props = withDefaults(defineProps<SearchSelectCommonProps<TModel>>(), {
@@ -24,22 +25,11 @@ const model = defineModel<TModel>({ required: true })
 
 const query = ref('')
 
-const filteredOptions = computed(() => {
-  const searchTerm = query.value
-  if (!searchTerm) return props.options
-
-  const filterFunc = props.filterFunction
-  if (filterFunc) {
-    return props.options.filter(opt => filterFunc(opt, searchTerm))
-  }
-
-  const lowerTerm = searchTerm.toLowerCase()
-  return props.options.filter(
-    opt =>
-      opt.label.toLowerCase().includes(lowerTerm) ||
-      toString(opt.key).toLowerCase().includes(lowerTerm)
-  )
-})
+const filteredOptions = useSearchSelectFiltering(
+  () => props.options,
+  query,
+  props.filterFunction
+)
 
 const handleUpdate = (value: TModel) => {
   model.value = value
@@ -93,7 +83,9 @@ const referenceElement = computed(() => {
       :display-value="displayValue"
       :is-open="open"
       :query="query"
-      @change-query="query = $event" />
+      :has-value="query !== '' || model !== null"
+      @change-query="query = $event"
+      @close="$emit('close')" />
 
     <SearchSelectDropdown
       v-if="open"

@@ -14,14 +14,9 @@ export interface Option<T extends string | number> {
   disabled?: boolean
 }
 
-export type SearchSelectBaseEmit = {
-  (e: 'focus', event: FocusEvent): void
-  (e: 'close'): void
-  (e: 'search-input', value: string): void
-}
-
-export type SearchSelectEmit<T> = SearchSelectBaseEmit & {
+export type SearchSelectEmit<T> = {
   (e: 'update:modelValue', value: T): void
+  (e: 'close'): void
 }
 
 export interface SearchSelectTheme {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, useId, useTemplateRef } from 'vue'
+import { ref, useId, useTemplateRef, watch } from 'vue'
 
 import { ComboboxButton, ComboboxInput } from '@headlessui/vue'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
@@ -14,16 +14,27 @@ const props = defineProps<{
   displayValue: (item: unknown) => string
   isOpen: boolean
   query: string
+  hasValue: boolean
 }>()
 
 const emit = defineEmits<{
   (e: 'change-query', value: string): void
   (e: 'keydown', event: KeyboardEvent): void
+  (e: 'close'): void
 }>()
 
 const inputRef = useTemplateRef<HTMLInputElement>('inputRef')
 const rootRef = useTemplateRef<HTMLElement>('rootRef')
 const buttonRef = ref<InstanceType<typeof ComboboxButton> | null>(null)
+
+watch(
+  () => props.isOpen,
+  (newVal, oldVal) => {
+    if (oldVal && !newVal) {
+      emit('close')
+    }
+  }
+)
 
 const focus = () => {
   inputRef.value?.focus()
@@ -67,7 +78,7 @@ const inputId = useId()
       :label="label"
       :required="required"
       :disabled="disabled"
-      :has-value="query !== ''"
+      :has-value="hasValue"
       :input-id="inputId"
       :error-message="''">
       <template #prefix>

@@ -29,6 +29,7 @@ const TestWrapper = defineComponent({
         :disabled="props.disabled"
         :query="query"
         :is-open="false"
+        :has-value="query !== '' || !!model"
         @change-query="query = $event"
       />
     </Combobox>

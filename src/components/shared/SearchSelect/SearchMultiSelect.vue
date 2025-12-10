@@ -4,11 +4,10 @@ import { computed, ref, useTemplateRef } from 'vue'
 import { Combobox } from '@headlessui/vue'
 import { CheckIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 
-import { toString } from '@/components/shared/utils'
-
 import SearchSelectDropdown from './SearchSelectDropdown.vue'
 import SearchSelectInput from './SearchSelectInput.vue'
 import { type SearchSelectCommonProps } from './composables/useSearchSelectBase'
+import { useSearchSelectFiltering } from './composables/useSearchSelectFiltering'
 import type { SearchSelectEmit } from './types'
 
 const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
@@ -25,22 +24,11 @@ const model = defineModel<TValue[]>({ required: true })
 const query = ref('')
 
 // Filtering logic
-const filteredOptions = computed(() => {
-  const searchTerm = query.value
-  if (!searchTerm) return props.options
-
-  const filterFunc = props.filterFunction
-  if (filterFunc) {
-    return props.options.filter(opt => filterFunc(opt, searchTerm))
-  }
-
-  const lowerTerm = searchTerm.toLowerCase()
-  return props.options.filter(
-    opt =>
-      opt.label.toLowerCase().includes(lowerTerm) ||
-      toString(opt.key).toLowerCase().includes(lowerTerm)
-  )
-})
+const filteredOptions = useSearchSelectFiltering(
+  () => props.options,
+  query,
+  props.filterFunction
+)
 
 const handleUpdate = (value: TValue[]) => {
   model.value = value
@@ -50,7 +38,9 @@ const handleUpdate = (value: TValue[]) => {
 }
 
 const displayValue = () => {
-  return query.value // In multi-select, input displays query?
+  // In MultiSelect, the input should only display the search query, not the selected values.
+  // Selected values are displayed as tags below the input.
+  return query.value
 }
 
 const inputComponentRef =
@@ -107,8 +97,10 @@ const handleKeyDown = (e: KeyboardEvent) => {
       :display-value="displayValue"
       :is-open="open"
       :query="query"
+      :has-value="model.length > 0 || query !== ''"
       @keydown="handleKeyDown"
-      @change-query="query = $event" />
+      @change-query="query = $event"
+      @close="$emit('close')" />
 
     <!-- Selected items (Tags) -->
     <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1" role="list">

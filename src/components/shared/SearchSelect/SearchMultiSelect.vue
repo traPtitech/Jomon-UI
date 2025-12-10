@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
   placeholder: '検索',
   disabled: false,
   required: false,
-  resetOnClose: true,
+  resetOnSelect: true,
   theme: () => ({ themeColor: 'blue' }),
 })
 
@@ -32,7 +32,7 @@ const filteredOptions = useSearchSelectFiltering(
 
 const handleUpdate = (value: TValue[]) => {
   model.value = value
-  if (props.resetOnClose) {
+  if (props.resetOnSelect) {
     query.value = ''
   }
 }

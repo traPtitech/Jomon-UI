@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="TModel extends string | number | null">
+<script setup lang="ts" generic="TValue extends string | number | null">
 import { computed, ref, useTemplateRef } from 'vue'
 
 import { Combobox } from '@headlessui/vue'
@@ -12,16 +12,16 @@ import { type SearchSelectCommonProps } from './composables/useSearchSelectBase'
 import { useSearchSelectFiltering } from './composables/useSearchSelectFiltering'
 import type { SearchSelectEmit } from './types'
 
-const props = withDefaults(defineProps<SearchSelectCommonProps<TModel>>(), {
+const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
   placeholder: '検索',
   disabled: false,
   required: false,
-  resetOnClose: false,
+  resetOnSelect: false,
   theme: () => ({ themeColor: 'blue' }),
 })
 
-defineEmits<SearchSelectEmit<TModel>>()
-const model = defineModel<TModel>({ required: true })
+defineEmits<SearchSelectEmit<TValue>>()
+const model = defineModel<TValue>({ required: true })
 
 const query = ref('')
 
@@ -31,13 +31,13 @@ const filteredOptions = useSearchSelectFiltering(
   props.filterFunction
 )
 
-const handleUpdate = (value: TModel) => {
+const handleUpdate = (value: TValue) => {
   model.value = value
   // Force update query to reflect selected value, bypassing ComboxInput display-value issues
   if (value !== null) {
     query.value = displayValue(value)
   }
-  if (props.resetOnClose) {
+  if (props.resetOnSelect) {
     query.value = ''
   }
 }

@@ -1,9 +1,9 @@
 import type { Option, SearchSelectTheme } from '../types'
 
 export interface SearchSelectCommonProps<
-  TModel extends string | number | null,
+  TValue extends string | number | null,
 > {
-  options: Option<NonNullable<TModel>>[]
+  options: Option<NonNullable<TValue>>[]
   label: string
   placeholder?: string | undefined
   disabled?: boolean | undefined
@@ -15,14 +15,14 @@ export interface SearchSelectCommonProps<
    * @param searchTerm The current search term (not lower-cased).
    */
   filterFunction?:
-    | ((option: Option<NonNullable<TModel>>, searchTerm: string) => boolean)
+    | ((option: Option<NonNullable<TValue>>, searchTerm: string) => boolean)
     | undefined
   /**
    * Whether to reset the search term when an item is selected.
    * @default true
    * Note: Single Select components (SearchSelect.vue) may override this to `false` to persist the selected label.
    */
-  resetOnClose?: boolean | undefined
+  resetOnSelect?: boolean | undefined
   /**
    * Text to display when no options match the search term.
    * @default '該当する項目がありません。'

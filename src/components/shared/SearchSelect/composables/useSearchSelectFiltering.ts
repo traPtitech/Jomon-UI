@@ -10,7 +10,7 @@ export function useSearchSelectFiltering<T extends string | number>(
   filterFunction?: (option: Option<T>, term: string) => boolean
 ) {
   return computed(() => {
-    const searchTerm = query.value
+    const searchTerm = query.value.trim()
     const opts = toValue(options)
     if (!searchTerm) return opts
 

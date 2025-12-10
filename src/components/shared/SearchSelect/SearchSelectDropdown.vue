@@ -32,14 +32,12 @@ const props = withDefaults(
 
 const floating = ref<HTMLElement | null>(null)
 
-// Use a fixed item height for the Virtual List.
-const ITEM_HEIGHT = props.itemHeight
 const OVERSCAN = 10
 
 const { list, containerProps, wrapperProps } = useVirtualList(
   computed(() => props.filteredOptions),
   {
-    itemHeight: ITEM_HEIGHT,
+    itemHeight: () => props.itemHeight,
     overscan: OVERSCAN,
   }
 )
@@ -47,9 +45,7 @@ const { list, containerProps, wrapperProps } = useVirtualList(
 watch(
   () => props.filteredOptions,
   () => {
-    if (containerProps.ref.value) {
-      containerProps.ref.value.scrollTop = 0
-    }
+    containerProps.ref.value?.scrollTo(0, 0)
   }
 )
 
@@ -106,7 +102,7 @@ const getOptionClass = (
   <Teleport to="body">
     <ComboboxOptions
       ref="floating"
-      class="ring-opacity-5 absolute z-50 max-h-60 w-full overflow-hidden rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black focus:outline-none sm:text-sm"
+      class="ring-opacity-5 absolute z-50 w-full overflow-hidden rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black focus:outline-none sm:text-sm"
       :style="floatingStyles"
       static>
       <!-- Empty State -->
@@ -117,7 +113,7 @@ const getOptionClass = (
       </div>
 
       <!-- Virtual List Container -->
-      <div v-bind="containerProps" style="max-height: 200px; overflow-y: auto">
+      <div v-bind="containerProps" class="max-h-60 overflow-y-auto">
         <div v-bind="wrapperProps">
           <ComboboxOption
             v-for="{ data: option } in list"

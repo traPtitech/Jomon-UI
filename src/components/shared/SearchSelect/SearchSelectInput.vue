@@ -93,7 +93,8 @@ const inputId = useId()
             {
               class: [
                 inputProps.class,
-                'w-full border-none bg-transparent px-3 pb-2 ring-0 outline-none not-focus-visible:placeholder:text-transparent',
+                'w-full border-none bg-transparent px-3 pb-2 ring-0 outline-none',
+                'not-focus-visible:placeholder:text-transparent', // placeholder behavior
                 label ? 'pt-6' : 'pt-2',
                 disabled ? 'cursor-not-allowed' : '',
                 'pr-8',

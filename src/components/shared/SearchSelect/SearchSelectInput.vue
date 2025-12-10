@@ -25,6 +25,7 @@ const emit = defineEmits<{
 }>()
 
 const inputRef = useTemplateRef<InstanceType<typeof BaseTextInput>>('inputRef')
+const rootRef = useTemplateRef<HTMLElement>('rootRef')
 
 const focus = () => {
   inputRef.value?.focus()
@@ -37,6 +38,9 @@ const select = () => {
 defineExpose({
   focus,
   select,
+  get el() {
+    return rootRef.value
+  },
 })
 
 const handleToggle = () => {
@@ -48,7 +52,7 @@ const handleToggle = () => {
 </script>
 
 <template>
-  <div class="relative">
+  <div ref="rootRef" class="relative">
     <BaseTextInput
       ref="inputRef"
       v-model="model"
@@ -58,13 +62,12 @@ const handleToggle = () => {
       :disabled="disabled"
       :required="required"
       :input-attrs="{
-        // Combobox Pattern Attributes
         role: 'combobox',
+        'aria-controls': ariaControls,
+        'aria-expanded': isOpen,
+        'aria-activedescendant': ariaActivedescendant,
         'aria-haspopup': 'listbox',
         'aria-autocomplete': 'list',
-        'aria-expanded': isOpen,
-        'aria-controls': ariaControls,
-        'aria-activedescendant': ariaActivedescendant,
       }"
       @focus="emit('focus', $event)"
       @input="emit('input', $event)"

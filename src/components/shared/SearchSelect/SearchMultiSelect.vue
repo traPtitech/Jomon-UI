@@ -8,7 +8,7 @@
  * - `focus`: When the input receives focus.
  * - `close`: When the dropdown menu closes.
  */
-import { useTemplateRef } from 'vue'
+import { computed, useTemplateRef } from 'vue'
 
 import { CheckIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 
@@ -49,8 +49,25 @@ const emit = defineEmits<SearchSelectEmit<TValue[]>>()
 
 const model = defineModel<TValue[]>({ required: true })
 
-const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
 const inputRef = useTemplateRef<SearchSelectInputRef>('inputRef')
+
+// Use structural type for generic component ref to avoid TS2344
+const dropdownComponentRef = useTemplateRef<{ el: HTMLElement | null }>(
+  'dropdownComponentRef'
+)
+// Fix: Restore dropdownRef to reference the root wrapper element.
+// This wrapper contains both the input and the selected tags (chips).
+const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
+
+// Fix: We must ignore clicks on the entire component wrapper (input + chips)
+// so that interacting with chips (e.g., delete) doesn't close the menu.
+const outsideClickIgnoreRef = computed(() => dropdownRef.value || null)
+
+// Fix: Create a computed ref for the dropdown element so useSearchSelectBase
+// can set up onClickOutside correctly.
+const dropdownElementRef = computed(
+  () => dropdownComponentRef.value?.el || null
+)
 
 const {
   isOpen,
@@ -59,16 +76,23 @@ const {
   filteredOptions,
   handleInputFocus,
   handleSearchInput,
-  handleKeyDown,
-  handleSelect,
   handleCompositionStart,
   handleCompositionEnd,
   listboxId,
   activeOptionId,
   toggleMenu,
+  handleSelect,
+  handleKeyDown, // handleKeyDown wraps baseHandleKeyDown, so we use this one
   optionMap,
   placeholderText,
-} = useSearchSelectMulti<TValue>(props, emit, model, dropdownRef, inputRef)
+} = useSearchSelectMulti<TValue>(
+  props,
+  emit,
+  model,
+  dropdownElementRef, // Use computed element ref
+  inputRef,
+  outsideClickIgnoreRef
+)
 
 defineExpose({
   focus: () => {
@@ -117,12 +141,14 @@ defineExpose({
 
     <SearchSelectDropdown
       v-if="isOpen"
+      ref="dropdownComponentRef"
       :listbox-id="listboxId"
       :filtered-options="filteredOptions"
       :search-term="searchTerm"
       :highlighted-index="highlightedIndex"
       :model-value="model"
-      multiple
+      :reference-element="inputRef?.el || null"
+      :multiple="true"
       :item-height="itemHeight"
       :no-results-text="noResultsText"
       :no-items-text="noItemsText"

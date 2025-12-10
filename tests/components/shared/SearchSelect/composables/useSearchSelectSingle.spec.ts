@@ -32,7 +32,8 @@ describe('useSearchSelectSingle', () => {
           props,
           emit,
           modelValue,
-          dropdownRef
+          dropdownRef,
+          undefined // ignoreRef
         )
         return () => h('div')
       },

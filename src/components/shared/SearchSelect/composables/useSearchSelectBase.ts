@@ -1,8 +1,9 @@
-import { type Ref, computed, ref, useId } from 'vue'
+import { type Ref, computed, ref, useId, watch } from 'vue'
+
+import { onClickOutside } from '@vueuse/core'
 
 import { useSearchSelectHighlight } from '@/components/shared/SearchSelect/composables/useSearchSelectHighlight'
 import { useSearchSelectKeyboard } from '@/components/shared/SearchSelect/composables/useSearchSelectKeyboard'
-import { useSearchSelectMenu } from '@/components/shared/SearchSelect/composables/useSearchSelectMenu'
 import { toString } from '@/components/shared/utils'
 
 import type { Option, SearchSelectBaseEmit, SearchSelectTheme } from '../types'
@@ -54,12 +55,14 @@ export interface SearchSelectCommonProps<
 export interface SearchSelectInputRef {
   focus: () => void
   select: () => void
+  el: HTMLElement | null
 }
 
 export const useSearchSelectBase = <TModel extends string | number | null>(
   props: SearchSelectCommonProps<TModel>,
   emit: SearchSelectBaseEmit,
-  dropdownRef: Ref<HTMLElement | null>
+  dropdownRef: Ref<HTMLElement | null>,
+  outsideClickIgnoreRef?: Ref<HTMLElement | null>
 ) => {
   // resetOnClose defaults to true.
   const resetOnClose = computed(() => {
@@ -81,10 +84,50 @@ export const useSearchSelectBase = <TModel extends string | number | null>(
     }
   }
 
-  const { isOpen, toggleMenu, openMenu, closeMenu } = useSearchSelectMenu(
-    props,
+  const isOpen = ref(false)
+
+  const toggleMenu = () => {
+    if (props.disabled) return
+    isOpen.value = !isOpen.value
+  }
+
+  const openMenu = () => {
+    if (props.disabled) return
+    isOpen.value = true
+  }
+
+  const closeMenu = () => {
+    isOpen.value = false
+  }
+
+  onClickOutside(
     dropdownRef,
-    handleCloseMenu
+    () => {
+      closeMenu()
+    },
+    {
+      ignore: outsideClickIgnoreRef ? [outsideClickIgnoreRef] : [],
+    }
+  )
+
+  // Close menu if disabled prop changes to true
+  watch(
+    () => props.disabled,
+    (disabled: boolean | undefined) => {
+      if (disabled) {
+        isOpen.value = false
+      }
+    }
+  )
+
+  watch(
+    isOpen,
+    (newVal: boolean) => {
+      if (!newVal) {
+        handleCloseMenu()
+      }
+    },
+    { flush: 'sync' }
   )
 
   const filteredOptions = computed(() => {

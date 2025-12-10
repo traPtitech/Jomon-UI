@@ -8,7 +8,7 @@
  * - `focus`: When the input receives focus.
  * - `close`: When the dropdown menu closes.
  */
-import { useTemplateRef } from 'vue'
+import { computed, useTemplateRef } from 'vue'
 
 import { CheckIcon } from '@heroicons/vue/24/outline'
 
@@ -45,12 +45,29 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TModel>>(), {
 
 const emit = defineEmits<SearchSelectEmit<TModel>>()
 // Note: 'close' event is emitted by useSearchSelectBase (via useSearchSelectSingle) when the menu closes.
-// The component itself does not handle 'close' in the template.
+// The component itself does not handles 'close' in the template.
 
 const model = defineModel<TModel>({ required: true })
 
-const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
 const inputRef = useTemplateRef<SearchSelectInputRef>('inputRef')
+
+// Use structural type for generic component ref to avoid TS2344
+const dropdownComponentRef = useTemplateRef<{ el: HTMLElement | null }>(
+  'dropdownComponentRef'
+)
+// Fix: Define the dropdownRef to match the template ref on the root wrapper.
+const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
+
+// Fix: We must ignore clicks on the entire component wrapper so that its
+// own native click handlers (toggle) can work without interference from
+// onClickOutside (which would close the menu).
+const outsideClickIgnoreRef = computed(() => dropdownRef.value || null)
+
+// Fix: Create a computed ref for the dropdown element so useSearchSelectBase
+// can set up onClickOutside correctly.
+const dropdownElementRef = computed(
+  () => dropdownComponentRef.value?.el || null
+)
 
 defineExpose({
   focus: () => {
@@ -72,7 +89,13 @@ const {
   listboxId,
   activeOptionId,
   toggleMenu,
-} = useSearchSelectSingle<TModel>(props, emit, model, dropdownRef)
+} = useSearchSelectSingle<TModel>(
+  props,
+  emit,
+  model,
+  dropdownElementRef, // Use computed element ref
+  outsideClickIgnoreRef
+)
 
 const handleFocus = (event: FocusEvent) => {
   inputRef.value?.select()
@@ -101,11 +124,13 @@ const handleFocus = (event: FocusEvent) => {
 
     <SearchSelectDropdown
       v-if="isOpen"
+      ref="dropdownComponentRef"
       :listbox-id="listboxId"
       :filtered-options="filteredOptions"
       :search-term="searchTerm"
       :highlighted-index="highlightedIndex"
       :model-value="model"
+      :reference-element="inputRef?.el || null"
       :item-height="itemHeight"
       :no-results-text="noResultsText"
       :no-items-text="noItemsText"

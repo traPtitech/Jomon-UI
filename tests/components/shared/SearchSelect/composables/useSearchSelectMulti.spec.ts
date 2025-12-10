@@ -24,7 +24,11 @@ describe('useSearchSelectMulti', () => {
     const emit = vi.fn()
     const modelValue = ref(initialValue)
     const dropdownRef = ref<HTMLElement | null>(null)
-    const inputRef = ref({ focus: vi.fn(), select: vi.fn() })
+    const inputRef = ref({
+      focus: vi.fn(),
+      select: vi.fn(),
+      el: null,
+    })
     const props = reactive(initialProps)
 
     const TestComponent = defineComponent({

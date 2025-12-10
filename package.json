@@ -24,6 +24,7 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@floating-ui/vue": "^1.1.9",
     "@vueuse/core": "^14.1.0",
     "axios": "^1.12.2",
     "luxon": "^3.7.2",

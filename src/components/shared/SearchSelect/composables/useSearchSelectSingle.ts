@@ -12,9 +12,15 @@ export const useSearchSelectSingle = <TModel extends string | number | null>(
   props: SearchSelectCommonProps<TModel>,
   emit: SearchSelectEmit<TModel>,
   model: Ref<TModel>,
-  dropdownRef: Ref<HTMLElement | null>
+  dropdownRef: Ref<HTMLElement | null>,
+  outsideClickIgnoreRef?: Ref<HTMLElement | null>
 ) => {
-  const base = useSearchSelectBase(props, emit, dropdownRef)
+  const base = useSearchSelectBase(
+    props,
+    emit,
+    dropdownRef,
+    outsideClickIgnoreRef
+  )
 
   const { searchTerm, isOpen, baseHandleKeyDown } = base
 

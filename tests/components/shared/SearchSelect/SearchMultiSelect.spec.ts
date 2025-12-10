@@ -8,6 +8,15 @@ import type { Option } from '@/components/shared/SearchSelect/types'
 
 const { mockScrollTo } = vi.hoisted(() => ({ mockScrollTo: vi.fn() }))
 
+vi.mock('@floating-ui/vue', () => ({
+  useFloating: () => ({
+    floatingStyles: { value: {} },
+  }),
+  offset: () => ({}),
+  size: () => ({}),
+  autoUpdate: () => {},
+}))
+
 vi.mock('@vueuse/core', async importOriginal => {
   const actual = await importOriginal<typeof import('@vueuse/core')>()
   return {
@@ -36,6 +45,13 @@ const options: Option<string>[] = [
   { label: 'Option 3', key: 'opt3', disabled: true },
 ]
 
+// Stub Teleport to render content in-place
+const globalConfig = {
+  stubs: {
+    Teleport: { template: '<div><slot /></div>' },
+  },
+}
+
 describe('SearchMultiSelect', () => {
   it('renders properly with options', () => {
     const wrapper = mount(SearchMultiSelect, {
@@ -44,6 +60,7 @@ describe('SearchMultiSelect', () => {
         label: 'Test Label',
         modelValue: [],
       },
+      global: globalConfig,
     })
     expect(wrapper.text()).toContain('Test Label')
     expect(wrapper.find('input').exists()).toBe(true)
@@ -56,6 +73,7 @@ describe('SearchMultiSelect', () => {
         label: 'Test Label',
         modelValue: [],
       },
+      global: globalConfig,
     })
 
     await wrapper.find('input').trigger('focus')
@@ -84,6 +102,7 @@ describe('SearchMultiSelect', () => {
         label: 'Test Label',
         modelValue: ['opt1', 'opt2'],
       },
+      global: globalConfig,
     })
 
     await wrapper.find('input').trigger('focus')
@@ -103,6 +122,7 @@ describe('SearchMultiSelect', () => {
         label: 'Test Label',
         modelValue: ['opt1', 'opt2'],
       },
+      global: globalConfig,
     })
 
     await wrapper.find('input').trigger('focus')
@@ -119,6 +139,7 @@ describe('SearchMultiSelect', () => {
         label: 'Test Label',
         modelValue: ['opt1', 'opt2'],
       },
+      global: globalConfig,
     })
 
     // Find the delete button for the first item (opt1)
@@ -128,6 +149,8 @@ describe('SearchMultiSelect', () => {
 
     await deleteButtons[0]?.trigger('click')
 
+    expect(wrapper.emitted('update:modelValue')).toBeTruthy()
+    // Initial was ['opt1', 'opt2'], removing 'opt1' (index 0) results in [['opt2']]
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([['opt2']])
   })
 
@@ -139,6 +162,7 @@ describe('SearchMultiSelect', () => {
         modelValue: ['opt1', 'opt2'],
         placeholder: 'Default Placeholder',
       },
+      global: globalConfig,
     })
 
     const input = wrapper.find('input')

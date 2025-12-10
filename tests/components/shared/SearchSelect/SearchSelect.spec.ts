@@ -8,6 +8,15 @@ import type { Option } from '@/components/shared/SearchSelect/types'
 
 const { mockScrollTo } = vi.hoisted(() => ({ mockScrollTo: vi.fn() }))
 
+vi.mock('@floating-ui/vue', () => ({
+  useFloating: () => ({
+    floatingStyles: { value: {} },
+  }),
+  offset: () => ({}),
+  size: () => ({}),
+  autoUpdate: () => {},
+}))
+
 vi.mock('@vueuse/core', async importOriginal => {
   const actual = await importOriginal<typeof import('@vueuse/core')>()
   return {
@@ -36,6 +45,13 @@ const options: Option<string>[] = [
   { label: 'Option 3', key: 'opt3', disabled: true },
 ]
 
+// Stub Teleport to render content in-place
+const globalConfig = {
+  stubs: {
+    Teleport: { template: '<div><slot /></div>' },
+  },
+}
+
 describe('SearchSelect', () => {
   it('renders properly with options', () => {
     const wrapper = mount(SearchSelect, {
@@ -44,6 +60,7 @@ describe('SearchSelect', () => {
         label: 'Test Label',
         modelValue: null,
       },
+      global: globalConfig,
     })
     expect(wrapper.text()).toContain('Test Label')
     expect(wrapper.find('input').exists()).toBe(true)
@@ -56,6 +73,7 @@ describe('SearchSelect', () => {
         label: 'Test Label',
         modelValue: null,
       },
+      global: globalConfig,
     })
 
     await wrapper.find('input').trigger('focus')
@@ -74,6 +92,7 @@ describe('SearchSelect', () => {
         label: 'Test Label',
         modelValue: null,
       },
+      global: globalConfig,
     })
 
     await wrapper.find('input').trigger('focus')
@@ -92,6 +111,7 @@ describe('SearchSelect', () => {
         label: 'Test Label',
         modelValue: null,
       },
+      global: globalConfig,
     })
 
     await wrapper.find('input').trigger('focus')
@@ -111,6 +131,7 @@ describe('SearchSelect', () => {
         label: 'Test Label',
         modelValue: null,
       },
+      global: globalConfig,
     })
 
     const input = wrapper.find('input')
@@ -126,9 +147,11 @@ describe('SearchSelect', () => {
 
     // ArrowDown to highlight second option
     await input.trigger('keydown', { key: 'ArrowDown' })
-    expect(optionsList[1]?.classes()).toContain('bg-blue-100')
-    expect(optionsList[1]?.classes()).toContain('text-blue-500')
-    expect(optionsList[0]?.classes()).not.toContain('bg-blue-100')
+    const updatedOptionsList = wrapper.findAll('div[role="option"]')
+
+    expect(updatedOptionsList[1]?.classes()).toContain('bg-blue-100')
+    expect(updatedOptionsList[1]?.classes()).toContain('text-blue-500')
+    expect(updatedOptionsList[0]?.classes()).not.toContain('bg-blue-100')
 
     // Enter to select
     await input.trigger('keydown', { key: 'Enter' })
@@ -144,6 +167,7 @@ describe('SearchSelect', () => {
         modelValue: null,
       },
       attachTo: document.body, // Needed for document click listener
+      global: globalConfig,
     })
 
     const input = wrapper.find('input')

@@ -13,13 +13,19 @@ export const useSearchSelectMulti = <TValue extends string | number>(
   emit: SearchSelectEmit<TValue[]>,
   model: Ref<TValue[]>,
   dropdownRef: Ref<HTMLElement | null>,
-  inputRef?: Ref<SearchSelectInputRef | null>
+  inputRef: Ref<SearchSelectInputRef | null>,
+  outsideClickIgnoreRef?: Ref<HTMLElement | null>
 ) => {
   // For MultiSelect, TModel is effectively TValue because it doesn't support null in the array elements usually.
   // We assume that the model array does NOT contain null values (TValue extends string | number).
   // However, SearchSelectCommonProps expects TModel, so strict types might mismatch if we passed TValue directly without checking.
   // If we pass TValue as TModel, then options are Option<NonNullable<TValue>>[], which is Option<TValue>[] since TValue is string|number.
-  const base = useSearchSelectBase<TValue>(props, emit, dropdownRef)
+  const base = useSearchSelectBase<TValue>(
+    props,
+    emit,
+    dropdownRef,
+    outsideClickIgnoreRef
+  )
   const { searchTerm, baseHandleKeyDown, isComposing } = base
 
   const handleSelect = (selectedValue: TValue) => {
@@ -38,7 +44,7 @@ export const useSearchSelectMulti = <TValue extends string | number>(
     // We restore focus on removal to allow continuous deletions or immediate search for replacement.
     // On addition, we don't force focus back to input to keep the flow natural (or to allow other interactions).
     if (isSelected) {
-      inputRef?.value?.focus()
+      inputRef.value?.focus()
     }
   }
 

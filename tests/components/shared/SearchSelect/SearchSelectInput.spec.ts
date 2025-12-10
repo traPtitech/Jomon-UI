@@ -82,4 +82,23 @@ describe('SearchSelectInput', () => {
     await wrapper.setProps({ isOpen: true })
     expect(chevron.classes()).toContain('rotate-180')
   })
+
+  it('passes ARIA attributes to the inner input', () => {
+    const wrapper = mount(SearchSelectInput, {
+      props: {
+        ...defaultProps,
+        isOpen: true,
+        ariaControls: 'test-listbox',
+        ariaActivedescendant: 'test-descendant',
+      },
+    })
+
+    const input = wrapper.find('input')
+    expect(input.attributes('role')).toBe('combobox')
+    expect(input.attributes('aria-expanded')).toBe('true')
+    expect(input.attributes('aria-controls')).toBe('test-listbox')
+    expect(input.attributes('aria-activedescendant')).toBe('test-descendant')
+    expect(input.attributes('aria-haspopup')).toBe('listbox')
+    expect(input.attributes('aria-autocomplete')).toBe('list')
+  })
 })

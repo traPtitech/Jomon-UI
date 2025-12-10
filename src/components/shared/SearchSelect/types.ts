@@ -14,8 +14,13 @@ export interface Option<T extends string | number> {
   disabled?: boolean
 }
 
+/**
+ * Emits for the SearchSelect component.
+ * Designed to work with `defineModel`.
+ */
 export type SearchSelectEmit<T> = {
   (e: 'update:modelValue', value: T): void
+  (e: 'keydown', event: KeyboardEvent): void
   (e: 'close'): void
 }
 

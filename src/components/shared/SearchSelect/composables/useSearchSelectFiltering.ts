@@ -18,11 +18,11 @@ export function useSearchSelectFiltering<T extends string | number>(
       return opts.filter(opt => filterFunction(opt, searchTerm))
     }
 
-    const lowerTerm = searchTerm.toLowerCase()
+    const lowerTerm = searchTerm.toLocaleLowerCase()
     return opts.filter(
       opt =>
-        opt.label.toLowerCase().includes(lowerTerm) ||
-        toString(opt.key).toLowerCase().includes(lowerTerm)
+        opt.label.toLocaleLowerCase().includes(lowerTerm) ||
+        toString(opt.key).toLocaleLowerCase().includes(lowerTerm)
     )
   })
 }

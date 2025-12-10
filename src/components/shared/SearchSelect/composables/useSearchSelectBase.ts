@@ -9,6 +9,10 @@ export interface SearchSelectCommonProps<
   disabled?: boolean | undefined
   required?: boolean | undefined
   /**
+   * Error message to display.
+   */
+  errorMessage?: string | undefined
+  /**
    * Optional custom filter function.
    * Return true to include the option in the filtered list.
    * @param option The option to test.
@@ -19,7 +23,7 @@ export interface SearchSelectCommonProps<
     | undefined
   /**
    * Whether to reset the search term when an item is selected.
-   * @default true
+   * MultiSelect では通常 `true` を、SingleSelect では多くの場合 `false` を指定します。
    * Note: Single Select components (SearchSelect.vue) may override this to `false` to persist the selected label.
    */
   resetOnSelect?: boolean | undefined

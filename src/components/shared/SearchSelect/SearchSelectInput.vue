@@ -15,6 +15,7 @@ const props = defineProps<{
   isOpen: boolean
   query: string
   hasValue: boolean
+  errorMessage?: string | undefined
 }>()
 
 const emit = defineEmits<{
@@ -64,6 +65,8 @@ const handleKeyDown = (e: KeyboardEvent) => {
 }
 
 const handleFocus = () => {
+  // Workaround: Headless UI Combobox doesn't provide a public API to open programmatically,
+  // so we simulate a click on the button to open it.
   if (!props.isOpen && buttonRef.value?.$el) {
     buttonRef.value.$el.click()
   }
@@ -80,7 +83,7 @@ const inputId = useId()
       :disabled="disabled"
       :has-value="hasValue"
       :input-id="inputId"
-      :error-message="''">
+      :error-message="errorMessage">
       <template #prefix>
         <MagnifyingGlassIcon class="ml-3 w-6 text-text-secondary" />
       </template>

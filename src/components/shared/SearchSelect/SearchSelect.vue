@@ -18,9 +18,10 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
   required: false,
   resetOnSelect: false,
   theme: () => ({ themeColor: 'blue' }),
+  errorMessage: undefined,
 })
 
-defineEmits<SearchSelectEmit<TValue>>()
+const emit = defineEmits<SearchSelectEmit<TValue>>()
 const model = defineModel<TValue>({ required: true })
 
 const query = ref('')
@@ -84,8 +85,10 @@ const referenceElement = computed(() => {
       :is-open="open"
       :query="query"
       :has-value="query !== '' || model !== null"
+      :error-message="errorMessage"
       @change-query="query = $event"
-      @close="$emit('close')" />
+      @keydown="emit('keydown', $event)"
+      @close="emit('close')" />
 
     <SearchSelectDropdown
       v-if="open"

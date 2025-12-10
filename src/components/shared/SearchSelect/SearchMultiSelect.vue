@@ -16,6 +16,7 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
   required: false,
   resetOnSelect: true,
   theme: () => ({ themeColor: 'blue' }),
+  errorMessage: undefined,
 })
 
 defineEmits<SearchSelectEmit<TValue[]>>()
@@ -66,14 +67,16 @@ const optionMap = computed(() => {
 })
 
 const removeItem = (val: TValue) => {
-  model.value = model.value.filter(v => v !== val)
+  const index = model.value.indexOf(val)
+  if (index === -1) return
+  const newValue = [...model.value]
+  newValue.splice(index, 1)
+  model.value = newValue
 }
 
 const handleKeyDown = (e: KeyboardEvent) => {
   if (e.key === 'Backspace' && query.value === '' && model.value.length > 0) {
-    const newValue = [...model.value]
-    newValue.pop()
-    model.value = newValue
+    model.value = model.value.slice(0, -1)
   }
 }
 </script>
@@ -98,12 +101,13 @@ const handleKeyDown = (e: KeyboardEvent) => {
       :is-open="open"
       :query="query"
       :has-value="model.length > 0 || query !== ''"
+      :error-message="errorMessage"
       @keydown="handleKeyDown"
       @change-query="query = $event"
       @close="$emit('close')" />
 
     <!-- Selected items (Tags) -->
-    <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1" role="list">
+    <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1" role="group">
       <div v-for="val in model" :key="val" class="text-xs" role="listitem">
         {{ optionMap.get(val) ?? val }}
         <button

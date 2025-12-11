@@ -90,6 +90,7 @@ const getOptionClass = (
   disabled: boolean
 ) => {
   if (disabled) return 'cursor-not-allowed text-gray-400 opacity-50'
+  // theme is guaranteed to be present due to default prop value.
   const theme = props.theme
 
   if (active) {

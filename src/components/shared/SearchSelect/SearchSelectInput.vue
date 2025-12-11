@@ -15,9 +15,9 @@ const props = defineProps<{
   // The transformation logic resides in the parent (SearchSelect/SearchMultiSelect).
   displayValue: (item: unknown) => string
   isOpen: boolean
-  query: string
   hasValue: boolean
   errorMessage?: string | undefined
+  inputRequired?: boolean | undefined
 }>()
 
 const emit = defineEmits<{
@@ -70,8 +70,9 @@ const handleFocus = () => {
   // Workaround: Headless UI Combobox doesn't provide a public API to open programmatically,
   // so we simulate a click on the button to open it.
   if (props.disabled) return
-  if (!props.isOpen && buttonRef.value?.$el) {
-    buttonRef.value.$el.click()
+  const el = buttonRef.value?.$el as HTMLElement | undefined
+  if (!props.isOpen && el) {
+    el.click()
   }
 }
 
@@ -107,7 +108,7 @@ const inputId = useId()
               ],
               placeholder,
               disabled,
-              required,
+              required: inputRequired ?? required,
               displayValue,
               'aria-labelledby': undefined,
               'aria-label': undefined,

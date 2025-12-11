@@ -16,7 +16,11 @@ const resolveTags = (ids: string[]) => {
       id =>
         tags.value.find(t => t.id === id) ?? model.value.find(t => t.id === id)
     )
-    .filter((tag): tag is Tag => tag !== undefined)
+    .filter((tag): tag is Tag => {
+      // If tag is not found in store or current model, it is silently dropped.
+      // This is expected behavior to clean up invalid IDs.
+      return tag !== undefined
+    })
 }
 
 const selectedValue = computed({

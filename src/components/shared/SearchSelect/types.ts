@@ -17,6 +17,7 @@ export interface Option<T extends string | number> {
 /**
  * Emits for the SearchSelect component.
  * Designed to work with `defineModel`.
+ * Note: `update:modelValue` is handled via `defineModel` macro but typed here for completeness.
  */
 export type SearchSelectEmit<T> = {
   (e: 'update:modelValue', value: T): void
@@ -71,6 +72,7 @@ export interface SearchSelectCommonProps<
   /**
    * Whether to reset the search term when an item is selected.
    * MultiSelect uses `true` by default, while SingleSelect components (SearchSelect.vue) override this to `false` to persist the selected label.
+   * If true, the query (filter text) is cleared after selection.
    */
   resetOnSelect?: boolean | undefined
   /**
@@ -92,10 +94,4 @@ export interface SearchSelectCommonProps<
    * Theming options.
    */
   theme?: SearchSelectTheme | undefined
-}
-
-export interface SearchSelectInputRef {
-  focus: () => void
-  select: () => void
-  el: HTMLElement | null
 }

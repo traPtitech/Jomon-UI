@@ -70,6 +70,7 @@ const removeItem = (val: TValue) => {
   const index = model.value.indexOf(val)
   if (index === -1) return
   const newValue = [...model.value]
+  // Assumes that values are unique in the array.
   newValue.splice(index, 1)
   model.value = newValue
 }
@@ -99,8 +100,8 @@ const handleKeyDown = (e: KeyboardEvent) => {
       :disabled="disabled"
       :display-value="displayValue"
       :is-open="open"
-      :query="query"
       :has-value="model.length > 0 || query !== ''"
+      :input-required="false"
       :error-message="errorMessage"
       @keydown="handleKeyDown"
       @change-query="query = $event"

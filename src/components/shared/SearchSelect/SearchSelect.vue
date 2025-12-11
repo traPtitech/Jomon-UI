@@ -35,7 +35,8 @@ const filteredOptions = useSearchSelectFiltering(
 
 const handleUpdate = (value: TValue) => {
   model.value = value
-  // Force update query to reflect selected value, bypassing ComboxInput display-value issues
+  // Force update query to reflect selected value, bypassing ComboxInput display-value issues.
+  // When resetOnSelect is false (default for SingleSelect), this ensures the input shows the selected label.
   if (value !== null) {
     query.value = displayValue(value)
   } else {
@@ -89,7 +90,6 @@ const referenceElement = computed(() => {
       :disabled="disabled"
       :display-value="displayValue"
       :is-open="open"
-      :query="query"
       :has-value="query !== '' || model !== null"
       :error-message="errorMessage"
       @change-query="query = $event"

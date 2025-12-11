@@ -116,7 +116,7 @@ describe('SearchSelectDropdown', () => {
       global: globalConfig,
     })
 
-    expect(wrapper.text()).toContain('該当する項目がありません')
+    expect(wrapper.text()).toContain('該当する項目がありません。')
   })
 
   it('displays empty message when filteredOptions is empty and no search term', () => {
@@ -128,6 +128,6 @@ describe('SearchSelectDropdown', () => {
       global: globalConfig,
     })
 
-    expect(wrapper.text()).toContain('項目がありません')
+    expect(wrapper.text()).toContain('項目がありません。')
   })
 })

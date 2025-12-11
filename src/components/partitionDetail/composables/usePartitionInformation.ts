@@ -2,7 +2,7 @@ import { ref, watch } from 'vue'
 
 import { useToast } from 'vue-toastification'
 
-import type { PartitionSeedDraft } from '@/features/partition/entities'
+import type { PartitionSeedDraft } from '@/components/partitionDetail/types'
 import { usePartitionStore } from '@/features/partition/store'
 
 export type EditMode = 'name' | 'partitionGroup' | 'budget' | ''
@@ -53,7 +53,14 @@ export const usePartitionInformation = () => {
 
     isSending.value = true
     try {
-      await editPartition(currentPartition.value.id, editedValue.value)
+      if (!editedValue.value.parentPartitionGroupId) {
+        throw new Error('パーティション グループは必須です')
+      }
+
+      await editPartition(currentPartition.value.id, {
+        ...editedValue.value,
+        parentPartitionGroupId: editedValue.value.parentPartitionGroupId,
+      })
       toast.success('パーティション情報を更新しました')
     } catch (e) {
       if (e instanceof Error) {

@@ -21,13 +21,6 @@ export interface PartitionSeed {
   }
 }
 
-export type PartitionSeedDraft = Omit<
-  PartitionSeed,
-  'parentPartitionGroupId'
-> & {
-  parentPartitionGroupId: string | null
-}
-
 export interface PartitionQuerySeed {
   name?: string
   budget?: number

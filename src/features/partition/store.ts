@@ -6,7 +6,7 @@ import { PartitionRepositoryKey } from '@/di'
 import type { User } from '@/features/user/entities'
 import type { AsyncStatus } from '@/types'
 
-import type { Partition, PartitionSeed, PartitionSeedDraft } from './entities'
+import type { Partition, PartitionSeed } from './entities'
 
 export const usePartitionStore = defineStoreComposable('partition', () => {
   const repository = inject(PartitionRepositoryKey)
@@ -56,37 +56,20 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
     }
   }
 
-  const createPartition = async (partition: PartitionSeedDraft) => {
-    if (!partition.parentPartitionGroupId) {
-      throw new Error('パーティション グループは必須です')
-    }
-    const strictPartition: PartitionSeed = {
-      ...partition,
-      parentPartitionGroupId: partition.parentPartitionGroupId,
-    }
+  const createPartition = async (partition: PartitionSeed) => {
     try {
-      const res = await repository.createPartition(strictPartition)
+      const res = await repository.createPartition(partition)
       partitions.value.unshift(res)
     } catch {
       throw new Error('パーティションの作成に失敗しました')
     }
   }
 
-  const editPartition = async (
-    id: string,
-    partitionSeed: PartitionSeedDraft
-  ) => {
+  const editPartition = async (id: string, partitionSeed: PartitionSeed) => {
     if (!currentPartition.value) return
-    if (!partitionSeed.parentPartitionGroupId) {
-      throw new Error('パーティション グループは必須です')
-    }
-    const strictPartition: PartitionSeed = {
-      ...partitionSeed,
-      parentPartitionGroupId: partitionSeed.parentPartitionGroupId,
-    }
 
     try {
-      const res = await repository.editPartition(id, strictPartition)
+      const res = await repository.editPartition(id, partitionSeed)
       currentPartition.value = res
       const index = partitions.value.findIndex(
         partition => partition.id === res.id

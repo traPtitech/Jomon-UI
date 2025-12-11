@@ -4,15 +4,13 @@ import { computed } from 'vue'
 import { TrashIcon } from '@heroicons/vue/24/solid'
 import { useToast } from 'vue-toastification'
 
+import type { ApplicationTargetEditDraft } from '@/components/applicationDetail/types'
 import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
 import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
-import type {
-  ApplicationTargetDetail,
-  ApplicationTargetEditDraft,
-} from '@/features/applicationTarget/entities'
+import type { ApplicationTargetDetail } from '@/features/applicationTarget/entities'
 import { useUserStore } from '@/features/user/store'
 
 const props = defineProps<{

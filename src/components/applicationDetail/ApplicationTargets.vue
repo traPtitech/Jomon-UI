@@ -1,15 +1,16 @@
+```typescript
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 
 import { useToast } from 'vue-toastification'
 
 import ApplicationTarget from '@/components/applicationDetail/ApplicationTarget.vue'
+import type { ApplicationTargetEditDraft } from '@/components/applicationDetail/types'
 import EditButton from '@/components/shared/EditButton.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useApplication } from '@/features/application/composables'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
-import type { ApplicationTargetEditDraft } from '@/features/applicationTarget/entities'
 import { useUserStore } from '@/features/user/store'
 
 const props = defineProps<{

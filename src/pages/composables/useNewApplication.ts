@@ -4,12 +4,10 @@ import { useRouter } from 'vue-router'
 
 import { useToast } from 'vue-toastification'
 
+import type { ApplicationTargetDraft } from '@/components/applicationDetail/types'
 import type { ApplicationSeed } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
-import type {
-  ApplicationTarget,
-  ApplicationTargetDraft,
-} from '@/features/applicationTarget/entities'
+import type { ApplicationTarget } from '@/features/applicationTarget/entities'
 import type { FileSeed } from '@/features/file/entities'
 import { createFiles } from '@/features/file/services'
 import { useUserStore } from '@/features/user/store'

@@ -32,13 +32,27 @@ export function useSearchSelectMachine<T extends string | number>(
     props.filterFunction
   )
 
-  const collection = computed(() =>
-    combobox.collection({
+  const collection = computed(() => {
+    // Check for duplicate keys in string representation to avoid unexpected behavior
+    if (import.meta.env.DEV) {
+      const keys = new Set<string>()
+      for (const item of filteredOptions.value) {
+        const keyStr = String(item.key)
+        if (keys.has(keyStr)) {
+          console.warn(
+            `[SearchSelect] Duplicate key found: "${keyStr}". Keys must be unique when converted to string.`
+          )
+        }
+        keys.add(keyStr)
+      }
+    }
+
+    return combobox.collection({
       items: filteredOptions.value,
       itemToString: item => (item ? item.label : ''),
       itemToValue: item => (item ? String(item.key) : ''),
     })
-  )
+  })
 
   // Computed Props for useMachine
   // Zag Vue accepts a computed object for options to be reactive

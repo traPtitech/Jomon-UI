@@ -39,11 +39,7 @@ const { api, filteredOptions } = useSearchSelectMachine<NonNullable<TValue>>(
   // Adapter for emit to match types
   (event, value) => {
     if (!Array.isArray(value)) {
-      if (value !== null) {
-        emit(event, value)
-      } else {
-        emit(event, value as TValue)
-      }
+      emit(event, value)
     }
   }
 )

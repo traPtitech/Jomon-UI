@@ -101,12 +101,7 @@ describe('Partition Store', () => {
 
       expect(mockFetchPartition).toHaveBeenCalledWith('partition-1')
       expect(store.currentPartition.value).toEqual(mockPartition)
-      expect(store.editedValue.value).toEqual({
-        name: mockPartition.name,
-        budget: mockPartition.budget,
-        parentPartitionGroupId: mockPartition.parentPartitionGroupId,
-        management: mockPartition.management,
-      })
+      expect(store.currentPartition.value).toEqual(mockPartition)
     })
 
     it('createPartition creates partition and adds to list', async () => {

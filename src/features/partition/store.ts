@@ -8,16 +8,6 @@ import type { AsyncStatus } from '@/types'
 
 import type { Partition, PartitionSeed, PartitionSeedDraft } from './entities'
 
-const createDefaultPartitionSeed = (): PartitionSeedDraft => ({
-  name: '',
-  budget: 0,
-  parentPartitionGroupId: null,
-  management: {
-    category: 'manual',
-    state: 'available',
-  },
-})
-
 export const usePartitionStore = defineStoreComposable('partition', () => {
   const repository = inject(PartitionRepositoryKey)
   if (!repository) throw new Error('PartitionRepository is not provided')
@@ -26,7 +16,6 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
   const status = ref<AsyncStatus>('idle')
   const error = ref<string | null>(null)
   const currentPartition = ref<Partition | undefined>(undefined)
-  const editedValue = ref<PartitionSeedDraft>(createDefaultPartitionSeed())
 
   const partitionOptions = computed(() =>
     partitions.value.map(partition => ({
@@ -62,12 +51,6 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
     try {
       const partition = await repository.fetchPartition(id)
       currentPartition.value = partition
-      editedValue.value = {
-        name: partition.name,
-        budget: partition.budget,
-        parentPartitionGroupId: partition.parentPartitionGroupId,
-        management: { ...partition.management },
-      }
     } catch {
       throw new Error('パーティションの取得に失敗しました')
     }
@@ -112,12 +95,6 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
         partitions.value.splice(index, 1, res)
       }
     } catch {
-      editedValue.value = {
-        name: currentPartition.value.name,
-        budget: currentPartition.value.budget,
-        parentPartitionGroupId: currentPartition.value.parentPartitionGroupId,
-        management: { ...currentPartition.value.management },
-      }
       throw new Error('パーティションの更新に失敗しました')
     }
   }
@@ -134,18 +111,12 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
     }
   }
 
-  const resetDetail = () => {
-    currentPartition.value = undefined
-    editedValue.value = createDefaultPartitionSeed()
-  }
-
   return {
     partitions,
     status,
     error,
     isPartitionFetched,
     currentPartition,
-    editedValue,
     partitionOptions,
     canEditPartition,
     fetchPartitions,
@@ -153,7 +124,6 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
     createPartition,
     editPartition,
     deletePartition,
-    resetDetail,
   }
 })
 

@@ -17,6 +17,10 @@ const props = defineProps<{
   isOpen: boolean
   hasValue: boolean
   errorMessage?: string | undefined
+  /**
+   * Required logic for the native input element.
+   * If provided, this takes precedence over the `required` prop for the input's `required` attribute.
+   */
   inputRequired?: boolean | undefined
 }>()
 

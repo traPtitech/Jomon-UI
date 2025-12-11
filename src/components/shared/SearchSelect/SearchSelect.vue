@@ -35,8 +35,10 @@ const filteredOptions = useSearchSelectFiltering(
 
 const handleUpdate = (value: TValue) => {
   model.value = value
-  // Force update query to reflect selected value, bypassing ComboxInput display-value issues.
-  // When resetOnSelect is false (default for SingleSelect), this ensures the input shows the selected label.
+  // Force update query to reflect selected value.
+  // This ensures that the filtering state is consistent with the current selection.
+  // If we didn't update `query`, it might remain as the user's partial input (e.g. "fo" after selecting "foo").
+  // When resetOnSelect is false (default for SingleSelect), this also ensures the input text matches the selected label.
   if (value !== null) {
     query.value = displayValue(value)
   } else {
@@ -54,6 +56,9 @@ const displayValue = (item: unknown) => {
   if (item === null || item === undefined) return ''
   const found = props.options.find(opt => opt.key === item)
   if (found) return found.label
+  if (props.options.length > 0 && item !== '') {
+    console.warn('[SearchSelect] modelValue is not in options', item)
+  }
   return typeof item === 'string' || typeof item === 'number'
     ? toString(item)
     : ''

@@ -5,13 +5,14 @@ import { toString } from '@/components/shared/utils'
 import type { Option } from '../types'
 
 export function useSearchSelectFiltering<T extends string | number>(
-  options: MaybeRefOrGetter<Option<T>[]>,
+  options: MaybeRefOrGetter<readonly Option<T>[]>,
   query: Ref<string>,
   filterFunction?: (option: Option<T>, term: string) => boolean
 ) {
   return computed(() => {
     const searchTerm = query.value.trim()
-    const opts = toValue(options)
+    const rawOpts = toValue(options)
+    const opts = Array.isArray(rawOpts) ? rawOpts : []
     if (!searchTerm) return opts
 
     if (filterFunction) {
@@ -25,11 +26,11 @@ export function useSearchSelectFiltering<T extends string | number>(
       }
     }
 
-    const lowerTerm = searchTerm.toLocaleLowerCase()
+    const lowerTerm = searchTerm.toLocaleLowerCase('ja')
     return opts.filter(
       opt =>
-        opt.label.toLocaleLowerCase().includes(lowerTerm) ||
-        toString(opt.key).toLocaleLowerCase().includes(lowerTerm)
+        opt.label.toLocaleLowerCase('ja').includes(lowerTerm) ||
+        toString(opt.key).toLocaleLowerCase('ja').includes(lowerTerm)
     )
   })
 }

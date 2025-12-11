@@ -79,6 +79,8 @@ const handleKeyDown = (e: KeyboardEvent) => {
   if (e.key === 'Backspace' && query.value === '' && model.value.length > 0) {
     model.value = model.value.slice(0, -1)
   }
+  // Emit keydown event after potential model updates (backspace deletion).
+  // This allows parents to react to the state *after* the deletion.
   emit('keydown', e)
 }
 </script>

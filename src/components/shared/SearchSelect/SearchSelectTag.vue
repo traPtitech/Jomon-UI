@@ -12,10 +12,14 @@ const { tagOptions, tags } = useTagStore()
 
 const resolveTags = (ids: string[]) => {
   return ids
-    .map(
-      id =>
+    .map(id => {
+      const found =
         tags.value.find(t => t.id === id) ?? model.value.find(t => t.id === id)
-    )
+      if (!found) {
+        console.warn('[SearchSelectTag] Unknown tag ID encountered:', id)
+      }
+      return found
+    })
     .filter((tag): tag is Tag => {
       // If tag is not found in store or current model, it is silently dropped.
       // This is expected behavior to clean up invalid IDs.

@@ -51,7 +51,7 @@ export interface SearchSelectTheme {
 export interface SearchSelectCommonProps<
   TValue extends string | number | null,
 > {
-  options: Option<NonNullable<TValue>>[]
+  options: readonly Option<NonNullable<TValue>>[]
   label: string
   placeholder?: string | undefined
   disabled?: boolean | undefined

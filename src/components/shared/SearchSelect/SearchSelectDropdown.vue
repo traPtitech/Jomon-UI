@@ -11,8 +11,10 @@ import { toString } from '@/components/shared/utils'
 
 import type { Option, SearchSelectTheme } from './types'
 
-const baseOptionsClass =
-  'absolute z-50 w-full overflow-hidden rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'
+const baseOptionsClass = [
+  'absolute z-50 w-full overflow-hidden rounded-md bg-white',
+  'py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
+].join(' ')
 
 const themeConfig = {
   blue: {
@@ -32,6 +34,10 @@ const props = withDefaults(
     filteredOptions: Option<T>[]
     referenceElement: HTMLElement | null
     theme?: SearchSelectTheme | undefined
+    /**
+     * Current search term.
+     * Used mainly to switch between `noResultsText` and `noItemsText`.
+     */
     searchTerm?: string | undefined
     noResultsText?: string | undefined
     noItemsText?: string | undefined

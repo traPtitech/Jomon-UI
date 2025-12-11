@@ -26,6 +26,9 @@ export const usePartitionGroupStore = defineStoreComposable(
     const status = ref<AsyncStatus>('idle')
     const error = ref<string | null>(null)
     const currentPartitionGroup = ref<PartitionGroup | undefined>(undefined)
+    // TODO: This draft state should be moved to a component-local state (e.g. via usePartitionGroupInformation)
+    // once the editing UI for PartitionGroups is implemented.
+    // Keeping it here for now as a placeholder/reservation for future implementation.
     const editedValue = ref<PartitionGroupSeed>(
       createDefaultPartitionGroupSeed()
     )

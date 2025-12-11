@@ -28,6 +28,8 @@
     "@floating-ui/vue": "^1.1.9",
     "@headlessui/vue": "^1.7.23",
     "@vueuse/core": "^14.1.0",
+    "@zag-js/combobox": "^1.31.1",
+    "@zag-js/vue": "^1.31.1",
     "axios": "^1.12.2",
     "luxon": "^3.7.2",
     "markdown-it": "^14.1.0",

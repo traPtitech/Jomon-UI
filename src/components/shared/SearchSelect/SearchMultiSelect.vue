@@ -1,12 +1,20 @@
+```
 <script setup lang="ts" generic="TValue extends string | number">
-import { computed, ref, useTemplateRef } from 'vue'
+import { computed, useId } from 'vue'
 
-import { Combobox } from '@headlessui/vue'
-import { CheckIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+import {
+  CheckIcon,
+  ChevronUpDownIcon,
+  XMarkIcon,
+} from '@heroicons/vue/24/outline'
 
-import SearchSelectDropdown from './SearchSelectDropdown.vue'
-import SearchSelectInput from './SearchSelectInput.vue'
-import { useSearchSelectFiltering } from './composables/useSearchSelectFiltering'
+import { safeBind } from '@/components/shared/utils'
+
+import { useSearchSelectMachine } from './composables/useSearchSelectMachine'
+import SearchSelectPrimitiveInput from './primitives/SearchSelectPrimitiveInput.vue'
+import SearchSelectPrimitiveItem from './primitives/SearchSelectPrimitiveItem.vue'
+import SearchSelectPrimitiveList from './primitives/SearchSelectPrimitiveList.vue'
+import SearchSelectPrimitiveRoot from './primitives/SearchSelectPrimitiveRoot.vue'
 import type { SearchSelectCommonProps, SearchSelectEmit } from './types'
 
 const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
@@ -21,136 +29,145 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
 const emit = defineEmits<SearchSelectEmit<TValue[]>>()
 const model = defineModel<TValue[]>({ required: true })
 
-const query = ref('')
+const id = useId()
 
-// Filtering logic
-const filteredOptions = useSearchSelectFiltering(
-  () => props.options,
-  query,
-  props.filterFunction
+const { api, filteredOptions } = useSearchSelectMachine<TValue>(
+  {
+    id,
+    options: computed(() => props.options),
+    multiple: true,
+    disabled: computed(() => props.disabled),
+    placeholder: computed(() => props.placeholder),
+    modelValue: computed(() => model.value),
+    filterFunction: props.filterFunction,
+  },
+  (event, value) => {
+    if (Array.isArray(value)) {
+      emit(event, value)
+    }
+  }
 )
 
-const handleUpdate = (value: TValue[]) => {
-  model.value = value
-  if (props.resetOnSelect) {
-    query.value = ''
-  }
-}
+const machineApi = computed(() => api.value)
 
-const displayValue = () => {
-  // In MultiSelect, the input should only display the search query, not the selected values.
-  // Selected values are displayed as tags below the input.
-  return query.value
-}
-
-const inputComponentRef =
-  useTemplateRef<InstanceType<typeof SearchSelectInput>>('inputComponentRef')
-
-defineExpose({
-  focus: () => {
-    inputComponentRef.value?.focus()
-  },
-})
-
-const referenceElement = computed(() => {
-  return inputComponentRef.value?.el || null
-})
-
-// Option Map for Tags
+// Option Map for Tags Loop
 const optionMap = computed(() => {
-  const map = new Map<string | number, string>()
+  const map = new Map<string, string>()
   for (const option of props.options) {
-    map.set(option.key, option.label)
+    map.set(String(option.key), option.label)
   }
   return map
 })
 
-const removeItem = (val: TValue) => {
+// Remove tag handler
+const removeItem = (valueStr: string) => {
+  // Use machine api to clear value
+  // api.value is the object. clearValue is method.
   if (props.disabled) return
-  const index = model.value.indexOf(val)
-  if (index === -1) return
-  const newValue = [...model.value]
-  // Assumes that values are unique in the array.
-  newValue.splice(index, 1)
-  model.value = newValue
+  api.value.clearValue(valueStr)
 }
 
-const handleKeyDown = (e: KeyboardEvent) => {
-  if (e.key === 'Backspace' && query.value === '' && model.value.length > 0) {
-    model.value = model.value.slice(0, -1)
-  }
-  // Emit keydown event after potential model updates (backspace deletion).
-  // This allows parents to react to the state *after* the deletion.
-  emit('keydown', e)
-}
+// Floating Label Condition
+const isFloating = computed(() => {
+  const apiVal = machineApi.value
+  return (
+    apiVal.inputValue.length > 0 || apiVal.value.length > 0 || apiVal.focused
+  )
+})
 </script>
 
 <template>
-  <Combobox
-    :model-value="model"
-    :disabled="!!disabled"
-    multiple
-    as="div"
-    class="relative"
-    @update:model-value="handleUpdate"
-    v-slot="{ open }">
-    <SearchSelectInput
-      ref="inputComponentRef"
-      :label="label"
-      :placeholder="model.length === 0 ? placeholder : ''"
-      :required="required"
-      :disabled="disabled"
-      :display-value="displayValue"
-      :is-open="open"
-      :has-value="model.length > 0 || query !== ''"
-      :input-required="false"
-      :error-message="errorMessage"
-      @keydown="handleKeyDown"
-      @change-query="query = $event"
-      @close="emit('close')" />
+  <SearchSelectPrimitiveRoot v-bind="safeBind(machineApi.getRootProps())">
+    <div v-bind="safeBind(machineApi.getControlProps())" class="group relative">
+      <SearchSelectPrimitiveInput
+        v-bind="safeBind(machineApi.getInputProps())"
+        :id="id"
+        class="peer h-12 border-gray-300 pt-6 pb-2 focus:border-blue-500 focus:ring-blue-500"
+        :placeholder="isFloating ? '' : placeholder" />
+      <!-- We can't rely solely on peer-placeholder-shown if we want 'value.length > 0' to trigger floating.
+           So we explicitly control label classes based on isFloating.
+      -->
 
-    <!-- Selected items (Tags) -->
+      <label
+        v-bind="safeBind(machineApi.getLabelProps())"
+        :for="id"
+        class="pointer-events-none absolute left-3 transition-all duration-200"
+        :class="[
+          isFloating
+            ? 'top-1 text-xs text-blue-500' // or text-gray-500 if not focused?
+            : 'top-3.5 text-base text-gray-400',
+          machineApi.focused ? 'text-blue-500' : 'text-gray-500',
+        ]">
+        {{ label }}
+        <span v-if="required" class="ml-0.5 text-red-500">*</span>
+      </label>
+
+      <button
+        v-bind="safeBind(machineApi.getTriggerProps())"
+        class="absolute inset-y-0 right-0 flex items-center pr-2"
+        tabindex="-1">
+        <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+      </button>
+    </div>
+
+    <!-- Tags -->
     <div
-      v-if="model.length > 0"
+      v-if="machineApi.value && machineApi.value.length > 0"
       class="mt-2 flex flex-wrap gap-1"
       role="group"
-      aria-label="選択済みタグ">
-      <div v-for="val in model" :key="val" class="text-xs" role="listitem">
-        {{ optionMap.get(val) ?? val }}
+      aria-label="Selection">
+      <div
+        v-for="valStr in machineApi.value"
+        :key="valStr"
+        class="inline-flex items-center rounded bg-gray-100 px-2 py-1 text-xs text-gray-700">
+        {{ optionMap.get(valStr) ?? valStr }}
         <button
           type="button"
-          :class="[
-            'ml-1 rounded-full',
-            theme?.themeColor === 'gray'
-              ? 'hover:bg-gray-100'
-              : 'hover:bg-blue-100',
-            disabled ? 'cursor-not-allowed opacity-50' : '',
-          ]"
-          :aria-label="`${optionMap.get(val) ?? val} を削除`"
-          :disabled="disabled"
-          @click.stop="removeItem(val)">
+          class="ml-1 rounded-full hover:bg-gray-300"
+          @click.stop="removeItem(valStr)">
           <XMarkIcon class="h-3 w-3" />
         </button>
       </div>
     </div>
 
-    <SearchSelectDropdown
-      v-if="open"
-      :filtered-options="filteredOptions"
-      :search-term="query"
-      :theme="theme"
-      :no-results-text="noResultsText"
-      :no-items-text="noItemsText"
-      :item-height="itemHeight"
-      :reference-element="referenceElement">
-      <template #option-content="{ option, selected }">
-        <div class="mr-2 flex h-4 w-4 items-center justify-center">
-          <CheckIcon v-if="selected" class="h-4 w-4" />
-        </div>
-        <span class="truncate" :class="{ 'font-semibold': selected }">
-          {{ option.label }}
-        </span>
-      </template>
-    </SearchSelectDropdown>
-  </Combobox>
+    <!-- Error Message -->
+    <p v-if="errorMessage" class="mt-1 text-sm text-red-600">
+      {{ errorMessage }}
+    </p>
+
+    <Teleport to="body">
+      <div v-bind="safeBind(machineApi.getPositionerProps())">
+        <SearchSelectPrimitiveList
+          v-if="machineApi.open"
+          v-bind="safeBind(machineApi.getContentProps())">
+          <SearchSelectPrimitiveItem
+            v-for="item in filteredOptions"
+            :key="item.key"
+            v-bind="safeBind(machineApi.getItemProps({ item }))">
+            <div class="flex items-center">
+              <!-- Checkbox style for multiselect? or just checkmark -->
+              <div
+                class="mr-2 flex h-4 w-4 items-center justify-center rounded border border-gray-300">
+                <CheckIcon
+                  v-if="machineApi.value.includes(String(item.key))"
+                  class="h-3 w-3 text-blue-600" />
+              </div>
+              <span
+                :class="{
+                  'font-semibold': machineApi.value.includes(String(item.key)),
+                }">
+                {{ item.label }}
+              </span>
+            </div>
+          </SearchSelectPrimitiveItem>
+
+          <div
+            v-if="filteredOptions.length === 0"
+            class="px-4 py-2 text-sm text-gray-500">
+            {{ props.noResultsText || '該当する項目がありません。' }}
+          </div>
+        </SearchSelectPrimitiveList>
+      </div>
+    </Teleport>
+  </SearchSelectPrimitiveRoot>
 </template>

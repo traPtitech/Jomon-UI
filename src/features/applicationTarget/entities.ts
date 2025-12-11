@@ -13,5 +13,5 @@ export interface ApplicationTargetDetail extends ApplicationTarget {
 
 export interface ApplicationTargetDraft {
   amount: number | null
-  target: string
+  target: string | null
 }

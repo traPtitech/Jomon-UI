@@ -88,7 +88,8 @@ const handleRemoveTarget = async () => {
   <div v-else-if="targetModel" class="flex items-center justify-between">
     <div class="flex gap-1">
       <SearchSelect
-        v-model="targetModel.target"
+        :model-value="targetModel.target"
+        @update:model-value="val => (targetModel.target = val ?? '')"
         :options="targetOptions"
         label="対象者" />
       <BaseNumberInput v-model="amountModel" label="金額" :min="0">

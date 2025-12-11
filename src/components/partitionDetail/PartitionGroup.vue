@@ -33,7 +33,10 @@ const { partitionGroupIdNameToMap, partitionGroupOptions } =
     <SearchSelect
       required
       v-if="props.isEditMode"
-      v-model="editedValue.parentPartitionGroupId"
+      :model-value="editedValue.parentPartitionGroupId"
+      @update:model-value="
+        val => val !== null && (editedValue.parentPartitionGroupId = val)
+      "
       class="grow"
       :options="partitionGroupOptions"
       label="パーティショングループ" />

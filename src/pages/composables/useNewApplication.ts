@@ -22,8 +22,9 @@ export const useNewApplication = () => {
 
   const isSending = ref(false)
 
-  type ApplicationForm = Omit<ApplicationSeed, 'targets'> & {
+  type ApplicationForm = Omit<ApplicationSeed, 'targets' | 'partition'> & {
     targets: ApplicationTargetDraft[]
+    partition: string | null
   }
 
   const hasFilledTargets = (
@@ -31,7 +32,10 @@ export const useNewApplication = () => {
   ): targets is ApplicationTarget[] =>
     targets.every(
       target =>
-        target.target !== '' && target.amount !== null && target.amount > 0
+        target.target !== null &&
+        target.target !== '' &&
+        target.amount !== null &&
+        target.amount > 0
     )
 
   const application = ref<ApplicationForm>({
@@ -40,7 +44,7 @@ export const useNewApplication = () => {
     targets: [{ target: '', amount: null }],
     content: '',
     tags: [],
-    partition: '',
+    partition: null,
   })
   const files = ref<FileSeed[]>([])
 

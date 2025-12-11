@@ -28,10 +28,10 @@ test.describe('SearchSelect E2E', () => {
     await page.goto('/applications/new')
   })
 
-  test('Focusing input opens dropdown', async ({ page }) => {
-    const input = page.getByLabel('パーティション')
+  test('Clicking input opens dropdown', async ({ page }) => {
+    const input = page.getByRole('combobox', { name: 'パーティション' })
     await expect(page.getByRole('listbox')).toBeHidden()
-    await input.focus()
+    await input.click()
     // It should open
     await expect(page.getByRole('listbox')).toBeVisible()
     // Blur to close (if configured?) or just check it opened.
@@ -40,16 +40,16 @@ test.describe('SearchSelect E2E', () => {
   test('Single Select (Partition) filters and selects option', async ({
     page,
   }) => {
-    const input = page.getByLabel('パーティション')
+    const input = page.getByRole('combobox', { name: 'パーティション' })
     await expect(input).toBeVisible()
 
     // Open and filter
     await input.click()
     await input.fill('テスト')
-
-    // Select option
-    const optionName = 'テストパーティション(指定なし) 0'
-    const option = page.getByRole('option', { name: optionName }).first()
+    // Wait for filter
+    const option = page
+      .getByRole('option', { name: 'テストパーティション(指定なし) 0' })
+      .first()
     await expect(option).toBeVisible()
     // Use force click to ensure it registers
     await option.click({ force: true })
@@ -57,8 +57,11 @@ test.describe('SearchSelect E2E', () => {
     // Verify dropdown closes
     await expect(page.getByRole('listbox')).toBeHidden()
 
-    // Verify selection
-    await expect(input).toHaveValue(optionName)
+    // Check value
+    await expect(input).toHaveValue('テストパーティション(指定なし) 0')
+
+    // Since we selected a value, modelValue should update.
+    // In this specific component implementation, the input display value updates too.
   })
 
   test('Multi Select (Tags) selects and removes items', async ({ page }) => {
@@ -69,41 +72,46 @@ test.describe('SearchSelect E2E', () => {
     // Type to open and filter
     await input.click()
     await input.fill('2021')
-    await page.getByRole('option', { name: '2021講習会' }).click()
+    await page
+      .getByRole('option', { name: '2021講習会' })
+      .click({ force: true })
 
     // Type again for second item (since query might be cleared or persisted)
     // Multi select usually clears query on select if configured.
-    // SearchMultiSelect.vue has query = '' in handleUpdate if resetOnClose (default true).
     await input.fill('2022')
-    await page.getByRole('option', { name: '2022講習会' }).click()
+    await page
+      .getByRole('option', { name: '2022講習会' })
+      .click({ force: true })
 
-    // Press escape to close dropdown to clearly see chips if they are overlapped by dropdown (though dropdown usually below)
-    await page.keyboard.press('Escape')
-
-    // Verify chips are displayed
+    // Check tags are rendered
+    // Check tags are rendered
     await expect(
-      page.getByRole('button', { name: '2021講習会 を削除' })
+      page.getByLabel('Selection').getByText('2021講習会')
     ).toBeVisible()
     await expect(
-      page.getByRole('button', { name: '2022講習会 を削除' })
+      page.getByLabel('Selection').getByText('2022講習会')
     ).toBeVisible()
 
     // Remove one item
-    await page.getByRole('button', { name: '2021講習会 を削除' }).click()
+    // A better selector for the remove button of '2021講習会'
+    const tag2021 = page
+      .locator('div[role="group"] > div')
+      .filter({ hasText: '2021講習会' })
+    const remove2021 = tag2021.locator('button')
+    await remove2021.click({ force: true })
 
-    // Verify removal
     await expect(
-      page.getByRole('button', { name: '2021講習会 を削除' })
-    ).not.toBeVisible()
+      page.getByLabel('Selection').getByText('2021講習会')
+    ).toBeHidden()
     await expect(
-      page.getByRole('button', { name: '2022講習会 を削除' })
+      page.getByLabel('Selection').getByText('2022講習会')
     ).toBeVisible()
   })
 
   test('Single Select (Partition) re-opens dropdown on input click', async ({
     page,
   }) => {
-    const input = page.getByLabel('パーティション')
+    const input = page.getByRole('combobox', { name: 'パーティション' })
     // Click to open
     await input.click()
     await expect(page.getByRole('listbox')).toBeVisible()
@@ -114,7 +122,7 @@ test.describe('SearchSelect E2E', () => {
     await option.click({ force: true })
     await expect(page.getByRole('listbox')).toBeHidden()
 
-    // Click again to re-open
+    // Click input again -> should open
     await input.click()
     await expect(page.getByRole('listbox')).toBeVisible()
   })

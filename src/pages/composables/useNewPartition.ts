@@ -12,10 +12,14 @@ export const useNewPartition = () => {
   const toast = useToast()
   const router = useRouter()
   const { createPartition } = usePartitionStore()
-  const partition = ref<PartitionSeed>({
+  const partition = ref<
+    Omit<PartitionSeed, 'parentPartitionGroupId'> & {
+      parentPartitionGroupId: string | null
+    }
+  >({
     name: '',
     budget: 0,
-    parentPartitionGroupId: '',
+    parentPartitionGroupId: null,
     management: {
       category: 'manual',
       state: 'available',
@@ -28,7 +32,17 @@ export const useNewPartition = () => {
     }
     try {
       isSending.value = true
-      await createPartition(partition.value)
+      // We only allow submission if validation passes, so assertion is safe here or we can check again.
+      // But PartitionSeed expects string. SearchSelect might be cleared.
+      // If required, we should add validation.
+      if (!partition.value.parentPartitionGroupId) {
+        toast.warning('所属するパーティショングループは必須です')
+        return
+      }
+      await createPartition({
+        ...partition.value,
+        parentPartitionGroupId: partition.value.parentPartitionGroupId,
+      })
       toast.success('パーティションを作成しました')
       await router.push('/partitions')
     } catch (e) {

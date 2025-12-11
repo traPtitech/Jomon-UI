@@ -3,7 +3,7 @@ import { computed, onMounted, useId } from 'vue'
 
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/24/outline'
 
-import { safeBind } from '@/components/shared/utils'
+import { safeBind, serializeOptionKey } from '@/components/shared/utils'
 
 import { useSearchSelectMachine } from './composables/useSearchSelectMachine'
 import SearchSelectPrimitiveInput from './primitives/SearchSelectPrimitiveInput.vue'
@@ -97,12 +97,14 @@ onMounted(() => {})
             <div class="flex items-center justify-between">
               <span
                 :class="{
-                  'font-semibold': machineApi.value.includes(String(item.key)),
+                  'font-semibold': machineApi.value.includes(
+                    serializeOptionKey(item.key)
+                  ),
                 }">
                 {{ item.label }}
               </span>
               <CheckIcon
-                v-if="machineApi.value.includes(String(item.key))"
+                v-if="machineApi.value.includes(serializeOptionKey(item.key))"
                 class="h-4 w-4 text-blue-600" />
             </div>
           </SearchSelectPrimitiveItem>

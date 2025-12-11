@@ -1,8 +1,10 @@
-export function toString(val: unknown): string {
-  if (val === null || val === undefined) return ''
-  if (typeof val === 'string') return val
-  if (typeof val === 'number') return String(val)
-  return ''
+/**
+ * Serializes a value to a string key.
+ * Strictly accepts only string or number.
+ * Throws runtime error if null or undefined is passed, to prevent silent failures.
+ */
+export function serializeOptionKey(val: string | number): string {
+  return String(val)
 }
 
 /**

@@ -1,6 +1,6 @@
 import { type MaybeRefOrGetter, type Ref, computed, toValue } from 'vue'
 
-import { toString } from '@/components/shared/utils'
+import { serializeOptionKey } from '@/components/shared/utils'
 
 import type { Option } from '../types'
 
@@ -30,7 +30,7 @@ export function useSearchSelectFiltering<T extends string | number>(
     return opts.filter(
       opt =>
         opt.label.toLocaleLowerCase('ja').includes(lowerTerm) ||
-        toString(opt.key).toLocaleLowerCase('ja').includes(lowerTerm)
+        serializeOptionKey(opt.key).toLocaleLowerCase('ja').includes(lowerTerm)
     )
   })
 }

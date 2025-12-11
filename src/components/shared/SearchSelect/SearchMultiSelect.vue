@@ -1,4 +1,3 @@
-```
 <script setup lang="ts" generic="TValue extends string | number">
 import { computed, useId } from 'vue'
 
@@ -8,7 +7,7 @@ import {
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
 
-import { safeBind } from '@/components/shared/utils'
+import { safeBind, serializeOptionKey } from '@/components/shared/utils'
 
 import { useSearchSelectMachine } from './composables/useSearchSelectMachine'
 import SearchSelectPrimitiveInput from './primitives/SearchSelectPrimitiveInput.vue'
@@ -54,7 +53,7 @@ const machineApi = computed(() => api.value)
 const optionMap = computed(() => {
   const map = new Map<string, string>()
   for (const option of props.options) {
-    map.set(String(option.key), option.label)
+    map.set(serializeOptionKey(option.key), option.label)
   }
   return map
 })
@@ -149,12 +148,14 @@ const isFloating = computed(() => {
               <div
                 class="mr-2 flex h-4 w-4 items-center justify-center rounded border border-gray-300">
                 <CheckIcon
-                  v-if="machineApi.value.includes(String(item.key))"
+                  v-if="machineApi.value.includes(serializeOptionKey(item.key))"
                   class="h-3 w-3 text-blue-600" />
               </div>
               <span
                 :class="{
-                  'font-semibold': machineApi.value.includes(String(item.key)),
+                  'font-semibold': machineApi.value.includes(
+                    serializeOptionKey(item.key)
+                  ),
                 }">
                 {{ item.label }}
               </span>

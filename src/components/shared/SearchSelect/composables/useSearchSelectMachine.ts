@@ -3,6 +3,8 @@ import { type MaybeRef, computed, ref, toValue } from 'vue'
 import * as combobox from '@zag-js/combobox'
 import { normalizeProps, useMachine } from '@zag-js/vue'
 
+import { serializeOptionKey } from '@/components/shared/utils'
+
 import type { Option } from '../types'
 import { useSearchSelectFiltering } from './useSearchSelectFiltering'
 
@@ -37,7 +39,7 @@ export function useSearchSelectMachine<T extends string | number>(
     const map = new Map<string, Option<T>>()
     const allOptions = toValue(props.options)
     for (const option of allOptions) {
-      const keyStr = String(option.key)
+      const keyStr = serializeOptionKey(option.key)
       if (import.meta.env.DEV && map.has(keyStr)) {
         console.warn(
           `[SearchSelect] Duplicate key found: "${keyStr}". Keys must be unique when converted to string to ensure correct selection.`
@@ -52,7 +54,7 @@ export function useSearchSelectMachine<T extends string | number>(
     combobox.collection({
       items: filteredOptions.value,
       itemToString: item => (item ? item.label : ''),
-      itemToValue: item => (item ? String(item.key) : ''),
+      itemToValue: item => (item ? serializeOptionKey(item.key) : ''),
     })
   )
 
@@ -62,9 +64,9 @@ export function useSearchSelectMachine<T extends string | number>(
     const modelVal = toValue(props.modelValue)
     let value: string[] = []
     if (Array.isArray(modelVal)) {
-      value = modelVal.map(v => String(v))
+      value = modelVal.map(v => serializeOptionKey(v))
     } else if (modelVal !== null && modelVal !== undefined) {
-      value = [String(modelVal)]
+      value = [serializeOptionKey(modelVal)]
     }
 
     return {

@@ -19,7 +19,7 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
   errorMessage: undefined,
 })
 
-defineEmits<SearchSelectEmit<TValue[]>>()
+const emit = defineEmits<SearchSelectEmit<TValue[]>>()
 const model = defineModel<TValue[]>({ required: true })
 
 const query = ref('')
@@ -78,6 +78,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
   if (e.key === 'Backspace' && query.value === '' && model.value.length > 0) {
     model.value = model.value.slice(0, -1)
   }
+  emit('keydown', e)
 }
 </script>
 
@@ -107,7 +108,11 @@ const handleKeyDown = (e: KeyboardEvent) => {
       @close="$emit('close')" />
 
     <!-- Selected items (Tags) -->
-    <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1" role="group">
+    <div
+      v-if="model.length > 0"
+      class="mt-2 flex flex-wrap gap-1"
+      role="group"
+      aria-label="選択済みタグ">
       <div v-for="val in model" :key="val" class="text-xs" role="listitem">
         {{ optionMap.get(val) ?? val }}
         <button

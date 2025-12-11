@@ -77,24 +77,20 @@ const getOptionClass = (
   const theme = props.theme
 
   if (active) {
-    return (
-      theme.activeOptionClass ??
-      (theme.themeColor === 'gray'
-        ? 'bg-gray-100 text-gray-900'
-        : 'bg-blue-100 text-blue-500')
-    )
+    if (theme.activeOptionClass) return theme.activeOptionClass
+    return theme.themeColor === 'gray'
+      ? 'bg-gray-100 text-gray-900'
+      : 'bg-blue-100 text-blue-500'
   }
   if (selected) {
     return theme.themeColor === 'gray'
       ? 'bg-gray-50 text-gray-900'
       : 'bg-blue-50 text-blue-500'
   }
-  return (
-    theme.hoverOptionClass ??
-    (theme.themeColor === 'gray'
-      ? 'hover:bg-gray-100 hover:text-gray-900'
-      : 'hover:bg-blue-100 hover:text-blue-500')
-  )
+  if (theme.hoverOptionClass) return theme.hoverOptionClass
+  return theme.themeColor === 'gray'
+    ? 'hover:bg-gray-100 hover:text-gray-900'
+    : 'hover:bg-blue-100 hover:text-blue-500'
 }
 </script>
 
@@ -108,7 +104,8 @@ const getOptionClass = (
       <!-- Empty State -->
       <div
         v-if="filteredOptions.length === 0"
-        class="relative cursor-default px-4 py-2 text-gray-700 select-none">
+        class="relative cursor-default px-4 py-2 text-gray-700 select-none"
+        role="status">
         {{ searchTerm ? noResultsText : noItemsText }}
       </div>
 

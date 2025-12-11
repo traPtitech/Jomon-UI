@@ -62,7 +62,7 @@ test.describe('SearchSelect E2E', () => {
   })
 
   test('Multi Select (Tags) selects and removes items', async ({ page }) => {
-    const input = page.getByLabel('タグ')
+    const input = page.getByRole('combobox', { name: 'タグ' })
     await expect(input).toBeVisible()
 
     // Select multiple options

@@ -12,7 +12,7 @@ const model = defineModel<ApplicationTargetDraft[]>({ required: true })
 const { userOptions } = useUserStore()
 
 function handleAddTarget() {
-  model.value = [...model.value, { target: '', amount: null }]
+  model.value = [...model.value, { target: null, amount: null }]
 }
 function handleRemoveTarget(index: number) {
   model.value = model.value.filter((_, i) => i !== index)

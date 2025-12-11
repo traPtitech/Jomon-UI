@@ -34,13 +34,6 @@ const targetOptions = computed(() =>
 
 const targetModel = defineModel<T>('targetModel', { required: true })
 
-const amountModel = computed<number | null>({
-  get: () => targetModel.value.amount,
-  set: (val: number | null) => {
-    targetModel.value.amount = val ?? 0
-  },
-})
-
 const emit = defineEmits<(e: 'delete', id: string) => void>()
 
 const handleRemoveTarget = async () => {
@@ -76,9 +69,15 @@ const handleRemoveTarget = async () => {
     v-if="!props.isEditMode"
     class="flex flex-wrap items-center justify-between gap-2 md:gap-0">
     <div class="flex items-center gap-1">
-      <UserIcon class="w-10" :name="getUserName(target.target ?? '')" />
+      <UserIcon
+        v-if="target.target"
+        class="w-10"
+        :name="getUserName(target.target)" />
       <div class="flex flex-col gap-1 break-all">
-        <div>{{ getUserNameWithFallback(target.target ?? '') }}</div>
+        <div v-if="target.target">
+          {{ getUserNameWithFallback(target.target) }}
+        </div>
+        <div v-else class="text-text-disabled">未選択</div>
         <div>{{ target.amount }}円</div>
       </div>
     </div>
@@ -89,7 +88,7 @@ const handleRemoveTarget = async () => {
         v-model="targetModel.target"
         :options="targetOptions"
         label="対象者" />
-      <BaseNumberInput v-model="amountModel" label="金額" :min="0">
+      <BaseNumberInput v-model="targetModel.amount" label="金額" :min="0">
         <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
           ¥
         </span>

@@ -12,7 +12,7 @@ import { toString } from '@/components/shared/utils'
 import type { Option, SearchSelectTheme } from './types'
 
 const baseOptionsClass = [
-  'absolute z-50 w-full overflow-hidden rounded-md bg-white',
+  'z-50 w-full overflow-hidden rounded-md bg-white',
   'py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
 ].join(' ')
 

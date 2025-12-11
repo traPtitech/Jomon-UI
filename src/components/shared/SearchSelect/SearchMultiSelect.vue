@@ -107,7 +107,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
       :error-message="errorMessage"
       @keydown="handleKeyDown"
       @change-query="query = $event"
-      @close="$emit('close')" />
+      @close="emit('close')" />
 
     <!-- Selected items (Tags) -->
     <div

@@ -57,7 +57,7 @@ onMounted(() => {})
       <SearchSelectPrimitiveInput
         v-bind="safeBind(machineApi.getInputProps())"
         :id="id"
-        class="peer h-12 border-gray-300 pt-6 pb-2 focus:border-blue-500 focus:ring-blue-500"
+        class="peer h-12 w-full rounded-md border border-gray-300 px-3 pt-6 pb-2 focus:border-blue-500 focus:ring-blue-500"
         placeholder=" " />
       <!-- Note: placeholder=" " (space) is required for peer-placeholder-shown to work -->
 

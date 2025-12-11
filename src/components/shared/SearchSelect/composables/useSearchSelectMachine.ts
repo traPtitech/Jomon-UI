@@ -32,27 +32,29 @@ export function useSearchSelectMachine<T extends string | number>(
     props.filterFunction
   )
 
-  const collection = computed(() => {
-    // Check for duplicate keys in string representation to avoid unexpected behavior
-    if (import.meta.env.DEV) {
-      const keys = new Set<string>()
-      for (const item of filteredOptions.value) {
-        const keyStr = String(item.key)
-        if (keys.has(keyStr)) {
-          console.warn(
-            `[SearchSelect] Duplicate key found: "${keyStr}". Keys must be unique when converted to string.`
-          )
-        }
-        keys.add(keyStr)
+  // Create a map for O(1) lookup and validation of string keys
+  const keyToOptionMap = computed(() => {
+    const map = new Map<string, Option<T>>()
+    const allOptions = toValue(props.options)
+    for (const option of allOptions) {
+      const keyStr = String(option.key)
+      if (import.meta.env.DEV && map.has(keyStr)) {
+        console.warn(
+          `[SearchSelect] Duplicate key found: "${keyStr}". Keys must be unique when converted to string to ensure correct selection.`
+        )
       }
+      map.set(keyStr, option)
     }
+    return map
+  })
 
-    return combobox.collection({
+  const collection = computed(() =>
+    combobox.collection({
       items: filteredOptions.value,
       itemToString: item => (item ? item.label : ''),
       itemToValue: item => (item ? String(item.key) : ''),
     })
-  })
+  )
 
   // Computed Props for useMachine
   // Zag Vue accepts a computed object for options to be reactive
@@ -78,11 +80,10 @@ export function useSearchSelectMachine<T extends string | number>(
 
       onValueChange: (details: combobox.ValueChangeDetails) => {
         const val = details.value // string[]
-        const allOpts = toValue(props.options)
 
         const selectedKeys: T[] = []
         for (const k of val) {
-          const found = allOpts.find(opt => String(opt.key) === k)
+          const found = keyToOptionMap.value.get(k)
           if (found) {
             selectedKeys.push(found.key)
           }

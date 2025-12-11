@@ -15,7 +15,14 @@ export function useSearchSelectFiltering<T extends string | number>(
     if (!searchTerm) return opts
 
     if (filterFunction) {
-      return opts.filter(opt => filterFunction(opt, searchTerm))
+      try {
+        return opts.filter(opt => filterFunction(opt, searchTerm))
+      } catch (e) {
+        console.error('Error in custom filterFunction:', e)
+        // Fallback to returning original options or empty depending on preference.
+        // Returning original options is safer to avoid empty list on error.
+        return opts
+      }
     }
 
     const lowerTerm = searchTerm.toLocaleLowerCase()

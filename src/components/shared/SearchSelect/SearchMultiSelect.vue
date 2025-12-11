@@ -87,7 +87,6 @@ const handleKeyDown = (e: KeyboardEvent) => {
     :model-value="model"
     :disabled="!!disabled"
     multiple
-    nullable
     as="div"
     class="relative"
     @update:model-value="handleUpdate"

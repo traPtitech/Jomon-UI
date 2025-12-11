@@ -11,6 +11,8 @@ const props = defineProps<{
   placeholder?: string | undefined
   required?: boolean | undefined
   disabled?: boolean | undefined
+  // Input passes displayValue exactly as is to ComboboxInput.
+  // The transformation logic resides in the parent (SearchSelect/SearchMultiSelect).
   displayValue: (item: unknown) => string
   isOpen: boolean
   query: string
@@ -118,6 +120,7 @@ const inputId = useId()
     </BaseInputFrame>
 
     <ComboboxButton
+      as="button"
       ref="buttonRef"
       class="absolute inset-y-0 right-0 flex items-center pr-2">
       <ChevronDownIcon

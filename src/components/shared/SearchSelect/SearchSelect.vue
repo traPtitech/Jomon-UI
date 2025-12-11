@@ -24,6 +24,8 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
 const emit = defineEmits<SearchSelectEmit<TValue>>()
 const model = defineModel<TValue>({ required: true })
 
+// Query starts empty even if model has value.
+// The initial display is handled by `displayValue` prop on ComboboxInput.
 const query = ref('')
 
 const filteredOptions = useSearchSelectFiltering(
@@ -38,6 +40,8 @@ const handleUpdate = (value: TValue) => {
   if (value !== null) {
     query.value = displayValue(value)
   }
+  // If resetOnSelect is true, clear the query after selection.
+  // The display remains correct because Combobox manages the input value via displayValue.
   if (props.resetOnSelect) {
     query.value = ''
   }

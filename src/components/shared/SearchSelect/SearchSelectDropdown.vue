@@ -11,6 +11,22 @@ import { toString } from '@/components/shared/utils'
 
 import type { Option, SearchSelectTheme } from './types'
 
+const baseOptionsClass =
+  'absolute z-50 w-full overflow-hidden rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'
+
+const themeConfig = {
+  blue: {
+    active: 'bg-blue-100 text-blue-500',
+    selected: 'bg-blue-50 text-blue-500',
+    hover: 'hover:bg-blue-100 hover:text-blue-500',
+  },
+  gray: {
+    active: 'bg-gray-100 text-gray-900',
+    selected: 'bg-gray-50 text-gray-900',
+    hover: 'hover:bg-gray-100 hover:text-gray-900',
+  },
+} as const
+
 const props = withDefaults(
   defineProps<{
     filteredOptions: Option<T>[]
@@ -79,18 +95,18 @@ const getOptionClass = (
   if (active) {
     if (theme.activeOptionClass) return theme.activeOptionClass
     return theme.themeColor === 'gray'
-      ? 'bg-gray-100 text-gray-900'
-      : 'bg-blue-100 text-blue-500'
+      ? themeConfig.gray.active
+      : themeConfig.blue.active
   }
   if (selected) {
     return theme.themeColor === 'gray'
-      ? 'bg-gray-50 text-gray-900'
-      : 'bg-blue-50 text-blue-500'
+      ? themeConfig.gray.selected
+      : themeConfig.blue.selected
   }
   if (theme.hoverOptionClass) return theme.hoverOptionClass
   return theme.themeColor === 'gray'
-    ? 'hover:bg-gray-100 hover:text-gray-900'
-    : 'hover:bg-blue-100 hover:text-blue-500'
+    ? themeConfig.gray.hover
+    : themeConfig.blue.hover
 }
 </script>
 
@@ -98,7 +114,7 @@ const getOptionClass = (
   <Teleport to="body">
     <ComboboxOptions
       ref="floating"
-      class="ring-opacity-5 absolute z-50 w-full overflow-hidden rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black focus:outline-none sm:text-sm"
+      :class="baseOptionsClass"
       :style="floatingStyles"
       static>
       <!-- Empty State -->

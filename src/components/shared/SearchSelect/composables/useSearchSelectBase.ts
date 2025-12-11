@@ -23,8 +23,7 @@ export interface SearchSelectCommonProps<
     | undefined
   /**
    * Whether to reset the search term when an item is selected.
-   * MultiSelect では通常 `true` を、SingleSelect では多くの場合 `false` を指定します。
-   * Note: Single Select components (SearchSelect.vue) may override this to `false` to persist the selected label.
+   * MultiSelect uses `true` by default, while SingleSelect components (SearchSelect.vue) override this to `false` to persist the selected label.
    */
   resetOnSelect?: boolean | undefined
   /**

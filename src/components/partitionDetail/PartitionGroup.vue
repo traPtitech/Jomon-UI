@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { ref, watch } from 'vue'
+
 import type { EditMode } from '@/components/partitionDetail/composables/usePartitionInformation'
 import EditButton from '@/components/shared/EditButton.vue'
 import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
@@ -26,6 +28,26 @@ const {
 } = usePartitionStore()
 const { partitionGroupIdNameToMap, partitionGroupOptions } =
   usePartitionGroupStore()
+
+// UI State: SearchSelect emits null, so we handle it in a local nullable ref.
+const inputParentPartitionGroupId = ref<string | null>(
+  editedValue.value.parentPartitionGroupId
+)
+
+// Sync UI State -> Domain Model
+watch(inputParentPartitionGroupId, val => {
+  if (val !== null) {
+    editedValue.value.parentPartitionGroupId = val
+  }
+})
+
+// Sync Domain Model -> UI State
+watch(
+  () => editedValue.value.parentPartitionGroupId,
+  val => {
+    inputParentPartitionGroupId.value = val
+  }
+)
 </script>
 
 <template>
@@ -33,10 +55,7 @@ const { partitionGroupIdNameToMap, partitionGroupOptions } =
     <SearchSelect
       required
       v-if="props.isEditMode"
-      :model-value="editedValue.parentPartitionGroupId"
-      @update:model-value="
-        val => val !== null && (editedValue.parentPartitionGroupId = val)
-      "
+      v-model="inputParentPartitionGroupId"
       class="grow"
       :options="partitionGroupOptions"
       label="パーティショングループ" />

@@ -1,5 +1,5 @@
 <script lang="ts" setup generic="T extends ApplicationTarget">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import { TrashIcon } from '@heroicons/vue/24/solid'
 import { useToast } from 'vue-toastification'
@@ -42,6 +42,22 @@ const amountModel = computed<number | null>({
     targetModel.value.amount = val ?? 0
   },
 })
+
+// UI State: SearchSelect emits null, so we handle it in a local nullable ref.
+const inputTarget = ref<string | null>(targetModel.value.target)
+
+// Sync UI State -> Domain Model
+watch(inputTarget, val => {
+  targetModel.value.target = val ?? ''
+})
+
+// Sync Domain Model -> UI State (in case parent updates it)
+watch(
+  () => targetModel.value.target,
+  val => {
+    inputTarget.value = val
+  }
+)
 
 const emit = defineEmits<(e: 'delete', id: string) => void>()
 
@@ -88,8 +104,7 @@ const handleRemoveTarget = async () => {
   <div v-else-if="targetModel" class="flex items-center justify-between">
     <div class="flex gap-1">
       <SearchSelect
-        :model-value="targetModel.target"
-        @update:model-value="val => (targetModel.target = val ?? '')"
+        v-model="inputTarget"
         :options="targetOptions"
         label="対象者" />
       <BaseNumberInput v-model="amountModel" label="金額" :min="0">

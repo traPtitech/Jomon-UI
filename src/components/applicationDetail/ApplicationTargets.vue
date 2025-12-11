@@ -49,29 +49,35 @@ const toggleEditTargets = () => {
 
 const handleUpdateTargets = async () => {
   const targets = editedTargets.value
-  const hasEmptyTargets = targets.some(
-    target => !target.target || target.amount === null
+
+  // Validation: Ensure all necessary fields are filled
+  const validTargets = targets.filter(
+    (
+      t
+    ): t is ApplicationTargetEditDraft & { target: string; amount: number } => {
+      return t.target !== null && t.target !== '' && t.amount !== null
+    }
   )
+
+  const hasEmptyTargets = validTargets.length !== targets.length
 
   if (hasEmptyTargets) {
     toast.error('払い戻し対象者と金額を入力してください')
     return
   }
 
-  // Type Guard / Conversion: We verified all targets are filled.
-  // We can safely cast or map to strict structure if necessary, but ApplicationSeed/Detail usage might require strict types.
-  // editedTargets is ApplicationTargetEditDraft. API expects strict types likely.
-  const validTargets = targets.map(t => ({
+  // Conversion: Map to strict structure (safe because we validated above)
+  const strictTargets = validTargets.map(t => ({
     id: t.id,
-    target: t.target as string,
-    amount: t.amount as number,
+    target: t.target,
+    amount: t.amount,
   }))
 
   try {
     await editApplication(props.application.id, {
       ...props.application,
       partition: props.application.partition.id,
-      targets: validTargets, // Pass validated strict targets
+      targets: strictTargets,
     })
     toast.success('更新しました')
   } catch {

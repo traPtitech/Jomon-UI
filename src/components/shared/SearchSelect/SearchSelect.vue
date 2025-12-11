@@ -8,9 +8,8 @@ import { toString } from '@/components/shared/utils'
 
 import SearchSelectDropdown from './SearchSelectDropdown.vue'
 import SearchSelectInput from './SearchSelectInput.vue'
-import { type SearchSelectCommonProps } from './composables/useSearchSelectBase'
 import { useSearchSelectFiltering } from './composables/useSearchSelectFiltering'
-import type { SearchSelectEmit } from './types'
+import type { SearchSelectCommonProps, SearchSelectEmit } from './types'
 
 const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
   placeholder: '検索',
@@ -39,6 +38,9 @@ const handleUpdate = (value: TValue) => {
   // Force update query to reflect selected value, bypassing ComboxInput display-value issues
   if (value !== null) {
     query.value = displayValue(value)
+  } else {
+    // Clear query when value is null (deselected)
+    query.value = ''
   }
   // If resetOnSelect is true, clear the query after selection.
   // The display remains correct because Combobox manages the input value via displayValue.

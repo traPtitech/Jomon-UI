@@ -6,9 +6,8 @@ import { CheckIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 
 import SearchSelectDropdown from './SearchSelectDropdown.vue'
 import SearchSelectInput from './SearchSelectInput.vue'
-import { type SearchSelectCommonProps } from './composables/useSearchSelectBase'
 import { useSearchSelectFiltering } from './composables/useSearchSelectFiltering'
-import type { SearchSelectEmit } from './types'
+import type { SearchSelectCommonProps, SearchSelectEmit } from './types'
 
 const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
   placeholder: '検索',
@@ -67,6 +66,7 @@ const optionMap = computed(() => {
 })
 
 const removeItem = (val: TValue) => {
+  if (props.disabled) return
   const index = model.value.indexOf(val)
   if (index === -1) return
   const newValue = [...model.value]
@@ -121,8 +121,10 @@ const handleKeyDown = (e: KeyboardEvent) => {
             theme?.themeColor === 'gray'
               ? 'hover:bg-gray-100'
               : 'hover:bg-blue-100',
+            disabled ? 'cursor-not-allowed opacity-50' : '',
           ]"
           :aria-label="`${optionMap.get(val) ?? val} を削除`"
+          :disabled="disabled"
           @click.stop="removeItem(val)">
           <XMarkIcon class="h-3 w-3" />
         </button>

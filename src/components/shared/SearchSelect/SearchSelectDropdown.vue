@@ -99,6 +99,7 @@ const getOptionClass = (
       : themeConfig.blue.active
   }
   if (selected) {
+    if (theme.selectedOptionClass) return theme.selectedOptionClass
     return theme.themeColor === 'gray'
       ? themeConfig.gray.selected
       : themeConfig.blue.selected

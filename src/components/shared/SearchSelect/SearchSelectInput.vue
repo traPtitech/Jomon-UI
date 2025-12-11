@@ -69,6 +69,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
 const handleFocus = () => {
   // Workaround: Headless UI Combobox doesn't provide a public API to open programmatically,
   // so we simulate a click on the button to open it.
+  if (props.disabled) return
   if (!props.isOpen && buttonRef.value?.$el) {
     buttonRef.value.$el.click()
   }

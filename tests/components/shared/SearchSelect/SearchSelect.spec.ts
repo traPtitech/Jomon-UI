@@ -172,4 +172,45 @@ describe('SearchSelect', () => {
 
     wrapper.unmount()
   })
+  it.todo('handles number keys correctly', async () => {
+    const numberOptions: Option<number>[] = [
+      { label: 'Num 1', key: 1 },
+      { label: 'Num 2', key: 2 },
+    ]
+
+    const wrapper = mount(SearchSelect, {
+      props: {
+        options: numberOptions,
+        label: 'Number Select',
+        modelValue: 1, // Start selected
+      },
+      global: globalConfig,
+      attachTo: document.body,
+    })
+
+    // Check if selected
+    const input = wrapper.find('input')
+    // Zag might display label in input or placeholder?
+    // Implementation: itemToString uses label. Input display depends on Zag logic.
+    // If we rely on simple rendering check:
+    await wrapper.vm.$nextTick()
+    await new Promise(r => setTimeout(r, 50))
+
+    // In single select, value might be shown? SearchSelect usually shows user input 'searchTerm'.
+    // But initially?
+    // Let's just check the checkmark existence if we can open it.
+    await input.trigger('focus')
+    await input.trigger('click')
+    await wrapper.vm.$nextTick()
+    await new Promise(r => setTimeout(r, 50))
+
+    const list = wrapper.find('ul')
+    const option1 = list.findAll('li').find(o => o.text().includes('Num 1'))
+
+    // Check if it's highlighted/selected
+    // Implementation uses check icon for selected
+    expect(option1?.findComponent({ name: 'CheckIcon' }).exists()).toBe(true)
+
+    wrapper.unmount()
+  })
 })

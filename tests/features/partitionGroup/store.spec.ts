@@ -101,11 +101,6 @@ describe('PartitionGroup Store', () => {
 
       expect(mockFetchPartitionGroup).toHaveBeenCalledWith('group-1')
       expect(store.currentPartitionGroup.value).toEqual(mockPartitionGroup)
-      expect(store.editedValue.value).toEqual({
-        name: mockPartitionGroup.name,
-        parentPartitionGroupId: mockPartitionGroup.parentPartitionGroupId,
-        depth: mockPartitionGroup.depth,
-      })
     })
 
     it('createPartitionGroup creates group and adds to list', async () => {

@@ -9,7 +9,7 @@ import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useApplication } from '@/features/application/composables'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
-import type { ApplicationTargetDetail } from '@/features/applicationTarget/entities'
+import type { ApplicationTargetEditDraft } from '@/features/applicationTarget/entities'
 import { useUserStore } from '@/features/user/store'
 
 const props = defineProps<{
@@ -24,15 +24,18 @@ const toast = useToast()
 const hasAuthority = isApplicationCreator.value(me.value)
 
 const isEditMode = ref(false)
-const editedTargets = ref<ApplicationTargetDetail[]>(
+const editedTargets = ref<ApplicationTargetEditDraft[]>(
   props.application.targets.map(t => ({ ...t }))
 )
 
-const selectedUserIds = computed(() =>
-  isEditMode.value
-    ? editedTargets.value.map(t => t.target)
-    : props.application.targets.map(t => t.target)
-)
+const selectedUserIds = computed(() => {
+  const targets = isEditMode.value
+    ? editedTargets.value
+    : props.application.targets
+  return targets
+    .map(t => t.target)
+    .filter((t): t is string => t !== null && t !== '')
+})
 
 const handleDeleteTarget = (id: string) => {
   editedTargets.value = editedTargets.value.filter(target => target.id !== id)
@@ -44,15 +47,30 @@ const toggleEditTargets = () => {
 }
 
 const handleUpdateTargets = async () => {
-  if (editedTargets.value.some(target => !target.target)) {
-    toast.error('払い戻し対象者を選択してください')
+  const targets = editedTargets.value
+  const hasEmptyTargets = targets.some(
+    target => !target.target || target.amount === null
+  )
+
+  if (hasEmptyTargets) {
+    toast.error('払い戻し対象者と金額を入力してください')
     return
   }
+
+  // Type Guard / Conversion: We verified all targets are filled.
+  // We can safely cast or map to strict structure if necessary, but ApplicationSeed/Detail usage might require strict types.
+  // editedTargets is ApplicationTargetEditDraft. API expects strict types likely.
+  const validTargets = targets.map(t => ({
+    id: t.id,
+    target: t.target as string,
+    amount: t.amount as number,
+  }))
+
   try {
     await editApplication(props.application.id, {
       ...props.application,
       partition: props.application.partition.id,
-      targets: editedTargets.value,
+      targets: validTargets, // Pass validated strict targets
     })
     toast.success('更新しました')
   } catch {

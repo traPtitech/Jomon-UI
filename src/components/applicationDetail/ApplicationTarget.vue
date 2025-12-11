@@ -1,5 +1,5 @@
-<script lang="ts" setup generic="T extends ApplicationTarget">
-import { computed, ref, watch } from 'vue'
+<script lang="ts" setup generic="T extends ApplicationTargetEditDraft">
+import { computed } from 'vue'
 
 import { TrashIcon } from '@heroicons/vue/24/solid'
 import { useToast } from 'vue-toastification'
@@ -10,15 +10,15 @@ import UserIcon from '@/components/shared/UserIcon.vue'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import type {
-  ApplicationTarget,
   ApplicationTargetDetail,
+  ApplicationTargetEditDraft,
 } from '@/features/applicationTarget/entities'
 import { useUserStore } from '@/features/user/store'
 
 const props = defineProps<{
   application: ApplicationDetail
   isEditMode: boolean
-  target: ApplicationTargetDetail
+  target: ApplicationTargetDetail | ApplicationTargetEditDraft
   selectedUserIds: string[]
 }>()
 
@@ -42,22 +42,6 @@ const amountModel = computed<number | null>({
     targetModel.value.amount = val ?? 0
   },
 })
-
-// UI State: SearchSelect emits null, so we handle it in a local nullable ref.
-const inputTarget = ref<string | null>(targetModel.value.target)
-
-// Sync UI State -> Domain Model
-watch(inputTarget, val => {
-  targetModel.value.target = val ?? ''
-})
-
-// Sync Domain Model -> UI State (in case parent updates it)
-watch(
-  () => targetModel.value.target,
-  val => {
-    inputTarget.value = val
-  }
-)
 
 const emit = defineEmits<(e: 'delete', id: string) => void>()
 
@@ -94,9 +78,9 @@ const handleRemoveTarget = async () => {
     v-if="!props.isEditMode"
     class="flex flex-wrap items-center justify-between gap-2 md:gap-0">
     <div class="flex items-center gap-1">
-      <UserIcon class="w-10" :name="getUserName(target.target)" />
+      <UserIcon class="w-10" :name="getUserName(target.target ?? '')" />
       <div class="flex flex-col gap-1 break-all">
-        <div>{{ getUserNameWithFallback(target.target) }}</div>
+        <div>{{ getUserNameWithFallback(target.target ?? '') }}</div>
         <div>{{ target.amount }}円</div>
       </div>
     </div>
@@ -104,7 +88,7 @@ const handleRemoveTarget = async () => {
   <div v-else-if="targetModel" class="flex items-center justify-between">
     <div class="flex gap-1">
       <SearchSelect
-        v-model="inputTarget"
+        v-model="targetModel.target"
         :options="targetOptions"
         label="対象者" />
       <BaseNumberInput v-model="amountModel" label="金額" :min="0">

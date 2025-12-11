@@ -6,12 +6,12 @@ import { PartitionRepositoryKey } from '@/di'
 import type { User } from '@/features/user/entities'
 import type { AsyncStatus } from '@/types'
 
-import type { Partition, PartitionSeed } from './entities'
+import type { Partition, PartitionSeed, PartitionSeedDraft } from './entities'
 
-const createDefaultPartitionSeed = (): PartitionSeed => ({
+const createDefaultPartitionSeed = (): PartitionSeedDraft => ({
   name: '',
   budget: 0,
-  parentPartitionGroupId: '',
+  parentPartitionGroupId: null,
   management: {
     category: 'manual',
     state: 'available',
@@ -26,7 +26,7 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
   const status = ref<AsyncStatus>('idle')
   const error = ref<string | null>(null)
   const currentPartition = ref<Partition | undefined>(undefined)
-  const editedValue = ref<PartitionSeed>(createDefaultPartitionSeed())
+  const editedValue = ref<PartitionSeedDraft>(createDefaultPartitionSeed())
 
   const partitionOptions = computed(() =>
     partitions.value.map(partition => ({
@@ -73,19 +73,37 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
     }
   }
 
-  const createPartition = async (partition: PartitionSeed) => {
+  const createPartition = async (partition: PartitionSeedDraft) => {
+    if (!partition.parentPartitionGroupId) {
+      throw new Error('パーティション グループは必須です')
+    }
+    const strictPartition: PartitionSeed = {
+      ...partition,
+      parentPartitionGroupId: partition.parentPartitionGroupId,
+    }
     try {
-      const res = await repository.createPartition(partition)
+      const res = await repository.createPartition(strictPartition)
       partitions.value.unshift(res)
     } catch {
       throw new Error('パーティションの作成に失敗しました')
     }
   }
 
-  const editPartition = async (id: string, partitionSeed: PartitionSeed) => {
+  const editPartition = async (
+    id: string,
+    partitionSeed: PartitionSeedDraft
+  ) => {
     if (!currentPartition.value) return
+    if (!partitionSeed.parentPartitionGroupId) {
+      throw new Error('パーティション グループは必須です')
+    }
+    const strictPartition: PartitionSeed = {
+      ...partitionSeed,
+      parentPartitionGroupId: partitionSeed.parentPartitionGroupId,
+    }
+
     try {
-      const res = await repository.editPartition(id, partitionSeed)
+      const res = await repository.editPartition(id, strictPartition)
       currentPartition.value = res
       const index = partitions.value.findIndex(
         partition => partition.id === res.id

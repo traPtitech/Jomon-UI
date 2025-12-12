@@ -90,6 +90,7 @@ describe('SearchSelectTag', () => {
   })
 
   it('filters out undefined tags', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
     const wrapper = createWrapper()
     const searchMultiSelect = wrapper.findComponent({
       name: 'SearchMultiSelect',
@@ -100,5 +101,7 @@ describe('SearchSelectTag', () => {
 
     // Should emit empty array (undefined filtered out)
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([[]])
+    expect(warnSpy).toHaveBeenCalled()
+    warnSpy.mockRestore()
   })
 })

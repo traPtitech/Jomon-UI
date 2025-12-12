@@ -1,7 +1,6 @@
+import { CheckIcon } from '@heroicons/vue/24/outline'
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
-
-// Added vi import
 
 import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
 import type { Option } from '@/components/shared/SearchSelect/types'
@@ -48,38 +47,7 @@ describe('SearchSelect', () => {
     expect(wrapper.find('label').attributes('for')).toBe(id)
   })
 
-  it.todo('filters options based on search term', async () => {
-    const wrapper = mount(SearchSelect, {
-      props: {
-        options: testOptions,
-        label: 'Test Label',
-        modelValue: null,
-      },
-      global: globalConfig,
-      attachTo: document.body, // Needed for focus/activeElement checks if any
-    })
-
-    const input = wrapper.find('input')
-    await input.trigger('focus') // Open menu
-    await input.trigger('click') // Ensure open
-    await input.setValue('Option 1')
-
-    // Wait for Zag machine to update
-    await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 50)) // Small delay for state machine
-
-    // Check if options are filtered
-    // With Zag, filtered options are computed.
-    // If using Teleport stub, the list should be in DOM if open.
-    const list = wrapper.find('ul')
-    expect(list.exists()).toBe(true)
-    expect(list.text()).toContain('Option 1')
-    expect(list.text()).not.toContain('Option 2')
-
-    wrapper.unmount()
-  })
-
-  it.todo('selects an option', async () => {
+  it('filters options based on search term', async () => {
     const wrapper = mount(SearchSelect, {
       props: {
         options: testOptions,
@@ -92,25 +60,22 @@ describe('SearchSelect', () => {
 
     const input = wrapper.find('input')
     await input.trigger('focus')
-    await input.trigger('click') // Trigger click to ensure open? (Zag usually opens on focus)
+    await input.trigger('click')
+    await input.setValue('Option 1')
 
+    // Wait for Zag to update
     await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 50))
+    await new Promise(r => setTimeout(r, 60))
 
-    const options = wrapper.findAll('li')
-    const option1 = options.find(o => o.text().includes('Option 1'))
-
-    expect(option1?.exists()).toBe(true)
-    await option1?.trigger('click')
-
-    await wrapper.vm.$nextTick()
-
-    // expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['opt1'])
+    const list = wrapper.find('ul')
+    expect(list.exists()).toBe(true)
+    expect(list.text()).toContain('Option 1')
+    expect(list.text()).not.toContain('Option 2')
 
     wrapper.unmount()
   })
 
-  it.todo('does not select disabled option', async () => {
+  it('selects an option', async () => {
     const wrapper = mount(SearchSelect, {
       props: {
         options: testOptions,
@@ -121,9 +86,43 @@ describe('SearchSelect', () => {
       attachTo: document.body,
     })
 
-    await wrapper.find('input').trigger('focus')
+    const input = wrapper.find('input')
+    await input.trigger('focus')
+    await input.trigger('click')
+
     await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 50))
+    await new Promise(r => setTimeout(r, 60))
+
+    const options = wrapper.findAll('li')
+    const option1 = options.find(o => o.text().includes('Option 1'))
+
+    expect(option1?.exists()).toBe(true)
+    await option1?.trigger('click')
+
+    await wrapper.vm.$nextTick()
+
+    // Zag emits array of keys, our component emits single key
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['opt1'])
+
+    wrapper.unmount()
+  })
+
+  it('does not select disabled option', async () => {
+    const wrapper = mount(SearchSelect, {
+      props: {
+        options: testOptions,
+        label: 'Test Label',
+        modelValue: null,
+      },
+      global: globalConfig,
+      attachTo: document.body,
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('focus')
+    await input.trigger('click')
+    await wrapper.vm.$nextTick()
+    await new Promise(r => setTimeout(r, 60))
 
     const disabledOption = wrapper
       .findAll('li')
@@ -140,7 +139,7 @@ describe('SearchSelect', () => {
     wrapper.unmount()
   })
 
-  it.todo('closes menu when clicking outside', async () => {
+  it('closes menu when clicking outside', async () => {
     const wrapper = mount(SearchSelect, {
       props: {
         options: testOptions,
@@ -153,8 +152,9 @@ describe('SearchSelect', () => {
 
     const input = wrapper.find('input')
     await input.trigger('focus')
+    await input.trigger('click')
     await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 50))
+    await new Promise(r => setTimeout(r, 60))
 
     expect(wrapper.find('ul').exists()).toBe(true)
 
@@ -166,13 +166,13 @@ describe('SearchSelect', () => {
     document.body.click()
 
     await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 50))
+    await new Promise(r => setTimeout(r, 60))
 
     expect(wrapper.find('ul').exists()).toBe(false)
 
     wrapper.unmount()
   })
-  it.todo('handles number keys correctly', async () => {
+  it('handles number keys correctly', async () => {
     const numberOptions: Option<number>[] = [
       { label: 'Num 1', key: 1 },
       { label: 'Num 2', key: 2 },
@@ -188,28 +188,64 @@ describe('SearchSelect', () => {
       attachTo: document.body,
     })
 
-    // Check if selected
     const input = wrapper.find('input')
-    // Zag might display label in input or placeholder?
-    // Implementation: itemToString uses label. Input display depends on Zag logic.
-    // If we rely on simple rendering check:
-    await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 50))
-
-    // In single select, value might be shown? SearchSelect usually shows user input 'searchTerm'.
-    // But initially?
-    // Let's just check the checkmark existence if we can open it.
     await input.trigger('focus')
     await input.trigger('click')
     await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 50))
+    await new Promise(r => setTimeout(r, 60))
 
     const list = wrapper.find('ul')
+    // Zag + string conversion means check serialized value or label
     const option1 = list.findAll('li').find(o => o.text().includes('Num 1'))
 
-    // Check if it's highlighted/selected
-    // Implementation uses check icon for selected
-    expect(option1?.findComponent({ name: 'CheckIcon' }).exists()).toBe(true)
+    // Check if it's highlighted/selected (CheckIcon exists)
+    expect(option1?.findComponent(CheckIcon).exists()).toBe(true)
+
+    wrapper.unmount()
+  })
+
+  it('selects all text on focus', async () => {
+    const wrapper = mount(SearchSelect, {
+      props: { options: testOptions, label: 'Test', modelValue: 'opt1' },
+      global: globalConfig,
+      attachTo: document.body,
+    })
+    const input = wrapper.find('input')
+    const element = input.element as HTMLInputElement
+    // Mock select method
+    element.select = vi.fn()
+
+    await input.trigger('focus')
+    expect(element.select).toHaveBeenCalled()
+    wrapper.unmount()
+  })
+
+  it('disables filtering if input matches selected label (Smart Filtering)', async () => {
+    const wrapper = mount(SearchSelect, {
+      props: { options: testOptions, label: 'Test', modelValue: 'opt1' },
+      global: globalConfig,
+      attachTo: document.body,
+    })
+    const input = wrapper.find('input')
+    await input.trigger('focus')
+    await input.trigger('click')
+    await wrapper.vm.$nextTick()
+    await new Promise(r => setTimeout(r, 60))
+
+    // Assuming input value is 'Option 1' (Zag sets it from filtered items or initial)
+    // Actually, Zag manages inputValue. The computed `effectiveSearchTerm` logic is in useSearchSelectMachine.
+    // If input value is 'Option 1' (matches label), filter should be empty -> all options shown.
+
+    // Simulate Zag updating input value to 'Option 1' (which happens on selection or initial load usually)
+    // Ideally we set input value to 'Option 1' manually to mimic this state
+    await input.setValue('Option 1')
+    await wrapper.vm.$nextTick()
+
+    const list = wrapper.find('ul')
+    expect(list.exists()).toBe(true)
+    // Should contain ALL options, not just Option 1
+    expect(list.text()).toContain('Option 1')
+    expect(list.text()).toContain('Option 2')
 
     wrapper.unmount()
   })

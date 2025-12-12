@@ -13,13 +13,19 @@ export function serializeOptionKey(val: string | number): string {
  * Also bypasses strict Index Signature checks by returning a loose Record.
  */
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function safeBind(props: object): Record<string, any> {
+/**
+ * Sanitizes props for v-bind to avoid strict type checks on undefined values.
+ * Useful when working with libraries like Zag.js that might return explicit undefined for optional props.
+ * Used with v-bind, which handles Generics gracefully.
+ */
+export function safeBind<T extends object>(
+  props: T
+): { [K in keyof T]: Exclude<T[K], undefined> } {
   const result: Record<string, unknown> = {}
   for (const [key, value] of Object.entries(props)) {
     if (value !== undefined) {
       result[key] = value
     }
   }
-  return result
+  return result as { [K in keyof T]: Exclude<T[K], undefined> }
 }

@@ -33,17 +33,20 @@ const toggleEditPartition = () => {
 }
 
 const handleUpdatePartition = async () => {
+  if (!editedPartition.value) {
+    toast.error('パーティションを選択してください')
+    return
+  }
   try {
     await editApplication(application.value.id, {
       ...application.value,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      partition: editedPartition.value!,
+      partition: editedPartition.value,
     })
     toast.success('更新しました')
+    isEditMode.value = false
   } catch {
     toast.error('更新に失敗しました')
   }
-  isEditMode.value = false
 }
 </script>
 

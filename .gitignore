@@ -9,3 +9,7 @@ debug.log
 
 .vscode/*
 !.vscode/extensions.json
+
+coverage
+test-results/
+playwright-report/

@@ -1,24 +1,22 @@
-<script lang="ts" setup>
+<script lang="ts" setup generic="T extends ApplicationTargetEditDraft">
 import { computed } from 'vue'
 
 import { TrashIcon } from '@heroicons/vue/24/solid'
 import { useToast } from 'vue-toastification'
 
+import type { ApplicationTargetEditDraft } from '@/components/applicationDetail/types'
 import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
-import SearchSelect from '@/components/shared/SearchSelect.vue'
+import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
-import type {
-  ApplicationTarget,
-  ApplicationTargetDetail,
-} from '@/features/applicationTarget/entities'
+import type { ApplicationTargetDetail } from '@/features/applicationTarget/entities'
 import { useUserStore } from '@/features/user/store'
 
 const props = defineProps<{
   application: ApplicationDetail
   isEditMode: boolean
-  target: ApplicationTargetDetail
+  target: ApplicationTargetDetail | ApplicationTargetEditDraft
   selectedUserIds: string[]
 }>()
 
@@ -29,12 +27,12 @@ const toast = useToast()
 const targetOptions = computed(() =>
   userOptions.value.filter(
     user =>
-      user.value === props.target.target ||
-      !props.selectedUserIds.includes(user.value)
+      user.key === props.target.target ||
+      !props.selectedUserIds.includes(user.key)
   )
 )
 
-const targetModel = defineModel<ApplicationTarget>('targetModel')
+const targetModel = defineModel<T>('targetModel', { required: true })
 
 const emit = defineEmits<(e: 'delete', id: string) => void>()
 
@@ -71,9 +69,15 @@ const handleRemoveTarget = async () => {
     v-if="!props.isEditMode"
     class="flex flex-wrap items-center justify-between gap-2 md:gap-0">
     <div class="flex items-center gap-1">
-      <UserIcon class="w-10" :name="getUserName(target.target)" />
+      <UserIcon
+        v-if="target.target"
+        class="w-10"
+        :name="getUserName(target.target)" />
       <div class="flex flex-col gap-1 break-all">
-        <div>{{ getUserNameWithFallback(target.target) }}</div>
+        <div v-if="target.target">
+          {{ getUserNameWithFallback(target.target) }}
+        </div>
+        <div v-else class="text-text-disabled">未選択</div>
         <div>{{ target.amount }}円</div>
       </div>
     </div>

@@ -17,15 +17,8 @@ export const useTagStore = defineStoreComposable('tag', () => {
 
   const tagOptions = computed(() =>
     tags.value.map(tag => ({
-      key: tag.name,
-      value: tag,
-    }))
-  )
-
-  const tagIdOptions = computed(() =>
-    tags.value.map(tag => ({
-      key: tag.name,
-      value: tag.id,
+      label: tag.name,
+      key: tag.id,
     }))
   )
 
@@ -47,24 +40,15 @@ export const useTagStore = defineStoreComposable('tag', () => {
     }
   }
 
-  const ensureTags = async (containNewTags: Tag[]): Promise<Tag[]> => {
-    const alreadyExists: Tag[] = []
-    const promises: Promise<Tag>[] = []
-
-    for (const tag of containNewTags) {
-      if (tag.id === '') {
-        promises.push(repository.createTag(tag.name))
-      } else {
-        alreadyExists.push(tag)
-      }
-    }
-
+  // TODO: Implement a dedicated UI for administrators to create, edit, and delete tags.
+  // This function is currently unused in the application creation flow but will be needed for tag management.
+  const createTag = async (name: string): Promise<Tag> => {
     try {
-      const created = await Promise.all(promises)
-      tags.value.push(...created)
-      return [...alreadyExists, ...created]
+      const newTag = await repository.createTag(name)
+      tags.value.push(newTag)
+      return newTag
     } catch {
-      throw new Error('新規タグの作成に失敗しました')
+      throw new Error('タグの作成に失敗しました')
     }
   }
 
@@ -89,9 +73,8 @@ export const useTagStore = defineStoreComposable('tag', () => {
     error,
     isTagFetched,
     tagOptions,
-    tagIdOptions,
     fetchTags,
-    ensureTags,
+    createTag,
     deleteTags,
     reset,
   }

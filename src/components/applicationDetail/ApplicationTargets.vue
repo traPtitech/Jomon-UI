@@ -1,15 +1,16 @@
+```typescript
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 
 import { useToast } from 'vue-toastification'
 
 import ApplicationTarget from '@/components/applicationDetail/ApplicationTarget.vue'
+import type { ApplicationTargetEditDraft } from '@/components/applicationDetail/types'
 import EditButton from '@/components/shared/EditButton.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useApplication } from '@/features/application/composables'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
-import type { ApplicationTargetDetail } from '@/features/applicationTarget/entities'
 import { useUserStore } from '@/features/user/store'
 
 const props = defineProps<{
@@ -24,15 +25,18 @@ const toast = useToast()
 const hasAuthority = isApplicationCreator.value(me.value)
 
 const isEditMode = ref(false)
-const editedTargets = ref<ApplicationTargetDetail[]>(
+const editedTargets = ref<ApplicationTargetEditDraft[]>(
   props.application.targets.map(t => ({ ...t }))
 )
 
-const selectedUserIds = computed(() =>
-  isEditMode.value
-    ? editedTargets.value.map(t => t.target)
-    : props.application.targets.map(t => t.target)
-)
+const selectedUserIds = computed(() => {
+  const targets = isEditMode.value
+    ? editedTargets.value
+    : props.application.targets
+  return targets
+    .map(t => t.target)
+    .filter((t): t is string => t !== null && t !== '')
+})
 
 const handleDeleteTarget = (id: string) => {
   editedTargets.value = editedTargets.value.filter(target => target.id !== id)
@@ -44,15 +48,36 @@ const toggleEditTargets = () => {
 }
 
 const handleUpdateTargets = async () => {
-  if (editedTargets.value.some(target => target.target === '')) {
-    toast.error('払い戻し対象者を選択してください')
+  const targets = editedTargets.value
+
+  // Validation: Ensure all necessary fields are filled
+  const validTargets = targets.filter(
+    (
+      t
+    ): t is ApplicationTargetEditDraft & { target: string; amount: number } => {
+      return t.target !== null && t.target !== '' && t.amount !== null
+    }
+  )
+
+  const hasEmptyTargets = validTargets.length !== targets.length
+
+  if (hasEmptyTargets) {
+    toast.error('払い戻し対象者と金額を入力してください')
     return
   }
+
+  // Conversion: Map to strict structure (safe because we validated above)
+  const strictTargets = validTargets.map(t => ({
+    id: t.id,
+    target: t.target,
+    amount: t.amount,
+  }))
+
   try {
     await editApplication(props.application.id, {
       ...props.application,
       partition: props.application.partition.id,
-      targets: editedTargets.value,
+      targets: strictTargets,
     })
     toast.success('更新しました')
   } catch {
@@ -82,15 +107,16 @@ const handleUpdateTargets = async () => {
     </div>
     <div v-if="application" class="flex flex-col gap-2">
       <template v-if="isEditMode">
-        <ApplicationTarget
-          v-for="(target, i) in editedTargets"
-          :key="target.id"
-          v-model:target-model="editedTargets[i]"
-          :is-edit-mode="isEditMode"
-          :application="application"
-          :target="target"
-          :selected-user-ids="selectedUserIds"
-          @delete="handleDeleteTarget" />
+        <div v-for="(target, i) in editedTargets" :key="target.id">
+          <ApplicationTarget
+            v-if="editedTargets[i]"
+            v-model:target-model="editedTargets[i]"
+            :is-edit-mode="isEditMode"
+            :application="application"
+            :target="target"
+            :selected-user-ids="selectedUserIds"
+            @delete="handleDeleteTarget" />
+        </div>
       </template>
       <template v-else>
         <ApplicationTarget
@@ -99,6 +125,7 @@ const handleUpdateTargets = async () => {
           :is-edit-mode="isEditMode"
           :application="application"
           :target="target"
+          :target-model="target"
           :selected-user-ids="selectedUserIds" />
       </template>
     </div>

@@ -20,6 +20,7 @@ const props = withDefaults(defineProps<Props>(), {
   step: 1,
   inputmode: 'decimal',
   errorMessage: '',
+  inputAttrs: () => ({}),
 })
 
 const model = defineModel<number | null>({ required: true })
@@ -104,6 +105,7 @@ const handleChange = (event: Event) => {
         :max="max"
         :step="step"
         :inputmode="inputmode"
+        v-bind="inputAttrs"
         :required="isFieldRequired"
         :aria-required="isFieldRequired ? 'true' : undefined"
         :aria-invalid="errorMessage ? 'true' : undefined"

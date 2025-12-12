@@ -18,11 +18,9 @@ const emit = defineEmits<{
 }>()
 
 const { me } = useUserStore()
-const {
-  canEditPartition,
-  currentPartition: partition,
-  editedValue,
-} = usePartitionStore()
+const { canEditPartition, currentPartition: partition } = usePartitionStore()
+
+const modelValue = defineModel<string>({ required: true })
 </script>
 
 <template>
@@ -30,7 +28,7 @@ const {
     <BaseTextInput
       required
       v-if="props.isEditMode"
-      v-model="editedValue.name"
+      v-model="modelValue"
       label="パーティション名"
       class="grow" />
     <h1 v-else class="grow text-2xl">

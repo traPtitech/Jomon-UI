@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useTemplateRef } from 'vue'
 
 import {
   type BaseInputCommonProps,
@@ -27,6 +27,7 @@ const props = withDefaults(defineProps<Props>(), {
   textarea: false,
   rows: 6,
   errorMessage: '',
+  inputAttrs: () => ({}),
 })
 
 const model = defineModel<string>({ required: true })
@@ -41,6 +42,10 @@ const { inputId, isFieldRequired, errorMessageId, describedBy } =
   useBaseInput(props)
 
 const hasValue = computed(() => model.value !== '')
+
+const inputRef = useTemplateRef<HTMLInputElement | HTMLTextAreaElement>(
+  'inputRef'
+)
 
 const handleInput = (event: Event) => {
   const target = event.target
@@ -69,6 +74,22 @@ const handleKeydown = (event: KeyboardEvent) => {
 const handleChange = (event: Event) => {
   emit('change', event)
 }
+
+defineExpose({
+  focus: () => {
+    inputRef.value?.focus()
+  },
+  select: () => {
+    inputRef.value?.select()
+  },
+  setSelectionRange: (
+    start: number,
+    end: number,
+    direction?: 'forward' | 'backward' | 'none'
+  ) => {
+    inputRef.value?.setSelectionRange(start, end, direction)
+  },
+})
 </script>
 
 <template>
@@ -89,6 +110,7 @@ const handleChange = (event: Event) => {
       <component
         :is="textarea ? 'textarea' : 'input'"
         :id="inputId"
+        ref="inputRef"
         :class="[
           inputProps.class,
           'w-full border-none bg-transparent px-3 pb-2 ring-0 outline-none not-focus-visible:placeholder:text-transparent',
@@ -107,6 +129,7 @@ const handleChange = (event: Event) => {
         :inputmode="inputmode"
         :autocomplete="autocomplete"
         :value="model"
+        v-bind="inputAttrs"
         @input="handleInput"
         @focus="handleFocus"
         @blur="handleBlur"

@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { computed, createApp, ref } from 'vue'
 
 import { createPinia, setActivePinia } from 'pinia'
 
@@ -161,8 +161,16 @@ describe('Application Store', () => {
       app.provide(ApplicationRepositoryKey, mockRepo)
 
       vi.mocked(useTagStore).mockReturnValue({
-        ensureTags: vi.fn().mockResolvedValue([]),
-      } as any) // eslint-disable-line @typescript-eslint/no-explicit-any
+        tags: ref([]),
+        status: ref('success'),
+        error: ref(null),
+        fetchTags: vi.fn(),
+        reset: vi.fn(),
+        isTagFetched: computed(() => true),
+        tagOptions: computed(() => []),
+        createTag: vi.fn(),
+        deleteTags: vi.fn(),
+      })
 
       const store = app.runWithContext(() => useApplicationStore())
       store.currentApplication.value = mockApplicationDetail

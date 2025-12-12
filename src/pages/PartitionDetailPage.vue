@@ -17,7 +17,7 @@ const id = toId(route.params.id)
 const { isUserFetched, fetchUsers } = useUserStore()
 const { currentPartition: partition, fetchPartition } = usePartitionStore()
 
-const { isSending, editMode, changeEditMode, finishEditing } =
+const { isSending, editMode, changeEditMode, finishEditing, editedValue } =
   usePartitionInformation()
 const { isPartitionGroupFetched, fetchPartitionGroups } =
   usePartitionGroupStore()
@@ -35,6 +35,7 @@ if (!isPartitionGroupFetched.value) {
     <div class="flex grow flex-col">
       <p>パーティション名</p>
       <PartitionName
+        v-model="editedValue.name"
         :is-edit-mode="editMode === 'name'"
         :is-sending="isSending"
         @change-edit-mode="changeEditMode($event)"
@@ -43,6 +44,7 @@ if (!isPartitionGroupFetched.value) {
     <div class="flex grow flex-col">
       <p>パーティショングループ</p>
       <PartitionGroup
+        v-model="editedValue.parentPartitionGroupId"
         :is-edit-mode="editMode === 'partitionGroup'"
         :is-sending="isSending"
         @change-edit-mode="changeEditMode($event)"
@@ -51,6 +53,7 @@ if (!isPartitionGroupFetched.value) {
     <div class="flex grow flex-col">
       <p>予算</p>
       <PartitionBudget
+        v-model="editedValue.budget"
         :is-edit-mode="editMode === 'budget'"
         :is-sending="isSending"
         @change-edit-mode="changeEditMode($event)"

@@ -10,8 +10,3 @@ export interface ApplicationTargetDetail extends ApplicationTarget {
   paidAt: string | null
   createdAt: DateTime
 }
-
-export interface ApplicationTargetDraft {
-  amount: number | null
-  target: string
-}

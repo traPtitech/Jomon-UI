@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { EditMode } from '@/components/partitionDetail/composables/usePartitionInformation'
 import EditButton from '@/components/shared/EditButton.vue'
-import SearchSelect from '@/components/shared/SearchSelect.vue'
+import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { usePartitionStore } from '@/features/partition/store'
 import { usePartitionGroupStore } from '@/features/partitionGroup/store'
@@ -19,13 +19,11 @@ const emit = defineEmits<{
 }>()
 
 const { me } = useUserStore()
-const {
-  canEditPartition,
-  currentPartition: partition,
-  editedValue,
-} = usePartitionStore()
+const { canEditPartition, currentPartition: partition } = usePartitionStore()
 const { partitionGroupIdNameToMap, partitionGroupOptions } =
   usePartitionGroupStore()
+
+const modelValue = defineModel<string | null>({ required: true })
 </script>
 
 <template>
@@ -33,7 +31,7 @@ const { partitionGroupIdNameToMap, partitionGroupOptions } =
     <SearchSelect
       required
       v-if="props.isEditMode"
-      v-model="editedValue.parentPartitionGroupId"
+      v-model="modelValue"
       class="grow"
       :options="partitionGroupOptions"
       label="パーティショングループ" />

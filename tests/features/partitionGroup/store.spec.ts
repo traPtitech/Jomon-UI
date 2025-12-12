@@ -101,11 +101,6 @@ describe('PartitionGroup Store', () => {
 
       expect(mockFetchPartitionGroup).toHaveBeenCalledWith('group-1')
       expect(store.currentPartitionGroup.value).toEqual(mockPartitionGroup)
-      expect(store.editedValue.value).toEqual({
-        name: mockPartitionGroup.name,
-        parentPartitionGroupId: mockPartitionGroup.parentPartitionGroupId,
-        depth: mockPartitionGroup.depth,
-      })
     })
 
     it('createPartitionGroup creates group and adds to list', async () => {
@@ -173,7 +168,7 @@ describe('PartitionGroup Store', () => {
       store.partitionGroups.value = [mockPartitionGroup]
 
       expect(store.partitionGroupOptions.value).toEqual([
-        { key: mockPartitionGroup.name, value: mockPartitionGroup.id },
+        { label: mockPartitionGroup.name, key: mockPartitionGroup.id },
       ])
     })
 

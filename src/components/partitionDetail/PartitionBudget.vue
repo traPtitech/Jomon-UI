@@ -19,18 +19,16 @@ const emit = defineEmits<{
 }>()
 
 const { me } = useUserStore()
-const {
-  canEditPartition,
-  currentPartition: partition,
-  editedValue,
-} = usePartitionStore()
+const { canEditPartition, currentPartition: partition } = usePartitionStore()
+
+const modelValue = defineModel<number | null>({ required: true })
 </script>
 
 <template>
   <div v-if="partition" class="flex items-center gap-3">
     <BaseNumberInput
       v-if="props.isEditMode"
-      v-model="editedValue.budget"
+      v-model="modelValue"
       label="予算"
       class="grow" />
 

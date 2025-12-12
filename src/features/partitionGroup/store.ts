@@ -10,12 +10,6 @@ import type {
 import type { User } from '@/features/user/entities'
 import type { AsyncStatus } from '@/types'
 
-const createDefaultPartitionGroupSeed = (): PartitionGroupSeed => ({
-  name: '',
-  parentPartitionGroupId: null,
-  depth: 0,
-})
-
 export const usePartitionGroupStore = defineStoreComposable(
   'partitionGroup',
   () => {
@@ -26,14 +20,11 @@ export const usePartitionGroupStore = defineStoreComposable(
     const status = ref<AsyncStatus>('idle')
     const error = ref<string | null>(null)
     const currentPartitionGroup = ref<PartitionGroup | undefined>(undefined)
-    const editedValue = ref<PartitionGroupSeed>(
-      createDefaultPartitionGroupSeed()
-    )
 
     const partitionGroupOptions = computed(() =>
       partitionGroups.value.map(group => ({
-        key: group.name,
-        value: group.id,
+        label: group.name,
+        key: group.id,
       }))
     )
 
@@ -68,11 +59,6 @@ export const usePartitionGroupStore = defineStoreComposable(
       try {
         const partitionGroup = await repository.fetchPartitionGroup(id)
         currentPartitionGroup.value = partitionGroup
-        editedValue.value = {
-          name: partitionGroup.name,
-          parentPartitionGroupId: partitionGroup.parentPartitionGroupId,
-          depth: partitionGroup.depth,
-        }
       } catch {
         throw new Error('パーティショングループの取得に失敗しました')
       }
@@ -102,12 +88,6 @@ export const usePartitionGroupStore = defineStoreComposable(
           partitionGroups.value.splice(index, 1, res)
         }
       } catch {
-        editedValue.value = {
-          name: currentPartitionGroup.value.name,
-          parentPartitionGroupId:
-            currentPartitionGroup.value.parentPartitionGroupId,
-          depth: currentPartitionGroup.value.depth,
-        }
         throw new Error('パーティショングループの更新に失敗しました')
       }
     }
@@ -126,7 +106,6 @@ export const usePartitionGroupStore = defineStoreComposable(
 
     const resetDetail = () => {
       currentPartitionGroup.value = undefined
-      editedValue.value = createDefaultPartitionGroupSeed()
     }
 
     return {
@@ -135,7 +114,6 @@ export const usePartitionGroupStore = defineStoreComposable(
       error,
       isPartitionGroupFetched,
       currentPartitionGroup,
-      editedValue,
       partitionGroupOptions,
       canEditPartitionGroup,
       partitionGroupIdNameToMap,

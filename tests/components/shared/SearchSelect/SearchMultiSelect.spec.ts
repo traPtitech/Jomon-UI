@@ -145,70 +145,67 @@ describe('SearchMultiSelect', () => {
     wrapper.unmount()
   })
 
-  it.todo(
-    'removes last item on Backspace when search term is empty',
-    async () => {
-      const wrapper = mount(SearchMultiSelect, {
-        props: {
-          options: testOptions,
-          label: 'Test Label',
-          modelValue: ['opt1', 'opt2'],
-        },
-        global: globalConfig,
-        attachTo: document.body,
-      })
+  it('removes last item on Backspace when search term is empty', async () => {
+    const wrapper = mount(SearchMultiSelect, {
+      props: {
+        options: testOptions,
+        label: 'Test Label',
+        modelValue: ['opt1', 'opt2'],
+      },
+      global: globalConfig,
+      attachTo: document.body,
+    })
 
-      const input = wrapper.find('input')
-      await input.trigger('focus')
-      // Ensure input value is empty
-      expect((input.element as HTMLInputElement).value).toBe('')
+    const input = wrapper.find('input')
+    await input.trigger('focus')
+    // Ensure input value is empty
+    expect((input.element as HTMLInputElement).value).toBe('')
 
-      // Ensure input value is synchronized as empty for Zag
-      await input.setValue('')
+    // Ensure input value is synchronized as empty for Zag
+    await input.setValue('')
 
-      // Zag checks `input.selectionStart === 0`. JSDOM inputs usually have 0.
-      const element = input.element as HTMLInputElement
-      element.focus() // essential for Zag to recognize it as active
+    // Zag checks `input.selectionStart === 0`. JSDOM inputs usually have 0.
+    const element = input.element as HTMLInputElement
+    element.focus() // essential for Zag to recognize it as active
 
-      // Verify focus
-      expect(document.activeElement).toBe(element)
+    // Verify focus
+    expect(document.activeElement).toBe(element)
 
-      element.selectionStart = 0
-      element.selectionEnd = 0
+    element.selectionStart = 0
+    element.selectionEnd = 0
 
-      // Provide full keydown event details (First Backspace - Highlight)
-      await input.trigger('keydown', {
-        key: 'Backspace',
-        code: 'Backspace',
-        keyCode: 8,
-        which: 8,
-      })
-      await wrapper.vm.$nextTick()
-      await new Promise(r => setTimeout(r, 60))
+    // Provide full keydown event details (First Backspace - Highlight)
+    await input.trigger('keydown', {
+      key: 'Backspace',
+      code: 'Backspace',
+      keyCode: 8,
+      which: 8,
+    })
+    await wrapper.vm.$nextTick()
+    await new Promise(r => setTimeout(r, 60))
 
-      // Second Backspace - Remove
-      await input.trigger('keydown', {
-        key: 'Backspace',
-        code: 'Backspace',
-        keyCode: 8,
-        which: 8,
-      })
-      await wrapper.vm.$nextTick()
-      await new Promise(r => setTimeout(r, 60))
+    // Second Backspace - Remove
+    await input.trigger('keydown', {
+      key: 'Backspace',
+      code: 'Backspace',
+      keyCode: 8,
+      which: 8,
+    })
+    await wrapper.vm.$nextTick()
+    await new Promise(r => setTimeout(r, 60))
 
-      const emitted = wrapper.emitted('update:modelValue')
-      // Check if emission occurred
-      expect(emitted).toBeDefined()
-      // If double backspace was needed, we might have 1 emission now.
-      // If single was needed, we might have 2 (one for each).
-      // Zag usually updates state.
-      // We check the LAST emission if multiple.
-      const lastEmission = emitted?.[emitted.length - 1]
-      expect(lastEmission?.[0]).toEqual(['opt1'])
+    const emitted = wrapper.emitted('update:modelValue')
+    // Check if emission occurred
+    expect(emitted).toBeDefined()
+    // If double backspace was needed, we might have 1 emission now.
+    // If single was needed, we might have 2 (one for each).
+    // Zag usually updates state.
+    // We check the LAST emission if multiple.
+    const lastEmission = emitted?.[emitted.length - 1]
+    expect(lastEmission?.[0]).toEqual(['opt1'])
 
-      wrapper.unmount()
-    }
-  )
+    wrapper.unmount()
+  })
 
   it('selects all text on focus', async () => {
     const wrapper = mount(SearchMultiSelect, {

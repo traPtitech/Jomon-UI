@@ -72,6 +72,21 @@ const isFloating = computed(() => {
     apiVal.inputValue.length > 0 || apiVal.value.length > 0 || apiVal.focused
   )
 })
+const handleInputKeydown = (e: KeyboardEvent) => {
+  if (props.disabled) return
+
+  // Backspace deletion for MultiSelect
+  // If input is empty and we have values, remove the last one.
+  if (e.key === 'Backspace' && machineApi.value.inputValue === '') {
+    const currentValues = machineApi.value.value // string[] of keys
+    if (currentValues.length > 0) {
+      // machineApi.value.value are string keys.
+      // We need to find the last one and remove it.
+      const lastKeyStr = currentValues[currentValues.length - 1]
+      api.value.clearValue(lastKeyStr)
+    }
+  }
+}
 </script>
 
 <template>
@@ -80,7 +95,8 @@ const isFloating = computed(() => {
       <SearchSelectPrimitiveInput
         v-bind="safeBind(machineApi.getInputProps())"
         :id="id"
-        :placeholder="isFloating ? '' : placeholder" />
+        :placeholder="isFloating ? '' : placeholder"
+        @keydown="handleInputKeydown" />
       <!-- We can't rely solely on peer-placeholder-shown if we want 'value.length > 0' to trigger floating.
            So we explicitly control label classes based on isFloating.
       -->

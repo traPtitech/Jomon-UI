@@ -108,6 +108,45 @@ test.describe('SearchSelect E2E', () => {
     ).toBeVisible()
   })
 
+  test('Multi Select (Tags) removes last item on Backspace', async ({
+    page,
+  }) => {
+    const input = page.getByRole('combobox', { name: 'タグ' })
+
+    // Select multiple options
+    await input.click()
+    await input.fill('2021')
+    const opt2021 = page.getByRole('option', { name: '2021講習会' })
+    await expect(opt2021).toBeVisible()
+    await opt2021.click({ force: true })
+
+    await input.fill('2022')
+    const opt2022 = page.getByRole('option', { name: '2022講習会' })
+    await expect(opt2022).toBeVisible()
+    await opt2022.click({ force: true })
+
+    // Wait for the tag to appear to confirm selection
+    await expect(
+      page.getByLabel('Selection').getByText('2022講習会')
+    ).toBeVisible()
+
+    // Clear input
+    await input.fill('')
+
+    // Ensure we are focused before pressing backspace
+    await input.click()
+
+    await input.press('Backspace')
+
+    await expect(
+      page.getByLabel('Selection').getByText('2022講習会')
+    ).toBeHidden()
+
+    await expect(
+      page.getByLabel('Selection').getByText('2021講習会')
+    ).toBeVisible()
+  })
+
   test('Single Select (Partition) re-opens dropdown on input click', async ({
     page,
   }) => {

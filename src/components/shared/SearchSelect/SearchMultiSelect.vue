@@ -7,14 +7,13 @@ import {
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
 
-import { safeBind, serializeOptionKey } from '@/components/shared/utils'
-
 import { useSearchSelectMachine } from './composables/useSearchSelectMachine'
 import SearchSelectPrimitiveInput from './primitives/SearchSelectPrimitiveInput.vue'
 import SearchSelectPrimitiveItem from './primitives/SearchSelectPrimitiveItem.vue'
 import SearchSelectPrimitiveList from './primitives/SearchSelectPrimitiveList.vue'
 import SearchSelectPrimitiveRoot from './primitives/SearchSelectPrimitiveRoot.vue'
 import type { SearchSelectCommonProps, SearchSelectEmit } from './types'
+import { safeBind, serializeOptionKey } from './utils'
 
 const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
   placeholder: '検索',

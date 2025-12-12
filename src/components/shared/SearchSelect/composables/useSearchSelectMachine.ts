@@ -3,9 +3,8 @@ import { type MaybeRef, computed, ref, toValue } from 'vue'
 import * as combobox from '@zag-js/combobox'
 import { normalizeProps, useMachine } from '@zag-js/vue'
 
-import { serializeOptionKey } from '@/components/shared/utils'
-
 import type { Option } from '../types'
+import { serializeOptionKey } from '../utils'
 import { useSearchSelectFiltering } from './useSearchSelectFiltering'
 
 export interface UseSearchSelectMachineProps<T extends string | number> {

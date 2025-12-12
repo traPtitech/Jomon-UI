@@ -1,8 +1,7 @@
 import { type MaybeRefOrGetter, type Ref, computed, toValue } from 'vue'
 
-import { serializeOptionKey } from '@/components/shared/utils'
-
 import type { Option } from '../types'
+import { serializeOptionKey } from '../utils'
 
 export function useSearchSelectFiltering<T extends string | number>(
   options: MaybeRefOrGetter<readonly Option<T>[]>,

@@ -25,15 +25,6 @@ export function useSearchSelectMachine<T extends string | number>(
   props: UseSearchSelectMachineProps<T>,
   emit: (event: 'update:modelValue', value: T | T[] | null) => void
 ) {
-  // Local state for filtering
-  const searchTerm = ref('')
-
-  const filteredOptions = useSearchSelectFiltering(
-    props.options,
-    searchTerm,
-    props.filterFunction
-  )
-
   // Create a map for O(1) lookup and validation of string keys
   const keyToOptionMap = computed(() => {
     const map = new Map<string, Option<T>>()
@@ -49,6 +40,41 @@ export function useSearchSelectMachine<T extends string | number>(
     }
     return map
   })
+
+  // Local state for filtering
+  const searchTerm = ref('')
+
+  // Determine current label for Smart Filtering (Single Select only)
+  // If inputValue matches the label of the currently selected item, we don't filter.
+  const currentLabel = computed(() => {
+    const modelVal = toValue(props.modelValue)
+    if (
+      Array.isArray(modelVal) ||
+      modelVal === null ||
+      modelVal === undefined
+    ) {
+      return null
+    }
+    const keyStr = serializeOptionKey(modelVal)
+    const option = keyToOptionMap.value.get(keyStr)
+    return option ? option.label : null
+  })
+
+  // Start Filtering with "Smart" logic
+  const effectiveSearchTerm = computed(() => {
+    const term = searchTerm.value
+    // If term exactly matches the current label, treat as empty search (show all)
+    if (currentLabel.value && term === currentLabel.value) {
+      return ''
+    }
+    return term
+  })
+
+  const filteredOptions = useSearchSelectFiltering(
+    props.options,
+    effectiveSearchTerm,
+    props.filterFunction
+  )
 
   const collection = computed(() =>
     combobox.collection({

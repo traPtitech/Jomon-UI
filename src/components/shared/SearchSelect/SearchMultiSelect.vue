@@ -81,7 +81,6 @@ const isFloating = computed(() => {
       <SearchSelectPrimitiveInput
         v-bind="safeBind(machineApi.getInputProps())"
         :id="id"
-        class="peer h-12 w-full rounded-md border border-gray-300 px-3 pt-6 pb-2 focus:border-blue-500 focus:ring-blue-500"
         :placeholder="isFloating ? '' : placeholder" />
       <!-- We can't rely solely on peer-placeholder-shown if we want 'value.length > 0' to trigger floating.
            So we explicitly control label classes based on isFloating.

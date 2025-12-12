@@ -10,12 +10,6 @@ export function serializeOptionKey(val: string | number): string {
 /**
  * Sanitizes props for v-bind to avoid strict type checks on undefined values.
  * Useful when working with libraries like Zag.js that might return explicit undefined for optional props.
- * Also bypasses strict Index Signature checks by returning a loose Record.
- */
-
-/**
- * Sanitizes props for v-bind to avoid strict type checks on undefined values.
- * Useful when working with libraries like Zag.js that might return explicit undefined for optional props.
  * Used with v-bind, which handles Generics gracefully.
  */
 export function safeBind<T extends object>(

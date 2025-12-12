@@ -25,11 +25,14 @@ export function useSearchSelectFiltering<T extends string | number>(
       }
     }
 
-    const lowerTerm = searchTerm.toLocaleLowerCase('ja')
+    const lowerTerm = searchTerm.normalize('NFKC').toLocaleLowerCase('ja')
     return opts.filter(
       opt =>
-        opt.label.toLocaleLowerCase('ja').includes(lowerTerm) ||
-        serializeOptionKey(opt.key).toLocaleLowerCase('ja').includes(lowerTerm)
+        opt.label.normalize('NFKC').toLocaleLowerCase('ja').includes(lowerTerm) ||
+        serializeOptionKey(opt.key)
+          .normalize('NFKC')
+          .toLocaleLowerCase('ja')
+          .includes(lowerTerm)
     )
   })
 }

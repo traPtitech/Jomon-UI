@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="TValue extends string | number | null">
-import { computed, onMounted, useId } from 'vue'
+import { computed, useId } from 'vue'
 
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/24/outline'
 
@@ -16,7 +16,6 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
   disabled: false,
   required: false,
   resetOnSelect: false,
-  theme: () => ({ themeColor: 'blue' }),
   errorMessage: undefined,
 })
 
@@ -24,6 +23,7 @@ const emit = defineEmits<SearchSelectEmit<TValue | null>>()
 const model = defineModel<TValue | null>({ required: true })
 
 const id = useId()
+const errorId = `${id}-error`
 
 const { api, filteredOptions } = useSearchSelectMachine<NonNullable<TValue>>(
   {
@@ -34,11 +34,16 @@ const { api, filteredOptions } = useSearchSelectMachine<NonNullable<TValue>>(
     placeholder: computed(() => props.placeholder),
     modelValue: computed(() => model.value),
     filterFunction: props.filterFunction,
+    resetOnSelect: computed(() => props.resetOnSelect),
   },
   // Adapter for emit to match types
   (event, value) => {
+    if (event === 'close') {
+      emit('close')
+      return
+    }
     if (!Array.isArray(value)) {
-      emit(event, value)
+      emit(event, value ?? null)
     }
   }
 )
@@ -46,7 +51,17 @@ const { api, filteredOptions } = useSearchSelectMachine<NonNullable<TValue>>(
 // Zag types are complex, but we can use them directly now
 const machineApi = computed(() => api.value)
 
-onMounted(() => {})
+const selectedKeysSet = computed(() => {
+  return new Set(machineApi.value.value)
+})
+
+// Floating Label Condition
+const isFloating = computed(() => {
+  const apiVal = machineApi.value
+  return (
+    apiVal.inputValue.length > 0 || apiVal.value.length > 0 || apiVal.focused
+  )
+})
 </script>
 
 <template>
@@ -56,20 +71,29 @@ onMounted(() => {})
       <SearchSelectPrimitiveInput
         v-bind="safeBind(machineApi.getInputProps())"
         :id="id"
-        placeholder=" " />
-      <!-- Note: placeholder=" " (space) is required for peer-placeholder-shown to work -->
+        :placeholder="isFloating ? '' : placeholder"
+        :aria-invalid="!!errorMessage"
+        :aria-describedby="errorMessage ? errorId : undefined"
+        @keydown="emit('keydown', $event)" />
 
       <!-- Floating Label -->
       <label
         v-bind="safeBind(machineApi.getLabelProps())"
         :for="id"
-        class="pointer-events-none absolute top-2 left-3 text-gray-500 transition-all duration-200 peer-not-placeholder-shown:top-1 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-xs peer-focus:text-blue-500">
+        class="pointer-events-none absolute left-3 transition-all duration-200"
+        :class="[
+          isFloating
+            ? 'top-1 text-xs text-blue-500' // or text-gray-500 if not focused?
+            : 'top-3.5 text-base text-gray-400',
+          machineApi.focused ? 'text-blue-500' : 'text-gray-500',
+        ]">
         {{ label }}
         <span v-if="required" class="ml-0.5 text-red-500">*</span>
       </label>
 
       <!-- Trigger Button (Chevron) -->
       <button
+        type="button"
         v-bind="safeBind(machineApi.getTriggerProps())"
         class="absolute inset-y-0 right-0 flex items-center pr-2"
         tabindex="-1">
@@ -78,7 +102,7 @@ onMounted(() => {})
     </div>
 
     <!-- Error Message -->
-    <p v-if="errorMessage" class="mt-1 text-sm text-red-600">
+    <p v-if="errorMessage" :id="errorId" class="mt-1 text-sm text-red-600">
       {{ errorMessage }}
     </p>
 
@@ -95,24 +119,31 @@ onMounted(() => {})
             <div class="flex items-center justify-between">
               <span
                 :class="{
-                  'font-semibold': machineApi.value.includes(
+                  'font-semibold': selectedKeysSet.has(
                     serializeOptionKey(item.key)
                   ),
                 }">
                 {{ item.label }}
               </span>
               <CheckIcon
-                v-if="machineApi.value.includes(serializeOptionKey(item.key))"
+                v-if="selectedKeysSet.has(serializeOptionKey(item.key))"
                 class="h-4 w-4 text-blue-600" />
             </div>
           </SearchSelectPrimitiveItem>
 
-          <!-- No Results -->
-          <div
-            v-if="filteredOptions.length === 0"
+          <!-- No Items / No Results -->
+          <li
+            v-if="props.options.length === 0"
+            role="presentation"
+            class="px-4 py-2 text-sm text-gray-500">
+            {{ props.noItemsText || '項目がありません。' }}
+          </li>
+          <li
+            v-else-if="filteredOptions.length === 0"
+            role="presentation"
             class="px-4 py-2 text-sm text-gray-500">
             {{ props.noResultsText || '該当する項目がありません。' }}
-          </div>
+          </li>
         </SearchSelectPrimitiveList>
       </div>
     </Teleport>

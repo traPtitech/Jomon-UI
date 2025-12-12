@@ -25,29 +25,6 @@ export type SearchSelectEmit<T> = {
   (e: 'close'): void
 }
 
-export interface SearchSelectTheme {
-  /**
-   * Theme color for the component.
-   * @default 'blue'
-   */
-  themeColor?: 'blue' | 'gray'
-  /**
-   * Custom class for the active (highlighted) option.
-   * If provided, overrides default theme styles for the active state.
-   */
-  activeOptionClass?: string
-  /**
-   * Custom class for the hovered option.
-   * If provided, overrides default theme styles for the hover state.
-   */
-  hoverOptionClass?: string
-  /**
-   * Custom class for the selected option.
-   * If provided, overrides default theme styles for the selected state.
-   */
-  selectedOptionClass?: string
-}
-
 export interface SearchSelectCommonProps<
   TValue extends string | number | null,
 > {
@@ -85,13 +62,4 @@ export interface SearchSelectCommonProps<
    * @default '項目がありません。'
    */
   noItemsText?: string | undefined
-  /**
-   * Height of each item in the virtual list (pixels).
-   * @default 36
-   */
-  itemHeight?: number | undefined
-  /**
-   * Theming options.
-   */
-  theme?: SearchSelectTheme | undefined
 }

@@ -18,11 +18,15 @@ export interface UseSearchSelectMachineProps<T extends string | number> {
   filterFunction?:
     | ((option: Option<T>, searchTerm: string) => boolean)
     | undefined
+  resetOnSelect?: MaybeRef<boolean> | undefined
 }
 
 export function useSearchSelectMachine<T extends string | number>(
   props: UseSearchSelectMachineProps<T>,
-  emit: (event: 'update:modelValue', value: T | T[] | null) => void
+  emit: (
+    event: 'update:modelValue' | 'close',
+    value?: T | T[] | null
+  ) => void
 ) {
   // Create a map for O(1) lookup and validation of string keys
   const keyToOptionMap = computed(() => {
@@ -80,6 +84,7 @@ export function useSearchSelectMachine<T extends string | number>(
       items: filteredOptions.value,
       itemToString: item => (item ? item.label : ''),
       itemToValue: item => (item ? serializeOptionKey(item.key) : ''),
+      isItemDisabled: item => (item ? !!item.disabled : false),
     })
   )
 
@@ -94,6 +99,10 @@ export function useSearchSelectMachine<T extends string | number>(
       value = [serializeOptionKey(modelVal)]
     }
 
+    const selectionBehavior: 'clear' | 'replace' = toValue(props.resetOnSelect)
+      ? 'clear'
+      : 'replace'
+
     return {
       id: props.id,
       collection: collection.value,
@@ -103,6 +112,7 @@ export function useSearchSelectMachine<T extends string | number>(
       placeholder: toValue(props.placeholder),
       value, // Controlled selection
       openOnClick: true,
+      selectionBehavior,
       // We do NOT control inputValue here, we let Zag manage it and listen to changes
 
       onValueChange: (details: combobox.ValueChangeDetails) => {
@@ -125,6 +135,11 @@ export function useSearchSelectMachine<T extends string | number>(
       },
       onInputValueChange: (details: combobox.InputValueChangeDetails) => {
         searchTerm.value = details.inputValue
+      },
+      onOpenChange: (details: combobox.OpenChangeDetails) => {
+        if (!details.open) {
+          emit('close')
+        }
       },
     }
   })

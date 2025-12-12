@@ -20,7 +20,6 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
   disabled: false,
   required: false,
   resetOnSelect: true,
-  theme: () => ({ themeColor: 'blue' }),
   errorMessage: undefined,
 })
 
@@ -28,6 +27,7 @@ const emit = defineEmits<SearchSelectEmit<TValue[]>>()
 const model = defineModel<TValue[]>({ required: true })
 
 const id = useId()
+const errorId = `${id}-error`
 
 const { api, filteredOptions } = useSearchSelectMachine<TValue>(
   {
@@ -38,8 +38,13 @@ const { api, filteredOptions } = useSearchSelectMachine<TValue>(
     placeholder: computed(() => props.placeholder),
     modelValue: computed(() => model.value),
     filterFunction: props.filterFunction,
+    resetOnSelect: computed(() => props.resetOnSelect),
   },
   (event, value) => {
+    if (event === 'close') {
+      emit('close')
+      return
+    }
     if (Array.isArray(value)) {
       emit(event, value)
     }
@@ -55,6 +60,10 @@ const optionMap = computed(() => {
     map.set(serializeOptionKey(option.key), option.label)
   }
   return map
+})
+
+const selectedKeysSet = computed(() => {
+  return new Set(machineApi.value.value)
 })
 
 // Remove tag handler
@@ -73,6 +82,7 @@ const isFloating = computed(() => {
   )
 })
 const handleInputKeydown = (e: KeyboardEvent) => {
+  emit('keydown', e)
   if (props.disabled) return
 
   // Backspace deletion for MultiSelect
@@ -96,6 +106,8 @@ const handleInputKeydown = (e: KeyboardEvent) => {
         v-bind="safeBind(machineApi.getInputProps())"
         :id="id"
         :placeholder="isFloating ? '' : placeholder"
+        :aria-invalid="!!errorMessage"
+        :aria-describedby="errorMessage ? errorId : undefined"
         @keydown="handleInputKeydown" />
       <!-- We can't rely solely on peer-placeholder-shown if we want 'value.length > 0' to trigger floating.
            So we explicitly control label classes based on isFloating.
@@ -116,6 +128,7 @@ const handleInputKeydown = (e: KeyboardEvent) => {
       </label>
 
       <button
+        type="button"
         v-bind="safeBind(machineApi.getTriggerProps())"
         class="absolute inset-y-0 right-0 flex items-center pr-2"
         tabindex="-1">
@@ -136,6 +149,7 @@ const handleInputKeydown = (e: KeyboardEvent) => {
         {{ optionMap.get(valStr) ?? valStr }}
         <button
           type="button"
+          :aria-label="`${optionMap.get(valStr) ?? valStr} を削除`"
           class="ml-1 rounded-full hover:bg-gray-300"
           @click.stop="removeItem(valStr)">
           <XMarkIcon class="h-3 w-3" />
@@ -144,7 +158,7 @@ const handleInputKeydown = (e: KeyboardEvent) => {
     </div>
 
     <!-- Error Message -->
-    <p v-if="errorMessage" class="mt-1 text-sm text-red-600">
+    <p v-if="errorMessage" :id="errorId" class="mt-1 text-sm text-red-600">
       {{ errorMessage }}
     </p>
 
@@ -162,12 +176,12 @@ const handleInputKeydown = (e: KeyboardEvent) => {
               <div
                 class="mr-2 flex h-4 w-4 items-center justify-center rounded border border-gray-300">
                 <CheckIcon
-                  v-if="machineApi.value.includes(serializeOptionKey(item.key))"
+                  v-if="selectedKeysSet.has(serializeOptionKey(item.key))"
                   class="h-3 w-3 text-blue-600" />
               </div>
               <span
                 :class="{
-                  'font-semibold': machineApi.value.includes(
+                  'font-semibold': selectedKeysSet.has(
                     serializeOptionKey(item.key)
                   ),
                 }">
@@ -176,11 +190,18 @@ const handleInputKeydown = (e: KeyboardEvent) => {
             </div>
           </SearchSelectPrimitiveItem>
 
-          <div
-            v-if="filteredOptions.length === 0"
+          <li
+            v-if="props.options.length === 0"
+            role="presentation"
+            class="px-4 py-2 text-sm text-gray-500">
+            {{ props.noItemsText || '項目がありません。' }}
+          </li>
+          <li
+            v-else-if="filteredOptions.length === 0"
+            role="presentation"
             class="px-4 py-2 text-sm text-gray-500">
             {{ props.noResultsText || '該当する項目がありません。' }}
-          </div>
+          </li>
         </SearchSelectPrimitiveList>
       </div>
     </Teleport>

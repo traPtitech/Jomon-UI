@@ -213,10 +213,11 @@ describe('SearchSelect', () => {
     const input = wrapper.find('input')
     const element = input.element as HTMLInputElement
     // Mock select method
-    element.select = vi.fn()
+    const selectMock = vi.fn()
+    element.select = selectMock
 
     await input.trigger('focus')
-    expect(element.select).toHaveBeenCalled()
+    expect(selectMock).toHaveBeenCalled()
     wrapper.unmount()
   })
 

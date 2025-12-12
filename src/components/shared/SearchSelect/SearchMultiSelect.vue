@@ -83,7 +83,7 @@ const isFloating = computed(() => {
 })
 const handleInputKeydown = (e: KeyboardEvent) => {
   emit('keydown', e)
-  if (props.disabled) return
+  if (props.disabled || e.isComposing) return
 
   // Backspace deletion for MultiSelect
   // If input is empty and we have values, remove the last one.
@@ -104,7 +104,6 @@ const handleInputKeydown = (e: KeyboardEvent) => {
     <div v-bind="safeBind(machineApi.getControlProps())" class="group relative">
       <SearchSelectPrimitiveInput
         v-bind="safeBind(machineApi.getInputProps())"
-        :id="id"
         :placeholder="isFloating ? '' : placeholder"
         :aria-invalid="!!errorMessage"
         :aria-describedby="errorMessage ? errorId : undefined"
@@ -113,9 +112,9 @@ const handleInputKeydown = (e: KeyboardEvent) => {
            So we explicitly control label classes based on isFloating.
       -->
 
+      <!-- eslint-disable vuejs-accessibility/label-has-for -->
       <label
         v-bind="safeBind(machineApi.getLabelProps())"
-        :for="id"
         class="pointer-events-none absolute left-3 transition-all duration-200"
         :class="[
           isFloating
@@ -130,8 +129,7 @@ const handleInputKeydown = (e: KeyboardEvent) => {
       <button
         type="button"
         v-bind="safeBind(machineApi.getTriggerProps())"
-        class="absolute inset-y-0 right-0 flex items-center pr-2"
-        tabindex="-1">
+        class="absolute inset-y-0 right-0 flex items-center pr-2">
         <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
       </button>
     </div>
@@ -192,17 +190,27 @@ const handleInputKeydown = (e: KeyboardEvent) => {
 
           <li
             v-if="props.options.length === 0"
-            role="presentation"
             class="px-4 py-2 text-sm text-gray-500">
             {{ props.noItemsText || '項目がありません。' }}
           </li>
           <li
             v-else-if="filteredOptions.length === 0"
-            role="presentation"
             class="px-4 py-2 text-sm text-gray-500">
             {{ props.noResultsText || '該当する項目がありません。' }}
           </li>
         </SearchSelectPrimitiveList>
+        <!-- Status for Screen Readers -->
+        <div
+          class="sr-only"
+          role="status"
+          aria-live="polite">
+          <span v-if="machineApi.open && props.options.length === 0">
+            {{ props.noItemsText || '項目がありません。' }}
+          </span>
+          <span v-else-if="machineApi.open && filteredOptions.length === 0">
+            {{ props.noResultsText || '該当する項目がありません。' }}
+          </span>
+        </div>
       </div>
     </Teleport>
   </SearchSelectPrimitiveRoot>

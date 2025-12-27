@@ -13,10 +13,10 @@
 ## Phase 3: Prototyping - Reka UI
 - [x] Task: Create `SearchSelect` prototype using Reka UI (Combobox). [be7fe55]
 - [x] Task: Create `SearchMultiSelect` prototype using Reka UI (Combobox). [be7fe55]
-- [ ] Task: Conductor - User Manual Verification 'Prototyping - Reka UI' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Prototyping - Reka UI' (Protocol in workflow.md) [checkpoint: 339c6dc]
 
 ## Phase 4: Prototyping - Zag (Refinement)
-- [ ] Task: Refine/Re-implement `SearchSelect` prototype using Zag (to compare against others).
+- [~] Task: Refine/Re-implement `SearchSelect` prototype using Zag (to compare against others).
 - [ ] Task: Refine/Re-implement `SearchMultiSelect` prototype using Zag.
 - [ ] Task: Conductor - User Manual Verification 'Prototyping - Zag (Refinement)' (Protocol in workflow.md)
 

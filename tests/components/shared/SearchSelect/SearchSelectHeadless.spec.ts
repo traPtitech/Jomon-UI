@@ -79,7 +79,7 @@ describe('SearchSelectHeadless', () => {
     wrapper.unmount()
   })
 
-  it.todo('selects an option', async () => {
+  it('selects an option', async () => {
     const wrapper = mount(SearchSelectHeadless, {
       props: {
         options: testOptions,
@@ -89,12 +89,12 @@ describe('SearchSelectHeadless', () => {
       attachTo: document.body
     })
 
-    const button = wrapper.find('button')
-    await button.trigger('click')
+    const input = wrapper.find('input')
+    // Trigger focus which should click button and open
+    await input.trigger('focus')
     
     await wrapper.vm.$nextTick()
     
-    const input = wrapper.find('input')
     // Navigate down to first option
     await input.trigger('keydown', { key: 'ArrowDown' })
     await wrapper.vm.$nextTick()

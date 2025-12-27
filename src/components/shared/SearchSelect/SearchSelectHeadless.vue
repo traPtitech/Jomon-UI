@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="TValue extends string | number | null">
-import { computed, ref, toRaw, watch } from 'vue'
+import { computed, nextTick, ref, toRaw, watch } from 'vue'
 
 import {
   Combobox,
@@ -18,7 +18,6 @@ import type {
 } from './types'
 
 // Props & Emits
-
 const emit = defineEmits<SearchSelectEmit<TValue | null>>()
 
 const props = withDefaults(defineProps<SearchSelectCommonProps<TValue> & { modelValue: TValue | null }>(), {
@@ -29,6 +28,20 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TValue> & { model
   errorMessage: undefined,
   modelValue: null
 })
+
+const comboButton = ref<InstanceType<typeof ComboboxButton> | null>(null)
+
+const handleInputFocus = () => {
+  // If not already open (Headless UI doesn't easily expose open state outside slot, but we can try to force open)
+  // A simple hack is to click the button if it exists.
+  // Ideally we check if open.
+  // For prototype, let's just click the button on focus if we can.
+  // But button toggles. If already open (e.g. from click), focus might close it?
+  // Headless UI Combobox opens on click input usually if configured? No, usually explicitly.
+  if (comboButton.value?.$el) {
+    comboButton.value.$el.click()
+  }
+}
 
 const localValue = ref(props.modelValue)
 
@@ -94,12 +107,14 @@ const displayValue = (item: unknown): string => {
         :display-value="displayValue"
         :placeholder="placeholder"
         @change="query = $event.target.value"
+        @focus="handleInputFocus"
       />
       
       <!-- Label Logic (Simplified for prototype) -->
        <label class="absolute left-3 top-0 text-xs text-gray-500" v-if="label">{{ label }}</label>
 
       <ComboboxButton
+        ref="comboButton"
         class="absolute inset-y-0 right-0 flex items-center pr-2"
       >
         <ChevronUpDownIcon

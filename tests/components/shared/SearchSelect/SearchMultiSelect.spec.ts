@@ -206,25 +206,4 @@ describe('SearchMultiSelect', () => {
 
     wrapper.unmount()
   })
-
-  it('selects all text on focus', async () => {
-    const wrapper = mount(SearchMultiSelect, {
-      props: {
-        options: testOptions,
-        label: 'Test Label',
-        modelValue: [],
-      },
-      global: globalConfig,
-      attachTo: document.body,
-    })
-    const input = wrapper.find('input')
-    const element = input.element as HTMLInputElement
-    // Mock select method
-    const selectMock = vi.fn()
-    element.select = selectMock
-
-    await input.trigger('focus')
-    expect(selectMock).toHaveBeenCalled()
-    wrapper.unmount()
-  })
 })

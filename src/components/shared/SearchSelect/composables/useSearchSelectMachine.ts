@@ -99,6 +99,9 @@ export function useSearchSelectMachine<T extends string | number>(
       value = [serializeOptionKey(modelVal)]
     }
 
+    // Deduplicate values
+    value = Array.from(new Set(value))
+
     const selectionBehavior: 'clear' | 'replace' = toValue(props.resetOnSelect)
       ? 'clear'
       : 'replace'

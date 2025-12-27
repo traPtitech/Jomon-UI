@@ -1,7 +1,7 @@
 /**
  * Serializes a value to a string key.
  * Strictly accepts only string or number.
- * Throws runtime error if null or undefined is passed, to prevent silent failures.
+ * Note: Converts any value to string using String().
  */
 export function serializeOptionKey(val: string | number): string {
   return String(val)

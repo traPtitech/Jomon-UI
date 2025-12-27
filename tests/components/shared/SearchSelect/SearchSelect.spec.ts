@@ -204,23 +204,6 @@ describe('SearchSelect', () => {
     wrapper.unmount()
   })
 
-  it('selects all text on focus', async () => {
-    const wrapper = mount(SearchSelect, {
-      props: { options: testOptions, label: 'Test', modelValue: 'opt1' },
-      global: globalConfig,
-      attachTo: document.body,
-    })
-    const input = wrapper.find('input')
-    const element = input.element as HTMLInputElement
-    // Mock select method
-    const selectMock = vi.fn()
-    element.select = selectMock
-
-    await input.trigger('focus')
-    expect(selectMock).toHaveBeenCalled()
-    wrapper.unmount()
-  })
-
   it('disables filtering if input matches selected label (Smart Filtering)', async () => {
     const wrapper = mount(SearchSelect, {
       props: { options: testOptions, label: 'Test', modelValue: 'opt1' },

@@ -1,9 +1,9 @@
 # Plan: Evaluate and Prototype SearchSelect Libraries
 
 ## Phase 1: Analysis & Setup
-- [ ] Task: Analyze current `SearchSelect` implementation and requirements.
-- [ ] Task: Research Headless UI capabilities for searchable selects (Combobox).
-- [ ] Task: Research Reka UI capabilities for searchable selects (Combobox/Select).
+- [x] Task: Analyze current `SearchSelect` implementation and requirements. [6e5817d]
+- [~] Task: Research Headless UI capabilities for searchable selects (Combobox).
+- [~] Task: Research Reka UI capabilities for searchable selects (Combobox/Select).
 
 ## Phase 2: Prototyping - Headless UI
 - [ ] Task: Create `SearchSelect` prototype using Headless UI (Combobox).

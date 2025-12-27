@@ -6,8 +6,8 @@
 - [x] Task: Research Reka UI capabilities for searchable selects (Combobox/Select). [70ff0ae]
 
 ## Phase 2: Prototyping - Headless UI
-- [ ] Task: Create `SearchSelect` prototype using Headless UI (Combobox).
-- [ ] Task: Create `SearchMultiSelect` prototype using Headless UI (Combobox).
+- [x] Task: Create `SearchSelect` prototype using Headless UI (Combobox). [858ad59]
+- [~] Task: Create `SearchMultiSelect` prototype using Headless UI (Combobox).
 - [ ] Task: Conductor - User Manual Verification 'Prototyping - Headless UI' (Protocol in workflow.md)
 
 ## Phase 3: Prototyping - Reka UI

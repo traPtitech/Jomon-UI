@@ -7,7 +7,7 @@
 
 ## Phase 2: Prototyping - Headless UI
 - [x] Task: Create `SearchSelect` prototype using Headless UI (Combobox). [858ad59]
-- [~] Task: Create `SearchMultiSelect` prototype using Headless UI (Combobox).
+- [x] Task: Create `SearchMultiSelect` prototype using Headless UI (Combobox). [c1b20d7]
 - [ ] Task: Conductor - User Manual Verification 'Prototyping - Headless UI' (Protocol in workflow.md)
 
 ## Phase 3: Prototyping - Reka UI

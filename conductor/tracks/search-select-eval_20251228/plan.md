@@ -11,8 +11,8 @@
 - [x] Task: Conductor - User Manual Verification 'Prototyping - Headless UI' (Protocol in workflow.md) [checkpoint: 8ade758]
 
 ## Phase 3: Prototyping - Reka UI
-- [ ] Task: Create `SearchSelect` prototype using Reka UI (Combobox).
-- [ ] Task: Create `SearchMultiSelect` prototype using Reka UI (Combobox).
+- [x] Task: Create `SearchSelect` prototype using Reka UI (Combobox). [be7fe55]
+- [x] Task: Create `SearchMultiSelect` prototype using Reka UI (Combobox). [be7fe55]
 - [ ] Task: Conductor - User Manual Verification 'Prototyping - Reka UI' (Protocol in workflow.md)
 
 ## Phase 4: Prototyping - Zag (Refinement)

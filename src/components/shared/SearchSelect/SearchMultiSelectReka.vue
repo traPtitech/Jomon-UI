@@ -14,6 +14,7 @@ import {
   ComboboxRoot,
   ComboboxTrigger,
   ComboboxViewport,
+  ComboboxAnchor,
 } from 'reka-ui'
 
 import type {
@@ -94,7 +95,7 @@ watch(() => props.modelValue, (newVal, oldVal) => {
     multiple
     nullable
   >
-    <div class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left border border-gray-300 focus-within:ring-2 focus-within:ring-white/75 focus-within:ring-offset-2 focus-within:ring-offset-teal-300 sm:text-sm">
+    <ComboboxAnchor class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left border border-gray-300 focus-within:ring-2 focus-within:ring-white/75 focus-within:ring-offset-2 focus-within:ring-offset-teal-300 sm:text-sm">
       <div class="flex flex-wrap gap-1 p-1">
         <!-- Tags Display Inside Input Area (Common for MultiSelect) or Outside? 
              Current Jomon implementation has tags outside (below). 
@@ -118,7 +119,7 @@ watch(() => props.modelValue, (newVal, oldVal) => {
       <ComboboxTrigger class="absolute inset-y-0 right-0 flex items-center pr-2">
         <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
       </ComboboxTrigger>
-    </div>
+    </ComboboxAnchor>
 
     <!-- Tags Display -->
     <div v-if="localModel.length > 0" class="mt-2 flex flex-wrap gap-1">

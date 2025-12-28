@@ -124,7 +124,7 @@ describe('SearchMultiSelect', () => {
 
     // Tags are rendered outside of the list in SearchMultiSelect (usually)
     // Check if tags exist
-    const tags = wrapper.findAll('.rounded.bg-gray-100')
+    const tags = wrapper.findAll('.rounded-sm.bg-surface-secondary')
     expect(tags.length).toBe(2)
 
     // Find remove button for opt1

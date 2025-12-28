@@ -16,8 +16,8 @@
 - [x] Task: Conductor - User Manual Verification 'Prototyping - Reka UI' (Protocol in workflow.md) [checkpoint: 339c6dc]
 
 ## Phase 4: Prototyping - Zag (Refinement)
-- [x] Task: Refine/Re-implement `SearchSelect` prototype using Zag (to compare against others). [ae829f7]
-- [x] Task: Refine/Re-implement `SearchMultiSelect` prototype using Zag. [ae829f7]
+- [~] Task: Refine/Re-implement `SearchSelect` prototype using Zag (to compare against others).
+- [~] Task: Refine/Re-implement `SearchMultiSelect` prototype using Zag.
 - [x] Task: Conductor - User Manual Verification 'Prototyping - Zag (Refinement)' (Protocol in workflow.md) [checkpoint: ae829f7]
 
 ## Phase 5: Evaluation & Selection

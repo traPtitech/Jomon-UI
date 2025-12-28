@@ -103,7 +103,7 @@ watch(localValue, () => {
     <div class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
       <ComboboxInput
         class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
-        :placeholder="isFloating ? '' : placeholder"
+        :placeholder="isFloating ? placeholder : ''"
         @change="query = $event.target.value"
         @focus="handleInputFocus(); isFocused = true"
         @blur="isFocused = false"

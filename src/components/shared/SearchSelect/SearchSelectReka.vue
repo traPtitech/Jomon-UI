@@ -98,7 +98,7 @@ const filteredOptions = computed(() => {
     <ComboboxAnchor class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left border border-gray-300 focus-within:ring-2 focus-within:ring-white/75 focus-within:ring-offset-2 focus-within:ring-offset-teal-300 sm:text-sm">
       <ComboboxInput
         class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 outline-none"
-        :placeholder="isFloating ? '' : placeholder"
+        :placeholder="isFloating ? placeholder : ''"
         v-model="searchTerm"
         :display-value="(val: any) => options.find(o => o.key === val)?.label ?? ''"
         @keydown.enter.prevent

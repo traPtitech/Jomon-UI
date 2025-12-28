@@ -111,7 +111,7 @@ const displayValue = (item: unknown): string => {
       <ComboboxInput
         class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
         :display-value="displayValue"
-        :placeholder="isFloating ? '' : placeholder"
+        :placeholder="isFloating ? placeholder : ''"
         @change="query = $event.target.value"
         @focus="handleInputFocus(); isFocused = true"
         @blur="isFocused = false"

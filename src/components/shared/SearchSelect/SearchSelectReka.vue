@@ -78,7 +78,6 @@ const filteredOptions = computed(() => {
 <template>
   <ComboboxRoot
     v-model="localModel"
-    v-model:searchTerm="searchTerm"
     v-model:open="open"
     :disabled="disabled"
     class="relative group"
@@ -88,6 +87,7 @@ const filteredOptions = computed(() => {
       <ComboboxInput
         class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 outline-none"
         :placeholder="placeholder"
+        v-model="searchTerm"
         @keydown.enter.prevent
         @focus="handleInputFocus"
       />
@@ -104,7 +104,7 @@ const filteredOptions = computed(() => {
         :side-offset="5"
         position="popper"
         align="start"
-        :style="{ width: 'var(--radix-combobox-trigger-width)', minWidth: 'var(--radix-combobox-trigger-width)' }"
+        :style="{ width: 'var(--reka-combobox-trigger-width)', minWidth: 'var(--reka-combobox-trigger-width)' }"
       >
         <ComboboxViewport>
           <ComboboxEmpty class="relative cursor-default select-none px-4 py-2 text-gray-700">

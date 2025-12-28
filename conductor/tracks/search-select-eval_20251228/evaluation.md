@@ -45,7 +45,5 @@ Reasons:
 3.  **Maintenance:** Easier for other developers to understand standard Vue components than Zag state machines.
 4.  **Performance:** Lightweight and effective.
 
-## Next Steps
-1.  Replace the current `SearchSelect` and `SearchMultiSelect` implementations with the **Headless UI** versions.
-2.  Port the full feature set (e.g. `allowCustom`, accurate styling tweaks) to the Headless UI implementation.
-3.  Remove Zag dependencies if no longer used.
+## Status
+Prototypes for all three (Zag Refined, Headless UI, Reka UI) are implemented and available for review at `/comparison`. Design has been aligned across all three.

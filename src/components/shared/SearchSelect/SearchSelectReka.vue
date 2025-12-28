@@ -88,6 +88,7 @@ const filteredOptions = computed(() => {
         class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 outline-none"
         :placeholder="placeholder"
         v-model="searchTerm"
+        :display-value="(val: any) => options.find(o => o.key === val)?.label ?? ''"
         @keydown.enter.prevent
         @focus="handleInputFocus"
       />

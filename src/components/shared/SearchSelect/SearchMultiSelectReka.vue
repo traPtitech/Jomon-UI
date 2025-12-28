@@ -48,10 +48,16 @@ const localModel = computed({
 
 const searchTerm = ref('')
 const open = ref(false)
+const isFocused = ref(false)
 
 const handleInputFocus = () => {
   open.value = true
+  isFocused.value = true
 }
+
+const isFloating = computed(() => {
+  return isFocused.value || searchTerm.value.length > 0 || localModel.value.length > 0
+})
 
 const filteredOptions = computed(() => {
   if (searchTerm.value === '') {
@@ -107,14 +113,26 @@ watch(() => props.modelValue, (newVal, oldVal) => {
         
         <ComboboxInput
           class="w-full border-none py-1 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 outline-none min-h-[2rem]"
-          :placeholder="placeholder"
+          :placeholder="isFloating ? '' : placeholder"
           v-model="searchTerm"
           @keydown.enter.prevent
           @focus="handleInputFocus"
+          @blur="isFocused = false"
         />
       </div>
       
-       <label class="absolute left-3 top-0 text-xs text-gray-500" v-if="label">{{ label }}</label>
+      <ComboboxLabel
+        class="pointer-events-none absolute left-3 transition-all duration-200"
+        :class="[
+          isFloating
+            ? 'top-0 text-xs text-blue-500'
+            : 'top-2 text-sm text-gray-500',
+          isFocused ? 'text-blue-500' : 'text-gray-500',
+        ]"
+        v-if="label"
+      >
+        {{ label }}
+      </ComboboxLabel>
 
       <ComboboxTrigger class="absolute inset-y-0 right-0 flex items-center pr-2">
         <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />

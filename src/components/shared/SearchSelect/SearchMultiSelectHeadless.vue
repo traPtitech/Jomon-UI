@@ -47,8 +47,12 @@ watch(localValue, (val) => {
   emit('update:modelValue', val)
 })
 
-// State
 const query = ref('')
+const isFocused = ref(false)
+
+const isFloating = computed(() => {
+  return isFocused.value || query.value.length > 0 || localValue.value.length > 0
+})
 
 // Filtering Logic
 const filteredOptions = computed(() => {
@@ -99,14 +103,26 @@ watch(localValue, () => {
     <div class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
       <ComboboxInput
         class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
-        :placeholder="placeholder"
+        :placeholder="isFloating ? '' : placeholder"
         @change="query = $event.target.value"
-        @focus="handleInputFocus"
+        @focus="handleInputFocus(); isFocused = true"
+        @blur="isFocused = false"
         :display-value="() => query" 
       />
       <!-- Note: display-value for MultiSelect usually reflects the query, not the selection. Selection is tags. -->
       
-       <label class="absolute left-3 top-0 text-xs text-gray-500" v-if="label">{{ label }}</label>
+      <label
+        class="pointer-events-none absolute left-3 transition-all duration-200"
+        :class="[
+          isFloating
+            ? 'top-0 text-xs text-blue-500'
+            : 'top-2 text-sm text-gray-500',
+          isFocused ? 'text-blue-500' : 'text-gray-500',
+        ]"
+        v-if="label"
+      >
+        {{ label }}
+      </label>
 
       <ComboboxButton
         ref="comboButton"

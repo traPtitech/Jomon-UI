@@ -56,6 +56,12 @@ watch(localValue, (val) => {
 
 // State
 const query = ref('')
+const isFocused = ref(false)
+
+// Floating Label Condition
+const isFloating = computed(() => {
+  return isFocused.value || query.value.length > 0 || !!localValue.value
+})
 
 // Filtering Logic
 const filteredOptions = computed(() => {
@@ -105,13 +111,24 @@ const displayValue = (item: unknown): string => {
       <ComboboxInput
         class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
         :display-value="displayValue"
-        :placeholder="placeholder"
+        :placeholder="isFloating ? '' : placeholder"
         @change="query = $event.target.value"
-        @focus="handleInputFocus"
+        @focus="handleInputFocus(); isFocused = true"
+        @blur="isFocused = false"
       />
       
-      <!-- Label Logic (Simplified for prototype) -->
-       <label class="absolute left-3 top-0 text-xs text-gray-500" v-if="label">{{ label }}</label>
+      <label
+        class="pointer-events-none absolute left-3 transition-all duration-200"
+        :class="[
+          isFloating
+            ? 'top-0 text-xs text-blue-500'
+            : 'top-2 text-sm text-gray-500', // Adjust top/text size to match non-floating input
+          isFocused ? 'text-blue-500' : 'text-gray-500',
+        ]"
+        v-if="label"
+      >
+        {{ label }}
+      </label>
 
       <ComboboxButton
         ref="comboButton"

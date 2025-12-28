@@ -29,6 +29,14 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TValue> & { model
 
 const emit = defineEmits<SearchSelectEmit<TValue[]>>()
 
+const comboButton = ref<InstanceType<typeof ComboboxButton> | null>(null)
+
+const handleInputFocus = () => {
+  if (comboButton.value?.$el) {
+    comboButton.value.$el.click()
+  }
+}
+
 const localValue = ref<TValue[]>([])
 
 watch(() => props.modelValue, (val) => {
@@ -93,6 +101,7 @@ watch(localValue, () => {
         class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
         :placeholder="placeholder"
         @change="query = $event.target.value"
+        @focus="handleInputFocus"
         :display-value="() => query" 
       />
       <!-- Note: display-value for MultiSelect usually reflects the query, not the selection. Selection is tags. -->
@@ -100,6 +109,7 @@ watch(localValue, () => {
        <label class="absolute left-3 top-0 text-xs text-gray-500" v-if="label">{{ label }}</label>
 
       <ComboboxButton
+        ref="comboButton"
         class="absolute inset-y-0 right-0 flex items-center pr-2"
       >
         <ChevronUpDownIcon

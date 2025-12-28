@@ -46,6 +46,11 @@ const localModel = computed({
 })
 
 const searchTerm = ref('')
+const open = ref(false)
+
+const handleInputFocus = () => {
+  open.value = true
+}
 
 const filteredOptions = computed(() => {
   if (searchTerm.value === '') {
@@ -83,6 +88,7 @@ watch(() => props.modelValue, (newVal, oldVal) => {
   <ComboboxRoot
     v-model="localModel"
     v-model:searchTerm="searchTerm"
+    v-model:open="open"
     :disabled="disabled"
     class="relative group"
     multiple
@@ -103,6 +109,7 @@ watch(() => props.modelValue, (newVal, oldVal) => {
           class="w-full border-none py-1 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 outline-none min-h-[2rem]"
           :placeholder="placeholder"
           @keydown.enter.prevent
+          @focus="handleInputFocus"
         />
       </div>
       

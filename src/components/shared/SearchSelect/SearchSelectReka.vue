@@ -59,6 +59,12 @@ const handleInputFocus = () => {
 }
 
 const filteredOptions = computed(() => {
+  const selectedOption = props.options.find(o => o.key === localModel.value)
+  // Smart Filtering: If search term matches the selected label exactly, show all options
+  if (selectedOption && searchTerm.value === selectedOption.label) {
+    return props.options
+  }
+
   if (searchTerm.value === '') {
     return props.options
   }

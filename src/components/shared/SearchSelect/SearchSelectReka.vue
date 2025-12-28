@@ -1,8 +1,13 @@
 <script setup lang="ts" generic="TValue extends string | number">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/24/outline'
 import {
+  CheckIcon,
+  ChevronDownIcon,
+  MagnifyingGlassIcon,
+} from '@heroicons/vue/24/outline'
+import {
+  ComboboxAnchor,
   ComboboxContent,
   ComboboxEmpty,
   ComboboxGroup,
@@ -14,16 +19,13 @@ import {
   ComboboxRoot,
   ComboboxTrigger,
   ComboboxViewport,
-  ComboboxAnchor,
 } from 'reka-ui'
 
 import type {
-  Option,
   SearchSelectCommonProps,
   SearchSelectEmit,
 } from './types'
 
-// Props & Emits
 const props = withDefaults(defineProps<SearchSelectCommonProps<TValue> & { modelValue: TValue | null }>(), {
   placeholder: '検索',
   disabled: false,
@@ -35,18 +37,9 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TValue> & { model
 
 const emit = defineEmits<SearchSelectEmit<TValue | null>>()
 
-// Reka UI Combobox works with v-model.
-// It accepts `modelValue` as the value of the selected item.
-// However, Reka UI Combobox usually expects the whole object or a specific value type.
-// Let's bind it to `modelValue` (the key).
-
-// We need a local model for v-model binding if we want to intercept or just use defineModel directly if Reka supports it.
-// Reka `ComboboxRoot` v-model matches the `value` prop of `ComboboxItem`.
-
 const localModel = computed({
   get: () => props.modelValue,
   set: (val) => {
-    console.log('Reka: localModel set', val)
     emit('update:modelValue', val)
   }
 })
@@ -66,25 +59,16 @@ const isFloating = computed(() => {
 
 const filteredOptions = computed(() => {
   const selectedOption = props.options.find(o => o.key === localModel.value)
-  // Smart Filtering: If search term matches the selected label exactly, show all options
   if (selectedOption && searchTerm.value === selectedOption.label) {
     return props.options
   }
-
-  if (searchTerm.value === '') {
-    return props.options
-  }
+  if (searchTerm.value === '') return props.options
   const term = searchTerm.value.toLowerCase()
   if (props.filterFunction) {
-    return props.options.filter(option => props.filterFunction!(option, searchTerm.value))
+    return props.options.filter(o => props.filterFunction!(o, searchTerm.value))
   }
-  return props.options.filter(option => option.label.toLowerCase().includes(term))
+  return props.options.filter(o => o.label.toLowerCase().includes(term))
 })
-
-// Helper to get label for display in input (if needed, but ComboboxInput usually handles text input)
-// Reka UI ComboboxInput displays the text content of the selected item if `displayValue` is not used, 
-// OR we can bind it. Reka UI is "headless", so we control the input value via v-model:searchTerm?
-// Reka UI `ComboboxRoot` has `v-model:searchTerm`.
 </script>
 
 <template>
@@ -95,44 +79,56 @@ const filteredOptions = computed(() => {
     class="relative group"
     nullable
   >
-    <ComboboxAnchor class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left border border-gray-300 focus-within:ring-2 focus-within:ring-white/75 focus-within:ring-offset-2 focus-within:ring-offset-teal-300 sm:text-sm">
-      <ComboboxInput
-        class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 outline-none"
-        :placeholder="isFloating ? placeholder : ''"
-        v-model="searchTerm"
-        :display-value="(val: any) => options.find(o => o.key === val)?.label ?? ''"
-        @keydown.enter.prevent
-        @focus="handleInputFocus"
-        @blur="isFocused = false"
-      />
-      <ComboboxLabel
-        class="pointer-events-none absolute left-3 transition-all duration-200"
-        :class="[
-          isFloating
-            ? 'top-0 text-xs text-blue-500'
-            : 'top-2 text-sm text-gray-500',
-          isFocused ? 'text-blue-500' : 'text-gray-500',
-        ]"
-        v-if="label"
-      >
-        {{ label }}
-      </ComboboxLabel>
+    <ComboboxAnchor
+      class="flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none"
+      :class="[disabled ? 'cursor-not-allowed bg-surface-secondary' : 'bg-white']"
+    >
+      <div class="pl-3 flex items-center justify-center">
+         <MagnifyingGlassIcon class="w-6 text-text-secondary" />
+      </div>
 
-      <ComboboxTrigger class="absolute inset-y-0 right-0 flex items-center pr-2">
-        <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+      <div class="relative w-full">
+        <ComboboxInput
+          class="w-full border-none bg-transparent px-3 pb-2 ring-0 outline-none text-base text-text-primary"
+          :class="[label ? 'pt-6' : 'pt-2', disabled ? 'cursor-not-allowed' : '']"
+          :placeholder="isFloating ? placeholder : ''"
+          v-model="searchTerm"
+          :display-value="(val: any) => options.find(o => o.key === val)?.label ?? ''"
+          @keydown.enter.prevent
+          @focus="handleInputFocus"
+          @blur="isFocused = false"
+        />
+        
+        <ComboboxLabel
+          v-if="label"
+          class="pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out"
+          :class="[
+            isFloating
+              ? 'top-1 text-xs font-medium text-blue-500' // Added blue-500 for active state check? Or rely on peer-focus? Reka Label doesn't detect peer focus easily without CSS.
+              : 'top-1/2 -translate-y-1/2 text-base',
+             isFocused ? 'text-blue-500' : ''
+          ]"
+        >
+          {{ label }}
+          <span v-if="required" class="text-red-500">*</span>
+        </ComboboxLabel>
+      </div>
+
+      <ComboboxTrigger class="flex items-center pr-2">
+        <ChevronDownIcon class="h-4 w-4 text-text-secondary" aria-hidden="true" />
       </ComboboxTrigger>
     </ComboboxAnchor>
 
     <ComboboxPortal>
       <ComboboxContent
-        class="box-border max-h-60 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50"
+        class="box-border absolute z-50 mt-1 w-full overflow-auto rounded-md border bg-white shadow-lg max-h-[200px] p-1 focus:outline-none"
         :side-offset="5"
         position="popper"
         align="start"
         :style="{ width: 'var(--reka-combobox-trigger-width)', minWidth: 'var(--reka-combobox-trigger-width)' }"
       >
         <ComboboxViewport>
-          <ComboboxEmpty class="relative cursor-default select-none px-4 py-2 text-gray-700">
+          <ComboboxEmpty class="relative cursor-default select-none px-2 py-1.5 text-sm text-gray-700">
              {{ noResultsText || '該当する項目がありません。' }}
           </ComboboxEmpty>
 
@@ -142,14 +138,12 @@ const filteredOptions = computed(() => {
               :key="String(option.key)"
               :value="option.key"
               :disabled="option.disabled"
-              class="relative cursor-default select-none py-2 pl-10 pr-4 data-[highlighted]:bg-blue-600 data-[highlighted]:text-white text-gray-900 outline-none"
+              class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm outline-none select-none data-[highlighted]:bg-blue-100 data-[highlighted]:text-blue-500 text-text-primary"
             >
-              <span class="block truncate" :class="{ 'font-medium': localModel === option.key, 'font-normal': localModel !== option.key }">
-                {{ option.label }}
-              </span>
+              <span class="truncate flex-1">{{ option.label }}</span>
               
-              <ComboboxItemIndicator class="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600 data-[highlighted]:text-white">
-                <CheckIcon class="h-5 w-5" aria-hidden="true" />
+              <ComboboxItemIndicator class="ml-auto h-4 w-4 text-text-primary">
+                <CheckIcon class="h-4 w-4" aria-hidden="true" />
               </ComboboxItemIndicator>
             </ComboboxItem>
           </ComboboxGroup>

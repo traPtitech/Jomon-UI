@@ -9,20 +9,23 @@ import {
   ComboboxOptions,
   TransitionRoot,
 } from '@headlessui/vue'
-import { CheckIcon, ChevronUpDownIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  MagnifyingGlassIcon,
+  XMarkIcon,
+} from '@heroicons/vue/24/outline'
 
 import type {
-  Option,
   SearchSelectCommonProps,
   SearchSelectEmit,
 } from './types'
 
-// Props & Emits
 const props = withDefaults(defineProps<SearchSelectCommonProps<TValue> & { modelValue: TValue[] }>(), {
   placeholder: '検索',
   disabled: false,
   required: false,
-  resetOnSelect: true, // Default true for Multi
+  resetOnSelect: true,
   errorMessage: undefined,
   modelValue: () => []
 })
@@ -30,8 +33,7 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TValue> & { model
 const emit = defineEmits<SearchSelectEmit<TValue[]>>()
 
 const comboButton = ref<InstanceType<typeof ComboboxButton> | null>(null)
-
-const handleInputFocus = () => {
+const forceOpen = () => {
   if (comboButton.value?.$el) {
     comboButton.value.$el.click()
   }
@@ -54,25 +56,15 @@ const isFloating = computed(() => {
   return isFocused.value || query.value.length > 0 || localValue.value.length > 0
 })
 
-// Filtering Logic
 const filteredOptions = computed(() => {
-  if (query.value === '') {
-    return props.options
-  }
+  if (query.value === '') return props.options
   const term = query.value.toLowerCase()
-  
   if (props.filterFunction) {
-    return props.options.filter(option => 
-      props.filterFunction!(option, query.value)
-    )
+    return props.options.filter(o => props.filterFunction!(o, query.value))
   }
-
-  return props.options.filter(option => {
-    return option.label.toLowerCase().includes(term)
-  })
+  return props.options.filter(o => o.label.toLowerCase().includes(term))
 })
 
-// Helper to get label from key
 const getLabel = (key: TValue) => {
   const option = props.options.find(o => o.key === key)
   return option ? option.label : String(key)
@@ -83,7 +75,6 @@ const removeTag = (key: TValue) => {
   localValue.value = localValue.value.filter(v => v !== key)
 }
 
-// Clear query on selection if resetOnSelect is true
 watch(localValue, () => {
   if (props.resetOnSelect) {
     query.value = ''
@@ -98,62 +89,74 @@ watch(localValue, () => {
     as="div"
     class="relative group"
     multiple
-    nullable>
-    
-    <div class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left border border-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
-      <ComboboxInput
-        class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
-        :placeholder="isFloating ? placeholder : ''"
-        @change="query = $event.target.value"
-        @focus="handleInputFocus(); isFocused = true"
-        @blur="isFocused = false"
-        :display-value="() => query" 
-      />
-      <!-- Note: display-value for MultiSelect usually reflects the query, not the selection. Selection is tags. -->
-      
-      <label
-        class="pointer-events-none absolute left-3 transition-all duration-200"
-        :class="[
-          isFloating
-            ? 'top-0 text-xs text-blue-500'
-            : 'top-2 text-sm text-gray-500',
-          isFocused ? 'text-blue-500' : 'text-gray-500',
-        ]"
-        v-if="label"
-      >
-        {{ label }}
-      </label>
+    nullable
+  >
+    <div
+      :class="[
+        'flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none',
+        disabled ? 'cursor-not-allowed bg-surface-secondary' : 'bg-white',
+      ]"
+    >
+      <div class="pl-3 flex items-center justify-center">
+         <MagnifyingGlassIcon class="w-6 text-text-secondary" />
+      </div>
+
+      <div class="relative w-full">
+        <ComboboxInput
+          class="peer w-full border-none bg-transparent px-3 pb-2 ring-0 outline-none text-base text-text-primary"
+          :class="[label ? 'pt-6' : 'pt-2', disabled ? 'cursor-not-allowed' : '']"
+          :placeholder="isFloating ? placeholder : ''"
+          @change="query = $event.target.value"
+          @focus="isFocused = true; forceOpen()"
+          @blur="isFocused = false"
+          :display-value="() => query" 
+        />
+        
+        <label
+          v-if="label"
+          class="pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out peer-focus:text-blue-500"
+          :class="[
+            isFloating
+              ? 'top-1 text-xs font-medium'
+              : 'top-1/2 -translate-y-1/2 text-base'
+          ]"
+        >
+          {{ label }}
+          <span v-if="required" class="text-red-500">*</span>
+        </label>
+      </div>
 
       <ComboboxButton
         ref="comboButton"
-        class="absolute inset-y-0 right-0 flex items-center pr-2"
+        class="flex items-center pr-2"
       >
-        <ChevronUpDownIcon
-          class="h-5 w-5 text-gray-400"
-          aria-hidden="true"
-        />
+        <ChevronDownIcon class="h-4 w-4 text-text-secondary" aria-hidden="true" />
       </ComboboxButton>
     </div>
 
-    <!-- Tags Display -->
+    <!-- Tags -->
     <div v-if="localValue.length > 0" class="mt-2 flex flex-wrap gap-1">
-      <span
+      <div
         v-for="key in localValue"
         :key="String(key)"
-        class="inline-flex items-center rounded bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700"
+        class="flex items-center rounded-sm bg-surface-secondary px-2 py-1 text-xs text-text-primary"
       >
         {{ getLabel(key) }}
         <button
           type="button"
-          class="ml-1 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-gray-400 hover:bg-gray-200 hover:text-gray-500 focus:bg-gray-500 focus:text-white focus:outline-none"
+          class="ml-1 rounded-full hover:bg-blue-100"
           @click.stop="removeTag(key)"
         >
-          <span class="sr-only">Remove {{ getLabel(key) }}</span>
           <XMarkIcon class="h-3 w-3" aria-hidden="true" />
         </button>
-      </span>
+      </div>
     </div>
-    
+
+    <!-- Error Message -->
+    <p v-if="errorMessage" class="mt-1 px-3 text-sm text-error-primary">
+      {{ errorMessage }}
+    </p>
+
     <TransitionRoot
       leave="transition ease-in duration-100"
       leave-from="opacity-100"
@@ -161,11 +164,11 @@ watch(localValue, () => {
       @after-leave="query = ''"
     >
       <ComboboxOptions
-        class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50"
+        class="absolute z-50 mt-1 w-full overflow-auto rounded-md border bg-white shadow-lg max-h-[200px] p-1 focus:outline-none"
       >
         <div
           v-if="filteredOptions.length === 0 && query !== ''"
-          class="relative cursor-default select-none px-4 py-2 text-gray-700"
+          class="relative cursor-default select-none px-2 py-1.5 text-sm text-gray-700"
         >
           {{ noResultsText || '該当する項目がありません。' }}
         </div>
@@ -176,28 +179,21 @@ watch(localValue, () => {
           :key="String(option.key)"
           :value="option.key"
           :disabled="option.disabled"
-          v-slot="{ selected, active }"
+          v-slot="{ selected, active, disabled }"
         >
           <li
-            class="relative cursor-default select-none py-2 pl-10 pr-4"
+            class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm outline-none select-none"
             :class="{
-              'bg-blue-600 text-white': active,
-              'text-gray-900': !active,
+              'bg-blue-100 text-blue-500': active,
+              'text-text-primary': !active,
+              'bg-blue-50': selected && !active,
+              'cursor-not-allowed opacity-50': disabled
             }"
           >
-            <span
-              class="block truncate"
-              :class="{ 'font-medium': selected, 'font-normal': !selected }"
-            >
-              {{ option.label }}
-            </span>
-            <span
-              v-if="selected"
-              class="absolute inset-y-0 left-0 flex items-center pl-3"
-              :class="{ 'text-white': active, 'text-blue-600': !active }"
-            >
-              <CheckIcon class="h-5 w-5" aria-hidden="true" />
-            </span>
+            <div class="mr-2 flex h-4 w-4 items-center justify-center">
+               <CheckIcon v-if="selected" class="h-4 w-4" aria-hidden="true" />
+            </div>
+            <span class="truncate">{{ option.label }}</span>
           </li>
         </ComboboxOption>
       </ComboboxOptions>

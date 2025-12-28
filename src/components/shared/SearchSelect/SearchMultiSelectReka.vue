@@ -1,8 +1,14 @@
 <script setup lang="ts" generic="TValue extends string | number">
 import { computed, ref, watch } from 'vue'
 
-import { CheckIcon, ChevronUpDownIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import {
+  CheckIcon,
+  ChevronDownIcon,
+  MagnifyingGlassIcon,
+  XMarkIcon,
+} from '@heroicons/vue/24/outline'
+import {
+  ComboboxAnchor,
   ComboboxContent,
   ComboboxEmpty,
   ComboboxGroup,
@@ -14,16 +20,13 @@ import {
   ComboboxRoot,
   ComboboxTrigger,
   ComboboxViewport,
-  ComboboxAnchor,
 } from 'reka-ui'
 
 import type {
-  Option,
   SearchSelectCommonProps,
   SearchSelectEmit,
 } from './types'
 
-// Props & Emits
 const props = withDefaults(defineProps<SearchSelectCommonProps<TValue> & { modelValue: TValue[] }>(), {
   placeholder: '検索',
   disabled: false,
@@ -35,12 +38,9 @@ const props = withDefaults(defineProps<SearchSelectCommonProps<TValue> & { model
 
 const emit = defineEmits<SearchSelectEmit<TValue[]>>()
 
-// Reka UI Combobox Root supports `multiple` prop.
-// v-model should be an array.
 const localModel = computed({
   get: () => props.modelValue,
   set: (val) => {
-    // Reka might return null/undefined depending on state, but multiple should be array
     const value = val || []
     emit('update:modelValue', value)
   }
@@ -60,14 +60,12 @@ const isFloating = computed(() => {
 })
 
 const filteredOptions = computed(() => {
-  if (searchTerm.value === '') {
-    return props.options
-  }
+  if (searchTerm.value === '') return props.options
   const term = searchTerm.value.toLowerCase()
   if (props.filterFunction) {
-    return props.options.filter(option => props.filterFunction!(option, searchTerm.value))
+    return props.options.filter(o => props.filterFunction!(o, searchTerm.value))
   }
-  return props.options.filter(option => option.label.toLowerCase().includes(term))
+  return props.options.filter(o => o.label.toLowerCase().includes(term))
 })
 
 const getLabel = (key: TValue) => {
@@ -81,14 +79,11 @@ const removeTag = (key: TValue) => {
   emit('update:modelValue', newValue)
 }
 
-// Clear search term on select if resetOnSelect is true
 watch(() => props.modelValue, (newVal, oldVal) => {
   if (props.resetOnSelect && newVal.length > (oldVal?.length || 0)) {
-     // Item added
      searchTerm.value = ''
   }
 }, { deep: true })
-
 </script>
 
 <template>
@@ -100,74 +95,73 @@ watch(() => props.modelValue, (newVal, oldVal) => {
     multiple
     nullable
   >
-    <ComboboxAnchor class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left border border-gray-300 focus-within:ring-2 focus-within:ring-white/75 focus-within:ring-offset-2 focus-within:ring-offset-teal-300 sm:text-sm">
-      <div class="flex flex-wrap gap-1 p-1">
-        <!-- Tags Display Inside Input Area (Common for MultiSelect) or Outside? 
-             Current Jomon implementation has tags outside (below). 
-             Headless UI implementation put tags below. 
-             Let's follow suit or put them inside for "modern" look?
-             Spec says "Breaking changes ... acceptable".
-             Let's put inside for tighter UI, or below if safer. 
-             Let's put below for now to match structure of prototype 1.
-        -->
-        
+    <ComboboxAnchor
+      class="flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none"
+      :class="[disabled ? 'cursor-not-allowed bg-surface-secondary' : 'bg-white']"
+    >
+      <div class="pl-3 flex items-center justify-center">
+         <MagnifyingGlassIcon class="w-6 text-text-secondary" />
+      </div>
+
+      <div class="relative w-full">
         <ComboboxInput
-          class="w-full border-none py-1 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 outline-none min-h-[2rem]"
+          class="w-full border-none bg-transparent px-3 pb-2 ring-0 outline-none text-base text-text-primary"
+          :class="[label ? 'pt-6' : 'pt-2', disabled ? 'cursor-not-allowed' : '']"
           :placeholder="isFloating ? placeholder : ''"
           v-model="searchTerm"
           @keydown.enter.prevent
           @focus="handleInputFocus"
           @blur="isFocused = false"
         />
+        
+        <ComboboxLabel
+          v-if="label"
+          class="pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out"
+          :class="[
+            isFloating
+              ? 'top-1 text-xs font-medium text-blue-500'
+              : 'top-1/2 -translate-y-1/2 text-base',
+             isFocused ? 'text-blue-500' : ''
+          ]"
+        >
+          {{ label }}
+          <span v-if="required" class="text-red-500">*</span>
+        </ComboboxLabel>
       </div>
-      
-      <ComboboxLabel
-        class="pointer-events-none absolute left-3 transition-all duration-200"
-        :class="[
-          isFloating
-            ? 'top-0 text-xs text-blue-500'
-            : 'top-2 text-sm text-gray-500',
-          isFocused ? 'text-blue-500' : 'text-gray-500',
-        ]"
-        v-if="label"
-      >
-        {{ label }}
-      </ComboboxLabel>
 
-      <ComboboxTrigger class="absolute inset-y-0 right-0 flex items-center pr-2">
-        <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+      <ComboboxTrigger class="flex items-center pr-2">
+        <ChevronDownIcon class="h-4 w-4 text-text-secondary" aria-hidden="true" />
       </ComboboxTrigger>
     </ComboboxAnchor>
 
-    <!-- Tags Display -->
+    <!-- Tags -->
     <div v-if="localModel.length > 0" class="mt-2 flex flex-wrap gap-1">
-      <span
+      <div
         v-for="key in localModel"
         :key="String(key)"
-        class="inline-flex items-center rounded bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700"
+        class="flex items-center rounded-sm bg-surface-secondary px-2 py-1 text-xs text-text-primary"
       >
         {{ getLabel(key) }}
         <button
           type="button"
-          class="ml-1 inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full text-gray-400 hover:bg-gray-200 hover:text-gray-500 focus:bg-gray-500 focus:text-white focus:outline-none"
+          class="ml-1 rounded-full hover:bg-blue-100"
           @click.stop="removeTag(key)"
         >
-          <span class="sr-only">Remove {{ getLabel(key) }}</span>
           <XMarkIcon class="h-3 w-3" aria-hidden="true" />
         </button>
-      </span>
+      </div>
     </div>
 
     <ComboboxPortal>
       <ComboboxContent
-        class="box-border max-h-60 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50"
+        class="box-border absolute z-50 mt-1 w-full overflow-auto rounded-md border bg-white shadow-lg max-h-[200px] p-1 focus:outline-none"
         :side-offset="5"
         position="popper"
         align="start"
         :style="{ width: 'var(--reka-combobox-trigger-width)', minWidth: 'var(--reka-combobox-trigger-width)' }"
       >
         <ComboboxViewport>
-          <ComboboxEmpty class="relative cursor-default select-none px-4 py-2 text-gray-700">
+          <ComboboxEmpty class="relative cursor-default select-none px-2 py-1.5 text-sm text-gray-700">
              {{ noResultsText || '該当する項目がありません。' }}
           </ComboboxEmpty>
 
@@ -177,15 +171,14 @@ watch(() => props.modelValue, (newVal, oldVal) => {
               :key="String(option.key)"
               :value="option.key"
               :disabled="option.disabled"
-              class="relative cursor-default select-none py-2 pl-10 pr-4 data-[highlighted]:bg-blue-600 data-[highlighted]:text-white text-gray-900 outline-none"
+              class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm outline-none select-none data-[highlighted]:bg-blue-100 data-[highlighted]:text-blue-500 text-text-primary"
             >
-               <span class="block truncate" :class="{ 'font-medium': localModel.includes(option.key), 'font-normal': !localModel.includes(option.key) }">
-                  {{ option.label }}
-                </span>
-              
-              <ComboboxItemIndicator class="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600 data-[highlighted]:text-white">
-                <CheckIcon class="h-5 w-5" aria-hidden="true" />
-              </ComboboxItemIndicator>
+              <div class="mr-2 flex h-4 w-4 items-center justify-center">
+                <ComboboxItemIndicator>
+                  <CheckIcon class="h-4 w-4" aria-hidden="true" />
+                </ComboboxItemIndicator>
+              </div>
+              <span class="truncate">{{ option.label }}</span>
             </ComboboxItem>
           </ComboboxGroup>
         </ComboboxViewport>

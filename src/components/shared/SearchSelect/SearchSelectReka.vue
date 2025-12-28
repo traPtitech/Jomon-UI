@@ -100,10 +100,11 @@ const filteredOptions = computed(() => {
 
     <ComboboxPortal>
       <ComboboxContent
-        class="max-h-60 w-[var(--radix-combobox-trigger-width)] min-w-[var(--radix-combobox-trigger-width)] overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50"
+        class="max-h-60 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50"
         :side-offset="5"
         position="popper"
         align="start"
+        :style="{ width: 'var(--radix-combobox-trigger-width)' }"
       >
         <ComboboxViewport>
           <ComboboxEmpty class="relative cursor-default select-none px-4 py-2 text-gray-700">

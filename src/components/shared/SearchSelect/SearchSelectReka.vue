@@ -23,7 +23,6 @@ import {
 
 import type { Option } from './types'
 
-// 型を固定してマクロの解析負荷を下げる
 type TValue = string | number
 
 interface Props {
@@ -43,7 +42,7 @@ const props = withDefaults(defineProps<Props>(), {
   placeholder: '検索',
   disabled: false,
   required: false,
-  name: '', // Default to empty string to avoid undefined
+  // name default removed
 })
 
 const model = defineModel<TValue | null>({ required: true })
@@ -56,13 +55,8 @@ const isFocused = ref(false)
 
 // Performance optimization: O(1) lookups
 const optionMap = computed(() => new Map(props.options.map(o => [o.key, o])))
-// Use Set<unknown> to allow checking mixed types without casting
-const keySet = computed(() => new Set<unknown>(props.options.map(o => o.key)))
-
-const handleInputFocus = () => {
-  open.value = true
-  isFocused.value = true
-}
+// Use Set<TValue> directly
+const keySet = computed(() => new Set<TValue>(props.options.map(o => o.key)))
 
 const isFloating = computed(() => {
   return isFocused.value || searchTerm.value.length > 0 || model.value !== null
@@ -107,6 +101,21 @@ const onUpdateModelValue = (val: unknown) => {
     model.value = val
   }
 }
+
+// Workaround for strict prop types in Reka UI
+const rootProps = computed(() => {
+  const p: Record<string, unknown> = {
+    disabled: props.disabled,
+    required: props.required,
+    ignoreFilter: true,
+    openOnFocus: true,
+    openOnClick: true,
+  }
+  if (props.name) {
+    p.name = props.name
+  }
+  return p
+})
 </script>
 
 <template>
@@ -114,10 +123,7 @@ const onUpdateModelValue = (val: unknown) => {
     :model-value="model"
     @update:model-value="onUpdateModelValue"
     v-model:open="open"
-    :disabled="props.disabled"
-    :name="props.name"
-    :required="props.required"
-    :ignore-filter="true"
+    v-bind="rootProps"
     class="group relative">
     <ComboboxAnchor
       class="flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none"
@@ -132,8 +138,8 @@ const onUpdateModelValue = (val: unknown) => {
 
       <div class="relative w-full">
         <!-- 
-          In Reka UI v2, search input value is managed via v-model on ComboboxInput.
-          The 'displayValue' prop is also placed on ComboboxInput.
+          Removed @keydown.enter.prevent to allow native selection behavior.
+          Using standard Combobox features for open/close behavior.
         -->
         <ComboboxInput
           as-child
@@ -149,8 +155,7 @@ const onUpdateModelValue = (val: unknown) => {
             :placeholder="isFloating || !props.label ? placeholder : ''"
             :aria-invalid="!!errorMessage"
             :aria-describedby="errorMessage ? errorId : undefined"
-            @keydown.enter.prevent
-            @focus="handleInputFocus"
+            @focus="isFocused = true"
             @blur="isFocused = false" />
         </ComboboxInput>
 

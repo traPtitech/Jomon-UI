@@ -51,7 +51,7 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   required: false,
   resetOnSelect: true,
-  name: '',
+  // name default is undefined
 })
 
 const model = defineModel<TValue[]>({ required: true })
@@ -66,11 +66,6 @@ const isFocused = ref(false)
 const optionMap = computed(() => new Map(props.options.map(o => [o.key, o])))
 // Use Set<unknown> to allow checking mixed types without casting
 const keySet = computed(() => new Set<unknown>(props.options.map(o => o.key)))
-
-const handleInputFocus = () => {
-  open.value = true
-  isFocused.value = true
-}
 
 const isFloating = computed(() => {
   return (
@@ -98,34 +93,59 @@ const removeTag = (key: TValue) => {
   model.value = model.value.filter(v => v !== key)
 }
 
+/**
+ * Type Guard: Verifies that the value is a string or number AND exists in the options.
+ */
+function isTValue(val: unknown): val is TValue {
+  return (
+    (typeof val === 'string' || typeof val === 'number') &&
+    keySet.value.has(val)
+  )
+}
+
 // Manual selection handler to keep dropdown open
 const handleSelect = (ev: ComboboxItemSelectEventWrapper<TValue>) => {
   // Prevent default behavior (closing and auto-update)
   ev.preventDefault()
 
   const val = ev.detail.value
-  // Ensure val is valid and within options using keySet for safety
-  if (!val || !keySet.value.has(val)) return
+
+  // Use Type Guard to ensure safety. This handles undefined/null checks too.
+  if (!isTValue(val)) return
 
   if (model.value.includes(val)) {
     model.value = model.value.filter(v => v !== val)
   } else {
     model.value = [...model.value, val]
+    // Manual reset is needed here because we prevented default behavior
     if (props.resetOnSelect) {
       searchTerm.value = ''
     }
   }
 }
+
+// Workaround for strict prop types in Reka UI
+const rootProps = computed(() => {
+  const p: Record<string, unknown> = {
+    disabled: props.disabled,
+    required: props.required,
+    ignoreFilter: true,
+    resetSearchTermOnSelect: props.resetOnSelect,
+    openOnFocus: true,
+    openOnClick: true,
+  }
+  if (props.name) {
+    p.name = props.name
+  }
+  return p
+})
 </script>
 
 <template>
   <ComboboxRoot
     :model-value="model"
     v-model:open="open"
-    :disabled="props.disabled"
-    :name="props.name"
-    :required="props.required"
-    :ignore-filter="true"
+    v-bind="rootProps"
     class="group relative"
     multiple>
     <ComboboxAnchor
@@ -140,7 +160,6 @@ const handleSelect = (ev: ComboboxItemSelectEventWrapper<TValue>) => {
       </div>
 
       <div class="relative w-full">
-        <!-- Search input sync via v-model on ComboboxInput -->
         <ComboboxInput as-child v-model="searchTerm">
           <input
             :id="inputId"
@@ -152,8 +171,7 @@ const handleSelect = (ev: ComboboxItemSelectEventWrapper<TValue>) => {
             :placeholder="isFloating || !props.label ? placeholder : ''"
             :aria-invalid="!!errorMessage"
             :aria-describedby="errorMessage ? errorId : undefined"
-            @keydown.enter.prevent
-            @focus="handleInputFocus"
+            @focus="isFocused = true"
             @blur="isFocused = false" />
         </ComboboxInput>
 
@@ -188,7 +206,7 @@ const handleSelect = (ev: ComboboxItemSelectEventWrapper<TValue>) => {
     <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1">
       <div
         v-for="key in model"
-        :key="key"
+        :key="String(key)"
         class="flex items-center rounded-sm bg-surface-secondary px-2 py-1 text-xs text-text-primary">
         {{ getLabel(key) }}
         <button

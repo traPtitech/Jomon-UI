@@ -160,6 +160,10 @@ const rootProps = computed(() => {
       </div>
 
       <div class="relative w-full">
+        <!-- 
+          Removed @keydown.enter.prevent to allow native selection behavior.
+          Using standard Combobox features for open/close behavior.
+        -->
         <ComboboxInput as-child v-model="searchTerm">
           <input
             :id="inputId"
@@ -211,8 +215,9 @@ const rootProps = computed(() => {
         {{ getLabel(key) }}
         <button
           type="button"
+          :disabled="props.disabled"
           :aria-label="`${getLabel(key)} を削除`"
-          class="ml-1 rounded-full hover:bg-blue-100"
+          class="ml-1 rounded-full hover:bg-blue-100 disabled:opacity-50 disabled:hover:bg-transparent"
           @click.stop="removeTag(key)">
           <XMarkIcon class="h-3 w-3" aria-hidden="true" />
         </button>

@@ -1,28 +1,51 @@
-import { computed, ref } from 'vue'
-import type { Ref } from 'vue'
+import { type Ref, computed, ref } from 'vue'
 
 import type { Option } from '../types'
 
-export function useSearchSelectReka<TValue extends string | number>(
+type TValue = string | number
+
+export function useSearchSelectReka(
   options: Ref<Option<TValue>[]>,
-  modelValue: Ref<TValue | null | TValue[]>,
+  modelValue: Ref<TValue | TValue[] | null>,
   filterFunction?: (option: Option<TValue>, query: string) => boolean
 ) {
   const searchTerm = ref('')
   const open = ref(false)
   const isFocused = ref(false)
 
-  // Performance optimization: O(1) lookups
-  const optionMap = computed(() => new Map(options.value.map(o => [o.key, o])))
-  // Use Set<unknown> to allow checking mixed types without casting or generic constraints issues
-  const keySet = computed(() => new Set<unknown>(options.value.map(o => o.key)))
-
   const isFloating = computed(() => {
-    const hasValue = Array.isArray(modelValue.value)
-      ? modelValue.value.length > 0
-      : modelValue.value !== null
-    return isFocused.value || searchTerm.value.length > 0 || hasValue
+    return (
+      isFocused.value ||
+      open.value ||
+      searchTerm.value !== '' ||
+      (Array.isArray(modelValue.value)
+        ? modelValue.value.length > 0
+        : modelValue.value !== null)
+    )
   })
+
+  const optionMap = computed(() => {
+    const map = new Map<TValue, Option<TValue>>()
+    for (const opt of options.value) {
+      map.set(opt.key, opt)
+    }
+    return map
+  })
+
+  const isTValue = (val: unknown): val is TValue => {
+    return typeof val === 'string' || typeof val === 'number'
+  }
+
+  const getOption = (val: unknown): Option<TValue> | undefined => {
+    if (isTValue(val)) {
+      return optionMap.value.get(val)
+    }
+    return undefined
+  }
+
+  const getLabel = (val: unknown): string => {
+    return getOption(val)?.label ?? (isTValue(val) ? String(val) : '')
+  }
 
   const filteredOptions = computed(() => {
     if (searchTerm.value === '') return options.value
@@ -34,20 +57,6 @@ export function useSearchSelectReka<TValue extends string | number>(
     return options.value.filter(o => o.label.toLowerCase().includes(term))
   })
 
-  /**
-   * Type Guard: Verifies that the value is a string or number AND exists in the options.
-   */
-  function isTValue(val: unknown): val is TValue {
-    return (
-      (typeof val === 'string' || typeof val === 'number') &&
-      keySet.value.has(val)
-    )
-  }
-
-  function getLabel(key: TValue): string {
-    return optionMap.value.get(key)?.label ?? String(key)
-  }
-
   return {
     searchTerm,
     open,
@@ -55,8 +64,8 @@ export function useSearchSelectReka<TValue extends string | number>(
     isFloating,
     filteredOptions,
     optionMap,
-    keySet,
     isTValue,
+    getOption,
     getLabel,
   }
 }

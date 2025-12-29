@@ -77,8 +77,14 @@ export default defineConfig([
     },
     vueTsConfigs.strictTypeChecked,
     {
-      files: ['src/**/*.vue'],
+      files: ['src/**/*.{ts,tsx,vue}'],
       rules: {
+        '@typescript-eslint/restrict-template-expressions': [
+          'error',
+          {
+            allowNumber: true,
+          },
+        ],
         'vue/require-default-prop': 'off',
         'vuejs-accessibility/label-has-for': [
           'error',

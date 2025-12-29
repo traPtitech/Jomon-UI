@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useId } from 'vue'
+import { computed, useId } from 'vue'
 
 import {
   CheckIcon,
@@ -10,7 +10,6 @@ import {
 import {
   ComboboxAnchor,
   ComboboxContent,
-  ComboboxEmpty,
   ComboboxGroup,
   ComboboxInput,
   ComboboxItem,
@@ -21,16 +20,12 @@ import {
   ComboboxViewport,
   Label,
 } from 'reka-ui'
+import type { ComboboxRootProps } from 'reka-ui'
 
+import { useSearchSelectReka } from './composables/useSearchSelectReka'
 import type { Option } from './types'
 
 type TValue = string | number
-
-// Manual type definition for Reka UI event if not exported
-type ComboboxItemSelectEventWrapper<T> = CustomEvent<{
-  value: T
-  originalEvent: Event
-}>
 
 interface Props {
   options: Option<TValue>[]
@@ -51,73 +46,52 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   required: false,
   resetOnSelect: true,
-  // name default is undefined
+  name: '',
 })
 
 const model = defineModel<TValue[]>({ required: true })
 
 const inputId = useId()
 const errorId = `${inputId}-error`
-const searchTerm = ref('')
-const open = ref(false)
-const isFocused = ref(false)
 
-// Performance optimization: O(1) lookups
-const optionMap = computed(() => new Map(props.options.map(o => [o.key, o])))
-// Use Set<unknown> to allow checking mixed types without casting
-const keySet = computed(() => new Set<unknown>(props.options.map(o => o.key)))
-
-const isFloating = computed(() => {
-  return (
-    isFocused.value || searchTerm.value.length > 0 || model.value.length > 0
-  )
-})
-
-const filteredOptions = computed(() => {
-  if (searchTerm.value === '') return props.options
-
-  const term = searchTerm.value.toLowerCase()
-  const filterFn = props.filterFunction
-  if (filterFn) {
-    return props.options.filter(o => filterFn(o, searchTerm.value))
-  }
-  return props.options.filter(o => o.label.toLowerCase().includes(term))
-})
-
-const getLabel = (key: TValue) => {
-  return optionMap.value.get(key)?.label ?? String(key)
-}
+const {
+  searchTerm,
+  open,
+  isFocused,
+  isFloating,
+  filteredOptions,
+  getOption,
+  getLabel,
+} = useSearchSelectReka(
+  computed(() => props.options),
+  model,
+  props.filterFunction
+)
 
 const removeTag = (key: TValue) => {
   if (props.disabled) return
   model.value = model.value.filter(v => v !== key)
 }
 
-/**
- * Type Guard: Verifies that the value is a string or number AND exists in the options.
- */
-function isTValue(val: unknown): val is TValue {
-  return (
-    (typeof val === 'string' || typeof val === 'number') &&
-    keySet.value.has(val)
-  )
-}
-
-// Manual selection handler to keep dropdown open
-const handleSelect = (ev: ComboboxItemSelectEventWrapper<TValue>) => {
-  // Prevent default behavior (closing and auto-update)
+// Manual selection handler to keep dropdown open for multiple selection
+const handleSelect = (ev: CustomEvent) => {
+  // We handle model updates manually to keep the dropdown open
   ev.preventDefault()
 
-  const val = ev.detail.value
+  if (props.disabled) return
 
-  // Use Type Guard to ensure safety. This handles undefined/null checks too.
-  if (!isTValue(val)) return
+  const val = ev.detail?.value
+  // Validate existence using O(1) Map lookup
+  const option = getOption(val)
+  // Fix: Ensure we check both root disabled and option disabled
+  if (!option || option.disabled) return
 
-  if (model.value.includes(val)) {
-    model.value = model.value.filter(v => v !== val)
+  const validKey = option.key
+
+  if (model.value.includes(validKey)) {
+    model.value = model.value.filter(v => v !== validKey)
   } else {
-    model.value = [...model.value, val]
-    // Manual reset is needed here because we prevented default behavior
+    model.value = [...model.value, validKey]
     if (props.resetOnSelect) {
       searchTerm.value = ''
     }
@@ -125,8 +99,8 @@ const handleSelect = (ev: ComboboxItemSelectEventWrapper<TValue>) => {
 }
 
 // Workaround for strict prop types in Reka UI
-const rootProps = computed(() => {
-  const p: Record<string, unknown> = {
+const rootProps = computed<Partial<ComboboxRootProps>>(() => {
+  const p: Partial<ComboboxRootProps> = {
     disabled: props.disabled,
     required: props.required,
     ignoreFilter: true,
@@ -151,7 +125,9 @@ const rootProps = computed(() => {
     <ComboboxAnchor
       class="flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none"
       :class="[
-        props.disabled ? 'cursor-not-allowed bg-surface-secondary' : 'bg-white',
+        props.disabled
+          ? 'cursor-not-allowed bg-surface-secondary opacity-60'
+          : 'bg-white',
       ]">
       <div class="flex items-center justify-center pl-3">
         <MagnifyingGlassIcon
@@ -159,12 +135,11 @@ const rootProps = computed(() => {
           aria-hidden="true" />
       </div>
 
-      <div class="relative w-full">
-        <!-- 
-          Removed @keydown.enter.prevent to allow native selection behavior.
-          Using standard Combobox features for open/close behavior.
-        -->
-        <ComboboxInput as-child v-model="searchTerm">
+      <div
+        class="relative w-full"
+        :class="[props.disabled ? 'pointer-events-none' : '']">
+        <!-- Search input sync via v-model on ComboboxInput -->
+        <ComboboxInput as-child v-model="searchTerm" :disabled="props.disabled">
           <input
             :id="inputId"
             class="peer w-full border-none bg-transparent px-3 pb-2 text-base text-text-primary ring-0 outline-none"
@@ -173,8 +148,11 @@ const rootProps = computed(() => {
               props.disabled ? 'cursor-not-allowed' : '',
             ]"
             :placeholder="isFloating || !props.label ? placeholder : ''"
+            :aria-label="label ?? placeholder ?? '検索'"
             :aria-invalid="!!errorMessage"
             :aria-describedby="errorMessage ? errorId : undefined"
+            :aria-errormessage="errorMessage ? errorId : undefined"
+            :disabled="props.disabled"
             @focus="isFocused = true"
             @blur="isFocused = false" />
         </ComboboxInput>
@@ -194,10 +172,11 @@ const rootProps = computed(() => {
         </Label>
       </div>
 
-      <ComboboxTrigger as-child>
+      <ComboboxTrigger as-child :disabled="props.disabled">
         <button
           type="button"
           class="flex items-center pr-2"
+          :class="[props.disabled ? 'cursor-not-allowed' : '']"
           :aria-label="label ? `${label}を開く` : '選択肢を開く'">
           <ChevronDownIcon
             class="h-4 w-4 text-text-secondary"
@@ -217,7 +196,7 @@ const rootProps = computed(() => {
           type="button"
           :disabled="props.disabled"
           :aria-label="`${getLabel(key)} を削除`"
-          class="ml-1 rounded-full hover:bg-blue-100 disabled:opacity-50 disabled:hover:bg-transparent"
+          class="ml-1 rounded-full hover:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
           @click.stop="removeTag(key)">
           <XMarkIcon class="h-3 w-3" aria-hidden="true" />
         </button>
@@ -242,19 +221,22 @@ const rootProps = computed(() => {
           minWidth: 'var(--reka-combobox-trigger-width)',
         }">
         <ComboboxViewport>
-          <ComboboxEmpty
+          <!-- Manual control over empty state due to ignore-filter -->
+          <div
+            v-if="filteredOptions.length === 0"
             class="relative cursor-default px-2 py-1.5 text-sm text-gray-700 select-none">
             {{ props.noResultsText || '該当する項目がありません。' }}
-          </ComboboxEmpty>
+          </div>
 
           <ComboboxGroup>
             <ComboboxItem
               v-for="option in filteredOptions"
               :key="option.key"
               :value="option.key"
-              :disabled="!!option.disabled"
+              :text-value="option.label"
+              :disabled="!!props.disabled || !!option.disabled"
               @select="handleSelect"
-              class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-[highlighted]:bg-blue-100 data-[highlighted]:text-blue-500">
+              class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-40 data-[highlighted]:not-data-[disabled]:bg-blue-100 data-[highlighted]:not-data-[disabled]:text-blue-500">
               <div class="mr-2 flex h-4 w-4 items-center justify-center">
                 <ComboboxItemIndicator>
                   <CheckIcon class="h-4 w-4" aria-hidden="true" />

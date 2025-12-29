@@ -22,7 +22,8 @@
     "postinstall": "npm run gen-api",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "prepare": "husky"
   },
   "dependencies": {
     "@floating-ui/vue": "^1.1.9",

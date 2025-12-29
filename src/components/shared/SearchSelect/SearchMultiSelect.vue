@@ -87,7 +87,7 @@ const handleInputKeydown = (e: KeyboardEvent) => {
 
   // Backspace deletion for MultiSelect
   if (e.key === 'Backspace' && machineApi.value.inputValue === '') {
-    const currentValues = machineApi.value.value 
+    const currentValues = machineApi.value.value
     if (currentValues.length > 0) {
       const lastKeyStr = currentValues[currentValues.length - 1]
       api.value.clearValue(lastKeyStr)
@@ -97,29 +97,32 @@ const handleInputKeydown = (e: KeyboardEvent) => {
 </script>
 
 <template>
-  <div v-bind="safeBind(machineApi.getRootProps())" class="relative w-full group">
+  <div
+    v-bind="safeBind(machineApi.getRootProps())"
+    class="group relative w-full">
     <!-- Input Wrapper -->
     <div
       v-bind="safeBind(machineApi.getControlProps())"
       :class="[
         'flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none',
         disabled ? 'cursor-not-allowed bg-surface-secondary' : 'bg-white',
-      ]"
-    >
-      <div class="pl-3 flex items-center justify-center">
-         <MagnifyingGlassIcon class="w-6 text-text-secondary" />
+      ]">
+      <div class="flex items-center justify-center pl-3">
+        <MagnifyingGlassIcon class="w-6 text-text-secondary" />
       </div>
 
       <div class="relative w-full">
         <input
           v-bind="safeBind(machineApi.getInputProps())"
-          class="peer w-full border-none bg-transparent px-3 pb-2 ring-0 outline-none text-base text-text-primary"
-          :class="[label ? 'pt-6' : 'pt-2', disabled ? 'cursor-not-allowed' : '']"
+          class="peer w-full border-none bg-transparent px-3 pb-2 text-base text-text-primary ring-0 outline-none"
+          :class="[
+            label ? 'pt-6' : 'pt-2',
+            disabled ? 'cursor-not-allowed' : '',
+          ]"
           :placeholder="isFloating ? placeholder : ''"
           :aria-invalid="!!errorMessage"
           :aria-describedby="errorMessage ? errorId : undefined"
-          @keydown="handleInputKeydown" 
-        />
+          @keydown="handleInputKeydown" />
 
         <label
           v-if="label"
@@ -128,9 +131,8 @@ const handleInputKeydown = (e: KeyboardEvent) => {
           :class="[
             isFloating
               ? 'top-1 text-xs font-medium'
-              : 'top-1/2 -translate-y-1/2 text-base'
-          ]"
-        >
+              : 'top-1/2 -translate-y-1/2 text-base',
+          ]">
           {{ label }}
           <span v-if="required" class="text-red-500">*</span>
         </label>
@@ -139,9 +141,10 @@ const handleInputKeydown = (e: KeyboardEvent) => {
       <button
         type="button"
         v-bind="safeBind(machineApi.getTriggerProps())"
-        class="flex items-center pr-2"
-      >
-        <ChevronUpDownIcon class="h-4 w-4 text-text-secondary" aria-hidden="true" />
+        class="flex items-center pr-2">
+        <ChevronUpDownIcon
+          class="h-4 w-4 text-text-secondary"
+          aria-hidden="true" />
       </button>
     </div>
 
@@ -150,27 +153,27 @@ const handleInputKeydown = (e: KeyboardEvent) => {
       v-if="machineApi.value && machineApi.value.length > 0"
       class="mt-2 flex flex-wrap gap-1"
       role="group"
-      aria-label="Selection"
-    >
+      aria-label="Selection">
       <div
         v-for="valStr in machineApi.value"
         :key="valStr"
-        class="flex items-center rounded-sm bg-surface-secondary px-2 py-1 text-xs text-text-primary"
-      >
+        class="flex items-center rounded-sm bg-surface-secondary px-2 py-1 text-xs text-text-primary">
         {{ optionMap.get(valStr) ?? valStr }}
         <button
           type="button"
           :aria-label="`${optionMap.get(valStr) ?? valStr} を削除`"
           class="ml-1 rounded-full hover:bg-blue-100"
-          @click.stop="removeItem(valStr)"
-        >
+          @click.stop="removeItem(valStr)">
           <XMarkIcon class="h-3 w-3" />
         </button>
       </div>
     </div>
 
     <!-- Error Message -->
-    <p v-if="errorMessage" :id="errorId" class="mt-1 px-3 text-sm text-error-primary">
+    <p
+      v-if="errorMessage"
+      :id="errorId"
+      class="mt-1 px-3 text-sm text-error-primary">
       {{ errorMessage }}
     </p>
 
@@ -180,19 +183,16 @@ const handleInputKeydown = (e: KeyboardEvent) => {
         <ul
           v-if="machineApi.open"
           v-bind="safeBind(machineApi.getContentProps())"
-          class="absolute z-50 mt-1 w-[var(--reference-width)] overflow-auto rounded-md border bg-white shadow-lg max-h-[200px] p-1 focus:outline-none"
-        >
+          class="absolute z-50 mt-1 max-h-[200px] w-(--reference-width) overflow-auto rounded-md border bg-white p-1 shadow-lg focus:outline-none">
           <li
             v-for="item in filteredOptions"
             :key="item.key"
             v-bind="safeBind(machineApi.getItemProps({ item }))"
-            class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm outline-none select-none data-[highlighted]:bg-blue-100 data-[highlighted]:text-blue-500 text-text-primary data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50"
-          >
+            class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-disabled:cursor-not-allowed data-disabled:opacity-50 data-highlighted:bg-blue-100 data-highlighted:text-blue-500">
             <div class="mr-2 flex h-4 w-4 items-center justify-center">
-               <CheckIcon
-                  v-if="selectedKeysSet.has(serializeOptionKey(item.key))"
-                  class="h-4 w-4" 
-               />
+              <CheckIcon
+                v-if="selectedKeysSet.has(serializeOptionKey(item.key))"
+                class="h-4 w-4" />
             </div>
             <span class="truncate">{{ item.label }}</span>
           </li>

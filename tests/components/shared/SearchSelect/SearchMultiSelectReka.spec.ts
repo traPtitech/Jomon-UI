@@ -4,11 +4,14 @@ import { describe, expect, it, vi } from 'vitest'
 import SearchMultiSelectReka from '@/components/shared/SearchSelect/SearchMultiSelectReka.vue'
 import type { Option } from '@/components/shared/SearchSelect/types'
 
-vi.stubGlobal('ResizeObserver', class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-})
+vi.stubGlobal(
+  'ResizeObserver',
+  class ResizeObserver {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+)
 
 // Reka UI uses scrollIntoView which isn't in JSDOM
 Element.prototype.scrollIntoView = vi.fn()
@@ -35,32 +38,32 @@ describe('SearchMultiSelectReka', () => {
     expect(input.exists()).toBe(true)
   })
 
-   it('selects multiple options', async () => {
+  it('selects multiple options', async () => {
     const wrapper = mount(SearchMultiSelectReka, {
       props: {
         options: testOptions,
         label: 'Test Label',
         modelValue: [],
       },
-      attachTo: document.body
+      attachTo: document.body,
     })
 
     const input = wrapper.find('input')
     // Focus or click to open
     await input.trigger('click')
     await wrapper.vm.$nextTick()
-    
+
     // Simulate typing
     await input.setValue('Option 1')
     await input.trigger('input')
     await wrapper.vm.$nextTick()
-    
+
     // Select first
     await input.trigger('keydown', { key: 'ArrowDown' })
     await wrapper.vm.$nextTick()
     await input.trigger('keydown', { key: 'Enter' })
     await wrapper.vm.$nextTick()
-    
+
     expect(wrapper.emitted('update:modelValue')).toBeTruthy()
     const events = wrapper.emitted('update:modelValue')
     if (events) {

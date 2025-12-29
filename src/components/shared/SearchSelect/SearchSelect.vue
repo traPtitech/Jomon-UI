@@ -1,7 +1,11 @@
 <script setup lang="ts" generic="TValue extends string | number | null">
 import { computed, useId } from 'vue'
 
-import { CheckIcon, ChevronUpDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
+import {
+  CheckIcon,
+  ChevronUpDownIcon,
+  MagnifyingGlassIcon,
+} from '@heroicons/vue/24/outline'
 
 import { useSearchSelectMachine } from './composables/useSearchSelectMachine'
 // Primitives removed, using inline elements for style control
@@ -65,31 +69,34 @@ const isFloating = computed(() => {
 </script>
 
 <template>
-  <div v-bind="safeBind(machineApi.getRootProps())" class="relative w-full group">
+  <div
+    v-bind="safeBind(machineApi.getRootProps())"
+    class="group relative w-full">
     <!-- Input Wrapper -->
     <div
       v-bind="safeBind(machineApi.getControlProps())"
       :class="[
         'flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none',
         disabled ? 'cursor-not-allowed bg-surface-secondary' : 'bg-white',
-      ]"
-    >
+      ]">
       <!-- Prefix Icon -->
-      <div class="pl-3 flex items-center justify-center">
-         <MagnifyingGlassIcon class="w-6 text-text-secondary" />
+      <div class="flex items-center justify-center pl-3">
+        <MagnifyingGlassIcon class="w-6 text-text-secondary" />
       </div>
 
       <div class="relative w-full">
         <!-- Input -->
         <input
           v-bind="safeBind(machineApi.getInputProps())"
-          class="peer w-full border-none bg-transparent px-3 pb-2 ring-0 outline-none text-base text-text-primary"
-          :class="[label ? 'pt-6' : 'pt-2', disabled ? 'cursor-not-allowed' : '']"
+          class="peer w-full border-none bg-transparent px-3 pb-2 text-base text-text-primary ring-0 outline-none"
+          :class="[
+            label ? 'pt-6' : 'pt-2',
+            disabled ? 'cursor-not-allowed' : '',
+          ]"
           :placeholder="isFloating ? placeholder : ''"
           :aria-invalid="!!errorMessage"
           :aria-describedby="errorMessage ? errorId : undefined"
-          @keydown="emit('keydown', $event)" 
-        />
+          @keydown="emit('keydown', $event)" />
 
         <!-- Floating Label -->
         <label
@@ -99,9 +106,8 @@ const isFloating = computed(() => {
           :class="[
             isFloating
               ? 'top-1 text-xs font-medium'
-              : 'top-1/2 -translate-y-1/2 text-base'
-          ]"
-        >
+              : 'top-1/2 -translate-y-1/2 text-base',
+          ]">
           {{ label }}
           <span v-if="required" class="text-red-500">*</span>
         </label>
@@ -111,14 +117,18 @@ const isFloating = computed(() => {
       <button
         type="button"
         v-bind="safeBind(machineApi.getTriggerProps())"
-        class="flex items-center pr-2"
-      >
-        <ChevronUpDownIcon class="h-4 w-4 text-text-secondary" aria-hidden="true" />
+        class="flex items-center pr-2">
+        <ChevronUpDownIcon
+          class="h-4 w-4 text-text-secondary"
+          aria-hidden="true" />
       </button>
     </div>
 
     <!-- Error Message -->
-    <p v-if="errorMessage" :id="errorId" class="mt-1 px-3 text-sm text-error-primary">
+    <p
+      v-if="errorMessage"
+      :id="errorId"
+      class="mt-1 px-3 text-sm text-error-primary">
       {{ errorMessage }}
     </p>
 
@@ -128,26 +138,24 @@ const isFloating = computed(() => {
         <ul
           v-if="machineApi.open"
           v-bind="safeBind(machineApi.getContentProps())"
-          class="absolute z-50 mt-1 w-[var(--reference-width)] overflow-auto rounded-md border bg-white shadow-lg max-h-[200px] p-1 focus:outline-none"
-        >
+          class="absolute z-50 mt-1 max-h-[200px] w-(--reference-width) overflow-auto rounded-md border bg-white p-1 shadow-lg focus:outline-none">
           <li
             v-for="item in filteredOptions"
             :key="item.key"
             v-bind="safeBind(machineApi.getItemProps({ item }))"
-            class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm outline-none select-none data-[highlighted]:bg-blue-100 data-[highlighted]:text-blue-500 text-text-primary data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50"
-          >
+            class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-disabled:cursor-not-allowed data-disabled:opacity-50 data-highlighted:bg-blue-100 data-highlighted:text-blue-500">
             <span
-              class="truncate flex-1"
+              class="flex-1 truncate"
               :class="{
-                'font-medium': selectedKeysSet.has(serializeOptionKey(item.key)),
-              }"
-            >
+                'font-medium': selectedKeysSet.has(
+                  serializeOptionKey(item.key)
+                ),
+              }">
               {{ item.label }}
             </span>
             <CheckIcon
               v-if="selectedKeysSet.has(serializeOptionKey(item.key))"
-              class="ml-auto h-4 w-4" 
-            />
+              class="ml-auto h-4 w-4" />
           </li>
 
           <!-- No Items / No Results -->

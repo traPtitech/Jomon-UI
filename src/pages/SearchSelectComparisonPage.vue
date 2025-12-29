@@ -27,21 +27,22 @@ const multiReka = ref<string[]>([])
 </script>
 
 <template>
-  <div class="container mx-auto p-8 space-y-8">
-    <h1 class="text-2xl font-bold mb-4">SearchSelect Implementation Comparison</h1>
+  <div class="container mx-auto space-y-8 p-8">
+    <h1 class="mb-4 text-2xl font-bold">
+      SearchSelect Implementation Comparison
+    </h1>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
       <!-- Zag (Current) -->
-      <div class="space-y-4 border p-4 rounded bg-gray-50">
+      <div class="space-y-4 rounded border bg-gray-50 p-4">
         <h2 class="text-xl font-semibold">Zag (Current)</h2>
-        
+
         <div class="space-y-2">
           <h3 class="font-medium">Single Select</h3>
           <SearchSelect
             v-model="singleZag"
             :options="options"
-            label="Select Item"
-          />
+            label="Select Item" />
           <div class="text-xs text-gray-500">Value: {{ singleZag }}</div>
         </div>
 
@@ -50,23 +51,21 @@ const multiReka = ref<string[]>([])
           <SearchMultiSelect
             v-model="multiZag"
             :options="options"
-            label="Select Items"
-          />
+            label="Select Items" />
           <div class="text-xs text-gray-500">Value: {{ multiZag }}</div>
         </div>
       </div>
 
       <!-- Headless UI -->
-      <div class="space-y-4 border p-4 rounded bg-gray-50">
+      <div class="space-y-4 rounded border bg-gray-50 p-4">
         <h2 class="text-xl font-semibold">Headless UI</h2>
-        
+
         <div class="space-y-2">
           <h3 class="font-medium">Single Select</h3>
           <SearchSelectHeadless
             v-model="singleHeadless"
             :options="options"
-            label="Select Item"
-          />
+            label="Select Item" />
           <div class="text-xs text-gray-500">Value: {{ singleHeadless }}</div>
         </div>
 
@@ -75,23 +74,21 @@ const multiReka = ref<string[]>([])
           <SearchMultiSelectHeadless
             v-model="multiHeadless"
             :options="options"
-            label="Select Items"
-          />
+            label="Select Items" />
           <div class="text-xs text-gray-500">Value: {{ multiHeadless }}</div>
         </div>
       </div>
 
       <!-- Reka UI -->
-      <div class="space-y-4 border p-4 rounded bg-gray-50">
+      <div class="space-y-4 rounded border bg-gray-50 p-4">
         <h2 class="text-xl font-semibold">Reka UI</h2>
-        
+
         <div class="space-y-2">
           <h3 class="font-medium">Single Select</h3>
           <SearchSelectReka
             v-model="singleReka"
             :options="options"
-            label="Select Item"
-          />
+            label="Select Item" />
           <div class="text-xs text-gray-500">Value: {{ singleReka }}</div>
         </div>
 
@@ -100,8 +97,7 @@ const multiReka = ref<string[]>([])
           <SearchMultiSelectReka
             v-model="multiReka"
             :options="options"
-            label="Select Items"
-          />
+            label="Select Items" />
           <div class="text-xs text-gray-500">Value: {{ multiReka }}</div>
         </div>
       </div>

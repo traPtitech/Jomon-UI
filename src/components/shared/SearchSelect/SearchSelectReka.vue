@@ -21,10 +21,7 @@ import {
   ComboboxViewport,
 } from 'reka-ui'
 
-import type {
-  SearchSelectCommonProps,
-  SearchSelectEmit,
-} from './types'
+import type { SearchSelectCommonProps, SearchSelectEmit } from './types'
 
 const props = withDefaults(defineProps<SearchSelectCommonProps<TValue> & { modelValue: TValue | null }>(), {
   placeholder: '検索',

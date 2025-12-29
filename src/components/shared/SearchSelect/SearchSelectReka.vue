@@ -103,16 +103,17 @@ const filteredOptions = computed(() => {
             isFloating
               ? 'top-1 text-xs font-medium text-blue-500' // Added blue-500 for active state check? Or rely on peer-focus? Reka Label doesn't detect peer focus easily without CSS.
               : 'top-1/2 -translate-y-1/2 text-base',
-             isFocused ? 'text-blue-500' : ''
-          ]"
-        >
+            isFocused ? 'text-blue-500' : '',
+          ]">
           {{ label }}
           <span v-if="required" class="text-red-500">*</span>
         </ComboboxLabel>
       </div>
 
       <ComboboxTrigger class="flex items-center pr-2">
-        <ChevronDownIcon class="h-4 w-4 text-text-secondary" aria-hidden="true" />
+        <ChevronDownIcon
+          class="h-4 w-4 text-text-secondary"
+          aria-hidden="true" />
       </ComboboxTrigger>
     </ComboboxAnchor>
 

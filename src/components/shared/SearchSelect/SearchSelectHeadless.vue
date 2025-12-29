@@ -111,19 +111,17 @@ const displayValue = (item: unknown): string => {
           :class="[
             isFloating
               ? 'top-1 text-xs font-medium'
-              : 'top-1/2 -translate-y-1/2 text-base'
-          ]"
-        >
+              : 'top-1/2 -translate-y-1/2 text-base',
+          ]">
           {{ label }}
           <span v-if="required" class="text-red-500">*</span>
         </label>
       </div>
 
-      <ComboboxButton
-        ref="comboButton"
-        class="flex items-center pr-2"
-      >
-        <ChevronDownIcon class="h-4 w-4 text-text-secondary" aria-hidden="true" />
+      <ComboboxButton ref="comboButton" class="flex items-center pr-2">
+        <ChevronDownIcon
+          class="h-4 w-4 text-text-secondary"
+          aria-hidden="true" />
       </ComboboxButton>
     </div>
 
@@ -136,15 +134,12 @@ const displayValue = (item: unknown): string => {
       leave="transition ease-in duration-100"
       leave-from="opacity-100"
       leave-to="opacity-0"
-      @after-leave="query = ''"
-    >
+      @after-leave="query = ''">
       <ComboboxOptions
-        class="absolute z-50 mt-1 w-full overflow-auto rounded-md border bg-white shadow-lg max-h-[200px] p-1 focus:outline-none"
-      >
+        class="absolute z-50 mt-1 max-h-[200px] w-full overflow-auto rounded-md border bg-white p-1 shadow-lg focus:outline-none">
         <div
           v-if="filteredOptions.length === 0 && query !== ''"
-          class="relative cursor-default select-none px-2 py-1.5 text-sm text-gray-700"
-        >
+          class="relative cursor-default px-2 py-1.5 text-sm text-gray-700 select-none">
           {{ noResultsText || '該当する項目がありません。' }}
         </div>
 

@@ -80,7 +80,17 @@ const removeTag = (key: TValue) => {
   model.value = model.value.filter(v => v !== key)
 }
 
-const inputAttrs = computed<Record<string, unknown>>(() => ({
+/**
+ * Handle input focus and clicks to ensure dropdown opens correctly.
+ */
+const handleInteraction = (isOpen: boolean) => {
+  isFocused.value = true
+  if (!isOpen) {
+    forceOpen()
+  }
+}
+
+const inputAttrs = (isOpen: boolean) => ({
   id: inputId,
   placeholder: isFloating.value ? props.placeholder : '',
   onInput: (e: Event) => {
@@ -89,14 +99,12 @@ const inputAttrs = computed<Record<string, unknown>>(() => ({
       query.value = target.value
     }
   },
-  onFocus: () => {
-    isFocused.value = true
-    forceOpen()
-  },
+  onFocus: () => { handleInteraction(isOpen); },
+  onClick: () => { handleInteraction(isOpen); },
   onBlur: () => {
     isFocused.value = false
   },
-}))
+})
 
 /**
  * Truly type-safe array guard
@@ -115,6 +123,7 @@ const onUpdateModel = (val: unknown) => {
 
 <template>
   <Combobox
+    v-slot="{ open }"
     :model-value="model"
     @update:model-value="onUpdateModel"
     :disabled="props.disabled"
@@ -138,7 +147,7 @@ const onUpdateModel = (val: unknown) => {
             label ? 'pt-6' : 'pt-2',
             props.disabled ? 'cursor-not-allowed' : '',
           ]"
-          v-bind="inputAttrs"
+          v-bind="inputAttrs(open)"
           :display-value="() => query" />
 
         <label

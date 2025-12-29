@@ -72,7 +72,7 @@ const filteredOptions = computed(() => {
 
 const displayValue = (item: unknown): string => {
   if (item === null || item === undefined) return ''
-
+  
   if (typeof item === 'string' || typeof item === 'number') {
     const option = props.options.find(o => o.key === item)
     if (option) return option.label
@@ -81,7 +81,18 @@ const displayValue = (item: unknown): string => {
   return ''
 }
 
-const inputAttrs = computed<Record<string, unknown>>(() => ({
+/**
+ * Handle input focus and clicks to ensure dropdown opens correctly.
+ * @param isOpen - Current open state from Combobox slot
+ */
+const handleInteraction = (isOpen: boolean) => {
+  isFocused.value = true
+  if (!isOpen) {
+    forceOpen()
+  }
+}
+
+const inputAttrs = (isOpen: boolean) => ({
   id: inputId,
   placeholder: isFloating.value ? props.placeholder : '',
   onInput: (e: Event) => {
@@ -90,14 +101,12 @@ const inputAttrs = computed<Record<string, unknown>>(() => ({
       query.value = target.value
     }
   },
-  onFocus: () => {
-    isFocused.value = true
-    forceOpen()
-  },
+  onFocus: () => { handleInteraction(isOpen); },
+  onClick: () => { handleInteraction(isOpen); },
   onBlur: () => {
     isFocused.value = false
   },
-}))
+})
 
 /**
  * Truly type-safe model update without 'as'
@@ -117,6 +126,7 @@ const onUpdateModel = (val: unknown) => {
 
 <template>
   <Combobox
+    v-slot="{ open }"
     :model-value="model"
     @update:model-value="onUpdateModel"
     :disabled="props.disabled"
@@ -141,7 +151,7 @@ const onUpdateModel = (val: unknown) => {
             props.disabled ? 'cursor-not-allowed' : '',
           ]"
           :display-value="displayValue"
-          v-bind="inputAttrs" />
+          v-bind="inputAttrs(open)" />
 
         <label
           v-if="label"

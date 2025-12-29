@@ -23,10 +23,7 @@ export interface UseSearchSelectMachineProps<T extends string | number> {
 
 export function useSearchSelectMachine<T extends string | number>(
   props: UseSearchSelectMachineProps<T>,
-  emit: (
-    event: 'update:modelValue' | 'close',
-    value?: T | T[] | null
-  ) => void
+  emit: (event: 'update:modelValue' | 'close', value?: T | T[] | null) => void
 ) {
   // Create a map for O(1) lookup and validation of string keys
   const keyToOptionMap = computed(() => {

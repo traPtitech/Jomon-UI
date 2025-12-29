@@ -4,11 +4,14 @@ import { describe, expect, it, vi } from 'vitest'
 import SearchMultiSelectHeadless from '@/components/shared/SearchSelect/SearchMultiSelectHeadless.vue'
 import type { Option } from '@/components/shared/SearchSelect/types'
 
-vi.stubGlobal('ResizeObserver', class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-})
+vi.stubGlobal(
+  'ResizeObserver',
+  class ResizeObserver {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+)
 
 const testOptions: Option<string>[] = [
   { label: 'Option 1', key: 'opt1' },

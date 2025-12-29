@@ -228,7 +228,7 @@ const handleInput = (e: Event) => {
               :key="String(option.key)"
               :value="option.key"
               :disabled="!!option.disabled"
-              class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-[highlighted]:bg-blue-100 data-[highlighted]:text-blue-500">
+              class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-highlighted:bg-blue-100 data-highlighted:text-blue-500">
               <div class="mr-2 flex h-4 w-4 items-center justify-center">
                 <ComboboxItemIndicator>
                   <CheckIcon class="h-4 w-4" aria-hidden="true" />

@@ -72,7 +72,7 @@ const filteredOptions = computed(() => {
 
 const displayValue = (item: unknown): string => {
   if (item === null || item === undefined) return ''
-
+  
   if (typeof item === 'string' || typeof item === 'number') {
     const option = props.options.find(o => o.key === item)
     if (option) return option.label
@@ -94,19 +94,16 @@ const handleInteraction = (isOpen: boolean) => {
 
 const inputAttrs = (isOpen: boolean) => ({
   id: inputId,
-  placeholder: isFloating.value ? props.placeholder : '',
+  // Fix: Show placeholder if floating (focused/has value) OR if there is no label (standard input behavior)
+  placeholder: isFloating.value || !props.label ? props.placeholder : '',
   onInput: (e: Event) => {
     const target = e.target
     if (target instanceof HTMLInputElement) {
       query.value = target.value
     }
   },
-  onFocus: () => {
-    handleInteraction(isOpen)
-  },
-  onClick: () => {
-    handleInteraction(isOpen)
-  },
+  onFocus: () => handleInteraction(isOpen),
+  onClick: () => handleInteraction(isOpen),
   onBlur: () => {
     isFocused.value = false
   },
@@ -143,7 +140,9 @@ const onUpdateModel = (val: unknown) => {
         props.disabled ? 'cursor-not-allowed bg-surface-secondary' : 'bg-white',
       ]">
       <div class="flex items-center justify-center pl-3">
-        <MagnifyingGlassIcon class="w-6 text-text-secondary" />
+        <MagnifyingGlassIcon
+          class="w-6 text-text-secondary"
+          aria-hidden="true" />
       </div>
 
       <div class="relative w-full">

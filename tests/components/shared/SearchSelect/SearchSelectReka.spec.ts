@@ -68,11 +68,8 @@ describe('SearchSelectReka', () => {
 
     expect(wrapper.emitted('update:modelValue')).toBeTruthy()
     const events = wrapper.emitted('update:modelValue')
-    if (events) {
-       // Expect selection
-       expect(events[0]).toBeDefined()
-    }
-    
+    expect(events).toBeDefined()
+    expect(events?.[0]).toBeDefined()
     wrapper.unmount()
   })
 })

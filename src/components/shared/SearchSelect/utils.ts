@@ -18,7 +18,11 @@ export function safeBind<T extends object>(
   const result: Record<string, unknown> = {}
   for (const [key, value] of Object.entries(props)) {
     if (value !== undefined) {
-      result[key] = value
+      if (key === 'htmlFor') {
+        result['for'] = value
+      } else {
+        result[key] = value
+      }
     }
   }
   return result as { [K in keyof T]: Exclude<T[K], undefined> }

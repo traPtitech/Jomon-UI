@@ -19,11 +19,11 @@ const options: Option<string>[] = [
 
 const singleZag = ref<string | null>(null)
 const singleHeadless = ref<string | null>(null)
-const singleReka = ref<string | null>(null)
+const singleReka = ref<string | number | null>(null)
 
 const multiZag = ref<string[]>([])
 const multiHeadless = ref<string[]>([])
-const multiReka = ref<string[]>([])
+const multiReka = ref<(string | number)[]>([])
 </script>
 
 <template>

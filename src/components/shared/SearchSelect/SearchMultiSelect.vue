@@ -126,6 +126,7 @@ const handleInputKeydown = (e: KeyboardEvent) => {
 
         <label
           v-if="label"
+          :for="id"
           v-bind="safeBind(machineApi.getLabelProps())"
           class="pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out peer-focus:text-blue-500"
           :class="[

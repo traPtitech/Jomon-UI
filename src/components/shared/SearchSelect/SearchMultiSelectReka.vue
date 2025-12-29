@@ -1,5 +1,5 @@
-<script setup lang="ts" generic="TValue extends string | number">
-import { computed, ref, watch } from 'vue'
+<script setup lang="ts">
+import { computed, ref, useId } from 'vue'
 
 import {
   CheckIcon,
@@ -22,30 +22,33 @@ import {
   ComboboxViewport,
 } from 'reka-ui'
 
-import type { SearchSelectCommonProps, SearchSelectEmit } from './types'
+import type { Option } from './types'
 
-const props = withDefaults(
-  defineProps<SearchSelectCommonProps<TValue> & { modelValue: TValue[] }>(),
-  {
-    placeholder: '検索',
-    disabled: false,
-    required: false,
-    resetOnSelect: true,
-    errorMessage: undefined,
-    modelValue: () => [],
-  }
-)
+type TValue = string | number
 
-const emit = defineEmits<SearchSelectEmit<TValue[]>>()
+interface Props {
+  options: Option<TValue>[]
+  label?: string
+  placeholder?: string
+  disabled?: boolean
+  required?: boolean
+  resetOnSelect?: boolean
+  noResultsText?: string
+  errorMessage?: string
+  filterFunction?: (option: Option<TValue>, query: string) => boolean
+}
 
-const localModel = computed({
-  get: () => props.modelValue,
-  set: val => {
-    const value = val || []
-    emit('update:modelValue', value)
-  },
+const props = withDefaults(defineProps<Props>(), {
+  placeholder: '検索',
+  disabled: false,
+  required: false,
+  resetOnSelect: true,
+  noResultsText: '該当する項目がありません。',
 })
 
+const model = defineModel<TValue[]>({ required: true })
+
+const inputId = useId()
 const searchTerm = ref('')
 const open = ref(false)
 const isFocused = ref(false)
@@ -57,20 +60,20 @@ const handleInputFocus = () => {
 
 const isFloating = computed(() => {
   return (
-    isFocused.value ||
-    searchTerm.value.length > 0 ||
-    localModel.value.length > 0
+    isFocused.value || searchTerm.value.length > 0 || model.value.length > 0
   )
 })
 
 const filteredOptions = computed(() => {
+  const options = props.options
+  if (searchTerm.value === '') return options
+
   const term = searchTerm.value.toLowerCase()
   const filterFn = props.filterFunction
-   
   if (filterFn) {
-    return props.options.filter(o => filterFn(o, searchTerm.value))
+    return options.filter(o => filterFn(o, searchTerm.value))
   }
-  return props.options.filter(o => o.label.toLowerCase().includes(term))
+  return options.filter(o => o.label.toLowerCase().includes(term))
 })
 
 const getLabel = (key: TValue) => {
@@ -80,64 +83,78 @@ const getLabel = (key: TValue) => {
 
 const removeTag = (key: TValue) => {
   if (props.disabled) return
-  const newValue = localModel.value.filter(v => v !== key)
-  emit('update:modelValue', newValue)
+  model.value = model.value.filter(v => v !== key)
 }
 
-watch(
-  () => props.modelValue,
-  (newVal, oldVal) => {
-    const oldLength = oldVal.length
+function isTValueArray(val: unknown[]): val is TValue[] {
+  return val.every(v => typeof v === 'string' || typeof v === 'number')
+}
 
-    if (props.resetOnSelect && newVal.length > oldLength) {
+const onUpdateModelValue = (val: unknown) => {
+  if (Array.isArray(val) && isTValueArray(val)) {
+    const isAdded = val.length > model.value.length
+    model.value = val
+
+    if (isAdded && props.resetOnSelect) {
       searchTerm.value = ''
     }
-  },
-  { deep: true }
-)
+  }
+}
+
+const handleInput = (e: Event) => {
+  const target = e.target
+  if (target instanceof HTMLInputElement) {
+    searchTerm.value = target.value
+  }
+}
 </script>
 
 <template>
   <ComboboxRoot
-    v-model="localModel"
+    :model-value="model"
+    @update:model-value="onUpdateModelValue"
     v-model:open="open"
-    :disabled="disabled"
+    :disabled="props.disabled"
     class="group relative"
-    multiple
-    nullable>
+    multiple>
     <ComboboxAnchor
       class="flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none"
       :class="[
-        disabled ? 'cursor-not-allowed bg-surface-secondary' : 'bg-white',
+        props.disabled ? 'cursor-not-allowed bg-surface-secondary' : 'bg-white',
       ]">
       <div class="flex items-center justify-center pl-3">
         <MagnifyingGlassIcon class="w-6 text-text-secondary" />
       </div>
 
       <div class="relative w-full">
-        <ComboboxInput
-          class="w-full border-none bg-transparent px-3 pb-2 text-base text-text-primary ring-0 outline-none"
-          :class="[
-            label ? 'pt-6' : 'pt-2',
-            disabled ? 'cursor-not-allowed' : '',
-          ]"
-          :placeholder="isFloating ? placeholder : ''"
-          v-model="searchTerm"
-          @keydown.enter.prevent
-          @focus="handleInputFocus"
-          @blur="isFocused = false" />
+        <ComboboxInput as-child>
+          <input
+            :id="inputId"
+            class="peer w-full border-none bg-transparent px-3 pb-2 text-base text-text-primary ring-0 outline-none"
+            :class="[
+              props.label ? 'pt-6' : 'pt-2',
+              props.disabled ? 'cursor-not-allowed' : '',
+            ]"
+            :placeholder="isFloating ? props.placeholder : ''"
+            :value="searchTerm"
+            @input="handleInput"
+            @keydown.enter.prevent
+            @focus="handleInputFocus"
+            @blur="isFocused = false" />
+        </ComboboxInput>
 
         <ComboboxLabel
-          v-if="label"
+          v-if="props.label"
+          :for="inputId"
           class="pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out"
           :class="[
             isFloating
-              ? 'top-1 text-xs font-medium text-blue-500'
+              ? 'top-1 text-xs font-medium'
               : 'top-1/2 -translate-y-1/2 text-base',
             isFocused ? 'text-blue-500' : '',
           ]">
-          {{ label }}
-          <span v-if="required" class="text-red-500">*</span>
+          {{ props.label }}
+          <span v-if="props.required" class="text-red-500">*</span>
         </ComboboxLabel>
       </div>
 
@@ -149,9 +166,9 @@ watch(
     </ComboboxAnchor>
 
     <!-- Tags -->
-    <div v-if="localModel.length > 0" class="mt-2 flex flex-wrap gap-1">
+    <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1">
       <div
-        v-for="key in localModel"
+        v-for="key in model"
         :key="String(key)"
         class="flex items-center rounded-sm bg-surface-secondary px-2 py-1 text-xs text-text-primary">
         {{ getLabel(key) }}
@@ -163,6 +180,10 @@ watch(
         </button>
       </div>
     </div>
+
+    <p v-if="props.errorMessage" class="mt-1 px-3 text-sm text-error-primary">
+      {{ props.errorMessage }}
+    </p>
 
     <ComboboxPortal>
       <ComboboxContent
@@ -177,7 +198,7 @@ watch(
         <ComboboxViewport>
           <ComboboxEmpty
             class="relative cursor-default px-2 py-1.5 text-sm text-gray-700 select-none">
-            {{ noResultsText || '該当する項目がありません。' }}
+            {{ props.noResultsText }}
           </ComboboxEmpty>
 
           <ComboboxGroup>
@@ -185,8 +206,8 @@ watch(
               v-for="option in filteredOptions"
               :key="String(option.key)"
               :value="option.key"
-              :disabled="option.disabled"
-              class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-[highlighted]:bg-blue-100 data-[highlighted]:text-blue-500">
+              :disabled="!!option.disabled"
+              class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-highlighted:bg-blue-100 data-highlighted:text-blue-500">
               <div class="mr-2 flex h-4 w-4 items-center justify-center">
                 <ComboboxItemIndicator>
                   <CheckIcon class="h-4 w-4" aria-hidden="true" />

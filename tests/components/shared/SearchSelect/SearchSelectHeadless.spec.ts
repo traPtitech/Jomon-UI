@@ -110,10 +110,10 @@ describe('SearchSelectHeadless', () => {
     console.log('Emitted events (keyboard):', wrapper.emitted())
     expect(wrapper.emitted('update:modelValue')).toBeTruthy()
     const events = wrapper.emitted('update:modelValue')
-    if (events) {
-      expect(events[0]).toEqual(['opt1'])
-    }
-    
+    // Ensure events exist before checking content, but avoid expect inside if
+    expect(events).toBeDefined()
+    expect(events?.[0]).toEqual(['opt1'])
+
     // Note: wrapper.props('modelValue') won't update unless we manually update it or use a real parent component.
     // Checking emitted event is the correct way for unit testing.
 

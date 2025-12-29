@@ -66,10 +66,8 @@ describe('SearchMultiSelectReka', () => {
 
     expect(wrapper.emitted('update:modelValue')).toBeTruthy()
     const events = wrapper.emitted('update:modelValue')
-    if (events) {
-       expect(events[0]).toEqual([['opt1']])
-    }
-    
+    expect(events).toBeDefined()
+    expect(events?.[0]).toEqual([['opt1']])
     wrapper.unmount()
   })
 })

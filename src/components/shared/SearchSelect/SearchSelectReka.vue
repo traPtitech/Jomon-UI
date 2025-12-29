@@ -32,25 +32,35 @@ interface Props {
   placeholder?: string
   disabled?: boolean
   required?: boolean
+  name?: string
   noResultsText?: string
   errorMessage?: string
   filterFunction?: (option: Option<TValue>, query: string) => boolean
 }
 
+// defineModel handles modelValue, so it is removed from defineProps.
 const props = withDefaults(defineProps<Props>(), {
   placeholder: '検索',
   disabled: false,
   required: false,
+  name: '', // Default to empty string to avoid undefined
 })
 
 const model = defineModel<TValue | null>({ required: true })
 
 const inputId = useId()
+const errorId = `${inputId}-error`
 const searchTerm = ref('')
 const open = ref(false)
 const isFocused = ref(false)
 
+// Performance optimization: O(1) lookups
+const optionMap = computed(() => new Map(props.options.map(o => [o.key, o])))
+// Use Set<unknown> to allow checking mixed types without casting
+const keySet = computed(() => new Set<unknown>(props.options.map(o => o.key)))
+
 const handleInputFocus = () => {
+  // Declarative open control provided by Reka UI. No DOM hacking required.
   open.value = true
   isFocused.value = true
 }
@@ -60,32 +70,41 @@ const isFloating = computed(() => {
 })
 
 const filteredOptions = computed(() => {
-  const options = props.options
-  const selectedOption = options.find(o => o.key === model.value)
-  if (selectedOption && searchTerm.value === selectedOption.label) {
-    return options
-  }
-  if (searchTerm.value === '') return options
+  if (searchTerm.value === '') return props.options
+
   const term = searchTerm.value.toLowerCase()
   const filterFn = props.filterFunction
   if (filterFn) {
-    return options.filter(o => filterFn(o, searchTerm.value))
+    return props.options.filter(o => filterFn(o, searchTerm.value))
   }
-  return options.filter(o => o.label.toLowerCase().includes(term))
+  return props.options.filter(o => o.label.toLowerCase().includes(term))
 })
 
 const getDisplayValue = (val: unknown): string => {
   if (val === null || val === undefined) return ''
-  // 型ガードで TValue であることを保証
-  if (typeof val === 'string' || typeof val === 'number') {
-    return props.options.find(o => o.key === val)?.label ?? ''
+  // Use Type Guard instead of cast
+  if (isTValue(val)) {
+    return optionMap.value.get(val)?.label ?? String(val)
   }
   return ''
 }
 
+/**
+ * Type Guard: Verifies that the value is a string or number AND exists in the options.
+ * This guarantees type safety at runtime.
+ */
+function isTValue(val: unknown): val is TValue {
+  return (
+    (typeof val === 'string' || typeof val === 'number') &&
+    keySet.value.has(val)
+  )
+}
+
 const onUpdateModelValue = (val: unknown) => {
-  // 型ガードで TValue | null であることを保証
-  if (val === null || typeof val === 'string' || typeof val === 'number') {
+  if (val === null) {
+    model.value = null
+  } else if (isTValue(val)) {
+    // TypeScript now knows val is TValue
     model.value = val
   }
 }
@@ -104,6 +123,7 @@ const handleInput = (e: Event) => {
     @update:model-value="onUpdateModelValue"
     v-model:open="open"
     :disabled="props.disabled"
+    :name="props.name"
     class="group relative">
     <ComboboxAnchor
       class="flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none"
@@ -111,7 +131,9 @@ const handleInput = (e: Event) => {
         props.disabled ? 'cursor-not-allowed bg-surface-secondary' : 'bg-white',
       ]">
       <div class="flex items-center justify-center pl-3">
-        <MagnifyingGlassIcon class="w-6 text-text-secondary" />
+        <MagnifyingGlassIcon
+          class="w-6 text-text-secondary"
+          aria-hidden="true" />
       </div>
 
       <div class="relative w-full">
@@ -123,8 +145,10 @@ const handleInput = (e: Event) => {
               label ? 'pt-6' : 'pt-2',
               props.disabled ? 'cursor-not-allowed' : '',
             ]"
-            :placeholder="isFloating ? placeholder : ''"
+            :placeholder="isFloating || !props.label ? placeholder : ''"
             :value="searchTerm"
+            :aria-invalid="!!errorMessage"
+            :aria-describedby="errorMessage ? errorId : undefined"
             @input="handleInput"
             @keydown.enter.prevent
             @focus="handleInputFocus"
@@ -153,6 +177,13 @@ const handleInput = (e: Event) => {
       </ComboboxTrigger>
     </ComboboxAnchor>
 
+    <p
+      v-if="errorMessage"
+      :id="errorId"
+      class="mt-1 px-3 text-sm text-error-primary">
+      {{ errorMessage }}
+    </p>
+
     <ComboboxPortal>
       <ComboboxContent
         class="absolute z-50 mt-1 box-border max-h-[200px] w-full overflow-auto rounded-md border bg-white p-1 shadow-lg focus:outline-none"
@@ -175,7 +206,7 @@ const handleInput = (e: Event) => {
               :key="String(option.key)"
               :value="option.key"
               :disabled="!!option.disabled"
-              class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-highlighted:bg-blue-100 data-highlighted:text-blue-500">
+              class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-[highlighted]:bg-blue-100 data-[highlighted]:text-blue-500">
               <span class="flex-1 truncate">{{ option.label }}</span>
 
               <ComboboxItemIndicator class="ml-auto h-4 w-4 text-text-primary">

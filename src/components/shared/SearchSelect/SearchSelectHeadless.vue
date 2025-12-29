@@ -5,6 +5,7 @@ import {
   Combobox,
   ComboboxButton,
   ComboboxInput,
+  ComboboxLabel,
   ComboboxOption,
   ComboboxOptions,
   TransitionRoot,
@@ -17,15 +18,15 @@ import {
 
 import type { Option } from './types'
 
-// Use inline type definition for defineProps to satisfy TS4025 in generic SFC
+// defineModel handles modelValue, so it is removed from defineProps to avoid duplication.
 const props = withDefaults(
   defineProps<{
     options: Option<TValue>[]
-    modelValue: TValue | null
     label?: string
     placeholder?: string
     disabled?: boolean
     required?: boolean
+    name?: string
     noResultsText?: string
     errorMessage?: string
     filterFunction?: (option: Option<TValue>, query: string) => boolean
@@ -34,17 +35,25 @@ const props = withDefaults(
     placeholder: '検索',
     disabled: false,
     required: false,
-    modelValue: null,
+    name: '', // Use empty string as default to satisfy exactOptionalPropertyTypes
   }
 )
 
 const model = defineModel<TValue | null>({ required: true })
 
 const inputId = useId()
+const errorId = `${inputId}-error`
 const query = ref('')
 const isFocused = ref(false)
 
+// Performance optimization: O(1) lookups
+const optionMap = computed(() => new Map(props.options.map(o => [o.key, o])))
+// Cast to Set<unknown> to simplify checks against unknown 'val'
+const keySet = computed(() => new Set<unknown>(props.options.map(o => o.key)))
+
 const comboButton = ref<InstanceType<typeof ComboboxButton> | null>(null)
+
+// Workaround for lack of "openOnFocus" prop in Headless UI Vue v1.
 const forceOpen = () => {
   if (comboButton.value?.$el instanceof HTMLElement) {
     comboButton.value.$el.click()
@@ -56,35 +65,24 @@ const isFloating = computed(() => {
 })
 
 const filteredOptions = computed(() => {
-  const options = props.options
-  if (query.value === '') return options
+  if (query.value === '') return props.options
 
   const term = query.value.toLowerCase()
-  const selectedOption = options.find(o => o.key === model.value)
-  if (selectedOption && query.value === selectedOption.label) return options
-
   const filterFn = props.filterFunction
   if (filterFn) {
-    return options.filter(o => filterFn(o, query.value))
+    return props.options.filter(o => filterFn(o, query.value))
   }
-  return options.filter(o => o.label.toLowerCase().includes(term))
+  return props.options.filter(o => o.label.toLowerCase().includes(term))
 })
 
 const displayValue = (item: unknown): string => {
   if (item === null || item === undefined) return ''
-
   if (typeof item === 'string' || typeof item === 'number') {
-    const option = props.options.find(o => o.key === item)
-    if (option) return option.label
-    return String(item)
+    return optionMap.value.get(item as TValue)?.label ?? String(item)
   }
   return ''
 }
 
-/**
- * Handle input focus and clicks to ensure dropdown opens correctly.
- * @param isOpen - Current open state from Combobox slot
- */
 const handleInteraction = (isOpen: boolean) => {
   isFocused.value = true
   if (!isOpen) {
@@ -94,7 +92,6 @@ const handleInteraction = (isOpen: boolean) => {
 
 const inputAttrs = (isOpen: boolean) => ({
   id: inputId,
-  // Fix: Show placeholder if floating (focused/has value) OR if there is no label (standard input behavior)
   placeholder: isFloating.value || !props.label ? props.placeholder : '',
   onInput: (e: Event) => {
     const target = e.target
@@ -111,13 +108,13 @@ const inputAttrs = (isOpen: boolean) => ({
   onBlur: () => {
     isFocused.value = false
   },
+  'aria-invalid': !!props.errorMessage,
+  'aria-describedby': props.errorMessage ? errorId : undefined,
 })
 
-/**
- * Truly type-safe model update without 'as'
- */
+// Optimized type guard using Set
 function isTValue(val: unknown): val is TValue {
-  return props.options.some(o => o.key === val)
+  return keySet.value.has(val)
 }
 
 const onUpdateModel = (val: unknown) => {
@@ -135,6 +132,7 @@ const onUpdateModel = (val: unknown) => {
     :model-value="model"
     @update:model-value="onUpdateModel"
     :disabled="props.disabled"
+    :name="props.name"
     as="div"
     class="group relative"
     nullable>
@@ -160,9 +158,8 @@ const onUpdateModel = (val: unknown) => {
           :display-value="displayValue"
           v-bind="inputAttrs(open)" />
 
-        <label
+        <ComboboxLabel
           v-if="label"
-          :for="inputId"
           class="pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out peer-focus:text-blue-500"
           :class="[
             isFloating
@@ -171,7 +168,7 @@ const onUpdateModel = (val: unknown) => {
           ]">
           {{ label }}
           <span v-if="required" class="text-red-500">*</span>
-        </label>
+        </ComboboxLabel>
       </div>
 
       <ComboboxButton ref="comboButton" class="flex items-center pr-2">
@@ -181,7 +178,10 @@ const onUpdateModel = (val: unknown) => {
       </ComboboxButton>
     </div>
 
-    <p v-if="errorMessage" class="mt-1 px-3 text-sm text-error-primary">
+    <p
+      v-if="errorMessage"
+      :id="errorId"
+      class="mt-1 px-3 text-sm text-error-primary">
       {{ errorMessage }}
     </p>
 

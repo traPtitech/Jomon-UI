@@ -101,8 +101,12 @@ const inputAttrs = (isOpen: boolean) => ({
       query.value = target.value
     }
   },
-  onFocus: () => handleInteraction(isOpen),
-  onClick: () => handleInteraction(isOpen),
+  onFocus: () => {
+    handleInteraction(isOpen)
+  },
+  onClick: () => {
+    handleInteraction(isOpen)
+  },
   onBlur: () => {
     isFocused.value = false
   },

@@ -72,7 +72,7 @@ const filteredOptions = computed(() => {
 
 const displayValue = (item: unknown): string => {
   if (item === null || item === undefined) return ''
-  
+
   if (typeof item === 'string' || typeof item === 'number') {
     const option = props.options.find(o => o.key === item)
     if (option) return option.label
@@ -102,8 +102,12 @@ const inputAttrs = (isOpen: boolean) => ({
       query.value = target.value
     }
   },
-  onFocus: () => handleInteraction(isOpen),
-  onClick: () => handleInteraction(isOpen),
+  onFocus: () => {
+    handleInteraction(isOpen)
+  },
+  onClick: () => {
+    handleInteraction(isOpen)
+  },
   onBlur: () => {
     isFocused.value = false
   },

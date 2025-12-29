@@ -14,11 +14,11 @@ import {
   ComboboxInput,
   ComboboxItem,
   ComboboxItemIndicator,
-  ComboboxLabel,
   ComboboxPortal,
   ComboboxRoot,
   ComboboxTrigger,
   ComboboxViewport,
+  Label,
 } from 'reka-ui'
 
 import type { Option } from './types'
@@ -60,7 +60,6 @@ const optionMap = computed(() => new Map(props.options.map(o => [o.key, o])))
 const keySet = computed(() => new Set<unknown>(props.options.map(o => o.key)))
 
 const handleInputFocus = () => {
-  // Declarative open control provided by Reka UI. No DOM hacking required.
   open.value = true
   isFocused.value = true
 }
@@ -108,13 +107,6 @@ const onUpdateModelValue = (val: unknown) => {
     model.value = val
   }
 }
-
-const handleInput = (e: Event) => {
-  const target = e.target
-  if (target instanceof HTMLInputElement) {
-    searchTerm.value = target.value
-  }
-}
 </script>
 
 <template>
@@ -124,6 +116,8 @@ const handleInput = (e: Event) => {
     v-model:open="open"
     :disabled="props.disabled"
     :name="props.name"
+    :required="props.required"
+    :ignore-filter="true"
     class="group relative">
     <ComboboxAnchor
       class="flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none"
@@ -137,7 +131,14 @@ const handleInput = (e: Event) => {
       </div>
 
       <div class="relative w-full">
-        <ComboboxInput as-child :display-value="getDisplayValue">
+        <!-- 
+          In Reka UI v2, search input value is managed via v-model on ComboboxInput.
+          The 'displayValue' prop is also placed on ComboboxInput.
+        -->
+        <ComboboxInput
+          as-child
+          v-model="searchTerm"
+          :display-value="getDisplayValue">
           <input
             :id="inputId"
             class="peer w-full border-none bg-transparent px-3 pb-2 text-base text-text-primary ring-0 outline-none"
@@ -146,16 +147,14 @@ const handleInput = (e: Event) => {
               props.disabled ? 'cursor-not-allowed' : '',
             ]"
             :placeholder="isFloating || !props.label ? placeholder : ''"
-            :value="searchTerm"
             :aria-invalid="!!errorMessage"
             :aria-describedby="errorMessage ? errorId : undefined"
-            @input="handleInput"
             @keydown.enter.prevent
             @focus="handleInputFocus"
             @blur="isFocused = false" />
         </ComboboxInput>
 
-        <ComboboxLabel
+        <Label
           v-if="label"
           :for="inputId"
           class="pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out"
@@ -167,13 +166,18 @@ const handleInput = (e: Event) => {
           ]">
           {{ label }}
           <span v-if="required" class="text-red-500">*</span>
-        </ComboboxLabel>
+        </Label>
       </div>
 
-      <ComboboxTrigger class="flex items-center pr-2">
-        <ChevronDownIcon
-          class="h-4 w-4 text-text-secondary"
-          aria-hidden="true" />
+      <ComboboxTrigger as-child>
+        <button
+          type="button"
+          class="flex items-center pr-2"
+          :aria-label="label ? `${label}を開く` : '選択肢を開く'">
+          <ChevronDownIcon
+            class="h-4 w-4 text-text-secondary"
+            aria-hidden="true" />
+        </button>
       </ComboboxTrigger>
     </ComboboxAnchor>
 
@@ -203,10 +207,10 @@ const handleInput = (e: Event) => {
           <ComboboxGroup>
             <ComboboxItem
               v-for="option in filteredOptions"
-              :key="String(option.key)"
+              :key="option.key"
               :value="option.key"
               :disabled="!!option.disabled"
-              class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-highlighted:bg-blue-100 data-highlighted:text-blue-500">
+              class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-[highlighted]:bg-blue-100 data-[highlighted]:text-blue-500">
               <span class="flex-1 truncate">{{ option.label }}</span>
 
               <ComboboxItemIndicator class="ml-auto h-4 w-4 text-text-primary">

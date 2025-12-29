@@ -15,16 +15,22 @@ import {
   ComboboxInput,
   ComboboxItem,
   ComboboxItemIndicator,
-  ComboboxLabel,
   ComboboxPortal,
   ComboboxRoot,
   ComboboxTrigger,
   ComboboxViewport,
+  Label,
 } from 'reka-ui'
 
 import type { Option } from './types'
 
 type TValue = string | number
+
+// Manual type definition for Reka UI event if not exported
+type ComboboxItemSelectEventWrapper<T> = CustomEvent<{
+  value: T
+  originalEvent: Event
+}>
 
 interface Props {
   options: Option<TValue>[]
@@ -58,6 +64,7 @@ const isFocused = ref(false)
 
 // Performance optimization: O(1) lookups
 const optionMap = computed(() => new Map(props.options.map(o => [o.key, o])))
+// Use Set<unknown> to allow checking mixed types without casting
 const keySet = computed(() => new Set<unknown>(props.options.map(o => o.key)))
 
 const handleInputFocus = () => {
@@ -91,32 +98,22 @@ const removeTag = (key: TValue) => {
   model.value = model.value.filter(v => v !== key)
 }
 
-/**
- * Type Guard for Array<TValue>
- */
-function isTValueArray(val: unknown[]): val is TValue[] {
-  const set = keySet.value
-  return val.every(
-    v => (typeof v === 'string' || typeof v === 'number') && set.has(v)
-  )
-}
+// Manual selection handler to keep dropdown open
+const handleSelect = (ev: ComboboxItemSelectEventWrapper<TValue>) => {
+  // Prevent default behavior (closing and auto-update)
+  ev.preventDefault()
 
-const onUpdateModelValue = (val: unknown) => {
-  if (Array.isArray(val) && isTValueArray(val)) {
-    const isAdded = val.length > model.value.length
-    model.value = val
+  const val = ev.detail.value
+  // Ensure val is valid and within options using keySet for safety
+  if (!val || !keySet.value.has(val)) return
 
-    // Reset search term on selection if enabled
-    if (isAdded && props.resetOnSelect) {
+  if (model.value.includes(val)) {
+    model.value = model.value.filter(v => v !== val)
+  } else {
+    model.value = [...model.value, val]
+    if (props.resetOnSelect) {
       searchTerm.value = ''
     }
-  }
-}
-
-const handleInput = (e: Event) => {
-  const target = e.target
-  if (target instanceof HTMLInputElement) {
-    searchTerm.value = target.value
   }
 }
 </script>
@@ -124,10 +121,11 @@ const handleInput = (e: Event) => {
 <template>
   <ComboboxRoot
     :model-value="model"
-    @update:model-value="onUpdateModelValue"
     v-model:open="open"
     :disabled="props.disabled"
     :name="props.name"
+    :required="props.required"
+    :ignore-filter="true"
     class="group relative"
     multiple>
     <ComboboxAnchor
@@ -142,7 +140,8 @@ const handleInput = (e: Event) => {
       </div>
 
       <div class="relative w-full">
-        <ComboboxInput as-child>
+        <!-- Search input sync via v-model on ComboboxInput -->
+        <ComboboxInput as-child v-model="searchTerm">
           <input
             :id="inputId"
             class="peer w-full border-none bg-transparent px-3 pb-2 text-base text-text-primary ring-0 outline-none"
@@ -151,16 +150,14 @@ const handleInput = (e: Event) => {
               props.disabled ? 'cursor-not-allowed' : '',
             ]"
             :placeholder="isFloating || !props.label ? placeholder : ''"
-            :value="searchTerm"
             :aria-invalid="!!errorMessage"
             :aria-describedby="errorMessage ? errorId : undefined"
-            @input="handleInput"
             @keydown.enter.prevent
             @focus="handleInputFocus"
             @blur="isFocused = false" />
         </ComboboxInput>
 
-        <ComboboxLabel
+        <Label
           v-if="label"
           :for="inputId"
           class="pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out"
@@ -172,13 +169,18 @@ const handleInput = (e: Event) => {
           ]">
           {{ label }}
           <span v-if="required" class="text-red-500">*</span>
-        </ComboboxLabel>
+        </Label>
       </div>
 
-      <ComboboxTrigger class="flex items-center pr-2">
-        <ChevronDownIcon
-          class="h-4 w-4 text-text-secondary"
-          aria-hidden="true" />
+      <ComboboxTrigger as-child>
+        <button
+          type="button"
+          class="flex items-center pr-2"
+          :aria-label="label ? `${label}を開く` : '選択肢を開く'">
+          <ChevronDownIcon
+            class="h-4 w-4 text-text-secondary"
+            aria-hidden="true" />
+        </button>
       </ComboboxTrigger>
     </ComboboxAnchor>
 
@@ -186,7 +188,7 @@ const handleInput = (e: Event) => {
     <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1">
       <div
         v-for="key in model"
-        :key="String(key)"
+        :key="key"
         class="flex items-center rounded-sm bg-surface-secondary px-2 py-1 text-xs text-text-primary">
         {{ getLabel(key) }}
         <button
@@ -225,10 +227,11 @@ const handleInput = (e: Event) => {
           <ComboboxGroup>
             <ComboboxItem
               v-for="option in filteredOptions"
-              :key="String(option.key)"
+              :key="option.key"
               :value="option.key"
               :disabled="!!option.disabled"
-              class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-highlighted:bg-blue-100 data-highlighted:text-blue-500">
+              @select="handleSelect"
+              class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-[highlighted]:bg-blue-100 data-[highlighted]:text-blue-500">
               <div class="mr-2 flex h-4 w-4 items-center justify-center">
                 <ComboboxItemIndicator>
                   <CheckIcon class="h-4 w-4" aria-hidden="true" />

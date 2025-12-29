@@ -8,13 +8,13 @@ The goal was to improve maintainability, visual consistency with `BaseInput`, an
 
 ## Comparison Matrix
 
-| Feature              | Zag (Existing)             | Headless UI            | Reka UI (v2)                 |
-| :------------------- | :------------------------- | :--------------------- | :--------------------------- |
-| **Boilerplate**      | High (State machine logic) | Low (Component-based)  | Medium (High composition)    |
-| **Tailwind Support** | Excellent (Headless)       | Excellent (Headless)   | Excellent (Headless)         |
-| **Type Safety**      | Complex (Manual mapping)   | Good (Stable generics) | Fragile (Generic SFC issues) |
-| **Complexity**       | High                       | Low                    | Medium                       |
-| **Accessibility**    | Built-in                   | Built-in               | Built-in                     |
+| Feature              | Zag (Existing)             | Headless UI            | Reka UI (v2)              |
+| :------------------- | :------------------------- | :--------------------- | :------------------------ |
+| **Boilerplate**      | High (State machine logic) | Low (Component-based)  | Medium (High composition) |
+| **Tailwind Support** | Excellent (Headless)       | Excellent (Headless)   | Excellent (Headless)      |
+| **Type Safety**      | Complex (Manual mapping)   | Good (Stable generics) | Good (Stable generics)    |
+| **Complexity**       | High                       | Low                    | Medium                    |
+| **Accessibility**    | Built-in                   | Built-in               | Built-in                  |
 
 ## Key Findings
 
@@ -25,28 +25,28 @@ The goal was to improve maintainability, visual consistency with `BaseInput`, an
 
 ### 2. Headless UI (`@headlessui/vue`)
 
-- **Strengths:** Very simple API. It is already used in the project, making it a low-risk addition. It works well with Vue 3.4+ `generic` SFC attributes.
-- **Weaknesses:** The TypeScript types for `ComboboxInput` do not explicitly include standard HTML attributes like `placeholder` or event handlers, though they fall through at runtime. This required a `v-bind="inputAttrs"` workaround to pass strict `vue-tsc` checks without using `any` or `ts-ignore`.
+- **Strengths:** Very simple API. Works well with Vue 3.4+ `generic` SFC attributes.
+- **Weaknesses:** Lacks declarative control for certain behaviors (e.g., "open on focus"), requiring imperative workarounds like DOM-level `.click()` triggers. Type definitions for some components are restrictive, requiring `v-bind` objects to pass standard HTML attributes without type errors.
 
 ### 3. Reka UI (`reka-ui` / v2)
 
-- **Strengths:** Powerful composition via `as-child`. Excellent for building highly custom UI primitives while maintaining accessibility.
-- **Weaknesses:** During prototyping, we encountered severe type inference issues when combining Reka's complex generic types with Vue SFC's `generic` attribute and `defineModel`. This often resulted in the component type collapsing to `never` in the parent scope. We had to fix the type to `string | number` to achieve stability.
+- **Strengths:** Powerful composition via `as-child`. Provides declarative APIs for state control (e.g., `v-model:open`), avoiding implementation-dependent hacks. Excellent for building highly custom UI primitives.
+- **Weaknesses:** Initial setup with Vue's generic SFC and `defineModel` was complex and required careful implementation to avoid type inference collapse. The composition model requires more boilerplate than Headless UI but less than Zag.
 
 ## Final Recommendation
 
-We recommend **Headless UI (`@headlessui/vue`)** for the final implementation of `SearchSelect` and `SearchMultiSelect`.
+(Final selection pending verification of Reka UI implementation details.)
 
-### Reasons:
+### Criteria for Selection:
 
-1.  **Maintainability:** The implementation is significantly simpler than Zag while providing the same feature set.
-2.  **Stability:** It integrates more smoothly with Vue's generic SFC system, allowing us to keep `TValue` flexible for consumers.
-3.  **Consistency:** Headless UI is already an established dependency in Jomon-UI.
-4.  **Visual Match:** We successfully matched the design of `BaseInput` using Headless UI's unstyled components.
+1.  **Maintainability:** Headless UI is simpler, but Reka UI offers cleaner, more declarative control.
+2.  **Stability:** Reka UI's use of official props for state control is more robust than Headless UI's imperative workarounds.
+3.  **Type Safety:** Both can achieve high type safety, though Reka UI's implementation is currently more refined in terms of declarative logic.
+4.  **Visual Match:** Both libraries successfully matched the design of `BaseInput`.
 
 ## Implementation Details
 
-The prototypes in `src/components/shared/SearchSelect/` (Headless UI versions) demonstrate the final proposed structure. They include:
+The prototypes in `src/components/shared/SearchSelect/` demonstrate the structure for each candidate. They include:
 
 - `MagnifyingGlassIcon` as a prefix.
 - Floating label support.

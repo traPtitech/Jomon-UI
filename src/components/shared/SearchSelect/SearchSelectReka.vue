@@ -157,7 +157,7 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => {
               props.disabled ? 'cursor-not-allowed' : '',
             ]"
             :placeholder="isFloating || !props.label ? placeholder : ''"
-            :aria-label="label ?? placeholder ?? '選択'"
+            :aria-label="label ? undefined : (placeholder ?? '選択')"
             :aria-invalid="!!errorMessage"
             :aria-describedby="errorMessage ? errorId : undefined"
             :aria-errormessage="errorMessage ? errorId : undefined"

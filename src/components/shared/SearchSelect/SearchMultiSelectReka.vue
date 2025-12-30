@@ -236,7 +236,7 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => {
               :text-value="option.label"
               :disabled="!!props.disabled || !!option.disabled"
               @select="handleSelect"
-              class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-40 data-[highlighted]:not-data-[disabled]:bg-blue-100 data-[highlighted]:not-data-[disabled]:text-blue-500">
+              class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-disabled:cursor-not-allowed data-disabled:opacity-40 data-highlighted:not-data-disabled:bg-blue-100 data-highlighted:not-data-disabled:text-blue-500">
               <div class="mr-2 flex h-4 w-4 items-center justify-center">
                 <ComboboxItemIndicator>
                   <CheckIcon class="h-4 w-4" aria-hidden="true" />

@@ -1,7 +1,7 @@
 import { nextTick } from 'vue'
 
 import { flushPromises, mount } from '@vue/test-utils'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import SearchMultiSelectReka from '@/components/shared/SearchSelect/SearchMultiSelectReka.vue'
 
@@ -12,12 +12,21 @@ describe('SearchMultiSelectReka', () => {
     { key: 'opt3', label: 'Option 3' },
   ]
 
+  let wrapper: ReturnType<typeof mount> | null = null
+
   beforeEach(() => {
     document.body.innerHTML = ''
   })
 
+  afterEach(() => {
+    if (wrapper) {
+      wrapper.unmount()
+      wrapper = null
+    }
+  })
+
   it('renders tags for initial values', async () => {
-    const wrapper = mount(SearchMultiSelectReka, {
+    wrapper = mount(SearchMultiSelectReka, {
       props: {
         modelValue: ['opt1', 'opt2'],
         options,
@@ -33,7 +42,7 @@ describe('SearchMultiSelectReka', () => {
   })
 
   it('toggles options and keeps menu open', async () => {
-    const wrapper = mount(SearchMultiSelectReka, {
+    wrapper = mount(SearchMultiSelectReka, {
       props: {
         modelValue: ['opt1'],
         options,
@@ -74,11 +83,77 @@ describe('SearchMultiSelectReka', () => {
     const secondEmitted = wrapper.emitted('update:modelValue')
     if (!secondEmitted) throw new Error('update:modelValue was not emitted')
 
-    expect(secondEmitted[1]?.[0]).toEqual(['opt2'])
+    // Ensure array bounds before accessing
+    if (!secondEmitted[1]) throw new Error('second emission missing')
+    expect(secondEmitted[1][0]).toEqual(['opt2'])
+  })
+
+  it('supports continuous selection using keyboard', async () => {
+    wrapper = mount(SearchMultiSelectReka, {
+      props: {
+        modelValue: [],
+        options,
+      },
+      attachTo: document.body,
+    })
+
+    await flushPromises()
+    const input = wrapper.find('input')
+    await input.trigger('click')
+    await flushPromises()
+
+    // Select first item (opt1)
+    await input.trigger('keydown', { key: 'Home' }) // Move to top
+    await input.trigger('keydown', { key: 'Enter' })
+    await flushPromises()
+
+    const emitted = wrapper.emitted('update:modelValue')
+    if (!emitted) throw new Error('update:modelValue was not emitted')
+    expect(emitted[0]?.[0]).toEqual(['opt1'])
+
+    // Update props to simulate parent state change
+    await wrapper.setProps({ modelValue: ['opt1'] })
+    await nextTick()
+
+    // Select second item (opt2)
+    // First ArrowDown might just re-highlight the current item or first item depending on Reka state.
+    // We send ArrowDown twice to ensure we move to the next item (opt2)
+    await input.trigger('keydown', { key: 'ArrowDown' })
+    await input.trigger('keydown', { key: 'ArrowDown' })
+    await input.trigger('keydown', { key: 'Enter' })
+    await flushPromises()
+
+    const secondEmitted = wrapper.emitted('update:modelValue')
+    if (!secondEmitted) throw new Error('update:modelValue was not emitted')
+    expect(secondEmitted[secondEmitted.length - 1]?.[0]).toEqual([
+      'opt1',
+      'opt2',
+    ])
+  })
+
+  it('updates tags when labels change and handles missing options', async () => {
+    wrapper = mount(SearchMultiSelectReka, {
+      props: {
+        modelValue: ['opt1', 'opt2'],
+        options,
+      },
+    })
+
+    await flushPromises()
+
+    // Change opt1 label and remove opt2 from options
+    const newOptions = [{ key: 'opt1', label: 'New Label 1' }]
+    await wrapper.setProps({ options: newOptions })
+    await flushPromises()
+    await nextTick()
+
+    const tags = wrapper.findAll('.bg-surface-secondary')
+    expect(tags[0]?.text()).toContain('New Label 1')
+    expect(tags[1]?.text()).toContain('opt2') // Fallback to key
   })
 
   it('removes tags when clicking the remove button', async () => {
-    const wrapper = mount(SearchMultiSelectReka, {
+    wrapper = mount(SearchMultiSelectReka, {
       props: {
         modelValue: ['opt1'],
         options,
@@ -96,7 +171,7 @@ describe('SearchMultiSelectReka', () => {
   })
 
   it('disables interactions when props.disabled is true', async () => {
-    const wrapper = mount(SearchMultiSelectReka, {
+    wrapper = mount(SearchMultiSelectReka, {
       props: {
         modelValue: ['opt1'],
         options,

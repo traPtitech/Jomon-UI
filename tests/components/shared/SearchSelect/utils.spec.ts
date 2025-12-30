@@ -1,16 +1,16 @@
 import { describe, expect, it } from 'vitest'
 
-import { serializeOptionKey } from '@/components/shared/SearchSelect/utils'
+import { safeString } from '@/components/shared/SearchSelect/utils'
 
 describe('serializeOptionKey', () => {
   it('serializes string correctly', () => {
-    expect(serializeOptionKey('foo')).toBe('foo')
-    expect(serializeOptionKey('')).toBe('')
+    expect(safeString('foo')).toBe('foo')
+    expect(safeString('')).toBe('')
   })
 
   it('serializes number correctly', () => {
-    expect(serializeOptionKey(123)).toBe('123')
-    expect(serializeOptionKey(0)).toBe('0')
-    expect(serializeOptionKey(-1)).toBe('-1')
+    expect(safeString(123)).toBe('123')
+    expect(safeString(0)).toBe('0')
+    expect(safeString(-1)).toBe('-1')
   })
 })

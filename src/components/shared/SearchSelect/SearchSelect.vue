@@ -14,7 +14,7 @@ import { useSearchSelectMachine } from './composables/useSearchSelectMachine'
 // import SearchSelectPrimitiveList from './primitives/SearchSelectPrimitiveList.vue'
 // import SearchSelectPrimitiveRoot from './primitives/SearchSelectPrimitiveRoot.vue'
 import type { SearchSelectCommonProps, SearchSelectEmit } from './types'
-import { safeBind, serializeOptionKey } from './utils'
+import { safeBind, safeString } from './utils'
 
 const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
   placeholder: '検索',
@@ -148,14 +148,12 @@ const isFloating = computed(() => {
             <span
               class="flex-1 truncate"
               :class="{
-                'font-medium': selectedKeysSet.has(
-                  serializeOptionKey(item.key)
-                ),
+                'font-medium': selectedKeysSet.has(safeString(item.key)),
               }">
               {{ item.label }}
             </span>
             <CheckIcon
-              v-if="selectedKeysSet.has(serializeOptionKey(item.key))"
+              v-if="selectedKeysSet.has(safeString(item.key))"
               class="ml-auto h-4 w-4" />
           </li>
 

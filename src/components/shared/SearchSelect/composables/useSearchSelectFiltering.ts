@@ -1,7 +1,7 @@
 import { type MaybeRefOrGetter, type Ref, computed, toValue } from 'vue'
 
 import type { Option } from '../types'
-import { serializeOptionKey } from '../utils'
+import { safeString } from '../utils'
 
 export function useSearchSelectFiltering<T extends string | number>(
   options: MaybeRefOrGetter<readonly Option<T>[]>,
@@ -32,7 +32,7 @@ export function useSearchSelectFiltering<T extends string | number>(
           .normalize('NFKC')
           .toLocaleLowerCase('ja')
           .includes(lowerTerm) ||
-        serializeOptionKey(opt.key)
+        safeString(opt.key)
           .normalize('NFKC')
           .toLocaleLowerCase('ja')
           .includes(lowerTerm)

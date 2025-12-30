@@ -4,7 +4,7 @@ import * as combobox from '@zag-js/combobox'
 import { normalizeProps, useMachine } from '@zag-js/vue'
 
 import type { Option } from '../types'
-import { serializeOptionKey } from '../utils'
+import { safeString } from '../utils'
 import { useSearchSelectFiltering } from './useSearchSelectFiltering'
 
 export interface UseSearchSelectMachineProps<T extends string | number> {
@@ -30,7 +30,7 @@ export function useSearchSelectMachine<T extends string | number>(
     const map = new Map<string, Option<T>>()
     const allOptions = toValue(props.options)
     for (const option of allOptions) {
-      const keyStr = serializeOptionKey(option.key)
+      const keyStr = safeString(option.key)
       if (import.meta.env.DEV && map.has(keyStr)) {
         console.warn(
           `[SearchSelect] Duplicate key found: "${keyStr}". Keys must be unique when converted to string to ensure correct selection.`
@@ -55,7 +55,7 @@ export function useSearchSelectMachine<T extends string | number>(
     ) {
       return null
     }
-    const keyStr = serializeOptionKey(modelVal)
+    const keyStr = safeString(modelVal)
     const option = keyToOptionMap.value.get(keyStr)
     return option ? option.label : null
   })
@@ -80,7 +80,7 @@ export function useSearchSelectMachine<T extends string | number>(
     combobox.collection({
       items: filteredOptions.value,
       itemToString: item => (item ? item.label : ''),
-      itemToValue: item => (item ? serializeOptionKey(item.key) : ''),
+      itemToValue: item => (item ? safeString(item.key) : ''),
       isItemDisabled: item => (item ? !!item.disabled : false),
     })
   )
@@ -91,9 +91,9 @@ export function useSearchSelectMachine<T extends string | number>(
     const modelVal = toValue(props.modelValue)
     let value: string[] = []
     if (Array.isArray(modelVal)) {
-      value = modelVal.map(v => serializeOptionKey(v))
+      value = modelVal.map(v => safeString(v))
     } else if (modelVal !== null && modelVal !== undefined) {
-      value = [serializeOptionKey(modelVal)]
+      value = [safeString(modelVal)]
     }
 
     // Deduplicate values

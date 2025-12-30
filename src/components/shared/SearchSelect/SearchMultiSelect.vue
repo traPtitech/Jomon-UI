@@ -15,7 +15,7 @@ import { useSearchSelectMachine } from './composables/useSearchSelectMachine'
 // import SearchSelectPrimitiveList from './primitives/SearchSelectPrimitiveList.vue'
 // import SearchSelectPrimitiveRoot from './primitives/SearchSelectPrimitiveRoot.vue'
 import type { SearchSelectCommonProps, SearchSelectEmit } from './types'
-import { safeBind, serializeOptionKey } from './utils'
+import { safeBind, safeString } from './utils'
 
 const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
   placeholder: '検索',
@@ -59,7 +59,7 @@ const machineApi = computed(() => api.value)
 const optionMap = computed(() => {
   const map = new Map<string, string>()
   for (const option of props.options) {
-    map.set(serializeOptionKey(option.key), option.label)
+    map.set(safeString(option.key), option.label)
   }
   return map
 })
@@ -192,7 +192,7 @@ const handleInputKeydown = (e: KeyboardEvent) => {
             class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-disabled:cursor-not-allowed data-disabled:opacity-50 data-highlighted:bg-blue-100 data-highlighted:text-blue-500">
             <div class="mr-2 flex h-4 w-4 items-center justify-center">
               <CheckIcon
-                v-if="selectedKeysSet.has(serializeOptionKey(item.key))"
+                v-if="selectedKeysSet.has(safeString(item.key))"
                 class="h-4 w-4" />
             </div>
             <span class="truncate">{{ item.label }}</span>

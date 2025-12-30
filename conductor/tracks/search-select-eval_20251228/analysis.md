@@ -25,7 +25,7 @@ The current implementation consists of two main components: `SearchSelect.vue` (
 ## Key Observations
 
 1.  **Complexity**: The Zag implementation requires significant boilerplate (connecting machine, normalizing props, handling collections, mapping keys).
-2.  **Type Safety**: While TypeScript is used, the bridge between the generic `TValue` and Zag's string-based values requires manual serialization/deserialization (`serializeOptionKey`), which introduces a layer of complexity.
+2.  **Type Safety**: While TypeScript is used, the bridge between the generic `TValue` and Zag's string-based values requires manual serialization/deserialization (`safeString`), which introduces a layer of complexity.
 3.  **Styling**: Styling is fully custom using Tailwind CSS, applied to the primitive components and the main wrappers.
 4.  **Floating Label**: Custom logic determines when the label should "float" based on input value, selection, or focus state.
 

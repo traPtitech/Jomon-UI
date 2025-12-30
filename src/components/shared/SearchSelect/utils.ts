@@ -1,9 +1,4 @@
-/**
- * Serializes a value to a string key.
- * Strictly accepts only string or number.
- * Note: Converts any value to string using String().
- */
-export function serializeOptionKey(val: string | number): string {
+export function safeString(val: string | number): string {
   return String(val)
 }
 

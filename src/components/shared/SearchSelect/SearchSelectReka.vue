@@ -6,6 +6,7 @@ import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/vue/24/outline'
+import type { ComboboxRootProps } from 'reka-ui'
 import {
   ComboboxAnchor,
   ComboboxContent,
@@ -19,10 +20,10 @@ import {
   ComboboxViewport,
   Label,
 } from 'reka-ui'
-import type { ComboboxRootProps } from 'reka-ui'
 
 import { useSearchSelectReka } from './composables/useSearchSelectReka'
 import type { Option } from './types'
+import { safeString } from './utils'
 
 type TValue = string | number
 
@@ -86,7 +87,7 @@ const getDisplayValue = (val: unknown): string => {
   // Return the friendly label of the selected value.
   const option = getOption(val)
   if (option) return option.label
-  if (isTValue(val)) return String(val)
+  if (isTValue(val)) return safeString(val)
   return ''
 }
 

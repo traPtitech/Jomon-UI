@@ -7,6 +7,7 @@ import {
   MagnifyingGlassIcon,
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
+import type { ComboboxRootProps } from 'reka-ui'
 import {
   ComboboxAnchor,
   ComboboxContent,
@@ -20,10 +21,10 @@ import {
   ComboboxViewport,
   Label,
 } from 'reka-ui'
-import type { ComboboxRootProps } from 'reka-ui'
 
 import { useSearchSelectReka } from './composables/useSearchSelectReka'
 import type { Option } from './types'
+import { safeString } from './utils'
 
 type TValue = string | number
 
@@ -189,7 +190,7 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => {
     <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1">
       <div
         v-for="key in model"
-        :key="String(key)"
+        :key="safeString(key)"
         class="flex items-center rounded-sm bg-surface-secondary px-2 py-1 text-xs text-text-primary">
         {{ getLabel(key) }}
         <button

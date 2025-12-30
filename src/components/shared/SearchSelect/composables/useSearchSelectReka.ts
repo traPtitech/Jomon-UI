@@ -1,6 +1,7 @@
 import { type Ref, computed, ref } from 'vue'
 
 import type { Option } from '../types'
+import { safeString } from '../utils'
 
 type TValue = string | number
 
@@ -44,7 +45,7 @@ export function useSearchSelectReka(
   }
 
   const getLabel = (val: unknown): string => {
-    return getOption(val)?.label ?? (isTValue(val) ? String(val) : '')
+    return getOption(val)?.label ?? (isTValue(val) ? safeString(val) : '')
   }
 
   const filteredOptions = computed(() => {

@@ -31,10 +31,6 @@ const routes: RouteRecordRaw[] = [
     path: '/account-managers',
     component: () => import('./pages/AccountManagerPage.vue'),
   },
-  {
-    path: '/comparison',
-    component: () => import('./pages/SearchSelectComparisonPage.vue'),
-  },
   { path: '/:path(.*)', component: () => import('./pages/NotFoundPage.vue') },
 ]
 

@@ -40,7 +40,7 @@ export function useSearchSelectReka<
   })
 
   const optionMap = computed(() => {
-    const map = new Map<T, RekaOption<T>>()
+    const map = new Map<unknown, RekaOption<T>>()
     for (const opt of options.value) {
       map.set(opt.key, opt)
     }
@@ -52,12 +52,12 @@ export function useSearchSelectReka<
    */
   const isTValue = (val: unknown): val is T => {
     // Check if the value exists as a key in our map to ensure it's a valid option
-    return val !== null && val !== undefined && optionMap.value.has(val as T)
+    return val !== null && val !== undefined && optionMap.value.has(val)
   }
 
   const getOption = (val: unknown): RekaOption<T> | undefined => {
     if (val === null || val === undefined) return undefined
-    return optionMap.value.get(val as T)
+    return optionMap.value.get(val)
   }
 
   const getLabel = (val: unknown): string => {

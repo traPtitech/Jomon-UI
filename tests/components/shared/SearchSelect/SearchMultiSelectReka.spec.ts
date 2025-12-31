@@ -58,7 +58,10 @@ describe('SearchMultiSelectReka', () => {
     const items = document.querySelectorAll('[role="option"]')
     const opt2Item = Array.from(items).find(el =>
       el.textContent.includes('Option 2')
-    ) as HTMLElement
+    )
+    if (!opt2Item || !(opt2Item instanceof HTMLElement)) {
+      throw new Error('Option 2 item not found')
+    }
 
     // Select Option 2
     opt2Item.click()
@@ -76,7 +79,10 @@ describe('SearchMultiSelectReka', () => {
     // Select Option 1 again (to remove it)
     const opt1Item = Array.from(items).find(el =>
       el.textContent.includes('Option 1')
-    ) as HTMLElement
+    )
+    if (!opt1Item || !(opt1Item instanceof HTMLElement)) {
+      throw new Error('Option 1 item not found')
+    }
     opt1Item.click()
     await flushPromises()
 
@@ -202,7 +208,10 @@ describe('SearchMultiSelectReka', () => {
 
     const disabledItem = document.querySelector(
       '[role="option"][data-disabled]'
-    ) as HTMLElement
+    )
+    if (!disabledItem || !(disabledItem instanceof HTMLElement)) {
+      throw new Error('Disabled item not found')
+    }
     expect(disabledItem).not.toBeNull()
 
     // Attempt click

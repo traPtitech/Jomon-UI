@@ -51,9 +51,10 @@ describe('SearchMultiSelect (Headless UI)', () => {
     })
 
     await flushPromises()
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    const button = wrapper.find('button')
+    await button.trigger('click')
     await flushPromises()
+    await nextTick()
 
     const items = document.querySelectorAll('[role="option"]')
     // Note: Headless UI might render items differently, but we expect role="option"
@@ -65,8 +66,12 @@ describe('SearchMultiSelect (Headless UI)', () => {
     }
 
     // Select Option 2
+    opt2Item.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }))
+    opt2Item.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
+    opt2Item.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }))
     opt2Item.click()
     await flushPromises()
+    await nextTick()
 
     const emitted = wrapper.emitted('update:modelValue')
     if (!emitted) throw new Error('update:modelValue was not emitted')
@@ -84,6 +89,9 @@ describe('SearchMultiSelect (Headless UI)', () => {
     if (!opt1Item || !(opt1Item instanceof HTMLElement)) {
       throw new Error('Option 1 item not found')
     }
+    opt1Item.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }))
+    opt1Item.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
+    opt1Item.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }))
     opt1Item.click()
     await flushPromises()
 
@@ -151,7 +159,7 @@ describe('SearchMultiSelect (Headless UI)', () => {
     // We expect the button to exist but be disabled
     expect(removeButton.exists()).toBe(true)
     expect(removeButton.attributes('disabled')).toBeDefined()
-    
+
     await removeButton.trigger('click')
     expect(wrapper.emitted('update:modelValue')).toBeUndefined()
   })

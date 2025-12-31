@@ -51,9 +51,10 @@ describe('SearchSelect (Headless UI)', () => {
 
     await flushPromises()
     const input = wrapper.find('input')
+    const button = wrapper.find('button')
 
     // Open the menu
-    await input.trigger('click')
+    await button.trigger('click')
     await flushPromises()
     await nextTick()
 
@@ -83,8 +84,9 @@ describe('SearchSelect (Headless UI)', () => {
 
     await flushPromises()
     const input = wrapper.find('input')
+    const button = wrapper.find('button')
 
-    await input.trigger('click')
+    await button.trigger('click')
     await flushPromises()
     await nextTick()
     expect(input.element.value).toBe('')
@@ -94,6 +96,11 @@ describe('SearchSelect (Headless UI)', () => {
       new MouseEvent('pointerdown', { bubbles: true })
     )
     document.body.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
+    document.body.click()
+    await flushPromises()
+    await nextTick()
+    // Wait for transition duration (100ms)
+    await new Promise(resolve => setTimeout(resolve, 150))
     await flushPromises()
     await nextTick()
 
@@ -135,7 +142,8 @@ describe('SearchSelect (Headless UI)', () => {
     })
 
     const input = wrapper.find('input')
-    await input.trigger('click')
+    const button = wrapper.find('button')
+    await button.trigger('click')
     await flushPromises()
     await nextTick()
 

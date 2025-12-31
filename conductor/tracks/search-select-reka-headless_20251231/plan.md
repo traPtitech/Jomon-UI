@@ -15,17 +15,17 @@
 - [x] Task: Scaffold Headless UI Components [verified]
   - [ ] Create `src/components/shared/SearchSelectHeadless/` directory.
   - [ ] Install `@headlessui/vue` (if not already installed).
-- [~] Task: Implement SearchSelect (Headless UI)
+- [x] Task: Implement SearchSelect (Headless UI) [verified]
   - [x] Sub-task: Write Comprehensive Tests for Headless SearchSelect. [fc75114]
     - **CRITICAL:** Reference the existing Reka UI `SearchSelect.spec.ts` to ensure all functionality and edge cases are covered.
-  - [~] Sub-task: Implement `SearchSelect` using Headless UI `Combobox` / `Listbox`.
-  - [ ] Sub-task: Verify Type Safety (ensure no assertions/lint disables needed).
-- [ ] Task: Implement SearchMultiSelect (Headless UI)
-  - [ ] Sub-task: Write Comprehensive Tests for Headless SearchMultiSelect.
+  - [x] Sub-task: Implement `SearchSelect` using Headless UI `Combobox` / `Listbox`. [verified]
+  - [x] Sub-task: Verify Type Safety (ensure no assertions/lint disables needed). [verified]
+- [x] Task: Implement SearchMultiSelect (Headless UI) [verified]
+  - [x] Sub-task: Write Comprehensive Tests for Headless SearchMultiSelect. [verified]
     - **CRITICAL:** Reference existing tests to ensure parity in features like multiple selection, tag removal, and filtering.
-  - [ ] Sub-task: Implement `SearchMultiSelect` using Headless UI.
-  - [ ] Sub-task: Verify Type Safety (v-model array handling).
-- [ ] Task: Full Integration Verification
+  - [x] Sub-task: Implement `SearchMultiSelect` using Headless UI. [verified]
+  - [x] Sub-task: Verify Type Safety (v-model array handling). [verified]
+- [~] Task: Full Integration Verification
   - [ ] Replace `SearchSelect`/`SearchMultiSelect` imports in all usage points (`AccountManagerPage`, `ApplicationFilters`, `SearchSelectTag`, etc.) with the Headless UI versions.
   - [ ] Run `npm run type-check` to verify integration type safety.
   - [ ] Run application and verify behavior manually.

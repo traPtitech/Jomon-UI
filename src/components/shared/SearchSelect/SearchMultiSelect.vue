@@ -1,5 +1,6 @@
-<script setup lang="ts" generic="T extends string | number = string | number">
-import { computed, useId } from 'vue'
+<script setup lang="ts" generic="T extends string | number">
+import type { DefineComponent } from 'vue'
+import { computed, useId, watch } from 'vue'
 
 import {
   CheckIcon,
@@ -25,7 +26,7 @@ import {
 import type { SearchSelectOption } from './composables/useSearchSelect'
 import { useSearchSelect } from './composables/useSearchSelect'
 
-export interface SearchMultiSelectRekaProps<T extends string | number> {
+export interface SearchMultiSelectProps<T extends string | number> {
   options: SearchSelectOption<T>[]
   label?: string
   placeholder?: string
@@ -38,13 +39,27 @@ export interface SearchMultiSelectRekaProps<T extends string | number> {
   filterFunction?: (option: SearchSelectOption<T>, query: string) => boolean
 }
 
-// defineModel handles modelValue, so it is removed from defineProps.
-const props = withDefaults(defineProps<SearchMultiSelectRekaProps<T>>(), {
+const props = withDefaults(defineProps<SearchMultiSelectProps<T>>(), {
   placeholder: '検索',
   disabled: false,
   required: false,
   resetOnSelect: true,
 })
+
+const emit = defineEmits<{
+  (e: 'close'): void
+}>()
+
+const ComboboxRootUnsafe = ComboboxRoot as unknown as DefineComponent<
+  Record<string, unknown>,
+  Record<string, never>,
+  Record<string, never>,
+  Record<string, never>,
+  Record<string, never>,
+  Record<string, never>,
+  Record<string, never>,
+  Record<string, never>
+>
 
 const model = defineModel<T[]>({ required: true })
 
@@ -65,6 +80,12 @@ const {
   model,
   props.filterFunction
 )
+
+watch(open, (isOpen, wasOpen) => {
+  if (!isOpen && wasOpen) {
+    emit('close')
+  }
+})
 
 const removeTag = (key: T) => {
   if (props.disabled) return
@@ -94,7 +115,7 @@ const handleSelect = (ev: SelectItemSelectEvent<T>) => {
 }
 
 // Simplified rootProps thanks to exactOptionalPropertyTypes: false
-const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
+const rootProps = computed<Partial<ComboboxRootProps<T>>>(() => ({
   disabled: props.disabled,
   required: props.required,
   ignoreFilter: true,
@@ -106,7 +127,7 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
 </script>
 
 <template>
-  <ComboboxRoot
+  <ComboboxRootUnsafe
     :model-value="model"
     v-model:open="open"
     v-bind="rootProps"
@@ -228,7 +249,7 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
               :key="option.key"
               :value="option.key"
               :text-value="option.label"
-              :disabled="!!props.disabled || !!option.disabled"
+              :disabled="props.disabled || option.disabled"
               @select.prevent="handleSelect"
               class="relative flex w-full cursor-default items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-disabled:cursor-not-allowed data-disabled:opacity-40 data-highlighted:not-data-disabled:bg-blue-100 data-highlighted:not-data-disabled:text-blue-500">
               <div class="mr-2 flex h-4 w-4 items-center justify-center">
@@ -242,5 +263,5 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
         </ComboboxViewport>
       </ComboboxContent>
     </ComboboxPortal>
-  </ComboboxRoot>
+  </ComboboxRootUnsafe>
 </template>

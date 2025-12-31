@@ -2,6 +2,7 @@ import { computed, inject, ref } from 'vue'
 
 import { defineStoreComposable } from '@/lib/store'
 
+import type { SearchSelectOption } from '@/components/shared/SearchSelect/composables/useSearchSelect'
 import { PartitionRepositoryKey } from '@/di'
 import type { User } from '@/features/user/entities'
 import type { AsyncStatus } from '@/types'
@@ -17,7 +18,7 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
   const error = ref<string | null>(null)
   const currentPartition = ref<Partition | undefined>(undefined)
 
-  const partitionOptions = computed(() =>
+  const partitionOptions = computed<SearchSelectOption<string>[]>(() =>
     partitions.value.map(partition => ({
       label: partition.name,
       key: partition.id,

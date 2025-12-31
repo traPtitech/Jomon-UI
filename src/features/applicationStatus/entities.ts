@@ -2,6 +2,7 @@ import type { DateTime } from 'luxon'
 
 import type { StatusEnum } from '@/lib/apis'
 
+import type { SearchSelectOption } from '@/components/shared/SearchSelect/composables/useSearchSelect'
 import type { ApplicationComment } from '@/features/applicationComment/entities'
 
 export interface ApplicationStatusDetail {
@@ -17,6 +18,6 @@ export const applicationStatusOptions = [
   { key: 'approved', label: '承認済み' },
   { key: 'rejected', label: '却下' },
   { key: 'payment_finished', label: '支払い済み' },
-] as const
+] as const satisfies SearchSelectOption<ApplicationStatus>[]
 
 export type ApplicationStatus = (typeof StatusEnum)[keyof typeof StatusEnum]

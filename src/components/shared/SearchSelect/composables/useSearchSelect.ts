@@ -8,18 +8,19 @@ import { safeString } from '../utils'
  * Localized Option type for Reka components.
  * Key must be a primitive (string or number) to ensure safe Map lookups.
  */
-export interface SearchSelectOption<
-  T extends string | number = string | number,
-> {
+export interface SearchSelectOption<T extends string | number> {
   key: T
   label: string
   disabled?: boolean
 }
 
-export function useSearchSelect<T extends string | number = string | number>(
-  options: Ref<SearchSelectOption<T>[]>,
-  modelValue: Ref<T | T[] | null>,
-  filterFunction?: (option: SearchSelectOption<T>, query: string) => boolean
+export function useSearchSelect<T extends string | number | null, U = T | T[]>(
+  options: Ref<SearchSelectOption<NonNullable<T>>[]>,
+  modelValue: Ref<U>,
+  filterFunction?: (
+    option: SearchSelectOption<NonNullable<T>>,
+    query: string
+  ) => boolean
 ) {
   const searchTerm = ref('')
   const open = ref(false)
@@ -40,7 +41,7 @@ export function useSearchSelect<T extends string | number = string | number>(
   })
 
   const optionMap = computed(() => {
-    const map = new Map<unknown, SearchSelectOption<T>>()
+    const map = new Map<unknown, SearchSelectOption<NonNullable<T>>>()
     for (const opt of options.value) {
       map.set(opt.key, opt)
     }
@@ -55,7 +56,9 @@ export function useSearchSelect<T extends string | number = string | number>(
     return val !== null && val !== undefined && optionMap.value.has(val)
   }
 
-  const getOption = (val: unknown): SearchSelectOption<T> | undefined => {
+  const getOption = (
+    val: unknown
+  ): SearchSelectOption<NonNullable<T>> | undefined => {
     if (val === null || val === undefined) return undefined
     return optionMap.value.get(val)
   }

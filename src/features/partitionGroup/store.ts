@@ -2,6 +2,7 @@ import { computed, inject, ref } from 'vue'
 
 import { defineStoreComposable } from '@/lib/store'
 
+import type { SearchSelectOption } from '@/components/shared/SearchSelect/composables/useSearchSelect'
 import { PartitionGroupRepositoryKey } from '@/di'
 import type {
   PartitionGroup,
@@ -21,7 +22,7 @@ export const usePartitionGroupStore = defineStoreComposable(
     const error = ref<string | null>(null)
     const currentPartitionGroup = ref<PartitionGroup | undefined>(undefined)
 
-    const partitionGroupOptions = computed(() =>
+    const partitionGroupOptions = computed<SearchSelectOption<string>[]>(() =>
       partitionGroups.value.map(group => ({
         label: group.name,
         key: group.id,

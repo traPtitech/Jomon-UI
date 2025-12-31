@@ -1,4 +1,5 @@
-<script setup lang="ts" generic="T extends string | number = string | number">
+<script setup lang="ts" generic="T extends string | number | null">
+import type { DefineComponent } from 'vue'
 import { computed, useId, watch } from 'vue'
 
 import {
@@ -24,8 +25,8 @@ import {
 import type { SearchSelectOption } from './composables/useSearchSelect'
 import { useSearchSelect } from './composables/useSearchSelect'
 
-export interface SearchSelectRekaProps<T extends string | number> {
-  options: SearchSelectOption<T>[]
+export interface SearchSelectProps<T extends string | number | null> {
+  options: SearchSelectOption<NonNullable<T>>[]
   label?: string
   placeholder?: string
   disabled?: boolean
@@ -33,16 +34,34 @@ export interface SearchSelectRekaProps<T extends string | number> {
   name?: string
   noResultsText?: string
   errorMessage?: string
-  filterFunction?: (option: SearchSelectOption<T>, query: string) => boolean
+  filterFunction?: (
+    option: SearchSelectOption<NonNullable<T>>,
+    query: string
+  ) => boolean
 }
 
-const props = withDefaults(defineProps<SearchSelectRekaProps<T>>(), {
+const ComboboxRootUnsafe = ComboboxRoot as unknown as DefineComponent<
+  Record<string, unknown>,
+  Record<string, never>,
+  Record<string, never>,
+  Record<string, never>,
+  Record<string, never>,
+  Record<string, never>,
+  Record<string, never>,
+  Record<string, never>
+>
+
+const props = withDefaults(defineProps<SearchSelectProps<T>>(), {
   placeholder: '検索',
   disabled: false,
   required: false,
 })
 
-const model = defineModel<T | null>({ required: true })
+const emit = defineEmits<{
+  (e: 'close'): void
+}>()
+
+const model = defineModel<T>({ required: true })
 
 const inputId = useId()
 const errorId = `${inputId}-error`
@@ -63,9 +82,13 @@ const {
 )
 
 // Ensure query is cleared when opening.
-watch(open, isOpen => {
+watch(open, (isOpen, wasOpen) => {
   if (isOpen) {
     searchTerm.value = ''
+    return
+  }
+  if (wasOpen) {
+    emit('close')
   }
 })
 
@@ -88,7 +111,7 @@ const getDisplayValue = (val: unknown): string => {
  */
 const onUpdateModelValue = (val: unknown) => {
   if (val == null) {
-    model.value = null
+    model.value = null as T
     return
   }
 
@@ -106,7 +129,7 @@ const onUpdateSearchTerm = (val: string) => {
 }
 
 // Simplified rootProps thanks to exactOptionalPropertyTypes: false
-const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
+const rootProps = computed<Partial<ComboboxRootProps<T>>>(() => ({
   disabled: props.disabled,
   required: props.required,
   ignoreFilter: true,
@@ -118,7 +141,8 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
 </script>
 
 <template>
-  <ComboboxRoot
+  <!-- @vue-generic T -->
+  <ComboboxRootUnsafe
     :model-value="model"
     @update:model-value="onUpdateModelValue"
     v-model:open="open"
@@ -239,5 +263,5 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
         </ComboboxViewport>
       </ComboboxContent>
     </ComboboxPortal>
-  </ComboboxRoot>
+  </ComboboxRootUnsafe>
 </template>

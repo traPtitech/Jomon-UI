@@ -2,6 +2,7 @@ import { computed, inject, ref } from 'vue'
 
 import { defineStoreComposable } from '@/lib/store'
 
+import type { SearchSelectOption } from '@/components/shared/SearchSelect/composables/useSearchSelect'
 import { AccountManagerRepositoryKey } from '@/di'
 import { useUserStore } from '@/features/user/store'
 import type { AsyncStatus } from '@/types'
@@ -16,7 +17,7 @@ export const useAccountManagerStore = defineStoreComposable(
     const status = ref<AsyncStatus>('idle')
     const error = ref<string | null>(null)
 
-    const accountManagerOptions = computed(() => {
+    const accountManagerOptions = computed<SearchSelectOption<string>[]>(() => {
       const { getUserNameWithFallback } = useUserStore()
       return accountManagers.value.map(accountManager => ({
         label: getUserNameWithFallback(accountManager),

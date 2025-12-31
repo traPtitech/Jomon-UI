@@ -27,6 +27,10 @@ const resolveTags = (ids: string[]) => {
     })
 }
 
+const emit = defineEmits<{
+  (e: 'close'): void
+}>()
+
 const selectedValue = computed({
   get: () => model.value.map(tag => tag.id),
   set: (newIds: string[]) => {
@@ -39,5 +43,6 @@ const selectedValue = computed({
   <SearchMultiSelect
     v-model="selectedValue"
     :options="tagOptions"
-    label="タグ" />
+    label="タグ"
+    @close="emit('close')" />
 </template>

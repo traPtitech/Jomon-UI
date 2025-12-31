@@ -2,6 +2,7 @@ import { computed, inject, ref } from 'vue'
 
 import { defineStoreComposable } from '@/lib/store'
 
+import type { SearchSelectOption } from '@/components/shared/SearchSelect/composables/useSearchSelect'
 import { UserRepositoryKey } from '@/di'
 import type { AsyncStatus } from '@/types'
 
@@ -18,7 +19,7 @@ export const useUserStore = defineStoreComposable('user', () => {
   const isMeFetched = ref(false)
 
   const isAccountManager = computed(() => Boolean(me.value?.accountManager))
-  const userOptions = computed(() =>
+  const userOptions = computed<SearchSelectOption<string>[]>(() =>
     users.value.map(user => ({
       label: user.name,
       key: user.id,

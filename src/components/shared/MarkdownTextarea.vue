@@ -33,8 +33,7 @@ const templateOptions = computed(
     }) ?? []
 )
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- FIXME: InputSelectSingleを直す
-function setTemplate(template: Record<string, any> | string | null) {
+function setTemplate(template: Record<string, unknown> | string | null) {
   if (typeof template !== 'string') {
     return
   }

@@ -2,6 +2,7 @@ import { computed, inject, ref } from 'vue'
 
 import { defineStoreComposable } from '@/lib/store'
 
+import type { SearchSelectOption } from '@/components/shared/SearchSelect/composables/useSearchSelect'
 import { TagRepositoryKey } from '@/di'
 import type { AsyncStatus } from '@/types'
 
@@ -15,7 +16,7 @@ export const useTagStore = defineStoreComposable('tag', () => {
   const status = ref<AsyncStatus>('idle')
   const error = ref<string | null>(null)
 
-  const tagOptions = computed(() =>
+  const tagOptions = computed<SearchSelectOption<string>[]>(() =>
     tags.value.map(tag => ({
       label: tag.name,
       key: tag.id,

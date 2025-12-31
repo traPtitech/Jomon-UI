@@ -86,20 +86,29 @@ const getDisplayValue = (val: unknown): string => {
   const option = getOption(val)
   if (option) return option.label
 
-  if (typeof val === 'string' || typeof val === 'number') {
-    return safeString(val)
-  }
-  return val != null ? '[Object]' : ''
+  return safeString(val)
 }
 
+/**
+ * Validated Update: Ensures only items existing in 'options' and not disabled can be selected.
+ */
 const onUpdateModelValue = (val: unknown) => {
   if (val == null) {
     model.value = null
     return
   }
+
+  // Guard against invalid types and missing options using Composable's logic
   if (isTValue(val)) {
-    model.value = val
+    const option = getOption(val)
+    if (option && !option.disabled) {
+      model.value = val
+    }
   }
+}
+
+const onUpdateSearchTerm = (val: string) => {
+  searchTerm.value = val
 }
 
 // Simplified rootProps thanks to exactOptionalPropertyTypes: false
@@ -125,7 +134,9 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
       <div
         class="flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none"
         :class="[
-          props.disabled ? 'bg-surface-secondary opacity-60' : 'bg-white',
+          props.disabled
+            ? 'cursor-not-allowed bg-surface-secondary opacity-60'
+            : 'bg-white',
         ]"
         @focusin="isFocused = true"
         @focusout="isFocused = false">
@@ -146,7 +157,7 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
           <ComboboxInput
             as-child
             :model-value="open ? searchTerm : undefined"
-            @update:model-value="val => (searchTerm = val)"
+            @update:model-value="onUpdateSearchTerm"
             :display-value="open ? undefined : getDisplayValue"
             :disabled="props.disabled">
             <input
@@ -219,7 +230,7 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
           <ComboboxGroup>
             <ComboboxItem
               v-for="option in filteredOptions"
-              :key="String(option.key)"
+              :key="option.id ?? safeString(option.key)"
               :value="option.key"
               :text-value="option.label"
               :disabled="!!option.disabled"

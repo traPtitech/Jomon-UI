@@ -10,10 +10,10 @@ import type {
 
 describe('useSearchSelectReka', () => {
   const options = ref<RekaOption<AcceptableValue>[]>([
-    { key: 'opt1', label: 'Option 1' },
-    { key: 'opt2', label: 'Option 2' },
-    { key: 0, label: 'Option Zero' },
-    { key: 'opt4', label: 'Disabled Option', disabled: true },
+    { id: 1, key: 'opt1', label: 'Option 1' },
+    { id: 2, key: 'opt2', label: 'Option 2' },
+    { id: 3, key: 0, label: 'Option Zero' },
+    { id: 4, key: 'opt4', label: 'Disabled Option', disabled: true },
   ])
 
   it('filters options based on searchTerm', () => {
@@ -106,18 +106,18 @@ describe('useSearchSelectReka', () => {
 
       expect(getLabel('opt1')).toBe('Option 1')
       expect(getLabel(0)).toBe('Option Zero')
-      expect(getLabel('unknown')).toBe('unknown') // fallback
+      expect(getLabel('unknown')).toBe('unknown') // Should return key string if it's a primitive
     })
 
-    it('identifies valid TValue', () => {
+    it('identifies valid values (presence in options)', () => {
       const model = ref<AcceptableValue | null>(null)
       const { isTValue } = useSearchSelectReka(options, model)
 
-      expect(isTValue('abc')).toBe(true)
-      expect(isTValue(123)).toBe(true)
+      expect(isTValue('opt1')).toBe(true)
+      expect(isTValue(0)).toBe(true)
+      expect(isTValue('unknown')).toBe(false)
       expect(isTValue(null)).toBe(false)
       expect(isTValue(undefined)).toBe(false)
-      expect(isTValue({})).toBe(true) // object is acceptable
     })
   })
 })

@@ -7,9 +7,9 @@ import SearchMultiSelectReka from '@/components/shared/SearchSelect/SearchMultiS
 
 describe('SearchMultiSelectReka', () => {
   const options = [
-    { key: 'opt1', label: 'Option 1' },
-    { key: 'opt2', label: 'Option 2' },
-    { key: 'opt3', label: 'Option 3' },
+    { id: 1, key: 'opt1', label: 'Option 1' },
+    { id: 2, key: 'opt2', label: 'Option 2' },
+    { id: 3, key: 'opt3', label: 'Option 3' },
   ]
 
   let wrapper: ReturnType<typeof mount> | null = null
@@ -114,9 +114,6 @@ describe('SearchMultiSelectReka', () => {
     await nextTick()
 
     // Select second item (opt2)
-    // We assume focus might not move automatically in multi-select, or stays at top.
-    // Sending ArrowDown twice ensures we reach the second item from top if reset,
-    // or moves to next if not reset.
     await input.trigger('keydown', { key: 'ArrowDown' })
     await input.trigger('keydown', { key: 'ArrowDown' })
     await input.trigger('keydown', { key: 'Enter' })
@@ -124,7 +121,6 @@ describe('SearchMultiSelectReka', () => {
 
     const secondEmitted = wrapper.emitted('update:modelValue')
     if (!secondEmitted) throw new Error('update:modelValue was not emitted')
-    // Check the LAST emission for cumulative result
     const lastEmission = secondEmitted[secondEmitted.length - 1]?.[0]
     expect(lastEmission).toContain('opt2')
   })
@@ -140,7 +136,7 @@ describe('SearchMultiSelectReka', () => {
     await flushPromises()
 
     // Change opt1 label and remove opt2 from options
-    const newOptions = [{ key: 'opt1', label: 'New Label 1' }]
+    const newOptions = [{ id: 1, key: 'opt1', label: 'New Label 1' }]
     await wrapper.setProps({ options: newOptions })
     await flushPromises()
     await nextTick()
@@ -188,8 +184,8 @@ describe('SearchMultiSelectReka', () => {
 
   it('does not select individually disabled options', async () => {
     const optionsWithDisabled = [
-      { key: 'opt1', label: 'Option 1' },
-      { key: 'opt2', label: 'Disabled Option', disabled: true },
+      { id: 1, key: 'opt1', label: 'Option 1' },
+      { id: 2, key: 'opt2', label: 'Disabled Option', disabled: true },
     ]
     wrapper = mount(SearchMultiSelectReka, {
       props: {

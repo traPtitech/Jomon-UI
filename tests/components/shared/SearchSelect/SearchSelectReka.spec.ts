@@ -7,9 +7,9 @@ import SearchSelectReka from '@/components/shared/SearchSelect/SearchSelectReka.
 
 describe('SearchSelectReka', () => {
   const options = [
-    { key: 'opt1', label: 'Option 1' },
-    { key: 'opt2', label: 'Option 2' },
-    { key: 'opt3', label: 'Option 3' },
+    { id: 1, key: 'opt1', label: 'Option 1' },
+    { id: 2, key: 'opt2', label: 'Option 2' },
+    { id: 3, key: 'opt3', label: 'Option 3' },
   ]
 
   let wrapper: ReturnType<typeof mount> | null = null
@@ -155,5 +155,30 @@ describe('SearchSelectReka', () => {
 
     const expectedLabel = options.find(o => o.key === selectedKey)?.label
     expect(input.element.value).toBe(expectedLabel)
+  })
+
+  it('ignores invalid types in model updates', async () => {
+    wrapper = mount(SearchSelectReka, {
+      props: {
+        modelValue: 'opt1',
+        options,
+      },
+    })
+
+    await flushPromises()
+
+    // Simulate selection of an option
+    // Accessing internal method for validation logic test
+    const vm = wrapper.vm as unknown as {
+      onUpdateModelValue: (val: unknown) => void
+    }
+
+    vm.onUpdateModelValue('opt2')
+    const emitted = wrapper.emitted('update:modelValue')
+    expect(emitted?.[0]?.[0]).toBe('opt2')
+
+    // Invalid update (object not in options) - should be ignored
+    vm.onUpdateModelValue({ unknown: 'object' })
+    expect(wrapper.emitted('update:modelValue')).toHaveLength(1)
   })
 })

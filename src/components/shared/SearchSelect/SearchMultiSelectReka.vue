@@ -27,6 +27,7 @@ import type {
   AcceptableValue,
   RekaOption,
 } from './composables/useSearchSelectReka'
+import { safeString } from './utils'
 
 export interface SearchMultiSelectRekaProps<T extends AcceptableValue> {
   options: RekaOption<T>[]
@@ -47,7 +48,6 @@ const props = withDefaults(defineProps<SearchMultiSelectRekaProps<T>>(), {
   disabled: false,
   required: false,
   resetOnSelect: true,
-  name: '',
 })
 
 const model = defineModel<T[]>({ required: true })
@@ -63,6 +63,7 @@ const {
   filteredOptions,
   getOption,
   getLabel,
+  isTValue,
 } = useSearchSelectReka(
   computed(() => props.options),
   model,
@@ -82,19 +83,19 @@ const handleSelect = (ev: CustomEvent) => {
   if (props.disabled) return
 
   const val = ev.detail?.value
-  // Validate existence using O(1) Map lookup
-  const option = getOption(val)
-  // Fix: Ensure we check both root disabled and option disabled
-  if (!option || option.disabled) return
 
-  const validKey = option.key
-
-  if (model.value.includes(validKey)) {
-    model.value = model.value.filter(v => v !== validKey)
-  } else {
-    model.value = [...model.value, validKey]
-    if (props.resetOnSelect) {
-      searchTerm.value = ''
+  // Use type guard to ensure value is valid T and present in options
+  if (isTValue(val)) {
+    const option = getOption(val)
+    if (option && !option.disabled) {
+      if (model.value.includes(val)) {
+        model.value = model.value.filter(v => v !== val)
+      } else {
+        model.value = [...model.value, val]
+        if (props.resetOnSelect) {
+          searchTerm.value = ''
+        }
+      }
     }
   }
 }
@@ -153,10 +154,7 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
               :aria-label="label ?? placeholder ?? '検索'"
               :aria-invalid="!!errorMessage"
               :aria-describedby="errorMessage ? errorId : undefined"
-              :aria-errormessage="errorMessage ? errorId : undefined"
-              :disabled="props.disabled"
-              @focus="isFocused = true"
-              @blur="isFocused = false" />
+              :disabled="props.disabled" />
           </ComboboxInput>
 
           <Label
@@ -192,7 +190,7 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
     <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1">
       <div
         v-for="key in model"
-        :key="String(key)"
+        :key="safeString(key)"
         class="flex items-center rounded-sm bg-surface-secondary px-2 py-1 text-xs text-text-primary">
         {{ getLabel(key) }}
         <button
@@ -234,7 +232,7 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
           <ComboboxGroup>
             <ComboboxItem
               v-for="option in filteredOptions"
-              :key="String(option.key)"
+              :key="option.id ?? safeString(option.key)"
               :value="option.key"
               :text-value="option.label"
               :disabled="!!props.disabled || !!option.disabled"

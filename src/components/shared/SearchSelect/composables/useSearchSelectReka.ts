@@ -5,13 +5,14 @@ import type { AcceptableValue } from 'reka-ui'
 import { safeString } from '../utils'
 
 /**
- * Localized Option type for Reka components to support broader generics
- * without breaking legacy Zag/Headless components.
+ * Localized Option type for Reka components to support broader generics.
+ * Optional 'id' for stable UI rendering (v-for keys).
  */
 export interface RekaOption<T extends AcceptableValue = string | number> {
   key: T
   label: string
   disabled?: boolean
+  id?: string | number
 }
 
 export function useSearchSelectReka<
@@ -31,8 +32,8 @@ export function useSearchSelectReka<
   })
 
   /**
-   * Floating label logic (Refactored):
-   * Should trigger when focused, menu is open, or a value exists.
+   * Floating label logic:
+   * Triggers when focused, menu is open, or a value exists.
    */
   const isFloating = computed(() => {
     return isFocused.value || open.value || hasValue.value
@@ -46,25 +47,23 @@ export function useSearchSelectReka<
     return map
   })
 
+  /**
+   * Type guard to check if a value exists in the options and matches T.
+   */
   const isTValue = (val: unknown): val is T => {
-    // Basic runtime check - for objects, we trust the map lookup or basic type checks
-    return (
-      typeof val === 'string' ||
-      typeof val === 'number' ||
-      typeof val === 'bigint' ||
-      typeof val === 'boolean' ||
-      (typeof val === 'object' && val !== null)
-    )
+    // Check if the value exists as a key in our map to ensure it's a valid option
+    return val !== null && val !== undefined && optionMap.value.has(val as T)
   }
 
   const getOption = (val: unknown): RekaOption<T> | undefined => {
+    if (val === null || val === undefined) return undefined
     return optionMap.value.get(val as T)
   }
 
   const getLabel = (val: unknown): string => {
     const option = getOption(val)
     if (option) return option.label
-    // Fallback to safe stringification for primitives
+    // Fallback to safe stringification for basic types
     if (typeof val === 'string' || typeof val === 'number')
       return safeString(val)
     return val != null ? '[Object]' : ''
@@ -92,4 +91,5 @@ export function useSearchSelectReka<
     getLabel,
   }
 }
+
 export type { AcceptableValue }

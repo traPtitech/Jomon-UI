@@ -16,6 +16,7 @@ import {
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
 
+import OpenStateEmitter from './OpenStateEmitter.vue'
 import type { SearchSelectOption } from './composables/useSearchSelect'
 import { useSearchSelect } from './composables/useSearchSelect'
 
@@ -38,6 +39,10 @@ const props = withDefaults(defineProps<SearchMultiSelectProps<T>>(), {
   required: false,
   resetOnSelect: true,
 })
+
+const emit = defineEmits<{
+  (e: 'close'): void
+}>()
 
 const model = defineModel<T[]>({ required: true })
 
@@ -64,7 +69,9 @@ const removeTag = (key: T) => {
     :disabled="disabled"
     as="div"
     class="group relative"
-    multiple>
+    multiple
+    v-slot="{ open }">
+    <OpenStateEmitter :open="open" @close="emit('close')" />
     <div
       class="flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none"
       :class="[

@@ -29,7 +29,7 @@
   - [x] Replace `SearchSelect`/`SearchMultiSelect` imports in all usage points (`AccountManagerPage`, `ApplicationFilters`, `SearchSelectTag`, etc.) with the Headless UI versions. [verified]
   - [x] Run `npm run type-check` to verify integration type safety. [verified]
   - [x] Run application and verify behavior manually. [verified]
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Headless UI Implementation & Integration' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 2: Headless UI Implementation & Integration' (Protocol in workflow.md)
 
 ## Phase 3: Comparison & Final Decision
 

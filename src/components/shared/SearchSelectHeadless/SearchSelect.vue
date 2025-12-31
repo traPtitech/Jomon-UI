@@ -15,6 +15,7 @@ import {
   MagnifyingGlassIcon,
 } from '@heroicons/vue/24/outline'
 
+import OpenStateEmitter from './OpenStateEmitter.vue'
 import type { SearchSelectOption } from './composables/useSearchSelect'
 import { useSearchSelect } from './composables/useSearchSelect'
 
@@ -39,6 +40,10 @@ const props = withDefaults(defineProps<SearchSelectProps<T>>(), {
   required: false,
 })
 
+const emit = defineEmits<{
+  (e: 'close'): void
+}>()
+
 const model = defineModel<T>({ required: true })
 
 const inputId = useId()
@@ -61,6 +66,7 @@ const { searchTerm, isFocused, isFloating, filteredOptions, getLabel } =
     class="group relative"
     nullable
     v-slot="{ open }">
+    <OpenStateEmitter :open="open" @close="emit('close')" />
     <div
       class="flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none"
       :class="[

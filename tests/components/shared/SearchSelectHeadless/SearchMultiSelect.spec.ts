@@ -78,6 +78,14 @@ describe('SearchMultiSelect (Headless UI)', () => {
 
     expect(emitted[0]?.[0]).toEqual(['opt1', 'opt2'])
 
+    // Verify menu is still open
+    const optionsList = wrapper.find('ul') // Headless UI ComboboxOptions renders as ul by default? Or we used as="ul"? No, default is ul.
+    expect(optionsList.exists()).toBe(true)
+
+    // Wait for potential close transition
+    await new Promise(resolve => setTimeout(resolve, 150))
+    expect(optionsList.isVisible()).toBe(true)
+
     // Sync prop to simulate parent update
     await wrapper.setProps({ modelValue: ['opt1', 'opt2'] })
     await nextTick()
@@ -182,5 +190,30 @@ describe('SearchMultiSelect (Headless UI)', () => {
     expect(input.attributes('aria-invalid')).toBe('true')
     // Headless UI might handle aria-describedby differently
     // expect(input.attributes('aria-describedby')).toContain('error')
+  })
+
+  it('filters options based on input', async () => {
+    wrapper = mount(SearchMultiSelect, {
+      props: {
+        modelValue: [],
+        options,
+      },
+      attachTo: document.body,
+    })
+
+    await flushPromises()
+    const button = wrapper.find('button')
+    await button.trigger('click')
+    await flushPromises()
+    await nextTick()
+
+    const input = wrapper.find('input')
+    await input.setValue('Option 1')
+    await flushPromises()
+    await nextTick()
+
+    const items = document.querySelectorAll('[role="option"]')
+    expect(items.length).toBe(1)
+    expect(items[0]?.textContent).toContain('Option 1')
   })
 })

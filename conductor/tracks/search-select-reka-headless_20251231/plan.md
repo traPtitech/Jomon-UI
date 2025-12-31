@@ -4,7 +4,7 @@
 
 - [x] Task: Document Reka UI Issues and Workarounds [caaa646]
   - [ ] Create a markdown file (e.g., `conductor/tracks/search-select-reka-headless_20251231/reka_ui_analysis.md`) summarizing the "string | string[]" type leakage and the specific `DefineComponent` cast workaround used.
-- [ ] Task: Verify Baseline Stability
+- [x] Task: Verify Baseline Stability [verified]
   - [ ] Run `npm run type-check` to confirm the current Reka UI implementation passes without errors.
   - [ ] Run `npm run lint` to confirm no lint errors.
   - [ ] Run unit tests to confirm current functionality.

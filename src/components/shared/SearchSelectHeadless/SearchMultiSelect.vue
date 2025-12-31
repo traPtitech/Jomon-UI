@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends string | number">
-import { computed, useId } from 'vue'
+import { computed, ref, useId } from 'vue'
 
 import {
   Combobox,
@@ -48,6 +48,7 @@ const model = defineModel<T[]>({ required: true })
 
 const inputId = useId()
 const errorId = `${inputId}-error`
+const buttonRef = ref<HTMLElement | null>(null)
 
 const { searchTerm, isFocused, isFloating, filteredOptions, getLabel } =
   useSearchSelect(
@@ -92,6 +93,8 @@ const removeTag = (key: T) => {
         :class="[props.disabled ? 'pointer-events-none' : '']">
         <ComboboxInput as="template" @change="searchTerm = $event.target.value">
           <input
+            @focus="!open && buttonRef?.click()"
+            @click="!open && buttonRef?.click()"
             :id="inputId"
             class="peer w-full border-none bg-transparent px-3 pb-2 text-base text-text-primary ring-0 outline-none"
             :class="[
@@ -123,6 +126,7 @@ const removeTag = (key: T) => {
 
       <ComboboxButton as="template">
         <button
+          ref="buttonRef"
           type="button"
           class="flex items-center pr-2"
           :class="[props.disabled ? 'cursor-not-allowed' : '']"

@@ -216,4 +216,24 @@ describe('SearchMultiSelect (Headless UI)', () => {
     expect(items.length).toBe(1)
     expect(items[0]?.textContent).toContain('Option 1')
   })
+
+  it('opens menu on input click/focus', async () => {
+    wrapper = mount(SearchMultiSelect, {
+      props: {
+        modelValue: [],
+        options,
+      },
+      attachTo: document.body,
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('click')
+    await input.trigger('focus')
+    await flushPromises()
+    await nextTick()
+
+    const optionsList = wrapper.find('ul')
+    expect(optionsList.exists()).toBe(true)
+    expect(optionsList.isVisible()).toBe(true)
+  })
 })

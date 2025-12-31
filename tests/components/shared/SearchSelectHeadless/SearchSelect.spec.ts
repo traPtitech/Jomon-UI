@@ -164,4 +164,26 @@ describe('SearchSelect (Headless UI)', () => {
     const selectedKey = firstEmit[0] as string | number
     expect(options.map(o => o.key)).toContain(selectedKey)
   })
+
+  it('opens menu on input click/focus', async () => {
+    wrapper = mount(SearchSelect, {
+      props: {
+        modelValue: 'opt1',
+        options,
+      },
+      attachTo: document.body,
+    })
+
+    const input = wrapper.find('input')
+    // Simulate focus/click
+    await input.trigger('click')
+    await input.trigger('focus')
+    await flushPromises()
+    await nextTick()
+
+    // Check if open (ComboboxOptions should exist)
+    const optionsList = wrapper.find('ul')
+    expect(optionsList.exists()).toBe(true)
+    expect(optionsList.isVisible()).toBe(true)
+  })
 })

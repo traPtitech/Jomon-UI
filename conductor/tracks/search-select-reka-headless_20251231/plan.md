@@ -45,7 +45,7 @@
   - [x] Record decision in the report. [verified]
 - [~] Task: Conductor - User Manual Verification 'Phase 3: Comparison & Final Decision' (Protocol in workflow.md)
 
-## Phase 4: Finalize Codebase
+## Phase 4: Finalize Codebase [checkpoint: 7056ef3]
 
 - [~] Task: Apply Final Selection
   - [x] If Headless UI wins: Clean up Reka UI components and rename Headless components to main names. [verified]
@@ -53,4 +53,4 @@
   - [x] Ensure `src/components/shared/` reflects the final choice. [verified]
 - [x] Task: Final Quality Check [verified]
   - [x] Run full test suite, lint, and type-check one last time. [verified]
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Finalize Codebase' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Finalize Codebase' (Protocol in workflow.md) [075e625]

@@ -7,7 +7,7 @@ import type { ApplicationComment } from '@/features/applicationComment/entities'
 export interface ApplicationStatusDetail {
   createdBy: string
   status: ApplicationStatus
-  comment?: ApplicationComment | undefined
+  comment?: ApplicationComment
   createdAt: DateTime
 }
 

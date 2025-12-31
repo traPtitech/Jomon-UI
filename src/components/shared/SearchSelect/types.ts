@@ -30,36 +30,37 @@ export interface SearchSelectCommonProps<
 > {
   options: readonly Option<NonNullable<TValue>>[]
   label: string
-  placeholder?: string | undefined
-  disabled?: boolean | undefined
-  required?: boolean | undefined
+  placeholder?: string
+  disabled?: boolean
+  required?: boolean
   /**
    * Error message to display.
    */
-  errorMessage?: string | undefined
+  errorMessage?: string
   /**
    * Optional custom filter function.
    * Return true to include the option in the filtered list.
    * @param option The option to test.
    * @param searchTerm The current search term (not lower-cased).
    */
-  filterFunction?:
-    | ((option: Option<NonNullable<TValue>>, searchTerm: string) => boolean)
-    | undefined
+  filterFunction?: (
+    option: Option<NonNullable<TValue>>,
+    searchTerm: string
+  ) => boolean
   /**
    * Whether to reset the search term when an item is selected.
    * MultiSelect uses `true` by default, while SingleSelect components (SearchSelect.vue) override this to `false` to persist the selected label.
    * If true, the query (filter text) is cleared after selection.
    */
-  resetOnSelect?: boolean | undefined
+  resetOnSelect?: boolean
   /**
    * Text to display when no options match the search term.
    * @default '該当する項目がありません。'
    */
-  noResultsText?: string | undefined
+  noResultsText?: string
   /**
    * Text to display when there are no options available at all.
    * @default '項目がありません。'
    */
-  noItemsText?: string | undefined
+  noItemsText?: string
 }

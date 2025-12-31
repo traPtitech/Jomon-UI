@@ -4,7 +4,7 @@ import { ref, watch } from 'vue'
 import { UserCircleIcon } from '@heroicons/vue/24/solid'
 
 const props = defineProps<{
-  name?: string | undefined
+  name?: string
 }>()
 
 const hasImageError = ref(false)

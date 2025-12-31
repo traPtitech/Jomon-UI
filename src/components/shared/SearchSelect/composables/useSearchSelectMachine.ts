@@ -10,15 +10,13 @@ import { useSearchSelectFiltering } from './useSearchSelectFiltering'
 export interface UseSearchSelectMachineProps<T extends string | number> {
   id: string
   options: MaybeRef<readonly Option<T>[]>
-  disabled?: MaybeRef<boolean> | undefined
-  readOnly?: MaybeRef<boolean> | undefined
-  placeholder?: MaybeRef<string> | undefined
-  multiple?: MaybeRef<boolean> | undefined
-  modelValue?: MaybeRef<T | T[] | null> | undefined
-  filterFunction?:
-    | ((option: Option<T>, searchTerm: string) => boolean)
-    | undefined
-  resetOnSelect?: MaybeRef<boolean> | undefined
+  disabled?: MaybeRef<boolean>
+  readOnly?: MaybeRef<boolean>
+  placeholder?: MaybeRef<string>
+  multiple?: MaybeRef<boolean>
+  modelValue?: MaybeRef<T | T[] | null>
+  filterFunction?: (option: Option<T>, searchTerm: string) => boolean
+  resetOnSelect?: MaybeRef<boolean>
 }
 
 export function useSearchSelectMachine<T extends string | number>(

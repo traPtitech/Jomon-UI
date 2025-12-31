@@ -3,7 +3,7 @@ import { ref } from 'vue'
 
 import SearchMultiSelectHeadless from '@/components/shared/SearchSelectHeadless/SearchMultiSelectHeadless.vue'
 import SearchSelectHeadless from '@/components/shared/SearchSelectHeadless/SearchSelectHeadless.vue'
-import type { Option } from '@/components/shared/SearchSelectHeadless/types'
+import type { SearchSelectOption as HeadlessOption } from '@/components/shared/SearchSelectHeadless/types'
 import SearchMultiSelectReka from '@/components/shared/SearchSelectReka/SearchMultiSelect.vue'
 import SearchSelectReka from '@/components/shared/SearchSelectReka/SearchSelect.vue'
 import type { SearchSelectOption as RekaOption } from '@/components/shared/SearchSelectReka/composables/useSearchSelect'
@@ -15,7 +15,7 @@ const optionsReka: RekaOption<string>[] = [
   { label: 'Option 4', key: 'opt4', disabled: true },
   { label: 'Option 5', key: 'opt5' },
 ]
-const optionsHeadless: Option<string>[] = [
+const optionsHeadless: HeadlessOption<string>[] = [
   { label: 'Option 1', key: 'opt1' },
   { label: 'Option 2', key: 'opt2' },
   { label: 'Option 3', key: 'opt3' },

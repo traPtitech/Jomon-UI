@@ -2,7 +2,7 @@
  * Represents an option in a selection list.
  * @template T - The type of the value.
  */
-export interface Option<T extends string | number> {
+export interface SearchSelectOption<T extends string | number> {
   /** Display label shown in the UI */
   label: string
   /**

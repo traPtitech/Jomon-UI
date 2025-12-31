@@ -14,32 +14,38 @@ import {
   CheckIcon,
   ChevronDownIcon,
   MagnifyingGlassIcon,
+  XMarkIcon,
 } from '@heroicons/vue/24/outline'
 
-import type { Option } from './types'
+import type { SearchSelectOption } from './types'
 
-// defineModel handles modelValue, so it is removed from defineProps to avoid duplication.
+// defineModel handles modelValue, so it is removed from defineProps.
 const props = withDefaults(
   defineProps<{
-    options: Option<TValue>[]
+    options: SearchSelectOption<TValue>[]
     label?: string
     placeholder?: string
     disabled?: boolean
     required?: boolean
+    resetOnSelect?: boolean
     name?: string
     noResultsText?: string
     errorMessage?: string
-    filterFunction?: (option: Option<TValue>, query: string) => boolean
+    filterFunction?: (
+      option: SearchSelectOption<TValue>,
+      query: string
+    ) => boolean
   }>(),
   {
     placeholder: '検索',
     disabled: false,
     required: false,
-    name: '', // Use empty string as default to satisfy exactOptionalPropertyTypes
+    resetOnSelect: true,
+    name: '',
   }
 )
 
-const model = defineModel<TValue | null>({ required: true })
+const model = defineModel<TValue[]>({ required: true })
 
 const inputId = useId()
 const errorId = `${inputId}-error`
@@ -48,7 +54,6 @@ const isFocused = ref(false)
 
 // Performance optimization: O(1) lookups
 const optionMap = computed(() => new Map(props.options.map(o => [o.key, o])))
-// Cast to Set<unknown> to simplify checks against unknown 'val'
 const keySet = computed(() => new Set<unknown>(props.options.map(o => o.key)))
 
 const comboButton = ref<InstanceType<typeof ComboboxButton> | null>(null)
@@ -61,7 +66,7 @@ const forceOpen = () => {
 }
 
 const isFloating = computed(() => {
-  return isFocused.value || query.value.length > 0 || model.value !== null
+  return isFocused.value || query.value.length > 0 || model.value.length > 0
 })
 
 const filteredOptions = computed(() => {
@@ -75,12 +80,13 @@ const filteredOptions = computed(() => {
   return props.options.filter(o => o.label.toLowerCase().includes(term))
 })
 
-const displayValue = (item: unknown): string => {
-  if (item === null || item === undefined) return ''
-  if (typeof item === 'string' || typeof item === 'number') {
-    return optionMap.value.get(item as TValue)?.label ?? String(item)
-  }
-  return ''
+const getLabel = (key: TValue) => {
+  return optionMap.value.get(key)?.label ?? String(key)
+}
+
+const removeTag = (key: TValue) => {
+  if (props.disabled) return
+  model.value = model.value.filter(v => v !== key)
 }
 
 const handleInteraction = (isOpen: boolean) => {
@@ -113,15 +119,20 @@ const inputAttrs = (isOpen: boolean) => ({
 })
 
 // Optimized type guard using Set
-function isTValue(val: unknown): val is TValue {
-  return keySet.value.has(val)
+function isTValueArray(val: unknown[]): val is TValue[] {
+  const set = keySet.value
+  return val.every(
+    v => typeof v === 'string' || (typeof v === 'number' && set.has(v))
+  )
 }
 
 const onUpdateModel = (val: unknown) => {
-  if (val === null) {
-    model.value = null
-  } else if (isTValue(val)) {
+  if (Array.isArray(val) && isTValueArray(val)) {
+    const isAdded = val.length > model.value.length
     model.value = val
+    if (isAdded && props.resetOnSelect) {
+      query.value = ''
+    }
   }
 }
 </script>
@@ -135,7 +146,7 @@ const onUpdateModel = (val: unknown) => {
     :name="props.name"
     as="div"
     class="group relative"
-    nullable>
+    multiple>
     <div
       :class="[
         'flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none',
@@ -155,8 +166,8 @@ const onUpdateModel = (val: unknown) => {
             label ? 'pt-6' : 'pt-2',
             props.disabled ? 'cursor-not-allowed' : '',
           ]"
-          :display-value="displayValue"
-          v-bind="inputAttrs(open)" />
+          v-bind="inputAttrs(open)"
+          :display-value="() => query" />
 
         <ComboboxLabel
           v-if="label"
@@ -176,6 +187,23 @@ const onUpdateModel = (val: unknown) => {
           class="h-4 w-4 text-text-secondary"
           aria-hidden="true" />
       </ComboboxButton>
+    </div>
+
+    <!-- Tags -->
+    <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1">
+      <div
+        v-for="key in model"
+        :key="String(key)"
+        class="flex items-center rounded-sm bg-surface-secondary px-2 py-1 text-xs text-text-primary">
+        {{ getLabel(key) }}
+        <button
+          type="button"
+          :aria-label="`${getLabel(key)} を削除`"
+          class="ml-1 rounded-full hover:bg-blue-100"
+          @click.stop="removeTag(key)">
+          <XMarkIcon class="h-3 w-3" aria-hidden="true" />
+        </button>
+      </div>
     </div>
 
     <p
@@ -213,11 +241,10 @@ const onUpdateModel = (val: unknown) => {
               'bg-blue-50': selected && !active,
               'cursor-not-allowed opacity-50': optionDisabled,
             }">
-            <span class="flex-1 truncate">{{ option.label }}</span>
-            <CheckIcon
-              v-if="selected"
-              class="ml-auto h-4 w-4"
-              aria-hidden="true" />
+            <div class="mr-2 flex h-4 w-4 items-center justify-center">
+              <CheckIcon v-if="selected" class="h-4 w-4" aria-hidden="true" />
+            </div>
+            <span class="truncate">{{ option.label }}</span>
           </li>
         </ComboboxOption>
       </ComboboxOptions>

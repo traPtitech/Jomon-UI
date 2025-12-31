@@ -14,7 +14,6 @@
     "lint:nofix": "eslint --cache src tests scripts vite.config.ts vitest.config.ts eslint.config.js",
     "lint:ci": "eslint src tests scripts vite.config.ts vitest.config.ts eslint.config.js --max-warnings=0",
     "type-check": "vue-tsc --build --noEmit",
-    "type-check:tests": "vue-tsc --project tsconfig.vitest.json --noEmit",
     "test:unit": "vitest run",
     "test:coverage": "vitest run --coverage",
     "gen-api": "esno ./scripts/generate-apis.ts",

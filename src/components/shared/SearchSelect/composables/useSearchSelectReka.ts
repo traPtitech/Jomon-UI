@@ -14,15 +14,18 @@ export function useSearchSelectReka(
   const open = ref(false)
   const isFocused = ref(false)
 
+  const hasValue = computed(() => {
+    const v = modelValue.value
+    return Array.isArray(v) ? v.length > 0 : v !== null
+  })
+
+  /**
+   * Floating label logic (Refactored):
+   * Should trigger when focused, menu is open, or a value exists.
+   * We no longer rely on searchTerm here to ensure UI stability when the query is cleared.
+   */
   const isFloating = computed(() => {
-    return (
-      isFocused.value ||
-      open.value ||
-      searchTerm.value !== '' ||
-      (Array.isArray(modelValue.value)
-        ? modelValue.value.length > 0
-        : modelValue.value !== null)
-    )
+    return isFocused.value || open.value || hasValue.value
   })
 
   const optionMap = computed(() => {

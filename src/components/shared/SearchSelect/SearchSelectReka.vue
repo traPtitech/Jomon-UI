@@ -105,20 +105,16 @@ const onUpdateSearchTerm = (val: string) => {
   searchTerm.value = val
 }
 
-const rootProps = computed<Partial<ComboboxRootProps>>(() => {
-  const p: Partial<ComboboxRootProps> = {
-    disabled: props.disabled,
-    required: props.required,
-    ignoreFilter: true,
-    openOnFocus: true,
-    openOnClick: true,
-    resetSearchTermOnSelect: true,
-  }
-  if (props.name) {
-    p.name = props.name
-  }
-  return p
-})
+// Simplified rootProps thanks to exactOptionalPropertyTypes: false
+const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
+  disabled: props.disabled,
+  required: props.required,
+  ignoreFilter: true,
+  openOnFocus: true,
+  openOnClick: true,
+  resetSearchTermOnSelect: true,
+  name: props.name,
+}))
 </script>
 
 <template>
@@ -158,7 +154,7 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => {
               props.disabled ? 'cursor-not-allowed' : '',
             ]"
             :placeholder="isFloating || !props.label ? placeholder : ''"
-            :aria-label="label ? undefined : (placeholder ?? '選択')"
+            :aria-label="label ?? placeholder ?? '選択'"
             :aria-invalid="!!errorMessage"
             :aria-describedby="errorMessage ? errorId : undefined"
             :aria-errormessage="errorMessage ? errorId : undefined"

@@ -99,21 +99,16 @@ const handleSelect = (ev: CustomEvent) => {
   }
 }
 
-// Workaround for strict prop types in Reka UI
-const rootProps = computed<Partial<ComboboxRootProps>>(() => {
-  const p: Partial<ComboboxRootProps> = {
-    disabled: props.disabled,
-    required: props.required,
-    ignoreFilter: true,
-    resetSearchTermOnSelect: props.resetOnSelect,
-    openOnFocus: true,
-    openOnClick: true,
-  }
-  if (props.name) {
-    p.name = props.name
-  }
-  return p
-})
+// Simplified rootProps thanks to exactOptionalPropertyTypes: false
+const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
+  disabled: props.disabled,
+  required: props.required,
+  ignoreFilter: true,
+  resetSearchTermOnSelect: props.resetOnSelect,
+  openOnFocus: true,
+  openOnClick: true,
+  name: props.name,
+}))
 </script>
 
 <template>
@@ -149,7 +144,7 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => {
               props.disabled ? 'cursor-not-allowed' : '',
             ]"
             :placeholder="isFloating || !props.label ? placeholder : ''"
-            :aria-label="label ? undefined : (placeholder ?? '検索')"
+            :aria-label="label ?? placeholder ?? '検索'"
             :aria-invalid="!!errorMessage"
             :aria-describedby="errorMessage ? errorId : undefined"
             :aria-errormessage="errorMessage ? errorId : undefined"

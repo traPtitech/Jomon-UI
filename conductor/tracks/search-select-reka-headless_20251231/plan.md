@@ -43,11 +43,11 @@
 - [x] Task: Select Final Library [verified]
   - [x] Review report and decide on the winner. [verified]
   - [x] Record decision in the report. [verified]
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Comparison & Final Decision' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 3: Comparison & Final Decision' (Protocol in workflow.md)
 
 ## Phase 4: Finalize Codebase
 
-- [ ] Task: Apply Final Selection
+- [~] Task: Apply Final Selection
   - [ ] If Headless UI wins: Clean up Reka UI components and rename Headless components to main names.
   - [ ] If Reka UI wins: Revert integration changes, keeping Headless UI code in a reference/archive folder or deleting it, and document why Reka was chosen despite the workaround.
   - [ ] Ensure `src/components/shared/` reflects the final choice.

@@ -2,7 +2,7 @@ import { computed, inject, ref } from 'vue'
 
 import { defineStoreComposable } from '@/lib/store'
 
-import type { SearchSelectOption } from '@/components/shared/SearchSelectReka/composables/useSearchSelect'
+import type { SearchSelectOption } from '@/components/shared/SearchSelect/composables/useSearchSelect'
 import { AccountManagerRepositoryKey } from '@/di'
 import { useUserStore } from '@/features/user/store'
 import type { AsyncStatus } from '@/types'

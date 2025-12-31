@@ -41,6 +41,9 @@ describe('useSearchSelectReka', () => {
 
     searchTerm.value = 'Disabled'
     expect(filteredOptions.value).toHaveLength(1)
+
+    searchTerm.value = ''
+    expect(filteredOptions.value).toHaveLength(4)
   })
 
   describe('isFloating logic', () => {

@@ -187,4 +187,35 @@ describe('SearchMultiSelectReka', () => {
     await removeButton.trigger('click')
     expect(wrapper.emitted('update:modelValue')).toBeUndefined()
   })
+
+  it('does not select individually disabled options', async () => {
+    const optionsWithDisabled = [
+      { key: 'opt1', label: 'Option 1' },
+      { key: 'opt2', label: 'Disabled Option', disabled: true },
+    ]
+    wrapper = mount(SearchMultiSelectReka, {
+      props: {
+        modelValue: [],
+        options: optionsWithDisabled,
+      },
+      attachTo: document.body,
+    })
+
+    await flushPromises()
+    const input = wrapper.find('input')
+    await input.trigger('click')
+    await flushPromises()
+
+    const disabledItem = document.querySelector(
+      '[role="option"][data-disabled]'
+    ) as HTMLElement
+    expect(disabledItem).not.toBeNull()
+
+    // Attempt click
+    disabledItem.click()
+    await flushPromises()
+
+    // Should NOT emit update
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+  })
 })

@@ -148,9 +148,9 @@ describe('SearchSelectReka', () => {
     if (!emitted) throw new Error('update:modelValue was not emitted')
 
     const firstEmit = emitted[0]
-    expect(firstEmit).toBeDefined()
+    if (!firstEmit) throw new Error('first emit is undefined')
 
-    const selectedKey = firstEmit?.[0] as string | number
+    const selectedKey = firstEmit[0] as string | number
     expect(options.map(o => o.key)).toContain(selectedKey)
 
     const expectedLabel = options.find(o => o.key === selectedKey)?.label

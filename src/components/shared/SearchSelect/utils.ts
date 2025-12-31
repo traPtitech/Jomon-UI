@@ -1,29 +1,8 @@
 /**
  * Safely converts a value to a string for display or keys.
  */
-export function safeString(val: unknown): string {
-  if (typeof val === 'string') return val
-  if (
-    typeof val === 'number' ||
-    typeof val === 'bigint' ||
-    typeof val === 'boolean'
-  ) {
-    return String(val)
-  }
-  if (typeof val === 'object' && val !== null) {
-    if ('label' in val && typeof val.label === 'string') return val.label
-    if (
-      'id' in val &&
-      (typeof val.id === 'string' || typeof val.id === 'number')
-    )
-      return String(val.id)
-    try {
-      return JSON.stringify(val)
-    } catch {
-      return '[Object]'
-    }
-  }
-  return ''
+export function safeString(val: string | number): string {
+  return String(val)
 }
 
 /**

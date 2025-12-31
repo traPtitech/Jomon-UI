@@ -23,7 +23,6 @@ import {
 
 import { useSearchSelectReka } from './composables/useSearchSelectReka'
 import type { RekaOption } from './composables/useSearchSelectReka'
-import { safeString } from './utils'
 
 export interface SearchSelectRekaProps<T extends string | number> {
   options: RekaOption<T>[]
@@ -55,6 +54,7 @@ const {
   isFloating,
   filteredOptions,
   getOption,
+  getLabel,
   isTValue,
 } = useSearchSelectReka(
   computed(() => props.options),
@@ -80,10 +80,7 @@ const getDisplayValue = (val: unknown): string => {
   }
 
   // If closed, we are in "Display Mode".
-  const option = getOption(val)
-  if (option) return option.label
-
-  return safeString(val)
+  return getLabel(val)
 }
 
 /**

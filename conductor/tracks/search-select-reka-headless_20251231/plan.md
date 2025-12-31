@@ -2,7 +2,7 @@
 
 ## Phase 1: Reka UI Documentation & Baseline Verification
 
-- [~] Task: Document Reka UI Issues and Workarounds
+- [x] Task: Document Reka UI Issues and Workarounds [caaa646]
   - [ ] Create a markdown file (e.g., `conductor/tracks/search-select-reka-headless_20251231/reka_ui_analysis.md`) summarizing the "string | string[]" type leakage and the specific `DefineComponent` cast workaround used.
 - [ ] Task: Verify Baseline Stability
   - [ ] Run `npm run type-check` to confirm the current Reka UI implementation passes without errors.

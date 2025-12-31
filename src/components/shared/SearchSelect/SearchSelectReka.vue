@@ -119,7 +119,7 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
 
 <template>
   <ComboboxRoot
-    :model-value="model ?? undefined"
+    :model-value="model"
     @update:model-value="onUpdateModelValue"
     v-model:open="open"
     v-bind="rootProps"

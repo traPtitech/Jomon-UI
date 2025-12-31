@@ -7,7 +7,7 @@ import {
   MagnifyingGlassIcon,
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
-import type { ComboboxRootProps } from 'reka-ui'
+import type { ComboboxRootProps, SelectItemSelectEvent } from 'reka-ui'
 import {
   ComboboxAnchor,
   ComboboxContent,
@@ -22,8 +22,8 @@ import {
   Label,
 } from 'reka-ui'
 
-import { useSearchSelectReka } from './composables/useSearchSelectReka'
 import type { RekaOption } from './composables/useSearchSelectReka'
+import { useSearchSelectReka } from './composables/useSearchSelectReka'
 
 export interface SearchMultiSelectRekaProps<T extends string | number> {
   options: RekaOption<T>[]
@@ -72,13 +72,10 @@ const removeTag = (key: T) => {
 }
 
 // Manual selection handler to keep dropdown open for multiple selection
-const handleSelect = (ev: CustomEvent) => {
-  // We handle model updates manually to keep the dropdown open
-  ev.preventDefault()
-
+const handleSelect = (ev: SelectItemSelectEvent<T>) => {
   if (props.disabled) return
 
-  const val = ev.detail?.value
+  const val = ev.detail.value
 
   // Use type guard to ensure value is valid T and present in options
   if (isTValue(val)) {
@@ -232,7 +229,7 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
               :value="option.key"
               :text-value="option.label"
               :disabled="!!props.disabled || !!option.disabled"
-              @select="handleSelect"
+              @select.prevent="handleSelect"
               class="relative flex w-full cursor-default items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-disabled:cursor-not-allowed data-disabled:opacity-40 data-highlighted:not-data-disabled:bg-blue-100 data-highlighted:not-data-disabled:text-blue-500">
               <div class="mr-2 flex h-4 w-4 items-center justify-center">
                 <ComboboxItemIndicator>

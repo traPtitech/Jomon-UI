@@ -6,7 +6,7 @@ import { useToast } from 'vue-toastification'
 
 import type { ApplicationTargetEditDraft } from '@/components/applicationDetail/types'
 import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
-import SearchSelect from '@/components/shared/SearchSelectReka/SearchSelect.vue'
+import SearchSelect from '@/components/shared/SearchSelectHeadless/SearchSelect.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'

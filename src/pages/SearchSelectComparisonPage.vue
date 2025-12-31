@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import SearchMultiSelectHeadless from '@/components/shared/SearchSelectHeadless/SearchMultiSelectHeadless.vue'
-import SearchSelectHeadless from '@/components/shared/SearchSelectHeadless/SearchSelectHeadless.vue'
-import type { SearchSelectOption as HeadlessOption } from '@/components/shared/SearchSelectHeadless/types'
+import SearchMultiSelectHeadless from '@/components/shared/SearchSelectHeadless/SearchMultiSelect.vue'
+import SearchSelectHeadless from '@/components/shared/SearchSelectHeadless/SearchSelect.vue'
+import type { SearchSelectOption as HeadlessOption } from '@/components/shared/SearchSelectHeadless/composables/useSearchSelect'
 import SearchMultiSelectReka from '@/components/shared/SearchSelectReka/SearchMultiSelect.vue'
 import SearchSelectReka from '@/components/shared/SearchSelectReka/SearchSelect.vue'
 import type { SearchSelectOption as RekaOption } from '@/components/shared/SearchSelectReka/composables/useSearchSelect'

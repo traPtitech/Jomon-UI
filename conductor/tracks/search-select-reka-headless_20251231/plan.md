@@ -25,10 +25,10 @@
     - **CRITICAL:** Reference existing tests to ensure parity in features like multiple selection, tag removal, and filtering.
   - [x] Sub-task: Implement `SearchMultiSelect` using Headless UI. [verified]
   - [x] Sub-task: Verify Type Safety (v-model array handling). [verified]
-- [~] Task: Full Integration Verification
-  - [ ] Replace `SearchSelect`/`SearchMultiSelect` imports in all usage points (`AccountManagerPage`, `ApplicationFilters`, `SearchSelectTag`, etc.) with the Headless UI versions.
-  - [ ] Run `npm run type-check` to verify integration type safety.
-  - [ ] Run application and verify behavior manually.
+- [x] Task: Full Integration Verification [verified]
+  - [x] Replace `SearchSelect`/`SearchMultiSelect` imports in all usage points (`AccountManagerPage`, `ApplicationFilters`, `SearchSelectTag`, etc.) with the Headless UI versions. [verified]
+  - [x] Run `npm run type-check` to verify integration type safety. [verified]
+  - [x] Run application and verify behavior manually. [verified]
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Headless UI Implementation & Integration' (Protocol in workflow.md)
 
 ## Phase 3: Comparison & Final Decision

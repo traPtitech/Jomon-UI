@@ -3,7 +3,7 @@ import { ref } from 'vue'
 
 import { useToast } from 'vue-toastification'
 
-import SearchMultiSelect from '@/components/shared/SearchSelectReka/SearchMultiSelect.vue'
+import SearchMultiSelect from '@/components/shared/SearchSelectHeadless/SearchMultiSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useAccountManagerStore } from '@/features/accountManager/store'
 import { useTagStore } from '@/features/tag/store'

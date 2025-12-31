@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import SearchMultiSelectReka from '@/components/shared/SearchSelect/SearchMultiSelect.vue'
-import SearchSelectReka from '@/components/shared/SearchSelect/SearchSelect.vue'
-import type { SearchSelectOption as RekaOption } from '@/components/shared/SearchSelect/composables/useSearchSelect'
 import SearchMultiSelectHeadless from '@/components/shared/SearchSelectHeadless/SearchMultiSelectHeadless.vue'
 import SearchSelectHeadless from '@/components/shared/SearchSelectHeadless/SearchSelectHeadless.vue'
 import type { Option } from '@/components/shared/SearchSelectHeadless/types'
+import SearchMultiSelectReka from '@/components/shared/SearchSelectReka/SearchMultiSelect.vue'
+import SearchSelectReka from '@/components/shared/SearchSelectReka/SearchSelect.vue'
+import type { SearchSelectOption as RekaOption } from '@/components/shared/SearchSelectReka/composables/useSearchSelect'
 
 const optionsReka: RekaOption<string>[] = [
   { label: 'Option 1', key: 'opt1' },

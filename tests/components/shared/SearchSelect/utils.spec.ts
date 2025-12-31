@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { safeString } from '@/components/shared/SearchSelect/utils'
+import { safeString } from '@/components/shared/SearchSelectReka/utils'
 
 describe('serializeOptionKey', () => {
   it('serializes string correctly', () => {

@@ -2,7 +2,7 @@ import { computed, inject, ref } from 'vue'
 
 import { defineStoreComposable } from '@/lib/store'
 
-import type { SearchSelectOption } from '@/components/shared/SearchSelect/composables/useSearchSelect'
+import type { SearchSelectOption } from '@/components/shared/SearchSelectReka/composables/useSearchSelect'
 import { PartitionGroupRepositoryKey } from '@/di'
 import type {
   PartitionGroup,

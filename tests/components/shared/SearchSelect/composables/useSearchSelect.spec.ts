@@ -2,8 +2,8 @@ import { ref } from 'vue'
 
 import { describe, expect, it } from 'vitest'
 
-import type { SearchSelectOption } from '@/components/shared/SearchSelect/composables/useSearchSelect'
-import { useSearchSelect } from '@/components/shared/SearchSelect/composables/useSearchSelect'
+import type { SearchSelectOption } from '@/components/shared/SearchSelectReka/composables/useSearchSelect'
+import { useSearchSelect } from '@/components/shared/SearchSelectReka/composables/useSearchSelect'
 
 type TestValue = string | number
 

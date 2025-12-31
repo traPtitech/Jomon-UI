@@ -3,7 +3,7 @@ import { nextTick } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
-import SearchMultiSelect from '@/components/shared/SearchSelect/SearchMultiSelect.vue'
+import SearchMultiSelect from '@/components/shared/SearchSelectReka/SearchMultiSelect.vue'
 
 describe('SearchMultiSelect', () => {
   const options = [

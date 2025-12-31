@@ -15,8 +15,8 @@
 - [x] Task: Scaffold Headless UI Components [verified]
   - [ ] Create `src/components/shared/SearchSelectHeadless/` directory.
   - [ ] Install `@headlessui/vue` (if not already installed).
-- [ ] Task: Implement SearchSelect (Headless UI)
-  - [ ] Sub-task: Write Comprehensive Tests for Headless SearchSelect.
+- [~] Task: Implement SearchSelect (Headless UI)
+  - [~] Sub-task: Write Comprehensive Tests for Headless SearchSelect.
     - **CRITICAL:** Reference the existing Reka UI `SearchSelect.spec.ts` to ensure all functionality and edge cases are covered.
   - [ ] Sub-task: Implement `SearchSelect` using Headless UI `Combobox` / `Listbox`.
   - [ ] Sub-task: Verify Type Safety (ensure no assertions/lint disables needed).

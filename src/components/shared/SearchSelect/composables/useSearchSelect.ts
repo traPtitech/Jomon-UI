@@ -8,7 +8,9 @@ import { safeString } from '../utils'
  * Localized Option type for Reka components.
  * Key must be a primitive (string or number) to ensure safe Map lookups.
  */
-export interface RekaOption<T extends string | number = string | number> {
+export interface SearchSelectOption<
+  T extends string | number = string | number,
+> {
   key: T
   label: string
   disabled?: boolean
@@ -16,9 +18,9 @@ export interface RekaOption<T extends string | number = string | number> {
 }
 
 export function useSearchSelect<T extends string | number = string | number>(
-  options: Ref<RekaOption<T>[]>,
+  options: Ref<SearchSelectOption<T>[]>,
   modelValue: Ref<T | T[] | null>,
-  filterFunction?: (option: RekaOption<T>, query: string) => boolean
+  filterFunction?: (option: SearchSelectOption<T>, query: string) => boolean
 ) {
   const searchTerm = ref('')
   const open = ref(false)
@@ -39,7 +41,7 @@ export function useSearchSelect<T extends string | number = string | number>(
   })
 
   const optionMap = computed(() => {
-    const map = new Map<unknown, RekaOption<T>>()
+    const map = new Map<unknown, SearchSelectOption<T>>()
     for (const opt of options.value) {
       map.set(opt.key, opt)
     }
@@ -54,7 +56,7 @@ export function useSearchSelect<T extends string | number = string | number>(
     return val !== null && val !== undefined && optionMap.value.has(val)
   }
 
-  const getOption = (val: unknown): RekaOption<T> | undefined => {
+  const getOption = (val: unknown): SearchSelectOption<T> | undefined => {
     if (val === null || val === undefined) return undefined
     return optionMap.value.get(val)
   }

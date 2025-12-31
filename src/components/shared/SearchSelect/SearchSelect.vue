@@ -21,11 +21,11 @@ import {
   Label,
 } from 'reka-ui'
 
-import type { RekaOption } from './composables/useSearchSelect'
+import type { SearchSelectOption } from './composables/useSearchSelect'
 import { useSearchSelect } from './composables/useSearchSelect'
 
 export interface SearchSelectRekaProps<T extends string | number> {
-  options: RekaOption<T>[]
+  options: SearchSelectOption<T>[]
   label?: string
   placeholder?: string
   disabled?: boolean
@@ -33,7 +33,7 @@ export interface SearchSelectRekaProps<T extends string | number> {
   name?: string
   noResultsText?: string
   errorMessage?: string
-  filterFunction?: (option: RekaOption<T>, query: string) => boolean
+  filterFunction?: (option: SearchSelectOption<T>, query: string) => boolean
 }
 
 const props = withDefaults(defineProps<SearchSelectRekaProps<T>>(), {

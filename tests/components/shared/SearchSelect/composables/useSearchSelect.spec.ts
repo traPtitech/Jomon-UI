@@ -2,13 +2,13 @@ import { ref } from 'vue'
 
 import { describe, expect, it } from 'vitest'
 
-import type { RekaOption } from '@/components/shared/SearchSelect/composables/useSearchSelect'
+import type { SearchSelectOption } from '@/components/shared/SearchSelect/composables/useSearchSelect'
 import { useSearchSelect } from '@/components/shared/SearchSelect/composables/useSearchSelect'
 
 type TestValue = string | number
 
 describe('useSearchSelect', () => {
-  const options = ref<RekaOption<TestValue>[]>([
+  const options = ref<SearchSelectOption<TestValue>[]>([
     { id: 1, key: 'opt1', label: 'Option 1' },
     { id: 2, key: 'opt2', label: 'Option 2' },
     { id: 3, key: 0, label: 'Option Zero' },
@@ -30,7 +30,7 @@ describe('useSearchSelect', () => {
 
   it('uses custom filter function if provided', () => {
     const model = ref<TestValue | null>(null)
-    const customFilter = (opt: RekaOption<TestValue>, query: string) =>
+    const customFilter = (opt: SearchSelectOption<TestValue>, query: string) =>
       opt.label.includes(query)
     const { searchTerm, filteredOptions } = useSearchSelect(
       options,

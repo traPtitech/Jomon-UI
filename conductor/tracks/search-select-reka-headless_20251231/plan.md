@@ -48,9 +48,9 @@
 ## Phase 4: Finalize Codebase
 
 - [~] Task: Apply Final Selection
-  - [ ] If Headless UI wins: Clean up Reka UI components and rename Headless components to main names.
+  - [x] If Headless UI wins: Clean up Reka UI components and rename Headless components to main names. [verified]
   - [ ] If Reka UI wins: Revert integration changes, keeping Headless UI code in a reference/archive folder or deleting it, and document why Reka was chosen despite the workaround.
-  - [ ] Ensure `src/components/shared/` reflects the final choice.
-- [ ] Task: Final Quality Check
-  - [ ] Run full test suite, lint, and type-check one last time.
+  - [x] Ensure `src/components/shared/` reflects the final choice. [verified]
+- [x] Task: Final Quality Check [verified]
+  - [x] Run full test suite, lint, and type-check one last time. [verified]
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Finalize Codebase' (Protocol in workflow.md)

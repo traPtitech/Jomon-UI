@@ -7,9 +7,9 @@ import SearchMultiSelect from '@/components/shared/SearchSelect/SearchMultiSelec
 
 describe('SearchMultiSelect', () => {
   const options = [
-    { id: 1, key: 'opt1', label: 'Option 1' },
-    { id: 2, key: 'opt2', label: 'Option 2' },
-    { id: 3, key: 'opt3', label: 'Option 3' },
+    { key: 'opt1', label: 'Option 1' },
+    { key: 'opt2', label: 'Option 2' },
+    { key: 'opt3', label: 'Option 3' },
   ]
 
   let wrapper: ReturnType<typeof mount> | null = null
@@ -142,7 +142,7 @@ describe('SearchMultiSelect', () => {
     await flushPromises()
 
     // Change opt1 label and remove opt2 from options
-    const newOptions = [{ id: 1, key: 'opt1', label: 'New Label 1' }]
+    const newOptions = [{ key: 'opt1', label: 'New Label 1' }]
     await wrapper.setProps({ options: newOptions })
     await flushPromises()
     await nextTick()
@@ -190,8 +190,8 @@ describe('SearchMultiSelect', () => {
 
   it('does not select individually disabled options', async () => {
     const optionsWithDisabled = [
-      { id: 1, key: 'opt1', label: 'Option 1' },
-      { id: 2, key: 'opt2', label: 'Disabled Option', disabled: true },
+      { key: 'opt1', label: 'Option 1' },
+      { key: 'opt2', label: 'Disabled Option', disabled: true },
     ]
     wrapper = mount(SearchMultiSelect, {
       props: {

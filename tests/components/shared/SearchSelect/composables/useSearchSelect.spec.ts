@@ -9,10 +9,10 @@ type TestValue = string | number
 
 describe('useSearchSelect', () => {
   const options = ref<SearchSelectOption<TestValue>[]>([
-    { id: 1, key: 'opt1', label: 'Option 1' },
-    { id: 2, key: 'opt2', label: 'Option 2' },
-    { id: 3, key: 0, label: 'Option Zero' },
-    { id: 4, key: 'opt4', label: 'Disabled Option', disabled: true },
+    { key: 'opt1', label: 'Option 1' },
+    { key: 'opt2', label: 'Option 2' },
+    { key: 0, label: 'Option Zero' },
+    { key: 'opt4', label: 'Disabled Option', disabled: true },
   ])
 
   it('filters options based on searchTerm', () => {

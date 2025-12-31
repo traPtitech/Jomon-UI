@@ -14,7 +14,6 @@ export interface SearchSelectOption<
   key: T
   label: string
   disabled?: boolean
-  id?: string | number
 }
 
 export function useSearchSelect<T extends string | number = string | number>(

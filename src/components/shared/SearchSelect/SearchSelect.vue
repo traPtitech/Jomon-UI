@@ -224,7 +224,7 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
           <ComboboxGroup>
             <ComboboxItem
               v-for="option in filteredOptions"
-              :key="option.id ?? option.key"
+              :key="option.key"
               :value="option.key"
               :text-value="option.label"
               :disabled="!!option.disabled"

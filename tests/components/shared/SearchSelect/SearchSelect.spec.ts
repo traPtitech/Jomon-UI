@@ -7,9 +7,9 @@ import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
 
 describe('SearchSelect', () => {
   const options = [
-    { id: 1, key: 'opt1', label: 'Option 1' },
-    { id: 2, key: 'opt2', label: 'Option 2' },
-    { id: 3, key: 'opt3', label: 'Option 3' },
+    { key: 'opt1', label: 'Option 1' },
+    { key: 'opt2', label: 'Option 2' },
+    { key: 'opt3', label: 'Option 3' },
   ]
 
   let wrapper: ReturnType<typeof mount> | null = null

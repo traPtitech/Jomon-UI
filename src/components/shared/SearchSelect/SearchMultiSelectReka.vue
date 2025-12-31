@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends AcceptableValue = string | number">
 import { computed, useId } from 'vue'
 
 import {
@@ -23,13 +23,13 @@ import {
 } from 'reka-ui'
 
 import { useSearchSelectReka } from './composables/useSearchSelectReka'
-import type { Option } from './types'
-import { safeString } from './utils'
+import type {
+  AcceptableValue,
+  RekaOption,
+} from './composables/useSearchSelectReka'
 
-type TValue = string | number
-
-interface Props {
-  options: Option<TValue>[]
+export interface SearchMultiSelectRekaProps<T extends AcceptableValue> {
+  options: RekaOption<T>[]
   label?: string
   placeholder?: string
   disabled?: boolean
@@ -38,11 +38,11 @@ interface Props {
   name?: string
   noResultsText?: string
   errorMessage?: string
-  filterFunction?: (option: Option<TValue>, query: string) => boolean
+  filterFunction?: (option: RekaOption<T>, query: string) => boolean
 }
 
 // defineModel handles modelValue, so it is removed from defineProps.
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<SearchMultiSelectRekaProps<T>>(), {
   placeholder: '検索',
   disabled: false,
   required: false,
@@ -50,7 +50,7 @@ const props = withDefaults(defineProps<Props>(), {
   name: '',
 })
 
-const model = defineModel<TValue[]>({ required: true })
+const model = defineModel<T[]>({ required: true })
 
 const inputId = useId()
 const errorId = `${inputId}-error`
@@ -69,7 +69,7 @@ const {
   props.filterFunction
 )
 
-const removeTag = (key: TValue) => {
+const removeTag = (key: T) => {
   if (props.disabled) return
   model.value = model.value.filter(v => v !== key)
 }
@@ -118,74 +118,81 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
     v-bind="rootProps"
     class="group relative"
     multiple>
-    <ComboboxAnchor
-      class="flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none"
-      :class="[
-        props.disabled
-          ? 'cursor-not-allowed bg-surface-secondary opacity-60'
-          : 'bg-white',
-      ]">
-      <div class="flex items-center justify-center pl-3">
-        <MagnifyingGlassIcon
-          class="w-6 text-text-secondary"
-          aria-hidden="true" />
-      </div>
-
+    <ComboboxAnchor as-child>
       <div
-        class="relative w-full"
-        :class="[props.disabled ? 'pointer-events-none' : '']">
-        <!-- Search input sync via v-model on ComboboxInput -->
-        <ComboboxInput as-child v-model="searchTerm" :disabled="props.disabled">
-          <input
-            :id="inputId"
-            class="peer w-full border-none bg-transparent px-3 pb-2 text-base text-text-primary ring-0 outline-none"
-            :class="[
-              label ? 'pt-6' : 'pt-2',
-              props.disabled ? 'cursor-not-allowed' : '',
-            ]"
-            :placeholder="isFloating || !props.label ? placeholder : ''"
-            :aria-label="label ?? placeholder ?? '検索'"
-            :aria-invalid="!!errorMessage"
-            :aria-describedby="errorMessage ? errorId : undefined"
-            :aria-errormessage="errorMessage ? errorId : undefined"
-            :disabled="props.disabled"
-            @focus="isFocused = true"
-            @blur="isFocused = false" />
-        </ComboboxInput>
-
-        <Label
-          v-if="label"
-          :for="inputId"
-          class="pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out"
-          :class="[
-            isFloating
-              ? 'top-1 text-xs font-medium'
-              : 'top-1/2 -translate-y-1/2 text-base',
-            isFocused ? 'text-blue-500' : '',
-          ]">
-          {{ label }}
-          <span v-if="required" class="text-red-500">*</span>
-        </Label>
-      </div>
-
-      <ComboboxTrigger as-child :disabled="props.disabled">
-        <button
-          type="button"
-          class="flex items-center pr-2"
-          :class="[props.disabled ? 'cursor-not-allowed' : '']"
-          :aria-label="label ? `${label}を開く` : '選択肢を開く'">
-          <ChevronDownIcon
-            class="h-4 w-4 text-text-secondary"
+        class="flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none"
+        :class="[
+          props.disabled
+            ? 'cursor-not-allowed bg-surface-secondary opacity-60'
+            : 'bg-white',
+        ]"
+        @focusin="isFocused = true"
+        @focusout="isFocused = false">
+        <div class="flex items-center justify-center pl-3">
+          <MagnifyingGlassIcon
+            class="w-6 text-text-secondary"
             aria-hidden="true" />
-        </button>
-      </ComboboxTrigger>
+        </div>
+
+        <div
+          class="relative w-full"
+          :class="[props.disabled ? 'pointer-events-none' : '']">
+          <!-- Search input sync via v-model on ComboboxInput -->
+          <ComboboxInput
+            as-child
+            v-model="searchTerm"
+            :disabled="props.disabled">
+            <input
+              :id="inputId"
+              class="peer w-full border-none bg-transparent px-3 pb-2 text-base text-text-primary ring-0 outline-none"
+              :class="[
+                label ? 'pt-6' : 'pt-2',
+                props.disabled ? 'cursor-not-allowed' : '',
+              ]"
+              :placeholder="isFloating || !props.label ? placeholder : ''"
+              :aria-label="label ?? placeholder ?? '検索'"
+              :aria-invalid="!!errorMessage"
+              :aria-describedby="errorMessage ? errorId : undefined"
+              :aria-errormessage="errorMessage ? errorId : undefined"
+              :disabled="props.disabled"
+              @focus="isFocused = true"
+              @blur="isFocused = false" />
+          </ComboboxInput>
+
+          <Label
+            v-if="label"
+            :for="inputId"
+            class="pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out"
+            :class="[
+              isFloating
+                ? 'top-1 text-xs font-medium'
+                : 'top-1/2 -translate-y-1/2 text-base',
+              isFocused ? 'text-blue-500' : '',
+            ]">
+            {{ label }}
+            <span v-if="required" class="text-red-500">*</span>
+          </Label>
+        </div>
+
+        <ComboboxTrigger as-child :disabled="props.disabled">
+          <button
+            type="button"
+            class="flex items-center pr-2"
+            :class="[props.disabled ? 'cursor-not-allowed' : '']"
+            :aria-label="label ? `${label}を開く` : '選択肢を開く'">
+            <ChevronDownIcon
+              class="h-4 w-4 text-text-secondary"
+              aria-hidden="true" />
+          </button>
+        </ComboboxTrigger>
+      </div>
     </ComboboxAnchor>
 
     <!-- Tags -->
     <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1">
       <div
         v-for="key in model"
-        :key="safeString(key)"
+        :key="String(key)"
         class="flex items-center rounded-sm bg-surface-secondary px-2 py-1 text-xs text-text-primary">
         {{ getLabel(key) }}
         <button
@@ -227,12 +234,12 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
           <ComboboxGroup>
             <ComboboxItem
               v-for="option in filteredOptions"
-              :key="option.key"
+              :key="String(option.key)"
               :value="option.key"
               :text-value="option.label"
               :disabled="!!props.disabled || !!option.disabled"
               @select="handleSelect"
-              class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-disabled:cursor-not-allowed data-disabled:opacity-40 data-highlighted:not-data-disabled:bg-blue-100 data-highlighted:not-data-disabled:text-blue-500">
+              class="relative flex w-full cursor-default items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-disabled:cursor-not-allowed data-disabled:opacity-40 data-highlighted:not-data-disabled:bg-blue-100 data-highlighted:not-data-disabled:text-blue-500">
               <div class="mr-2 flex h-4 w-4 items-center justify-center">
                 <ComboboxItemIndicator>
                   <CheckIcon class="h-4 w-4" aria-hidden="true" />

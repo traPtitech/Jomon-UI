@@ -19,11 +19,13 @@ const options: Option<string>[] = [
 
 const singleZag = ref<string | null>(null)
 const singleHeadless = ref<string | null>(null)
-const singleReka = ref<string | number | null>(null)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const singleReka = ref<any>(null)
 
 const multiZag = ref<string[]>([])
 const multiHeadless = ref<string[]>([])
-const multiReka = ref<(string | number)[]>([])
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const multiReka = ref<any>([])
 </script>
 
 <template>

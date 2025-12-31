@@ -15,9 +15,7 @@ export interface RekaOption<T extends string | number = string | number> {
   id?: string | number
 }
 
-export function useSearchSelectReka<
-  T extends string | number = string | number,
->(
+export function useSearchSelect<T extends string | number = string | number>(
   options: Ref<RekaOption<T>[]>,
   modelValue: Ref<T | T[] | null>,
   filterFunction?: (option: RekaOption<T>, query: string) => boolean

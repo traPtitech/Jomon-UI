@@ -1,209 +1,243 @@
-import { mount } from '@vue/test-utils'
-import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
+
+import { flushPromises, mount } from '@vue/test-utils'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import SearchMultiSelect from '@/components/shared/SearchSelect/SearchMultiSelect.vue'
-import type { Option } from '@/components/shared/SearchSelect/types'
-
-vi.hoisted(() => ({ mockScrollTo: vi.fn() }))
-
-// Mock ResizeObserver
-vi.stubGlobal(
-  'ResizeObserver',
-  class ResizeObserver {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-  }
-)
-
-vi.mock('@floating-ui/vue', () => ({
-  useFloating: vi.fn(() => ({
-    x: 0,
-    y: 0,
-    strategy: 'absolute',
-    reference: { value: null },
-    floating: { value: null },
-    update: vi.fn(),
-  })),
-  autoUpdate: vi.fn(() => vi.fn()),
-}))
-
-const testOptions: Option<string>[] = [
-  { label: 'Option 1', key: 'opt1' },
-  { label: 'Option 2', key: 'opt2' },
-  { label: 'Option 3', key: 'opt3', disabled: true },
-]
-
-// Stub Teleport to render content in-place
-const globalConfig = {
-  stubs: {
-    Teleport: true,
-  },
-}
 
 describe('SearchMultiSelect', () => {
-  it('renders properly with options', () => {
-    const wrapper = mount(SearchMultiSelect, {
-      props: {
-        options: testOptions,
-        label: 'Test Label',
-        modelValue: [],
-      },
-      global: globalConfig,
-    })
-    expect(wrapper.text()).toContain('Test Label')
-    expect(wrapper.find('input').exists()).toBe(true)
+  const options = [
+    { id: 1, key: 'opt1', label: 'Option 1' },
+    { id: 2, key: 'opt2', label: 'Option 2' },
+    { id: 3, key: 'opt3', label: 'Option 3' },
+  ]
+
+  let wrapper: ReturnType<typeof mount> | null = null
+
+  beforeEach(() => {
+    document.body.innerHTML = ''
   })
 
-  it('selects multiple options', async () => {
-    const wrapper = mount(SearchMultiSelect, {
+  afterEach(() => {
+    if (wrapper) {
+      wrapper.unmount()
+      wrapper = null
+    }
+  })
+
+  it('renders tags for initial values', async () => {
+    wrapper = mount(SearchMultiSelect, {
       props: {
-        options: testOptions,
-        label: 'Test Label',
-        modelValue: [],
+        modelValue: ['opt1', 'opt2'],
+        options,
       },
-      global: globalConfig,
+    })
+
+    await flushPromises()
+
+    const tags = wrapper.findAll('.bg-surface-secondary')
+    expect(tags).toHaveLength(2)
+    expect(tags[0]?.text()).toContain('Option 1')
+    expect(tags[1]?.text()).toContain('Option 2')
+  })
+
+  it('toggles options and keeps menu open', async () => {
+    wrapper = mount(SearchMultiSelect, {
+      props: {
+        modelValue: ['opt1'],
+        options,
+      },
       attachTo: document.body,
     })
 
+    await flushPromises()
     const input = wrapper.find('input')
-    await input.trigger('focus') // Open
-    await input.trigger('click') // Ensure open
-    await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 60))
+    await input.trigger('click')
+    await flushPromises()
 
-    const list = wrapper.find('ul')
-    expect(list.exists()).toBe(true)
-
-    const option1 = list.findAll('li').find(l => l.text().includes('Option 1'))
-
-    await option1?.trigger('click')
-    await wrapper.vm.$nextTick()
-
-    // First emission
-    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([['opt1']])
-
-    // Update props to simulate v-model update
-    await wrapper.setProps({ modelValue: ['opt1'] })
-
-    // Ensure menu is open (multi select usually stays open or might close depending on Zag config)
-    // We re-open just in case
-    if (!wrapper.find('ul').exists()) {
-      await input.trigger('focus')
-      await input.trigger('click')
-      await wrapper.vm.$nextTick()
-      await new Promise(r => setTimeout(r, 60))
+    const items = document.querySelectorAll('[role="option"]')
+    const opt2Item = Array.from(items).find(el =>
+      el.textContent.includes('Option 2')
+    )
+    if (!opt2Item || !(opt2Item instanceof HTMLElement)) {
+      throw new Error('Option 2 item not found')
     }
 
-    const list2 = wrapper.find('ul')
-    const option2 = list2.findAll('li').find(l => l.text().includes('Option 2'))
+    // Select Option 2
+    opt2Item.click()
+    await flushPromises()
 
-    await option2?.trigger('click')
-    await wrapper.vm.$nextTick()
-
-    // Second emission should contain both (based on prop update logic in machine)
-    // Note: Zag machine logic emits the NEW value.
-    // Index 1: [['opt1', 'opt2']]
-    // Index 1: [['opt1', 'opt2']]
     const emitted = wrapper.emitted('update:modelValue')
-    expect(emitted?.[1]?.[0]).toEqual(['opt1', 'opt2'])
+    if (!emitted) throw new Error('update:modelValue was not emitted')
 
-    wrapper.unmount()
+    expect(emitted[0]?.[0]).toEqual(['opt1', 'opt2'])
+
+    // Sync prop to simulate parent update
+    await wrapper.setProps({ modelValue: ['opt1', 'opt2'] })
+    await nextTick()
+
+    // Select Option 1 again (to remove it)
+    const opt1Item = Array.from(items).find(el =>
+      el.textContent.includes('Option 1')
+    )
+    if (!opt1Item || !(opt1Item instanceof HTMLElement)) {
+      throw new Error('Option 1 item not found')
+    }
+    opt1Item.click()
+    await flushPromises()
+
+    const secondEmitted = wrapper.emitted('update:modelValue')
+    if (!secondEmitted) throw new Error('update:modelValue was not emitted')
+
+    expect(secondEmitted[1]?.[0]).toEqual(['opt2'])
   })
 
-  it('deselects an option via tag removal', async () => {
-    const wrapper = mount(SearchMultiSelect, {
+  it('supports continuous selection using keyboard', async () => {
+    wrapper = mount(SearchMultiSelect, {
       props: {
-        options: testOptions,
-        label: 'Test Label',
-        modelValue: ['opt1', 'opt2'],
+        modelValue: [],
+        options,
       },
-      global: globalConfig,
       attachTo: document.body,
     })
 
-    // Tags are rendered outside of the list in SearchMultiSelect (usually)
-    // Check if tags exist
-    const tags = wrapper.findAll('.rounded-sm.bg-surface-secondary')
-    expect(tags.length).toBe(2)
-
-    // Find remove button for opt1
-    // The component renders tags with text content.
-    const tag1 = tags.find(t => t.text().includes('Option 1'))
-    const removeBtn = tag1?.find('button')
-
-    expect(removeBtn?.exists()).toBe(true)
-    await removeBtn?.trigger('click')
-
-    // Should emit update with removed item
-    // Note: Zag machine might handle removal logic internally and emit new value
-    // Should emit update with removed item
-    // Note: Zag machine might handle removal logic internally and emit new value
-    const emitted = wrapper.emitted('update:modelValue')
-    expect(emitted?.[0]?.[0]).toEqual(['opt2'])
-
-    wrapper.unmount()
-  })
-
-  it('removes last item on Backspace when search term is empty', async () => {
-    const wrapper = mount(SearchMultiSelect, {
-      props: {
-        options: testOptions,
-        label: 'Test Label',
-        modelValue: ['opt1', 'opt2'],
-      },
-      global: globalConfig,
-      attachTo: document.body,
-    })
-
+    await flushPromises()
     const input = wrapper.find('input')
-    await input.trigger('focus')
-    // Ensure input value is empty
-    expect((input.element as HTMLInputElement).value).toBe('')
+    await input.trigger('click')
+    await flushPromises()
 
-    // Ensure input value is synchronized as empty for Zag
-    await input.setValue('')
-
-    // Zag checks `input.selectionStart === 0`. JSDOM inputs usually have 0.
-    const element = input.element as HTMLInputElement
-    element.focus() // essential for Zag to recognize it as active
-
-    // Verify focus
-    expect(document.activeElement).toBe(element)
-
-    element.selectionStart = 0
-    element.selectionEnd = 0
-
-    // Provide full keydown event details (First Backspace - Highlight)
-    await input.trigger('keydown', {
-      key: 'Backspace',
-      code: 'Backspace',
-      keyCode: 8,
-      which: 8,
-    })
-    await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 60))
-
-    // Second Backspace - Remove
-    await input.trigger('keydown', {
-      key: 'Backspace',
-      code: 'Backspace',
-      keyCode: 8,
-      which: 8,
-    })
-    await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 60))
+    // Select first item (opt1)
+    await input.trigger('keydown', { key: 'Home' }) // Move to top
+    await input.trigger('keydown', { key: 'Enter' })
+    await flushPromises()
 
     const emitted = wrapper.emitted('update:modelValue')
-    // Check if emission occurred
-    expect(emitted).toBeDefined()
-    // If double backspace was needed, we might have 1 emission now.
-    // If single was needed, we might have 2 (one for each).
-    // Zag usually updates state.
-    // We check the LAST emission if multiple.
-    const lastEmission = emitted?.[emitted.length - 1]
-    expect(lastEmission?.[0]).toEqual(['opt1'])
+    if (!emitted) throw new Error('update:modelValue was not emitted')
+    expect(emitted[0]?.[0]).toEqual(['opt1'])
 
-    wrapper.unmount()
+    // Update props to simulate parent state change
+    await wrapper.setProps({ modelValue: ['opt1'] })
+    await nextTick()
+
+    // Select second item (opt2)
+    await input.trigger('keydown', { key: 'ArrowDown' })
+    await input.trigger('keydown', { key: 'ArrowDown' })
+    await input.trigger('keydown', { key: 'Enter' })
+    await flushPromises()
+
+    const secondEmitted = wrapper.emitted('update:modelValue')
+    if (!secondEmitted) throw new Error('update:modelValue was not emitted')
+    const lastEmission = secondEmitted[secondEmitted.length - 1]?.[0]
+    expect(lastEmission).toContain('opt2')
+  })
+
+  it('updates tags when labels change and handles missing options', async () => {
+    wrapper = mount(SearchMultiSelect, {
+      props: {
+        modelValue: ['opt1', 'opt2'],
+        options,
+      },
+    })
+
+    await flushPromises()
+
+    // Change opt1 label and remove opt2 from options
+    const newOptions = [{ id: 1, key: 'opt1', label: 'New Label 1' }]
+    await wrapper.setProps({ options: newOptions })
+    await flushPromises()
+    await nextTick()
+
+    const tags = wrapper.findAll('.bg-surface-secondary')
+    expect(tags[0]?.text()).toContain('New Label 1')
+    expect(tags[1]?.text()).toContain('opt2') // Fallback to key
+  })
+
+  it('removes tags when clicking the remove button', async () => {
+    wrapper = mount(SearchMultiSelect, {
+      props: {
+        modelValue: ['opt1'],
+        options,
+      },
+    })
+
+    await flushPromises()
+    const removeButton = wrapper.find('button[aria-label*="削除"]')
+    await removeButton.trigger('click')
+
+    const emitted = wrapper.emitted('update:modelValue')
+    if (!emitted) throw new Error('update:modelValue was not emitted')
+
+    expect(emitted[0]?.[0]).toEqual([])
+  })
+
+  it('disables interactions when props.disabled is true', async () => {
+    wrapper = mount(SearchMultiSelect, {
+      props: {
+        modelValue: ['opt1'],
+        options,
+        disabled: true,
+      },
+    })
+
+    await flushPromises()
+
+    const removeButton = wrapper.find('button[aria-label*="削除"]')
+    expect(removeButton.attributes('disabled')).toBeDefined()
+
+    await removeButton.trigger('click')
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+  })
+
+  it('does not select individually disabled options', async () => {
+    const optionsWithDisabled = [
+      { id: 1, key: 'opt1', label: 'Option 1' },
+      { id: 2, key: 'opt2', label: 'Disabled Option', disabled: true },
+    ]
+    wrapper = mount(SearchMultiSelect, {
+      props: {
+        modelValue: [],
+        options: optionsWithDisabled,
+      },
+      attachTo: document.body,
+    })
+
+    await flushPromises()
+    const input = wrapper.find('input')
+    await input.trigger('click')
+    await flushPromises()
+
+    const disabledItem = document.querySelector(
+      '[role="option"][data-disabled]'
+    )
+    if (!disabledItem || !(disabledItem instanceof HTMLElement)) {
+      throw new Error('Disabled item not found')
+    }
+    expect(disabledItem).not.toBeNull()
+
+    // Attempt click
+    disabledItem.click()
+    await flushPromises()
+
+    // Should NOT emit update
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+  })
+
+  it('handles accessibility attributes correctly', async () => {
+    wrapper = mount(SearchMultiSelect, {
+      props: {
+        modelValue: [],
+        options,
+        label: 'My Multi Label',
+        errorMessage: 'Invalid selection',
+      },
+    })
+
+    await flushPromises()
+    const input = wrapper.find('input')
+
+    // aria-label should be undefined when label prop is present
+    expect(input.attributes('aria-label')).toBeUndefined()
+    expect(input.attributes('aria-invalid')).toBe('true')
+    expect(input.attributes('aria-describedby')).toContain('error')
   })
 })

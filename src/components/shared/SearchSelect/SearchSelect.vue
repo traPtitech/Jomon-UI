@@ -1,131 +1,202 @@
-<script setup lang="ts" generic="TValue extends string | number | null">
-import { computed, useId } from 'vue'
+<script setup lang="ts" generic="T extends string | number = string | number">
+import { computed, useId, watch } from 'vue'
 
 import {
   CheckIcon,
-  ChevronUpDownIcon,
+  ChevronDownIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/vue/24/outline'
+import type { ComboboxRootProps } from 'reka-ui'
+import {
+  ComboboxAnchor,
+  ComboboxContent,
+  ComboboxGroup,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxItemIndicator,
+  ComboboxPortal,
+  ComboboxRoot,
+  ComboboxTrigger,
+  ComboboxViewport,
+  Label,
+} from 'reka-ui'
 
-import { useSearchSelectMachine } from './composables/useSearchSelectMachine'
-// Primitives removed, using inline elements for style control
-// import SearchSelectPrimitiveInput from './primitives/SearchSelectPrimitiveInput.vue'
-// import SearchSelectPrimitiveItem from './primitives/SearchSelectPrimitiveItem.vue'
-// import SearchSelectPrimitiveList from './primitives/SearchSelectPrimitiveList.vue'
-// import SearchSelectPrimitiveRoot from './primitives/SearchSelectPrimitiveRoot.vue'
-import type { SearchSelectCommonProps, SearchSelectEmit } from './types'
-import { safeBind, safeString } from './utils'
+import type { RekaOption } from './composables/useSearchSelect'
+import { useSearchSelect } from './composables/useSearchSelect'
 
-const props = withDefaults(defineProps<SearchSelectCommonProps<TValue>>(), {
+export interface SearchSelectRekaProps<T extends string | number> {
+  options: RekaOption<T>[]
+  label?: string
+  placeholder?: string
+  disabled?: boolean
+  required?: boolean
+  name?: string
+  noResultsText?: string
+  errorMessage?: string
+  filterFunction?: (option: RekaOption<T>, query: string) => boolean
+}
+
+const props = withDefaults(defineProps<SearchSelectRekaProps<T>>(), {
   placeholder: '検索',
   disabled: false,
   required: false,
-  resetOnSelect: false,
-  errorMessage: undefined,
 })
 
-const emit = defineEmits<SearchSelectEmit<TValue | null>>()
-const model = defineModel<TValue | null>({ required: true })
+const model = defineModel<T | null>({ required: true })
 
-const id = useId()
-const errorId = `${id}-error`
+const inputId = useId()
+const errorId = `${inputId}-error`
 
-const { api, filteredOptions } = useSearchSelectMachine<NonNullable<TValue>>(
-  {
-    id,
-    options: computed(() => props.options),
-    multiple: false,
-    disabled: computed(() => props.disabled),
-    placeholder: computed(() => props.placeholder),
-    modelValue: computed(() => model.value),
-    filterFunction: props.filterFunction,
-    resetOnSelect: computed(() => props.resetOnSelect),
-  },
-  // Adapter for emit to match types
-  (event, value) => {
-    if (event === 'close') {
-      emit('close')
-      return
-    }
-    if (!Array.isArray(value)) {
-      emit(event, value ?? null)
-    }
-  }
+const {
+  searchTerm,
+  open,
+  isFocused,
+  isFloating,
+  filteredOptions,
+  getOption,
+  getLabel,
+  isTValue,
+} = useSearchSelect(
+  computed(() => props.options),
+  model,
+  props.filterFunction
 )
 
-const machineApi = computed(() => api.value)
-
-const selectedKeysSet = computed(() => {
-  return new Set(machineApi.value.value)
+// Ensure query is cleared when opening.
+watch(open, isOpen => {
+  if (isOpen) {
+    searchTerm.value = ''
+  }
 })
 
-// Floating Label Condition
-const isFloating = computed(() => {
-  const apiVal = machineApi.value
-  return (
-    apiVal.inputValue.length > 0 || apiVal.value.length > 0 || apiVal.focused
-  )
-})
+/**
+ * Robust Display Value Logic: Used by Reka UI when in Uncontrolled mode (menu closed).
+ * Returns the human-readable label of the selected item.
+ */
+const getDisplayValue = (val: unknown): string => {
+  // If the dropdown is open, we are in "Search Mode".
+  if (open.value) {
+    return searchTerm.value
+  }
+
+  // If closed, we are in "Display Mode".
+  return getLabel(val)
+}
+
+/**
+ * Validated Update: Ensures only items existing in 'options' and not disabled can be selected.
+ */
+const onUpdateModelValue = (val: unknown) => {
+  if (val == null) {
+    model.value = null
+    return
+  }
+
+  // Guard against invalid types and missing options using Composable's logic
+  if (isTValue(val)) {
+    const option = getOption(val)
+    if (option && !option.disabled) {
+      model.value = val
+    }
+  }
+}
+
+const onUpdateSearchTerm = (val: string) => {
+  searchTerm.value = val
+}
+
+// Simplified rootProps thanks to exactOptionalPropertyTypes: false
+const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
+  disabled: props.disabled,
+  required: props.required,
+  ignoreFilter: true,
+  openOnFocus: true,
+  openOnClick: true,
+  resetSearchTermOnSelect: true,
+  name: props.name,
+}))
 </script>
 
 <template>
-  <div
-    v-bind="safeBind(machineApi.getRootProps())"
-    class="group relative w-full">
-    <!-- Input Wrapper -->
-    <div
-      v-bind="safeBind(machineApi.getControlProps())"
-      :class="[
-        'flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none',
-        disabled ? 'cursor-not-allowed bg-surface-secondary' : 'bg-white',
-      ]">
-      <!-- Prefix Icon -->
-      <div class="flex items-center justify-center pl-3">
-        <MagnifyingGlassIcon class="w-6 text-text-secondary" />
+  <ComboboxRoot
+    :model-value="model"
+    @update:model-value="onUpdateModelValue"
+    v-model:open="open"
+    v-bind="rootProps"
+    class="group relative">
+    <ComboboxAnchor as-child>
+      <div
+        class="flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none"
+        :class="[
+          props.disabled
+            ? 'cursor-not-allowed bg-surface-secondary opacity-60'
+            : 'bg-white',
+        ]"
+        @focusin="isFocused = true"
+        @focusout="isFocused = false">
+        <div class="flex items-center justify-center pl-3">
+          <MagnifyingGlassIcon
+            class="w-6 text-text-secondary"
+            aria-hidden="true" />
+        </div>
+
+        <div
+          class="relative w-full"
+          :class="[props.disabled ? 'pointer-events-none' : '']">
+          <!-- 
+            Leveraging exactOptionalPropertyTypes: false to toggle modes elegantly.
+            - When OPEN: model-value is bound to searchTerm (Controlled).
+            - When CLOSED: display-value is bound to getDisplayValue (Uncontrolled).
+          -->
+          <ComboboxInput
+            as-child
+            :model-value="open ? searchTerm : undefined"
+            @update:model-value="onUpdateSearchTerm"
+            :display-value="open ? undefined : getDisplayValue"
+            :disabled="props.disabled">
+            <input
+              :id="inputId"
+              class="peer w-full border-none bg-transparent px-3 pb-2 text-base text-text-primary ring-0 outline-none"
+              :class="[
+                label ? 'pt-6' : 'pt-2',
+                props.disabled ? 'cursor-not-allowed' : '',
+              ]"
+              :placeholder="isFloating || !props.label ? placeholder : ''"
+              :aria-label="!label ? (placeholder ?? '選択') : undefined"
+              :aria-invalid="!!errorMessage"
+              :aria-describedby="errorMessage ? errorId : undefined"
+              :aria-errormessage="errorMessage ? errorId : undefined" />
+          </ComboboxInput>
+
+          <Label
+            v-if="label"
+            :for="inputId"
+            class="pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out"
+            :class="[
+              isFloating
+                ? 'top-1 text-xs font-medium'
+                : 'top-1/2 -translate-y-1/2 text-base',
+              isFocused ? 'text-blue-500' : '',
+            ]">
+            {{ label }}
+            <span v-if="required" class="text-red-500">*</span>
+          </Label>
+        </div>
+
+        <ComboboxTrigger as-child :disabled="props.disabled">
+          <button
+            type="button"
+            class="flex items-center pr-2"
+            :class="[props.disabled ? 'cursor-not-allowed' : '']"
+            :aria-label="label ? `${label}を開く` : '選択肢を開く'">
+            <ChevronDownIcon
+              class="h-4 w-4 text-text-secondary"
+              aria-hidden="true" />
+          </button>
+        </ComboboxTrigger>
       </div>
+    </ComboboxAnchor>
 
-      <div class="relative w-full">
-        <!-- Input -->
-        <input
-          v-bind="safeBind(machineApi.getInputProps())"
-          class="peer w-full border-none bg-transparent px-3 pb-2 text-base text-text-primary ring-0 outline-none"
-          :class="[
-            label ? 'pt-6' : 'pt-2',
-            disabled ? 'cursor-not-allowed' : '',
-          ]"
-          :placeholder="isFloating ? placeholder : ''"
-          :aria-invalid="!!errorMessage"
-          :aria-describedby="errorMessage ? errorId : undefined"
-          @keydown="emit('keydown', $event)" />
-
-        <!-- Floating Label -->
-        <label
-          v-if="label"
-          :for="id"
-          v-bind="safeBind(machineApi.getLabelProps())"
-          class="pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out peer-focus:text-blue-500"
-          :class="[
-            isFloating
-              ? 'top-1 text-xs font-medium'
-              : 'top-1/2 -translate-y-1/2 text-base',
-          ]">
-          {{ label }}
-          <span v-if="required" class="text-red-500">*</span>
-        </label>
-      </div>
-
-      <!-- Trigger Button -->
-      <button
-        type="button"
-        v-bind="safeBind(machineApi.getTriggerProps())"
-        class="flex items-center pr-2">
-        <ChevronUpDownIcon
-          class="h-4 w-4 text-text-secondary"
-          aria-hidden="true" />
-      </button>
-    </div>
-
-    <!-- Error Message -->
     <p
       v-if="errorMessage"
       :id="errorId"
@@ -133,43 +204,40 @@ const isFloating = computed(() => {
       {{ errorMessage }}
     </p>
 
-    <!-- Dropdown Portal -->
-    <Teleport to="body">
-      <div v-bind="safeBind(machineApi.getPositionerProps())">
-        <ul
-          v-if="machineApi.open"
-          v-bind="safeBind(machineApi.getContentProps())"
-          class="absolute z-50 mt-1 max-h-[200px] w-(--reference-width) overflow-auto rounded-md border bg-white p-1 shadow-lg focus:outline-none">
-          <li
-            v-for="item in filteredOptions"
-            :key="item.key"
-            v-bind="safeBind(machineApi.getItemProps({ item }))"
-            class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-disabled:cursor-not-allowed data-disabled:opacity-50 data-highlighted:bg-blue-100 data-highlighted:text-blue-500">
-            <span
-              class="flex-1 truncate"
-              :class="{
-                'font-medium': selectedKeysSet.has(safeString(item.key)),
-              }">
-              {{ item.label }}
-            </span>
-            <CheckIcon
-              v-if="selectedKeysSet.has(safeString(item.key))"
-              class="ml-auto h-4 w-4" />
-          </li>
-
-          <!-- No Items / No Results -->
-          <li
-            v-if="props.options.length === 0"
-            class="px-2 py-1.5 text-sm text-gray-700 select-none">
-            {{ props.noItemsText || '項目がありません。' }}
-          </li>
-          <li
-            v-else-if="filteredOptions.length === 0"
-            class="px-2 py-1.5 text-sm text-gray-700 select-none">
+    <ComboboxPortal>
+      <ComboboxContent
+        class="absolute z-50 mt-1 box-border max-h-[min(200px,var(--reka-combobox-content-available-height))] w-full overflow-auto rounded-md border bg-white p-1 shadow-lg focus:outline-none"
+        :side-offset="5"
+        position="popper"
+        align="start"
+        :style="{
+          width: 'var(--reka-combobox-trigger-width)',
+          minWidth: 'var(--reka-combobox-trigger-width)',
+        }">
+        <ComboboxViewport>
+          <div
+            v-if="filteredOptions.length === 0"
+            class="relative cursor-default px-2 py-1.5 text-sm text-gray-700 select-none">
             {{ props.noResultsText || '該当する項目がありません。' }}
-          </li>
-        </ul>
-      </div>
-    </Teleport>
-  </div>
+          </div>
+
+          <ComboboxGroup>
+            <ComboboxItem
+              v-for="option in filteredOptions"
+              :key="option.id ?? option.key"
+              :value="option.key"
+              :text-value="option.label"
+              :disabled="!!option.disabled"
+              class="relative flex w-full cursor-default items-center rounded-sm px-2 py-1.5 text-left text-sm text-text-primary outline-none select-none data-disabled:cursor-not-allowed data-disabled:opacity-40 data-highlighted:not-data-disabled:bg-blue-100 data-highlighted:not-data-disabled:text-blue-500">
+              <span class="flex-1 truncate">{{ option.label }}</span>
+
+              <ComboboxItemIndicator class="ml-auto h-4 w-4 text-text-primary">
+                <CheckIcon class="h-4 w-4" aria-hidden="true" />
+              </ComboboxItemIndicator>
+            </ComboboxItem>
+          </ComboboxGroup>
+        </ComboboxViewport>
+      </ComboboxContent>
+    </ComboboxPortal>
+  </ComboboxRoot>
 </template>

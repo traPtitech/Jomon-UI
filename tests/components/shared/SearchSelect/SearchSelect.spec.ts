@@ -1,236 +1,185 @@
-import { CheckIcon } from '@heroicons/vue/24/outline'
-import { mount } from '@vue/test-utils'
-import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
+
+import { flushPromises, mount } from '@vue/test-utils'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
-import type { Option } from '@/components/shared/SearchSelect/types'
-
-// Mock ResizeObserver for Zag.js/Floating UI
-vi.stubGlobal(
-  'ResizeObserver',
-  class ResizeObserver {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-  }
-)
-
-const testOptions: Option<string>[] = [
-  { label: 'Option 1', key: 'opt1' },
-  { label: 'Option 2', key: 'opt2' },
-  { label: 'Option 3', key: 'opt3', disabled: true },
-]
-
-// Stub Teleport to render content in-place
-const globalConfig = {
-  stubs: {
-    Teleport: true,
-  },
-}
 
 describe('SearchSelect', () => {
-  it('renders properly with options', () => {
-    const wrapper = mount(SearchSelect, {
-      props: {
-        options: testOptions,
-        label: 'Test Label',
-        modelValue: null,
-      },
-      global: globalConfig,
-    })
-    expect(wrapper.text()).toContain('Test Label')
-    const input = wrapper.find('input')
-    expect(input.exists()).toBe(true)
-    // Check ID for accessibility
-    expect(input.attributes('id')).toBeDefined()
-    const id = input.attributes('id')
-    expect(wrapper.find('label').attributes('for')).toBe(id)
+  const options = [
+    { id: 1, key: 'opt1', label: 'Option 1' },
+    { id: 2, key: 'opt2', label: 'Option 2' },
+    { id: 3, key: 'opt3', label: 'Option 3' },
+  ]
+
+  let wrapper: ReturnType<typeof mount> | null = null
+
+  beforeEach(() => {
+    document.body.innerHTML = ''
   })
 
-  it('filters options based on search term', async () => {
-    const wrapper = mount(SearchSelect, {
+  afterEach(() => {
+    if (wrapper) {
+      wrapper.unmount()
+      wrapper = null
+    }
+  })
+
+  it('renders initial label when closed', async () => {
+    wrapper = mount(SearchSelect, {
       props: {
-        options: testOptions,
-        label: 'Test Label',
-        modelValue: null,
+        modelValue: 'opt1',
+        options,
       },
-      global: globalConfig,
+    })
+
+    await flushPromises()
+    await nextTick()
+
+    const input = wrapper.find('input')
+    expect(input.element.value).toBe('Option 1')
+  })
+
+  it('clears query and shows search mode when opened', async () => {
+    wrapper = mount(SearchSelect, {
+      props: {
+        modelValue: 'opt1',
+        options,
+      },
       attachTo: document.body,
     })
 
+    await flushPromises()
     const input = wrapper.find('input')
-    await input.trigger('focus')
+
+    // Open the menu
     await input.trigger('click')
-    await input.setValue('Option 1')
+    await flushPromises()
+    await nextTick()
 
-    // Wait for Zag to update
-    await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 60))
+    // Should be empty now
+    expect(input.element.value).toBe('')
 
-    const list = wrapper.find('ul')
-    expect(list.exists()).toBe(true)
-    expect(list.text()).toContain('Option 1')
-    expect(list.text()).not.toContain('Option 2')
+    // Type something
+    await input.setValue('opt')
+    expect(input.element.value).toBe('opt')
 
-    wrapper.unmount()
+    // Close the menu via Escape
+    await input.trigger('keydown', { key: 'Escape' })
+    await flushPromises()
+    await nextTick()
+
+    expect(input.element.value).toBe('Option 1')
   })
 
-  it('selects an option', async () => {
-    const wrapper = mount(SearchSelect, {
+  it('reverts to label when clicking outside', async () => {
+    wrapper = mount(SearchSelect, {
       props: {
-        options: testOptions,
-        label: 'Test Label',
-        modelValue: null,
+        modelValue: 'opt1',
+        options,
       },
-      global: globalConfig,
       attachTo: document.body,
     })
 
+    await flushPromises()
     const input = wrapper.find('input')
-    await input.trigger('focus')
+
     await input.trigger('click')
+    await flushPromises()
+    await nextTick()
+    expect(input.element.value).toBe('')
 
-    await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 60))
-
-    const options = wrapper.findAll('li')
-    const option1 = options.find(o => o.text().includes('Option 1'))
-
-    expect(option1?.exists()).toBe(true)
-    await option1?.trigger('click')
-
-    await wrapper.vm.$nextTick()
-
-    // Zag emits array of keys, our component emits single key
-    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['opt1'])
-
-    wrapper.unmount()
-  })
-
-  it('does not select disabled option', async () => {
-    const wrapper = mount(SearchSelect, {
-      props: {
-        options: testOptions,
-        label: 'Test Label',
-        modelValue: null,
-      },
-      global: globalConfig,
-      attachTo: document.body,
-    })
-
-    const input = wrapper.find('input')
-    await input.trigger('focus')
-    await input.trigger('click')
-    await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 60))
-
-    const disabledOption = wrapper
-      .findAll('li')
-      .find(o => o.text().includes('Option 3'))
-
-    expect(disabledOption?.exists()).toBe(true)
-    // Zag adds data-disabled attribute
-    expect(disabledOption?.attributes('data-disabled')).toBeDefined()
-
-    await disabledOption?.trigger('click')
-
-    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
-
-    wrapper.unmount()
-  })
-
-  it('closes menu when clicking outside', async () => {
-    const wrapper = mount(SearchSelect, {
-      props: {
-        options: testOptions,
-        label: 'Test Label',
-        modelValue: null,
-      },
-      global: globalConfig,
-      attachTo: document.body,
-    })
-
-    const input = wrapper.find('input')
-    await input.trigger('focus')
-    await input.trigger('click')
-    await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 60))
-
-    expect(wrapper.find('ul').exists()).toBe(true)
-
-    // Simulate click outside
+    // Simulate clicking outside more thoroughly
     document.body.dispatchEvent(
       new MouseEvent('pointerdown', { bubbles: true })
     )
     document.body.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
-    document.body.click()
+    await flushPromises()
+    await nextTick()
 
-    await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 60))
-
-    expect(wrapper.find('ul').exists()).toBe(false)
-
-    wrapper.unmount()
+    // It should close and show the label
+    expect(input.element.value).toBe('Option 1')
   })
-  it('handles number keys correctly', async () => {
-    const numberOptions: Option<number>[] = [
-      { label: 'Num 1', key: 1 },
-      { label: 'Num 2', key: 2 },
-    ]
 
-    const wrapper = mount(SearchSelect, {
+  it('handles accessibility attributes correctly', async () => {
+    wrapper = mount(SearchSelect, {
       props: {
-        options: numberOptions,
-        label: 'Number Select',
-        modelValue: 1, // Start selected
+        modelValue: null,
+        options,
+        label: 'My Label',
+        errorMessage: 'Something went wrong',
       },
-      global: globalConfig,
-      attachTo: document.body,
     })
 
+    await flushPromises()
     const input = wrapper.find('input')
-    await input.trigger('focus')
-    await input.trigger('click')
-    await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 60))
 
-    const list = wrapper.find('ul')
-    // Zag + string conversion means check serialized value or label
-    const option1 = list.findAll('li').find(o => o.text().includes('Num 1'))
+    // Since we have a label element, aria-label should be undefined to avoid duplication
+    expect(input.attributes('aria-label')).toBeUndefined()
+    expect(input.attributes('aria-invalid')).toBe('true')
+    expect(input.attributes('aria-describedby')).toContain('error')
 
-    // Check if it's highlighted/selected (CheckIcon exists)
-    expect(option1?.findComponent(CheckIcon).exists()).toBe(true)
-
-    wrapper.unmount()
+    const error = wrapper.find('[id$="-error"]')
+    expect(error.text()).toBe('Something went wrong')
   })
 
-  it('disables filtering if input matches selected label (Smart Filtering)', async () => {
-    const wrapper = mount(SearchSelect, {
-      props: { options: testOptions, label: 'Test', modelValue: 'opt1' },
-      global: globalConfig,
+  it('navigates and selects using keyboard', async () => {
+    wrapper = mount(SearchSelect, {
+      props: {
+        modelValue: null,
+        options,
+      },
       attachTo: document.body,
     })
+
     const input = wrapper.find('input')
-    await input.trigger('focus')
     await input.trigger('click')
-    await wrapper.vm.$nextTick()
-    await new Promise(r => setTimeout(r, 60))
+    await flushPromises()
+    await nextTick()
 
-    // Assuming input value is 'Option 1' (Zag sets it from filtered items or initial)
-    // Actually, Zag manages inputValue. The computed `effectiveSearchTerm` logic is in useSearchSelectMachine.
-    // If input value is 'Option 1' (matches label), filter should be empty -> all options shown.
+    await input.trigger('keydown', { key: 'ArrowDown' })
+    await flushPromises()
+    await nextTick()
 
-    // Simulate Zag updating input value to 'Option 1' (which happens on selection or initial load usually)
-    // Ideally we set input value to 'Option 1' manually to mimic this state
-    await input.setValue('Option 1')
-    await wrapper.vm.$nextTick()
+    await input.trigger('keydown', { key: 'Enter' })
+    await flushPromises()
+    await nextTick()
 
-    const list = wrapper.find('ul')
-    expect(list.exists()).toBe(true)
-    // Should contain ALL options, not just Option 1
-    expect(list.text()).toContain('Option 1')
-    expect(list.text()).toContain('Option 2')
+    const emitted = wrapper.emitted('update:modelValue')
+    if (!emitted) throw new Error('update:modelValue was not emitted')
 
-    wrapper.unmount()
+    const firstEmit = emitted[0]
+    if (!firstEmit) throw new Error('first emit is undefined')
+
+    const selectedKey = firstEmit[0] as string | number
+    expect(options.map(o => o.key)).toContain(selectedKey)
+
+    const expectedLabel = options.find(o => o.key === selectedKey)?.label
+    expect(input.element.value).toBe(expectedLabel)
+  })
+
+  it('ignores invalid types in model updates', async () => {
+    wrapper = mount(SearchSelect, {
+      props: {
+        modelValue: 'opt1',
+        options,
+      },
+    })
+
+    await flushPromises()
+
+    // Simulate selection of an option
+    // Accessing internal method for validation logic test
+    const vm = wrapper.vm as unknown as {
+      onUpdateModelValue: (val: unknown) => void
+    }
+
+    vm.onUpdateModelValue('opt2')
+    const emitted = wrapper.emitted('update:modelValue')
+    expect(emitted?.[0]?.[0]).toBe('opt2')
+
+    // Invalid update (object not in options) - should be ignored
+    vm.onUpdateModelValue({ unknown: 'object' })
+    expect(wrapper.emitted('update:modelValue')).toHaveLength(1)
   })
 })

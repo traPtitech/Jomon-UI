@@ -1,5 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/applications' },
@@ -30,10 +30,6 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/account-managers',
     component: () => import('./pages/AccountManagerPage.vue'),
-  },
-  {
-    path: '/comparison',
-    component: () => import('./pages/SearchSelectComparisonPage.vue'),
   },
   { path: '/:path(.*)', component: () => import('./pages/NotFoundPage.vue') },
 ]

@@ -12,7 +12,7 @@
 
 ## Phase 2: Headless UI Implementation & Integration
 
-- [ ] Task: Scaffold Headless UI Components
+- [x] Task: Scaffold Headless UI Components [verified]
   - [ ] Create `src/components/shared/SearchSelectHeadless/` directory.
   - [ ] Install `@headlessui/vue` (if not already installed).
 - [ ] Task: Implement SearchSelect (Headless UI)

@@ -114,7 +114,8 @@ describe('SearchSelectReka', () => {
     await flushPromises()
     const input = wrapper.find('input')
 
-    expect(input.attributes('aria-label')).toBe('My Label')
+    // Since we have a label element, aria-label should be undefined to avoid duplication
+    expect(input.attributes('aria-label')).toBeUndefined()
     expect(input.attributes('aria-invalid')).toBe('true')
     expect(input.attributes('aria-describedby')).toContain('error')
 

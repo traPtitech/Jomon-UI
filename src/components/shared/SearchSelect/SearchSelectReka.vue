@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T extends AcceptableValue = string | number">
+<script setup lang="ts" generic="T extends string | number = string | number">
 import { computed, useId, watch } from 'vue'
 
 import {
@@ -22,13 +22,10 @@ import {
 } from 'reka-ui'
 
 import { useSearchSelectReka } from './composables/useSearchSelectReka'
-import type {
-  AcceptableValue,
-  RekaOption,
-} from './composables/useSearchSelectReka'
+import type { RekaOption } from './composables/useSearchSelectReka'
 import { safeString } from './utils'
 
-export interface SearchSelectRekaProps<T extends AcceptableValue> {
+export interface SearchSelectRekaProps<T extends string | number> {
   options: RekaOption<T>[]
   label?: string
   placeholder?: string
@@ -168,7 +165,7 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
                 props.disabled ? 'cursor-not-allowed' : '',
               ]"
               :placeholder="isFloating || !props.label ? placeholder : ''"
-              :aria-label="label ?? placeholder ?? '選択'"
+              :aria-label="!label ? (placeholder ?? '選択') : undefined"
               :aria-invalid="!!errorMessage"
               :aria-describedby="errorMessage ? errorId : undefined"
               :aria-errormessage="errorMessage ? errorId : undefined" />
@@ -212,7 +209,7 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
 
     <ComboboxPortal>
       <ComboboxContent
-        class="absolute z-50 mt-1 box-border max-h-[200px] w-full overflow-auto rounded-md border bg-white p-1 shadow-lg focus:outline-none"
+        class="absolute z-50 mt-1 box-border max-h-[min(200px,var(--reka-combobox-content-available-height))] w-full overflow-auto rounded-md border bg-white p-1 shadow-lg focus:outline-none"
         :side-offset="5"
         position="popper"
         align="start"
@@ -230,7 +227,7 @@ const rootProps = computed<Partial<ComboboxRootProps>>(() => ({
           <ComboboxGroup>
             <ComboboxItem
               v-for="option in filteredOptions"
-              :key="option.id ?? safeString(option.key)"
+              :key="option.id ?? option.key"
               :value="option.key"
               :text-value="option.label"
               :disabled="!!option.disabled"

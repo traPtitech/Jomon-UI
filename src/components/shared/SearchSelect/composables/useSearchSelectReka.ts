@@ -1,14 +1,14 @@
 import { type Ref, computed, ref } from 'vue'
 
-import type { AcceptableValue } from 'reka-ui'
+import { type AcceptableValue, useFilter } from 'reka-ui'
 
 import { safeString } from '../utils'
 
 /**
- * Localized Option type for Reka components to support broader generics.
- * Optional 'id' for stable UI rendering (v-for keys).
+ * Localized Option type for Reka components.
+ * Key must be a primitive (string or number) to ensure safe Map lookups.
  */
-export interface RekaOption<T extends AcceptableValue = string | number> {
+export interface RekaOption<T extends string | number = string | number> {
   key: T
   label: string
   disabled?: boolean
@@ -16,7 +16,7 @@ export interface RekaOption<T extends AcceptableValue = string | number> {
 }
 
 export function useSearchSelectReka<
-  T extends AcceptableValue = string | number,
+  T extends string | number = string | number,
 >(
   options: Ref<RekaOption<T>[]>,
   modelValue: Ref<T | T[] | null>,
@@ -25,6 +25,7 @@ export function useSearchSelectReka<
   const searchTerm = ref('')
   const open = ref(false)
   const isFocused = ref(false)
+  const { contains } = useFilter({ sensitivity: 'base' })
 
   const hasValue = computed(() => {
     const v = modelValue.value
@@ -66,17 +67,16 @@ export function useSearchSelectReka<
     // Fallback to safe stringification for basic types
     if (typeof val === 'string' || typeof val === 'number')
       return safeString(val)
-    return val != null ? '[Object]' : ''
+    return ''
   }
 
   const filteredOptions = computed(() => {
     if (searchTerm.value === '') return options.value
 
-    const term = searchTerm.value.toLowerCase()
     if (filterFunction) {
       return options.value.filter(o => filterFunction(o, searchTerm.value))
     }
-    return options.value.filter(o => o.label.toLowerCase().includes(term))
+    return options.value.filter(o => contains(o.label, searchTerm.value))
   })
 
   return {

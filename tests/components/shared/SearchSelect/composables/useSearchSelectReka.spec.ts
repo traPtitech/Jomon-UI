@@ -3,13 +3,12 @@ import { ref } from 'vue'
 import { describe, expect, it } from 'vitest'
 
 import { useSearchSelectReka } from '@/components/shared/SearchSelect/composables/useSearchSelectReka'
-import type {
-  AcceptableValue,
-  RekaOption,
-} from '@/components/shared/SearchSelect/composables/useSearchSelectReka'
+import type { RekaOption } from '@/components/shared/SearchSelect/composables/useSearchSelectReka'
+
+type TestValue = string | number
 
 describe('useSearchSelectReka', () => {
-  const options = ref<RekaOption<AcceptableValue>[]>([
+  const options = ref<RekaOption<TestValue>[]>([
     { id: 1, key: 'opt1', label: 'Option 1' },
     { id: 2, key: 'opt2', label: 'Option 2' },
     { id: 3, key: 0, label: 'Option Zero' },
@@ -17,7 +16,7 @@ describe('useSearchSelectReka', () => {
   ])
 
   it('filters options based on searchTerm', () => {
-    const model = ref<AcceptableValue | null>(null)
+    const model = ref<TestValue | null>(null)
     const { searchTerm, filteredOptions } = useSearchSelectReka(options, model)
 
     searchTerm.value = 'option 1'
@@ -30,8 +29,8 @@ describe('useSearchSelectReka', () => {
   })
 
   it('uses custom filter function if provided', () => {
-    const model = ref<AcceptableValue | null>(null)
-    const customFilter = (opt: RekaOption<AcceptableValue>, query: string) =>
+    const model = ref<TestValue | null>(null)
+    const customFilter = (opt: RekaOption<TestValue>, query: string) =>
       opt.label.includes(query)
     const { searchTerm, filteredOptions } = useSearchSelectReka(
       options,
@@ -51,7 +50,7 @@ describe('useSearchSelectReka', () => {
 
   describe('isFloating logic', () => {
     it('returns true if focused or open', () => {
-      const model = ref<AcceptableValue | null>(null)
+      const model = ref<TestValue | null>(null)
       const { isFocused, open, isFloating } = useSearchSelectReka(
         options,
         model
@@ -68,11 +67,11 @@ describe('useSearchSelectReka', () => {
     })
 
     it('returns true if value is selected (even if blurred/closed)', () => {
-      const model = ref<AcceptableValue | null>('opt1')
+      const model = ref<TestValue | null>('opt1')
       const { isFloating } = useSearchSelectReka(options, model)
       expect(isFloating.value).toBe(true)
 
-      const multiModel = ref<AcceptableValue[]>(['opt1'])
+      const multiModel = ref<TestValue[]>(['opt1'])
       const { isFloating: isMultiFloating } = useSearchSelectReka(
         options,
         multiModel
@@ -81,13 +80,13 @@ describe('useSearchSelectReka', () => {
     })
 
     it('handles falsy values correctly (0 should be considered a value)', () => {
-      const model = ref<AcceptableValue | null>(0)
+      const model = ref<TestValue | null>(0)
       const { isFloating } = useSearchSelectReka(options, model)
       expect(isFloating.value).toBe(true)
     })
 
     it('stays true even if searchTerm is cleared but open', () => {
-      const model = ref<AcceptableValue | null>(null)
+      const model = ref<TestValue | null>(null)
       const { open, searchTerm, isFloating } = useSearchSelectReka(
         options,
         model
@@ -101,7 +100,7 @@ describe('useSearchSelectReka', () => {
 
   describe('label and option lookups', () => {
     it('gets correct label for keys', () => {
-      const model = ref<AcceptableValue | null>(null)
+      const model = ref<TestValue | null>(null)
       const { getLabel } = useSearchSelectReka(options, model)
 
       expect(getLabel('opt1')).toBe('Option 1')
@@ -110,7 +109,7 @@ describe('useSearchSelectReka', () => {
     })
 
     it('identifies valid values (presence in options)', () => {
-      const model = ref<AcceptableValue | null>(null)
+      const model = ref<TestValue | null>(null)
       const { isTValue } = useSearchSelectReka(options, model)
 
       expect(isTValue('opt1')).toBe(true)

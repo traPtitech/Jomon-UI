@@ -221,4 +221,23 @@ describe('SearchMultiSelectReka', () => {
     // Should NOT emit update
     expect(wrapper.emitted('update:modelValue')).toBeUndefined()
   })
+
+  it('handles accessibility attributes correctly', async () => {
+    wrapper = mount(SearchMultiSelectReka, {
+      props: {
+        modelValue: [],
+        options,
+        label: 'My Multi Label',
+        errorMessage: 'Invalid selection',
+      },
+    })
+
+    await flushPromises()
+    const input = wrapper.find('input')
+
+    // aria-label should be undefined when label prop is present
+    expect(input.attributes('aria-label')).toBeUndefined()
+    expect(input.attributes('aria-invalid')).toBe('true')
+    expect(input.attributes('aria-describedby')).toContain('error')
+  })
 })

@@ -15,8 +15,6 @@ const handleSelectOption = (value: T) => {
   emit('selectOption', value)
 }
 
-const containerRef = ref<HTMLDivElement | null>(null)
-
 const callback = () => {
   emit('closeMenu')
 }

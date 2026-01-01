@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends string">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 
 defineProps<{
   options: { key: string; value: T }[]

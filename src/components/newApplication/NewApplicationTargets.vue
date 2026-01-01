@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
+import { computed } from 'vue'
 
 import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
@@ -10,6 +11,13 @@ import { useUserStore } from '@/features/user/store'
 const model = defineModel<ApplicationTargetDraft[]>({ required: true })
 
 const { userOptions } = useUserStore()
+
+const selectedUser = computed(() => model.value.map(target => target.target))
+const filteredUserOptions = computed(() => {
+  return userOptions.value.filter(
+    user => !selectedUser.value.includes(user.value)
+  )
+})
 
 function handleAddTarget() {
   model.value = [...model.value, { target: '', amount: null }]
@@ -26,6 +34,12 @@ function handleRemoveTarget(index: number) {
         <SearchSelect
           v-model="target.target"
           :options="userOptions"
+          :display-options="
+            [
+              ...filteredUserOptions,
+              userOptions.find(({ value }) => value === target.target)
+            ].filter(option => !!option)
+          "
           class="grow"
           label="払い戻し対象者" />
         <BaseNumberInput v-model="target.amount" label="金額" :min="0">

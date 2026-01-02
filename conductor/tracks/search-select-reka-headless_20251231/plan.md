@@ -76,13 +76,13 @@
 
 ## Phase 7: Review Feedback Implementation
 
-- [ ] Task: Unify input event handling in `SearchMultiSelect.vue`
-  - [ ] Remove `v-model` from inner input and rely on `ComboboxInput` `@change`.
-  - [ ] Ensure `value` binding is correct.
-- [ ] Task: Enhance `resetOnSelect` logic
-  - [ ] Modify `watch` to clear search term on any model change (length change or value replacement) if `resetOnSelect` is true.
-- [ ] Task: Safely reconstruct Tags in `SearchSelectTag.vue`
-  - [ ] Update `resolveTags` to preserve existing Tag objects from `model` to avoid data loss.
-- [ ] Task: Optimize open triggers
-  - [ ] Remove `@click` handler from inputs in `SearchSelect.vue` and `SearchMultiSelect.vue`, relying on `@focus` (and button click) to avoid redundancy.
-- [ ] Task: Conductor - User Manual Verification 'Phase 7: Review Feedback Implementation' (Protocol in workflow.md)
+- [x] Task: Unify input event handling in `SearchMultiSelect.vue` [verified]
+  - [x] Remove `v-model` from inner input and rely on `ComboboxInput` `@change`. [verified]
+  - [x] Ensure `value` binding is correct. [verified]
+- [x] Task: Enhance `resetOnSelect` logic [verified]
+  - [x] Modify `watch` to clear search term on any model change (length change or value replacement) if `resetOnSelect` is true. [verified]
+- [x] Task: Safely reconstruct Tags in `SearchSelectTag.vue` [verified]
+  - [x] Update `resolveTags` to preserve existing Tag objects from `model` to avoid data loss. [verified]
+- [x] Task: Optimize open triggers [verified]
+  - [x] Remove `@click` handler from inputs in `SearchSelect.vue` and `SearchMultiSelect.vue`, relying on `@focus` (and button click) to avoid redundancy. [verified]
+- [x] Task: Conductor - User Manual Verification 'Phase 7: Review Feedback Implementation' (Protocol in workflow.md) [ea10ea5]

@@ -111,11 +111,21 @@
   - [x] Add `inputRef` and restore focus to input after clicking button programmatically to prevent focus loss. [verified]
 - [x] Task: Conductor - User Manual Verification 'Phase 9: Further Refinement' (Protocol in workflow.md) [65dc803]
 
-## Phase 10: Final Review Adjustments
+## Phase 10: Final Review Adjustments [checkpoint: c694cda]
 
-- [ ] Task: Consolidate Logic and Improve Accessibility
-  - [ ] Sub-task: Create `SearchSelectBase.vue` to unify `SearchSelect` and `SearchSelectNullable` implementations.
-  - [ ] Sub-task: Remove `OpenStateEmitter.vue` and move `isFloating` logic to template.
-  - [ ] Sub-task: Add `:disabled` and `:aria-required` attributes to inputs/buttons.
-  - [ ] Sub-task: Verify changes with existing tests and add new tests for `resetOnSelect`.
-- [ ] Task: Conductor - User Manual Verification 'Phase 10: Final Review Adjustments' (Protocol in workflow.md)
+- [x] Task: Consolidate Logic and Improve Accessibility [verified]
+  - [x] Sub-task: Create `SearchSelectBase.vue` to unify `SearchSelect` and `SearchSelectNullable` implementations. [skipped]
+  - [x] Sub-task: Remove `OpenStateEmitter.vue` and move `isFloating` logic to template. [skipped]
+  - [x] Sub-task: Add `:disabled` and `:aria-required` attributes to inputs/buttons. [verified]
+  - [x] Sub-task: Verify changes with existing tests and add new tests for `resetOnSelect`. [verified]
+- [x] Task: Conductor - User Manual Verification 'Phase 10: Final Review Adjustments' (Protocol in workflow.md) [c694cda]
+
+## Phase 11: Final Refactoring - Duplication Reduction
+
+- [ ] Task: Reduce duplication between SearchSelect and SearchSelectNullable
+  - [ ] Sub-task: Define `SearchSelectCommonProps` in `types.ts`.
+  - [ ] Sub-task: Create `SearchSelectBase.vue` implementing the core logic.
+  - [ ] Sub-task: Refactor `SearchSelect.vue` to wrap `SearchSelectBase`.
+  - [ ] Sub-task: Refactor `SearchSelectNullable.vue` to wrap `SearchSelectBase`.
+  - [ ] Sub-task: Verify with tests.
+- [ ] Task: Conductor - User Manual Verification 'Phase 11: Final Refactoring - Duplication Reduction' (Protocol in workflow.md)

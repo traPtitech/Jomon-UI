@@ -86,3 +86,18 @@
 - [x] Task: Optimize open triggers [verified]
   - [x] Remove `@click` handler from inputs in `SearchSelect.vue` and `SearchMultiSelect.vue`, relying on `@focus` (and button click) to avoid redundancy. [verified]
 - [x] Task: Conductor - User Manual Verification 'Phase 7: Review Feedback Implementation' (Protocol in workflow.md) [b105ff8]
+
+## Phase 8: Component Separation and Refinement
+
+- [ ] Task: Split SearchSelect into Required and Nullable versions
+  - [ ] Create `SearchSelectNullable.vue` based on current `SearchSelect.vue`.
+  - [ ] Modify `SearchSelect.vue` to be non-nullable (remove `nullable` prop from Combobox, restrict generic T).
+  - [ ] Update usages: Check each usage of `SearchSelect` and switch to `SearchSelectNullable` if `null` is allowed/expected.
+- [ ] Task: Fix HTML Structure in ComboboxOptions
+  - [ ] Change "No results" `div` to `li` in all SearchSelect components.
+- [ ] Task: Refactor Input Handling in SearchMultiSelect
+  - [ ] Remove `v-model` from inner input and rely purely on `ComboboxInput`'s `displayValue` and `@change`.
+- [ ] Task: Improve Focus Styling
+  - [ ] Remove manual `isFocused` tracking.
+  - [ ] Use CSS `focus-within` for styling the wrapper.
+- [ ] Task: Conductor - User Manual Verification 'Phase 8: Component Separation and Refinement' (Protocol in workflow.md)

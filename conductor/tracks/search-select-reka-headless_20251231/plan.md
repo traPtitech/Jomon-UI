@@ -64,3 +64,12 @@
   - [x] Sub-task: Improve `isTValue` type guard. [verified]
   - [x] Sub-task: Verify changes with existing tests and add new tests for `resetOnSelect`. [verified]
 - [x] Task: Conductor - User Manual Verification 'Phase 5: Code Review Refactoring' (Protocol in workflow.md) [bdf2558]
+
+## Phase 6: Additional Improvements
+
+- [ ] Task: Address additional code review feedback
+  - [ ] Sub-task: Fix `TransitionRoot` usage in `SearchSelect.vue` and `SearchMultiSelect.vue` (pass `:show="open"`).
+  - [ ] Sub-task: Improve `hasValue` computed property in `useSearchSelect.ts` to handle `undefined`.
+  - [ ] Sub-task: Simplify input event handling in `SearchMultiSelect.vue` (remove redundant `v-model` on inner input or `@change` on ComboboxInput).
+  - [ ] Sub-task: Verify changes with tests.
+- [ ] Task: Conductor - User Manual Verification 'Phase 6: Additional Improvements' (Protocol in workflow.md)

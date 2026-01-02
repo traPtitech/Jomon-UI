@@ -55,12 +55,12 @@
   - [x] Run full test suite, lint, and type-check one last time. [verified]
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Finalize Codebase' (Protocol in workflow.md) [075e625]
 
-## Phase 5: Code Review Refactoring
+## Phase 5: Code Review Refactoring [checkpoint: e331fad]
 
-- [~] Task: Refactor SearchSelect components based on review
-  - [~] Sub-task: Centralize `SearchSelectOption` type definition in `types.ts`.
-  - [ ] Sub-task: Sync `open` state in `useSearchSelect` via `OpenStateEmitter` integration.
-  - [ ] Sub-task: Implement `resetOnSelect` logic in `SearchMultiSelect.vue`.
-  - [ ] Sub-task: Improve `isTValue` type guard.
-  - [ ] Sub-task: Verify changes with existing tests and add new tests for `resetOnSelect`.
-- [ ] Task: Conductor - User Manual Verification 'Phase 5: Code Review Refactoring' (Protocol in workflow.md)
+- [x] Task: Refactor SearchSelect components based on review [verified]
+  - [x] Sub-task: Centralize `SearchSelectOption` type definition in `types.ts`. [verified]
+  - [x] Sub-task: Sync `open` state in `useSearchSelect` via `OpenStateEmitter` integration. [verified]
+  - [x] Sub-task: Implement `resetOnSelect` logic in `SearchMultiSelect.vue`. [verified]
+  - [x] Sub-task: Improve `isTValue` type guard. [verified]
+  - [x] Sub-task: Verify changes with existing tests and add new tests for `resetOnSelect`. [verified]
+- [x] Task: Conductor - User Manual Verification 'Phase 5: Code Review Refactoring' (Protocol in workflow.md) [e331fad]

@@ -45,7 +45,7 @@ const model = defineModel<T | null>({ required: true })
 
 const inputId = useId()
 const errorId = `${inputId}-error`
-const buttonRef = ref<HTMLElement | null>(null)
+const buttonRef = ref<HTMLButtonElement | null>(null)
 const containerRef = ref<ComponentPublicInstance | null>(null)
 const isOpen = ref(false)
 
@@ -66,10 +66,9 @@ const onClose = () => {
 }
 
 const handleFocusOut = (e: FocusEvent) => {
-  if (
-    e.relatedTarget instanceof Node &&
-    containerRef.value?.$el.contains(e.relatedTarget)
-  ) {
+  const next = e.relatedTarget
+  const root = containerRef.value?.$el as HTMLElement | undefined
+  if (next instanceof Node && root?.contains(next)) {
     return
   }
   isFocused.value = false
@@ -128,6 +127,8 @@ defineOptions({
             :aria-invalid="!!errorMessage"
             :aria-describedby="errorMessage ? errorId : undefined"
             :aria-errormessage="errorMessage ? errorId : undefined"
+            :aria-required="required || undefined"
+            :disabled="props.disabled"
             autocomplete="off" />
         </ComboboxInput>
 
@@ -152,7 +153,8 @@ defineOptions({
           type="button"
           class="flex items-center pr-2"
           :class="[props.disabled ? 'cursor-not-allowed' : '']"
-          :aria-label="label ? `${label}を開く` : '選択肢を開く'">
+          :aria-label="label ? `${label}を開く` : '選択肢を開く'"
+          :disabled="props.disabled">
           <ChevronDownIcon
             class="h-4 w-4 text-text-secondary"
             aria-hidden="true" />

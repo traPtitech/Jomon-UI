@@ -74,7 +74,7 @@
   - [x] Sub-task: Verify changes with tests. [verified]
 - [x] Task: Conductor - User Manual Verification 'Phase 6: Additional Improvements' (Protocol in workflow.md) [87a6114]
 
-## Phase 7: Review Feedback Implementation
+## Phase 7: Review Feedback Implementation [checkpoint: b105ff8]
 
 - [x] Task: Unify input event handling in `SearchMultiSelect.vue` [verified]
   - [x] Remove `v-model` from inner input and rely on `ComboboxInput` `@change`. [verified]
@@ -85,4 +85,4 @@
   - [x] Update `resolveTags` to preserve existing Tag objects from `model` to avoid data loss. [verified]
 - [x] Task: Optimize open triggers [verified]
   - [x] Remove `@click` handler from inputs in `SearchSelect.vue` and `SearchMultiSelect.vue`, relying on `@focus` (and button click) to avoid redundancy. [verified]
-- [x] Task: Conductor - User Manual Verification 'Phase 7: Review Feedback Implementation' (Protocol in workflow.md) [ea10ea5]
+- [x] Task: Conductor - User Manual Verification 'Phase 7: Review Feedback Implementation' (Protocol in workflow.md) [b105ff8]

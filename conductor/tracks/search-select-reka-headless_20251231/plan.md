@@ -102,11 +102,20 @@
   - [x] Use CSS `focus-within` for styling the wrapper. [verified]
 - [x] Task: Conductor - User Manual Verification 'Phase 8: Component Separation and Refinement' (Protocol in workflow.md) [8e9a245]
 
-## Phase 9: Further Refinement
+## Phase 9: Further Refinement [checkpoint: 65dc803]
 
-- [ ] Task: Improve focus handling safety
-  - [ ] Fix `handleFocusOut` in `SearchSelect.vue`, `SearchSelectNullable.vue`, `SearchMultiSelect.vue` to safely access `$el`.
-  - [ ] Refine `buttonRef` type definition to `HTMLButtonElement`.
-- [ ] Task: Enhance auto-open behavior
-  - [ ] Add `inputRef` and restore focus to input after clicking button programmatically to prevent focus loss.
-- [ ] Task: Conductor - User Manual Verification 'Phase 9: Further Refinement' (Protocol in workflow.md)
+- [x] Task: Improve focus handling safety [verified]
+  - [x] Fix `handleFocusOut` in `SearchSelect.vue`, `SearchSelectNullable.vue`, `SearchMultiSelect.vue` to safely access `$el`. [verified]
+  - [x] Refine `buttonRef` type definition to `HTMLButtonElement`. [verified]
+- [x] Task: Enhance auto-open behavior [verified]
+  - [x] Add `inputRef` and restore focus to input after clicking button programmatically to prevent focus loss. [verified]
+- [x] Task: Conductor - User Manual Verification 'Phase 9: Further Refinement' (Protocol in workflow.md) [65dc803]
+
+## Phase 10: Final Review Adjustments
+
+- [ ] Task: Consolidate Logic and Improve Accessibility
+  - [ ] Sub-task: Create `SearchSelectBase.vue` to unify `SearchSelect` and `SearchSelectNullable` implementations.
+  - [ ] Sub-task: Remove `OpenStateEmitter.vue` and move `isFloating` logic to template.
+  - [ ] Sub-task: Add `:disabled` and `:aria-required` attributes to inputs/buttons.
+  - [ ] Sub-task: Verify changes with existing tests and add new tests for `resetOnSelect`.
+- [ ] Task: Conductor - User Manual Verification 'Phase 10: Final Review Adjustments' (Protocol in workflow.md)

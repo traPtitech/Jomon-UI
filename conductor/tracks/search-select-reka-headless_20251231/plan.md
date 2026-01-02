@@ -67,9 +67,9 @@
 
 ## Phase 6: Additional Improvements
 
-- [ ] Task: Address additional code review feedback
-  - [ ] Sub-task: Fix `TransitionRoot` usage in `SearchSelect.vue` and `SearchMultiSelect.vue` (pass `:show="open"`).
-  - [ ] Sub-task: Improve `hasValue` computed property in `useSearchSelect.ts` to handle `undefined`.
-  - [ ] Sub-task: Simplify input event handling in `SearchMultiSelect.vue` (remove redundant `v-model` on inner input or `@change` on ComboboxInput).
-  - [ ] Sub-task: Verify changes with tests.
-- [ ] Task: Conductor - User Manual Verification 'Phase 6: Additional Improvements' (Protocol in workflow.md)
+- [x] Task: Address additional code review feedback [verified]
+  - [x] Sub-task: Fix `TransitionRoot` usage in `SearchSelect.vue` and `SearchMultiSelect.vue` (pass `:show="open"`). [verified]
+  - [x] Sub-task: Improve `hasValue` computed property in `useSearchSelect.ts` to handle `undefined`. [verified]
+  - [x] Sub-task: Simplify input event handling in `SearchMultiSelect.vue` (remove redundant `v-model` on inner input or `@change` on ComboboxInput). [verified]
+  - [x] Sub-task: Verify changes with tests. [verified]
+- [x] Task: Conductor - User Manual Verification 'Phase 6: Additional Improvements' (Protocol in workflow.md) [ef3c942]

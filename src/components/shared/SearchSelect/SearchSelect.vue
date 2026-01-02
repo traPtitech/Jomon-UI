@@ -56,6 +56,10 @@ const { searchTerm, isFocused, isFloating, filteredOptions, getLabel } =
     model,
     props.filterFunction
   )
+
+defineOptions({
+  name: 'SearchSelect',
+})
 </script>
 
 <template>

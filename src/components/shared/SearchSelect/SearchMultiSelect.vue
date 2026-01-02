@@ -61,6 +61,10 @@ const removeTag = (key: T) => {
   if (props.disabled) return
   model.value = model.value.filter(v => v !== key)
 }
+
+defineOptions({
+  name: 'SearchMultiSelect',
+})
 </script>
 
 <template>

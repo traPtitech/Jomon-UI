@@ -186,4 +186,41 @@ describe('SearchSelect (Headless UI)', () => {
     expect(optionsList.exists()).toBe(true)
     expect(optionsList.isVisible()).toBe(true)
   })
+
+  it('resets search term after leaving', async () => {
+    wrapper = mount(SearchSelect, {
+      props: {
+        modelValue: null,
+        options,
+      },
+      attachTo: document.body,
+    })
+
+    const button = wrapper.find('button')
+    await button.trigger('click')
+    await flushPromises()
+
+    const input = wrapper.find('input')
+    await input.setValue('opt')
+    expect(input.element.value).toBe('opt')
+
+    // Close menu
+    await button.trigger('click')
+    await flushPromises()
+    await nextTick()
+
+    // Transition finish should trigger @after-leave
+    // Simulate transition end if necessary, but Headless UI's TransitionRoot handles this
+    // We wait long enough for the transition
+    await new Promise(resolve => setTimeout(resolve, 200))
+    await flushPromises()
+    await nextTick()
+
+    // When opened again, search term should be empty
+    await button.trigger('click')
+    await flushPromises()
+    await nextTick()
+
+    expect(input.element.value).toBe('')
+  })
 })

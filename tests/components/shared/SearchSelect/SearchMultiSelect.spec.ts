@@ -172,6 +172,23 @@ describe('SearchMultiSelect (Headless UI)', () => {
     expect(wrapper.emitted('update:modelValue')).toBeUndefined()
   })
 
+  it('prevents removing tags when disabled', async () => {
+    wrapper = mount(SearchMultiSelect, {
+      props: {
+        modelValue: ['opt1'],
+        options,
+        disabled: true,
+      },
+    })
+
+    await flushPromises()
+    // Access internal method to test guard specifically
+    // @ts-expect-error: Accessing internal method for coverage
+    wrapper.vm.removeTag('opt1')
+
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+  })
+
   it('handles accessibility attributes correctly', async () => {
     wrapper = mount(SearchMultiSelect, {
       props: {
@@ -312,6 +329,30 @@ describe('SearchMultiSelect (Headless UI)', () => {
     const items = document.querySelectorAll('[role="option"]')
     expect(items.length).toBe(1)
     expect(items[0]?.textContent).toContain('Option 1')
+  })
+
+  it('shows no results message when query does not match', async () => {
+    wrapper = mount(SearchMultiSelect, {
+      props: {
+        modelValue: [],
+        options,
+      },
+      attachTo: document.body,
+    })
+
+    await flushPromises()
+    const button = wrapper.find('button')
+    await button.trigger('click')
+    await flushPromises()
+    await nextTick()
+
+    const input = wrapper.find('input')
+    await input.setValue('NonExistent')
+    await flushPromises()
+    await nextTick()
+
+    const noResults = document.body.textContent
+    expect(noResults).toContain('該当する項目がありません')
   })
 
   it('opens menu on input click/focus', async () => {

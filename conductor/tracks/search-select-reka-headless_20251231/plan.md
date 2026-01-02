@@ -65,11 +65,24 @@
   - [x] Sub-task: Verify changes with existing tests and add new tests for `resetOnSelect`. [verified]
 - [x] Task: Conductor - User Manual Verification 'Phase 5: Code Review Refactoring' (Protocol in workflow.md) [bdf2558]
 
-## Phase 6: Additional Improvements
+## Phase 6: Additional Improvements [checkpoint: 87a6114]
 
 - [x] Task: Address additional code review feedback [verified]
   - [x] Sub-task: Fix `TransitionRoot` usage in `SearchSelect.vue` and `SearchMultiSelect.vue` (pass `:show="open"`). [verified]
   - [x] Sub-task: Improve `hasValue` computed property in `useSearchSelect.ts` to handle `undefined`. [verified]
   - [x] Sub-task: Simplify input event handling in `SearchMultiSelect.vue` (remove redundant `v-model` on inner input or `@change` on ComboboxInput). [verified]
   - [x] Sub-task: Verify changes with tests. [verified]
-- [x] Task: Conductor - User Manual Verification 'Phase 6: Additional Improvements' (Protocol in workflow.md) [ef3c942]
+- [x] Task: Conductor - User Manual Verification 'Phase 6: Additional Improvements' (Protocol in workflow.md) [87a6114]
+
+## Phase 7: Review Feedback Implementation
+
+- [ ] Task: Unify input event handling in `SearchMultiSelect.vue`
+  - [ ] Remove `v-model` from inner input and rely on `ComboboxInput` `@change`.
+  - [ ] Ensure `value` binding is correct.
+- [ ] Task: Enhance `resetOnSelect` logic
+  - [ ] Modify `watch` to clear search term on any model change (length change or value replacement) if `resetOnSelect` is true.
+- [ ] Task: Safely reconstruct Tags in `SearchSelectTag.vue`
+  - [ ] Update `resolveTags` to preserve existing Tag objects from `model` to avoid data loss.
+- [ ] Task: Optimize open triggers
+  - [ ] Remove `@click` handler from inputs in `SearchSelect.vue` and `SearchMultiSelect.vue`, relying on `@focus` (and button click) to avoid redundancy.
+- [ ] Task: Conductor - User Manual Verification 'Phase 7: Review Feedback Implementation' (Protocol in workflow.md)

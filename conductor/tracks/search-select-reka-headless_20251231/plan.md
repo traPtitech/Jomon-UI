@@ -87,17 +87,26 @@
   - [x] Remove `@click` handler from inputs in `SearchSelect.vue` and `SearchMultiSelect.vue`, relying on `@focus` (and button click) to avoid redundancy. [verified]
 - [x] Task: Conductor - User Manual Verification 'Phase 7: Review Feedback Implementation' (Protocol in workflow.md) [b105ff8]
 
-## Phase 8: Component Separation and Refinement
+## Phase 8: Component Separation and Refinement [checkpoint: 8e9a245]
 
-- [ ] Task: Split SearchSelect into Required and Nullable versions
-  - [ ] Create `SearchSelectNullable.vue` based on current `SearchSelect.vue`.
-  - [ ] Modify `SearchSelect.vue` to be non-nullable (remove `nullable` prop from Combobox, restrict generic T).
-  - [ ] Update usages: Check each usage of `SearchSelect` and switch to `SearchSelectNullable` if `null` is allowed/expected.
-- [ ] Task: Fix HTML Structure in ComboboxOptions
-  - [ ] Change "No results" `div` to `li` in all SearchSelect components.
-- [ ] Task: Refactor Input Handling in SearchMultiSelect
-  - [ ] Remove `v-model` from inner input and rely purely on `ComboboxInput`'s `displayValue` and `@change`.
-- [ ] Task: Improve Focus Styling
-  - [ ] Remove manual `isFocused` tracking.
-  - [ ] Use CSS `focus-within` for styling the wrapper.
-- [ ] Task: Conductor - User Manual Verification 'Phase 8: Component Separation and Refinement' (Protocol in workflow.md)
+- [x] Task: Split SearchSelect into Required and Nullable versions [verified]
+  - [x] Create `SearchSelectNullable.vue` based on current `SearchSelect.vue`. [verified]
+  - [x] Modify `SearchSelect.vue` to be non-nullable (remove `nullable` prop from Combobox, restrict generic T). [verified]
+  - [x] Update usages: Check each usage of `SearchSelect` and switch to `SearchSelectNullable` if `null` is allowed/expected. [verified]
+- [x] Task: Fix HTML Structure in ComboboxOptions [verified]
+  - [x] Change "No results" `div` to `li` in all SearchSelect components. [verified]
+- [x] Task: Refactor Input Handling in SearchMultiSelect [verified]
+  - [x] Remove `v-model` from inner input and rely purely on `ComboboxInput`'s `displayValue` and `@change`. [verified]
+- [x] Task: Improve Focus Styling [verified]
+  - [x] Remove manual `isFocused` tracking. [verified]
+  - [x] Use CSS `focus-within` for styling the wrapper. [verified]
+- [x] Task: Conductor - User Manual Verification 'Phase 8: Component Separation and Refinement' (Protocol in workflow.md) [8e9a245]
+
+## Phase 9: Further Refinement
+
+- [ ] Task: Improve focus handling safety
+  - [ ] Fix `handleFocusOut` in `SearchSelect.vue`, `SearchSelectNullable.vue`, `SearchMultiSelect.vue` to safely access `$el`.
+  - [ ] Refine `buttonRef` type definition to `HTMLButtonElement`.
+- [ ] Task: Enhance auto-open behavior
+  - [ ] Add `inputRef` and restore focus to input after clicking button programmatically to prevent focus loss.
+- [ ] Task: Conductor - User Manual Verification 'Phase 9: Further Refinement' (Protocol in workflow.md)

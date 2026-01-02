@@ -14,6 +14,10 @@
 
 - **Framework:** Tailwind CSS 4
 
+## UI Component Libraries
+
+- **Headless UI:** Used for complex accessible components like SearchSelect and SearchMultiSelect. (Replaced Reka UI for better type safety).
+
 ## Network Layer
 
 - **HTTP Client:** axios

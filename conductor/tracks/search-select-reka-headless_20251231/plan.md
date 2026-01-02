@@ -31,7 +31,7 @@
   - [x] Run application and verify behavior manually. [verified]
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Headless UI Implementation & Integration' (Protocol in workflow.md) [7fe8247]
 
-## Phase 3: Comparison & Final Decision
+## Phase 3: Comparison & Final Decision [verified]
 
 - [x] Task: Create Comparison Report [verified]
   - [x] Create `conductor/tracks/search-select-reka-headless_20251231/comparison_report.md`. [verified]
@@ -43,14 +43,24 @@
 - [x] Task: Select Final Library [verified]
   - [x] Review report and decide on the winner. [verified]
   - [x] Record decision in the report. [verified]
-- [~] Task: Conductor - User Manual Verification 'Phase 3: Comparison & Final Decision' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Comparison & Final Decision' (Protocol in workflow.md) [verified]
 
 ## Phase 4: Finalize Codebase [checkpoint: 7056ef3]
 
-- [~] Task: Apply Final Selection
+- [x] Task: Apply Final Selection [verified]
   - [x] If Headless UI wins: Clean up Reka UI components and rename Headless components to main names. [verified]
-  - [ ] If Reka UI wins: Revert integration changes, keeping Headless UI code in a reference/archive folder or deleting it, and document why Reka was chosen despite the workaround.
+  - [x] If Reka UI wins: Revert integration changes, keeping Headless UI code in a reference/archive folder or deleting it, and document why Reka was chosen despite the workaround. [skipped]
   - [x] Ensure `src/components/shared/` reflects the final choice. [verified]
 - [x] Task: Final Quality Check [verified]
   - [x] Run full test suite, lint, and type-check one last time. [verified]
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Finalize Codebase' (Protocol in workflow.md) [075e625]
+
+## Phase 5: Code Review Refactoring
+
+- [ ] Task: Refactor SearchSelect components based on review
+  - [ ] Sub-task: Centralize `SearchSelectOption` type definition in `types.ts`.
+  - [ ] Sub-task: Sync `open` state in `useSearchSelect` via `OpenStateEmitter` integration.
+  - [ ] Sub-task: Implement `resetOnSelect` logic in `SearchMultiSelect.vue`.
+  - [ ] Sub-task: Improve `isTValue` type guard.
+  - [ ] Sub-task: Verify changes with existing tests and add new tests for `resetOnSelect`.
+- [ ] Task: Conductor - User Manual Verification 'Phase 5: Code Review Refactoring' (Protocol in workflow.md)

@@ -2,7 +2,7 @@ import type { DateTime } from 'luxon'
 
 import type { StatusEnum } from '@/lib/apis'
 
-import type { SearchSelectOption } from '@/components/shared/SearchSelect/composables/useSearchSelect'
+import type { SearchSelectOption } from '@/components/shared/SearchSelect/types'
 import type { ApplicationComment } from '@/features/applicationComment/entities'
 
 export interface ApplicationStatusDetail {

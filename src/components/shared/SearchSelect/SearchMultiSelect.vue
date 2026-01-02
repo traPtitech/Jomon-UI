@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends string | number">
-import { computed, ref, useId } from 'vue'
+import { computed, ref, useId, watch } from 'vue'
 
 import {
   Combobox,
@@ -17,8 +17,8 @@ import {
 } from '@heroicons/vue/24/outline'
 
 import OpenStateEmitter from './OpenStateEmitter.vue'
-import type { SearchSelectOption } from './composables/useSearchSelect'
 import { useSearchSelect } from './composables/useSearchSelect'
+import type { SearchSelectOption } from './types'
 
 export interface SearchMultiSelectProps<T extends string | number> {
   options: SearchSelectOption<T>[]
@@ -49,17 +49,37 @@ const model = defineModel<T[]>({ required: true })
 const inputId = useId()
 const errorId = `${inputId}-error`
 const buttonRef = ref<HTMLElement | null>(null)
+const isOpen = ref(false)
 
 const { searchTerm, isFocused, isFloating, filteredOptions, getLabel } =
   useSearchSelect(
     computed(() => props.options),
     model,
-    props.filterFunction
+    props.filterFunction,
+    isOpen
   )
+
+// Implement resetOnSelect: Clear search term when a new item is added
+watch(
+  () => model.value.length,
+  (newLen, oldLen) => {
+    if (props.resetOnSelect && newLen > oldLen) {
+      searchTerm.value = ''
+    }
+  }
+)
 
 const removeTag = (key: T) => {
   if (props.disabled) return
   model.value = model.value.filter(v => v !== key)
+}
+
+const onOpen = () => {
+  isOpen.value = true
+}
+const onClose = () => {
+  isOpen.value = false
+  emit('close')
 }
 
 defineOptions({
@@ -76,7 +96,7 @@ defineOptions({
     class="group relative"
     multiple
     v-slot="{ open }">
-    <OpenStateEmitter :open="open" @close="emit('close')" />
+    <OpenStateEmitter :open="open" @open="onOpen" @close="onClose" />
     <div
       class="flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none"
       :class="[
@@ -97,6 +117,7 @@ defineOptions({
         :class="[props.disabled ? 'pointer-events-none' : '']">
         <ComboboxInput as="template" @change="searchTerm = $event.target.value">
           <input
+            v-model="searchTerm"
             @focus="!open && buttonRef?.click()"
             @click="!open && buttonRef?.click()"
             :id="inputId"

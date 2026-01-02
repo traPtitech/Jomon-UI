@@ -1,16 +1,7 @@
 import { type Ref, computed, ref } from 'vue'
 
+import type { SearchSelectOption } from '../types'
 import { safeString } from '../utils'
-
-/**
- * Localized Option type.
- * Key must be a primitive (string or number) to ensure safe Map lookups.
- */
-export interface SearchSelectOption<T extends string | number> {
-  key: T
-  label: string
-  disabled?: boolean
-}
 
 export function useSearchSelect<T extends string | number | null, U = T | T[]>(
   options: Ref<SearchSelectOption<NonNullable<T>>[]>,
@@ -18,14 +9,14 @@ export function useSearchSelect<T extends string | number | null, U = T | T[]>(
   filterFunction?: (
     option: SearchSelectOption<NonNullable<T>>,
     query: string
-  ) => boolean
+  ) => boolean,
+  openProp?: Ref<boolean>
 ) {
   const searchTerm = ref('')
-  // Headless UI might manage open state internally or via prop, keeping consistent API
-  const open = ref(false)
+  // open state should be synchronized from the component if provided
+  const open = openProp ?? ref(false)
   const isFocused = ref(false)
 
-  // Simple containment check similar to reka-ui's base sensitivity
   const contains = (text: string, query: string) => {
     return text.toLowerCase().includes(query.toLowerCase())
   }
@@ -40,11 +31,17 @@ export function useSearchSelect<T extends string | number | null, U = T | T[]>(
    * Triggers when focused, menu is open, or a value exists.
    */
   const isFloating = computed(() => {
-    return isFocused.value || hasValue.value || searchTerm.value !== ''
+    return (
+      isFocused.value || open.value || hasValue.value || searchTerm.value !== ''
+    )
   })
 
+  /**
+   * Internal map for efficient lookups.
+   * Keys are the option keys (strings or numbers).
+   */
   const optionMap = computed(() => {
-    const map = new Map<unknown, SearchSelectOption<NonNullable<T>>>()
+    const map = new Map<string | number, SearchSelectOption<NonNullable<T>>>()
     for (const opt of options.value) {
       map.set(opt.key, opt)
     }
@@ -52,24 +49,27 @@ export function useSearchSelect<T extends string | number | null, U = T | T[]>(
   })
 
   /**
-   * Type guard to check if a value exists in the options and matches T.
+   * Type guard to check if a value exists in the options.
+   * Narrowing to NonNullable<T> because keys are always non-null primitives.
    */
-  const isTValue = (val: unknown): val is T => {
-    // Check if the value exists as a key in our map to ensure it's a valid option
-    return val !== null && val !== undefined && optionMap.value.has(val)
+  const isTValue = (val: unknown): val is NonNullable<T> => {
+    return (
+      (typeof val === 'string' || typeof val === 'number') &&
+      optionMap.value.has(val)
+    )
   }
 
   const getOption = (
     val: unknown
   ): SearchSelectOption<NonNullable<T>> | undefined => {
-    if (val === null || val === undefined) return undefined
+    if (!isTValue(val)) return undefined
+    // val is now narrowed to string | number and guaranteed to be in the map
     return optionMap.value.get(val)
   }
 
   const getLabel = (val: unknown): string => {
     const option = getOption(val)
     if (option) return option.label
-    // Fallback to safe stringification for basic types
     if (typeof val === 'string' || typeof val === 'number')
       return safeString(val)
     return ''

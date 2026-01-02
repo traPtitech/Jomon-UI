@@ -57,8 +57,8 @@
 
 ## Phase 5: Code Review Refactoring
 
-- [ ] Task: Refactor SearchSelect components based on review
-  - [ ] Sub-task: Centralize `SearchSelectOption` type definition in `types.ts`.
+- [~] Task: Refactor SearchSelect components based on review
+  - [~] Sub-task: Centralize `SearchSelectOption` type definition in `types.ts`.
   - [ ] Sub-task: Sync `open` state in `useSearchSelect` via `OpenStateEmitter` integration.
   - [ ] Sub-task: Implement `resetOnSelect` logic in `SearchMultiSelect.vue`.
   - [ ] Sub-task: Improve `isTValue` type guard.

@@ -374,4 +374,42 @@ describe('SearchMultiSelect (Headless UI)', () => {
     expect(optionsList.exists()).toBe(true)
     expect(optionsList.isVisible()).toBe(true)
   })
+
+  it('resets search term on selection when resetOnSelect is true', async () => {
+    wrapper = mount(SearchMultiSelect, {
+      props: {
+        modelValue: [],
+        options,
+        resetOnSelect: true,
+      },
+      attachTo: document.body,
+    })
+
+    await flushPromises()
+    const button = wrapper.find('button')
+    await button.trigger('click')
+    await flushPromises()
+
+    const input = wrapper.find('input')
+    await input.setValue('Option 1')
+    expect(input.element.value).toBe('Option 1')
+
+    const opt1Item = Array.from(
+      document.querySelectorAll('[role="option"]')
+    ).find(
+      el => el.textContent && el.textContent.includes('Option 1')
+    ) as HTMLElement
+
+    // Select Option 1
+    opt1Item.click()
+    await flushPromises()
+    await nextTick()
+
+    // Trigger parent model update simulate
+    await wrapper.setProps({ modelValue: ['opt1'] })
+    await nextTick()
+
+    // Search term should be cleared
+    expect(input.element.value).toBe('')
+  })
 })

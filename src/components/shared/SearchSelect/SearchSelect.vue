@@ -16,8 +16,8 @@ import {
 } from '@heroicons/vue/24/outline'
 
 import OpenStateEmitter from './OpenStateEmitter.vue'
-import type { SearchSelectOption } from './composables/useSearchSelect'
 import { useSearchSelect } from './composables/useSearchSelect'
+import type { SearchSelectOption } from './types'
 
 export interface SearchSelectProps<T extends string | number | null> {
   options: SearchSelectOption<NonNullable<T>>[]
@@ -49,13 +49,23 @@ const model = defineModel<T>({ required: true })
 const inputId = useId()
 const errorId = `${inputId}-error`
 const buttonRef = ref<HTMLElement | null>(null)
+const isOpen = ref(false)
 
 const { searchTerm, isFocused, isFloating, filteredOptions, getLabel } =
   useSearchSelect(
     computed(() => props.options),
     model,
-    props.filterFunction
+    props.filterFunction,
+    isOpen
   )
+
+const onOpen = () => {
+  isOpen.value = true
+}
+const onClose = () => {
+  isOpen.value = false
+  emit('close')
+}
 
 defineOptions({
   name: 'SearchSelect',
@@ -71,7 +81,7 @@ defineOptions({
     class="group relative"
     nullable
     v-slot="{ open }">
-    <OpenStateEmitter :open="open" @close="emit('close')" />
+    <OpenStateEmitter :open="open" @open="onOpen" @close="onClose" />
     <div
       class="flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none"
       :class="[

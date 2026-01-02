@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 
+import type { SearchSelectOption } from '@/components/shared/SearchSelect/types'
 import type { Tag } from '@/features/tag/entities'
 import { useTagStore } from '@/features/tag/store'
 
@@ -8,23 +9,51 @@ import SearchMultiSelect from './SearchMultiSelect.vue'
 
 const model = defineModel<Tag[]>({ required: true })
 
-const { tagOptions, tags } = useTagStore()
+const { tagOptions } = useTagStore()
 
-const resolveTags = (ids: string[]) => {
-  return ids
-    .map(id => {
-      const found =
-        tags.value.find(t => t.id === id) ?? model.value.find(t => t.id === id)
-      if (!found) {
-        console.warn('[SearchSelectTag] Unknown tag ID encountered:', id)
-      }
-      return found
-    })
-    .filter((tag): tag is Tag => {
-      // If tag is not found in store or current model, it is silently dropped.
-      // This is expected behavior to clean up invalid IDs.
-      return tag !== undefined
-    })
+/**
+ * Reactive map of all available options (from store + currently selected).
+ * Ensures correct labels are displayed even if the store is not yet loaded.
+ */
+const optionsMap = computed(() => {
+  const map = new Map<string, SearchSelectOption<string>>()
+
+  // Add options from the store
+  tagOptions.value.forEach(option => {
+    map.set(option.key, option)
+  })
+
+  // Add options from the current model (preserving labels)
+  model.value.forEach(tag => {
+    if (!map.has(tag.id)) {
+      map.set(tag.id, { key: tag.id, label: tag.name })
+    }
+  })
+
+  return map
+})
+
+/**
+ * Array version of the options map for SearchMultiSelect.
+ */
+const mergedOptions = computed(() => Array.from(optionsMap.value.values()))
+
+/**
+ * Resolve selected IDs back to Tag objects using the local options map.
+ */
+const resolveTags = (ids: string[]): Tag[] => {
+  const resolved: Tag[] = []
+
+  for (const id of ids) {
+    const found = optionsMap.value.get(id)
+    if (found) {
+      resolved.push({ id: found.key, name: found.label })
+    } else {
+      console.warn('[SearchSelectTag] Unknown tag ID encountered:', id)
+    }
+  }
+
+  return resolved
 }
 
 const emit = defineEmits<{
@@ -42,7 +71,7 @@ const selectedValue = computed({
 <template>
   <SearchMultiSelect
     v-model="selectedValue"
-    :options="tagOptions"
+    :options="mergedOptions"
     label="タグ"
     @close="emit('close')" />
 </template>

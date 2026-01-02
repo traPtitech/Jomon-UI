@@ -76,7 +76,7 @@ const handleFocusOut = (e: FocusEvent) => {
 }
 
 defineOptions({
-  name: 'SearchSelect',
+  name: 'SearchSelectNullable',
 })
 </script>
 
@@ -88,6 +88,7 @@ defineOptions({
     :disabled="disabled"
     as="div"
     class="group relative"
+    nullable
     v-slot="{ open }"
     v-bind="{
       onFocusin: () => (isFocused = true),

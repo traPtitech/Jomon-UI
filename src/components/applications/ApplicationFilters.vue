@@ -4,7 +4,7 @@ import { useToast } from 'vue-toastification'
 
 import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
 import SearchMultiSelect from '@/components/shared/SearchSelect/SearchMultiSelect.vue'
-import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
+import SearchSelect from '@/components/shared/SearchSelect/SearchSelectNullable.vue'
 import { useApplicationStore } from '@/features/application/store'
 import { applicationStatusOptions } from '@/features/applicationStatus/entities'
 import { usePartitionStore } from '@/features/partition/store'

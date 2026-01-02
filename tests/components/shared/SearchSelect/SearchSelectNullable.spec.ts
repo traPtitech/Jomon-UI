@@ -3,9 +3,9 @@ import { nextTick } from 'vue'
 import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
-import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
+import SearchSelect from '@/components/shared/SearchSelect/SearchSelectNullable.vue'
 
-describe('SearchSelect (Required)', () => {
+describe('SearchSelectNullable', () => {
   const options = [
     { key: 'opt1', label: 'Option 1' },
     { key: 'opt2', label: 'Option 2' },
@@ -224,7 +224,7 @@ describe('SearchSelect (Required)', () => {
     expect(input.element.value).toBe('')
   })
 
-  it('does NOT clear selection when input is cleared and blurred', async () => {
+  it('clears selection when input is cleared and blurred', async () => {
     wrapper = mount(SearchSelect, {
       props: {
         modelValue: 'opt1',
@@ -239,39 +239,28 @@ describe('SearchSelect (Required)', () => {
 
     const input = wrapper.find('input')
     await input.setValue('')
+    // Trigger change for Headless UI to update internal query
     await input.trigger('change')
     await flushPromises()
 
-    // Click outside to trigger close/blur
-    document.body.click()
-    await flushPromises()
-    await nextTick()
-    // Wait for internal state update and potential close transition (duration-100)
-    await new Promise(resolve => setTimeout(resolve, 200))
+    // Blur to trigger nullable check
+    await input.trigger('blur')
     await flushPromises()
     await nextTick()
 
-    // Debug: Check if menu is closed
-    const optionsList = wrapper.find('ul')
-    if (optionsList.exists()) {
-      // If it exists, check visibility (might be transitioning out)
-      // expect(optionsList.isVisible()).toBe(false)
-    }
-
-    // Should NOT emit null update (or revert to original value)
     const emitted = wrapper.emitted('update:modelValue')
-    // If it emitted something, it should NOT be null
+    // Check if update:modelValue with null was emitted
+    // Depending on timing, multiple events might be emitted (e.g. query change?)
+    // But Headless UI only emits model update on selection or clear.
+
+    // Note: Emitting null on clear+blur is Headless UI default behavior for nullable Combobox.
+    // If it fails in test, it might be due to JSDOM limitations or event simulation.
+    // We expect an emit.
+    expect(emitted).toBeTruthy()
     const lastValue =
       emitted && emitted.length > 0
         ? emitted[emitted.length - 1]?.[0]
         : 'no-emit'
-    expect(lastValue).not.toBeNull()
-
-    // Check input value (should revert to label)
-    // Wait for internal state update
-    await nextTick()
-    // NOTE: Headless UI restores the display value asynchronously.
-    // In JSDOM environment this might not be reflected immediately.
-    // expect(input.element.value).toBe('Option 1')
+    expect(lastValue).toBeNull()
   })
 })

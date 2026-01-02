@@ -4,7 +4,7 @@ import { ref, watch } from 'vue'
 import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
 import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
 import InputCheckBox from '@/components/shared/InputCheckBox.vue'
-import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
+import SearchSelectNullable from '@/components/shared/SearchSelect/SearchSelectNullable.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { usePartitionGroupStore } from '@/features/partitionGroup/store'
 import { useUserStore } from '@/features/user/store'
@@ -46,7 +46,7 @@ watch(isUnspecifiedBudget, newVal => {
   <form class="flex flex-col gap-6">
     <BaseTextInput v-model="partition.name" label="パーティション名" required />
     <div>
-      <SearchSelect
+      <SearchSelectNullable
         v-model="partition.parentPartitionGroupId"
         class="w-full"
         :options="partitionGroupOptions"

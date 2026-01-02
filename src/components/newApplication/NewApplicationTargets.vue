@@ -3,7 +3,7 @@ import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
 import type { ApplicationTargetDraft } from '@/components/applicationDetail/types'
 import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
-import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
+import SearchSelectNullable from '@/components/shared/SearchSelect/SearchSelectNullable.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useUserStore } from '@/features/user/store'
 
@@ -23,7 +23,7 @@ function handleRemoveTarget(index: number) {
   <div class="flex flex-col gap-2">
     <ul class="flex flex-col gap-2">
       <li v-for="(target, i) in model" :key="i" class="flex gap-3">
-        <SearchSelect
+        <SearchSelectNullable
           v-model="target.target"
           :options="userOptions"
           class="grow"

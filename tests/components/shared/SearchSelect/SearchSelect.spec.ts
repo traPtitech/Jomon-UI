@@ -111,7 +111,7 @@ describe('SearchSelect (Required)', () => {
   it('handles accessibility attributes correctly', async () => {
     wrapper = mount(SearchSelect, {
       props: {
-        modelValue: null,
+        modelValue: 'opt1',
         options,
         label: 'My Label',
         errorMessage: 'Something went wrong',
@@ -135,7 +135,7 @@ describe('SearchSelect (Required)', () => {
   it('navigates and selects using keyboard', async () => {
     wrapper = mount(SearchSelect, {
       props: {
-        modelValue: null,
+        modelValue: 'opt1',
         options,
       },
       attachTo: document.body,
@@ -190,7 +190,7 @@ describe('SearchSelect (Required)', () => {
   it('resets search term after leaving', async () => {
     wrapper = mount(SearchSelect, {
       props: {
-        modelValue: null,
+        modelValue: 'opt1',
         options,
       },
       attachTo: document.body,
@@ -242,7 +242,7 @@ describe('SearchSelect (Required)', () => {
     await input.trigger('change')
     await flushPromises()
 
-    // Click outside to trigger close/blur
+    // Click outside to trigger blur/close
     document.body.click()
     await flushPromises()
     await nextTick()
@@ -265,6 +265,7 @@ describe('SearchSelect (Required)', () => {
       emitted && emitted.length > 0
         ? emitted[emitted.length - 1]?.[0]
         : 'no-emit'
+
     expect(lastValue).not.toBeNull()
 
     // Check input value (should revert to label)

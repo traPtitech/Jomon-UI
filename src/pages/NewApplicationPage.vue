@@ -5,7 +5,7 @@ import NewApplicationFileForm from '@/components/newApplication/NewApplicationFi
 import NewApplicationTargets from '@/components/newApplication/NewApplicationTargets.vue'
 import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
 import MarkdownTextarea from '@/components/shared/MarkdownTextarea.vue'
-import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
+import SearchSelectNullable from '@/components/shared/SearchSelect/SearchSelectNullable.vue'
 import SearchSelectTag from '@/components/shared/SearchSelect/SearchSelectTag.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { applicationTemplates } from '@/features/applicationTemplate/entities'
@@ -60,7 +60,7 @@ if (!isUserFetched.value) {
       label="詳細"
       :templates="applicationTemplates" />
     <NewApplicationTargets v-model="application.targets" />
-    <SearchSelect
+    <SearchSelectNullable
       v-model="application.partition"
       class="w-full"
       :options="partitionOptions"

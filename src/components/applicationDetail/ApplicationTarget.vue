@@ -6,7 +6,7 @@ import { useToast } from 'vue-toastification'
 
 import type { ApplicationTargetEditDraft } from '@/components/applicationDetail/types'
 import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
-import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
+import SearchSelectNullable from '@/components/shared/SearchSelect/SearchSelectNullable.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
@@ -84,7 +84,7 @@ const handleRemoveTarget = async () => {
   </div>
   <div v-else-if="targetModel" class="flex items-center justify-between">
     <div class="flex gap-1">
-      <SearchSelect
+      <SearchSelectNullable
         v-model="targetModel.target"
         :options="targetOptions"
         label="対象者" />

@@ -41,7 +41,7 @@ const emit = defineEmits<{
   (e: 'close'): void
 }>()
 
-const model = defineModel<T | null>({ required: true })
+const model = defineModel<T>({ required: true })
 
 const inputId = useId()
 const errorId = `${inputId}-error`

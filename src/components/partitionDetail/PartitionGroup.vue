@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { EditMode } from '@/components/partitionDetail/composables/usePartitionInformation'
 import EditButton from '@/components/shared/EditButton.vue'
-import SearchSelect from '@/components/shared/SearchSelect/SearchSelect.vue'
+import SearchSelectNullable from '@/components/shared/SearchSelect/SearchSelectNullable.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { usePartitionStore } from '@/features/partition/store'
 import { usePartitionGroupStore } from '@/features/partitionGroup/store'
@@ -28,7 +28,7 @@ const modelValue = defineModel<string | null>({ required: true })
 
 <template>
   <div v-if="partition" class="flex items-center gap-3">
-    <SearchSelect
+    <SearchSelectNullable
       required
       v-if="props.isEditMode"
       v-model="modelValue"

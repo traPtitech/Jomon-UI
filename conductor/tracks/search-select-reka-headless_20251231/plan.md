@@ -120,12 +120,29 @@
   - [x] Sub-task: Verify changes with existing tests and add new tests for `resetOnSelect`. [verified]
 - [x] Task: Conductor - User Manual Verification 'Phase 10: Final Review Adjustments' (Protocol in workflow.md) [c694cda]
 
-## Phase 11: Final Refactoring - Duplication Reduction
+## Phase 11: Final Refactoring - Duplication Reduction [checkpoint: 1ecded9]
 
-- [ ] Task: Reduce duplication between SearchSelect and SearchSelectNullable
-  - [ ] Sub-task: Define `SearchSelectCommonProps` in `types.ts`.
-  - [ ] Sub-task: Create `SearchSelectBase.vue` implementing the core logic.
-  - [ ] Sub-task: Refactor `SearchSelect.vue` to wrap `SearchSelectBase`.
-  - [ ] Sub-task: Refactor `SearchSelectNullable.vue` to wrap `SearchSelectBase`.
+- [x] Task: Reduce duplication between SearchSelect and SearchSelectNullable [verified]
+  - [x] Sub-task: Define `SearchSelectCommonProps` in `types.ts`. [verified]
+  - [x] Sub-task: Create `SearchSelectBase.vue` implementing the core logic. [verified]
+  - [x] Sub-task: Refactor `SearchSelect.vue` to wrap `SearchSelectBase`. [verified]
+  - [x] Sub-task: Refactor `SearchSelectNullable.vue` to wrap `SearchSelectBase`. [verified]
+  - [x] Sub-task: Verify with tests. [verified]
+- [x] Task: Conductor - User Manual Verification 'Phase 11: Final Refactoring - Duplication Reduction' (Protocol in workflow.md) [1ecded9]
+
+## Phase 12: SearchMultiSelect Layout Update [checkpoint: 4c5ee84]
+
+- [x] Task: Update SearchMultiSelect Layout [verified]
+  - [x] Sub-task: Implement inline tags layout in `SearchMultiSelect.vue`. [verified]
+  - [x] Sub-task: Add `inputRef` and focus logic. [verified]
+  - [x] Sub-task: Add Backspace deletion logic for UX improvement. [verified]
+  - [x] Sub-task: Verify with existing tests (and update if necessary). [verified]
+- [x] Task: Conductor - User Manual Verification 'Phase 12: SearchMultiSelect Layout Update' (Protocol in workflow.md) [4c5ee84]
+
+## Phase 13: Template Ref Modernization
+
+- [ ] Task: Refactor template refs to use `useTemplateRef`
+  - [ ] Sub-task: Refactor `SearchMultiSelect.vue`.
+  - [ ] Sub-task: Refactor `SearchSelectBase.vue`.
   - [ ] Sub-task: Verify with tests.
-- [ ] Task: Conductor - User Manual Verification 'Phase 11: Final Refactoring - Duplication Reduction' (Protocol in workflow.md)
+- [ ] Task: Conductor - User Manual Verification 'Phase 13: Template Ref Modernization' (Protocol in workflow.md)

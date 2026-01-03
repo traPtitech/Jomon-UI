@@ -10,7 +10,6 @@ export interface SearchSelectCommonProps<T extends string | number> {
   placeholder?: string
   disabled?: boolean
   required?: boolean
-  name?: string
   noResultsText?: string
   errorMessage?: string
   filterFunction?: (option: SearchSelectOption<T>, query: string) => boolean

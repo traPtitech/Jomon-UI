@@ -16,6 +16,6 @@ _Link: [./conductor/tracks/search-select-reka-headless_20251231/](./conductor/tr
 
 ---
 
-## [ ] Track: Search Select Review Fixes
+## [x] Track: Search Select Review Fixes
 
 _Link: [./conductor/tracks/search-select-review-fixes_20260103/](./conductor/tracks/search-select-review-fixes_20260103/)_

@@ -26,3 +26,18 @@
 - [x] Task: Final Polish [verified]
   - [x] Run lint and format. [verified]
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Minor Cleanup' (Protocol in workflow.md) [6d0f420]
+
+## Phase 4: Additional Review Fixes [checkpoint: 313bb75]
+
+- [x] Task: Fix query case sensitivity in filterFunction [verified]
+  - [x] Pass raw query to `filterFunction` in `useSearchSelect.ts`. [verified]
+- [x] Task: Remove unused close emit in SearchSelectTag [verified]
+  - [x] Remove `@close` listener and corresponding emit in `SearchSelectTag.vue`. [verified]
+- [x] Task: Remove search term reset on selection [verified]
+  - [x] Remove `resetOnSelect` prop and watch logic from `SearchMultiSelect.vue`. [verified]
+  - [x] Update tests in `SearchMultiSelect.spec.ts` to expect search term retention. [verified]
+- [x] Task: Improve input layout [verified]
+  - [x] Update input width class to `min-w-12` for better spacing. [verified]
+- [x] Task: Finalize behavior [verified]
+  - [x] Remove search term reset on close event in `SearchMultiSelect.vue`. [verified]
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Additional Review Fixes' (Protocol in workflow.md) [313bb75]

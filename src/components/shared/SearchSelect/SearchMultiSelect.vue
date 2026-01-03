@@ -128,9 +128,7 @@ defineOptions({
       <div
         class="relative w-full"
         :class="[props.disabled ? 'pointer-events-none' : '']">
-        <ComboboxInput
-          as="template"
-          @change="searchTerm = ($event.target as HTMLInputElement).value">
+        <ComboboxInput as="template" @change="searchTerm = $event.target.value">
           <input
             :value="searchTerm"
             @focus="!open && buttonRef?.click()"

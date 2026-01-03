@@ -69,7 +69,6 @@ const handleChange = (e: Event) => {
 }
 
 const handleAfterLeave = () => {
-  searchTerm.value = ''
   emit('close')
 }
 

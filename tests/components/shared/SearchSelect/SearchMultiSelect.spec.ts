@@ -460,4 +460,24 @@ describe('SearchMultiSelect (Headless UI)', () => {
     const button = wrapper.find('button[aria-haspopup="listbox"]')
     expect(button.attributes('aria-expanded')).toBe('true')
   })
+
+  it('opens menu when clicking MagnifyingGlassIcon', async () => {
+    wrapper = mount(SearchMultiSelect, {
+      props: {
+        modelValue: [],
+        options,
+      },
+      attachTo: document.body,
+    })
+
+    const iconWrapper = wrapper.find('svg').element.parentElement
+    if (!iconWrapper) throw new Error('Icon wrapper not found')
+
+    iconWrapper.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    await flushPromises()
+    await nextTick()
+
+    const button = wrapper.find('button[aria-haspopup="listbox"]')
+    expect(button.attributes('aria-expanded')).toBe('true')
+  })
 })

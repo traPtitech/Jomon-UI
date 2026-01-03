@@ -275,4 +275,46 @@ describe('SearchSelect (Required)', () => {
     // In JSDOM environment this might not be reflected immediately.
     // expect(input.element.value).toBe('Option 1')
   })
+
+  it('opens menu when clicking MagnifyingGlassIcon', async () => {
+    wrapper = mount(SearchSelect, {
+      props: {
+        modelValue: 'opt1',
+        options,
+      },
+      attachTo: document.body,
+    })
+
+    // Find the icon wrapper div (the one with the click handler)
+    const iconWrapper = wrapper.find('svg').element.parentElement
+    if (!iconWrapper) throw new Error('Icon wrapper not found')
+
+    iconWrapper.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    await flushPromises()
+    await nextTick()
+
+    const optionsList = wrapper.find('ul')
+    expect(optionsList.exists()).toBe(true)
+    expect(optionsList.isVisible()).toBe(true)
+  })
+
+  it('opens menu when clicking container padding', async () => {
+    wrapper = mount(SearchSelect, {
+      props: {
+        modelValue: 'opt1',
+        options,
+      },
+      attachTo: document.body,
+    })
+
+    // The container div with the click handler
+    const container = wrapper.find('.flex.rounded-lg')
+    await container.trigger('click')
+    await flushPromises()
+    await nextTick()
+
+    const optionsList = wrapper.find('ul')
+    expect(optionsList.exists()).toBe(true)
+    expect(optionsList.isVisible()).toBe(true)
+  })
 })

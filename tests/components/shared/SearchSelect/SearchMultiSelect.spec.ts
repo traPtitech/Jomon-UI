@@ -51,7 +51,7 @@ describe('SearchMultiSelect (Headless UI)', () => {
     })
 
     await flushPromises()
-    const button = wrapper.find('button')
+    const button = wrapper.find('button[aria-label$="開く"]')
     await button.trigger('click')
     await flushPromises()
     await nextTick()
@@ -267,7 +267,7 @@ describe('SearchMultiSelect (Headless UI)', () => {
     })
 
     await flushPromises()
-    const button = wrapper.find('button')
+    const button = wrapper.find('button[aria-label$="開く"]')
     await button.trigger('click')
     await flushPromises()
     await nextTick()
@@ -316,7 +316,7 @@ describe('SearchMultiSelect (Headless UI)', () => {
     })
 
     await flushPromises()
-    const button = wrapper.find('button')
+    const button = wrapper.find('button[aria-label$="開く"]')
     await button.trigger('click')
     await flushPromises()
     await nextTick()
@@ -341,7 +341,7 @@ describe('SearchMultiSelect (Headless UI)', () => {
     })
 
     await flushPromises()
-    const button = wrapper.find('button')
+    const button = wrapper.find('button[aria-label$="開く"]')
     await button.trigger('click')
     await flushPromises()
     await nextTick()
@@ -386,7 +386,7 @@ describe('SearchMultiSelect (Headless UI)', () => {
     })
 
     await flushPromises()
-    const button = wrapper.find('button')
+    const button = wrapper.find('button[aria-label$="開く"]')
     await button.trigger('click')
     await flushPromises()
 

@@ -50,6 +50,7 @@ const inputId = useId()
 const errorId = `${inputId}-error`
 const buttonRef = ref<HTMLButtonElement | null>(null)
 const containerRef = ref<ComponentPublicInstance | null>(null)
+const inputRef = ref<HTMLInputElement | null>(null)
 const isOpen = ref(false)
 
 const { searchTerm, isFocused, isFloating, filteredOptions, getLabel } =
@@ -92,6 +93,25 @@ const handleFocusOut = (e: FocusEvent) => {
   isFocused.value = false
 }
 
+const focusInputAndOpen = (open: boolean) => {
+  if (props.disabled) return
+  inputRef.value?.focus()
+  if (!open) buttonRef.value?.click()
+}
+
+const onInputKeydown = (e: KeyboardEvent) => {
+  if (
+    e.key === 'Backspace' &&
+    searchTerm.value === '' &&
+    model.value.length > 0
+  ) {
+    const lastKey = model.value[model.value.length - 1]
+    if (lastKey !== undefined) {
+      removeTag(lastKey)
+    }
+  }
+}
+
 defineOptions({
   name: 'SearchMultiSelect',
 })
@@ -128,26 +148,51 @@ defineOptions({
       <div
         class="relative w-full"
         :class="[props.disabled ? 'pointer-events-none' : '']">
-        <ComboboxInput as="template" @change="searchTerm = $event.target.value">
-          <input
-            :value="searchTerm"
-            @focus="!open && buttonRef?.click()"
-            @click="!open && buttonRef?.click()"
-            :id="inputId"
-            class="peer w-full border-none bg-transparent px-3 pb-2 text-base text-text-primary ring-0 outline-none"
-            :class="[
-              label ? 'pt-6' : 'pt-2',
-              props.disabled ? 'cursor-not-allowed' : '',
-            ]"
-            :placeholder="isFloating || !props.label ? placeholder : ''"
-            :aria-label="!label ? (placeholder ?? '検索') : undefined"
-            :aria-invalid="!!errorMessage"
-            :aria-describedby="errorMessage ? errorId : undefined"
-            :aria-errormessage="errorMessage ? errorId : undefined"
-            :aria-required="required || undefined"
-            :disabled="props.disabled"
-            autocomplete="off" />
-        </ComboboxInput>
+        <!-- eslint-disable-next-line vuejs-accessibility/no-static-element-interactions -->
+        <div
+          class="flex w-full flex-wrap items-center gap-1 px-3 pb-2"
+          :class="[
+            label ? 'pt-6' : 'pt-2',
+            props.disabled ? 'cursor-not-allowed' : '',
+          ]"
+          @mousedown.prevent="focusInputAndOpen(open)">
+          <div
+            v-for="key in model"
+            :key="key"
+            class="flex items-center rounded-sm bg-surface-secondary px-2 py-1 text-xs text-text-primary">
+            {{ getLabel(key) }}
+            <button
+              type="button"
+              :disabled="props.disabled"
+              :aria-label="`${getLabel(key)} を削除`"
+              class="ml-1 rounded-full hover:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
+              @mousedown.stop
+              @click.stop="removeTag(key)">
+              <XMarkIcon class="h-3 w-3" aria-hidden="true" />
+            </button>
+          </div>
+
+          <ComboboxInput
+            as="template"
+            @change="searchTerm = ($event.target as HTMLInputElement).value">
+            <input
+              ref="inputRef"
+              :value="searchTerm"
+              @keydown="onInputKeydown"
+              @focus="!open && buttonRef?.click()"
+              @click="!open && buttonRef?.click()"
+              :id="inputId"
+              class="min-w-[3rem] flex-1 border-none bg-transparent p-0 text-base text-text-primary ring-0 outline-none"
+              :placeholder="isFloating || !props.label ? placeholder : ''"
+              :aria-label="!label ? (placeholder ?? '検索') : undefined"
+              :aria-invalid="!!errorMessage"
+              :aria-describedby="errorMessage ? errorId : undefined"
+              :aria-errormessage="errorMessage ? errorId : undefined"
+              :aria-required="required || undefined"
+              :disabled="props.disabled"
+              autocomplete="off" />
+          </ComboboxInput>
+        </div>
 
         <label
           v-if="label"
@@ -177,24 +222,6 @@ defineOptions({
             aria-hidden="true" />
         </button>
       </ComboboxButton>
-    </div>
-
-    <!-- Tags -->
-    <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1">
-      <div
-        v-for="key in model"
-        :key="key"
-        class="flex items-center rounded-sm bg-surface-secondary px-2 py-1 text-xs text-text-primary">
-        {{ getLabel(key) }}
-        <button
-          type="button"
-          :disabled="props.disabled"
-          :aria-label="`${getLabel(key)} を削除`"
-          class="ml-1 rounded-full hover:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
-          @click.stop="removeTag(key)">
-          <XMarkIcon class="h-3 w-3" aria-hidden="true" />
-        </button>
-      </div>
     </div>
 
     <p

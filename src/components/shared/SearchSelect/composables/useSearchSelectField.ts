@@ -1,5 +1,5 @@
-import { ref, useId } from 'vue'
 import type { ComponentPublicInstance } from 'vue'
+import { ref, useId } from 'vue'
 
 export function useSearchSelectField() {
   const inputId = useId()
@@ -13,14 +13,8 @@ export function useSearchSelectField() {
   ) => {
     const next = e.relatedTarget
     const el = containerRef?.$el
-    if (!(el instanceof HTMLElement)) {
-      isFocused.value = false
+    if (el instanceof HTMLElement && next instanceof Node && el.contains(next))
       return
-    }
-
-    if (next instanceof Node && el.contains(next)) {
-      return
-    }
     isFocused.value = false
   }
 

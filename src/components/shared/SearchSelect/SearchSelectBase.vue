@@ -38,12 +38,19 @@ const { searchTerm, filteredOptions, getLabel } = useSearchSelect(
 
 const hasValue = computed(() => model.value !== null)
 
-const focusInputAndOpen = (open: boolean) => {
+const focusInputAndOpen = (e: Event, open: boolean) => {
   if (props.disabled) return
-  if (document.activeElement === inputRef.value) {
-    if (!open) buttonRef.value?.click()
-  } else {
+
+  if (e.target instanceof HTMLElement) {
+    if (e.target.closest('button') || e.target.closest('input')) {
+      return
+    }
+  }
+
+  if (document.activeElement !== inputRef.value) {
     inputRef.value?.focus()
+  } else if (!open) {
+    buttonRef.value?.click()
   }
 }
 
@@ -77,18 +84,16 @@ defineOptions({
       onFocusin: () => (isFocused = true),
       onFocusout: (e: FocusEvent) => handleFocusOut(e, containerRef),
     }">
+    <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
     <div
       class="flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none"
       :class="[
         props.disabled
           ? 'cursor-not-allowed bg-surface-secondary opacity-60'
-          : 'bg-white',
-      ]">
-      <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
-      <div
-        class="flex items-center justify-center pl-3"
-        :class="[props.disabled ? '' : 'cursor-pointer']"
-        @click.prevent="focusInputAndOpen(open)">
+          : 'cursor-pointer bg-white',
+      ]"
+      @click="focusInputAndOpen($event, open)">
+      <div class="flex items-center justify-center pl-3">
         <MagnifyingGlassIcon
           class="w-6 text-text-secondary"
           aria-hidden="true" />
@@ -104,12 +109,12 @@ defineOptions({
           <input
             ref="inputRef"
             @focus="!open && buttonRef?.click()"
-            @click="!open && buttonRef?.click()"
+            @click.stop="!open && buttonRef?.click()"
             :id="inputId"
             class="peer w-full border-none bg-transparent px-3 pb-2 text-base text-text-primary ring-0 outline-none"
             :class="[
               label ? 'pt-6' : 'pt-2',
-              props.disabled ? 'cursor-not-allowed' : '',
+              props.disabled ? 'cursor-not-allowed' : 'cursor-pointer',
             ]"
             :placeholder="
               isFocused || hasValue || open || !props.label ? placeholder : ''

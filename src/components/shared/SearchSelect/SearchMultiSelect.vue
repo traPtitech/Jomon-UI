@@ -43,12 +43,19 @@ const removeTag = (key: T) => {
   model.value = model.value.filter(v => v !== key)
 }
 
-const focusInputAndOpen = (open: boolean) => {
+const focusInputAndOpen = (e: Event, open: boolean) => {
   if (props.disabled) return
-  if (document.activeElement === inputRef.value) {
-    if (!open) buttonRef.value?.click()
-  } else {
+
+  if (e.target instanceof HTMLElement) {
+    if (e.target.closest('button') || e.target.closest('input')) {
+      return
+    }
+  }
+
+  if (document.activeElement !== inputRef.value) {
     inputRef.value?.focus()
+  } else if (!open) {
+    buttonRef.value?.click()
   }
 }
 
@@ -94,18 +101,16 @@ defineOptions({
       onFocusin: () => (isFocused = true),
       onFocusout: (e: FocusEvent) => handleFocusOut(e, containerRef),
     }">
+    <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
     <div
       class="flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none"
       :class="[
         props.disabled
           ? 'cursor-not-allowed bg-surface-secondary opacity-60'
-          : 'bg-white',
-      ]">
-      <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
-      <div
-        class="flex items-center justify-center pl-3"
-        :class="[props.disabled ? '' : 'cursor-pointer']"
-        @click.prevent="focusInputAndOpen(open)">
+          : 'cursor-pointer bg-white',
+      ]"
+      @click="focusInputAndOpen($event, open)">
+      <div class="flex items-center justify-center pl-3">
         <MagnifyingGlassIcon
           class="w-6 text-text-secondary"
           aria-hidden="true" />
@@ -114,14 +119,12 @@ defineOptions({
       <div
         class="relative w-full"
         :class="[props.disabled ? 'pointer-events-none' : '']">
-        <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
         <div
           class="flex w-full flex-wrap items-center gap-1 px-3 pb-2"
           :class="[
             label ? 'pt-6' : 'pt-2',
             props.disabled ? 'cursor-not-allowed' : '',
-          ]"
-          @click.self.prevent="focusInputAndOpen(open)">
+          ]">
           <div
             v-for="key in model"
             :key="key"
@@ -144,9 +147,10 @@ defineOptions({
               :value="searchTerm"
               @keydown="onInputKeydown"
               @focus="!open && buttonRef?.click()"
-              @click="!open && buttonRef?.click()"
+              @click.stop="!open && buttonRef?.click()"
               :id="inputId"
               class="min-w-12 flex-1 border-none bg-transparent p-0 text-base text-text-primary ring-0 outline-none"
+              :class="[props.disabled ? '' : 'cursor-pointer']"
               :placeholder="
                 isFocused || hasValue || open || !props.label ? placeholder : ''
               "

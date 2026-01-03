@@ -16,6 +16,12 @@ _Link: [./conductor/tracks/search-select-reka-headless_20251231/](./conductor/tr
 
 ---
 
-## [x] Track: Search Select Review Fixes
+## [x] Track: Improve SearchSelect Test Coverage
 
-_Link: [./conductor/tracks/search-select-review-fixes_20260103/](./conductor/tracks/search-select-review-fixes_20260103/)_
+_Link: [./conductor/tracks/search-select-test-coverage_20260103/](./conductor/tracks/search-select-test-coverage_20260103/)_
+
+---
+
+## [~] Track: Fix SearchSelect Interaction Bugs
+
+_Link: [./conductor/tracks/search-select-interaction-fixes_20260103/](./conductor/tracks/search-select-interaction-fixes_20260103/)_

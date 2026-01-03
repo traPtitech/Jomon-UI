@@ -171,3 +171,12 @@
 - [x] Task: Refine Composable types [verified]
   - [x] Sub-task: Improve type safety in `useSearchSelect.ts` to avoid `unknown`. [verified]
 - [x] Task: Conductor - User Manual Verification 'Phase 16: Final Type Refinements' (Protocol in workflow.md) [b286c7e]
+
+## Phase 17: Finalize Cast Removal
+
+- [x] Task: Remove all type assertions and unsafe casts [verified]
+  - [x] Sub-task: Refactor `useSearchSelect.ts` to use safe type guards and widen `optionMap` key type. [verified]
+  - [x] Sub-task: Refactor `useSearchSelectField.ts` to use `instanceof` check instead of casting `$el`. [verified]
+  - [x] Sub-task: Refactor `SearchSelectBase.vue` to remove `any` and event target casts. [verified]
+  - [x] Sub-task: Refactor `SearchMultiSelect.vue` to remove event target casts and ESLint disable comments. [verified]
+- [x] Task: Conductor - User Manual Verification 'Phase 17: Finalize Cast Removal' (Protocol in workflow.md)

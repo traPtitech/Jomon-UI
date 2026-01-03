@@ -411,4 +411,35 @@ describe('SearchMultiSelect (Headless UI)', () => {
     // Search term should be kept
     expect(input.element.value).toBe('Option 1')
   })
+
+  it('does not remove tag when disabled', async () => {
+    wrapper = mount(SearchMultiSelect, {
+      props: {
+        modelValue: ['opt1'],
+        options,
+        disabled: true,
+      },
+    })
+    const removeButton = wrapper.find('button[aria-label="Option 1 を削除"]')
+    expect(removeButton.exists()).toBe(true)
+    await removeButton.trigger('click')
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+  })
+
+  it('does not focus input when container clicked while disabled', async () => {
+    wrapper = mount(SearchMultiSelect, {
+      props: {
+        modelValue: [],
+        options,
+        disabled: true,
+      },
+      attachTo: document.body,
+    })
+
+    const input = wrapper.find('input')
+    const container = wrapper.find('.relative.w-full > div')
+
+    await container.trigger('mousedown')
+    expect(document.activeElement).not.toBe(input.element)
+  })
 })

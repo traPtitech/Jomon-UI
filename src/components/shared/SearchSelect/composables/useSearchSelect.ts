@@ -19,15 +19,16 @@ export function useSearchSelect<T extends string | number>(
   })
 
   const filteredOptions = computed(() => {
-    const query = searchTerm.value.toLowerCase()
-    if (query === '') {
+    if (searchTerm.value === '') {
       return options.value
     }
     if (filterFunction) {
-      return options.value.filter(option => filterFunction(option, query))
+      return options.value.filter(option =>
+        filterFunction(option, searchTerm.value)
+      )
     }
     return options.value.filter(option =>
-      option.label.toLowerCase().includes(query)
+      option.label.toLowerCase().includes(searchTerm.value.toLowerCase())
     )
   })
 

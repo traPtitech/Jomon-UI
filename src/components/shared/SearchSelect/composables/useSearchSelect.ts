@@ -2,6 +2,7 @@ import type { Ref } from 'vue'
 import { computed, ref } from 'vue'
 
 import type { SearchSelectOption } from '../types'
+import { safeString } from '../utils'
 
 export function useSearchSelect<T extends string | number>(
   options: Ref<SearchSelectOption<T>[]>,
@@ -42,7 +43,7 @@ export function useSearchSelect<T extends string | number>(
   const getLabel = (val: unknown): string => {
     if (val === null || val === undefined) return ''
     if (typeof val === 'string' || typeof val === 'number') {
-      return optionMap.value.get(val)?.label ?? String(val)
+      return optionMap.value.get(val)?.label ?? safeString(val)
     }
     return ''
   }

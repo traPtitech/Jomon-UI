@@ -25,6 +25,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@headlessui/tailwindcss": "^0.2.2",
     "@headlessui/vue": "^1.7.23",
     "@vueuse/core": "^14.1.0",
     "axios": "^1.12.2",

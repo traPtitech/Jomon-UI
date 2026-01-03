@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 
 @plugin '@tailwindcss/typography';
+@plugin '@headlessui/tailwindcss';
 
 @custom-variant dark (@media (prefers-color-scheme: dark));
 

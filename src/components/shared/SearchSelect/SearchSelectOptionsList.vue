@@ -36,29 +36,21 @@ const emit = defineEmits<{
 
       <ComboboxOption
         v-for="option in filteredOptions"
-        as="template"
         :key="option.key"
         :value="option.key"
         :disabled="!!option.disabled"
-        v-slot="{ selected, active, disabled: optionDisabled }">
-        <li
-          class="relative flex w-full cursor-default items-center rounded-sm px-2 py-1.5 text-left text-sm select-none"
-          :class="{
-            'bg-blue-100 text-blue-500': active && !optionDisabled,
-            'text-text-primary': !active && !optionDisabled,
-            'cursor-not-allowed opacity-40': optionDisabled,
-          }">
-          <div class="mr-2 flex h-4 w-4 items-center justify-center">
-            <span v-if="selected">
-              <CheckIcon class="h-4 w-4" aria-hidden="true" />
-            </span>
-          </div>
-          <span
-            class="flex-1 truncate"
-            :class="{ 'font-medium': selected, 'font-normal': !selected }">
-            {{ option.label }}
+        v-slot="{ selected }"
+        class="relative flex w-full cursor-default items-center rounded-sm px-2 py-1.5 text-left text-sm select-none ui-disabled:cursor-not-allowed ui-disabled:opacity-40 ui-active:ui-not-disabled:bg-blue-100 ui-not-active:ui-not-disabled:text-text-primary">
+        <div class="mr-2 flex h-4 w-4 items-center justify-center">
+          <span v-if="selected">
+            <CheckIcon class="h-4 w-4" aria-hidden="true" />
           </span>
-        </li>
+        </div>
+        <span
+          class="flex-1 truncate"
+          :class="{ 'font-medium': selected, 'font-normal': !selected }">
+          {{ option.label }}
+        </span>
       </ComboboxOption>
     </ComboboxOptions>
   </TransitionRoot>

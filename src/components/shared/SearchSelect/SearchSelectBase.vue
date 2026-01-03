@@ -169,7 +169,6 @@ defineOptions({
       :filtered-options="filteredOptions"
       :search-term="searchTerm"
       :no-results-text="props.noResultsText"
-      check-icon-position="right"
       @after-leave="handleAfterLeave" />
   </Combobox>
 </template>

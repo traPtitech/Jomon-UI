@@ -12,7 +12,6 @@ defineProps<{
   filteredOptions: SearchSelectOption<T>[]
   searchTerm: string
   noResultsText?: string
-  checkIconPosition?: 'left' | 'right'
 }>()
 
 const emit = defineEmits<{
@@ -49,9 +48,7 @@ const emit = defineEmits<{
             'text-text-primary': !active && !optionDisabled,
             'cursor-not-allowed opacity-40': optionDisabled,
           }">
-          <div
-            v-if="checkIconPosition === 'left'"
-            class="mr-2 flex h-4 w-4 items-center justify-center">
+          <div class="mr-2 flex h-4 w-4 items-center justify-center">
             <span v-if="selected">
               <CheckIcon class="h-4 w-4" aria-hidden="true" />
             </span>
@@ -60,15 +57,6 @@ const emit = defineEmits<{
             class="flex-1 truncate"
             :class="{ 'font-medium': selected, 'font-normal': !selected }">
             {{ option.label }}
-          </span>
-          <span
-            v-if="checkIconPosition === 'right' && selected"
-            class="ml-auto flex items-center pl-3"
-            :class="{
-              'text-blue-500': active,
-              'text-text-primary': !active,
-            }">
-            <CheckIcon class="h-4 w-4" aria-hidden="true" />
           </span>
         </li>
       </ComboboxOption>

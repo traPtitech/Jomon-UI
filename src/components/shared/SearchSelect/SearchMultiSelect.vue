@@ -98,7 +98,11 @@ defineOptions({
           ? 'cursor-not-allowed bg-surface-secondary opacity-60'
           : 'bg-white',
       ]">
-      <div class="flex items-center justify-center pl-3">
+      <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
+      <div
+        class="flex items-center justify-center pl-3"
+        :class="[props.disabled ? '' : 'cursor-pointer']"
+        @click.prevent="focusInputAndOpen(open)">
         <MagnifyingGlassIcon
           class="w-6 text-text-secondary"
           aria-hidden="true" />
@@ -173,7 +177,7 @@ defineOptions({
           ref="buttonRef"
           type="button"
           class="flex items-center pr-2"
-          :class="[props.disabled ? 'cursor-not-allowed' : '']"
+          :class="[props.disabled ? 'cursor-not-allowed' : 'cursor-pointer']"
           :aria-label="label ? `${label}を開く` : '選択肢を開く'"
           :disabled="props.disabled">
           <ChevronDownIcon

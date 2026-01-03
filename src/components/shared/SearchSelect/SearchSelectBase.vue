@@ -29,6 +29,7 @@ const { inputId, errorId, isFocused, handleFocusOut } = useSearchSelectField()
 
 const buttonRef = useTemplateRef<HTMLButtonElement>('buttonRef')
 const containerRef = useTemplateRef<ComponentPublicInstance>('containerRef')
+const inputRef = useTemplateRef<HTMLInputElement>('inputRef')
 
 const { searchTerm, filteredOptions, getLabel } = useSearchSelect(
   computed(() => props.options),
@@ -36,6 +37,12 @@ const { searchTerm, filteredOptions, getLabel } = useSearchSelect(
 )
 
 const hasValue = computed(() => model.value !== null)
+
+const focusInputAndOpen = (open: boolean) => {
+  if (props.disabled) return
+  inputRef.value?.focus()
+  if (!open) buttonRef.value?.click()
+}
 
 const handleChange = (e: Event) => {
   if (e.target instanceof HTMLInputElement) {
@@ -74,7 +81,11 @@ defineOptions({
           ? 'cursor-not-allowed bg-surface-secondary opacity-60'
           : 'bg-white',
       ]">
-      <div class="flex items-center justify-center pl-3">
+      <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
+      <div
+        class="flex items-center justify-center pl-3"
+        :class="[props.disabled ? '' : 'cursor-pointer']"
+        @click.prevent="focusInputAndOpen(open)">
         <MagnifyingGlassIcon
           class="w-6 text-text-secondary"
           aria-hidden="true" />
@@ -88,6 +99,7 @@ defineOptions({
           :display-value="(val: unknown) => (open ? searchTerm : getLabel(val))"
           @change="handleChange">
           <input
+            ref="inputRef"
             @focus="!open && buttonRef?.click()"
             @click="!open && buttonRef?.click()"
             :id="inputId"
@@ -128,7 +140,7 @@ defineOptions({
           ref="buttonRef"
           type="button"
           class="flex items-center pr-2"
-          :class="[props.disabled ? 'cursor-not-allowed' : '']"
+          :class="[props.disabled ? 'cursor-not-allowed' : 'cursor-pointer']"
           :aria-label="label ? `${label}を開く` : '選択肢を開く'"
           :disabled="props.disabled">
           <ChevronDownIcon

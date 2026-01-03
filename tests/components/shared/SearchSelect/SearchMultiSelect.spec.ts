@@ -375,12 +375,11 @@ describe('SearchMultiSelect (Headless UI)', () => {
     expect(optionsList.isVisible()).toBe(true)
   })
 
-  it('resets search term on selection when resetOnSelect is true', async () => {
+  it('keeps search term on selection', async () => {
     wrapper = mount(SearchMultiSelect, {
       props: {
         modelValue: [],
         options,
-        resetOnSelect: true,
       },
       attachTo: document.body,
     })
@@ -409,7 +408,7 @@ describe('SearchMultiSelect (Headless UI)', () => {
     await wrapper.setProps({ modelValue: ['opt1'] })
     await nextTick()
 
-    // Search term should be cleared
-    expect(input.element.value).toBe('')
+    // Search term should be kept
+    expect(input.element.value).toBe('Option 1')
   })
 })

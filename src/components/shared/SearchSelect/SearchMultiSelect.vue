@@ -1,10 +1,5 @@
 <script setup lang="ts" generic="T extends string | number">
-import {
-  type ComponentPublicInstance,
-  computed,
-  useTemplateRef,
-  watch,
-} from 'vue'
+import { type ComponentPublicInstance, computed, useTemplateRef } from 'vue'
 
 import { Combobox, ComboboxButton, ComboboxInput } from '@headlessui/vue'
 import {
@@ -22,7 +17,6 @@ const props = withDefaults(defineProps<SearchMultiSelectProps<T>>(), {
   placeholder: '検索',
   disabled: false,
   required: false,
-  resetOnSelect: true,
 })
 
 const emit = defineEmits<{
@@ -43,16 +37,6 @@ const { searchTerm, filteredOptions, getLabel } = useSearchSelect(
 )
 
 const hasValue = computed(() => model.value.length > 0)
-
-// Implement resetOnSelect: Clear search term when a new item is added
-watch(
-  () => model.value.length,
-  (newLen, oldLen) => {
-    if (props.resetOnSelect && newLen > oldLen) {
-      searchTerm.value = ''
-    }
-  }
-)
 
 const removeTag = (key: T) => {
   if (props.disabled) return

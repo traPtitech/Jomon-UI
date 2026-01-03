@@ -17,6 +17,4 @@ export interface SearchSelectCommonProps<T extends string | number> {
 }
 
 export type SearchMultiSelectProps<T extends string | number> =
-  SearchSelectCommonProps<T> & {
-    resetOnSelect?: boolean
-  }
+  SearchSelectCommonProps<T>

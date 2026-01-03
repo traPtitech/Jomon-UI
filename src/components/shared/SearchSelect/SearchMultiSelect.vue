@@ -140,7 +140,7 @@ defineOptions({
               @focus="!open && buttonRef?.click()"
               @click="!open && buttonRef?.click()"
               :id="inputId"
-              class="min-w-[3rem] flex-1 border-none bg-transparent p-0 text-base text-text-primary ring-0 outline-none"
+              class="min-w-12 flex-1 border-none bg-transparent p-0 text-base text-text-primary ring-0 outline-none"
               :placeholder="
                 isFocused || hasValue || open || !props.label ? placeholder : ''
               "

@@ -36,6 +36,12 @@ const { searchTerm, hasValue, filteredOptions, getLabel } = useSearchSelect(
   props.filterFunction
 )
 
+const handleChange = (e: Event) => {
+  if (e.target instanceof HTMLInputElement) {
+    searchTerm.value = e.target.value
+  }
+}
+
 defineOptions({
   name: 'SearchSelectBase',
 })
@@ -73,10 +79,8 @@ defineOptions({
         :class="[props.disabled ? 'pointer-events-none' : '']">
         <ComboboxInput
           as="template"
-          :display-value="
-            (val: any) => (open ? searchTerm : getLabel(val as T | null))
-          "
-          @change="searchTerm = ($event.target as HTMLInputElement).value">
+          :display-value="(val: unknown) => (open ? searchTerm : getLabel(val))"
+          @change="handleChange">
           <input
             @focus="!open && buttonRef?.click()"
             @click="!open && buttonRef?.click()"

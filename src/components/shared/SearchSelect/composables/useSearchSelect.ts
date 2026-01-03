@@ -11,7 +11,7 @@ export function useSearchSelect<T extends string | number>(
   const searchTerm = ref('')
 
   const optionMap = computed(() => {
-    const map = new Map<T, SearchSelectOption<T>>()
+    const map = new Map<string | number, SearchSelectOption<T>>()
     options.value.forEach(option => {
       map.set(option.key, option)
     })
@@ -39,9 +39,12 @@ export function useSearchSelect<T extends string | number>(
     )
   })
 
-  const getLabel = (val: T | null | undefined): string => {
+  const getLabel = (val: unknown): string => {
     if (val === null || val === undefined) return ''
-    return optionMap.value.get(val)?.label ?? String(val)
+    if (typeof val === 'string' || typeof val === 'number') {
+      return optionMap.value.get(val)?.label ?? String(val)
+    }
+    return ''
   }
 
   return {

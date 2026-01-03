@@ -12,8 +12,13 @@ export function useSearchSelectField() {
     containerRef: ComponentPublicInstance | null
   ) => {
     const next = e.relatedTarget
-    const root = containerRef?.$el as HTMLElement | undefined
-    if (next instanceof Node && root?.contains(next)) {
+    const el = containerRef?.$el
+    if (!(el instanceof HTMLElement)) {
+      isFocused.value = false
+      return
+    }
+
+    if (next instanceof Node && el.contains(next)) {
       return
     }
     isFocused.value = false

@@ -1,5 +1,12 @@
 <script setup lang="ts" generic="T extends string | number">
-import { type ComponentPublicInstance, computed, ref, useId, watch } from 'vue'
+import {
+  type ComponentPublicInstance,
+  computed,
+  ref,
+  useId,
+  useTemplateRef,
+  watch,
+} from 'vue'
 
 import {
   Combobox,
@@ -48,9 +55,9 @@ const model = defineModel<T[]>({ required: true })
 
 const inputId = useId()
 const errorId = `${inputId}-error`
-const buttonRef = ref<HTMLButtonElement | null>(null)
-const containerRef = ref<ComponentPublicInstance | null>(null)
-const inputRef = ref<HTMLInputElement | null>(null)
+const buttonRef = useTemplateRef<HTMLButtonElement>('buttonRef')
+const containerRef = useTemplateRef<ComponentPublicInstance>('containerRef')
+const inputRef = useTemplateRef<HTMLInputElement>('inputRef')
 const isOpen = ref(false)
 
 const { searchTerm, isFocused, isFloating, filteredOptions, getLabel } =

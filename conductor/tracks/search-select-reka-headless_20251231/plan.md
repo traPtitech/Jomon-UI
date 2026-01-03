@@ -139,10 +139,10 @@
   - [x] Sub-task: Verify with existing tests (and update if necessary). [verified]
 - [x] Task: Conductor - User Manual Verification 'Phase 12: SearchMultiSelect Layout Update' (Protocol in workflow.md) [4c5ee84]
 
-## Phase 13: Template Ref Modernization
+## Phase 13: Template Ref Modernization [checkpoint: 1ecded9]
 
-- [ ] Task: Refactor template refs to use `useTemplateRef`
-  - [ ] Sub-task: Refactor `SearchMultiSelect.vue`.
-  - [ ] Sub-task: Refactor `SearchSelectBase.vue`.
-  - [ ] Sub-task: Verify with tests.
-- [ ] Task: Conductor - User Manual Verification 'Phase 13: Template Ref Modernization' (Protocol in workflow.md)
+- [x] Task: Refactor template refs to use `useTemplateRef` [verified]
+  - [x] Sub-task: Refactor `SearchMultiSelect.vue`. [verified]
+  - [x] Sub-task: Refactor `SearchSelectBase.vue`. [verified]
+  - [x] Sub-task: Verify with tests. [verified]
+- [x] Task: Conductor - User Manual Verification 'Phase 13: Template Ref Modernization' (Protocol in workflow.md) [1ecded9]

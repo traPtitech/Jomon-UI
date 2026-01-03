@@ -139,10 +139,20 @@
   - [x] Sub-task: Verify with existing tests (and update if necessary). [verified]
 - [x] Task: Conductor - User Manual Verification 'Phase 12: SearchMultiSelect Layout Update' (Protocol in workflow.md) [4c5ee84]
 
-## Phase 13: Template Ref Modernization [checkpoint: 1ecded9]
+## Phase 13: Template Ref Modernization [checkpoint: 6c4a897]
 
 - [x] Task: Refactor template refs to use `useTemplateRef` [verified]
   - [x] Sub-task: Refactor `SearchMultiSelect.vue`. [verified]
   - [x] Sub-task: Refactor `SearchSelectBase.vue`. [verified]
   - [x] Sub-task: Verify with tests. [verified]
-- [x] Task: Conductor - User Manual Verification 'Phase 13: Template Ref Modernization' (Protocol in workflow.md) [1ecded9]
+- [x] Task: Conductor - User Manual Verification 'Phase 13: Template Ref Modernization' (Protocol in workflow.md) [6c4a897]
+
+## Phase 14: Final Refactoring - Logic and Dropdown Consolidation
+
+- [ ] Task: Consolidate Logic and Dropdown
+  - [ ] Sub-task: Refactor `types.ts` to extend common props.
+  - [ ] Sub-task: Extract `SearchSelectOptionsList.vue`.
+  - [ ] Sub-task: Create `useSearchSelectField` composable.
+  - [ ] Sub-task: Integrate new components/composables into `SearchSelectBase.vue` and `SearchMultiSelect.vue`.
+  - [ ] Sub-task: Verify with tests.
+- [ ] Task: Conductor - User Manual Verification 'Phase 14: Final Refactoring - Logic and Dropdown Consolidation' (Protocol in workflow.md)

@@ -147,12 +147,27 @@
   - [x] Sub-task: Verify with tests. [verified]
 - [x] Task: Conductor - User Manual Verification 'Phase 13: Template Ref Modernization' (Protocol in workflow.md) [6c4a897]
 
-## Phase 14: Final Refactoring - Logic and Dropdown Consolidation
+## Phase 14: Final Refactoring - Logic and Dropdown Consolidation [checkpoint: 1ecded9]
 
-- [ ] Task: Consolidate Logic and Dropdown
-  - [ ] Sub-task: Refactor `types.ts` to extend common props.
-  - [ ] Sub-task: Extract `SearchSelectOptionsList.vue`.
-  - [ ] Sub-task: Create `useSearchSelectField` composable.
-  - [ ] Sub-task: Integrate new components/composables into `SearchSelectBase.vue` and `SearchMultiSelect.vue`.
-  - [ ] Sub-task: Verify with tests.
-- [ ] Task: Conductor - User Manual Verification 'Phase 14: Final Refactoring - Logic and Dropdown Consolidation' (Protocol in workflow.md)
+- [x] Task: Consolidate Logic and Dropdown [verified]
+  - [x] Sub-task: Refactor `types.ts` to extend common props. [verified]
+  - [x] Sub-task: Extract `SearchSelectOptionsList.vue`. [verified]
+  - [x] Sub-task: Create `useSearchSelectField` composable. [verified]
+  - [x] Sub-task: Integrate new components/composables into `SearchSelectBase.vue` and `SearchMultiSelect.vue`. [verified]
+  - [x] Sub-task: Verify with tests. [verified]
+- [x] Task: Conductor - User Manual Verification 'Phase 14: Final Refactoring - Logic and Dropdown Consolidation' (Protocol in workflow.md) [1ecded9]
+
+## Phase 15: Eliminate OpenStateEmitter
+
+- [ ] Task: Move open-related logic to template and TransitionRoot
+  - [ ] Sub-task: Refactor `SearchSelectBase.vue` and `SearchMultiSelect.vue` to use `v-slot="{ open }"` for label styling.
+  - [ ] Sub-task: Move `emit('close')` to `SearchSelectOptionsList` `@after-leave`.
+  - [ ] Sub-task: Delete `OpenStateEmitter.vue`.
+  - [ ] Sub-task: Simplify `useSearchSelectField` and `useSearchSelect` (remove `isOpen` dependency).
+- [ ] Task: Conductor - User Manual Verification 'Phase 15: Eliminate OpenStateEmitter' (Protocol in workflow.md)
+
+## Phase 16: Final Type Refinements
+
+- [ ] Task: Refine Composable types
+  - [ ] Sub-task: Improve type safety in `useSearchSelect.ts` to avoid `unknown`.
+- [ ] Task: Conductor - User Manual Verification 'Phase 16: Final Type Refinements' (Protocol in workflow.md)

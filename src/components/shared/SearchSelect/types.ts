@@ -15,3 +15,8 @@ export interface SearchSelectCommonProps<T extends string | number> {
   errorMessage?: string
   filterFunction?: (option: SearchSelectOption<T>, query: string) => boolean
 }
+
+export type SearchMultiSelectProps<T extends string | number> =
+  SearchSelectCommonProps<T> & {
+    resetOnSelect?: boolean
+  }

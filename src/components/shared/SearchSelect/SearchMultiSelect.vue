@@ -2,43 +2,22 @@
 import {
   type ComponentPublicInstance,
   computed,
-  ref,
-  useId,
   useTemplateRef,
   watch,
 } from 'vue'
 
+import { Combobox, ComboboxButton, ComboboxInput } from '@headlessui/vue'
 import {
-  Combobox,
-  ComboboxButton,
-  ComboboxInput,
-  ComboboxOption,
-  ComboboxOptions,
-  TransitionRoot,
-} from '@headlessui/vue'
-import {
-  CheckIcon,
   ChevronDownIcon,
   MagnifyingGlassIcon,
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
 
 import OpenStateEmitter from './OpenStateEmitter.vue'
+import SearchSelectOptionsList from './SearchSelectOptionsList.vue'
 import { useSearchSelect } from './composables/useSearchSelect'
-import type { SearchSelectOption } from './types'
-
-export interface SearchMultiSelectProps<T extends string | number> {
-  options: SearchSelectOption<T>[]
-  label?: string
-  placeholder?: string
-  disabled?: boolean
-  required?: boolean
-  resetOnSelect?: boolean
-  name?: string
-  noResultsText?: string
-  errorMessage?: string
-  filterFunction?: (option: SearchSelectOption<T>, query: string) => boolean
-}
+import { useSearchSelectField } from './composables/useSearchSelectField'
+import type { SearchMultiSelectProps } from './types'
 
 const props = withDefaults(defineProps<SearchMultiSelectProps<T>>(), {
   placeholder: '検索',
@@ -53,20 +32,21 @@ const emit = defineEmits<{
 
 const model = defineModel<T[]>({ required: true })
 
-const inputId = useId()
-const errorId = `${inputId}-error`
+const { inputId, errorId, isOpen, isFocused, onOpen, onClose, handleFocusOut } =
+  useSearchSelectField(() => {
+    emit('close')
+  })
+
 const buttonRef = useTemplateRef<HTMLButtonElement>('buttonRef')
 const containerRef = useTemplateRef<ComponentPublicInstance>('containerRef')
 const inputRef = useTemplateRef<HTMLInputElement>('inputRef')
-const isOpen = ref(false)
 
-const { searchTerm, isFocused, isFloating, filteredOptions, getLabel } =
-  useSearchSelect(
-    computed(() => props.options),
-    model,
-    props.filterFunction,
-    isOpen
-  )
+const { searchTerm, isFloating, filteredOptions, getLabel } = useSearchSelect(
+  computed(() => props.options),
+  model,
+  props.filterFunction,
+  isOpen
+)
 
 // Implement resetOnSelect: Clear search term when a new item is added
 watch(
@@ -81,23 +61,6 @@ watch(
 const removeTag = (key: T) => {
   if (props.disabled) return
   model.value = model.value.filter(v => v !== key)
-}
-
-const onOpen = () => {
-  isOpen.value = true
-}
-const onClose = () => {
-  isOpen.value = false
-  emit('close')
-}
-
-const handleFocusOut = (e: FocusEvent) => {
-  const next = e.relatedTarget
-  const root = containerRef.value?.$el as HTMLElement | undefined
-  if (next instanceof Node && root?.contains(next)) {
-    return
-  }
-  isFocused.value = false
 }
 
 const focusInputAndOpen = (open: boolean) => {
@@ -136,7 +99,7 @@ defineOptions({
     v-slot="{ open }"
     v-bind="{
       onFocusin: () => (isFocused = true),
-      onFocusout: handleFocusOut,
+      onFocusout: (e: FocusEvent) => handleFocusOut(e, containerRef),
     }">
     <OpenStateEmitter :open="open" @open="onOpen" @close="onClose" />
     <div
@@ -189,7 +152,7 @@ defineOptions({
               @focus="!open && buttonRef?.click()"
               @click="!open && buttonRef?.click()"
               :id="inputId"
-              class="min-w-12 flex-1 border-none bg-transparent p-0 text-base text-text-primary ring-0 outline-none"
+              class="min-w-[3rem] flex-1 border-none bg-transparent p-0 text-base text-text-primary ring-0 outline-none"
               :placeholder="isFloating || !props.label ? placeholder : ''"
               :aria-label="!label ? (placeholder ?? '検索') : undefined"
               :aria-invalid="!!errorMessage"
@@ -238,47 +201,11 @@ defineOptions({
       {{ errorMessage }}
     </p>
 
-    <TransitionRoot
-      leave="transition ease-in duration-100"
-      leave-from="opacity-100"
-      leave-to="opacity-0"
-      @after-leave="searchTerm = ''">
-      <ComboboxOptions
-        class="absolute z-50 mt-1 box-border max-h-60 w-full overflow-auto rounded-md border bg-white p-1 shadow-lg focus:outline-none">
-        <li
-          v-if="filteredOptions.length === 0 && searchTerm !== ''"
-          class="relative cursor-default px-2 py-1.5 text-sm text-gray-700 select-none"
-          aria-disabled="true">
-          {{ props.noResultsText || '該当する項目がありません。' }}
-        </li>
-
-        <ComboboxOption
-          v-for="option in filteredOptions"
-          as="template"
-          :key="option.key"
-          :value="option.key"
-          :disabled="!!option.disabled"
-          v-slot="{ selected, active, disabled: optionDisabled }">
-          <li
-            class="relative flex w-full cursor-default items-center rounded-sm px-2 py-1.5 text-left text-sm select-none"
-            :class="{
-              'bg-blue-100 text-blue-500': active && !optionDisabled,
-              'text-text-primary': !active && !optionDisabled,
-              'cursor-not-allowed opacity-40': optionDisabled,
-            }">
-            <div class="mr-2 flex h-4 w-4 items-center justify-center">
-              <span v-if="selected">
-                <CheckIcon class="h-4 w-4" aria-hidden="true" />
-              </span>
-            </div>
-            <span
-              class="flex-1 truncate"
-              :class="{ 'font-medium': selected, 'font-normal': !selected }">
-              {{ option.label }}
-            </span>
-          </li>
-        </ComboboxOption>
-      </ComboboxOptions>
-    </TransitionRoot>
+    <SearchSelectOptionsList
+      :filtered-options="filteredOptions"
+      :search-term="searchTerm"
+      :no-results-text="props.noResultsText"
+      check-icon-position="left"
+      @after-leave="searchTerm = ''" />
   </Combobox>
 </template>

@@ -1,28 +1,13 @@
 <script setup lang="ts" generic="T extends string | number, M extends T | null">
-import {
-  type ComponentPublicInstance,
-  computed,
-  ref,
-  useId,
-  useTemplateRef,
-} from 'vue'
+import { type ComponentPublicInstance, computed, useTemplateRef } from 'vue'
 
-import {
-  Combobox,
-  ComboboxButton,
-  ComboboxInput,
-  ComboboxOption,
-  ComboboxOptions,
-  TransitionRoot,
-} from '@headlessui/vue'
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  MagnifyingGlassIcon,
-} from '@heroicons/vue/24/outline'
+import { Combobox, ComboboxButton, ComboboxInput } from '@headlessui/vue'
+import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 
 import OpenStateEmitter from './OpenStateEmitter.vue'
+import SearchSelectOptionsList from './SearchSelectOptionsList.vue'
 import { useSearchSelect } from './composables/useSearchSelect'
+import { useSearchSelectField } from './composables/useSearchSelectField'
 import type { SearchSelectCommonProps } from './types'
 
 const props = withDefaults(
@@ -41,36 +26,20 @@ const emit = defineEmits<{
 
 const model = defineModel<M>({ required: true })
 
-const inputId = useId()
-const errorId = `${inputId}-error`
+const { inputId, errorId, isOpen, isFocused, onOpen, onClose, handleFocusOut } =
+  useSearchSelectField(() => {
+    emit('close')
+  })
+
 const buttonRef = useTemplateRef<HTMLButtonElement>('buttonRef')
 const containerRef = useTemplateRef<ComponentPublicInstance>('containerRef')
-const isOpen = ref(false)
 
-const { searchTerm, isFocused, isFloating, filteredOptions, getLabel } =
-  useSearchSelect(
-    computed(() => props.options),
-    model,
-    props.filterFunction,
-    isOpen
-  )
-
-const onOpen = () => {
-  isOpen.value = true
-}
-const onClose = () => {
-  isOpen.value = false
-  emit('close')
-}
-
-const handleFocusOut = (e: FocusEvent) => {
-  const next = e.relatedTarget
-  const root = containerRef.value?.$el as HTMLElement | undefined
-  if (next instanceof Node && root?.contains(next)) {
-    return
-  }
-  isFocused.value = false
-}
+const { searchTerm, isFloating, filteredOptions, getLabel } = useSearchSelect(
+  computed(() => props.options),
+  model,
+  props.filterFunction,
+  isOpen
+)
 
 defineOptions({
   name: 'SearchSelectBase',
@@ -89,7 +58,7 @@ defineOptions({
     v-slot="{ open }"
     v-bind="{
       onFocusin: () => (isFocused = true),
-      onFocusout: handleFocusOut,
+      onFocusout: (e: FocusEvent) => handleFocusOut(e, containerRef),
     }">
     <OpenStateEmitter :open="open" @open="onOpen" @close="onClose" />
     <div
@@ -168,51 +137,11 @@ defineOptions({
       {{ errorMessage }}
     </p>
 
-    <TransitionRoot
-      leave="transition ease-in duration-100"
-      leave-from="opacity-100"
-      leave-to="opacity-0"
-      @after-leave="searchTerm = ''">
-      <ComboboxOptions
-        class="absolute z-50 mt-1 box-border max-h-60 w-full overflow-auto rounded-md border bg-white p-1 shadow-lg focus:outline-none">
-        <li
-          v-if="filteredOptions.length === 0 && searchTerm !== ''"
-          class="relative cursor-default px-2 py-1.5 text-sm text-gray-700 select-none"
-          aria-disabled="true">
-          {{ props.noResultsText || '該当する項目がありません。' }}
-        </li>
-
-        <ComboboxOption
-          v-for="option in filteredOptions"
-          as="template"
-          :key="option.key"
-          :value="option.key"
-          :disabled="!!option.disabled"
-          v-slot="{ selected, active, disabled: optionDisabled }">
-          <li
-            class="relative flex w-full cursor-default items-center rounded-sm px-2 py-1.5 text-left text-sm select-none"
-            :class="{
-              'bg-blue-100 text-blue-500': active && !optionDisabled,
-              'text-text-primary': !active && !optionDisabled,
-              'cursor-not-allowed opacity-40': optionDisabled,
-            }">
-            <span
-              class="flex-1 truncate"
-              :class="{ 'font-medium': selected, 'font-normal': !selected }">
-              {{ option.label }}
-            </span>
-            <span
-              v-if="selected"
-              class="ml-auto flex items-center pl-3"
-              :class="{
-                'text-blue-500': active,
-                'text-text-primary': !active,
-              }">
-              <CheckIcon class="h-4 w-4" aria-hidden="true" />
-            </span>
-          </li>
-        </ComboboxOption>
-      </ComboboxOptions>
-    </TransitionRoot>
+    <SearchSelectOptionsList
+      :filtered-options="filteredOptions"
+      :search-term="searchTerm"
+      :no-results-text="props.noResultsText"
+      check-icon-position="right"
+      @after-leave="searchTerm = ''" />
   </Combobox>
 </template>

@@ -13,3 +13,9 @@ _Link: [./conductor/tracks/search-select-eval_20251228/](./conductor/tracks/sear
 ## [x] Track: Reka UIのworkaround解消とHeadless UI의導入・比較検討
 
 _Link: [./conductor/tracks/search-select-reka-headless_20251231/](./conductor/tracks/search-select-reka-headless_20251231/)_
+
+---
+
+## [ ] Track: Search Select Review Fixes
+
+_Link: [./conductor/tracks/search-select-review-fixes_20260103/](./conductor/tracks/search-select-review-fixes_20260103/)_

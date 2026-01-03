@@ -25,16 +25,12 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@floating-ui/vue": "^1.1.9",
     "@headlessui/vue": "^1.7.23",
     "@vueuse/core": "^14.1.0",
-    "@zag-js/combobox": "^1.31.1",
-    "@zag-js/vue": "^1.31.1",
     "axios": "^1.12.2",
     "luxon": "^3.7.2",
     "markdown-it": "^14.1.0",
     "pinia": "^3.0.4",
-    "reka-ui": "^2.7.0",
     "vue": "^3.5.25",
     "vue-router": "^4.6.3",
     "vue-toastification": "^2.0.0-rc.5"

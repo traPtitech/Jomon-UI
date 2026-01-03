@@ -41,6 +41,7 @@ const hasValue = computed(() => model.value.length > 0)
 const removeTag = (key: T) => {
   if (props.disabled) return
   model.value = model.value.filter(v => v !== key)
+  inputRef.value?.focus()
 }
 
 const focusInputAndOpen = (e: Event, open: boolean) => {

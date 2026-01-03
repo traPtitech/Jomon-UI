@@ -480,4 +480,22 @@ describe('SearchMultiSelect (Headless UI)', () => {
     const button = wrapper.find('button[aria-haspopup="listbox"]')
     expect(button.attributes('aria-expanded')).toBe('true')
   })
+
+  it('refocuses input after removing a tag', async () => {
+    wrapper = mount(SearchMultiSelect, {
+      props: {
+        modelValue: ['opt1'],
+        options,
+      },
+      attachTo: document.body,
+    })
+
+    await flushPromises()
+    const removeButton = wrapper.find('button[aria-label="Option 1 を削除"]')
+    await removeButton.trigger('click')
+    await nextTick()
+
+    const input = wrapper.find('input')
+    expect(document.activeElement).toBe(input.element)
+  })
 })

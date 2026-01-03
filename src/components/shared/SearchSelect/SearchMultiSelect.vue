@@ -37,11 +37,12 @@ const buttonRef = useTemplateRef<HTMLButtonElement>('buttonRef')
 const containerRef = useTemplateRef<ComponentPublicInstance>('containerRef')
 const inputRef = useTemplateRef<HTMLInputElement>('inputRef')
 
-const { searchTerm, hasValue, filteredOptions, getLabel } = useSearchSelect(
+const { searchTerm, filteredOptions, getLabel } = useSearchSelect(
   computed(() => props.options),
-  model,
   props.filterFunction
 )
+
+const hasValue = computed(() => model.value.length > 0)
 
 // Implement resetOnSelect: Clear search term when a new item is added
 watch(
@@ -81,6 +82,11 @@ const handleChange = (e: Event) => {
   if (e.target instanceof HTMLInputElement) {
     searchTerm.value = e.target.value
   }
+}
+
+const handleAfterLeave = () => {
+  searchTerm.value = ''
+  emit('close')
 }
 
 defineOptions({
@@ -206,11 +212,6 @@ defineOptions({
       :search-term="searchTerm"
       :no-results-text="props.noResultsText"
       check-icon-position="left"
-      @after-leave="
-        () => {
-          searchTerm = ''
-          emit('close')
-        }
-      " />
+      @after-leave="handleAfterLeave" />
   </Combobox>
 </template>

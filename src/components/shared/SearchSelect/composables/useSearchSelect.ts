@@ -6,7 +6,6 @@ import { safeString } from '../utils'
 
 export function useSearchSelect<T extends string | number>(
   options: Ref<SearchSelectOption<T>[]>,
-  model: Ref<T | T[] | null>,
   filterFunction?: (option: SearchSelectOption<T>, query: string) => boolean
 ) {
   const searchTerm = ref('')
@@ -17,14 +16,6 @@ export function useSearchSelect<T extends string | number>(
       map.set(option.key, option)
     })
     return map
-  })
-
-  const hasValue = computed(() => {
-    const val = model.value
-    if (Array.isArray(val)) {
-      return val.length > 0
-    }
-    return val !== null && val !== ''
   })
 
   const filteredOptions = computed(() => {
@@ -50,7 +41,6 @@ export function useSearchSelect<T extends string | number>(
 
   return {
     searchTerm,
-    hasValue,
     filteredOptions,
     getLabel,
   }

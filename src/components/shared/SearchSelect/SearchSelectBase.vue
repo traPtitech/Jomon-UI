@@ -30,16 +30,22 @@ const { inputId, errorId, isFocused, handleFocusOut } = useSearchSelectField()
 const buttonRef = useTemplateRef<HTMLButtonElement>('buttonRef')
 const containerRef = useTemplateRef<ComponentPublicInstance>('containerRef')
 
-const { searchTerm, hasValue, filteredOptions, getLabel } = useSearchSelect(
+const { searchTerm, filteredOptions, getLabel } = useSearchSelect(
   computed(() => props.options),
-  model,
   props.filterFunction
 )
+
+const hasValue = computed(() => model.value !== null)
 
 const handleChange = (e: Event) => {
   if (e.target instanceof HTMLInputElement) {
     searchTerm.value = e.target.value
   }
+}
+
+const handleAfterLeave = () => {
+  searchTerm.value = ''
+  emit('close')
 }
 
 defineOptions({
@@ -144,11 +150,6 @@ defineOptions({
       :search-term="searchTerm"
       :no-results-text="props.noResultsText"
       check-icon-position="right"
-      @after-leave="
-        () => {
-          searchTerm = ''
-          emit('close')
-        }
-      " />
+      @after-leave="handleAfterLeave" />
   </Combobox>
 </template>

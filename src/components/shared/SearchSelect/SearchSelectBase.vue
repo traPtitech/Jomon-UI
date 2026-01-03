@@ -38,13 +38,14 @@ const { searchTerm, filteredOptions, getLabel } = useSearchSelect(
 
 const hasValue = computed(() => model.value !== null)
 
-const focusInputAndOpen = (e: Event, open: boolean) => {
+const focusInputAndOpen = (e: PointerEvent, open: boolean) => {
   if (props.disabled) return
 
-  if (e.target instanceof HTMLElement) {
-    if (e.target.closest('button') || e.target.closest('input')) {
-      return
-    }
+  if (
+    e.target instanceof HTMLElement &&
+    (e.target.closest('button') || e.target.closest('input'))
+  ) {
+    return
   }
 
   if (document.activeElement !== inputRef.value) {
@@ -54,10 +55,12 @@ const focusInputAndOpen = (e: Event, open: boolean) => {
   }
 }
 
-const handleChange = (e: Event) => {
-  if (e.target instanceof HTMLInputElement) {
-    searchTerm.value = e.target.value
+const handleChange = (
+  e: Event & {
+    target: HTMLInputElement
   }
+) => {
+  searchTerm.value = e.target.value
 }
 
 const handleAfterLeave = () => {

@@ -44,7 +44,7 @@ const removeTag = (key: T) => {
   inputRef.value?.focus()
 }
 
-const focusInputAndOpen = (e: Event, open: boolean) => {
+const focusInputAndOpen = (e: PointerEvent, open: boolean) => {
   if (props.disabled) return
 
   if (e.target instanceof HTMLElement) {
@@ -56,7 +56,7 @@ const focusInputAndOpen = (e: Event, open: boolean) => {
   if (document.activeElement !== inputRef.value) {
     inputRef.value?.focus()
   } else if (!open) {
-    buttonRef.value?.click()
+    inputRef.value?.focus()
   }
 }
 
@@ -73,10 +73,12 @@ const onInputKeydown = (e: KeyboardEvent) => {
   }
 }
 
-const handleChange = (e: Event) => {
-  if (e.target instanceof HTMLInputElement) {
-    searchTerm.value = e.target.value
+const handleChange = (
+  e: Event & {
+    target: HTMLInputElement
   }
+) => {
+  searchTerm.value = e.target.value
 }
 
 const handleAfterLeave = () => {

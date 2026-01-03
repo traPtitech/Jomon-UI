@@ -13,7 +13,6 @@ import {
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
 
-import OpenStateEmitter from './OpenStateEmitter.vue'
 import SearchSelectOptionsList from './SearchSelectOptionsList.vue'
 import { useSearchSelect } from './composables/useSearchSelect'
 import { useSearchSelectField } from './composables/useSearchSelectField'
@@ -32,20 +31,16 @@ const emit = defineEmits<{
 
 const model = defineModel<T[]>({ required: true })
 
-const { inputId, errorId, isOpen, isFocused, onOpen, onClose, handleFocusOut } =
-  useSearchSelectField(() => {
-    emit('close')
-  })
+const { inputId, errorId, isFocused, handleFocusOut } = useSearchSelectField()
 
 const buttonRef = useTemplateRef<HTMLButtonElement>('buttonRef')
 const containerRef = useTemplateRef<ComponentPublicInstance>('containerRef')
 const inputRef = useTemplateRef<HTMLInputElement>('inputRef')
 
-const { searchTerm, isFloating, filteredOptions, getLabel } = useSearchSelect(
+const { searchTerm, hasValue, filteredOptions, getLabel } = useSearchSelect(
   computed(() => props.options),
   model,
-  props.filterFunction,
-  isOpen
+  props.filterFunction
 )
 
 // Implement resetOnSelect: Clear search term when a new item is added
@@ -101,7 +96,6 @@ defineOptions({
       onFocusin: () => (isFocused = true),
       onFocusout: (e: FocusEvent) => handleFocusOut(e, containerRef),
     }">
-    <OpenStateEmitter :open="open" @open="onOpen" @close="onClose" />
     <div
       class="flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none"
       :class="[
@@ -153,7 +147,9 @@ defineOptions({
               @click="!open && buttonRef?.click()"
               :id="inputId"
               class="min-w-[3rem] flex-1 border-none bg-transparent p-0 text-base text-text-primary ring-0 outline-none"
-              :placeholder="isFloating || !props.label ? placeholder : ''"
+              :placeholder="
+                isFocused || hasValue || open || !props.label ? placeholder : ''
+              "
               :aria-label="!label ? (placeholder ?? '検索') : undefined"
               :aria-invalid="!!errorMessage"
               :aria-describedby="errorMessage ? errorId : undefined"
@@ -169,7 +165,7 @@ defineOptions({
           :for="inputId"
           class="pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out"
           :class="[
-            isFloating
+            isFocused || hasValue || open
               ? 'top-1 text-xs font-medium'
               : 'top-1/2 -translate-y-1/2 text-base',
             isFocused ? 'text-blue-500' : '',
@@ -206,6 +202,11 @@ defineOptions({
       :search-term="searchTerm"
       :no-results-text="props.noResultsText"
       check-icon-position="left"
-      @after-leave="searchTerm = ''" />
+      @after-leave="
+        () => {
+          searchTerm = ''
+          emit('close')
+        }
+      " />
   </Combobox>
 </template>

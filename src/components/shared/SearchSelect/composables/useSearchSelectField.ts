@@ -1,21 +1,11 @@
 import { ref, useId } from 'vue'
 import type { ComponentPublicInstance } from 'vue'
 
-export function useSearchSelectField(emitClose: () => void) {
+export function useSearchSelectField() {
   const inputId = useId()
   const errorId = `${inputId}-error`
 
-  const isOpen = ref(false)
   const isFocused = ref(false)
-
-  const onOpen = () => {
-    isOpen.value = true
-  }
-
-  const onClose = () => {
-    isOpen.value = false
-    emitClose()
-  }
 
   const handleFocusOut = (
     e: FocusEvent,
@@ -32,10 +22,7 @@ export function useSearchSelectField(emitClose: () => void) {
   return {
     inputId,
     errorId,
-    isOpen,
     isFocused,
-    onOpen,
-    onClose,
     handleFocusOut,
   }
 }

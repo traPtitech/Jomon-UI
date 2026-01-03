@@ -157,17 +157,17 @@
   - [x] Sub-task: Verify with tests. [verified]
 - [x] Task: Conductor - User Manual Verification 'Phase 14: Final Refactoring - Logic and Dropdown Consolidation' (Protocol in workflow.md) [1ecded9]
 
-## Phase 15: Eliminate OpenStateEmitter
+## Phase 15: Eliminate OpenStateEmitter [checkpoint: b286c7e]
 
-- [ ] Task: Move open-related logic to template and TransitionRoot
-  - [ ] Sub-task: Refactor `SearchSelectBase.vue` and `SearchMultiSelect.vue` to use `v-slot="{ open }"` for label styling.
-  - [ ] Sub-task: Move `emit('close')` to `SearchSelectOptionsList` `@after-leave`.
-  - [ ] Sub-task: Delete `OpenStateEmitter.vue`.
-  - [ ] Sub-task: Simplify `useSearchSelectField` and `useSearchSelect` (remove `isOpen` dependency).
-- [ ] Task: Conductor - User Manual Verification 'Phase 15: Eliminate OpenStateEmitter' (Protocol in workflow.md)
+- [x] Task: Move open-related logic to template and TransitionRoot [verified]
+  - [x] Sub-task: Refactor `SearchSelectBase.vue` and `SearchMultiSelect.vue` to use `v-slot="{ open }"` for label styling. [verified]
+  - [x] Sub-task: Move `emit('close')` to `SearchSelectOptionsList` `@after-leave`. [verified]
+  - [x] Sub-task: Delete `OpenStateEmitter.vue`. [verified]
+  - [x] Sub-task: Simplify `useSearchSelectField` and `useSearchSelect` (remove `isOpen` dependency). [verified]
+- [x] Task: Conductor - User Manual Verification 'Phase 15: Eliminate OpenStateEmitter' (Protocol in workflow.md) [b286c7e]
 
-## Phase 16: Final Type Refinements
+## Phase 16: Final Type Refinements [checkpoint: b286c7e]
 
-- [ ] Task: Refine Composable types
-  - [ ] Sub-task: Improve type safety in `useSearchSelect.ts` to avoid `unknown`.
-- [ ] Task: Conductor - User Manual Verification 'Phase 16: Final Type Refinements' (Protocol in workflow.md)
+- [x] Task: Refine Composable types [verified]
+  - [x] Sub-task: Improve type safety in `useSearchSelect.ts` to avoid `unknown`. [verified]
+- [x] Task: Conductor - User Manual Verification 'Phase 16: Final Type Refinements' (Protocol in workflow.md) [b286c7e]

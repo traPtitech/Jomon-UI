@@ -40,8 +40,11 @@ const hasValue = computed(() => model.value !== null)
 
 const focusInputAndOpen = (open: boolean) => {
   if (props.disabled) return
-  inputRef.value?.focus()
-  if (!open) buttonRef.value?.click()
+  if (document.activeElement === inputRef.value) {
+    if (!open) buttonRef.value?.click()
+  } else {
+    inputRef.value?.focus()
+  }
 }
 
 const handleChange = (e: Event) => {

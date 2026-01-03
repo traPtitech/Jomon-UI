@@ -442,4 +442,22 @@ describe('SearchMultiSelect (Headless UI)', () => {
     await container.trigger('mousedown')
     expect(document.activeElement).not.toBe(input.element)
   })
+
+  it('opens menu when clicking container padding', async () => {
+    wrapper = mount(SearchMultiSelect, {
+      props: {
+        modelValue: [],
+        options,
+      },
+      attachTo: document.body,
+    })
+
+    const container = wrapper.find('.flex.w-full.flex-wrap')
+    // Trigger click on the container itself (self)
+    await container.trigger('click')
+    await nextTick()
+
+    const button = wrapper.find('button[aria-haspopup="listbox"]')
+    expect(button.attributes('aria-expanded')).toBe('true')
+  })
 })

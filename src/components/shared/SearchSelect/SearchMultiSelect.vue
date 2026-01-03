@@ -45,8 +45,11 @@ const removeTag = (key: T) => {
 
 const focusInputAndOpen = (open: boolean) => {
   if (props.disabled) return
-  inputRef.value?.focus()
-  if (!open) buttonRef.value?.click()
+  if (document.activeElement === inputRef.value) {
+    if (!open) buttonRef.value?.click()
+  } else {
+    inputRef.value?.focus()
+  }
 }
 
 const onInputKeydown = (e: KeyboardEvent) => {
@@ -111,14 +114,14 @@ defineOptions({
       <div
         class="relative w-full"
         :class="[props.disabled ? 'pointer-events-none' : '']">
-        <!-- eslint-disable-next-line vuejs-accessibility/no-static-element-interactions -->
+        <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
         <div
           class="flex w-full flex-wrap items-center gap-1 px-3 pb-2"
           :class="[
             label ? 'pt-6' : 'pt-2',
             props.disabled ? 'cursor-not-allowed' : '',
           ]"
-          @mousedown.prevent="focusInputAndOpen(open)">
+          @click.self.prevent="focusInputAndOpen(open)">
           <div
             v-for="key in model"
             :key="key"

@@ -47,10 +47,11 @@ const removeTag = (key: T) => {
 const focusInputAndOpen = (e: PointerEvent, open: boolean) => {
   if (props.disabled) return
 
-  if (e.target instanceof HTMLElement) {
-    if (e.target.closest('button') || e.target.closest('input')) {
-      return
-    }
+  if (
+    e.target instanceof HTMLElement &&
+    (e.target.closest('button') || e.target.closest('input'))
+  ) {
+    return
   }
 
   if (document.activeElement !== inputRef.value) {

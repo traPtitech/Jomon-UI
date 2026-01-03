@@ -95,7 +95,6 @@ defineOptions({
   <Combobox
     ref="containerRef"
     v-model="model"
-    :name="name"
     :disabled="disabled"
     as="div"
     class="group relative"

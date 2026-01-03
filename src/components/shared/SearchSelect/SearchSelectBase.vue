@@ -77,7 +77,6 @@ defineOptions({
   <Combobox
     ref="containerRef"
     v-model="model"
-    :name="name"
     :disabled="disabled"
     :nullable="props.nullable"
     as="div"

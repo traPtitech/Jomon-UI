@@ -26,7 +26,7 @@ export const useApplicationInformation = () => {
 
     try {
       await editApplication(currentApplication.value.id, editedValue.value)
-      toast.success('パーティション情報を更新しました')
+      toast.success('申請情報を更新しました')
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message)

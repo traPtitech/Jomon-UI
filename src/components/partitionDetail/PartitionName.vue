@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { EditMode } from '@/components/partitionDetail/composables/usePartitionInformation'
+import type { PartitionEditMode } from '@/components/partitionDetail/composables/usePartitionInformation'
 import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
 import EditButton from '@/components/shared/EditButton.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
@@ -13,7 +13,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const emit = defineEmits<{
-  (e: 'changeEditMode', value: EditMode): void
+  (e: 'changeEditMode', value: PartitionEditMode): void
   (e: 'finishEditing'): void
 }>()
 
@@ -27,30 +27,18 @@ const {
 
 <template>
   <div v-if="partition" class="flex items-center gap-3">
-    <BaseTextInput
-      required
-      v-if="props.isEditMode"
-      v-model="editedValue.name"
-      label="パーティション名"
-      class="grow" />
+    <BaseTextInput required v-if="props.isEditMode" v-model="editedValue.name" label="パーティション名" class="grow" />
     <h1 v-else class="grow text-2xl">
       {{ partition.name }}
     </h1>
-    <SimpleButton
-      v-if="props.isEditMode"
-      font-size="base"
-      padding="sm"
-      @click="emit('finishEditing')"
+    <SimpleButton v-if="props.isEditMode" font-size="base" padding="sm" @click="emit('finishEditing')"
       :disabled="props.isSending">
       完了
     </SimpleButton>
-    <EditButton
-      v-if="canEditPartition(me)"
-      :is-edit-mode="props.isEditMode"
-      @click="
-        props.isEditMode
-          ? emit('changeEditMode', '')
-          : emit('changeEditMode', 'name')
+    <EditButton v-if="canEditPartition(me)" :is-edit-mode="props.isEditMode" @click="
+      props.isEditMode
+        ? emit('changeEditMode', '')
+        : emit('changeEditMode', 'name')
       " />
   </div>
 </template>

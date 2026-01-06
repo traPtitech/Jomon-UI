@@ -19,7 +19,7 @@ const createDefaultApplicationSeed = (): ApplicationSeed => ({
   content: '',
   tags: [],
   partition: '',
-  targets: []
+  targets: [],
 })
 
 const createDefaultParams = (): ApplicationQuerySeed => ({
@@ -36,34 +36,6 @@ const createDefaultParams = (): ApplicationQuerySeed => ({
 
 const dateRule = /^2[0-9]{3}-[0-9]{1,2}-[0-9]{1,2}$/
 
-const createApplicationStore = defineStore('application', {
-  state: () => ({
-    applications: [] as Application[],
-    isApplicationFetched: false,
-    filterParams: createDefaultParams(),
-    currentApplication: null as ApplicationDetail | null,
-    editedValue: createDefaultApplicationSeed()
-  }),
-  getters: {
-    hasApplicationDetail: state => state.currentApplication !== null
-  },
-  actions: {
-    resetFilters() {
-      this.filterParams = createDefaultParams()
-    },
-    clearCurrentApplication() {
-      this.currentApplication = null
-    },
-    async fetchApplications() {
-      const repository = useApplicationRepository()
-      const { since, until } = this.filterParams
-
-      if (
-        (since && !dateRule.test(since)) ||
-        (until && !dateRule.test(until))
-      ) {
-        throw new Error('日付はyyyy-MM-ddの形式で入力してください')
-      }
 export const useApplicationStore = defineStoreComposable('application', () => {
   const repository = inject(ApplicationRepositoryKey)
   if (!repository) throw new Error('ApplicationRepository is not provided')
@@ -75,6 +47,7 @@ export const useApplicationStore = defineStoreComposable('application', () => {
   const error = ref<string | null>(null)
   const filterParams = ref<ApplicationQuerySeed>(createDefaultParams())
   const currentApplication = ref<ApplicationDetail | null>(null)
+  const editedValue = ref<ApplicationSeed>(createDefaultApplicationSeed())
 
   const hasApplicationDetail = computed(() => currentApplication.value !== null)
   const isApplicationFetched = computed(() => status.value === 'success')
@@ -197,6 +170,7 @@ export const useApplicationStore = defineStoreComposable('application', () => {
     isApplicationFetched,
     filterParams,
     currentApplication,
+    editedValue,
     hasApplicationDetail,
     resetFilters,
     clearCurrentApplication,

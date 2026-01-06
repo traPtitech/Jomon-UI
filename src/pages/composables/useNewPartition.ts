@@ -1,8 +1,11 @@
+import { ref } from 'vue'
+
+import { useRouter } from 'vue-router'
+
+import { useToast } from 'vue-toastification'
+
 import type { PartitionSeed } from '@/features/partition/entities'
 import { usePartitionStore } from '@/features/partition/store'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useToast } from 'vue-toastification'
 
 export const useNewPartition = () => {
   const isSending = ref(false)
@@ -15,8 +18,8 @@ export const useNewPartition = () => {
     parentPartitionGroupId: '',
     management: {
       category: 'manual',
-      state: 'available'
-    }
+      state: 'available',
+    },
   })
   const handleCreatePartition = async () => {
     if (partition.value.name === '') {

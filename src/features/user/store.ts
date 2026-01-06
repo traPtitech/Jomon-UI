@@ -1,69 +1,93 @@
-import { useUserRepository } from './data/repository'
+import { computed, inject, ref } from 'vue'
+
+import { defineStoreComposable } from '@/lib/store'
+
+import { UserRepositoryKey } from '@/di'
+import type { AsyncStatus } from '@/types'
+
 import type { User } from './entities'
-import { defineStore, storeToRefs } from 'pinia'
 
-const createUserStore = defineStore('user', {
-  state: () => ({
-    me: undefined as User | undefined,
-    users: [] as User[],
-    isUserFetched: false,
-    isMeFetched: false
-  }),
-  getters: {
-    isAccountManager: state => Boolean(state.me?.accountManager),
-    userOptions: state =>
-      state.users.map(user => ({
-        key: user.name,
-        value: user.id
-      })),
-    userMap: state =>
-      state.users.reduce<Record<string, string>>((acc, user) => {
-        acc[user.id] = user.name
-        return acc
-      }, {})
-  },
-  actions: {
-    async fetchUsers() {
-      const repository = useUserRepository()
+export const useUserStore = defineStoreComposable('user', () => {
+  const repository = inject(UserRepositoryKey)
+  if (!repository) throw new Error('UserRepository is not provided')
 
-      try {
-        this.users = await repository.fetchUsers()
-        this.isUserFetched = true
-      } catch (e) {
-        throw new Error('ユーザー一覧の取得に失敗しました: ' + String(e))
-      }
-    },
-    async fetchMe() {
-      if (this.isMeFetched) return
+  const me = ref<User | undefined>(undefined)
+  const users = ref<User[]>([])
+  const status = ref<AsyncStatus>('idle')
+  const error = ref<string | null>(null)
+  const isMeFetched = ref(false)
 
-      const repository = useUserRepository()
+  const isAccountManager = computed(() => Boolean(me.value?.accountManager))
+  const userOptions = computed(() =>
+    users.value.map(user => ({
+      key: user.name,
+      value: user.id,
+    }))
+  )
+  const userMap = computed(() =>
+    users.value.reduce<Record<string, string>>((acc, user) => {
+      acc[user.id] = user.name
+      return acc
+    }, {})
+  )
 
-      try {
-        this.me = await repository.fetchMe()
-        this.isMeFetched = true
-      } catch {
-        throw new Error('ユーザーの取得に失敗しました')
-      }
-    },
-    reset() {
-      this.me = undefined
-      this.users = []
-      this.isUserFetched = false
-      this.isMeFetched = false
+  const UNKNOWN_USER_FALLBACK = '不明なユーザー'
+
+  const getUserName = (id: string): string | undefined => userMap.value[id]
+  const getUserNameWithFallback = (id: string): string =>
+    userMap.value[id] ?? UNKNOWN_USER_FALLBACK
+
+  const isUserFetched = computed(() => status.value === 'success')
+
+  const fetchUsers = async () => {
+    status.value = 'loading'
+    error.value = null
+
+    try {
+      users.value = await repository.fetchUsers()
+      status.value = 'success'
+    } catch (e) {
+      status.value = 'error'
+      error.value = 'ユーザー一覧の取得に失敗しました: ' + String(e)
+      throw new Error(error.value)
     }
   }
-})
 
-export const useUserStore = () => {
-  const store = createUserStore()
-  const refs = storeToRefs(store)
+  const fetchMe = async () => {
+    if (isMeFetched.value) return
+
+    try {
+      me.value = await repository.fetchMe()
+      isMeFetched.value = true
+    } catch {
+      throw new Error('ユーザーの取得に失敗しました')
+    }
+  }
+
+  const reset = () => {
+    me.value = undefined
+    users.value = []
+    status.value = 'idle'
+    error.value = null
+    isMeFetched.value = false
+  }
 
   return {
-    ...refs,
-    fetchUsers: store.fetchUsers.bind(store),
-    fetchMe: store.fetchMe.bind(store),
-    reset: store.reset.bind(store)
+    me,
+    users,
+    status,
+    error,
+    isUserFetched,
+    isMeFetched,
+    isAccountManager,
+    userOptions,
+    userMap,
+    getUserName,
+    getUserNameWithFallback,
+    fetchUsers,
+    fetchMe,
+    reset,
   }
-}
+})
 
 export type UserStore = ReturnType<typeof useUserStore>

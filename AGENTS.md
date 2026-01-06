@@ -11,11 +11,21 @@ Jomon UIはViteとVue 3 + TypeScriptで構築されています。`src/`配下�
 - `npm run serve`: ビルド成果物を`vite preview`で確認します。
 - `npm run lint` / `npm run format:check`: ESLintとPrettierで静的解析とフォーマット確認を行います。
 - `npm run type-check`: `vue-tsc --noEmit`による型検証のみを実行します。
+- `npm run type-check:tests`: テストファイルの型検証のみを実行します。
+- `npm run test:unit`: Vitestによる単体テストを実行します。
 - `npm run gen-api` / `npm run clean`: OpenAPIコード生成と生成物のクリーニングに使用します。
 
 ## コーディングスタイルと命名規約
 
-すべてのアプリコードはTypeScript標準（`strict`）に従い、Composition APIベースで記述してください。Prettier既定設定（2スペースインデント・シングルクォート）を保つため、保存前後に`npm run format`を活用します。ESLintは`plugin:vue/strongly-recommended`とアクセシビリティルールを適用しているため、ARIA属性とラベルの対応を必ず確認してください。ファイル名はケバブケース、TypeScriptの型・インターフェースはパスカルケース、storeやComposableは`useXxx`プレフィックスで統一します。
+すべてのアプリコードはTypeScript標準（`strict`）に従い、Composition APIベースで記述してください。
+
+- **Vueコンポーネント**: `<script setup lang="ts">`を使用し、`defineProps<Props>()` / `defineEmits<Events>()`で型定義を行います。
+- **状態管理**: PiniaのSetup Storeパターン（`defineStoreComposable`）を使用し、ドメイン単位でストアを分割します。
+- **型定義**: `any`は原則禁止です。ユニオン型やジェネリクスを活用してください。
+- **フォーマット**: Prettier既定設定（2スペースインデント・シングルクォート）を保つため、保存前後に`npm run format`を活用します。
+- **アクセシビリティ**: ESLint (`plugin:vue/strongly-recommended`, `vuejs-accessibility`) を適用し、ARIA属性とラベルの対応を確認してください。
+
+ファイル名はケバブケース、TypeScriptの型・インターフェースはパスカルケース、storeやComposableは`useXxx`プレフィックスで統一します。
 
 ### Tailwind CSS v4ポリシー
 
@@ -26,7 +36,14 @@ Jomon UIはViteとVue 3 + TypeScriptで構築されています。`src/`配下�
 
 ## テストガイドライン
 
-現状の自動テストは型検証とESLintが中心です。UIロジックにテストを追加する場合はVue Test Utilsとmswを利用し、HTTP通信は`src/features/<feature>/mock`のハンドラを再利用してください。テストファイルは対象モジュール近くに`*.spec.ts`として配置し、シナリオ単位で命名します。アクセシビリティ回帰を防ぐため、主要なフォーム・ダイアログでは`vue-axe`を併用した手動検証を行ってください。
+現状の自動テストは型検証とESLint、およびVitestによる単体テストが中心です。
+
+- **テストの目的**: 実装詳細ではなく「振る舞い」を検証してください。
+- **ファイル配置**:
+  - Featureテスト: `tests/features/<feature>/`
+  - Componentテスト: `tests/components/`
+- **モック**: UIロジックのテストにはVue Test UtilsとMSWを利用し、HTTP通信は`src/features/<feature>/__mocks__`のハンドラを再利用してください。
+- **アクセシビリティ**: 主要なフォーム・ダイアログでは`vue-axe`を併用した手動検証を行ってください。
 
 ## コミットとPull Requestガイドライン
 

@@ -22,7 +22,7 @@ const { me } = useUserStore()
 const {
   canEditPartition,
   currentPartition: partition,
-  editedValue
+  editedValue,
 } = usePartitionStore()
 </script>
 

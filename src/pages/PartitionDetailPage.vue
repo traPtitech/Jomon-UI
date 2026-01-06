@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+import { useRoute } from 'vue-router'
+
+import { toId } from '@/lib/parsePathParams'
+
 import PartitionBudget from '@/components/partitionDetail/PartitionBudget.vue'
 import PartitionGroup from '@/components/partitionDetail/PartitionGroup.vue'
 import PartitionName from '@/components/partitionDetail/PartitionName.vue'
@@ -6,8 +10,6 @@ import { usePartitionInformation } from '@/components/partitionDetail/composable
 import { usePartitionStore } from '@/features/partition/store'
 import { usePartitionGroupStore } from '@/features/partitionGroup/store'
 import { useUserStore } from '@/features/user/store'
-import { toId } from '@/lib/parsePathParams'
-import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const id = toId(route.params.id)

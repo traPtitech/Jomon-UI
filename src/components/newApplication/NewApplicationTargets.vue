@@ -1,10 +1,11 @@
 <script lang="ts" setup>
+import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
+
 import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import type { ApplicationTargetDraft } from '@/features/applicationTarget/entities'
 import { useUserStore } from '@/features/user/store'
-import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
 const model = defineModel<ApplicationTargetDraft[]>({ required: true })
 

@@ -1,7 +1,9 @@
-import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
+import { nextTick } from 'vue'
+
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import { nextTick } from 'vue'
+
+import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
 
 describe('BaseNumberInput', () => {
   it('number input として min/max/step/inputmode を反映する', () => {
@@ -15,8 +17,8 @@ describe('BaseNumberInput', () => {
         inputmode: 'numeric',
         required: true,
         errorMessage: 'エラーです',
-        describedById: 'helper-id'
-      }
+        describedById: 'helper-id',
+      },
     })
 
     const input = wrapper.get('input')
@@ -47,8 +49,8 @@ describe('BaseNumberInput', () => {
         label: '数量',
         modelValue: null,
         required: true,
-        readonly: true
-      }
+        readonly: true,
+      },
     })
 
     const input = wrapper.get('input')
@@ -67,8 +69,8 @@ describe('BaseNumberInput', () => {
     const wrapper = mount(BaseNumberInput, {
       props: {
         label: '数量',
-        modelValue: null
-      }
+        modelValue: null,
+      },
     })
 
     const input = wrapper.get('input')
@@ -84,8 +86,8 @@ describe('BaseNumberInput', () => {
     const wrapper = mount(BaseNumberInput, {
       props: {
         label: '数量',
-        modelValue: null
-      }
+        modelValue: null,
+      },
     })
 
     const input = wrapper.get('input')
@@ -103,8 +105,8 @@ describe('BaseNumberInput', () => {
     const wrapper = mount(BaseNumberInput, {
       props: {
         label: '数量',
-        modelValue: 10
-      }
+        modelValue: 10,
+      },
     })
 
     const input = wrapper.get('input')
@@ -121,8 +123,8 @@ describe('BaseNumberInput', () => {
     const wrapper = mount(BaseNumberInput, {
       props: {
         label: '数量',
-        modelValue: null
-      }
+        modelValue: null,
+      },
     })
 
     const input = wrapper.get('input')

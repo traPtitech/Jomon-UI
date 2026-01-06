@@ -1,127 +1,152 @@
-import { usePartitionGroupRepository } from './data/repository'
-import type { PartitionGroup, PartitionGroupSeed } from './entities'
+import { computed, inject, ref } from 'vue'
+
+import { defineStoreComposable } from '@/lib/store'
+
+import { PartitionGroupRepositoryKey } from '@/di'
+import type {
+  PartitionGroup,
+  PartitionGroupSeed,
+} from '@/features/partitionGroup/entities'
 import type { User } from '@/features/user/entities'
-import { defineStore, storeToRefs } from 'pinia'
+import type { AsyncStatus } from '@/types'
 
 const createDefaultPartitionGroupSeed = (): PartitionGroupSeed => ({
   name: '',
   parentPartitionGroupId: null,
-  depth: 0
+  depth: 0,
 })
 
-const createPartitionGroupStore = defineStore('partitionGroup', {
-  state: () => ({
-    partitionGroups: [] as PartitionGroup[],
-    isPartitionGroupFetched: false,
-    currentPartitionGroup: undefined as PartitionGroup | undefined,
-    editedValue: createDefaultPartitionGroupSeed()
-  }),
-  getters: {
-    partitionGroupOptions: state =>
-      state.partitionGroups.map(group => ({
+export const usePartitionGroupStore = defineStoreComposable(
+  'partitionGroup',
+  () => {
+    const repository = inject(PartitionGroupRepositoryKey)
+    if (!repository) throw new Error('PartitionGroupRepository is not provided')
+
+    const partitionGroups = ref<PartitionGroup[]>([])
+    const status = ref<AsyncStatus>('idle')
+    const error = ref<string | null>(null)
+    const currentPartitionGroup = ref<PartitionGroup | undefined>(undefined)
+    const editedValue = ref<PartitionGroupSeed>(
+      createDefaultPartitionGroupSeed()
+    )
+
+    const partitionGroupOptions = computed(() =>
+      partitionGroups.value.map(group => ({
         key: group.name,
-        value: group.id
-      })),
-    canEditPartitionGroup: () => (user: User | undefined) => {
+        value: group.id,
+      }))
+    )
+
+    const canEditPartitionGroup = computed(() => (user: User | undefined) => {
       if (!user) return false
       return user.accountManager
-    },
-    partitionGroupIdNameToMap: state => {
-      return new Map(state.partitionGroups.map(group => [group.id, group.name]))
-    }
-  },
-  actions: {
-    async fetchPartitionGroups() {
-      const repository = usePartitionGroupRepository()
+    })
+
+    const partitionGroupIdNameToMap = computed(() => {
+      return new Map(partitionGroups.value.map(group => [group.id, group.name]))
+    })
+
+    const isPartitionGroupFetched = computed(() => status.value === 'success')
+
+    const fetchPartitionGroups = async () => {
+      status.value = 'loading'
+      error.value = null
+
       try {
-        this.partitionGroups = await repository.fetchPartitionGroups()
-        this.isPartitionGroupFetched = true
+        partitionGroups.value = await repository.fetchPartitionGroups()
+        status.value = 'success'
       } catch (e) {
-        throw new Error(
+        status.value = 'error'
+        error.value =
           'パーティショングループ一覧の取得に失敗しました: ' +
-            (e instanceof Error ? e.message : String(e))
-        )
+          (e instanceof Error ? e.message : String(e))
+        throw new Error(error.value)
       }
-    },
-    async fetchPartitionGroup(id: string) {
-      const repository = usePartitionGroupRepository()
+    }
+
+    const fetchPartitionGroup = async (id: string) => {
       try {
         const partitionGroup = await repository.fetchPartitionGroup(id)
-        this.currentPartitionGroup = partitionGroup
-        this.editedValue = {
+        currentPartitionGroup.value = partitionGroup
+        editedValue.value = {
           name: partitionGroup.name,
           parentPartitionGroupId: partitionGroup.parentPartitionGroupId,
-          depth: partitionGroup.depth
+          depth: partitionGroup.depth,
         }
       } catch {
         throw new Error('パーティショングループの取得に失敗しました')
       }
-    },
-    async createPartitionGroup(partitionGroup: PartitionGroupSeed) {
-      const repository = usePartitionGroupRepository()
+    }
+
+    const createPartitionGroup = async (partitionGroup: PartitionGroupSeed) => {
       try {
         const res = await repository.createPartitionGroup(partitionGroup)
-        this.partitionGroups.unshift(res)
+        partitionGroups.value.unshift(res)
       } catch {
         throw new Error('パーティショングループの作成に失敗しました')
       }
-    },
-    async editPartitionGroup(
+    }
+
+    const editPartitionGroup = async (
       id: string,
       partitionGroupSeed: PartitionGroupSeed
-    ) {
-      if (!this.currentPartitionGroup) return
-      const repository = usePartitionGroupRepository()
+    ) => {
+      if (!currentPartitionGroup.value) return
       try {
         const res = await repository.editPartitionGroup(id, partitionGroupSeed)
-        this.currentPartitionGroup = res
-        const index = this.partitionGroups.findIndex(
-          partitionGroup => partitionGroup.id === res.id
+        currentPartitionGroup.value = res
+        const index = partitionGroups.value.findIndex(
+          group => group.id === res.id
         )
         if (index !== -1) {
-          this.partitionGroups.splice(index, 1, res)
+          partitionGroups.value.splice(index, 1, res)
         }
       } catch {
-        this.editedValue = {
-          name: this.currentPartitionGroup.name,
+        editedValue.value = {
+          name: currentPartitionGroup.value.name,
           parentPartitionGroupId:
-            this.currentPartitionGroup.parentPartitionGroupId,
-          depth: this.currentPartitionGroup.depth
+            currentPartitionGroup.value.parentPartitionGroupId,
+          depth: currentPartitionGroup.value.depth,
         }
         throw new Error('パーティショングループの更新に失敗しました')
       }
-    },
-    async deletePartitionGroup(id: string) {
-      const repository = usePartitionGroupRepository()
+    }
+
+    const deletePartitionGroup = async (id: string) => {
       try {
         await repository.deletePartitionGroup(id)
-        this.partitionGroups = this.partitionGroups.filter(
-          partitionGroup => partitionGroup.id !== id
-        )
+        const index = partitionGroups.value.findIndex(group => group.id === id)
+        if (index !== -1) {
+          partitionGroups.value.splice(index, 1)
+        }
       } catch {
         throw new Error('パーティショングループの削除に失敗しました')
       }
-    },
-    resetDetail() {
-      this.currentPartitionGroup = undefined
-      this.editedValue = createDefaultPartitionGroupSeed()
+    }
+
+    const resetDetail = () => {
+      currentPartitionGroup.value = undefined
+      editedValue.value = createDefaultPartitionGroupSeed()
+    }
+
+    return {
+      partitionGroups,
+      status,
+      error,
+      isPartitionGroupFetched,
+      currentPartitionGroup,
+      editedValue,
+      partitionGroupOptions,
+      canEditPartitionGroup,
+      partitionGroupIdNameToMap,
+      fetchPartitionGroups,
+      fetchPartitionGroup,
+      createPartitionGroup,
+      editPartitionGroup,
+      deletePartitionGroup,
+      resetDetail,
     }
   }
-})
-
-export const usePartitionGroupStore = () => {
-  const store = createPartitionGroupStore()
-  const refs = storeToRefs(store)
-
-  return {
-    ...refs,
-    fetchPartitionGroups: store.fetchPartitionGroups.bind(store),
-    fetchPartitionGroup: store.fetchPartitionGroup.bind(store),
-    createPartitionGroup: store.createPartitionGroup.bind(store),
-    editPartitionGroup: store.editPartitionGroup.bind(store),
-    deletePartitionGroup: store.deletePartitionGroup.bind(store),
-    resetDetail: store.resetDetail.bind(store)
-  }
-}
+)
 
 export type PartitionGroupStore = ReturnType<typeof usePartitionGroupStore>

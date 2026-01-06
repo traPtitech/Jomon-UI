@@ -1,6 +1,12 @@
 <script lang="ts" setup>
 import ApplicationAttachment from './ApplicationAttachment.vue'
 import type { ApplicationEditMode } from './composables/useApplicationInformation'
+import { ref } from 'vue'
+
+import { useToast } from 'vue-toastification'
+
+import { formatDateAndTime } from '@/lib/date'
+
 import EditButton from '@/components/shared/EditButton.vue'
 import MarkdownIt from '@/components/shared/MarkdownIt.vue'
 import MarkdownTextarea from '@/components/shared/MarkdownTextarea.vue'
@@ -11,6 +17,8 @@ import { useApplicationStore } from '@/features/application/store'
 import { useUserStore } from '@/features/user/store'
 import { formatDateAndTime } from '@/lib/date'
 import { computed } from 'vue'
+
+import ApplicationAttachment from './ApplicationAttachment.vue'
 
 defineProps<{
   isEditMode: boolean
@@ -38,9 +46,11 @@ const hasAuthority = computed(() => {
   <div v-if="application !== null" class="flex w-full flex-col gap-3">
     <div class="flex w-full items-center">
       <div class="flex flex-1 items-center gap-4">
-        <UserIcon class="w-12" :name="userMap[application.createdBy]" />
+        <UserIcon class="w-12" :name="getUserName(application.createdBy)" />
         <div>
-          <span class="font-bold">{{ userMap[application.createdBy] }}</span>
+          <span class="font-bold">{{
+            getUserNameWithFallback(application.createdBy)
+          }}</span>
           がこの申請を作成しました
         </div>
       </div>

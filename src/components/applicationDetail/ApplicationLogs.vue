@@ -1,13 +1,15 @@
 <script lang="ts" setup>
-import CommentLog from './CommentLog.vue'
-import NewComment from './NewComment.vue'
-import StatusChangeLog from './StatusChangeLog.vue'
+import { computed } from 'vue'
+
 import ApplicationContent from '@/components/applicationDetail/ApplicationContent.vue'
 import { useApplicationInformation } from '@/components/applicationDetail/composables/useApplicationInformation'
 import type { ApplicationDetail } from '@/features/application/entities'
 import type { ApplicationComment } from '@/features/applicationComment/entities'
 import type { ApplicationStatusDetail } from '@/features/applicationStatus/entities'
-import { computed } from 'vue'
+
+import CommentLog from './CommentLog.vue'
+import NewComment from './NewComment.vue'
+import StatusChangeLog from './StatusChangeLog.vue'
 
 const props = defineProps<{
   application: ApplicationDetail
@@ -24,12 +26,12 @@ const logs = computed((): Log[] => {
   const comments: CommentWithType[] = props.application.comments.map(
     comment => ({
       ...comment,
-      type: 'comment'
+      type: 'comment',
     })
   )
   const statuses: StatusWithType[] = props.application.statuses.map(status => ({
     ...status,
-    type: 'statusChange'
+    type: 'statusChange',
   }))
 
   const logs = [...comments, ...statuses]

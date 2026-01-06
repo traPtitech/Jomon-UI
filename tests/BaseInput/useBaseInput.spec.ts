@@ -1,7 +1,9 @@
-import { useBaseInput } from '@/components/shared/BaseInput/useBaseInput'
+import { defineComponent } from 'vue'
+
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import { defineComponent } from 'vue'
+
+import { useBaseInput } from '@/components/shared/BaseInput/useBaseInput'
 
 const TestComponent = defineComponent({
   props: {
@@ -10,19 +12,19 @@ const TestComponent = defineComponent({
     readonly: { type: Boolean, default: false },
     disabled: { type: Boolean, default: false },
     errorMessage: { type: String, default: '' },
-    describedById: { type: String, default: '' }
+    describedById: { type: String, default: '' },
   },
   setup(props) {
     const state = useBaseInput(props)
     return state
   },
-  template: '<div />'
+  template: '<div />',
 })
 
 describe('useBaseInput', () => {
   it('id が指定されていればそのまま inputId に使う', () => {
     const wrapper = mount(TestComponent, {
-      props: { id: 'custom-id' }
+      props: { id: 'custom-id' },
     })
 
     expect(wrapper.vm.inputId).toBe('custom-id')
@@ -36,7 +38,7 @@ describe('useBaseInput', () => {
 
   it('required かつ readonly/disabled でないときだけ isFieldRequired が true になる', async () => {
     const wrapper = mount(TestComponent, {
-      props: { required: true }
+      props: { required: true },
     })
 
     expect(wrapper.vm.isFieldRequired).toBe(true)
@@ -60,7 +62,7 @@ describe('useBaseInput', () => {
 
   it('describedById と errorMessageId を aria-describedby 用に連結する', async () => {
     const wrapper = mount(TestComponent, {
-      props: { describedById: 'helper-id' }
+      props: { describedById: 'helper-id' },
     })
 
     // errorMessage がないので helper-id のみ
@@ -79,14 +81,14 @@ describe('useBaseInput', () => {
 
     await wrapper.setProps({
       describedById: undefined,
-      errorMessage: undefined
+      errorMessage: undefined,
     })
     expect(wrapper.vm.describedBy).toBeUndefined()
   })
 
   it('describedById がなくても errorMessage があれば errorMessageId のみを返す', () => {
     const wrapper = mount(TestComponent, {
-      props: { errorMessage: 'エラーです' }
+      props: { errorMessage: 'エラーです' },
     })
 
     const errorId = wrapper.vm.errorMessageId

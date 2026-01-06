@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<Props>(), {
   isTextarea: false,
   hasValue: false,
   errorMessage: '',
-  errorMessageId: ''
+  errorMessageId: '',
 })
 
 const isFocused = ref(false)
@@ -56,7 +56,7 @@ const handleFocusOut = () => {
       'flex rounded-lg border border-surface-secondary ring-offset-2! transition-all duration-200 ease-in-out focus-within:ring-2! focus-within:ring-blue-500! focus-within:outline-none',
       readonly || disabled
         ? 'cursor-not-allowed bg-surface-secondary'
-        : 'bg-white'
+        : 'bg-white',
     ]"
     @focusin="handleFocusIn"
     @focusout="handleFocusOut">
@@ -68,7 +68,7 @@ const handleFocusOut = () => {
         :for="inputId"
         :class="[
           'pointer-events-none absolute left-3 text-text-secondary transition-all duration-200 ease-in-out peer-focus:text-blue-500',
-          labelPositionClass
+          labelPositionClass,
         ]">
         {{ label }}
         <span v-if="isRequired" class="text-red-500">*</span>

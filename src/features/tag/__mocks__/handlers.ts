@@ -1,11 +1,12 @@
-import type { Tag } from '@/lib/apis'
 import { HttpResponse, type PathParams, http } from 'msw'
+
+import type { Tag } from '@/lib/apis'
 
 export const mockTag: Tag = {
   id: '3fa85f64-5717-4562-b3fc-2c963f66afa5',
   name: '2021講習会',
   created_at: '2022-01-25T13:29:19.918Z',
-  updated_at: '2022-01-25T13:29:19.918Z'
+  updated_at: '2022-01-25T13:29:19.918Z',
 }
 
 export const mockTags: Tag[] = [
@@ -13,20 +14,20 @@ export const mockTags: Tag[] = [
     id: '3fa85f64-5717-4562-b3fc-2c963f66afa5',
     name: '2021講習会',
     created_at: '2022-01-25T13:29:19.918Z',
-    updated_at: '2022-01-25T13:29:19.918Z'
+    updated_at: '2022-01-25T13:29:19.918Z',
   },
   {
     id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
     name: '2022講習会',
     created_at: '2022-01-25T13:29:19.918Z',
-    updated_at: '2022-01-25T13:29:19.918Z'
+    updated_at: '2022-01-25T13:29:19.918Z',
   },
   {
     id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
     name: '2020講習会',
     created_at: '2022-01-25T13:29:19.918Z',
-    updated_at: '2022-01-25T13:29:19.918Z'
-  }
+    updated_at: '2022-01-25T13:29:19.918Z',
+  },
 ]
 
 export const tagHandlers = [
@@ -41,5 +42,5 @@ export const tagHandlers = [
   }),
   http.delete('/api/tags/:id', () => {
     return HttpResponse.json(null)
-  })
+  }),
 ]

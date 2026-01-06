@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+import { computed } from 'vue'
+
+import { TrashIcon } from '@heroicons/vue/24/solid'
+import { useToast } from 'vue-toastification'
+
 import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'
@@ -6,51 +11,57 @@ import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import type {
   ApplicationTarget,
-  ApplicationTargetDetail
+  ApplicationTargetDetail,
 } from '@/features/applicationTarget/entities'
 import { useUserStore } from '@/features/user/store'
-import { TrashIcon } from '@heroicons/vue/24/solid'
-import { computed } from 'vue'
 
 const props = defineProps<{
   application: ApplicationDetail
   isEditMode: boolean
   target: ApplicationTargetDetail
+  selectedUserIds: string[]
 }>()
 
-const { userMap, userOptions } = useUserStore()
+const { getUserName, getUserNameWithFallback, userOptions } = useUserStore()
 const { editApplication } = useApplicationStore()
+const toast = useToast()
 
-const targets = computed(() =>
-  props.application.targets.map(target => target.target)
-)
 const targetOptions = computed(() =>
   userOptions.value.filter(
     user =>
-      user.value === props.target.target || !targets.value.includes(user.value)
+      user.value === props.target.target ||
+      !props.selectedUserIds.includes(user.value)
   )
 )
 
-const targetModel = defineModel<ApplicationTarget>('targetModel', {
-  required: true
-})
+const targetModel = defineModel<ApplicationTarget>('targetModel')
+
+const emit = defineEmits<(e: 'delete', id: string) => void>()
 
 const handleRemoveTarget = async () => {
+  // TODO: confirmをカスタムモーダルに置き換える
   const result = confirm('本当に削除しますか？')
   if (!result) {
     return
   }
 
+  // 編集モード中はローカル削除のみ（親で処理）
+  if (props.isEditMode) {
+    emit('delete', props.target.id)
+    return
+  }
+
+  // 表示モードでは即座にAPI呼び出し
   try {
     await editApplication(props.application.id, {
       ...props.application,
       partition: props.application.partition.id,
       targets: props.application.targets.filter(
-        target => target.target !== props.target.target
-      )
+        target => target.id !== props.target.id
+      ),
     })
   } catch {
-    alert('削除に失敗しました')
+    toast.error('削除に失敗しました')
   }
 }
 </script>
@@ -60,14 +71,14 @@ const handleRemoveTarget = async () => {
     v-if="!props.isEditMode"
     class="flex flex-wrap items-center justify-between gap-2 md:gap-0">
     <div class="flex items-center gap-1">
-      <UserIcon class="w-10" :name="userMap[target.target]" />
+      <UserIcon class="w-10" :name="getUserName(target.target)" />
       <div class="flex flex-col gap-1 break-all">
-        <div>{{ userMap[target.target] }}</div>
+        <div>{{ getUserNameWithFallback(target.target) }}</div>
         <div>{{ target.amount }}円</div>
       </div>
     </div>
   </div>
-  <div v-else class="flex items-center justify-between">
+  <div v-else-if="targetModel" class="flex items-center justify-between">
     <div class="flex gap-1">
       <SearchSelect
         v-model="targetModel.target"
@@ -82,5 +93,8 @@ const handleRemoveTarget = async () => {
         <TrashIcon class="w-6 cursor-pointer text-error-primary" />
       </button>
     </div>
+  </div>
+  <div v-else class="text-error-primary">
+    [エラー] 対象者データの読み込みに失敗しました
   </div>
 </template>

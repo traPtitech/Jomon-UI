@@ -1,5 +1,6 @@
-import type { BaseInputCommonProps } from './BaseInput.types'
 import { computed, useId } from 'vue'
+
+import type { BaseInputCommonProps } from './BaseInput.types'
 
 type UseBaseInputProps = Pick<
   BaseInputCommonProps,
@@ -33,6 +34,6 @@ export function useBaseInput(props: UseBaseInputProps) {
     inputId,
     isFieldRequired,
     errorMessageId,
-    describedBy
+    describedBy,
   }
 }

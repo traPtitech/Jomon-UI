@@ -13,11 +13,11 @@ jobs:
       contents: read
       actions: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version-file: ./.node-version
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: ~/.npm
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
@@ -26,7 +26,7 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Upload artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: dist
           path: ./dist
@@ -42,7 +42,7 @@ jobs:
         with:
           key: ${{ secrets.STAGING_SSH_KEY }}
           known_hosts: ${{ secrets.STAGING_KNOWN_HOSTS }}
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v7
         with:
           name: dist
           path: ./dist

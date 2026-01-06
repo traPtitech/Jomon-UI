@@ -9,6 +9,15 @@ import type { ApplicationStatus } from '@/features/applicationStatus/entities'
 import { useTagStore } from '@/features/tag/store'
 import { defineStore, storeToRefs } from 'pinia'
 
+const createDefaultApplicationSeed = (): ApplicationSeed => ({
+  createdBy: '',
+  title: '',
+  content: '',
+  tags: [],
+  partition: '',
+  targets: []
+})
+
 const createDefaultParams = (): ApplicationQuerySeed => ({
   sort: 'created_at',
   currentStatus: '',
@@ -28,7 +37,8 @@ const createApplicationStore = defineStore('application', {
     applications: [] as Application[],
     isApplicationFetched: false,
     filterParams: createDefaultParams(),
-    currentApplication: null as ApplicationDetail | null
+    currentApplication: null as ApplicationDetail | null,
+    editedValue: createDefaultApplicationSeed()
   }),
   getters: {
     hasApplicationDetail: state => state.currentApplication !== null

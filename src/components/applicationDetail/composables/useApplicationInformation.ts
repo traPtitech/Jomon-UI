@@ -1,41 +1,37 @@
-import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
-import type { Ref } from 'vue'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
 
-export const usePartitionInformation = (
-  application: ApplicationDetail,
-  editedContent: Ref<string>
-) => {
+export type ApplicationEditMode = 'content' | ''
+
+export const usePartitionInformation = () => {
   const toast = useToast()
-  const { editApplication } = useApplicationStore()
+  const { currentApplication, editedValue, editApplication } =
+    useApplicationStore()
 
-  // 編集モードを composable 側で管理
-  const isEditMode = ref(false)
+  const editMode = ref<ApplicationEditMode>('')
 
-  const toggleEditContent = () => {
-    if (isEditMode.value) {
-      // 編集キャンセル時は元の内容に戻す
-      editedContent.value = application.content
+  const changeEditMode = (mode: ApplicationEditMode) => {
+    if (mode !== '') {
+      editMode.value = mode
+    } else {
+      editMode.value = ''
     }
-    isEditMode.value = !isEditMode.value
   }
 
-  const handleUpdateContent = async () => {
+  const finishEditing = async () => {
+    if (!currentApplication.value) return
+
     try {
-      await editApplication(application.id, {
-        ...application,
-        partition: application.partition.id,
-        content: editedContent.value
-      })
-      toast.success('更新しました')
-      // 成功したら編集モードを閉じる
-      isEditMode.value = false
-    } catch {
-      toast.error('更新に失敗しました')
+      await editApplication(currentApplication.value.id, editedValue.value)
+      toast.success('パーティション情報を更新しました')
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message)
+      }
     }
+    changeEditMode('')
   }
 
-  return { isEditMode, toggleEditContent, handleUpdateContent }
+  return { editMode, changeEditMode, finishEditing }
 }

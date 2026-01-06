@@ -1,6 +1,8 @@
-import { useApplicationStore } from '@/features/application/store'
 import { ref } from 'vue'
+
 import { useToast } from 'vue-toastification'
+
+import { useApplicationStore } from '@/features/application/store'
 
 export type ApplicationEditMode = 'content' | ''
 

@@ -2,6 +2,8 @@ import { ref } from 'vue'
 
 import { useToast } from 'vue-toastification'
 
+import { usePartitionStore } from '@/features/partition/store'
+
 export type PartitionEditMode = 'name' | 'partitionGroup' | 'budget' | ''
 
 export const usePartitionInformation = () => {

@@ -1,9 +1,5 @@
 <script lang="ts" setup>
-import ApplicationAttachment from './ApplicationAttachment.vue'
-import type { ApplicationEditMode } from './composables/useApplicationInformation'
-import { ref } from 'vue'
-
-import { useToast } from 'vue-toastification'
+import { computed } from 'vue'
 
 import { formatDateAndTime } from '@/lib/date'
 
@@ -15,10 +11,9 @@ import UserIcon from '@/components/shared/UserIcon.vue'
 import { useApplication } from '@/features/application/composables'
 import { useApplicationStore } from '@/features/application/store'
 import { useUserStore } from '@/features/user/store'
-import { formatDateAndTime } from '@/lib/date'
-import { computed } from 'vue'
 
 import ApplicationAttachment from './ApplicationAttachment.vue'
+import type { ApplicationEditMode } from './composables/useApplicationInformation'
 
 defineProps<{
   isEditMode: boolean
@@ -35,6 +30,10 @@ const formattedDateAndTime = computed(() =>
 )
 
 const { me, userMap } = useUserStore()
+
+const getUserName = (userId: string) => userMap.value[userId] || ''
+const getUserNameWithFallback = (userId: string) =>
+  userMap.value[userId] || userId
 
 const hasAuthority = computed(() => {
   if (!application.value) return false

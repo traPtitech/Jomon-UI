@@ -30,8 +30,13 @@ const { partitionGroupIdNameToMap, partitionGroupOptions } =
 
 <template>
   <div v-if="partition" class="flex items-center gap-3">
-    <SearchSelect required v-if="props.isEditMode" v-model="editedValue.parentPartitionGroupId" class="grow"
-      :options="partitionGroupOptions" label="パーティショングループ" />
+    <SearchSelect
+      required
+      v-if="props.isEditMode"
+      v-model="editedValue.parentPartitionGroupId"
+      class="grow"
+      :options="partitionGroupOptions"
+      label="パーティショングループ" />
     <h2 v-else class="grow text-xl">
       {{
         partitionGroupIdNameToMap.get(partition.parentPartitionGroupId) ??
@@ -39,15 +44,22 @@ const { partitionGroupIdNameToMap, partitionGroupOptions } =
       }}
     </h2>
 
-    <SimpleButton v-if="props.isEditMode" font-size="base" padding="sm" @click="emit('finishEditing')"
+    <SimpleButton
+      v-if="props.isEditMode"
+      font-size="base"
+      padding="sm"
+      @click="emit('finishEditing')"
       :disabled="props.isSending">
       完了
     </SimpleButton>
 
-    <EditButton v-if="canEditPartition(me)" :is-edit-mode="props.isEditMode" @click="
-      props.isEditMode
-        ? emit('changeEditMode', '')
-        : emit('changeEditMode', 'partitionGroup')
+    <EditButton
+      v-if="canEditPartition(me)"
+      :is-edit-mode="props.isEditMode"
+      @click="
+        props.isEditMode
+          ? emit('changeEditMode', '')
+          : emit('changeEditMode', 'partitionGroup')
       " />
   </div>
 </template>

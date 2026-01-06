@@ -1,39 +1,41 @@
 <script lang="ts" setup>
 import ApplicationAttachment from './ApplicationAttachment.vue'
-import { usePartitionInformation } from './composables/useApplicationInformation'
+import type { ApplicationEditMode } from './composables/useApplicationInformation'
 import EditButton from '@/components/shared/EditButton.vue'
 import MarkdownIt from '@/components/shared/MarkdownIt.vue'
 import MarkdownTextarea from '@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'
 import { useApplication } from '@/features/application/composables'
-import type { ApplicationDetail } from '@/features/application/entities'
+import { useApplicationStore } from '@/features/application/store'
 import { useUserStore } from '@/features/user/store'
 import { formatDateAndTime } from '@/lib/date'
-import { ref } from 'vue'
+import { computed } from 'vue'
 
-const props = defineProps<{
-  application: ApplicationDetail
+defineProps<{
+  isEditMode: boolean
 }>()
-
-const formattedDateAndTime = formatDateAndTime(props.application.createdAt)
-
-const { isApplicationCreator } = useApplication(props.application)
+const emit = defineEmits<{
+  (e: 'changeEditMode', value: ApplicationEditMode): void
+  (e: 'finishEditing'): void
+}>()
+const { currentApplication: application, editedValue } = useApplicationStore()
+const formattedDateAndTime = computed(() =>
+  application.value?.createdAt
+    ? formatDateAndTime(application.value.createdAt)
+    : ''
+)
 
 const { me, userMap } = useUserStore()
 
-const hasAuthority = isApplicationCreator.value(me.value)
-const editedContent = ref(props.application.content)
-const { isEditMode, toggleEditContent, handleUpdateContent } =
-  usePartitionInformation(props.application, editedContent)
-
-const onUpdateClick = async () => {
-  await handleUpdateContent()
-}
+const hasAuthority = computed(() => {
+  if (!application.value) return false
+  return useApplication(application.value).isApplicationCreator.value(me.value)
+})
 </script>
 
 <template>
-  <div class="flex w-full flex-col gap-3">
+  <div v-if="application !== null" class="flex w-full flex-col gap-3">
     <div class="flex w-full items-center">
       <div class="flex flex-1 items-center gap-4">
         <UserIcon class="w-12" :name="userMap[application.createdBy]" />
@@ -57,20 +59,24 @@ const onUpdateClick = async () => {
       </div>
       <MarkdownTextarea
         v-else
-        v-model="editedContent"
+        v-model="editedValue.content"
         label="詳細"
         class="flex-1" />
       <EditButton
         v-if="hasAuthority"
         :is-edit-mode="isEditMode"
-        @click="toggleEditContent" />
+        @click="
+          isEditMode
+            ? emit('changeEditMode', '')
+            : emit('changeEditMode', 'content')
+        " />
     </div>
     <div class="flex justify-end">
       <SimpleButton
         v-if="isEditMode"
         font-size="base"
         padding="sm"
-        @click="onUpdateClick">
+        @click="emit('finishEditing')">
         完了
       </SimpleButton>
     </div>

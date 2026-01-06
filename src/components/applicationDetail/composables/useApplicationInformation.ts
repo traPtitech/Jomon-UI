@@ -4,7 +4,7 @@ import { useToast } from 'vue-toastification'
 
 export type ApplicationEditMode = 'content' | ''
 
-export const usePartitionInformation = () => {
+export const useApplicationInformation = () => {
   const toast = useToast()
   const { currentApplication, editedValue, editApplication } =
     useApplicationStore()

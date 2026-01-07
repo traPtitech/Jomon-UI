@@ -11,6 +11,8 @@ export const useApplicationInformation = () => {
   const { currentApplication, editedValue, editApplication } =
     useApplicationStore()
 
+  const isSending = ref(false)
+
   const editMode = ref<ApplicationEditMode>('')
 
   const changeEditMode = (mode: ApplicationEditMode) => {
@@ -34,6 +36,7 @@ export const useApplicationInformation = () => {
   const finishEditing = async () => {
     if (!currentApplication.value) return
 
+    isSending.value = true
     try {
       await editApplication(currentApplication.value.id, editedValue.value)
       toast.success('申請情報を更新しました')
@@ -43,7 +46,8 @@ export const useApplicationInformation = () => {
       }
     }
     changeEditMode('')
+    isSending.value = false
   }
 
-  return { editMode, changeEditMode, finishEditing }
+  return { isSending, editMode, changeEditMode, finishEditing }
 }

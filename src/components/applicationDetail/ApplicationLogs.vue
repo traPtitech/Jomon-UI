@@ -15,7 +15,8 @@ const props = defineProps<{
   application: ApplicationDetail
 }>()
 
-const { editMode, changeEditMode, finishEditing } = useApplicationInformation()
+const { isSending, editMode, changeEditMode, finishEditing } =
+  useApplicationInformation()
 
 type CommentWithType = ApplicationComment & { type: 'comment' }
 type StatusWithType = ApplicationStatusDetail & { type: 'statusChange' }
@@ -46,6 +47,7 @@ const logs = computed((): Log[] => {
       <li class="vertical-bar">
         <ApplicationContent
           :is-edit-mode="editMode === 'content'"
+          :is-sending="isSending"
           @change-edit-mode="changeEditMode($event)"
           @finish-editing="finishEditing" />
       </li>

@@ -17,6 +17,7 @@ import type { ApplicationEditMode } from './composables/useApplicationInformatio
 
 defineProps<{
   isEditMode: boolean
+  isSending: boolean
 }>()
 const emit = defineEmits<{
   (e: 'changeEditMode', value: ApplicationEditMode): void
@@ -85,6 +86,7 @@ const hasAuthority = computed(() => {
         v-if="isEditMode"
         font-size="base"
         padding="sm"
+        :disabled="isSending"
         @click="emit('finishEditing')">
         完了
       </SimpleButton>

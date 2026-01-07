@@ -124,6 +124,15 @@ export const useApplicationStore = defineStoreComposable('application', () => {
         applications.value.splice(index, 1, updated)
       }
     } catch {
+      editedValue.value = {
+        createdBy: currentApplication.value.createdBy,
+        title: currentApplication.value.title,
+        content: currentApplication.value.content,
+        tags: [...currentApplication.value.tags],
+        partition: { ...currentApplication.value.partition },
+        targets: [...currentApplication.value.targets],
+      }
+
       throw new Error('申請の更新に失敗しました')
     }
   }

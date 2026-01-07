@@ -18,6 +18,9 @@ export const useApplicationInformation = () => {
       editMode.value = mode
     } else {
       editMode.value = ''
+      if (currentApplication.value) {
+        editedValue.value = currentApplication.value
+      }
     }
   }
 

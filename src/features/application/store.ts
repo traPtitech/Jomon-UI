@@ -84,7 +84,7 @@ export const useApplicationStore = defineStoreComposable('application', () => {
     }
   }
 
-  const fetchApplication = async (id: string) => {
+  const fetchApplication = async (id: string): Promise<ApplicationDetail> => {
     try {
       const application = await repository.fetchApplication(id)
       currentApplication.value = application
@@ -96,6 +96,7 @@ export const useApplicationStore = defineStoreComposable('application', () => {
         partition: currentApplication.value.partition.id,
         targets: [...currentApplication.value.targets],
       }
+      return application
     } catch {
       throw new Error('申請の取得に失敗しました')
     }

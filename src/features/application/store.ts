@@ -13,6 +13,15 @@ import type { ApplicationStatus } from '@/features/applicationStatus/entities'
 import { useTagStore } from '@/features/tag/store'
 import type { AsyncStatus } from '@/types'
 
+const createDefaultApplicationSeed = (): ApplicationSeed => ({
+  createdBy: '',
+  title: '',
+  content: '',
+  tags: [],
+  partition: '',
+  targets: [],
+})
+
 const createDefaultParams = (): ApplicationQuerySeed => ({
   sort: 'created_at',
   currentStatus: '',
@@ -38,6 +47,7 @@ export const useApplicationStore = defineStoreComposable('application', () => {
   const error = ref<string | null>(null)
   const filterParams = ref<ApplicationQuerySeed>(createDefaultParams())
   const currentApplication = ref<ApplicationDetail | null>(null)
+  const editedValue = ref<ApplicationSeed>(createDefaultApplicationSeed())
 
   const hasApplicationDetail = computed(() => currentApplication.value !== null)
   const isApplicationFetched = computed(() => status.value === 'success')
@@ -74,21 +84,29 @@ export const useApplicationStore = defineStoreComposable('application', () => {
     }
   }
 
+  const fetchApplication = async (id: string): Promise<ApplicationDetail> => {
+    try {
+      const application = await repository.fetchApplication(id)
+      currentApplication.value = application
+      editedValue.value = {
+        createdBy: currentApplication.value.createdBy,
+        title: currentApplication.value.title,
+        content: currentApplication.value.content,
+        tags: [...currentApplication.value.tags],
+        partition: currentApplication.value.partition.id,
+        targets: [...currentApplication.value.targets],
+      }
+      return application
+    } catch {
+      throw new Error('申請の取得に失敗しました')
+    }
+  }
+
   const ensureApplication = async (id: string) => {
     if (currentApplication.value?.id === id) {
       return currentApplication.value
     }
     return await fetchApplication(id)
-  }
-
-  const fetchApplication = async (id: string) => {
-    try {
-      const application = await repository.fetchApplication(id)
-      currentApplication.value = application
-      return application
-    } catch {
-      throw new Error('申請の取得に失敗しました')
-    }
   }
 
   const createApplication = async (applicationSeed: ApplicationSeed) => {
@@ -102,8 +120,9 @@ export const useApplicationStore = defineStoreComposable('application', () => {
   }
 
   const editApplication = async (id: string, seed: ApplicationSeed) => {
-    if (!currentApplication.value) return
-
+    if (!currentApplication.value) {
+      throw new Error('申請が読み込まれていません')
+    }
     const tags = await tagStore.ensureTags(seed.tags)
 
     try {
@@ -160,6 +179,7 @@ export const useApplicationStore = defineStoreComposable('application', () => {
     isApplicationFetched,
     filterParams,
     currentApplication,
+    editedValue,
     hasApplicationDetail,
     resetFilters,
     clearCurrentApplication,

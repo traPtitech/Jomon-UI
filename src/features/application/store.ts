@@ -95,7 +95,14 @@ export const useApplicationStore = defineStoreComposable('application', () => {
     try {
       const application = await repository.fetchApplication(id)
       currentApplication.value = application
-      return application
+      editedValue.value = {
+        createdBy: currentApplication.value.createdBy,
+        title: currentApplication.value.title,
+        content: currentApplication.value.content,
+        tags: [...currentApplication.value.tags],
+        partition: { ...currentApplication.value.partition },
+        targets: [...currentApplication.value.targets],
+      }
     } catch {
       throw new Error('申請の取得に失敗しました')
     }

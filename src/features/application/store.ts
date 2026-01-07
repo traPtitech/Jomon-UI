@@ -100,7 +100,7 @@ export const useApplicationStore = defineStoreComposable('application', () => {
         title: currentApplication.value.title,
         content: currentApplication.value.content,
         tags: [...currentApplication.value.tags],
-        partition: { ...currentApplication.value.partition },
+        partition: currentApplication.value.partition.id,
         targets: [...currentApplication.value.targets],
       }
     } catch {
@@ -119,8 +119,9 @@ export const useApplicationStore = defineStoreComposable('application', () => {
   }
 
   const editApplication = async (id: string, seed: ApplicationSeed) => {
-    if (!currentApplication.value) return
-
+    if (!currentApplication.value) {
+      throw new Error('申請が読み込まれていません')
+    }
     const tags = await tagStore.ensureTags(seed.tags)
 
     try {
@@ -136,7 +137,7 @@ export const useApplicationStore = defineStoreComposable('application', () => {
         title: currentApplication.value.title,
         content: currentApplication.value.content,
         tags: [...currentApplication.value.tags],
-        partition: { ...currentApplication.value.partition },
+        partition: currentApplication.value.partition.id,
         targets: [...currentApplication.value.targets],
       }
 

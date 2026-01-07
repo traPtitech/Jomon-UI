@@ -19,7 +19,14 @@ export const useApplicationInformation = () => {
     } else {
       editMode.value = ''
       if (currentApplication.value) {
-        editedValue.value = currentApplication.value
+        editedValue.value = {
+          createdBy: currentApplication.value.createdBy,
+          title: currentApplication.value.title,
+          content: currentApplication.value.content,
+          tags: [...currentApplication.value.tags],
+          partition: currentApplication.value.partition.id,
+          targets: [...currentApplication.value.targets],
+        }
       }
     }
   }

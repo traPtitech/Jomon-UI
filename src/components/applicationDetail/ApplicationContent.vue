@@ -60,17 +60,17 @@ const hasAuthority = computed(() => {
       </time>
     </div>
     <div class="ml-16 flex items-start gap-2">
+      <MarkdownTextarea
+        v-if="isEditMode"
+        v-model="editedValue.content"
+        label="詳細"
+        class="flex-1" />
       <div
-        v-if="!isEditMode"
+        v-else
         class="w-full flex-1 rounded-lg border border-surface-secondary px-4 py-3">
         <MarkdownIt :text="application.content" />
         <ApplicationAttachment :files="application.files" />
       </div>
-      <MarkdownTextarea
-        v-else
-        v-model="editedValue.content"
-        label="詳細"
-        class="flex-1" />
       <EditButton
         v-if="hasAuthority"
         :is-edit-mode="isEditMode"

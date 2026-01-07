@@ -45,7 +45,6 @@ const logs = computed((): Log[] => {
     <ul>
       <li class="vertical-bar">
         <ApplicationContent
-          :application="application"
           :is-edit-mode="editMode === 'content'"
           @change-edit-mode="changeEditMode($event)"
           @finish-editing="finishEditing" />

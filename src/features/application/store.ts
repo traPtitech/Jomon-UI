@@ -84,13 +84,6 @@ export const useApplicationStore = defineStoreComposable('application', () => {
     }
   }
 
-  const ensureApplication = async (id: string) => {
-    if (currentApplication.value?.id === id) {
-      return currentApplication.value
-    }
-    return await fetchApplication(id)
-  }
-
   const fetchApplication = async (id: string) => {
     try {
       const application = await repository.fetchApplication(id)
@@ -106,6 +99,13 @@ export const useApplicationStore = defineStoreComposable('application', () => {
     } catch {
       throw new Error('申請の取得に失敗しました')
     }
+  }
+
+  const ensureApplication = async (id: string) => {
+    if (currentApplication.value?.id === id) {
+      return currentApplication.value
+    }
+    return await fetchApplication(id)
   }
 
   const createApplication = async (applicationSeed: ApplicationSeed) => {

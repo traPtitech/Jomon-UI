@@ -18,6 +18,16 @@ export const useApplicationInformation = () => {
   const changeEditMode = (mode: ApplicationEditMode) => {
     if (mode !== '') {
       editMode.value = mode
+      if (currentApplication.value) {
+        editedValue.value = {
+          createdBy: currentApplication.value.createdBy,
+          title: currentApplication.value.title,
+          content: currentApplication.value.content,
+          tags: [...currentApplication.value.tags],
+          partition: currentApplication.value.partition.id,
+          targets: [...currentApplication.value.targets],
+        }
+      }
     } else {
       editMode.value = ''
       if (currentApplication.value) {

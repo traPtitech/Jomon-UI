@@ -4,7 +4,12 @@ import { useToast } from 'vue-toastification'
 
 import { useApplicationStore } from '@/features/application/store'
 
-export type ApplicationEditMode = 'content' | 'targets' | 'tags' | ''
+export type ApplicationEditMode =
+  | 'content'
+  | 'targets'
+  | 'tags'
+  | 'partition'
+  | ''
 
 export const useApplicationInformation = () => {
   const toast = useToast()

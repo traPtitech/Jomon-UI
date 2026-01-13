@@ -3,9 +3,6 @@ import ApplicationPartition from '@/components/applicationDetail/ApplicationPart
 import ApplicationTags from '@/components/applicationDetail/ApplicationTags.vue'
 import ApplicationTargets from '@/components/applicationDetail/ApplicationTargets.vue'
 import { useApplicationInformation } from '@/components/applicationDetail/composables/useApplicationInformation'
-import type { ApplicationDetail } from '@/features/application/entities'
-
-const application = defineModel<ApplicationDetail>({ required: true })
 
 const { editMode, isSending, changeEditMode, finishEditing } =
   useApplicationInformation()
@@ -14,7 +11,11 @@ const { editMode, isSending, changeEditMode, finishEditing } =
 <template>
   <div class="flex flex-col gap-8">
     <div class="flex flex-col gap-3">
-      <ApplicationPartition v-model="application" />
+      <ApplicationPartition
+        :is-edit-mode="editMode === 'partition'"
+        :is-sending="isSending"
+        @change-edit-mode="changeEditMode"
+        @finish-editing="finishEditing" />
       <ApplicationTags
         :is-edit-mode="editMode === 'tags'"
         :is-sending="isSending"

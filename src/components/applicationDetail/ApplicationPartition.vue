@@ -1,68 +1,68 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
-
-import { useToast } from 'vue-toastification'
+import { computed } from 'vue'
 
 import EditButton from '@/components/shared/EditButton.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
+import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useApplication } from '@/features/application/composables'
-import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import { usePartitionStore } from '@/features/partition/store'
 import { useUserStore } from '@/features/user/store'
 
-const application = defineModel<ApplicationDetail>('modelValue', {
-  required: true,
-})
+import type { ApplicationEditMode } from './composables/useApplicationInformation'
+
+defineProps<{
+  isEditMode: boolean
+  isSending: boolean
+}>()
+const emit = defineEmits<{
+  (e: 'changeEditMode', value: ApplicationEditMode): void
+  (e: 'finishEditing'): void
+}>()
+
+const { currentApplication: application, editedValue } = useApplicationStore()
 
 const { me } = useUserStore()
 const { partitionOptions } = usePartitionStore()
-const { isApplicationCreator } = useApplication(application.value)
-const { editApplication } = useApplicationStore()
-const toast = useToast()
 
-const hasAuthority = computed(() => isApplicationCreator.value(me.value))
-
-const isEditMode = ref(false)
-const editedPartition = ref<string>(application.value.partition.id)
-const toggleEditPartition = () => {
-  if (isEditMode.value) {
-    editedPartition.value = application.value.partition.id
-  }
-  isEditMode.value = !isEditMode.value
-}
-
-const handleUpdatePartition = async () => {
-  try {
-    await editApplication(application.value.id, {
-      ...application.value,
-      partition: editedPartition.value,
-    })
-    toast.success('更新しました')
-  } catch {
-    toast.error('更新に失敗しました')
-  }
-  isEditMode.value = false
-}
+const hasAuthority = computed(() => {
+  if (!application.value) return false
+  return useApplication(application.value).isApplicationCreator.value(me.value)
+})
 </script>
 
 <template>
   <div class="flex flex-col gap-1">
     <div class="flex items-center justify-between">
       <h2 class="text-sm font-bold">パーティション</h2>
-      <EditButton
-        v-if="hasAuthority"
-        :is-edit-mode="isEditMode"
-        @click="toggleEditPartition" />
+      <div class="flex items-center gap-2">
+        <SimpleButton
+          v-if="isEditMode"
+          font-size="base"
+          padding="sm"
+          :disabled="isSending"
+          @click="emit('finishEditing')">
+          完了
+        </SimpleButton>
+        <EditButton
+          v-if="hasAuthority"
+          :is-edit-mode="isEditMode"
+          @click="
+            emit(
+              'changeEditMode',
+              isEditMode ? '' : ('partition' as ApplicationEditMode)
+            )
+          " />
+      </div>
     </div>
     <div>
-      <span v-if="!isEditMode">{{ application.partition.name }}</span>
+      <span v-if="!isEditMode">{{ application?.partition.name }}</span>
       <SearchSelect
-        v-else
-        v-model="editedPartition"
+        v-else-if="application"
+        v-model="editedValue.partition"
         label="パーティション"
         :options="partitionOptions"
-        @close="handleUpdatePartition" />
+        @close="emit('finishEditing')" />
     </div>
   </div>
 </template>

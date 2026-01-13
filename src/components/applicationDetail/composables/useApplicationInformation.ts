@@ -9,6 +9,7 @@ export type ApplicationEditMode =
   | 'targets'
   | 'tags'
   | 'partition'
+  | 'title'
   | ''
 
 export const useApplicationInformation = () => {

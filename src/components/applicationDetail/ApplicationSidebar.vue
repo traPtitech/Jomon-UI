@@ -2,9 +2,13 @@
 import ApplicationPartition from '@/components/applicationDetail/ApplicationPartition.vue'
 import ApplicationTags from '@/components/applicationDetail/ApplicationTags.vue'
 import ApplicationTargets from '@/components/applicationDetail/ApplicationTargets.vue'
+import { useApplicationInformation } from '@/components/applicationDetail/composables/useApplicationInformation'
 import type { ApplicationDetail } from '@/features/application/entities'
 
 const application = defineModel<ApplicationDetail>({ required: true })
+
+const { editMode, isSending, changeEditMode, finishEditing } =
+  useApplicationInformation()
 </script>
 
 <template>
@@ -13,6 +17,10 @@ const application = defineModel<ApplicationDetail>({ required: true })
       <ApplicationPartition v-model="application" />
       <ApplicationTags v-model="application" />
     </div>
-    <ApplicationTargets :application="application" />
+    <ApplicationTargets
+      :is-edit-mode="editMode === 'targets'"
+      :is-sending="isSending"
+      @change-edit-mode="changeEditMode"
+      @finish-editing="finishEditing" />
   </div>
 </template>

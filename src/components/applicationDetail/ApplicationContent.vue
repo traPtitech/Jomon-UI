@@ -76,9 +76,10 @@ const hasAuthority = computed(() => {
         v-if="hasAuthority"
         :is-edit-mode="isEditMode"
         @click="
-          isEditMode
-            ? emit('changeEditMode', '')
-            : emit('changeEditMode', 'content')
+          emit(
+            'changeEditMode',
+            isEditMode ? '' : ('content' as ApplicationEditMode)
+          )
         " />
     </div>
     <div class="flex justify-end">

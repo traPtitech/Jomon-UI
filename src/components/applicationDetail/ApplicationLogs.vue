@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import ApplicationContent from '@/components/applicationDetail/ApplicationContent.vue'
+import { useApplicationInformation } from '@/components/applicationDetail/composables/useApplicationInformation'
 import type { ApplicationDetail } from '@/features/application/entities'
 import type { ApplicationComment } from '@/features/applicationComment/entities'
 import type { ApplicationStatusDetail } from '@/features/applicationStatus/entities'
@@ -13,6 +14,9 @@ import StatusChangeLog from './StatusChangeLog.vue'
 const props = defineProps<{
   application: ApplicationDetail
 }>()
+
+const { isSending, editMode, changeEditMode, finishEditing } =
+  useApplicationInformation()
 
 type CommentWithType = ApplicationComment & { type: 'comment' }
 type StatusWithType = ApplicationStatusDetail & { type: 'statusChange' }
@@ -38,10 +42,14 @@ const logs = computed((): Log[] => {
 </script>
 
 <template>
-  <div v-if="application">
+  <div v-if="application !== null">
     <ul>
       <li class="vertical-bar">
-        <ApplicationContent :application="application" />
+        <ApplicationContent
+          :is-edit-mode="editMode === 'content'"
+          :is-sending="isSending"
+          @change-edit-mode="changeEditMode($event)"
+          @finish-editing="finishEditing" />
       </li>
       <li
         v-for="(log, i) in logs"

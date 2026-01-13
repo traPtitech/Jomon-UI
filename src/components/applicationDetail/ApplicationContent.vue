@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
-
-import { useToast } from 'vue-toastification'
+import { computed } from 'vue'
 
 import { formatDateAndTime } from '@/lib/date'
 
@@ -11,50 +9,41 @@ import MarkdownTextarea from '@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'
 import { useApplication } from '@/features/application/composables'
-import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import { useUserStore } from '@/features/user/store'
 
 import ApplicationAttachment from './ApplicationAttachment.vue'
+import type { ApplicationEditMode } from './composables/useApplicationInformation'
 
-const props = defineProps<{
-  application: ApplicationDetail
+defineProps<{
+  isEditMode: boolean
+  isSending: boolean
 }>()
+const emit = defineEmits<{
+  (e: 'changeEditMode', value: ApplicationEditMode): void
+  (e: 'finishEditing'): void
+}>()
+const { currentApplication: application, editedValue } = useApplicationStore()
+const formattedDateAndTime = computed(() =>
+  application.value?.createdAt
+    ? formatDateAndTime(application.value.createdAt)
+    : ''
+)
 
-const formattedDateAndTime = formatDateAndTime(props.application.createdAt)
+const { me, userMap } = useUserStore()
 
-const toast = useToast()
-const { isApplicationCreator } = useApplication(props.application)
+const getUserName = (userId: string) => userMap.value[userId] || ''
+const getUserNameWithFallback = (userId: string) =>
+  userMap.value[userId] || userId
 
-const { me, getUserName, getUserNameWithFallback } = useUserStore()
-const { editApplication } = useApplicationStore()
-
-const hasAuthority = isApplicationCreator.value(me.value)
-const isEditMode = ref(false)
-const editedContent = ref(props.application.content)
-const toggleEditContent = () => {
-  if (isEditMode.value) {
-    editedContent.value = props.application.content
-  }
-  isEditMode.value = !isEditMode.value
-}
-const handleUpdateContent = async () => {
-  try {
-    await editApplication(props.application.id, {
-      ...props.application,
-      partition: props.application.partition.id,
-      content: editedContent.value,
-    })
-    toast.success('更新しました')
-  } catch {
-    toast.error('更新に失敗しました')
-  }
-  isEditMode.value = false
-}
+const hasAuthority = computed(() => {
+  if (!application.value) return false
+  return useApplication(application.value).isApplicationCreator.value(me.value)
+})
 </script>
 
 <template>
-  <div class="flex w-full flex-col gap-3">
+  <div v-if="application !== null" class="flex w-full flex-col gap-3">
     <div class="flex w-full items-center">
       <div class="flex flex-1 items-center gap-4">
         <UserIcon class="w-12" :name="getUserName(application.createdBy)" />
@@ -72,28 +61,34 @@ const handleUpdateContent = async () => {
       </time>
     </div>
     <div class="ml-16 flex items-start gap-2">
+      <MarkdownTextarea
+        v-if="isEditMode"
+        v-model="editedValue.content"
+        label="詳細"
+        class="flex-1" />
       <div
-        v-if="!isEditMode"
+        v-else
         class="w-full flex-1 rounded-lg border border-surface-secondary px-4 py-3">
         <MarkdownIt :text="application.content" />
         <ApplicationAttachment :files="application.files" />
       </div>
-      <MarkdownTextarea
-        v-else
-        v-model="editedContent"
-        label="詳細"
-        class="flex-1" />
       <EditButton
         v-if="hasAuthority"
         :is-edit-mode="isEditMode"
-        @click="toggleEditContent" />
+        @click="
+          emit(
+            'changeEditMode',
+            isEditMode ? '' : ('content' as ApplicationEditMode)
+          )
+        " />
     </div>
     <div class="flex justify-end">
       <SimpleButton
         v-if="isEditMode"
         font-size="base"
         padding="sm"
-        @click="handleUpdateContent">
+        :disabled="isSending"
+        @click="emit('finishEditing')">
         完了
       </SimpleButton>
     </div>

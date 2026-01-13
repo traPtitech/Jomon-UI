@@ -7,58 +7,53 @@ import ApplicationTarget from '@/components/applicationDetail/ApplicationTarget.
 import EditButton from '@/components/shared/EditButton.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useApplication } from '@/features/application/composables'
-import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import type { ApplicationTargetDetail } from '@/features/applicationTarget/entities'
 import { useUserStore } from '@/features/user/store'
 
-const props = defineProps<{
-  application: ApplicationDetail
+import type { ApplicationEditMode } from './composables/useApplicationInformation'
+
+defineProps<{
+  isEditMode: boolean
+  isSending: boolean
 }>()
+const emit = defineEmits<{
+  (e: 'changeEditMode', value: ApplicationEditMode): void
+  (e: 'finishEditing'): void
+}>()
+const { currentApplication: application, editedValue } = useApplicationStore()
 
 const { me } = useUserStore()
-const { isApplicationCreator } = useApplication(props.application)
-const { editApplication } = useApplicationStore()
 const toast = useToast()
 
-const hasAuthority = isApplicationCreator.value(me.value)
+const hasAuthority = computed(() => {
+  if (!application.value) return false
+  return useApplication(application.value).isApplicationCreator.value(me.value)
+})
 
-const isEditMode = ref(false)
 const editedTargets = ref<ApplicationTargetDetail[]>(
-  props.application.targets.map(t => ({ ...t }))
+  application.value?.targets.map(t => ({ ...t })) ?? []
 )
 
-const selectedUserIds = computed(() =>
-  isEditMode.value
-    ? editedTargets.value.map(t => t.target)
-    : props.application.targets.map(t => t.target)
-)
+const selectedUserIds = computed(() => editedTargets.value.map(t => t.target))
 
 const handleDeleteTarget = (id: string) => {
   editedTargets.value = editedTargets.value.filter(target => target.id !== id)
 }
 
-const toggleEditTargets = () => {
-  editedTargets.value = props.application.targets.map(t => ({ ...t }))
-  isEditMode.value = !isEditMode.value
-}
-
-const handleUpdateTargets = async () => {
+const handleUpdateTargets = () => {
   if (editedTargets.value.some(target => target.target === '')) {
     toast.error('払い戻し対象者を選択してください')
     return
   }
+  if (!application.value) return
+
   try {
-    await editApplication(props.application.id, {
-      ...props.application,
-      partition: props.application.partition.id,
-      targets: editedTargets.value,
-    })
-    toast.success('更新しました')
+    editedValue.value.targets = editedTargets.value
+    emit('finishEditing')
   } catch {
     toast.error('更新に失敗しました')
   }
-  isEditMode.value = false
 }
 </script>
 
@@ -71,13 +66,19 @@ const handleUpdateTargets = async () => {
           v-if="isEditMode"
           font-size="base"
           padding="sm"
+          :disabled="isSending"
           @click="handleUpdateTargets">
           完了
         </SimpleButton>
         <EditButton
           v-if="hasAuthority"
           :is-edit-mode="isEditMode"
-          @click="toggleEditTargets" />
+          @click="
+            emit(
+              'changeEditMode',
+              isEditMode ? '' : ('targets' as ApplicationEditMode)
+            )
+          " />
       </div>
     </div>
     <div v-if="application" class="flex flex-col gap-2">

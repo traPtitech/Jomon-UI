@@ -15,7 +15,11 @@ const { editMode, isSending, changeEditMode, finishEditing } =
   <div class="flex flex-col gap-8">
     <div class="flex flex-col gap-3">
       <ApplicationPartition v-model="application" />
-      <ApplicationTags v-model="application" />
+      <ApplicationTags
+        :is-edit-mode="editMode === 'tags'"
+        :is-sending="isSending"
+        @change-edit-mode="changeEditMode"
+        @finish-editing="finishEditing" />
     </div>
     <ApplicationTargets
       :is-edit-mode="editMode === 'targets'"

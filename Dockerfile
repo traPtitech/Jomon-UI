@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM node:20-alpine AS build
+FROM --platform=$BUILDPLATFORM node:24.11.0-alpine AS build
 WORKDIR /app
 
 COPY package*.json ./

@@ -1,11 +1,21 @@
 FROM --platform=$BUILDPLATFORM node:24.11.0-alpine AS build
+RUN apk add --update --no-cache openjdk17-jre-headless
+
 WORKDIR /app
 
 COPY package*.json ./
-COPY patches/ ./patches/
+COPY scripts/ ./scripts/
+
 RUN npm ci
 
 COPY . .
+RUN npm run gen-api
+RUN npm run lint:nofix && \
+    npm run format:check && \
+    npm run type-check && \
+    npm run type-check:tests && \
+    npm run test:unit
+
 RUN NODE_ENV=production npm run build
 
 FROM nginx:1.25-alpine

@@ -12,6 +12,8 @@ jobs:
   image:
     name: Build Docker Image
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v6
       - name: Set up QEMU

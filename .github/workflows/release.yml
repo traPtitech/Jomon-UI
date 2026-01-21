@@ -44,6 +44,8 @@ jobs:
   image:
     name: Build Docker Image
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Set IMAGE_TAG env

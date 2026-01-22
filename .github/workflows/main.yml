@@ -36,9 +36,9 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/${{ env.IMAGE_NAME }}:main
-          cache-from: type=registry,ref=ghcr.io/${{ env.IMAGE_NAME }}:buildcache
-          cache-to: type=registry,ref=ghcr.io/${{ env.IMAGE_NAME }}:buildcache,mode=max
+            ghcr.io/traptitech/${{ env.IMAGE_NAME }}:main
+          cache-from: type=registry,ref=ghcr.io/traptitech/${{ env.IMAGE_NAME }}:buildcache
+          cache-to: type=registry,ref=ghcr.io/traptitech/${{ env.IMAGE_NAME }}:buildcache,mode=max
 
   run-manifest-renovate:
     name: Run Renovate on manifest

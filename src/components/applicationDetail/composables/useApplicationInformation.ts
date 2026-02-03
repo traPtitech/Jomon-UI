@@ -31,7 +31,10 @@ export const useApplicationInformation = () => {
           content: currentApplication.value.content,
           tags: [...currentApplication.value.tags],
           partition: currentApplication.value.partition.id,
-          targets: [...currentApplication.value.targets],
+          targets: currentApplication.value.targets.map(t => ({
+            amount: t.amount,
+            target: t.target,
+          })),
         }
       }
     } else {
@@ -43,7 +46,10 @@ export const useApplicationInformation = () => {
           content: currentApplication.value.content,
           tags: [...currentApplication.value.tags],
           partition: currentApplication.value.partition.id,
-          targets: [...currentApplication.value.targets],
+          targets: currentApplication.value.targets.map(t => ({
+            amount: t.amount,
+            target: t.target,
+          })),
         }
       }
     }

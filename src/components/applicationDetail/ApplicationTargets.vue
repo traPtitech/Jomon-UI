@@ -47,7 +47,10 @@ const handleUpdateTargets = () => {
     toast.error('払い戻し対象者を選択してください')
     return
   }
-  editedValue.value.targets = localEditedTargets.value
+  editedValue.value.targets = localEditedTargets.value.map(t => ({
+    amount: t.amount,
+    target: t.target,
+  }))
   emit('finishEditing')
 }
 </script>
@@ -57,45 +60,27 @@ const handleUpdateTargets = () => {
     <div class="flex items-center justify-between">
       <h2 class="text-sm font-bold">払い戻し対象者</h2>
       <div class="flex items-center gap-2">
-        <SimpleButton
-          v-if="isEditMode"
-          font-size="base"
-          padding="sm"
-          :disabled="isSending"
+        <SimpleButton v-if="isEditMode" font-size="base" padding="sm" :disabled="isSending"
           @click="handleUpdateTargets">
           完了
         </SimpleButton>
-        <EditButton
-          v-if="hasAuthority"
-          :is-edit-mode="isEditMode"
-          @click="
-            emit(
-              'changeEditMode',
-              isEditMode ? '' : ('targets' as ApplicationEditMode)
-            )
+        <EditButton v-if="hasAuthority" :is-edit-mode="isEditMode" @click="
+          emit(
+            'changeEditMode',
+            isEditMode ? '' : ('targets' as ApplicationEditMode)
+          )
           " />
       </div>
     </div>
     <div v-if="application" class="flex flex-col gap-2">
       <template v-if="isEditMode">
-        <ApplicationTarget
-          v-for="(target, i) in localEditedTargets"
-          :key="target.id"
-          v-model:target-model="localEditedTargets[i]"
-          :is-edit-mode="isEditMode"
-          :application="application"
-          :target="target"
-          :selected-user-ids="selectedUserIds"
-          @delete="handleDeleteTarget" />
+        <ApplicationTarget v-for="(target, i) in localEditedTargets" :key="target.id"
+          v-model:target-model="localEditedTargets[i]" :is-edit-mode="isEditMode" :application="application"
+          :target="target" :selected-user-ids="selectedUserIds" @delete="handleDeleteTarget" />
       </template>
       <template v-else>
-        <ApplicationTarget
-          v-for="target in application.targets"
-          :key="target.id"
-          :is-edit-mode="isEditMode"
-          :application="application"
-          :target="target"
-          :selected-user-ids="selectedUserIds" />
+        <ApplicationTarget v-for="target in application.targets" :key="target.id" :is-edit-mode="isEditMode"
+          :application="application" :target="target" :selected-user-ids="selectedUserIds" />
       </template>
     </div>
   </div>

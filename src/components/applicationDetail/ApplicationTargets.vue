@@ -32,22 +32,22 @@ const hasAuthority = computed(() => {
   return useApplication(props.application).isApplicationCreator.value(me.value)
 })
 
-const editedTargets = ref<ApplicationTargetDetail[]>(
+const localEditedTargets = ref<ApplicationTargetDetail[]>(
   props.application.targets.map(t => ({ ...t }))
 )
 
-const selectedUserIds = computed(() => editedTargets.value.map(t => t.target))
+const selectedUserIds = computed(() => localEditedTargets.value.map(t => t.target))
 
 const handleDeleteTarget = (id: string) => {
-  editedTargets.value = editedTargets.value.filter(target => target.id !== id)
+  localEditedTargets.value = localEditedTargets.value.filter(target => target.id !== id)
 }
 
 const handleUpdateTargets = () => {
-  if (editedTargets.value.some(target => target.target === '')) {
+  if (localEditedTargets.value.some(target => target.target === '')) {
     toast.error('払い戻し対象者を選択してください')
     return
   }
-  editedValue.value.targets = editedTargets.value
+  editedValue.value.targets = localEditedTargets.value
   emit('finishEditing')
 }
 </script>
@@ -79,9 +79,9 @@ const handleUpdateTargets = () => {
     <div v-if="application" class="flex flex-col gap-2">
       <template v-if="isEditMode">
         <ApplicationTarget
-          v-for="(target, i) in editedTargets"
+          v-for="(target, i) in localEditedTargets"
           :key="target.id"
-          v-model:target-model="editedTargets[i]"
+          v-model:target-model="localEditedTargets[i]"
           :is-edit-mode="isEditMode"
           :application="application"
           :target="target"

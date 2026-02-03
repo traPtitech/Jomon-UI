@@ -58,6 +58,7 @@ const { isSending, editMode, changeEditMode, finishEditing } =
         :finish-editing="finishEditing" />
       <ApplicationSidebar
         v-model="application"
+        :application="application"
         :is-sending="isSending"
         :edit-mode="editMode"
         :change-edit-mode="changeEditMode"

@@ -9,13 +9,15 @@ import MarkdownTextarea from '@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'
 import { useApplication } from '@/features/application/composables'
+import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import { useUserStore } from '@/features/user/store'
 
 import ApplicationAttachment from './ApplicationAttachment.vue'
 import type { ApplicationEditMode } from './composables/useApplicationInformation'
 
-defineProps<{
+const props = defineProps<{
+  application: ApplicationDetail
   isEditMode: boolean
   isSending: boolean
 }>()
@@ -23,11 +25,9 @@ const emit = defineEmits<{
   (e: 'changeEditMode', value: ApplicationEditMode): void
   (e: 'finishEditing'): void
 }>()
-const { currentApplication: application, editedValue } = useApplicationStore()
+const { editedValue } = useApplicationStore()
 const formattedDateAndTime = computed(() =>
-  application.value?.createdAt
-    ? formatDateAndTime(application.value.createdAt)
-    : ''
+  formatDateAndTime(props.application.createdAt)
 )
 
 const { me, userMap } = useUserStore()
@@ -37,8 +37,7 @@ const getUserNameWithFallback = (userId: string) =>
   userMap.value[userId] || userId
 
 const hasAuthority = computed(() => {
-  if (!application.value) return false
-  return useApplication(application.value).isApplicationCreator.value(me.value)
+  return useApplication(props.application).isApplicationCreator.value(me.value)
 })
 </script>
 

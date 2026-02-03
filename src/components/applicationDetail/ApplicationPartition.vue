@@ -5,13 +5,15 @@ import EditButton from '@/components/shared/EditButton.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useApplication } from '@/features/application/composables'
+import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import { usePartitionStore } from '@/features/partition/store'
 import { useUserStore } from '@/features/user/store'
 
 import type { ApplicationEditMode } from './composables/useApplicationInformation'
 
-defineProps<{
+const props = defineProps<{
+  application: ApplicationDetail
   isEditMode: boolean
   isSending: boolean
 }>()
@@ -20,14 +22,13 @@ const emit = defineEmits<{
   (e: 'finishEditing'): void
 }>()
 
-const { currentApplication: application, editedValue } = useApplicationStore()
+const { editedValue } = useApplicationStore()
 
 const { me } = useUserStore()
 const { partitionOptions } = usePartitionStore()
 
 const hasAuthority = computed(() => {
-  if (!application.value) return false
-  return useApplication(application.value).isApplicationCreator.value(me.value)
+  return useApplication(props.application).isApplicationCreator.value(me.value)
 })
 </script>
 

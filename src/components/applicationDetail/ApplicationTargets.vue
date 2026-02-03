@@ -7,13 +7,15 @@ import ApplicationTarget from '@/components/applicationDetail/ApplicationTarget.
 import EditButton from '@/components/shared/EditButton.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useApplication } from '@/features/application/composables'
+import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import type { ApplicationTargetDetail } from '@/features/applicationTarget/entities'
 import { useUserStore } from '@/features/user/store'
 
 import type { ApplicationEditMode } from './composables/useApplicationInformation'
 
-defineProps<{
+const props = defineProps<{
+  application: ApplicationDetail
   isEditMode: boolean
   isSending: boolean
 }>()
@@ -21,18 +23,17 @@ const emit = defineEmits<{
   (e: 'changeEditMode', value: ApplicationEditMode): void
   (e: 'finishEditing'): void
 }>()
-const { currentApplication: application, editedValue } = useApplicationStore()
+const { editedValue } = useApplicationStore()
 
 const { me } = useUserStore()
 const toast = useToast()
 
 const hasAuthority = computed(() => {
-  if (!application.value) return false
-  return useApplication(application.value).isApplicationCreator.value(me.value)
+  return useApplication(props.application).isApplicationCreator.value(me.value)
 })
 
 const editedTargets = ref<ApplicationTargetDetail[]>(
-  application.value?.targets.map(t => ({ ...t })) ?? []
+  props.application.targets.map(t => ({ ...t }))
 )
 
 const selectedUserIds = computed(() => editedTargets.value.map(t => t.target))
@@ -46,14 +47,8 @@ const handleUpdateTargets = () => {
     toast.error('払い戻し対象者を選択してください')
     return
   }
-  if (!application.value) return
-
-  try {
-    editedValue.value.targets = editedTargets.value
-    emit('finishEditing')
-  } catch {
-    toast.error('更新に失敗しました')
-  }
+  editedValue.value.targets = editedTargets.value
+  emit('finishEditing')
 }
 </script>
 

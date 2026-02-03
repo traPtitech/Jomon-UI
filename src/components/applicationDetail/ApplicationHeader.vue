@@ -22,6 +22,7 @@ const totalAmount = computed(() =>
 <template>
   <div class="flex flex-col gap-4">
     <ApplicationTitle
+      :application="props.application"
       :is-edit-mode="props.editMode === 'title'"
       :is-sending="props.isSending"
       @change-edit-mode="props.changeEditMode"

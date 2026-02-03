@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 
 import ApplicationContent from '@/components/applicationDetail/ApplicationContent.vue'
-import { useApplicationInformation } from '@/components/applicationDetail/composables/useApplicationInformation'
+import type { ApplicationEditMode } from '@/components/applicationDetail/composables/useApplicationInformation.ts'
 import type { ApplicationDetail } from '@/features/application/entities'
 import type { ApplicationComment } from '@/features/applicationComment/entities'
 import type { ApplicationStatusDetail } from '@/features/applicationStatus/entities'
@@ -13,10 +13,11 @@ import StatusChangeLog from './StatusChangeLog.vue'
 
 const props = defineProps<{
   application: ApplicationDetail
+  isSending: boolean
+  editMode: ApplicationEditMode
+  changeEditMode: (mode: ApplicationEditMode) => void
+  finishEditing: () => void
 }>()
-
-const { isSending, editMode, changeEditMode, finishEditing } =
-  useApplicationInformation()
 
 type CommentWithType = ApplicationComment & { type: 'comment' }
 type StatusWithType = ApplicationStatusDetail & { type: 'statusChange' }
@@ -46,10 +47,10 @@ const logs = computed((): Log[] => {
     <ul>
       <li class="vertical-bar">
         <ApplicationContent
-          :is-edit-mode="editMode === 'content'"
-          :is-sending="isSending"
-          @change-edit-mode="changeEditMode($event)"
-          @finish-editing="finishEditing" />
+          :is-edit-mode="props.editMode === 'content'"
+          :is-sending="props.isSending"
+          @change-edit-mode="props.changeEditMode($event)"
+          @finish-editing="props.finishEditing" />
       </li>
       <li
         v-for="(log, i) in logs"

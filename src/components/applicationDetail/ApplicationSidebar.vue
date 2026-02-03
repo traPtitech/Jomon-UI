@@ -2,30 +2,34 @@
 import ApplicationPartition from '@/components/applicationDetail/ApplicationPartition.vue'
 import ApplicationTags from '@/components/applicationDetail/ApplicationTags.vue'
 import ApplicationTargets from '@/components/applicationDetail/ApplicationTargets.vue'
-import { useApplicationInformation } from '@/components/applicationDetail/composables/useApplicationInformation'
+import type { ApplicationEditMode } from '@/components/applicationDetail/composables/useApplicationInformation.ts'
 
-const { editMode, isSending, changeEditMode, finishEditing } =
-  useApplicationInformation()
+const props = defineProps<{
+  isSending: boolean
+  editMode: ApplicationEditMode
+  changeEditMode: (mode: ApplicationEditMode) => void
+  finishEditing: () => void
+}>()
 </script>
 
 <template>
   <div class="flex flex-col gap-8">
     <div class="flex flex-col gap-3">
       <ApplicationPartition
-        :is-edit-mode="editMode === 'partition'"
-        :is-sending="isSending"
-        @change-edit-mode="changeEditMode"
-        @finish-editing="finishEditing" />
+        :is-edit-mode="props.editMode === 'partition'"
+        :is-sending="props.isSending"
+        @change-edit-mode="props.changeEditMode"
+        @finish-editing="props.finishEditing" />
       <ApplicationTags
-        :is-edit-mode="editMode === 'tags'"
-        :is-sending="isSending"
-        @change-edit-mode="changeEditMode"
-        @finish-editing="finishEditing" />
+        :is-edit-mode="props.editMode === 'tags'"
+        :is-sending="props.isSending"
+        @change-edit-mode="props.changeEditMode"
+        @finish-editing="props.finishEditing" />
     </div>
     <ApplicationTargets
-      :is-edit-mode="editMode === 'targets'"
-      :is-sending="isSending"
-      @change-edit-mode="changeEditMode"
-      @finish-editing="finishEditing" />
+      :is-edit-mode="props.editMode === 'targets'"
+      :is-sending="props.isSending"
+      @change-edit-mode="props.changeEditMode"
+      @finish-editing="props.finishEditing" />
   </div>
 </template>

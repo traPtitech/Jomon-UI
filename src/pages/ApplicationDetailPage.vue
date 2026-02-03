@@ -6,6 +6,7 @@ import { toId } from '@/lib/parseQueryParams'
 import ApplicationHeader from '@/components/applicationDetail/ApplicationHeader.vue'
 import ApplicationLogs from '@/components/applicationDetail/ApplicationLogs.vue'
 import ApplicationSidebar from '@/components/applicationDetail/ApplicationSidebar.vue'
+import { useApplicationInformation } from '@/components/applicationDetail/composables/useApplicationInformation'
 import { useApplicationStore } from '@/features/application/store'
 import { usePartitionStore } from '@/features/partition/store'
 import { useTagStore } from '@/features/tag/store'
@@ -31,19 +32,37 @@ if (!isUserFetched.value) {
 if (!isTagFetched.value) {
   await fetchTags()
 }
+
+const { isSending, editMode, changeEditMode, finishEditing } =
+  useApplicationInformation()
 </script>
 
 <template>
   <div
     v-if="application !== undefined && application !== null"
     class="flex flex-col gap-6">
-    <ApplicationHeader :application="application" />
+    <ApplicationHeader
+      :application="application"
+      :is-sending="isSending"
+      :edit-mode="editMode"
+      :change-edit-mode="changeEditMode"
+      :finish-editing="finishEditing" />
     <div class="h-px bg-[#e5e7eb]" />
     <div class="flex flex-col justify-between gap-12 lg:flex-row">
       <ApplicationLogs
         class="order-2 lg:order-1 lg:w-2/3"
-        :application="application" />
-      <ApplicationSidebar v-model="application" class="order-1 lg:order-2" />
+        :application="application"
+        :is-sending="isSending"
+        :edit-mode="editMode"
+        :change-edit-mode="changeEditMode"
+        :finish-editing="finishEditing" />
+      <ApplicationSidebar
+        v-model="application"
+        :is-sending="isSending"
+        :edit-mode="editMode"
+        :change-edit-mode="changeEditMode"
+        :finish-editing="finishEditing"
+        class="order-1 lg:order-2" />
     </div>
   </div>
 </template>

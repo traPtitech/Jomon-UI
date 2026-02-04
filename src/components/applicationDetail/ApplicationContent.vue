@@ -8,9 +8,9 @@ import MarkdownIt from '@/components/shared/MarkdownIt.vue'
 import MarkdownTextarea from '@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'
-import { useApplication } from '@/features/application/composables'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
+import { useStatusOptions } from '@/features/applicationStatus/composables'
 import { useUserStore } from '@/features/user/store'
 
 import ApplicationAttachment from './ApplicationAttachment.vue'
@@ -30,15 +30,11 @@ const formattedDateAndTime = computed(() =>
   formatDateAndTime(props.application.createdAt)
 )
 
-const { me, userMap } = useUserStore()
-
+const { userMap } = useUserStore()
+const hasAuthority = computed(() => useStatusOptions(props.application))
 const getUserName = (userId: string) => userMap.value[userId] || ''
 const getUserNameWithFallback = (userId: string) =>
   userMap.value[userId] || userId
-
-const hasAuthority = computed(() => {
-  return useApplication(props.application).isApplicationCreator.value(me.value)
-})
 </script>
 
 <template>

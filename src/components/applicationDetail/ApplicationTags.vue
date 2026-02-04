@@ -5,10 +5,9 @@ import EditButton from '@/components/shared/EditButton.vue'
 import SearchSelectTag from '@/components/shared/SearchSelectTag.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import TagsPartition from '@/components/shared/TagsPartition.vue'
-import { useApplication } from '@/features/application/composables'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
-import { useUserStore } from '@/features/user/store'
+import { useStatusOptions } from '@/features/applicationStatus/composables'
 
 import type { ApplicationEditMode } from './composables/useApplicationInformation'
 
@@ -24,11 +23,7 @@ const emit = defineEmits<{
 
 const { editedValue } = useApplicationStore()
 
-const { me } = useUserStore()
-
-const hasAuthority = computed(() => {
-  return useApplication(props.application).isApplicationCreator.value(me.value)
-})
+const hasAuthority = computed(() => useStatusOptions(props.application))
 </script>
 
 <template>

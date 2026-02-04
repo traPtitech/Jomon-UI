@@ -4,11 +4,10 @@ import { computed } from 'vue'
 import EditButton from '@/components/shared/EditButton.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
-import { useApplication } from '@/features/application/composables'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
+import { useStatusOptions } from '@/features/applicationStatus/composables'
 import { usePartitionStore } from '@/features/partition/store'
-import { useUserStore } from '@/features/user/store'
 
 import type { ApplicationEditMode } from './composables/useApplicationInformation'
 
@@ -24,12 +23,9 @@ const emit = defineEmits<{
 
 const { editedValue } = useApplicationStore()
 
-const { me } = useUserStore()
 const { partitionOptions } = usePartitionStore()
 
-const hasAuthority = computed(() => {
-  return useApplication(props.application).isApplicationCreator.value(me.value)
-})
+const hasAuthority = computed(() => useStatusOptions(props.application))
 </script>
 
 <template>

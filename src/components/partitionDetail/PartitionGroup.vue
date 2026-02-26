@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { EditMode } from '@/components/partitionDetail/composables/usePartitionInformation'
+import type { PartitionEditMode } from '@/components/partitionDetail/composables/usePartitionInformation'
 import EditButton from '@/components/shared/EditButton.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
@@ -14,7 +14,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const emit = defineEmits<{
-  (e: 'changeEditMode', value: EditMode): void
+  (e: 'changeEditMode', value: PartitionEditMode): void
   (e: 'finishEditing'): void
 }>()
 

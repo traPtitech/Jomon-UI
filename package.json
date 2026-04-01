@@ -21,8 +21,7 @@
     "postinstall": "npm run gen-api",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test:e2e": "playwright test",
-    "prepare": "husky"
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@headlessui/tailwindcss": "^0.2.2",

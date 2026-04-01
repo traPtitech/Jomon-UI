@@ -31,7 +31,6 @@ export const useNewPartition = () => {
       return
     }
     try {
-      isSending.value = true
       // We only allow submission if validation passes, so assertion is safe here or we can check again.
       // But PartitionSeed expects string. SearchSelect might be cleared.
       // If required, we should add validation.
@@ -39,6 +38,7 @@ export const useNewPartition = () => {
         toast.warning('所属するパーティショングループは必須です')
         return
       }
+      isSending.value = true
       await createPartition({
         ...partition.value,
         parentPartitionGroupId: partition.value.parentPartitionGroupId,

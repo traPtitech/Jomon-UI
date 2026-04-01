@@ -5,7 +5,6 @@ import { fileURLToPath } from 'url'
 
 import { addApis } from './add-apis.js'
 import { addTsIgnoreToImports } from './add-ts-ignore-to-imports.js'
-import { fixConfigurationTypes } from './fix-configuration-types.js'
 
 const SWAGGER_PATH =
   'https://raw.githubusercontent.com/traPtitech/Jomon/v2/docs/swagger.yaml'
@@ -41,7 +40,4 @@ await (async () => {
 
   // importsNotUsedAsValuesでエラーが起きるのですべてのimportに@ts-ignoreを付与する
   await addTsIgnoreToImports(GENERATED_DIR)
-
-  // exactOptionalPropertyTypesに対応するためにConfigurationの型を修正する
-  await fixConfigurationTypes(GENERATED_DIR)
 })()

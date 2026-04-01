@@ -30,49 +30,49 @@ export class Configuration {
      * @param name security name
      * @memberof Configuration
      */
-    apiKey?:( string | Promise<string> | ((name: string) => string) | ((name: string) => Promise<string>)) | undefined;
+    apiKey?: string | Promise<string> | ((name: string) => string) | ((name: string) => Promise<string>);
     /**
      * parameter for basic security
      *
      * @type {string}
      * @memberof Configuration
      */
-    username?: string | undefined;
+    username?: string;
     /**
      * parameter for basic security
      *
      * @type {string}
      * @memberof Configuration
      */
-    password?: string | undefined;
+    password?: string;
     /**
      * parameter for oauth2 security
      * @param name security name
      * @param scopes oauth2 scope
      * @memberof Configuration
      */
-    accessToken?:( string | Promise<string> | ((name?: string, scopes?: string[]) => string) | ((name?: string, scopes?: string[]) => Promise<string>)) | undefined;
+    accessToken?: string | Promise<string> | ((name?: string, scopes?: string[]) => string) | ((name?: string, scopes?: string[]) => Promise<string>);
     /**
      * override base path
      *
      * @type {string}
      * @memberof Configuration
      */
-    basePath?: string | undefined;
+    basePath?: string;
     /**
      * override server index
      *
      * @type {number}
      * @memberof Configuration
      */
-    serverIndex?: number | undefined;
+    serverIndex?: number;
     /**
      * base options for axios calls
      *
      * @type {any}
      * @memberof Configuration
      */
-    baseOptions?: any | undefined;
+    baseOptions?: any;
     /**
      * The FormData constructor that will be used to create multipart form data
      * requests. You can inject this here so that execution environments that
@@ -80,7 +80,7 @@ export class Configuration {
      *
      * @type {new () => FormData}
      */
-    formDataCtor?:( new () => any) | undefined;
+    formDataCtor?: new () => any;
 
     constructor(param: ConfigurationParameters = {}) {
         this.apiKey = param.apiKey;

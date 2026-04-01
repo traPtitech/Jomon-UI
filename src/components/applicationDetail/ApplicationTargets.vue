@@ -1,4 +1,3 @@
-```typescript
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 

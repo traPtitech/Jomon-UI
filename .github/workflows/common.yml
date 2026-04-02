@@ -24,7 +24,7 @@ jobs:
           node-version-file: ./.node-version
           cache: npm
       - run: npm ci
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: apis
           path: ./src/lib/apis/generated

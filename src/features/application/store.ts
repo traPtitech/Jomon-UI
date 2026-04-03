@@ -36,7 +36,7 @@ export const useApplicationStore = defineStoreComposable('application', () => {
   const applications = ref<Application[]>([])
   const status = ref<AsyncStatus>('idle')
   const error = ref<string | null>(null)
-  const filterParams = ref<ApplicationQuerySeed>(createDefaultParams())
+  const filterParams = ref(createDefaultParams())
   const currentApplication = ref<ApplicationDetail | null>(null)
 
   const hasApplicationDetail = computed(() => currentApplication.value !== null)

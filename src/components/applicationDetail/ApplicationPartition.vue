@@ -24,7 +24,7 @@ const toast = useToast()
 const hasAuthority = computed(() => isApplicationCreator.value(me.value))
 
 const isEditMode = ref(false)
-const editedPartition = ref<string>(application.value.partition.id)
+const editedPartition = ref(application.value.partition.id)
 const toggleEditPartition = () => {
   if (isEditMode.value) {
     editedPartition.value = application.value.partition.id

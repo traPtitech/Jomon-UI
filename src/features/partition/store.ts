@@ -26,7 +26,7 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
   const status = ref<AsyncStatus>('idle')
   const error = ref<string | null>(null)
   const currentPartition = ref<Partition | undefined>(undefined)
-  const editedValue = ref<PartitionSeed>(createDefaultPartitionSeed())
+  const editedValue = ref(createDefaultPartitionSeed())
 
   const partitionOptions = computed(() =>
     partitions.value.map(partition => ({

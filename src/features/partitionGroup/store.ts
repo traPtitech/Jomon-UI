@@ -26,9 +26,7 @@ export const usePartitionGroupStore = defineStoreComposable(
     const status = ref<AsyncStatus>('idle')
     const error = ref<string | null>(null)
     const currentPartitionGroup = ref<PartitionGroup | undefined>(undefined)
-    const editedValue = ref(
-      createDefaultPartitionGroupSeed()
-    )
+    const editedValue = ref(createDefaultPartitionGroupSeed())
 
     const partitionGroupOptions = computed(() =>
       partitionGroups.value.map(group => ({

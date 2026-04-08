@@ -23,9 +23,7 @@ const toast = useToast()
 const hasAuthority = isApplicationCreator.value(me.value)
 
 const isEditMode = ref(false)
-const editedTargets = ref(
-  props.application.targets.map(t => ({ ...t }))
-)
+const editedTargets = ref(props.application.targets.map(t => ({ ...t })))
 
 const selectedUserIds = computed(() =>
   isEditMode.value

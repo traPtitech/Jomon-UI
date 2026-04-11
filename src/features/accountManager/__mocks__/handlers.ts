@@ -2,7 +2,7 @@ import { HttpResponse, type PathParams, http } from 'msw'
 
 import { mockUserMehm8128 } from '@/features/user/__mocks__/handlers'
 
-const mockAccountManagers = [mockUserMehm8128.id]
+let mockAccountManagers = [mockUserMehm8128.id]
 
 export const accountManagerHandlers = [
   http.get('/api/account-managers', () => {
@@ -12,10 +12,18 @@ export const accountManagerHandlers = [
     '/api/account-managers',
     async ({ request }) => {
       const reqBody: string[] = await request.json()
+      mockAccountManagers.push(...reqBody)
       return HttpResponse.json(reqBody)
     }
   ),
-  http.delete('/api/account-managers', () => {
-    return HttpResponse.json(null)
-  }),
+  http.delete<PathParams, string[], string[]>(
+    '/api/account-managers',
+    async ({ request }) => {
+      const reqBody: string[] = await request.json()
+      mockAccountManagers = mockAccountManagers.filter(
+        id => !reqBody.includes(id)
+      )
+      return HttpResponse.json(null)
+    }
+  ),
 ]

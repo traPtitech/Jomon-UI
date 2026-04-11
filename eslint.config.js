@@ -1,5 +1,4 @@
 import pluginJs from '@eslint/js'
-import vitest from '@vitest/eslint-plugin'
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 import {
   defineConfigWithVueTs,
@@ -48,7 +47,6 @@ export default defineConfig([
     files: [
       'scripts/**/*.{js,mjs,cjs,ts,mts,cts}',
       'vite.config.ts',
-      'vitest.config.ts',
       '**/*.config.{js,mjs,cjs,ts,mts,cts}',
     ],
     languageOptions: {
@@ -56,7 +54,7 @@ export default defineConfig([
       parserOptions: {
         projectService: {
           defaultProject: './tsconfig.node.json',
-          allowDefaultProject: ['eslint.config.js', 'vitest.config.ts'],
+          allowDefaultProject: ['eslint.config.js'],
         },
         tsconfigRootDir,
       },
@@ -91,15 +89,5 @@ export default defineConfig([
       },
     }
   ),
-  {
-    files: ['tests/**/*.ts'],
-    ...vitest.configs.recommended,
-    languageOptions: {
-      globals: {
-        ...vitest.environments.env.globals,
-        ...globals.node,
-      },
-    },
-  },
   skipFormatting,
 ])

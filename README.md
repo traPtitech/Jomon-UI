@@ -62,27 +62,23 @@ npm install
 3. `npm run lint:nofix`
 4. `npm run format:check`
 5. `npm run type-check`
-6. `npm run type-check:tests`
-7. `npm run test:unit`
-8. `npm run build`
+6. `npm run build`
 
 ### Scripts
 
-| Command                    | Description                                                       |
-| -------------------------- | ----------------------------------------------------------------- |
-| `npm run dev`              | Start the Vite development server.                                |
-| `npm run build`            | Run `vue-tsc --noEmit` then produce a production build with Vite. |
-| `npm run serve`            | Preview an existing production build via `vite preview`.          |
-| `npm run build:watch`      | Continuously watch and rebuild during development.                |
-| `npm run lint`             | Execute ESLint with automatic fixes.                              |
-| `npm run lint:nofix`       | Execute ESLint without applying fixes.                            |
-| `npm run type-check`       | Run type-only checks using `vue-tsc --noEmit`.                    |
-| `npm run format`           | Format code using Prettier.                                       |
-| `npm run format:check`     | Verify formatting differences with Prettier.                      |
-| `npm run test:unit`        | Run unit tests with Vitest.                                       |
-| `npm run type-check:tests` | Run type-only checks for tests using `vue-tsc --noEmit`.          |
-| `npm run gen-api`          | Generate the TypeScript client from the OpenAPI schema.           |
-| `npm run clean`            | Remove generated API clients in `src/lib/apis/generated`.         |
+| Command                | Description                                                       |
+| ---------------------- | ----------------------------------------------------------------- |
+| `npm run dev`          | Start the Vite development server.                                |
+| `npm run build`        | Run `vue-tsc --noEmit` then produce a production build with Vite. |
+| `npm run serve`        | Preview an existing production build via `vite preview`.          |
+| `npm run build:watch`  | Continuously watch and rebuild during development.                |
+| `npm run lint`         | Execute ESLint with automatic fixes.                              |
+| `npm run lint:nofix`   | Execute ESLint without applying fixes.                            |
+| `npm run type-check`   | Run type-only checks using `vue-tsc --noEmit`.                    |
+| `npm run format`       | Format code using Prettier.                                       |
+| `npm run format:check` | Verify formatting differences with Prettier.                      |
+| `npm run gen-api`      | Generate the TypeScript client from the OpenAPI schema.           |
+| `npm run clean`        | Remove generated API clients in `src/lib/apis/generated`.         |
 
 > After `npm install`, the `postinstall` script automatically triggers `npm run gen-api`. When the API schema changes, run `npm run clean && npm run gen-api` manually.
 
@@ -104,9 +100,6 @@ src/
   lib/apis/generated/    Auto-generated OpenAPI client (Do not edit)
   pages/                 Page-level Vue components
   styles/                Global styles (Tailwind CSS v4)
-tests/
-  features/              Unit tests mirroring src/features
-  components/            Component tests
 ```
 
 ### Best Practices
@@ -195,27 +188,23 @@ npm install
 3. `npm run lint:nofix`
 4. `npm run format:check`
 5. `npm run type-check`
-6. `npm run type-check:tests`
-7. `npm run test:unit`
-8. `npm run build`
+6. `npm run build`
 
 ### 主要スクリプト
 
-| コマンド                   | 説明                                                                |
-| -------------------------- | ------------------------------------------------------------------- |
-| `npm run dev`              | Vite の開発サーバーを起動します。                                   |
-| `npm run build`            | `vue-tsc --noEmit` で型検証後、Vite で本番ビルドを生成します。      |
-| `npm run serve`            | 生成済みビルドを `vite preview` で確認します。                      |
-| `npm run build:watch`      | 監視モードでビルドを実行します。                                    |
-| `npm run lint`             | ESLint を自動修正付きで実行します。                                 |
-| `npm run lint:nofix`       | 自動修正なしで ESLint を実行します。                                |
-| `npm run type-check`       | `vue-tsc --noEmit` による型検証のみを実行します。                   |
-| `npm run format`           | Prettier でコード整形を行います。                                   |
-| `npm run format:check`     | Prettier の整形差分を確認します。                                   |
-| `npm run test:unit`        | Vitest で単体テストを実行します。                                   |
-| `npm run type-check:tests` | テストファイルの型検証のみを実行します。                            |
-| `npm run gen-api`          | OpenAPI スキーマから TypeScript クライアントを生成します。          |
-| `npm run clean`            | 生成済み API クライアント (`src/lib/apis/generated`) を削除します。 |
+| コマンド               | 説明                                                                |
+| ---------------------- | ------------------------------------------------------------------- |
+| `npm run dev`          | Vite の開発サーバーを起動します。                                   |
+| `npm run build`        | `vue-tsc --noEmit` で型検証後、Vite で本番ビルドを生成します。      |
+| `npm run serve`        | 生成済みビルドを `vite preview` で確認します。                      |
+| `npm run build:watch`  | 監視モードでビルドを実行します。                                    |
+| `npm run lint`         | ESLint を自動修正付きで実行します。                                 |
+| `npm run lint:nofix`   | 自動修正なしで ESLint を実行します。                                |
+| `npm run type-check`   | `vue-tsc --noEmit` による型検証のみを実行します。                   |
+| `npm run format`       | Prettier でコード整形を行います。                                   |
+| `npm run format:check` | Prettier の整形差分を確認します。                                   |
+| `npm run gen-api`      | OpenAPI スキーマから TypeScript クライアントを生成します。          |
+| `npm run clean`        | 生成済み API クライアント (`src/lib/apis/generated`) を削除します。 |
 
 > `npm install` 後に `postinstall` スクリプトで `npm run gen-api` が自動実行されます。API スキーマ更新時は `npm run clean && npm run gen-api` を手動で再実行してください。
 
@@ -237,9 +226,6 @@ src/
   lib/apis/generated/    OpenAPI から自動生成されたクライアント (編集禁止)
   pages/                 画面単位の Vue コンポーネント
   styles/                グローバルスタイル (Tailwind CSS v4)
-tests/
-  features/              src/features に対応する単体テスト
-  components/            コンポーネントテスト
 ```
 
 ### ベストプラクティス

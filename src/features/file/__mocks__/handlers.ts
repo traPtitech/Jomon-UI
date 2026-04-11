@@ -3,11 +3,12 @@ import { HttpResponse, http } from 'msw'
 import type { FileMeta } from '@/lib/apis'
 
 import mehm8128 from '@/assets/mehm8128.png'
+import { mockUserMehm8128 } from '@/features/user/__mocks__/handlers'
 
 const mockFile = mehm8128
 
 const mockFileMeta: FileMeta = {
-  id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+  id: mockUserMehm8128.id,
   name: 'mehm8128.png',
   mime_type: 'image/png',
   created_at: '2021-08-01T00:00:00Z',
@@ -23,6 +24,6 @@ export const fileHandlers = [
     return HttpResponse.json(res)
   }),
   http.post('/api/files', () => {
-    return HttpResponse.json({ id: '3fa85f64-5717-4562-b3fc-2c963f66afa6' })
+    return HttpResponse.json({ id: mockUserMehm8128.id })
   }),
 ]

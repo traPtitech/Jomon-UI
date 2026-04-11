@@ -19,14 +19,15 @@ import {
 import { mockApplicationTargets } from '@/features/applicationTarget/__mocks__/handlers'
 import { mockPartition } from '@/features/partition/__mocks__/handlers'
 import { mockTags } from '@/features/tag/__mocks__/handlers'
+import { mockUserMehm8128 } from '@/features/user/__mocks__/handlers'
 
 const mockApplication: Application = {
-  id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+  id: mockUserMehm8128.id,
   status: 'pending_review',
 
   created_at: '2022-01-25T13:29:19.918Z',
   updated_at: '2022-01-25T13:29:19.918Z',
-  created_by: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+  created_by: mockUserMehm8128.id,
   title: 'SysAd講習会の開催費用',
   content: `# aaaaa
 - aaa
@@ -40,7 +41,7 @@ const mockApplicationDetail: ApplicationDetail = {
   ...mockApplication,
   comments: mockApplicationComments,
   statuses: mockApplicationStatuses,
-  files: ['3fa85f64-5717-4562-b3fc-2c963f66afa6'],
+  files: [mockUserMehm8128.id],
 }
 
 export const applicationHandlers = [

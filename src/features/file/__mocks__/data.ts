@@ -37,7 +37,7 @@ const createMockFileEntry = async (): Promise<MockFileEntry> => {
 
 export const mockIdToMockFileEntry = new Map(
   (
-    await Promise.all(
+    await Promise.allSettled(
       faker.helpers.multiple(createMockFileEntry, {
         count: {
           min: 0,
@@ -45,5 +45,7 @@ export const mockIdToMockFileEntry = new Map(
         },
       })
     )
-  ).map(file => [file.meta.id, file])
+  )
+    .filter(result => result.status === 'fulfilled')
+    .map(result => [result.value.meta.id, result.value])
 )

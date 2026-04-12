@@ -43,6 +43,7 @@ export interface ApplicationQuerySeed {
   partition: string
 }
 
+// FIXME: ファイルがないので申請作成時にファイルを添付できない
 export interface ApplicationSeed {
   createdBy: string
   title: string

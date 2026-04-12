@@ -1,29 +1,60 @@
-import { HttpResponse, http } from 'msw'
+import { fakerJA as faker } from '@faker-js/faker'
+import { HttpResponse, type PathParams, http } from 'msw'
 
 import type { FileMeta } from '@/lib/apis'
 
-import mehm8128 from '@/assets/mehm8128.png'
-import { mockUserMehm8128 } from '@/features/user/__mocks__/handlers'
-
-const mockFile = mehm8128
-
-const mockFileMeta: FileMeta = {
-  id: mockUserMehm8128.id,
-  name: 'mehm8128.png',
-  mime_type: 'image/png',
-  created_at: '2021-08-01T00:00:00Z',
-}
+import { mockIdToMockFileEntry } from './data'
 
 export const fileHandlers = [
-  http.get('/api/files/:id', () => {
-    return HttpResponse.text(mockFile)
+  http.get<PathParams, never, File>('/api/files/:id', ({ params }) => {
+    const id = params.id as string
+    const mockFile = mockIdToMockFileEntry.get(id)
+    if (!mockFile) {
+      return new HttpResponse(null, { status: 404 })
+    }
+    return new HttpResponse(mockFile.file, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/octet-stream',
+      },
+    })
   }),
-  http.get('/api/files/:id/meta', ({ params }) => {
-    const res: FileMeta = { ...mockFileMeta, id: params.id as string }
 
-    return HttpResponse.json(res)
+  http.delete<PathParams, never, never>('/api/files/:id', ({ params }) => {
+    const id = params.id as string
+    if (!mockIdToMockFileEntry.has(id)) {
+      return new HttpResponse(null, { status: 404 })
+    }
+    mockIdToMockFileEntry.delete(id)
+    return HttpResponse.json(null)
   }),
-  http.post('/api/files', () => {
-    return HttpResponse.json({ id: mockUserMehm8128.id })
+
+  http.get<PathParams, never, FileMeta>('/api/files/:id/meta', ({ params }) => {
+    const id = params.id as string
+    const mockFileEntry = mockIdToMockFileEntry.get(id)
+    if (!mockFileEntry) {
+      return new HttpResponse(null, { status: 404 })
+    }
+    return HttpResponse.json(mockFileEntry.meta)
   }),
+
+  http.post<PathParams, FormData, { id: string }>(
+    '/api/files',
+    async ({ request }) => {
+      const formData = await request.formData()
+      const file = formData.get('file') as File
+      const name = formData.get('name') as string
+      const newId = faker.string.uuid()
+      mockIdToMockFileEntry.set(newId, {
+        file: file,
+        meta: {
+          id: newId,
+          name: name,
+          mime_type: file.type,
+          created_at: new Date().toISOString(),
+        },
+      })
+      return HttpResponse.json({ id: newId })
+    }
+  ),
 ]

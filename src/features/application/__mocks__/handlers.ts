@@ -1,100 +1,174 @@
 import { HttpResponse, type PathParams, http } from 'msw'
 
-import type {
-  Application,
-  ApplicationDetail,
-  Comment,
-  CommentInput,
-  StatusDetail,
+import {
+  type Application,
+  type ApplicationDetail,
+  type ApplicationInput,
+  type Comment,
+  type CommentInput,
+  type StatusDetail,
+  type StatusInput,
 } from '@/lib/apis'
 
+import { createMockCommentFromCommentInput } from '@/features/applicationComment/__mocks__/data'
+import { createMockApplicationStatus } from '@/features/applicationStatus/__mocks__/data'
+import { mockIdToMockPartition } from '@/features/partition/__mocks__/data'
+import { getMockTagsByIds } from '@/features/tag/__mocks__/data'
+import { loggedInUser } from '@/features/user/__mocks__/data'
+
 import {
-  mockApplicationComment,
-  mockApplicationComments,
-} from '@/features/applicationComment/__mocks__/handlers'
-import {
-  mockApplicationStatus,
-  mockApplicationStatuses,
-} from '@/features/applicationStatus/__mocks__/handlers'
-import { mockApplicationTargets } from '@/features/applicationTarget/__mocks__/handlers'
-import { mockPartition } from '@/features/partition/__mocks__/handlers'
-import { mockTags } from '@/features/tag/__mocks__/handlers'
-import { mockUserMehm8128 } from '@/features/user/__mocks__/handlers'
-
-const mockApplication: Application = {
-  id: mockUserMehm8128.id,
-  status: 'pending_review',
-
-  created_at: '2022-01-25T13:29:19.918Z',
-  updated_at: '2022-01-25T13:29:19.918Z',
-  created_by: mockUserMehm8128.id,
-  title: 'SysAd講習会の開催費用',
-  content: `# aaaaa
-- aaa
-  - bbb`,
-  targets: mockApplicationTargets,
-  tags: mockTags,
-  partition: mockPartition,
-}
-
-const mockApplicationDetail: ApplicationDetail = {
-  ...mockApplication,
-  comments: mockApplicationComments,
-  statuses: mockApplicationStatuses,
-  files: [mockUserMehm8128.id],
-}
+  createNewApplicationFromApplicationInput,
+  mockIdToMockApplicationDetail,
+} from './data'
 
 export const applicationHandlers = [
-  http.get('/api/applications', () => {
-    const res: Application[] = Array(50).fill(mockApplication)
-    const data = JSON.stringify(res)
+  http.get<never, never, Application[]>('/api/applications', () => {
+    // NOTE: クエリパラメータには未対応
+    return HttpResponse.json(Array.from(mockIdToMockApplicationDetail.values()))
+  }),
 
-    return new Response(data, {
-      status: 200,
-    })
-  }),
-  http.get('/api/applications/:id', () => {
-    const res: ApplicationDetail = mockApplicationDetail
-    return HttpResponse.json(res)
-  }),
-  http.post<PathParams, Application, ApplicationDetail>(
-    '/api/applications',
-    async ({ request }) => {
-      const reqBody: Application = await request.json()
-      const res: ApplicationDetail = {
-        ...mockApplicationDetail,
-        ...reqBody,
+  http.get<PathParams, never, ApplicationDetail>(
+    '/api/applications/:id',
+    ({ params }) => {
+      const id = params.id as string
+      const applicationDetail = mockIdToMockApplicationDetail.get(id)
+      if (!applicationDetail) {
+        return new HttpResponse(null, { status: 404 })
       }
-
-      return HttpResponse.json(res)
+      return HttpResponse.json(applicationDetail)
     }
   ),
-  http.put('/api/applications/:id', ({ params }) => {
-    // tagsの変換が必要なため、reqBodyを使っていない
-    const res: ApplicationDetail = {
-      ...mockApplicationDetail,
-      id: params.id as string, // FIXME: 変換処理書く
-    }
 
-    return HttpResponse.json(res)
-  }),
+  http.post<never, ApplicationInput, ApplicationDetail>(
+    '/api/applications',
+    async ({ request }) => {
+      const applicationInput: ApplicationInput = await request.json()
+      const newApplication =
+        createNewApplicationFromApplicationInput(applicationInput)
+      if (!newApplication) {
+        return new HttpResponse(null, { status: 400 })
+      }
+      const newApplicationDetail: ApplicationDetail = {
+        ...newApplication,
+        comments: [],
+        statuses: [
+          {
+            ...createMockApplicationStatus(),
+            status: 'pending_review',
+            created_at: newApplication.created_at,
+          },
+        ],
+        files: [],
+      }
+      mockIdToMockApplicationDetail.set(
+        newApplicationDetail.id,
+        newApplicationDetail
+      )
+      return HttpResponse.json(newApplicationDetail)
+    }
+  ),
+
+  http.put<PathParams, ApplicationInput, ApplicationDetail>(
+    '/api/applications/:id',
+    async ({ params, request }) => {
+      const id = params.id as string
+      const existingApplicationDetail = mockIdToMockApplicationDetail.get(id)
+      if (!existingApplicationDetail) {
+        return new HttpResponse(null, { status: 404 })
+      }
+
+      const applicationInput = await request.json()
+      if (
+        applicationInput.created_by !== existingApplicationDetail.created_by
+      ) {
+        return new HttpResponse(null, { status: 400 })
+      }
+
+      const updatedTags = getMockTagsByIds(applicationInput.tags)
+      if (!updatedTags) {
+        return new HttpResponse(null, { status: 400 })
+      }
+
+      const updatedPartition = mockIdToMockPartition.get(
+        applicationInput.partition
+      )
+      if (!updatedPartition) {
+        return new HttpResponse(null, { status: 400 })
+      }
+
+      const updatedApplicationDetail = {
+        ...existingApplicationDetail,
+        ...applicationInput,
+        targets: existingApplicationDetail.targets, // FIXME: 今のAPI仕様ではこのエンドポイントのリクエストボディであるApplicationInputはtargetsを更新するための情報が足りておらず、targetsの更新処理を実装できない
+        tags: updatedTags,
+        partition: updatedPartition,
+        updated_at: new Date().toISOString(),
+      }
+      mockIdToMockApplicationDetail.set(id, updatedApplicationDetail)
+
+      return HttpResponse.json(updatedApplicationDetail)
+    }
+  ),
+
   http.post<PathParams, CommentInput, Comment>(
     '/api/applications/:id/comments',
     async ({ request, params }) => {
-      const reqBody: CommentInput = await request.json()
-      const res: Comment = {
-        ...mockApplicationComment,
-        id: params.id as string,
-        ...reqBody,
+      const applicationDetail = mockIdToMockApplicationDetail.get(
+        params.id as string
+      )
+      if (!applicationDetail) {
+        return new HttpResponse(null, { status: 404 })
       }
 
-      return HttpResponse.json(res)
+      if (!loggedInUser.id) {
+        return new HttpResponse(null, { status: 401 })
+      }
+      const commentInput = await request.json()
+      const newComment: Comment = createMockCommentFromCommentInput(
+        commentInput,
+        loggedInUser.id
+      )
+      applicationDetail.comments.push(newComment)
+
+      return HttpResponse.json(newComment)
     }
   ),
-  http.put('/api/applications/:id/status', () => {
-    // NOTE: commentの変換が必要なため、reqBodyを使っていない
-    const res: StatusDetail = mockApplicationStatus
 
-    return HttpResponse.json(res)
-  }),
+  http.put<PathParams, StatusInput, StatusDetail>(
+    '/api/applications/:id/status',
+    async ({ params, request }) => {
+      // NOTE: ログインユーザーの権限確認は未実装
+      const applicationDetail = mockIdToMockApplicationDetail.get(
+        params.id as string
+      )
+      if (!applicationDetail) {
+        return new HttpResponse(null, { status: 404 })
+      }
+
+      const statusInput = await request.json()
+      const newStatusDetail: StatusDetail = {
+        ...statusInput,
+        created_by: loggedInUser.id,
+        comment: undefined,
+        created_at: new Date().toISOString(),
+      }
+
+      if (statusInput.comment) {
+        const newComment = createMockCommentFromCommentInput(
+          {
+            comment: statusInput.comment,
+          },
+          loggedInUser.id
+        )
+        newStatusDetail.comment = newComment
+        applicationDetail.comments.push(newComment)
+      }
+
+      applicationDetail.status = statusInput.status
+      applicationDetail.statuses.push(newStatusDetail)
+      applicationDetail.updated_at = newStatusDetail.created_at
+
+      return HttpResponse.json(newStatusDetail)
+    }
+  ),
 ]

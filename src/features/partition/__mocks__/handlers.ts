@@ -1,80 +1,77 @@
-import { HttpResponse, http } from 'msw'
+import { HttpResponse, type PathParams, http } from 'msw'
 
-import type { Partition } from '@/lib/apis'
+import type { Partition, PartitionInput } from '@/lib/apis'
 
-import type { PartitionSeed } from '../entities'
-
-export const mockPartition: Partition = {
-  id: '1',
-  name: 'テストパーティション',
-  budget: 10000,
-  parent_partition_group: 'group-1',
-  management: {
-    category: 'manual',
-    state: 'available',
-  },
-  created_at: '2024-01-01T00:00:00Z',
-  updated_at: '2024-01-01T00:00:00Z',
-}
-export const mockPartitionWithoutBudget: Partition = {
-  id: '2',
-  name: 'テストパーティション(指定なし)',
-  budget: null,
-  parent_partition_group: 'group-2',
-  management: {
-    category: 'manual',
-    state: 'available',
-  },
-  created_at: '2024-01-02T00:00:00Z',
-  updated_at: '2024-01-02T00:00:00Z',
-}
-const mockPartitions: Partition[] = [
-  ...Array(5).fill(mockPartition),
-  ...Array(5).fill(mockPartitionWithoutBudget),
-]
+import {
+  createMockPartition,
+  isValidPartitionInput,
+  mockIdToMockPartition,
+} from './data'
 
 export const partitionHandlers = [
-  http.get('/api/partitions', () => {
-    return HttpResponse.json(mockPartitions)
+  http.get<never, never, Partition[]>('/api/partitions', () => {
+    return HttpResponse.json(Array.from(mockIdToMockPartition.values()))
   }),
 
-  http.get('/api/partitions/:id', ({ params }) => {
-    if (params.id === '1') {
-      return HttpResponse.json(mockPartition)
+  http.get<PathParams, never, Partition>(
+    '/api/partitions/:id',
+    ({ params }) => {
+      const partition = mockIdToMockPartition.get(params.id as string)
+      if (!partition) {
+        return new HttpResponse(null, { status: 404 })
+      }
+      return HttpResponse.json(partition)
     }
-    if (params.id === '2') {
-      return HttpResponse.json(mockPartitionWithoutBudget)
-    }
-    return new HttpResponse(null, { status: 404 })
-  }),
+  ),
 
-  http.post('/api/partitions', async ({ request }) => {
-    const seed = (await request.json()) as PartitionSeed
-    const partition: Partition = {
-      ...mockPartition,
-      name: seed.name,
-      budget: seed.budget,
-      parent_partition_group:
-        seed.parentPartitionGroupId || mockPartition.parent_partition_group,
-      management: seed.management,
+  http.post<PathParams, PartitionInput, Partition>(
+    '/api/partitions',
+    async ({ request }) => {
+      const partitionInput = await request.json()
+      if (!isValidPartitionInput(partitionInput)) {
+        return new HttpResponse(null, { status: 400 })
+      }
+      const newPartition: Partition = {
+        ...createMockPartition(),
+        ...partitionInput,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      }
+      mockIdToMockPartition.set(newPartition.id, newPartition)
+      return HttpResponse.json(newPartition)
     }
-    return HttpResponse.json(partition)
-  }),
+  ),
 
-  http.put('/api/partitions/:id', async ({ request }) => {
-    const seed = (await request.json()) as PartitionSeed
-    const partition: Partition = {
-      ...mockPartition,
-      name: seed.name,
-      budget: seed.budget,
-      parent_partition_group:
-        seed.parentPartitionGroupId || mockPartition.parent_partition_group,
-      management: seed.management,
+  http.put<PathParams, PartitionInput, Partition>(
+    '/api/partitions/:id',
+    async ({ params, request }) => {
+      const id = params.id as string
+      const existingMockPartition = mockIdToMockPartition.get(id)
+      if (!existingMockPartition) {
+        return new HttpResponse(null, { status: 404 })
+      }
+
+      const partitionInput = await request.json()
+      if (!isValidPartitionInput(partitionInput)) {
+        return new HttpResponse(null, { status: 400 })
+      }
+      const updatedPartition: Partition = {
+        ...existingMockPartition,
+        ...partitionInput,
+        updated_at: new Date().toISOString(),
+      }
+      mockIdToMockPartition.set(id, updatedPartition)
+      return HttpResponse.json(updatedPartition)
     }
-    return HttpResponse.json(partition)
-  }),
+  ),
 
-  http.delete('/api/partitions/:id', () => {
-    return new HttpResponse(null, { status: 204 })
+  http.delete<PathParams, never, never>('/api/partitions/:id', ({ params }) => {
+    const id = params.id as string
+    const existingMockPartition = mockIdToMockPartition.get(id)
+    if (!existingMockPartition) {
+      return new HttpResponse(null, { status: 404 })
+    }
+    mockIdToMockPartition.delete(id)
+    return HttpResponse.json(null)
   }),
 ]

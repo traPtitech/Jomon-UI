@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import BaseInput from './BaseInput.vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+
 import {
   CheckIcon,
   ChevronDownIcon,
   MagnifyingGlassIcon,
   PlusIcon,
-  XMarkIcon
+  XMarkIcon,
 } from '@heroicons/vue/24/outline'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+
+import BaseTextInput from './BaseInput/BaseTextInput.vue'
 
 interface Option {
   key: string
@@ -22,13 +24,15 @@ interface Props {
   multiple?: boolean
   allowCustom?: boolean
   disabled?: boolean
+  required?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   placeholder: '検索',
   multiple: false,
   allowCustom: false,
-  disabled: false
+  disabled: false,
+  required: false,
 })
 
 const emit = defineEmits<{
@@ -42,7 +46,6 @@ const menuState = ref<MenuState>('close')
 const searchTerm = ref('')
 const highlightedIndex = ref(-1)
 const dropdownRef = ref<HTMLElement | null>(null)
-const inputRef = ref<HTMLElement | null>(null)
 
 const filteredOptions = computed(() => {
   if (menuState.value === 'presearch') {
@@ -71,7 +74,14 @@ const getPlaceholderText = computed(() => {
 
 // Handle click outside
 const handleClickOutside = (event: MouseEvent) => {
-  if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
+  if (typeof Node === 'undefined') {
+    return
+  }
+  const target = event.target
+  if (!(target instanceof Node)) {
+    return
+  }
+  if (dropdownRef.value && !dropdownRef.value.contains(target)) {
     menuState.value = 'close'
     if (!props.multiple && model.value) {
       const selectedOption = props.options.find(
@@ -166,17 +176,16 @@ const handleKeyDown = (e: KeyboardEvent) => {
           ? highlightedIndex.value - 1
           : highlightedIndex.value
       break
-    case 'Enter':
+    case 'Enter': {
       e.preventDefault()
-      if (
-        highlightedIndex.value >= 0 &&
-        highlightedIndex.value < filteredOptions.value.length
-      ) {
-        handleSelect(filteredOptions.value[highlightedIndex.value].value)
+      const option = filteredOptions.value[highlightedIndex.value]
+      if (option) {
+        handleSelect(option.value)
       } else if (props.allowCustom && searchTerm.value) {
         handleAddCustom()
       }
       break
+    }
     case 'Escape':
       menuState.value = 'close'
       if (!props.multiple && model.value) {
@@ -198,18 +207,18 @@ const handleKeyDown = (e: KeyboardEvent) => {
 <template>
   <div ref="dropdownRef" class="relative">
     <div class="relative">
-      <BaseInput
-        ref="inputRef"
+      <BaseTextInput
         v-model="searchTerm"
         :label="label"
         :class="['pr-8', disabled && 'cursor-not-allowed opacity-50']"
         :placeholder="getPlaceholderText"
         :disabled="disabled"
+        :required="required"
         @focus="handleInputFocus"
         @input="handleChange"
         @keydown="handleKeyDown">
         <MagnifyingGlassIcon class="ml-3 w-6 text-text-secondary" />
-      </BaseInput>
+      </BaseTextInput>
       <button
         type="button"
         class="absolute inset-y-0 right-0 flex items-center pr-2"
@@ -222,7 +231,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
         <ChevronDownIcon
           :class="[
             'h-4 w-4 text-text-secondary transition-transform',
-            menuState !== 'close' && 'rotate-180'
+            menuState !== 'close' && 'rotate-180',
           ]" />
       </button>
     </div>
@@ -259,7 +268,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
             'hover:bg-blue-100 hover:text-blue-500',
             highlightedIndex === index && 'bg-blue-100 text-blue-500',
             option.disabled && 'cursor-not-allowed opacity-50',
-            selectedValues.includes(option.value) && 'bg-blue-100'
+            selectedValues.includes(option.value) && 'bg-blue-100',
           ]"
           :disabled="option.disabled"
           @click="!option.disabled && handleSelect(option.value)">
@@ -286,7 +295,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
           type="button"
           :class="[
             'relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm outline-none select-none',
-            'border-t hover:bg-blue-100 hover:text-blue-500'
+            'border-t hover:bg-blue-100 hover:text-blue-500',
           ]"
           @click="handleAddCustom">
           <PlusIcon class="mr-2 h-4 w-4" />

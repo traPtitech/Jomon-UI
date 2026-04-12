@@ -22,7 +22,7 @@ const generateBaseAPI = async (sourceFile: SourceFile) => {
     name: 'Apis',
     extends: 'BaseAPI',
     methods: [...apiMethods.values()].map(m => m.getStructure()),
-    isExported: true
+    isExported: true,
   })
 
   await sourceFile.save()

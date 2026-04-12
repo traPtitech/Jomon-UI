@@ -1,6 +1,7 @@
+import apis from '@/lib/apis'
+
 import type { FileMeta, FileSeed } from '../entities'
 import { convertFileMetaFromData } from './converter'
-import apis from '@/lib/apis'
 
 export const useFileRepository = () => {
   return createFileRepository()
@@ -24,5 +25,5 @@ const createFileRepository = () => ({
   },
   deleteFile: async (id: string) => {
     await apis.deleteFile(id)
-  }
+  },
 })

@@ -14,5 +14,5 @@ const createAccountManagerRepository = () => ({
   },
   removeAccountManagers: async (accountManagers: string[]) => {
     await apis.deleteAccountManagers(accountManagers)
-  }
+  },
 })

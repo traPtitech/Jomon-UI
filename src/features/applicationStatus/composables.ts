@@ -1,8 +1,9 @@
+import { computed } from 'vue'
+
 import { useApplication } from '@/features/application/composables'
 import type { ApplicationDetail } from '@/features/application/entities'
 import type { ApplicationStatus } from '@/features/applicationStatus/entities'
 import { useUserStore } from '@/features/user/store'
-import { computed } from 'vue'
 
 export const useStatusOptions = (application: ApplicationDetail) => {
   const { me, isAccountManager } = useUserStore()
@@ -28,16 +29,16 @@ export const useStatusOptions = (application: ApplicationDetail) => {
     {
       value: 'pending_review',
       key: '承認待ちにする',
-      show: showToPendingReview
+      show: showToPendingReview,
     },
     {
       value: 'change_requested',
       key: '要修正にする',
-      show: showToChangeRequested
+      show: showToChangeRequested,
     },
     { value: 'approved', key: '承認する', show: showToApproved },
     { value: 'rejected', key: '却下する', show: showToRejected },
-    { value: 'payment_finished', key: '支払い済み', show: showToPendingReview }
+    { value: 'payment_finished', key: '支払い済み', show: showToPendingReview },
   ])
   const showStatusOptions = computed(() =>
     statusOptions.value

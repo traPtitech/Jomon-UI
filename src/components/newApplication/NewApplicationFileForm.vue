@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import type { FileSeed } from '@/features/file/entities'
-import { isImageByType } from '@/lib/checkFileType'
+import { ref } from 'vue'
+
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
+
 import { computed, onUnmounted, ref } from 'vue'
 
 const files = defineModel<FileSeed[]>({ required: true })

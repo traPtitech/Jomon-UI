@@ -1,9 +1,10 @@
-import { addApis } from './add-apis.js'
-import { addTsIgnoreToImports } from './add-ts-ignore-to-imports.js'
 import { execa } from 'execa'
 import fs from 'fs/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'
+
+import { addApis } from './add-apis.js'
+import { addTsIgnoreToImports } from './add-ts-ignore-to-imports.js'
 
 const SWAGGER_PATH =
   'https://raw.githubusercontent.com/traPtitech/Jomon/v2/docs/swagger.yaml'
@@ -17,7 +18,7 @@ const generateCmd = [
   '-i',
   SWAGGER_PATH,
   '-o',
-  GENERATED_DIR
+  GENERATED_DIR,
 ]
 
 const __filename = fileURLToPath(import.meta.url)
@@ -26,7 +27,7 @@ const __dirname = path.dirname(__filename)
 
 await (async () => {
   await fs.mkdir(path.resolve(__dirname, '../', GENERATED_DIR), {
-    recursive: true
+    recursive: true,
   })
 
   const p = execa('npx', generateCmd)

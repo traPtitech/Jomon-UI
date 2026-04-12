@@ -13,8 +13,8 @@ export default defineConfig(({ mode }) => {
     plugins: [vue(), brotli(), tailwindcss()],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, 'src')
-      }
+        '@': path.resolve(__dirname, 'src'),
+      },
     },
     server: {
       port: 3000,
@@ -22,12 +22,12 @@ export default defineConfig(({ mode }) => {
         '/api': {
           target: env.VITE_SERVER_HOST,
           changeOrigin: true,
-          agent: keepAliveAgent
-        }
-      }
+          agent: keepAliveAgent,
+        },
+      },
     },
     optimizeDeps: {
-      include: ['axe-core']
-    }
+      include: ['axe-core'],
+    },
   }
 })

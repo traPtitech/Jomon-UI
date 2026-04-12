@@ -1,5 +1,10 @@
 <script lang="ts" setup>
-import ApplicationAttachment from './ApplicationAttachment.vue'
+import { ref } from 'vue'
+
+import { useToast } from 'vue-toastification'
+
+import { formatDateAndTime } from '@/lib/date'
+
 import EditButton from '@/components/shared/EditButton.vue'
 import MarkdownIt from '@/components/shared/MarkdownIt.vue'
 import MarkdownTextarea from '@/components/shared/MarkdownTextarea.vue'
@@ -9,9 +14,8 @@ import { useApplication } from '@/features/application/composables'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import { useUserStore } from '@/features/user/store'
-import { formatDateAndTime } from '@/lib/date'
-import { ref } from 'vue'
-import { useToast } from 'vue-toastification'
+
+import ApplicationAttachment from './ApplicationAttachment.vue'
 
 const props = defineProps<{
   application: ApplicationDetail
@@ -22,7 +26,7 @@ const formattedDateAndTime = formatDateAndTime(props.application.createdAt)
 const toast = useToast()
 const { isApplicationCreator } = useApplication(props.application)
 
-const { me, userMap } = useUserStore()
+const { me, getUserName, getUserNameWithFallback } = useUserStore()
 const { editApplication } = useApplicationStore()
 
 const hasAuthority = isApplicationCreator.value(me.value)
@@ -39,7 +43,7 @@ const handleUpdateContent = async () => {
     await editApplication(props.application.id, {
       ...props.application,
       partition: props.application.partition.id,
-      content: editedContent.value
+      content: editedContent.value,
     })
     toast.success('更新しました')
   } catch {
@@ -53,9 +57,11 @@ const handleUpdateContent = async () => {
   <div class="flex w-full flex-col gap-3">
     <div class="flex w-full items-center">
       <div class="flex flex-1 items-center gap-4">
-        <UserIcon class="w-12" :name="userMap[application.createdBy]" />
+        <UserIcon class="w-12" :name="getUserName(application.createdBy)" />
         <div>
-          <span class="font-bold">{{ userMap[application.createdBy] }}</span>
+          <span class="font-bold">{{
+            getUserNameWithFallback(application.createdBy)
+          }}</span>
           がこの申請を作成しました
         </div>
       </div>

@@ -1,23 +1,25 @@
-import type {
-  Application,
-  ApplicationDetail,
-  ApplicationQuerySeed,
-  ApplicationSeed
-} from '../entities'
-import { convertApplication, convertApplicationDetail } from './converter'
+import apis, {
+  type ApplicationInput,
+  type ApplicationTargetInput,
+  type CommentInput,
+  type StatusInput,
+} from '@/lib/apis'
+
 import { convertApplicationCommentFromData } from '@/features/applicationComment/data/converter'
 import type { ApplicationComment } from '@/features/applicationComment/entities'
 import { convertApplicationStatusDetailFromData } from '@/features/applicationStatus/data/converter'
 import type {
   ApplicationStatus,
-  ApplicationStatusDetail
+  ApplicationStatusDetail,
 } from '@/features/applicationStatus/entities'
-import apis, {
-  type ApplicationInput,
-  type ApplicationTargetInput,
-  type CommentInput,
-  type StatusInput
-} from '@/lib/apis'
+
+import type {
+  Application,
+  ApplicationDetail,
+  ApplicationQuerySeed,
+  ApplicationSeed,
+} from '../entities'
+import { convertApplication, convertApplicationDetail } from './converter'
 
 export const useApplicationRepository = () => {
   return createApplicationRepository()
@@ -27,7 +29,7 @@ const toApplicationTargetInput = (
   target: ApplicationSeed['targets'][number]
 ): ApplicationTargetInput => ({
   amount: target.amount,
-  target: target.target
+  target: target.target,
 })
 
 const toApplicationInput = (
@@ -38,11 +40,11 @@ const toApplicationInput = (
   content: application.content,
   tags: application.tags.map(tag => tag.id),
   partition: application.partition,
-  targets: application.targets.map(toApplicationTargetInput)
+  targets: application.targets.map(toApplicationTargetInput),
 })
 
 const toCommentInput = (comment: string): CommentInput => ({
-  comment
+  comment,
 })
 
 const toStatusInput = (
@@ -50,7 +52,7 @@ const toStatusInput = (
   comment: string
 ): StatusInput => ({
   status,
-  comment
+  comment,
 })
 
 const createApplicationRepository = () => ({
@@ -115,5 +117,5 @@ const createApplicationRepository = () => ({
     const { data } = await apis.putStatus(id, toStatusInput(status, comment))
 
     return convertApplicationStatusDetailFromData(data)
-  }
+  },
 })

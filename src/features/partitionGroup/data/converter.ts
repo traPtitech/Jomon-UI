@@ -1,5 +1,6 @@
-import type { PartitionGroup } from '../entities'
 import type { PartitionGroup as ApiPartitionGroup } from '@/lib/apis'
+
+import type { PartitionGroup } from '../entities'
 
 export const convertPartitionGroupFromData = (
   partitionGroup: ApiPartitionGroup
@@ -9,5 +10,5 @@ export const convertPartitionGroupFromData = (
   parentPartitionGroupId: partitionGroup.parent_partition_group,
   depth: partitionGroup.depth,
   createdAt: partitionGroup.created_at,
-  updatedAt: partitionGroup.updated_at
+  updatedAt: partitionGroup.updated_at,
 })

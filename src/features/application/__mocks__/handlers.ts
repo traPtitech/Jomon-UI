@@ -17,6 +17,7 @@ import { getMockTagsByIds } from '@/features/tag/__mocks__/data'
 import { loggedInUser } from '@/features/user/__mocks__/data'
 
 import {
+  convertApplicationDetailToApplication,
   createNewApplicationFromApplicationInput,
   mockIdToMockApplicationDetail,
 } from './data'
@@ -24,7 +25,11 @@ import {
 export const applicationHandlers = [
   http.get<never, never, Application[]>('/api/applications', () => {
     // NOTE: クエリパラメータには未対応
-    return HttpResponse.json(Array.from(mockIdToMockApplicationDetail.values()))
+    return HttpResponse.json(
+      Array.from(mockIdToMockApplicationDetail.values()).map(
+        convertApplicationDetailToApplication
+      )
+    )
   }),
 
   http.get<PathParams, never, ApplicationDetail>(

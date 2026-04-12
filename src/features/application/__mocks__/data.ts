@@ -117,3 +117,32 @@ export const createNewApplicationFromApplicationInput = (
     partition: partition,
   }
 }
+
+export const convertApplicationDetailToApplication = (
+  applicationDetail: ApplicationDetail
+): Application => {
+  const {
+    id,
+    status,
+    created_by,
+    title,
+    content,
+    targets,
+    tags,
+    partition,
+    created_at,
+    updated_at,
+  } = applicationDetail
+  return {
+    id,
+    status,
+    created_by,
+    title,
+    content,
+    targets,
+    tags,
+    partition,
+    created_at,
+    updated_at,
+  }
+}

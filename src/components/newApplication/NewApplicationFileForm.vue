@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type Ref, computed, onUnmounted, ref } from 'vue'
+import { type Ref, onUnmounted, ref, watch } from 'vue'
 
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
@@ -8,7 +8,7 @@ import { isImageByType } from '@/lib/checkFileType'
 
 import type { FileSeed } from '@/features/file/entities'
 
-const files = defineModel<FileSeed[]>({ required: true })
+const fileSeeds = defineModel<FileSeed[]>({ required: true })
 
 const inputRef = ref()
 
@@ -17,57 +17,54 @@ function handleFileChange(e: Event) {
     return
   }
 
-  const newFiles = Array.from(e.target.files).map(file => {
+  const newFileSeeds = Array.from(e.target.files).map(file => {
     return { name: file.name, file: file }
   })
-  files.value.push(...newFiles)
+  fileSeeds.value.push(...newFileSeeds)
   if (inputRef.value) {
     inputRef.value.value = null
   }
 }
 
-const useFilePreviewUrls = (files: Ref<FileSeed[]>) => {
-  const previewUrlCache = new Map<File, string>()
+const useFilePreviewUrls = (fileSeeds: Ref<FileSeed[]>) => {
+  const filePreviewUrls = ref(new Map<File, string>())
 
-  const filePreviewUrls = computed(() => {
-    return files.value.map(({ file }) => {
-      const cachedPreviewUrl = previewUrlCache.get(file)
-      if (cachedPreviewUrl) {
-        return cachedPreviewUrl
+  watch(fileSeeds, newFileSeeds => {
+    filePreviewUrls.value.forEach((previewUrl, file) => {
+      if (!newFileSeeds.some(fileSeed => fileSeed.file === file)) {
+        URL.revokeObjectURL(previewUrl)
+        filePreviewUrls.value.delete(file)
       }
-
-      const previewUrl = URL.createObjectURL(file)
-      previewUrlCache.set(file, previewUrl)
-      return previewUrl
+    })
+    newFileSeeds.forEach(fileSeed => {
+      const { file } = fileSeed
+      if (!filePreviewUrls.value.has(file)) {
+        const previewUrl = URL.createObjectURL(file)
+        filePreviewUrls.value.set(file, previewUrl)
+      }
     })
   })
 
-  function removeFile(index: number) {
-    const fileSeed = files.value[index]
-    if (!fileSeed) {
-      return
-    }
-    const { file } = fileSeed
-
-    const previewUrl = previewUrlCache.get(file)
+  function removeFile(file: File) {
+    const previewUrl = filePreviewUrls.value.get(file)
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl)
     }
-    previewUrlCache.delete(file)
-    files.value.splice(index, 1)
+    filePreviewUrls.value.delete(file)
+    fileSeeds.value = fileSeeds.value.filter(fileSeed => fileSeed.file !== file)
   }
 
   onUnmounted(() => {
-    previewUrlCache.forEach(value => {
+    filePreviewUrls.value.forEach(value => {
       URL.revokeObjectURL(value)
     })
-    previewUrlCache.clear()
+    filePreviewUrls.value.clear()
   })
 
   return { filePreviewUrls, removeFile }
 }
 
-const { filePreviewUrls, removeFile } = useFilePreviewUrls(files)
+const { filePreviewUrls, removeFile } = useFilePreviewUrls(fileSeeds)
 </script>
 
 <template>
@@ -82,28 +79,28 @@ const { filePreviewUrls, removeFile } = useFilePreviewUrls(files)
       @change="handleFileChange" />
   </div>
   <div>
-    <div v-if="files.length === 0" class="text-sm font-medium">
+    <div v-if="fileSeeds.length === 0" class="text-sm font-medium">
       画像プレビュー
     </div>
-    <div v-if="files.length !== 0" class="flex flex-wrap">
+    <div v-if="fileSeeds.length !== 0" class="flex flex-wrap">
       <div
-        v-for="(file, index) in files"
+        v-for="(fileSeed, index) in fileSeeds"
         :key="index"
         class="group relative flex flex-col items-center not-first:ml-2">
         <img
-          v-if="isImageByType(file.file.type)"
-          :alt="file.name"
+          v-if="isImageByType(fileSeed.file.type)"
+          :alt="fileSeed.name"
           class="h-32"
-          :src="filePreviewUrls[index]" />
+          :src="filePreviewUrls.get(fileSeed.file)" />
         <DocumentIcon v-else class="h-32" />
         <button
           aria-label="ファイルを削除"
           class="invisible absolute top-1 right-1 h-6 w-6 cursor-pointer group-hover:visible"
           type="button"
-          @click="removeFile(index)">
+          @click="removeFile(fileSeed.file)">
           <XCircleIcon />
         </button>
-        <span>{{ file.name }}</span>
+        <span>{{ fileSeed.name }}</span>
       </div>
     </div>
   </div>

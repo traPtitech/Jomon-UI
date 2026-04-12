@@ -29,21 +29,25 @@ function handleFileChange(e: Event) {
 const useFilePreviewUrls = (fileSeeds: Ref<FileSeed[]>) => {
   const filePreviewUrls = ref(new Map<File, string>())
 
-  watch(fileSeeds, newFileSeeds => {
-    filePreviewUrls.value.forEach((previewUrl, file) => {
-      if (!newFileSeeds.some(fileSeed => fileSeed.file === file)) {
-        URL.revokeObjectURL(previewUrl)
-        filePreviewUrls.value.delete(file)
-      }
-    })
-    newFileSeeds.forEach(fileSeed => {
-      const { file } = fileSeed
-      if (!filePreviewUrls.value.has(file)) {
-        const previewUrl = URL.createObjectURL(file)
-        filePreviewUrls.value.set(file, previewUrl)
-      }
-    })
-  })
+  watch(
+    fileSeeds,
+    newFileSeeds => {
+      filePreviewUrls.value.forEach((previewUrl, file) => {
+        if (!newFileSeeds.some(fileSeed => fileSeed.file === file)) {
+          URL.revokeObjectURL(previewUrl)
+          filePreviewUrls.value.delete(file)
+        }
+      })
+      newFileSeeds.forEach(fileSeed => {
+        const { file } = fileSeed
+        if (!filePreviewUrls.value.has(file)) {
+          const previewUrl = URL.createObjectURL(file)
+          filePreviewUrls.value.set(file, previewUrl)
+        }
+      })
+    },
+    { deep: true, immediate: true }
+  )
 
   function removeFile(file: File) {
     const previewUrl = filePreviewUrls.value.get(file)

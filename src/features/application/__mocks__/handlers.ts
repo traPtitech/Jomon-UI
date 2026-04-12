@@ -121,9 +121,6 @@ export const applicationHandlers = [
         return new HttpResponse(null, { status: 404 })
       }
 
-      if (!loggedInUser.id) {
-        return new HttpResponse(null, { status: 401 })
-      }
       const commentInput = await request.json()
       const newComment: Comment = createMockCommentFromCommentInput(
         commentInput,

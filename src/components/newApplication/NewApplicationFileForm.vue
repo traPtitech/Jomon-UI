@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onUnmounted, ref } from 'vue'
+import { type Ref, computed, onUnmounted, ref } from 'vue'
 
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
@@ -11,7 +11,6 @@ import type { FileSeed } from '@/features/file/entities'
 const files = defineModel<FileSeed[]>({ required: true })
 
 const inputRef = ref()
-const previewUrlCache = new Map<File, string>()
 
 function handleFileChange(e: Event) {
   if (!(e.target instanceof HTMLInputElement) || !e.target.files) {
@@ -27,37 +26,48 @@ function handleFileChange(e: Event) {
   }
 }
 
-function removeFile(index: number) {
-  const fileSeed = files.value[index]
-  if (!fileSeed) {
-    return
+const useFilePreviewUrls = (files: Ref<FileSeed[]>) => {
+  const previewUrlCache = new Map<File, string>()
+
+  const filePreviewUrls = computed(() => {
+    return files.value.map(({ file }) => {
+      const cachedPreviewUrl = previewUrlCache.get(file)
+      if (cachedPreviewUrl) {
+        return cachedPreviewUrl
+      }
+
+      const previewUrl = URL.createObjectURL(file)
+      previewUrlCache.set(file, previewUrl)
+      return previewUrl
+    })
+  })
+
+  function removeFile(index: number) {
+    const fileSeed = files.value[index]
+    if (!fileSeed) {
+      return
+    }
+    const { file } = fileSeed
+
+    const previewUrl = previewUrlCache.get(file)
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl)
+    }
+    previewUrlCache.delete(file)
+    files.value.splice(index, 1)
   }
-  const { file } = fileSeed
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  URL.revokeObjectURL(previewUrlCache.get(file)!)
-  previewUrlCache.delete(file)
-  files.value.splice(index, 1)
+
+  onUnmounted(() => {
+    previewUrlCache.forEach(value => {
+      URL.revokeObjectURL(value)
+    })
+    previewUrlCache.clear()
+  })
+
+  return { filePreviewUrls, removeFile }
 }
 
-const filePreviewUrls = computed(() => {
-  return files.value.map(({ file }) => {
-    const cachedPreviewUrl = previewUrlCache.get(file)
-    if (cachedPreviewUrl) {
-      return cachedPreviewUrl
-    }
-
-    const previewUrl = URL.createObjectURL(file)
-    previewUrlCache.set(file, previewUrl)
-    return previewUrl
-  })
-})
-
-onUnmounted(() => {
-  previewUrlCache.forEach(value => {
-    URL.revokeObjectURL(value)
-  })
-  previewUrlCache.clear()
-})
+const { filePreviewUrls, removeFile } = useFilePreviewUrls(files)
 </script>
 
 <template>

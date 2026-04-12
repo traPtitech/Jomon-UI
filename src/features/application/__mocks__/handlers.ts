@@ -54,6 +54,7 @@ export const applicationHandlers = [
         statuses: [
           {
             ...createMockApplicationStatus(),
+            created_by: newApplication.created_by,
             status: 'pending_review',
             created_at: newApplication.created_at,
           },

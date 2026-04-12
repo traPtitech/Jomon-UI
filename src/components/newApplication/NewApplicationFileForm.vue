@@ -34,9 +34,9 @@ function removeFile(index: number) {
 
 const filePreviewUrls = computed(() => {
   return files.value.map(({ file }) => {
-    if (previewUrlCache.has(file)) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return previewUrlCache.get(file)!
+    const cachedPreviewUrl = previewUrlCache.get(file)
+    if (cachedPreviewUrl) {
+      return cachedPreviewUrl
     }
 
     const previewUrl = URL.createObjectURL(file)

@@ -24,11 +24,12 @@ export const createMockCommentFromCommentInput = (
   commentInput: CommentInput,
   loggedInUser: string
 ): Comment => {
+  const now = new Date().toISOString()
   return {
     ...commentInput,
     id: faker.string.uuid(),
     user: loggedInUser,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    created_at: now,
+    updated_at: now,
   }
 }

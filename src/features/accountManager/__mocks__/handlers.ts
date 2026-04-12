@@ -1,19 +1,33 @@
-import { HttpResponse, type PathParams, http } from 'msw'
+import { HttpResponse, http } from 'msw'
 
-const mockAccountManagers = ['3fa85f64-5717-4562-b3fc-2c963f66afa6']
+import { mockUserIds } from '@/features/user/__mocks__/data'
+
+import { mockAccountManagers } from './data'
 
 export const accountManagerHandlers = [
-  http.get('/api/account-managers', () => {
-    return HttpResponse.json(mockAccountManagers)
+  http.get<never, never, string[]>('/api/account-managers', () => {
+    return HttpResponse.json(Array.from(mockAccountManagers))
   }),
-  http.post<PathParams, string[], string[]>(
+
+  http.post<never, string[], string[]>(
     '/api/account-managers',
     async ({ request }) => {
-      const reqBody: string[] = await request.json()
-      return HttpResponse.json(reqBody)
+      const addingManagers = await request.json()
+      if (addingManagers.some(id => !mockUserIds.has(id))) {
+        return new HttpResponse(null, { status: 400 })
+      }
+
+      addingManagers.forEach(id => mockAccountManagers.add(id))
+      return HttpResponse.json(addingManagers)
     }
   ),
-  http.delete('/api/account-managers', () => {
-    return HttpResponse.json(null)
-  }),
+
+  http.delete<never, string[], never>(
+    '/api/account-managers',
+    async ({ request }) => {
+      const deletingManagers = await request.json()
+      deletingManagers.forEach(id => mockAccountManagers.delete(id))
+      return HttpResponse.json(null)
+    }
+  ),
 ]

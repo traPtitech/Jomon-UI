@@ -1,55 +1,78 @@
-import { HttpResponse, http } from 'msw'
+import { HttpResponse, type PathParams, http } from 'msw'
 
-import type { PartitionGroup } from '@/lib/apis'
+import type { PartitionGroup, PartitionGroupInput } from '@/lib/apis'
 
-import type { PartitionGroupSeed } from '../entities'
-
-export const mockPartitionGroup: PartitionGroup = {
-  id: 'group-1',
-  name: 'テストパーティショングループ',
-  parent_partition_group: null,
-  depth: 1,
-  created_at: '2024-01-01T00:00:00Z',
-  updated_at: '2024-01-01T00:00:00Z',
-}
-
-const mockPartitionGroups = Array(10).fill(mockPartitionGroup)
+import {
+  createMockPartitionGroup,
+  isValidPartitionGroupInput,
+  mockIdToMockPartitionGroup,
+} from './data'
 
 export const partitionGroupHandlers = [
-  http.get('/api/partition-groups', () => {
-    return HttpResponse.json(mockPartitionGroups)
+  http.get<never, never, PartitionGroup[]>('/api/partition-groups', () => {
+    return HttpResponse.json(Array.from(mockIdToMockPartitionGroup.values()))
   }),
 
-  http.get('/api/partition-groups/:id', ({ params }) => {
-    if (params.id === 'group-1') {
-      return HttpResponse.json(mockPartitionGroup)
+  http.get<PathParams, never, PartitionGroup>(
+    '/api/partition-groups/:id',
+    ({ params }) => {
+      const partitionGroup = mockIdToMockPartitionGroup.get(params.id as string)
+      if (!partitionGroup) {
+        return new HttpResponse(null, { status: 404 })
+      }
+      return HttpResponse.json(partitionGroup)
     }
-    return new HttpResponse(null, { status: 404 })
-  }),
+  ),
 
-  http.post('/api/partition-groups', async ({ request }) => {
-    const seed = (await request.json()) as PartitionGroupSeed
-    const partitionGroup: PartitionGroup = {
-      ...mockPartitionGroup,
-      name: seed.name,
-      parent_partition_group: seed.parentPartitionGroupId,
-      depth: seed.depth,
+  http.post<PathParams, PartitionGroupInput, PartitionGroup>(
+    '/api/partition-groups',
+    async ({ request }) => {
+      const partitionGroupInput = await request.json()
+      if (!isValidPartitionGroupInput(partitionGroupInput)) {
+        return new HttpResponse(null, { status: 400 })
+      }
+      const newPartitionGroup: PartitionGroup = {
+        ...createMockPartitionGroup(),
+        ...partitionGroupInput,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      }
+      mockIdToMockPartitionGroup.set(newPartitionGroup.id, newPartitionGroup)
+      return HttpResponse.json(newPartitionGroup)
     }
-    return HttpResponse.json(partitionGroup)
-  }),
+  ),
 
-  http.put('/api/partition-groups/:id', async ({ request }) => {
-    const seed = (await request.json()) as PartitionGroupSeed
-    const partitionGroup: PartitionGroup = {
-      ...mockPartitionGroup,
-      name: seed.name,
-      parent_partition_group: seed.parentPartitionGroupId,
-      depth: seed.depth,
+  http.put<PathParams, PartitionGroupInput, PartitionGroup>(
+    '/api/partition-groups/:id',
+    async ({ params, request }) => {
+      const id = params.id as string
+      const existingPartitionGroup = mockIdToMockPartitionGroup.get(id)
+      if (!existingPartitionGroup) {
+        return new HttpResponse(null, { status: 404 })
+      }
+      const partitionGroupInput = await request.json()
+      if (!isValidPartitionGroupInput(partitionGroupInput)) {
+        return new HttpResponse(null, { status: 400 })
+      }
+      const updatedPartitionGroup: PartitionGroup = {
+        ...existingPartitionGroup,
+        ...partitionGroupInput,
+        updated_at: new Date().toISOString(),
+      }
+      mockIdToMockPartitionGroup.set(id, updatedPartitionGroup)
+      return HttpResponse.json(updatedPartitionGroup)
     }
-    return HttpResponse.json(partitionGroup)
-  }),
+  ),
 
-  http.delete('/api/partition-groups/:id', () => {
-    return new HttpResponse(null, { status: 204 })
-  }),
+  http.delete<PathParams, never, never>(
+    '/api/partition-groups/:id',
+    ({ params }) => {
+      const id = params.id as string
+      if (!mockIdToMockPartitionGroup.has(id)) {
+        return new HttpResponse(null, { status: 404 })
+      }
+      mockIdToMockPartitionGroup.delete(id)
+      return HttpResponse.json(null)
+    }
+  ),
 ]

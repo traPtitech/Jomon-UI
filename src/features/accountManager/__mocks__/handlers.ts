@@ -22,7 +22,7 @@ export const accountManagerHandlers = [
     }
   ),
 
-  http.delete<never, string[], string[]>(
+  http.delete<never, string[], never>(
     '/api/account-managers',
     async ({ request }) => {
       const deletingManagers = await request.json()

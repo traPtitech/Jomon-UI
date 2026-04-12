@@ -44,6 +44,7 @@ export interface ApplicationQuerySeed {
 }
 
 // FIXME: ファイルがないので申請作成時にファイルを添付できない
+// issue: https://github.com/traPtitech/Jomon/issues/1033
 export interface ApplicationSeed {
   createdBy: string
   title: string

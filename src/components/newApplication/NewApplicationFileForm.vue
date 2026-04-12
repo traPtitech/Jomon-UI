@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, onUnmounted, ref } from 'vue'
 
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
 
-import { computed, onUnmounted, ref } from 'vue'
+import { isImageByType } from '@/lib/checkFileType'
+
+import type { FileSeed } from '@/features/file/entities'
 
 const files = defineModel<FileSeed[]>({ required: true })
 
@@ -26,7 +28,11 @@ function handleFileChange(e: Event) {
 }
 
 function removeFile(index: number) {
-  const { file } = files.value[index]
+  const fileSeed = files.value[index]
+  if (!fileSeed) {
+    return
+  }
+  const { file } = fileSeed
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   URL.revokeObjectURL(previewUrlCache.get(file)!)
   previewUrlCache.delete(file)

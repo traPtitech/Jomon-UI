@@ -1,13 +1,15 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import { loggedInUser, setLoggedInUser } from '@/features/user/__mocks__/data'
 import { useUserStore } from '@/features/user/store'
 
-const { userOptions, fetchMe } = useUserStore()
+const { userOptions, fetchMe, fetchUsers } = useUserStore()
 
 const selectedUser = ref(loggedInUser.id)
+
+onMounted(fetchUsers)
 
 const searchSelectCloseHandler = async () => {
   setLoggedInUser(selectedUser.value)

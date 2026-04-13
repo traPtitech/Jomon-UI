@@ -28,4 +28,14 @@ export const mockUserIds = new Set(mockUsers.map(user => user.id))
 export const getRandomMockUser = (): User =>
   faker.helpers.arrayElement(mockUsers)
 
-export const loggedInUser = mockUserMehm8128
+export let loggedInUser = mockUserMehm8128
+
+const mockIdToMockUser = new Map(mockUsers.map(user => [user.id, user]))
+
+export const setLoggedInUser = (userId: string): void => {
+  const user = mockIdToMockUser.get(userId)
+  if (user === undefined) {
+    return
+  }
+  loggedInUser = user
+}

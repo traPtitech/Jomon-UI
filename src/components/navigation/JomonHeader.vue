@@ -6,13 +6,10 @@ import { Bars3Icon } from '@heroicons/vue/24/outline'
 import ModalWrapper from '@/components/modal/ModalWrapper.vue'
 import { useModal } from '@/components/modal/composables/useModal'
 import JomonLogo from '@/components/shared/JomonLogo.vue'
-import UserIcon from '@/components/shared/UserIcon.vue'
-import { useUserStore } from '@/features/user/store'
 
 import PageNavigations from './PageNavigations.vue'
 import SideDrawer from './SideDrawer.vue'
-
-const { me } = useUserStore()
+import loggedInUserIcon from './loggedInUserIcon.vue'
 
 const { shouldShowModal, openModal, closeModal } = useModal()
 
@@ -50,7 +47,7 @@ const handleOpenDrawer = () => {
           tabindex="0">
           ヘルプ
         </a>
-        <UserIcon v-if="me !== undefined" class="w-10" :name="me.name" />
+        <loggedInUserIcon />
       </div>
     </div>
   </header>

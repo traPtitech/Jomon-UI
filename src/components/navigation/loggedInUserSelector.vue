@@ -13,10 +13,12 @@ const searchSelectCloseHandler = async () => {
   setLoggedInUser(selectedUser.value)
   await fetchMe({ force: true })
 }
+
+const label = 'ログインユーザーを変更'
 </script>
 
 <template>
-  <button popovertarget="user-select">
+  <button popovertarget="user-select" :aria-label="label">
     <slot />
   </button>
   <SearchSelect
@@ -25,6 +27,6 @@ const searchSelectCloseHandler = async () => {
     class="overflow-visible [position-area:bottom_span-all]"
     :options="userOptions"
     v-model="selectedUser"
-    label="ログインユーザーを変更"
+    :label="label"
     @close="searchSelectCloseHandler" />
 </template>

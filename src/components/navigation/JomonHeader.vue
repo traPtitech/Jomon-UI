@@ -7,10 +7,10 @@ import ModalWrapper from '@/components/modal/ModalWrapper.vue'
 import { useModal } from '@/components/modal/composables/useModal'
 import JomonLogo from '@/components/shared/JomonLogo.vue'
 
+import LoggedInUserIcon from './LoggedInUserIcon.vue'
+import LoggedInUserSelector from './LoggedInUserSelector.vue'
 import PageNavigations from './PageNavigations.vue'
 import SideDrawer from './SideDrawer.vue'
-import loggedInUserIcon from './loggedInUserIcon.vue'
-import loggedInUserSelector from './loggedInUserSelector.vue'
 
 const { shouldShowModal, openModal, closeModal } = useModal()
 
@@ -50,10 +50,10 @@ const handleOpenDrawer = () => {
           tabindex="0">
           ヘルプ
         </a>
-        <loggedInUserSelector v-if="isDevEnvironment">
-          <loggedInUserIcon />
-        </loggedInUserSelector>
-        <loggedInUserIcon v-else />
+        <LoggedInUserSelector v-if="isDevEnvironment">
+          <LoggedInUserIcon />
+        </LoggedInUserSelector>
+        <LoggedInUserIcon v-else />
       </div>
     </div>
   </header>

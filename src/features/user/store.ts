@@ -53,12 +53,19 @@ export const useUserStore = defineStoreComposable('user', () => {
     }
   }
 
-  const fetchMe = async () => {
-    if (isMeFetched.value) return
+  type FetchMeOptions = {
+    force?: boolean
+  }
+
+  const fetchMe = async (options: FetchMeOptions = {}) => {
+    const { force = false } = options
+
+    if (isMeFetched.value && !force) return me.value
 
     try {
       me.value = await repository.fetchMe()
       isMeFetched.value = true
+      return me.value
     } catch {
       throw new Error('ユーザーの取得に失敗しました')
     }

@@ -10,8 +10,11 @@ import JomonLogo from '@/components/shared/JomonLogo.vue'
 import PageNavigations from './PageNavigations.vue'
 import SideDrawer from './SideDrawer.vue'
 import loggedInUserIcon from './loggedInUserIcon.vue'
+import loggedInUserSelector from './loggedInUserSelector.vue'
 
 const { shouldShowModal, openModal, closeModal } = useModal()
+
+const isDevEnvironment = import.meta.env.MODE === 'development'
 
 const handleOpenDrawer = () => {
   if (!shouldShowModal.value) {
@@ -47,7 +50,10 @@ const handleOpenDrawer = () => {
           tabindex="0">
           ヘルプ
         </a>
-        <loggedInUserIcon />
+        <loggedInUserSelector v-if="isDevEnvironment">
+          <loggedInUserIcon />
+        </loggedInUserSelector>
+        <loggedInUserIcon v-else />
       </div>
     </div>
   </header>

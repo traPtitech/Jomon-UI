@@ -1,6 +1,7 @@
-import type { PartitionSeed, Partition } from '../entities'
-import { convertPartitionFromData } from './converter'
 import apis, { type PartitionInput } from '@/lib/apis'
+
+import type { Partition, PartitionSeed } from '../entities'
+import { convertPartitionFromData } from './converter'
 
 export const usePartitionRepository = () => {
   return createPartitionRepository()
@@ -10,7 +11,7 @@ const toPartitionInput = (partition: PartitionSeed): PartitionInput => ({
   name: partition.name,
   budget: partition.budget,
   parent_partition_group: partition.parentPartitionGroupId,
-  management: partition.management
+  management: partition.management,
 })
 
 const createPartitionRepository = () => ({
@@ -37,5 +38,5 @@ const createPartitionRepository = () => ({
   },
   deletePartition: async (id: string) => {
     await apis.deletePartition(id)
-  }
+  },
 })

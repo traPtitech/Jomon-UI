@@ -6,7 +6,7 @@ withDefaults(
     isEditMode?: boolean
   }>(),
   {
-    isEditMode: false
+    isEditMode: false,
   }
 )
 </script>

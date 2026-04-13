@@ -1,7 +1,9 @@
+import { computed, ref } from 'vue'
+
+import { useToast } from 'vue-toastification'
+
 import { useAccountManagerStore } from '@/features/accountManager/store'
 import { useUserStore } from '@/features/user/store'
-import { computed, ref } from 'vue'
-import { useToast } from 'vue-toastification'
 
 export const useAccountManager = () => {
   const { users } = useUserStore()
@@ -14,7 +16,7 @@ export const useAccountManager = () => {
       .filter(user => !accountManagers.value.includes(user.id))
       .map(user => ({
         key: user.name,
-        value: user.id
+        value: user.id,
       }))
   })
 
@@ -71,6 +73,6 @@ export const useAccountManager = () => {
     absentMembers,
     isSending,
     addAccountManagers: addAccountManagersHandler,
-    removeAccountManagers: removeAccountManagersHandler
+    removeAccountManagers: removeAccountManagersHandler,
   }
 }

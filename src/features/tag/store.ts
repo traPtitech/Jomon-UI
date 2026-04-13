@@ -1,85 +1,100 @@
-import { useTagRepository } from './data/repository'
+import { computed, inject, ref } from 'vue'
+
+import { defineStoreComposable } from '@/lib/store'
+
+import { TagRepositoryKey } from '@/di'
+import type { AsyncStatus } from '@/types'
+
 import type { Tag } from './entities'
-import { defineStore, storeToRefs } from 'pinia'
 
-const createTagStore = defineStore('tag', {
-  state: () => ({
-    tags: [] as Tag[],
-    isTagFetched: false
-  }),
-  getters: {
-    tagOptions: state =>
-      state.tags.map(tag => ({
-        key: tag.name,
-        value: tag
-      })),
-    tagIdOptions: state =>
-      state.tags.map(tag => ({
-        key: tag.name,
-        value: tag.id
-      }))
-  },
-  actions: {
-    async fetchTags() {
-      const repository = useTagRepository()
-      try {
-        this.tags = await repository.fetchTags()
-        this.isTagFetched = true
-      } catch (e) {
-        throw new Error(
-          'タグの取得に失敗しました: ' +
-            (e instanceof Error ? e.message : String(e))
-        )
-      }
-    },
-    async ensureTags(containNewTags: Tag[]): Promise<Tag[]> {
-      const repository = useTagRepository()
-      const alreadyExists: Tag[] = []
-      const promises: Promise<Tag>[] = []
+export const useTagStore = defineStoreComposable('tag', () => {
+  const repository = inject(TagRepositoryKey)
+  if (!repository) throw new Error('TagRepository is not provided')
 
-      for (const tag of containNewTags) {
-        if (tag.id === '') {
-          promises.push(repository.createTag(tag.name))
-        } else {
-          alreadyExists.push(tag)
-        }
-      }
+  const tags = ref<Tag[]>([])
+  const status = ref<AsyncStatus>('idle')
+  const error = ref<string | null>(null)
 
-      try {
-        const created = await Promise.all(promises)
-        this.tags.push(...created)
-        return [...alreadyExists, ...created]
-      } catch {
-        throw new Error('新規タグの作成に失敗しました')
-      }
-    },
-    async deleteTags(ids: string[]) {
-      const repository = useTagRepository()
-      try {
-        await Promise.all(ids.map(repository.deleteTag))
-        this.tags = this.tags.filter(tag => !ids.includes(tag.id))
-      } catch {
-        throw new Error('タグの削除に失敗しました')
-      }
-    },
-    reset() {
-      this.tags = []
-      this.isTagFetched = false
+  const tagOptions = computed(() =>
+    tags.value.map(tag => ({
+      key: tag.name,
+      value: tag,
+    }))
+  )
+
+  const tagIdOptions = computed(() =>
+    tags.value.map(tag => ({
+      key: tag.name,
+      value: tag.id,
+    }))
+  )
+
+  const isTagFetched = computed(() => status.value === 'success')
+
+  const fetchTags = async () => {
+    status.value = 'loading'
+    error.value = null
+
+    try {
+      tags.value = await repository.fetchTags()
+      status.value = 'success'
+    } catch (e) {
+      status.value = 'error'
+      error.value =
+        'タグの取得に失敗しました: ' +
+        (e instanceof Error ? e.message : String(e))
+      throw new Error(error.value)
     }
   }
-})
 
-export const useTagStore = () => {
-  const store = createTagStore()
-  const refs = storeToRefs(store)
+  const ensureTags = async (containNewTags: Tag[]): Promise<Tag[]> => {
+    const alreadyExists: Tag[] = []
+    const promises: Promise<Tag>[] = []
+
+    for (const tag of containNewTags) {
+      if (tag.id === '') {
+        promises.push(repository.createTag(tag.name))
+      } else {
+        alreadyExists.push(tag)
+      }
+    }
+
+    try {
+      const created = await Promise.all(promises)
+      tags.value.push(...created)
+      return [...alreadyExists, ...created]
+    } catch {
+      throw new Error('新規タグの作成に失敗しました')
+    }
+  }
+
+  const deleteTags = async (ids: string[]) => {
+    try {
+      await Promise.all(ids.map(repository.deleteTag))
+      tags.value = tags.value.filter(tag => !ids.includes(tag.id))
+    } catch {
+      throw new Error('タグの削除に失敗しました')
+    }
+  }
+
+  const reset = () => {
+    tags.value = []
+    status.value = 'idle'
+    error.value = null
+  }
 
   return {
-    ...refs,
-    fetchTags: store.fetchTags.bind(store),
-    ensureTags: store.ensureTags.bind(store),
-    deleteTags: store.deleteTags.bind(store),
-    reset: store.reset.bind(store)
+    tags,
+    status,
+    error,
+    isTagFetched,
+    tagOptions,
+    tagIdOptions,
+    fetchTags,
+    ensureTags,
+    deleteTags,
+    reset,
   }
-}
+})
 
 export type TagStore = ReturnType<typeof useTagStore>

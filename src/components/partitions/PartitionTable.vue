@@ -1,7 +1,10 @@
 <script lang="ts" setup>
 import type { Partition } from '@/features/partition/entities'
+import { isBudgetSet } from '@/features/partition/lib/isBudgetSet'
+import { usePartitionGroupStore } from '@/features/partitionGroup/store'
 import router from '@/router'
 
+const { partitionGroupIdNameToMap } = usePartitionGroupStore()
 interface Props {
   page: number
   partitions: Partition[]
@@ -25,7 +28,11 @@ const navigateToPartition = async (partitionId: string) => {
     <thead>
       <tr>
         <th
-          v-for="key in ['パーティション名', '予算']"
+          v-for="key in [
+            'パーティション名',
+            'パーティショングループ名',
+            '予算',
+          ]"
           :key="key"
           scope="col"
           class="bg-surface-tertiary px-1 py-4 text-left font-normal first:rounded-ss-xl first:pl-6 last:rounded-se-xl last:pr-6">
@@ -46,7 +53,17 @@ const navigateToPartition = async (partitionId: string) => {
         <td class="px-1 py-4 pl-6">
           {{ partition.name }}
         </td>
-        <td class="px-1 py-4 pr-6">{{ partition.budget }}円</td>
+        <td class="px-1 py-4">
+          {{
+            partitionGroupIdNameToMap.get(partition.parentPartitionGroupId) ??
+            '不明なパーティショングループ'
+          }}
+        </td>
+        <td class="px-1 py-4 pr-6">
+          {{
+            isBudgetSet(partition.budget) ? partition.budget + '円' : '指定なし'
+          }}
+        </td>
       </tr>
     </tbody>
   </table>

@@ -1,9 +1,12 @@
 <script lang="ts" setup>
-import BaseInput from './BaseInput.vue'
-import MarkdownIt from './MarkdownIt.vue'
-import SearchSelect from '@/components/shared/SearchSelect.vue'
-import { EyeIcon, PencilSquareIcon } from '@heroicons/vue/24/outline'
 import { computed, ref } from 'vue'
+
+import { EyeIcon, PencilSquareIcon } from '@heroicons/vue/24/outline'
+
+import SearchSelect from '@/components/shared/SearchSelect.vue'
+
+import BaseTextInput from './BaseInput/BaseTextInput.vue'
+import MarkdownIt from './MarkdownIt.vue'
 
 type TabType = 'input' | 'preview'
 interface Props {
@@ -14,7 +17,7 @@ interface Props {
 
 const model = defineModel<string>({ required: true })
 const props = withDefaults(defineProps<Props>(), {
-  placeholder: ''
+  placeholder: '',
 })
 
 const currentTab = ref<TabType>('input')
@@ -25,7 +28,7 @@ const templateOptions = computed(
     props.templates?.map(template => {
       return {
         key: template.name,
-        value: template.name
+        value: template.name,
       }
     }) ?? []
 )
@@ -83,10 +86,10 @@ function changeCurrentTab(tab: TabType) {
         @update:model-value="setTemplate($event)" />
     </div>
     <div class="h-3/5 px-5 py-3">
-      <BaseInput
+      <BaseTextInput
         v-if="currentTab === 'input'"
         v-model="model"
-        type="textarea"
+        textarea
         :label="props.label"
         class="h-full w-full resize-none overflow-y-auto"
         :placeholder="placeholder" />

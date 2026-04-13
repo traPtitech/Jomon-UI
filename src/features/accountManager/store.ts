@@ -1,76 +1,91 @@
-import { useAccountManagerRepository } from './data/repository'
+import { computed, inject, ref } from 'vue'
+
+import { defineStoreComposable } from '@/lib/store'
+
+import { AccountManagerRepositoryKey } from '@/di'
 import { useUserStore } from '@/features/user/store'
-import { defineStore, storeToRefs } from 'pinia'
+import type { AsyncStatus } from '@/types'
 
-const createAccountManagerStore = defineStore('accountManager', {
-  state: () => ({
-    accountManagers: [] as string[],
-    isAccountManagerFetched: false
-  }),
-  getters: {
-    accountManagerOptions(state) {
-      const { userMap } = useUserStore()
-      return state.accountManagers.map(accountManager => ({
-        key: userMap.value[accountManager],
-        value: accountManager
+export const useAccountManagerStore = defineStoreComposable(
+  'accountManager',
+  () => {
+    const repository = inject(AccountManagerRepositoryKey)
+    if (!repository) throw new Error('AccountManagerRepository is not provided')
+
+    const accountManagers = ref<string[]>([])
+    const status = ref<AsyncStatus>('idle')
+    const error = ref<string | null>(null)
+
+    const accountManagerOptions = computed(() => {
+      const { getUserNameWithFallback } = useUserStore()
+      return accountManagers.value.map(accountManager => ({
+        key: getUserNameWithFallback(accountManager),
+        value: accountManager,
       }))
-    }
-  },
-  actions: {
-    async fetchAccountManagers() {
-      const repository = useAccountManagerRepository()
+    })
+
+    const isAccountManagerFetched = computed(() => status.value === 'success')
+
+    const fetchAccountManagers = async () => {
+      status.value = 'loading'
+      error.value = null
 
       try {
-        this.accountManagers = await repository.fetchAccountManagers()
-        this.isAccountManagerFetched = true
-      } catch {
-        throw new Error('会計管理者の取得に失敗しました')
+        accountManagers.value = await repository.fetchAccountManagers()
+        status.value = 'success'
+      } catch (e) {
+        status.value = 'error'
+        error.value =
+          '会計管理者の取得に失敗しました: ' +
+          (e instanceof Error ? e.message : String(e))
+        throw new Error(error.value)
       }
-    },
-    async addAccountManagers(accountManagers: string[]) {
-      if (accountManagers.length === 0) return
-      const repository = useAccountManagerRepository()
+    }
+
+    const addAccountManagers = async (newAccountManagers: string[]) => {
+      if (newAccountManagers.length === 0) return
 
       try {
-        await repository.addAccountManagers(accountManagers)
-        this.accountManagers = Array.from(
-          new Set([...this.accountManagers, ...accountManagers])
+        await repository.addAccountManagers(newAccountManagers)
+        accountManagers.value = Array.from(
+          new Set([...accountManagers.value, ...newAccountManagers])
         )
       } catch {
         throw new Error('会計管理者の追加に失敗しました')
       }
-    },
-    async removeAccountManagers(accountManagers: string[]) {
-      if (accountManagers.length === 0) return
-      const repository = useAccountManagerRepository()
+    }
+
+    const removeAccountManagers = async (targetAccountManagers: string[]) => {
+      if (targetAccountManagers.length === 0) return
 
       try {
-        await repository.removeAccountManagers(accountManagers)
-        this.accountManagers = this.accountManagers.filter(
-          accountManager => !accountManagers.includes(accountManager)
+        await repository.removeAccountManagers(targetAccountManagers)
+        accountManagers.value = accountManagers.value.filter(
+          accountManager => !targetAccountManagers.includes(accountManager)
         )
       } catch {
         throw new Error('会計管理者の削除に失敗しました')
       }
-    },
-    reset() {
-      this.accountManagers = []
-      this.isAccountManagerFetched = false
+    }
+
+    const reset = () => {
+      accountManagers.value = []
+      status.value = 'idle'
+      error.value = null
+    }
+
+    return {
+      accountManagers,
+      status,
+      error,
+      isAccountManagerFetched,
+      accountManagerOptions,
+      fetchAccountManagers,
+      addAccountManagers,
+      removeAccountManagers,
+      reset,
     }
   }
-})
-
-export const useAccountManagerStore = () => {
-  const store = createAccountManagerStore()
-  const refs = storeToRefs(store)
-
-  return {
-    ...refs,
-    fetchAccountManagers: store.fetchAccountManagers.bind(store),
-    addAccountManagers: store.addAccountManagers.bind(store),
-    removeAccountManagers: store.removeAccountManagers.bind(store),
-    reset: store.reset.bind(store)
-  }
-}
+)
 
 export type AccountManagerStore = ReturnType<typeof useAccountManagerStore>

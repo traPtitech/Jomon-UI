@@ -1,10 +1,13 @@
 <script lang="ts" setup>
-import { useApplicationFile } from './composables/useApplicationFile'
-import SimpleButton from '@/components/shared/SimpleButton.vue'
-import { useApplicationStore } from '@/features/application/store'
-import { isImageByName } from '@/lib/checkFileType'
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
+
+import { isImageByName } from '@/lib/checkFileType'
+
+import SimpleButton from '@/components/shared/SimpleButton.vue'
+import { useApplicationStore } from '@/features/application/store'
+
+import { useApplicationFile } from './composables/useApplicationFile'
 
 const { currentApplication: application } = useApplicationStore()
 

@@ -1,13 +1,20 @@
+import { ref } from 'vue'
+
+import { useRouter } from 'vue-router'
+
+import { useToast } from 'vue-toastification'
+
 import type { ApplicationSeed } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
+import type {
+  ApplicationTarget,
+  ApplicationTargetDraft,
+} from '@/features/applicationTarget/entities'
 import type { FileSeed } from '@/features/file/entities'
 import { createFiles } from '@/features/file/services'
 import type { Tag } from '@/features/tag/entities'
 import { useTagStore } from '@/features/tag/store'
 import { useUserStore } from '@/features/user/store'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useToast } from 'vue-toastification'
 
 export const useNewApplication = () => {
   const toast = useToast()
@@ -18,13 +25,25 @@ export const useNewApplication = () => {
 
   const isSending = ref(false)
 
-  const application = ref<ApplicationSeed>({
+  type ApplicationForm = Omit<ApplicationSeed, 'targets'> & {
+    targets: ApplicationTargetDraft[]
+  }
+
+  const hasFilledTargets = (
+    targets: ApplicationTargetDraft[]
+  ): targets is ApplicationTarget[] =>
+    targets.every(
+      target =>
+        target.target !== '' && target.amount !== null && target.amount > 0
+    )
+
+  const application = ref<ApplicationForm>({
     createdBy: me.value?.id ?? '',
     title: '',
-    targets: [{ target: '', amount: 0 }],
+    targets: [{ target: '', amount: null }],
     content: '',
     tags: [],
-    partition: ''
+    partition: '',
   })
   const files = ref<FileSeed[]>([])
 
@@ -41,11 +60,8 @@ export const useNewApplication = () => {
       toast.warning('パーティションは必須です')
       return
     }
-    if (
-      application.value.targets.some(
-        target => target.target === '' || target.amount === 0
-      )
-    ) {
+    const { targets } = application.value
+    if (!hasFilledTargets(targets)) {
       toast.warning('対象者の選択と金額の入力は必須です')
       return
     }
@@ -65,9 +81,13 @@ export const useNewApplication = () => {
     }
 
     try {
-      const applicationSeedWithNewTags = {
-        ...application.value,
-        tags
+      const applicationSeedWithNewTags: ApplicationSeed = {
+        createdBy: application.value.createdBy,
+        title: application.value.title,
+        content: application.value.content,
+        tags,
+        partition: application.value.partition,
+        targets,
       }
       const res = await createApplication(applicationSeedWithNewTags)
       try {

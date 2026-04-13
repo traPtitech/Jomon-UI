@@ -1,16 +1,14 @@
 <script lang="ts" setup>
-import type { FileSeed } from '@/features/file/entities'
-import { isImageByType } from '@/lib/checkFileType'
+import { type Ref, onUnmounted, ref, watch } from 'vue'
+
 import { DocumentIcon } from '@heroicons/vue/24/outline'
 import { XCircleIcon } from '@heroicons/vue/24/solid'
-import { ref } from 'vue'
 
-interface Props {
-  files: FileSeed[]
-}
+import { isImageByType } from '@/lib/checkFileType'
 
-const props = defineProps<Props>()
-const emit = defineEmits<(e: 'input', value: FileSeed[]) => void>()
+import type { FileSeed } from '@/features/file/entities'
+
+const fileSeeds = defineModel<FileSeed[]>({ required: true })
 
 const inputRef = ref()
 
@@ -18,27 +16,59 @@ function handleFileChange(e: Event) {
   if (!(e.target instanceof HTMLInputElement) || !e.target.files) {
     return
   }
-  for (const file of Array.from(e.target.files)) {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => {
-      emit('input', [
-        ...props.files,
-        { name: file.name, file: file } as FileSeed
-      ])
-    }
-  }
+
+  const newFileSeeds = Array.from(e.target.files).map(file => {
+    return { name: file.name, file: file }
+  })
+  fileSeeds.value.push(...newFileSeeds)
   if (inputRef.value) {
     inputRef.value.value = null
   }
 }
 
-function removeFile(index: number) {
-  emit(
-    'input',
-    props.files.filter((_, i) => index !== i)
+const useFilePreviewUrls = (fileSeeds: Ref<FileSeed[]>) => {
+  const filePreviewUrls = ref(new Map<File, string>())
+
+  watch(
+    fileSeeds,
+    newFileSeeds => {
+      filePreviewUrls.value.forEach((previewUrl, file) => {
+        if (!newFileSeeds.some(fileSeed => fileSeed.file === file)) {
+          URL.revokeObjectURL(previewUrl)
+          filePreviewUrls.value.delete(file)
+        }
+      })
+      newFileSeeds.forEach(fileSeed => {
+        const { file } = fileSeed
+        if (!filePreviewUrls.value.has(file)) {
+          const previewUrl = URL.createObjectURL(file)
+          filePreviewUrls.value.set(file, previewUrl)
+        }
+      })
+    },
+    { deep: true, immediate: true }
   )
+
+  function removeFile(file: File) {
+    const previewUrl = filePreviewUrls.value.get(file)
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl)
+    }
+    filePreviewUrls.value.delete(file)
+    fileSeeds.value = fileSeeds.value.filter(fileSeed => fileSeed.file !== file)
+  }
+
+  onUnmounted(() => {
+    filePreviewUrls.value.forEach(value => {
+      URL.revokeObjectURL(value)
+    })
+    filePreviewUrls.value.clear()
+  })
+
+  return { filePreviewUrls, removeFile }
 }
+
+const { filePreviewUrls, removeFile } = useFilePreviewUrls(fileSeeds)
 </script>
 
 <template>
@@ -53,28 +83,28 @@ function removeFile(index: number) {
       @change="handleFileChange" />
   </div>
   <div>
-    <div v-if="files.length === 0" class="text-sm font-medium">
+    <div v-if="fileSeeds.length === 0" class="text-sm font-medium">
       画像プレビュー
     </div>
-    <div v-if="files.length !== 0" class="flex flex-wrap">
+    <div v-if="fileSeeds.length !== 0" class="flex flex-wrap">
       <div
-        v-for="(file, index) in files"
+        v-for="(fileSeed, index) in fileSeeds"
         :key="index"
         class="group relative flex flex-col items-center not-first:ml-2">
         <img
-          v-if="isImageByType(file.file.type)"
-          :alt="file.name"
+          v-if="isImageByType(fileSeed.file.type)"
+          :alt="fileSeed.name"
           class="h-32"
-          :src="file.name" />
+          :src="filePreviewUrls.get(fileSeed.file)" />
         <DocumentIcon v-else class="h-32" />
         <button
           aria-label="ファイルを削除"
           class="invisible absolute top-1 right-1 h-6 w-6 cursor-pointer group-hover:visible"
           type="button"
-          @click="removeFile(index)">
+          @click="removeFile(fileSeed.file)">
           <XCircleIcon />
         </button>
-        <span>{{ file.name }}</span>
+        <span>{{ fileSeed.name }}</span>
       </div>
     </div>
   </div>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { EditMode } from '@/components/partitionDetail/composables/usePartitionInformation'
-import BaseInput from '@/components/shared/BaseInput.vue'
+import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
 import EditButton from '@/components/shared/EditButton.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { usePartitionStore } from '@/features/partition/store'
@@ -21,25 +21,27 @@ const { me } = useUserStore()
 const {
   canEditPartition,
   currentPartition: partition,
-  editedValue
+  editedValue,
 } = usePartitionStore()
 </script>
 
 <template>
   <div v-if="partition" class="flex items-center gap-3">
-    <h1 v-if="!props.isEditMode" class="grow text-2xl">
-      {{ partition.name }}
-    </h1>
-    <BaseInput
-      v-else
+    <BaseTextInput
+      required
+      v-if="props.isEditMode"
       v-model="editedValue.name"
       label="パーティション名"
       class="grow" />
+    <h1 v-else class="grow text-2xl">
+      {{ partition.name }}
+    </h1>
     <SimpleButton
-      v-if="isEditMode"
+      v-if="props.isEditMode"
       font-size="base"
       padding="sm"
-      @click="emit('finishEditing')">
+      @click="emit('finishEditing')"
+      :disabled="props.isSending">
       完了
     </SimpleButton>
     <EditButton

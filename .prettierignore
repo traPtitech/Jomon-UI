@@ -1,3 +1,11 @@
 public/mockServiceWorker.js
 src/lib/apis/generated/**/*
 package-lock.json
+dist
+coverage
+*.log
+*.svg
+*.ico
+*.png
+*.jpg
+*.jpeg

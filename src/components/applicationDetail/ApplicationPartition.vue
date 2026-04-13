@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+import { computed, ref } from 'vue'
+
+import { useToast } from 'vue-toastification'
+
 import EditButton from '@/components/shared/EditButton.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import { useApplication } from '@/features/application/composables'
@@ -6,11 +10,9 @@ import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import { usePartitionStore } from '@/features/partition/store'
 import { useUserStore } from '@/features/user/store'
-import { computed, ref } from 'vue'
-import { useToast } from 'vue-toastification'
 
 const application = defineModel<ApplicationDetail>('modelValue', {
-  required: true
+  required: true,
 })
 
 const { me } = useUserStore()
@@ -22,7 +24,7 @@ const toast = useToast()
 const hasAuthority = computed(() => isApplicationCreator.value(me.value))
 
 const isEditMode = ref(false)
-const editedPartition = ref<string>(application.value.partition.id)
+const editedPartition = ref(application.value.partition.id)
 const toggleEditPartition = () => {
   if (isEditMode.value) {
     editedPartition.value = application.value.partition.id
@@ -34,7 +36,7 @@ const handleUpdatePartition = async () => {
   try {
     await editApplication(application.value.id, {
       ...application.value,
-      partition: editedPartition.value
+      partition: editedPartition.value,
     })
     toast.success('更新しました')
   } catch {

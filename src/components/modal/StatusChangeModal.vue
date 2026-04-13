@@ -1,12 +1,14 @@
 <script lang="ts" setup>
+import { ref } from 'vue'
+
+import { useToast } from 'vue-toastification'
+
 import MarkdownTextarea from '@/components/shared/MarkdownTextarea.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import StatusChip from '@/components/shared/StatusChip.vue'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import type { ApplicationStatus } from '@/features/applicationStatus/entities'
-import { ref } from 'vue'
-import { useToast } from 'vue-toastification'
 
 const props = defineProps<{
   application: ApplicationDetail
@@ -45,7 +47,7 @@ const handleKeydown = async (e: KeyboardEvent) => {
 
 <template>
   <div
-    class="absolute inset-0 m-auto flex h-3/5 min-h-100 w-19/20 max-w-200 flex-col gap-6 bg-white px-12 pt-4 shadow-lg lg:w-3/5">
+    class="absolute inset-0 m-auto flex h-3/5 min-h-100 w-19/20 max-w-200 flex-col gap-6 rounded-sm bg-white px-12 pt-4 shadow-lg lg:w-3/5">
     <h1 class="text-center text-3xl">申請の状態変更</h1>
     <div class="flex h-full min-h-60 flex-col gap-4">
       <div class="flex flex-wrap items-center gap-1">

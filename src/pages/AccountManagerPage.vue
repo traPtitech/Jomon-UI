@@ -1,21 +1,29 @@
 <script lang="ts" setup>
-import { useAccountManager } from './composables/useAccountManager'
+import { ref } from 'vue'
+
+import { useToast } from 'vue-toastification'
+
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useAccountManagerStore } from '@/features/accountManager/store'
 import { useTagStore } from '@/features/tag/store'
 import { useUserStore } from '@/features/user/store'
-import { ref } from 'vue'
-import { useToast } from 'vue-toastification'
+
+import { useAccountManager } from './composables/useAccountManager'
 
 const {
   isAccountManagerFetched,
   accountManagers,
   accountManagerOptions,
-  fetchAccountManagers
+  fetchAccountManagers,
 } = useAccountManagerStore()
-const { me, isUserFetched, isAccountManager, userMap, fetchUsers } =
-  useUserStore()
+const {
+  me,
+  isUserFetched,
+  isAccountManager,
+  getUserNameWithFallback,
+  fetchUsers,
+} = useUserStore()
 const { isTagFetched, tagIdOptions, deleteTags, fetchTags } = useTagStore()
 const toast = useToast()
 
@@ -79,7 +87,7 @@ if (me.value?.accountManager) {
       <ul class="flex gap-3" aria-labelledby="accountManager-list">
         <li v-for="accountManager in accountManagers" :key="accountManager">
           <div class="rounded-sm border border-text-primary px-2 text-center">
-            {{ userMap[accountManager] }}
+            {{ getUserNameWithFallback(accountManager) }}
           </div>
         </li>
       </ul>

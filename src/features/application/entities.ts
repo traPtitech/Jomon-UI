@@ -1,15 +1,16 @@
+import { DateTime } from 'luxon'
+
 import type { ApplicationComment } from '@/features/applicationComment/entities'
 import type {
   ApplicationStatus,
-  ApplicationStatusDetail
+  ApplicationStatusDetail,
 } from '@/features/applicationStatus/entities'
 import type {
   ApplicationTarget,
-  ApplicationTargetDetail
+  ApplicationTargetDetail,
 } from '@/features/applicationTarget/entities'
 import type { Partition } from '@/features/partition/entities'
 import type { Tag } from '@/features/tag/entities'
-import { DateTime } from 'luxon'
 
 export interface Application {
   id: string
@@ -42,6 +43,8 @@ export interface ApplicationQuerySeed {
   partition: string
 }
 
+// FIXME: ファイルがないので申請作成時にファイルを添付できない
+// issue: https://github.com/traPtitech/Jomon/issues/1033
 export interface ApplicationSeed {
   createdBy: string
   title: string

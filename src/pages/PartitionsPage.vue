@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router'
 
-import PartitionTable from '@/components/partitions/PartitionTable.vue'
+import PartitionList from '@/components/partitions/PartitionList.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import { useUserStore } from '@/features/user/store'
 
@@ -21,6 +21,6 @@ const { isAccountManager } = useUserStore()
       </div>
     </div>
 
-    <PartitionTable />
+    <PartitionList />
   </div>
 </template>

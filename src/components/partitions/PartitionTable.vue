@@ -7,11 +7,8 @@ import { usePartitionStore } from '@/features/partition/store'
 import { usePartitionGroupStore } from '@/features/partitionGroup/store'
 
 const { partitions, isPartitionFetched, fetchPartitions } = usePartitionStore()
-const {
-  isPartitionGroupFetched,
-  fetchPartitionGroups,
-  partitionGroupIdToName,
-} = usePartitionGroupStore()
+const { isPartitionGroupFetched, fetchPartitionGroups, idToPartitionGroup } =
+  usePartitionGroupStore()
 
 const partitionGroupIdToPartitions = computed(() => {
   const idToPartitions = new Map<string, Partition[]>()
@@ -36,7 +33,8 @@ if (!isPartitionFetched.value) {
 
 const getPartitionGroupName = (groupId: string) => {
   return (
-    partitionGroupIdToName.value.get(groupId) ?? '不明なパーティショングループ'
+    idToPartitionGroup.value.get(groupId)?.name ??
+    '不明なパーティショングループ'
   )
 }
 </script>

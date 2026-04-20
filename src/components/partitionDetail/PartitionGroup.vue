@@ -24,8 +24,7 @@ const {
   currentPartition: partition,
   editedValue,
 } = usePartitionStore()
-const { partitionGroupIdToName, partitionGroupOptions } =
-  usePartitionGroupStore()
+const { idToPartitionGroup, partitionGroupOptions } = usePartitionGroupStore()
 </script>
 
 <template>
@@ -39,7 +38,7 @@ const { partitionGroupIdToName, partitionGroupOptions } =
       label="パーティショングループ" />
     <h2 v-else class="grow text-xl">
       {{
-        partitionGroupIdToName.get(partition.parentPartitionGroupId) ??
+        idToPartitionGroup.get(partition.parentPartitionGroupId)?.name ??
         '不明なパーティショングループ'
       }}
     </h2>

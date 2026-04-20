@@ -7,21 +7,37 @@ import { usePartitionStore } from '@/features/partition/store'
 import { usePartitionGroupStore } from '@/features/partitionGroup/store'
 
 const { partitions, isPartitionFetched, fetchPartitions } = usePartitionStore()
-const { isPartitionGroupFetched, fetchPartitionGroups, idToPartitionGroup } =
+const { isPartitionGroupFetched, fetchPartitionGroups, partitionGroups } =
   usePartitionGroupStore()
 
-const partitionGroupIdToPartitions = computed(() => {
-  const idToPartitions = new Map<string, Partition[]>()
+const groupIdToGroupedPartitions = computed(() => {
+  const idToGroupedPartitions = new Map(
+    partitionGroups.value.map(group => [
+      group.id,
+      { group, partitions: [] as Partition[] },
+    ])
+  )
   for (const partition of partitions.value) {
-    const groupId = partition.parentPartitionGroupId
-    const groupPartitions = idToPartitions.get(groupId)
-    if (groupPartitions === undefined) {
-      idToPartitions.set(groupId, [partition])
+    const groupedPartitions = idToGroupedPartitions.get(
+      partition.parentPartitionGroupId
+    )
+    if (groupedPartitions === undefined) {
+      idToGroupedPartitions.set(partition.parentPartitionGroupId, {
+        group: {
+          id: partition.parentPartitionGroupId,
+          name: '不明なパーティショングループ',
+          parentPartitionGroupId: null,
+          depth: 1,
+          createdAt: '',
+          updatedAt: '',
+        },
+        partitions: [partition],
+      })
       continue
     }
-    groupPartitions.push(partition)
+    groupedPartitions.partitions.push(partition)
   }
-  return idToPartitions
+  return idToGroupedPartitions
 })
 
 if (!isPartitionGroupFetched.value) {
@@ -29,13 +45,6 @@ if (!isPartitionGroupFetched.value) {
 }
 if (!isPartitionFetched.value) {
   await fetchPartitions()
-}
-
-const getPartitionGroupName = (groupId: string) => {
-  return (
-    idToPartitionGroup.value.get(groupId)?.name ??
-    '不明なパーティショングループ'
-  )
 }
 </script>
 
@@ -62,19 +71,19 @@ const getPartitionGroupName = (groupId: string) => {
       <template
         v-for="[
           groupId,
-          groupPartitions,
-        ] in partitionGroupIdToPartitions.entries()"
+          groupedPartitions,
+        ] in groupIdToGroupedPartitions.entries()"
         :key="groupId">
         <tr
-          v-for="(partition, i) in groupPartitions"
+          v-for="(partition, i) in groupedPartitions.partitions"
           :key="partition.id"
-          :aria-label="`${getPartitionGroupName(groupId)}の${partition.name}`"
+          :aria-label="`${groupedPartitions.group.name}の${partition.name}`"
           class="border-b">
           <td
             v-if="i === 0"
-            :rowspan="groupPartitions.length"
+            :rowspan="groupedPartitions.partitions.length"
             class="px-1 py-4 pl-6">
-            {{ getPartitionGroupName(groupId) }}
+            {{ groupedPartitions.group.name }}
           </td>
           <td class="px-1 py-4">
             {{ partition.name }}

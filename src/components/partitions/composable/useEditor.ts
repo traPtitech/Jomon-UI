@@ -28,8 +28,9 @@ export const useEditor = <T extends string | number | null>(
       } else {
         toast.error(errorMessage)
       }
+    } finally {
+      isSaving.value = false
     }
-    isSaving.value = false
   }
 
   return {

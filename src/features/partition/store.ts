@@ -8,25 +8,15 @@ import type { AsyncStatus } from '@/types'
 
 import type { Partition, PartitionSeed } from './entities'
 
-const createDefaultPartitionSeed = (): PartitionSeed => ({
-  name: '',
-  budget: 0,
-  parentPartitionGroupId: '',
-  management: {
-    category: 'manual',
-    state: 'available',
-  },
-})
-
 export const usePartitionStore = defineStoreComposable('partition', () => {
   const repository = inject(PartitionRepositoryKey)
   if (!repository) throw new Error('PartitionRepository is not provided')
 
-  const partitions = ref<Partition[]>([])
+  const idToPartition = ref(new Map<string, Partition>())
   const status = ref<AsyncStatus>('idle')
   const error = ref<string | null>(null)
-  const currentPartition = ref<Partition | undefined>(undefined)
-  const editedValue = ref(createDefaultPartitionSeed())
+
+  const partitions = computed(() => Array.from(idToPartition.value.values()))
 
   const partitionOptions = computed(() =>
     partitions.value.map(partition => ({
@@ -47,7 +37,10 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
     error.value = null
 
     try {
-      partitions.value = await repository.fetchPartitions()
+      const partitions = await repository.fetchPartitions()
+      idToPartition.value = new Map(
+        partitions.map(partition => [partition.id, partition])
+      )
       status.value = 'success'
     } catch (e) {
       status.value = 'error'
@@ -60,14 +53,7 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
 
   const fetchPartition = async (id: string) => {
     try {
-      const partition = await repository.fetchPartition(id)
-      currentPartition.value = partition
-      editedValue.value = {
-        name: partition.name,
-        budget: partition.budget,
-        parentPartitionGroupId: partition.parentPartitionGroupId,
-        management: { ...partition.management },
-      }
+      return await repository.fetchPartition(id)
     } catch {
       throw new Error('パーティションの取得に失敗しました')
     }
@@ -75,31 +61,18 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
 
   const createPartition = async (partition: PartitionSeed) => {
     try {
-      const res = await repository.createPartition(partition)
-      partitions.value.unshift(res)
+      const createdPartition = await repository.createPartition(partition)
+      idToPartition.value.set(createdPartition.id, createdPartition)
     } catch {
       throw new Error('パーティションの作成に失敗しました')
     }
   }
 
   const editPartition = async (id: string, partitionSeed: PartitionSeed) => {
-    if (!currentPartition.value) return
     try {
-      const res = await repository.editPartition(id, partitionSeed)
-      currentPartition.value = res
-      const index = partitions.value.findIndex(
-        partition => partition.id === res.id
-      )
-      if (index !== -1) {
-        partitions.value.splice(index, 1, res)
-      }
+      const editedPartition = await repository.editPartition(id, partitionSeed)
+      idToPartition.value.set(editedPartition.id, editedPartition)
     } catch {
-      editedValue.value = {
-        name: currentPartition.value.name,
-        budget: currentPartition.value.budget,
-        parentPartitionGroupId: currentPartition.value.parentPartitionGroupId,
-        management: { ...currentPartition.value.management },
-      }
       throw new Error('パーティションの更新に失敗しました')
     }
   }
@@ -107,27 +80,18 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
   const deletePartition = async (id: string) => {
     try {
       await repository.deletePartition(id)
-      const index = partitions.value.findIndex(partition => partition.id === id)
-      if (index !== -1) {
-        partitions.value.splice(index, 1)
-      }
+      idToPartition.value.delete(id)
     } catch {
       throw new Error('パーティションの削除に失敗しました')
     }
   }
 
-  const resetDetail = () => {
-    currentPartition.value = undefined
-    editedValue.value = createDefaultPartitionSeed()
-  }
-
   return {
     partitions,
+    idToPartition,
     status,
     error,
     isPartitionFetched,
-    currentPartition,
-    editedValue,
     partitionOptions,
     canEditPartition,
     fetchPartitions,
@@ -135,7 +99,6 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
     createPartition,
     editPartition,
     deletePartition,
-    resetDetail,
   }
 })
 

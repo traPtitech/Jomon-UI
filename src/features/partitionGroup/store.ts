@@ -40,7 +40,7 @@ export const usePartitionGroupStore = defineStoreComposable(
       return user.accountManager
     })
 
-    const partitionGroupIdNameToMap = computed(() => {
+    const partitionGroupIdToName = computed(() => {
       return new Map(partitionGroups.value.map(group => [group.id, group.name]))
     })
 
@@ -136,7 +136,7 @@ export const usePartitionGroupStore = defineStoreComposable(
       editedValue,
       partitionGroupOptions,
       canEditPartitionGroup,
-      partitionGroupIdNameToMap,
+      partitionGroupIdToName,
       fetchPartitionGroups,
       fetchPartitionGroup,
       createPartitionGroup,

@@ -1,24 +1,43 @@
 <script lang="ts" setup>
+import { computed } from 'vue'
+
 import type { Partition } from '@/features/partition/entities'
 import { isBudgetSet } from '@/features/partition/lib/isBudgetSet'
+import { usePartitionStore } from '@/features/partition/store'
 import { usePartitionGroupStore } from '@/features/partitionGroup/store'
-import router from '@/router'
 
-const { partitionGroupIdNameToMap } = usePartitionGroupStore()
-interface Props {
-  page: number
-  partitions: Partition[]
+const { partitions, isPartitionFetched, fetchPartitions } = usePartitionStore()
+const {
+  isPartitionGroupFetched,
+  fetchPartitionGroups,
+  partitionGroupIdToName,
+} = usePartitionGroupStore()
+
+const partitionGroupIdToPartitions = computed(() => {
+  const idToPartitions = new Map<string, Partition[]>()
+  for (const partition of partitions.value) {
+    const groupId = partition.parentPartitionGroupId
+    const groupPartitions = idToPartitions.get(groupId)
+    if (groupPartitions === undefined) {
+      idToPartitions.set(groupId, [partition])
+      continue
+    }
+    groupPartitions.push(partition)
+  }
+  return idToPartitions
+})
+
+if (!isPartitionGroupFetched.value) {
+  await fetchPartitionGroups()
 }
-const props = defineProps<Props>()
-
-const slicePartitionsAt = (index: number, n: number) => {
-  const start = (index - 1) * n
-  const end = index * n
-  return props.partitions.slice(start, end)
+if (!isPartitionFetched.value) {
+  await fetchPartitions()
 }
 
-const navigateToPartition = async (partitionId: string) => {
-  await router.push(`/partitions/${partitionId}`)
+const getPartitionGroupName = (groupId: string) => {
+  return (
+    partitionGroupIdToName.value.get(groupId) ?? '不明なパーティショングループ'
+  )
 }
 </script>
 
@@ -28,43 +47,49 @@ const navigateToPartition = async (partitionId: string) => {
     <thead>
       <tr>
         <th
-          v-for="key in [
-            'パーティション名',
+          v-for="name in [
             'パーティショングループ名',
+            'パーティション名',
             '予算',
           ]"
-          :key="key"
+          :key="name"
           scope="col"
           class="bg-surface-tertiary px-1 py-4 text-left font-normal first:rounded-ss-xl first:pl-6 last:rounded-se-xl last:pr-6">
-          {{ key }}
+          {{ name }}
         </th>
       </tr>
     </thead>
+
     <tbody>
-      <tr
-        v-for="partition in slicePartitionsAt(props.page, 10)"
-        :key="partition.id"
-        tabindex="0"
-        :aria-label="'View details for ' + partition.id"
-        class="cursor-pointer border-b hover:bg-hover-secondary"
-        @click="navigateToPartition(partition.id)"
-        @keydown.enter="navigateToPartition(partition.id)"
-        @keydown.space.stop="navigateToPartition(partition.id)">
-        <td class="px-1 py-4 pl-6">
-          {{ partition.name }}
-        </td>
-        <td class="px-1 py-4">
-          {{
-            partitionGroupIdNameToMap.get(partition.parentPartitionGroupId) ??
-            '不明なパーティショングループ'
-          }}
-        </td>
-        <td class="px-1 py-4 pr-6">
-          {{
-            isBudgetSet(partition.budget) ? partition.budget + '円' : '指定なし'
-          }}
-        </td>
-      </tr>
+      <template
+        v-for="[
+          groupId,
+          groupPartitions,
+        ] in partitionGroupIdToPartitions.entries()"
+        :key="groupId">
+        <tr
+          v-for="(partition, i) in groupPartitions"
+          :key="partition.id"
+          :aria-label="`${getPartitionGroupName(groupId)}の${partition.name}`"
+          class="border-b">
+          <td
+            v-if="i === 0"
+            :rowspan="groupPartitions.length"
+            class="px-1 py-4 pl-6">
+            {{ getPartitionGroupName(groupId) }}
+          </td>
+          <td class="px-1 py-4">
+            {{ partition.name }}
+          </td>
+          <td class="px-1 py-4 pr-6">
+            {{
+              isBudgetSet(partition.budget)
+                ? partition.budget + '円'
+                : '指定なし'
+            }}
+          </td>
+        </tr>
+      </template>
     </tbody>
   </table>
 </template>

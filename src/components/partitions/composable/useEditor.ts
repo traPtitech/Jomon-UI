@@ -2,14 +2,14 @@ import { type Ref, ref } from 'vue'
 
 import { useToast } from 'vue-toastification'
 
-const toast = useToast()
-
 export const useEditor = <T extends string | number | null>(
   currentValue: Ref<T>,
   editedValue: Ref<T>,
   saveEdit: () => Promise<void>,
   errorMessage: string
 ) => {
+  const toast = useToast()
+
   const isEditMode = ref(false)
   const isSaving = ref(false)
 

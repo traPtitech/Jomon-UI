@@ -9,10 +9,7 @@ import SearchSelect from '@/components/shared/SearchSelect.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
-import type {
-  ApplicationTarget,
-  ApplicationTargetDetail,
-} from '@/features/applicationTarget/entities'
+import type { ApplicationTargetDetail } from '@/features/applicationTarget/entities'
 import { useUserStore } from '@/features/user/store'
 
 const props = defineProps<{
@@ -34,9 +31,22 @@ const targetOptions = computed(() =>
   )
 )
 
-const targetModel = defineModel<ApplicationTarget>('targetModel')
+const targetModel = defineModel<ApplicationTargetDetail>('targetModel', {
+  required: true,
+})
 
 const emit = defineEmits<(e: 'delete', id: string) => void>()
+
+const targetAmountDraft = computed<number | null>({
+  get: () => props.target.amount,
+  set: newAmount => {
+    if (newAmount === null) return
+    targetModel.value = {
+      ...targetModel.value,
+      amount: newAmount,
+    }
+  },
+})
 
 const handleRemoveTarget = async () => {
   // TODO: confirmをカスタムモーダルに置き換える
@@ -67,24 +77,13 @@ const handleRemoveTarget = async () => {
 </script>
 
 <template>
-  <div
-    v-if="!props.isEditMode"
-    class="flex flex-wrap items-center justify-between gap-2 md:gap-0">
-    <div class="flex items-center gap-1">
-      <UserIcon class="w-10" :name="getUserName(target.target)" />
-      <div class="flex flex-col gap-1 break-all">
-        <div>{{ getUserNameWithFallback(target.target) }}</div>
-        <div>{{ target.amount }}円</div>
-      </div>
-    </div>
-  </div>
-  <div v-else-if="targetModel" class="flex items-center justify-between">
+  <div v-if="props.isEditMode" class="flex items-center justify-between">
     <div class="flex gap-1">
       <SearchSelect
         v-model="targetModel.target"
         :options="targetOptions"
         label="対象者" />
-      <BaseNumberInput v-model="targetModel.amount" label="金額" :min="0">
+      <BaseNumberInput v-model="targetAmountDraft" label="金額" :min="0">
         <span class="mt-auto mb-2 ml-3 text-2xl font-bold text-text-secondary">
           ¥
         </span>
@@ -94,7 +93,15 @@ const handleRemoveTarget = async () => {
       </button>
     </div>
   </div>
-  <div v-else class="text-error-primary">
-    [エラー] 対象者データの読み込みに失敗しました
+  <div
+    v-else
+    class="flex flex-wrap items-center justify-between gap-2 md:gap-0">
+    <div class="flex items-center gap-1">
+      <UserIcon class="w-10" :name="getUserName(target.target)" />
+      <div class="flex flex-col gap-1 break-all">
+        <div>{{ getUserNameWithFallback(target.target) }}</div>
+        <div>{{ target.amount }}円</div>
+      </div>
+    </div>
   </div>
 </template>

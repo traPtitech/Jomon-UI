@@ -78,25 +78,18 @@ const handleUpdateTargets = async () => {
       </div>
     </div>
     <div v-if="application" class="flex flex-col gap-2">
-      <template v-if="isEditMode">
+      <template v-for="(target, i) in editedTargets" :key="target.id">
         <ApplicationTarget
-          v-for="(target, i) in editedTargets"
-          :key="target.id"
+          v-if="editedTargets[i]"
           v-model:target-model="editedTargets[i]"
           :is-edit-mode="isEditMode"
           :application="application"
           :target="target"
           :selected-user-ids="selectedUserIds"
           @delete="handleDeleteTarget" />
-      </template>
-      <template v-else>
-        <ApplicationTarget
-          v-for="target in application.targets"
-          :key="target.id"
-          :is-edit-mode="isEditMode"
-          :application="application"
-          :target="target"
-          :selected-user-ids="selectedUserIds" />
+        <div v-else class="text-error-primary">
+          [エラー] 対象者データの読み込みに失敗しました
+        </div>
       </template>
     </div>
   </div>

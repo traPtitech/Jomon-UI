@@ -4,6 +4,7 @@ import { useToast } from 'vue-toastification'
 
 import BaseTextInput from '@/components/shared/BaseInput/BaseTextInput.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
+import SearchSelectMultiple from '@/components/shared/SearchSelectMultiple.vue'
 import { useApplicationStore } from '@/features/application/store'
 import { applicationStatusOptions } from '@/features/applicationStatus/entities'
 import { usePartitionStore } from '@/features/partition/store'
@@ -69,11 +70,10 @@ function sortByCreatedAt() {
       :options="partitionOptions"
       label="パーティション"
       @close="fetchApplications" />
-    <SearchSelect
+    <SearchSelectMultiple
       v-model="filterParams.tags"
       :options="tagIdOptions"
       label="タグ"
-      multiple
       @close="fetchApplications" />
   </div>
   <span v-if="applications && applications.length !== 0" class="ml-1/6">

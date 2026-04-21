@@ -16,7 +16,6 @@
   },
   "vueCompilerOptions": {
     "strictTemplates": true,
-    "fallthroughAttributes": true,
-    "strictVModel": false
+    "fallthroughAttributes": true
   }
 }

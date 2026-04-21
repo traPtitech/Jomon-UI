@@ -87,6 +87,7 @@ const handleInputFocus = () => {
 
 const handleChange = () => {
   menuState.value = 'searched'
+  highlightedIndex.value = -1
 }
 
 const handleKeyDown = (e: KeyboardEvent) => {

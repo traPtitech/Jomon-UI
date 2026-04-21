@@ -2,30 +2,24 @@
 import { computed } from 'vue'
 
 import { TrashIcon } from '@heroicons/vue/24/solid'
-import { useToast } from 'vue-toastification'
 
 import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
 import type { ApplicationDetail } from '@/features/application/entities'
-import { useApplicationStore } from '@/features/application/store'
 import type { ApplicationTargetDetail } from '@/features/applicationTarget/entities'
 import { useUserStore } from '@/features/user/store'
 
 const props = defineProps<{
   application: ApplicationDetail
-  isEditMode: boolean
-  target: ApplicationTargetDetail
   selectedUserIds: string[]
 }>()
 
 const { userOptions } = useUserStore()
-const { editApplication } = useApplicationStore()
-const toast = useToast()
 
 const targetOptions = computed(() =>
   userOptions.value.filter(
     user =>
-      user.value === props.target.target ||
+      user.value === targetModel.value.target ||
       !props.selectedUserIds.includes(user.value)
   )
 )
@@ -37,7 +31,7 @@ const targetModel = defineModel<ApplicationTargetDetail>('targetModel', {
 const emit = defineEmits<(e: 'delete', id: string) => void>()
 
 const targetAmountDraft = computed<number | null>({
-  get: () => props.target.amount,
+  get: () => targetModel.value.amount,
   set: newAmount => {
     if (newAmount === null) return
     targetModel.value = {
@@ -47,31 +41,15 @@ const targetAmountDraft = computed<number | null>({
   },
 })
 
-const handleRemoveTarget = async () => {
+const handleRemoveTarget = () => {
   // TODO: confirmをカスタムモーダルに置き換える
   const result = confirm('本当に削除しますか？')
   if (!result) {
     return
   }
 
-  // 編集モード中はローカル削除のみ（親で処理）
-  if (props.isEditMode) {
-    emit('delete', props.target.id)
-    return
-  }
-
-  // 表示モードでは即座にAPI呼び出し
-  try {
-    await editApplication(props.application.id, {
-      ...props.application,
-      partition: props.application.partition.id,
-      targets: props.application.targets.filter(
-        target => target.id !== props.target.id
-      ),
-    })
-  } catch {
-    toast.error('削除に失敗しました')
-  }
+  emit('delete', targetModel.value.id)
+  return
 }
 </script>
 

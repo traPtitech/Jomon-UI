@@ -240,7 +240,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
     <div
       v-if="multiple && Array.isArray(model) && model.length > 0"
       class="mt-2 flex flex-wrap gap-1">
-      <div v-for="val in model" :key="val" variant="secondary" class="text-xs">
+      <div v-for="val in model" :key="val" class="text-xs">
         {{ options.find(opt => opt.value === val)?.key || val }}
         <button
           type="button"
@@ -255,7 +255,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
       v-if="menuState !== 'close'"
       class="absolute z-50 mt-1 w-full rounded-md border bg-white shadow-lg">
       <!-- Options list -->
-      <div class="max-h-[200px] overflow-auto p-1">
+      <div class="max-h-50 overflow-auto p-1">
         <div v-if="filteredOptions.length === 0" class="px-2 py-1.5 text-sm">
           {{ searchTerm ? '該当する項目がありません' : '項目がありません' }}
         </div>

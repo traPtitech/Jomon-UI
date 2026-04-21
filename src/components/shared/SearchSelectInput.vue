@@ -37,6 +37,8 @@ const emit = defineEmits<{
       type="button"
       class="absolute inset-y-0 right-0 flex items-center pr-2"
       :disabled="disabled"
+      :aria-label="disabled ? undefined : 'オプションを表示'"
+      :aria-expanded="disabled ? undefined : isOptionsOpened"
       @click="() => !props.disabled && emit('clickToggleButton')">
       <ChevronDownIcon
         :class="[

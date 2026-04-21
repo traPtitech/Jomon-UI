@@ -18,9 +18,7 @@ const handleFileUpload = () => {
     <div class="flex gap-3">
       <div v-for="file in files" :key="file">
         <a :href="'/files/' + file" :download="file">
-          <div
-            class="h-36 w-32 overflow-hidden rounded bg-surface-secondary"
-            :model-value="file">
+          <div class="h-36 w-32 overflow-hidden rounded bg-surface-secondary">
             <img
               v-if="file === 'image'"
               :alt="file"
@@ -34,9 +32,7 @@ const handleFileUpload = () => {
     <div class="mt-3 flex gap-3">
       <div v-for="file in files" :key="file">
         <a :href="'/files/' + file" :download="file">
-          <div
-            class="h-60 w-96 overflow-hidden rounded bg-surface-secondary"
-            :model-value="file">
+          <div class="h-60 w-96 overflow-hidden rounded bg-surface-secondary">
             <img
               v-if="file === 'image'"
               :alt="file"

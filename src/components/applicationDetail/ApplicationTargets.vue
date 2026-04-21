@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 
 import { useToast } from 'vue-toastification'
 
-import ApplicationTarget from '@/components/applicationDetail/ApplicationTarget.vue'
+import ApplicationTargetEditor from '@/components/applicationDetail/ApplicationTargetEditor.vue'
 import EditButton from '@/components/shared/EditButton.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
 import UserIcon from '@/components/shared/UserIcon.vue'
@@ -81,12 +81,10 @@ const handleUpdateTargets = async () => {
     <div v-if="application" class="flex flex-col gap-2">
       <template v-if="isEditMode">
         <template v-for="(target, i) in editedTargets" :key="target.id">
-          <ApplicationTarget
+          <ApplicationTargetEditor
             v-if="editedTargets[i]"
             v-model:target-model="editedTargets[i]"
-            :is-edit-mode="isEditMode"
             :application="application"
-            :target="target"
             :selected-user-ids="selectedUserIds"
             @delete="handleDeleteTarget" />
           <div v-else class="text-error-primary">

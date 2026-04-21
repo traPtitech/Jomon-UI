@@ -6,7 +6,6 @@ import { useToast } from 'vue-toastification'
 
 import BaseNumberInput from '@/components/shared/BaseInput/BaseNumberInput.vue'
 import SearchSelect from '@/components/shared/SearchSelect.vue'
-import UserIcon from '@/components/shared/UserIcon.vue'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import type { ApplicationTargetDetail } from '@/features/applicationTarget/entities'
@@ -19,7 +18,7 @@ const props = defineProps<{
   selectedUserIds: string[]
 }>()
 
-const { getUserName, getUserNameWithFallback, userOptions } = useUserStore()
+const { userOptions } = useUserStore()
 const { editApplication } = useApplicationStore()
 const toast = useToast()
 
@@ -77,7 +76,7 @@ const handleRemoveTarget = async () => {
 </script>
 
 <template>
-  <div v-if="props.isEditMode" class="flex items-center justify-between">
+  <div class="flex items-center justify-between">
     <div class="flex gap-1">
       <SearchSelect
         v-model="targetModel.target"
@@ -91,17 +90,6 @@ const handleRemoveTarget = async () => {
       <button @click="handleRemoveTarget">
         <TrashIcon class="w-6 cursor-pointer text-error-primary" />
       </button>
-    </div>
-  </div>
-  <div
-    v-else
-    class="flex flex-wrap items-center justify-between gap-2 md:gap-0">
-    <div class="flex items-center gap-1">
-      <UserIcon class="w-10" :name="getUserName(target.target)" />
-      <div class="flex flex-col gap-1 break-all">
-        <div>{{ getUserNameWithFallback(target.target) }}</div>
-        <div>{{ target.amount }}円</div>
-      </div>
     </div>
   </div>
 </template>

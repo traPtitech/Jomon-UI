@@ -6,6 +6,7 @@ import { useToast } from 'vue-toastification'
 import ApplicationTarget from '@/components/applicationDetail/ApplicationTarget.vue'
 import EditButton from '@/components/shared/EditButton.vue'
 import SimpleButton from '@/components/shared/SimpleButton.vue'
+import UserIcon from '@/components/shared/UserIcon.vue'
 import { useApplication } from '@/features/application/composables'
 import type { ApplicationDetail } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
@@ -15,7 +16,7 @@ const props = defineProps<{
   application: ApplicationDetail
 }>()
 
-const { me } = useUserStore()
+const { getUserName, getUserNameWithFallback, me } = useUserStore()
 const { isApplicationCreator } = useApplication(props.application)
 const { editApplication } = useApplicationStore()
 const toast = useToast()
@@ -78,18 +79,34 @@ const handleUpdateTargets = async () => {
       </div>
     </div>
     <div v-if="application" class="flex flex-col gap-2">
-      <template v-for="(target, i) in editedTargets" :key="target.id">
-        <ApplicationTarget
-          v-if="editedTargets[i]"
-          v-model:target-model="editedTargets[i]"
-          :is-edit-mode="isEditMode"
-          :application="application"
-          :target="target"
-          :selected-user-ids="selectedUserIds"
-          @delete="handleDeleteTarget" />
-        <div v-else class="text-error-primary">
-          [エラー] 対象者データの読み込みに失敗しました
-        </div>
+      <template v-if="isEditMode">
+        <template v-for="(target, i) in editedTargets" :key="target.id">
+          <ApplicationTarget
+            v-if="editedTargets[i]"
+            v-model:target-model="editedTargets[i]"
+            :is-edit-mode="isEditMode"
+            :application="application"
+            :target="target"
+            :selected-user-ids="selectedUserIds"
+            @delete="handleDeleteTarget" />
+          <div v-else class="text-error-primary">
+            [エラー] 対象者データの読み込みに失敗しました
+          </div>
+        </template>
+      </template>
+      <template v-else>
+        <template v-for="target in application.targets" :key="target.id">
+          <div
+            class="flex flex-wrap items-center justify-between gap-2 md:gap-0">
+            <div class="flex items-center gap-1">
+              <UserIcon class="w-10" :name="getUserName(target.target)" />
+              <div class="flex flex-col gap-1 break-all">
+                <div>{{ getUserNameWithFallback(target.target) }}</div>
+                <div>{{ target.amount }}円</div>
+              </div>
+            </div>
+          </div>
+        </template>
       </template>
     </div>
   </div>

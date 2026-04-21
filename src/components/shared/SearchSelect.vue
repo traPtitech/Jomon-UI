@@ -119,7 +119,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
     case 'Enter': {
       e.preventDefault()
       const option = filteredOptions.value[highlightedIndex.value]
-      if (option) {
+      if (option && !option.disabled) {
         handleSelect(option.value)
       }
       break

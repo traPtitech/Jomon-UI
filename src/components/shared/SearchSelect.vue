@@ -10,15 +10,10 @@ import {
 } from '@heroicons/vue/24/outline'
 
 import BaseTextInput from './BaseInput/BaseTextInput.vue'
-
-interface Option {
-  key: string
-  value: string
-  disabled?: boolean
-}
+import type { SearchSelectOption } from './SearchSelect.types'
 
 interface Props {
-  options: Option[]
+  options: SearchSelectOption[]
   label: string
   placeholder?: string
   multiple?: boolean

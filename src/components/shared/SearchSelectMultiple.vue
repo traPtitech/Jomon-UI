@@ -126,6 +126,9 @@ const handleKeyDown = (e: KeyboardEvent) => {
       break
   }
 }
+
+const getKeyByValue = (value: T) =>
+  props.options.find(opt => opt.value === value)?.key || value
 </script>
 
 <template>
@@ -149,10 +152,11 @@ const handleKeyDown = (e: KeyboardEvent) => {
     <!-- Selected items for multiple selection -->
     <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1">
       <div v-for="val in model" :key="val" class="text-xs">
-        {{ options.find(opt => opt.value === val)?.key || val }}
+        {{ getKeyByValue(val) }}
         <button
           type="button"
           class="ml-1 rounded-full hover:bg-blue-100"
+          :aria-label="`${getKeyByValue(val)} を選択解除`"
           @click.stop="handleSelect(val)">
           <XMarkIcon class="h-3 w-3" />
         </button>

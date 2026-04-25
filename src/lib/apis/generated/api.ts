@@ -205,49 +205,6 @@ export interface ApplicationFile {
 /**
  * 
  * @export
- * @interface ApplicationInput
- */
-export interface ApplicationInput {
-    /**
-     * 
-     * @type {string}
-     * @memberof ApplicationInput
-     */
-    'created_by': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ApplicationInput
-     */
-    'title': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ApplicationInput
-     */
-    'content': string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof ApplicationInput
-     */
-    'tags': Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof ApplicationInput
-     */
-    'partition': string;
-    /**
-     * 
-     * @type {Array<ApplicationTargetInput>}
-     * @memberof ApplicationInput
-     */
-    'targets': Array<ApplicationTargetInput>;
-}
-/**
- * 
- * @export
  * @interface ApplicationTarget
  */
 export interface ApplicationTarget {
@@ -281,25 +238,6 @@ export interface ApplicationTarget {
      * @memberof ApplicationTarget
      */
     'created_at': string;
-}
-/**
- * 
- * @export
- * @interface ApplicationTargetInput
- */
-export interface ApplicationTargetInput {
-    /**
-     * 
-     * @type {number}
-     * @memberof ApplicationTargetInput
-     */
-    'amount': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof ApplicationTargetInput
-     */
-    'target': string;
 }
 /**
  * 
@@ -596,6 +534,68 @@ export type PartitionManagementStateEnum = typeof PartitionManagementStateEnum[k
 /**
  * 
  * @export
+ * @interface PostApplicationInput
+ */
+export interface PostApplicationInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof PostApplicationInput
+     */
+    'created_by': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostApplicationInput
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostApplicationInput
+     */
+    'content': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof PostApplicationInput
+     */
+    'tags': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostApplicationInput
+     */
+    'partition': string;
+    /**
+     * 
+     * @type {Array<PostApplicationTargetInput>}
+     * @memberof PostApplicationInput
+     */
+    'targets': Array<PostApplicationTargetInput>;
+}
+/**
+ * 
+ * @export
+ * @interface PostApplicationTargetInput
+ */
+export interface PostApplicationTargetInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof PostApplicationTargetInput
+     */
+    'amount': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostApplicationTargetInput
+     */
+    'target': string;
+}
+/**
+ * 
+ * @export
  * @interface PostFile200Response
  */
 export interface PostFile200Response {
@@ -605,6 +605,74 @@ export interface PostFile200Response {
      * @memberof PostFile200Response
      */
     'id'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface PutApplicationInput
+ */
+export interface PutApplicationInput {
+    /**
+     * 
+     * @type {string}
+     * @memberof PutApplicationInput
+     */
+    'created_by': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PutApplicationInput
+     */
+    'title': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PutApplicationInput
+     */
+    'content': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof PutApplicationInput
+     */
+    'tags': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof PutApplicationInput
+     */
+    'partition': string;
+    /**
+     * 
+     * @type {Array<PutApplicationTargetInput>}
+     * @memberof PutApplicationInput
+     */
+    'targets': Array<PutApplicationTargetInput>;
+}
+/**
+ * 
+ * @export
+ * @interface PutApplicationTargetInput
+ */
+export interface PutApplicationTargetInput {
+    /**
+     * 
+     * @type {number}
+     * @memberof PutApplicationTargetInput
+     */
+    'amount': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PutApplicationTargetInput
+     */
+    'target': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PutApplicationTargetInput
+     */
+    'paid_at': string | null;
 }
 /**
  * 
@@ -1153,13 +1221,13 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 申請を新規作成する。
-         * @param {ApplicationInput} applicationInput 
+         * @param {PostApplicationInput} postApplicationInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postApplication: async (applicationInput: ApplicationInput, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'applicationInput' is not null or undefined
-            assertParamExists('postApplication', 'applicationInput', applicationInput)
+        postApplication: async (postApplicationInput: PostApplicationInput, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'postApplicationInput' is not null or undefined
+            assertParamExists('postApplication', 'postApplicationInput', postApplicationInput)
             const localVarPath = `/applications`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1179,7 +1247,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(applicationInput, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(postApplicationInput, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1228,15 +1296,15 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
         /**
          * 指定した申請を修正する。作成者権限が必要。
          * @param {string} applicationID 
-         * @param {ApplicationInput} applicationInput 
+         * @param {PutApplicationInput} putApplicationInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putApplicationDetail: async (applicationID: string, applicationInput: ApplicationInput, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        putApplicationDetail: async (applicationID: string, putApplicationInput: PutApplicationInput, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'applicationID' is not null or undefined
             assertParamExists('putApplicationDetail', 'applicationID', applicationID)
-            // verify required parameter 'applicationInput' is not null or undefined
-            assertParamExists('putApplicationDetail', 'applicationInput', applicationInput)
+            // verify required parameter 'putApplicationInput' is not null or undefined
+            assertParamExists('putApplicationDetail', 'putApplicationInput', putApplicationInput)
             const localVarPath = `/applications/{applicationID}`
                 .replace(`{${"applicationID"}}`, encodeURIComponent(String(applicationID)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1257,7 +1325,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(applicationInput, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(putApplicationInput, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1348,12 +1416,12 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 申請を新規作成する。
-         * @param {ApplicationInput} applicationInput 
+         * @param {PostApplicationInput} postApplicationInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postApplication(applicationInput: ApplicationInput, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplicationDetail>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.postApplication(applicationInput, options);
+        async postApplication(postApplicationInput: PostApplicationInput, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplicationDetail>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.postApplication(postApplicationInput, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.postApplication']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1374,12 +1442,12 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
         /**
          * 指定した申請を修正する。作成者権限が必要。
          * @param {string} applicationID 
-         * @param {ApplicationInput} applicationInput 
+         * @param {PutApplicationInput} putApplicationInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async putApplicationDetail(applicationID: string, applicationInput: ApplicationInput, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplicationDetail>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.putApplicationDetail(applicationID, applicationInput, options);
+        async putApplicationDetail(applicationID: string, putApplicationInput: PutApplicationInput, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApplicationDetail>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putApplicationDetail(applicationID, putApplicationInput, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ApplicationsApi.putApplicationDetail']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1436,12 +1504,12 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
         },
         /**
          * 申請を新規作成する。
-         * @param {ApplicationInput} applicationInput 
+         * @param {PostApplicationInput} postApplicationInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postApplication(applicationInput: ApplicationInput, options?: RawAxiosRequestConfig): AxiosPromise<ApplicationDetail> {
-            return localVarFp.postApplication(applicationInput, options).then((request) => request(axios, basePath));
+        postApplication(postApplicationInput: PostApplicationInput, options?: RawAxiosRequestConfig): AxiosPromise<ApplicationDetail> {
+            return localVarFp.postApplication(postApplicationInput, options).then((request) => request(axios, basePath));
         },
         /**
          * 指定した申請にコメントを新規作成する。
@@ -1456,12 +1524,12 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
         /**
          * 指定した申請を修正する。作成者権限が必要。
          * @param {string} applicationID 
-         * @param {ApplicationInput} applicationInput 
+         * @param {PutApplicationInput} putApplicationInput 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putApplicationDetail(applicationID: string, applicationInput: ApplicationInput, options?: RawAxiosRequestConfig): AxiosPromise<ApplicationDetail> {
-            return localVarFp.putApplicationDetail(applicationID, applicationInput, options).then((request) => request(axios, basePath));
+        putApplicationDetail(applicationID: string, putApplicationInput: PutApplicationInput, options?: RawAxiosRequestConfig): AxiosPromise<ApplicationDetail> {
+            return localVarFp.putApplicationDetail(applicationID, putApplicationInput, options).then((request) => request(axios, basePath));
         },
         /**
          * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、accountManagerはpayment_finishedを除く任意の状態間で可能。ただしapprovedからの変更は、すでに支払われている人がいた場合不可。payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
@@ -1516,13 +1584,13 @@ export class ApplicationsApi extends BaseAPI {
 
     /**
      * 申請を新規作成する。
-     * @param {ApplicationInput} applicationInput 
+     * @param {PostApplicationInput} postApplicationInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public postApplication(applicationInput: ApplicationInput, options?: RawAxiosRequestConfig) {
-        return ApplicationsApiFp(this.configuration).postApplication(applicationInput, options).then((request) => request(this.axios, this.basePath));
+    public postApplication(postApplicationInput: PostApplicationInput, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).postApplication(postApplicationInput, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1540,13 +1608,13 @@ export class ApplicationsApi extends BaseAPI {
     /**
      * 指定した申請を修正する。作成者権限が必要。
      * @param {string} applicationID 
-     * @param {ApplicationInput} applicationInput 
+     * @param {PutApplicationInput} putApplicationInput 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public putApplicationDetail(applicationID: string, applicationInput: ApplicationInput, options?: RawAxiosRequestConfig) {
-        return ApplicationsApiFp(this.configuration).putApplicationDetail(applicationID, applicationInput, options).then((request) => request(this.axios, this.basePath));
+    public putApplicationDetail(applicationID: string, putApplicationInput: PutApplicationInput, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).putApplicationDetail(applicationID, putApplicationInput, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3206,13 +3274,13 @@ export class Apis extends BaseAPI {
 
     /**
      * 申請を新規作成する。
-     * @param {ApplicationInput} applicationInput
+     * @param {PostApplicationInput} postApplicationInput
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public postApplication(applicationInput: ApplicationInput, options?: RawAxiosRequestConfig) {
-        return ApplicationsApiFp(this.configuration).postApplication(applicationInput, options).then((request) => request(this.axios, this.basePath));
+    public postApplication(postApplicationInput: PostApplicationInput, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).postApplication(postApplicationInput, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3230,13 +3298,13 @@ export class Apis extends BaseAPI {
     /**
      * 指定した申請を修正する。作成者権限が必要。
      * @param {string} applicationID
-     * @param {ApplicationInput} applicationInput
+     * @param {PutApplicationInput} putApplicationInput
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApplicationsApi
      */
-    public putApplicationDetail(applicationID: string, applicationInput: ApplicationInput, options?: RawAxiosRequestConfig) {
-        return ApplicationsApiFp(this.configuration).putApplicationDetail(applicationID, applicationInput, options).then((request) => request(this.axios, this.basePath));
+    public putApplicationDetail(applicationID: string, putApplicationInput: PutApplicationInput, options?: RawAxiosRequestConfig) {
+        return ApplicationsApiFp(this.configuration).putApplicationDetail(applicationID, putApplicationInput, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

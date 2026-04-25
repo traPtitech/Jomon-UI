@@ -1,6 +1,10 @@
 import { fakerJA as faker } from '@faker-js/faker'
 
-import type { ApplicationTarget, ApplicationTargetInput } from '@/lib/apis'
+import type {
+  ApplicationTarget,
+  PostApplicationTargetInput,
+  PutApplicationTargetInput,
+} from '@/lib/apis'
 
 import { getRandomMockUser } from '@/features/user/__mocks__/data'
 
@@ -20,11 +24,19 @@ export const createMockApplicationTarget = (): ApplicationTarget => {
   }
 }
 
-export const createNewApplicationTargetFromApplicationTargetInput = (
-  applicationTargetInput: ApplicationTargetInput
+export const createMockApplicationTargetFromPostApplicationTargetInput = (
+  postApplicationTargetInput: PostApplicationTargetInput
 ) => ({
-  ...applicationTargetInput,
+  ...postApplicationTargetInput,
   id: faker.string.uuid(),
   paid_at: null,
+  created_at: new Date().toISOString(),
+})
+
+export const createMockApplicationTargetFromPutApplicationTargetInput = (
+  putApplicationTargetInput: PutApplicationTargetInput
+) => ({
+  ...putApplicationTargetInput,
+  id: faker.string.uuid(),
   created_at: new Date().toISOString(),
 })

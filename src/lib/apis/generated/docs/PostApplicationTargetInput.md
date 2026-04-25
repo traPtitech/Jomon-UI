@@ -1,4 +1,4 @@
-# ApplicationTargetInput
+# PostApplicationTargetInput
 
 
 ## Properties
@@ -11,9 +11,9 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ApplicationTargetInput } from './api';
+import { PostApplicationTargetInput } from './api';
 
-const instance: ApplicationTargetInput = {
+const instance: PostApplicationTargetInput = {
     amount,
     target,
 };

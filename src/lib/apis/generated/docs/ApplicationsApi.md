@@ -143,7 +143,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **postApplication**
-> ApplicationDetail postApplication(applicationInput)
+> ApplicationDetail postApplication(postApplicationInput)
 
 申請を新規作成する。
 
@@ -153,16 +153,16 @@ No authorization required
 import {
     ApplicationsApi,
     Configuration,
-    ApplicationInput
+    PostApplicationInput
 } from './api';
 
 const configuration = new Configuration();
 const apiInstance = new ApplicationsApi(configuration);
 
-let applicationInput: ApplicationInput; //
+let postApplicationInput: PostApplicationInput; //
 
 const { status, data } = await apiInstance.postApplication(
-    applicationInput
+    postApplicationInput
 );
 ```
 
@@ -170,7 +170,7 @@ const { status, data } = await apiInstance.postApplication(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **applicationInput** | **ApplicationInput**|  | |
+| **postApplicationInput** | **PostApplicationInput**|  | |
 
 
 ### Return type
@@ -253,7 +253,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **putApplicationDetail**
-> ApplicationDetail putApplicationDetail(applicationInput)
+> ApplicationDetail putApplicationDetail(putApplicationInput)
 
 指定した申請を修正する。作成者権限が必要。
 
@@ -263,18 +263,18 @@ No authorization required
 import {
     ApplicationsApi,
     Configuration,
-    ApplicationInput
+    PutApplicationInput
 } from './api';
 
 const configuration = new Configuration();
 const apiInstance = new ApplicationsApi(configuration);
 
 let applicationID: string; // (default to undefined)
-let applicationInput: ApplicationInput; //
+let putApplicationInput: PutApplicationInput; //
 
 const { status, data } = await apiInstance.putApplicationDetail(
     applicationID,
-    applicationInput
+    putApplicationInput
 );
 ```
 
@@ -282,7 +282,7 @@ const { status, data } = await apiInstance.putApplicationDetail(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **applicationInput** | **ApplicationInput**|  | |
+| **putApplicationInput** | **PutApplicationInput**|  | |
 | **applicationID** | [**string**] |  | defaults to undefined|
 
 

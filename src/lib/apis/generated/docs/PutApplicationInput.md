@@ -1,4 +1,4 @@
-# ApplicationInput
+# PutApplicationInput
 
 
 ## Properties
@@ -10,14 +10,14 @@ Name | Type | Description | Notes
 **content** | **string** |  | [default to undefined]
 **tags** | **Array&lt;string&gt;** |  | [default to undefined]
 **partition** | **string** |  | [default to undefined]
-**targets** | [**Array&lt;ApplicationTargetInput&gt;**](ApplicationTargetInput.md) |  | [default to undefined]
+**targets** | [**Array&lt;PutApplicationTargetInput&gt;**](PutApplicationTargetInput.md) |  | [default to undefined]
 
 ## Example
 
 ```typescript
-import { ApplicationInput } from './api';
+import { PutApplicationInput } from './api';
 
-const instance: ApplicationInput = {
+const instance: PutApplicationInput = {
     created_by,
     title,
     content,

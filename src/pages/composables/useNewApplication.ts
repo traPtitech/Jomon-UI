@@ -4,11 +4,11 @@ import { useRouter } from 'vue-router'
 
 import { useToast } from 'vue-toastification'
 
-import type { ApplicationSeed } from '@/features/application/entities'
+import type { PostApplicationSeed } from '@/features/application/entities'
 import { useApplicationStore } from '@/features/application/store'
 import type {
-  ApplicationTarget,
-  ApplicationTargetDraft,
+  PostApplicationTargetDraft,
+  PostApplicationTargetSeed,
 } from '@/features/applicationTarget/entities'
 import type { FileSeed } from '@/features/file/entities'
 import { createFiles } from '@/features/file/services'
@@ -25,13 +25,13 @@ export const useNewApplication = () => {
 
   const isSending = ref(false)
 
-  type ApplicationForm = Omit<ApplicationSeed, 'targets'> & {
-    targets: ApplicationTargetDraft[]
+  type ApplicationForm = Omit<PostApplicationSeed, 'targets'> & {
+    targets: PostApplicationTargetDraft[]
   }
 
   const hasFilledTargets = (
-    targets: ApplicationTargetDraft[]
-  ): targets is ApplicationTarget[] =>
+    targets: PostApplicationTargetDraft[]
+  ): targets is PostApplicationTargetSeed[] =>
     targets.every(
       target =>
         target.target !== '' && target.amount !== null && target.amount > 0
@@ -81,7 +81,7 @@ export const useNewApplication = () => {
     }
 
     try {
-      const applicationSeedWithNewTags: ApplicationSeed = {
+      const applicationSeedWithNewTags: PostApplicationSeed = {
         createdBy: application.value.createdBy,
         title: application.value.title,
         content: application.value.content,

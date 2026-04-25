@@ -6,8 +6,9 @@ import type {
   ApplicationStatusDetail,
 } from '@/features/applicationStatus/entities'
 import type {
-  ApplicationTarget,
   ApplicationTargetDetail,
+  PostApplicationTargetSeed,
+  PutApplicationTargetSeed,
 } from '@/features/applicationTarget/entities'
 import type { Partition } from '@/features/partition/entities'
 import type { Tag } from '@/features/tag/entities'
@@ -45,11 +46,20 @@ export interface ApplicationQuerySeed {
 
 // FIXME: ファイルがないので申請作成時にファイルを添付できない
 // issue: https://github.com/traPtitech/Jomon/issues/1033
-export interface ApplicationSeed {
+export interface PostApplicationSeed {
   createdBy: string
   title: string
   content: string
   tags: Tag[]
   partition: string
-  targets: ApplicationTarget[]
+  targets: PostApplicationTargetSeed[]
+}
+
+export interface PutApplicationSeed {
+  createdBy: string
+  title: string
+  content: string
+  tags: Tag[]
+  partition: string
+  targets: PutApplicationTargetSeed[]
 }

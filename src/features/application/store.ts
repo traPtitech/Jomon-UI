@@ -7,7 +7,8 @@ import type {
   Application,
   ApplicationDetail,
   ApplicationQuerySeed,
-  ApplicationSeed,
+  PostApplicationSeed,
+  PutApplicationSeed,
 } from '@/features/application/entities'
 import type { ApplicationStatus } from '@/features/applicationStatus/entities'
 import { useTagStore } from '@/features/tag/store'
@@ -91,9 +92,9 @@ export const useApplicationStore = defineStoreComposable('application', () => {
     }
   }
 
-  const createApplication = async (applicationSeed: ApplicationSeed) => {
+  const createApplication = async (seed: PostApplicationSeed) => {
     try {
-      const application = await repository.createApplication(applicationSeed)
+      const application = await repository.createApplication(seed)
       applications.value.unshift(application)
       return application
     } catch {
@@ -101,7 +102,7 @@ export const useApplicationStore = defineStoreComposable('application', () => {
     }
   }
 
-  const editApplication = async (id: string, seed: ApplicationSeed) => {
+  const editApplication = async (id: string, seed: PutApplicationSeed) => {
     if (!currentApplication.value) return
 
     const tags = await tagStore.ensureTags(seed.tags)

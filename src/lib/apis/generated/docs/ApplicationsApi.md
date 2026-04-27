@@ -313,7 +313,7 @@ No authorization required
 # **putStatus**
 > StatusDetail putStatus(statusInput)
 
-指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、accountManagerはpayment_finishedを除く任意の状態間で可能。ただしapprovedからの変更は、すでに支払われている人がいた場合不可。payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
+指定した申請のstatusを変更のみ(新規はPOST /applications)する。commentは常に必須(ないときは空文字列)。 statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、 accountManagerはpayment_finishedを除く任意の状態間で可能。 ただしapprovedからの変更は、すでに支払われている人がいた場合不可。 payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
 
 ### Example
 

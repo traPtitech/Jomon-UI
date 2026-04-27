@@ -186,25 +186,6 @@ export interface ApplicationDetail {
 /**
  * 
  * @export
- * @interface ApplicationFile
- */
-export interface ApplicationFile {
-    /**
-     * 
-     * @type {File}
-     * @memberof ApplicationFile
-     */
-    'file': File;
-    /**
-     * 
-     * @type {string}
-     * @memberof ApplicationFile
-     */
-    'name': string;
-}
-/**
- * 
- * @export
  * @interface ApplicationTarget
  */
 export interface ApplicationTarget {
@@ -238,37 +219,6 @@ export interface ApplicationTarget {
      * @memberof ApplicationTarget
      */
     'created_at': string;
-}
-/**
- * 
- * @export
- * @interface AuthInfo
- */
-export interface AuthInfo {
-    /**
-     * 
-     * @type {string}
-     * @memberof AuthInfo
-     */
-    'code_challenge'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AuthInfo
-     */
-    'code_challenge_method'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AuthInfo
-     */
-    'client_id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof AuthInfo
-     */
-    'response_type'?: string;
 }
 /**
  * 
@@ -1333,7 +1283,7 @@ export const ApplicationsApiAxiosParamCreator = function (configuration?: Config
             };
         },
         /**
-         * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、accountManagerはpayment_finishedを除く任意の状態間で可能。ただしapprovedからの変更は、すでに支払われている人がいた場合不可。payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
+         * 指定した申請のstatusを変更のみ(新規はPOST /applications)する。commentは常に必須(ないときは空文字列)。 statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、 accountManagerはpayment_finishedを除く任意の状態間で可能。 ただしapprovedからの変更は、すでに支払われている人がいた場合不可。 payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
          * @param {string} applicationID 
          * @param {StatusInput} statusInput 
          * @param {*} [options] Override http request option.
@@ -1453,7 +1403,7 @@ export const ApplicationsApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、accountManagerはpayment_finishedを除く任意の状態間で可能。ただしapprovedからの変更は、すでに支払われている人がいた場合不可。payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
+         * 指定した申請のstatusを変更のみ(新規はPOST /applications)する。commentは常に必須(ないときは空文字列)。 statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、 accountManagerはpayment_finishedを除く任意の状態間で可能。 ただしapprovedからの変更は、すでに支払われている人がいた場合不可。 payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
          * @param {string} applicationID 
          * @param {StatusInput} statusInput 
          * @param {*} [options] Override http request option.
@@ -1532,7 +1482,7 @@ export const ApplicationsApiFactory = function (configuration?: Configuration, b
             return localVarFp.putApplicationDetail(applicationID, putApplicationInput, options).then((request) => request(axios, basePath));
         },
         /**
-         * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、accountManagerはpayment_finishedを除く任意の状態間で可能。ただしapprovedからの変更は、すでに支払われている人がいた場合不可。payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
+         * 指定した申請のstatusを変更のみ(新規はPOST /applications)する。commentは常に必須(ないときは空文字列)。 statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、 accountManagerはpayment_finishedを除く任意の状態間で可能。 ただしapprovedからの変更は、すでに支払われている人がいた場合不可。 payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
          * @param {string} applicationID 
          * @param {StatusInput} statusInput 
          * @param {*} [options] Override http request option.
@@ -1618,7 +1568,7 @@ export class ApplicationsApi extends BaseAPI {
     }
 
     /**
-     * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、accountManagerはpayment_finishedを除く任意の状態間で可能。ただしapprovedからの変更は、すでに支払われている人がいた場合不可。payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
+     * 指定した申請のstatusを変更のみ(新規はPOST /applications)する。commentは常に必須(ないときは空文字列)。 statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、 accountManagerはpayment_finishedを除く任意の状態間で可能。 ただしapprovedからの変更は、すでに支払われている人がいた場合不可。 payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
      * @param {string} applicationID 
      * @param {StatusInput} statusInput 
      * @param {*} [options] Override http request option.
@@ -1643,8 +1593,8 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        generatePKCE: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/auth/genpkce`;
+        beginAuth: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/auth/signin`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1682,10 +1632,10 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async generatePKCE(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.generatePKCE(options);
+        async beginAuth(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.beginAuth(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AuthApi.generatePKCE']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.beginAuth']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -1703,8 +1653,8 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        generatePKCE(options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.generatePKCE(options).then((request) => request(axios, basePath));
+        beginAuth(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.beginAuth(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1722,8 +1672,8 @@ export class AuthApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public generatePKCE(options?: RawAxiosRequestConfig) {
-        return AuthApiFp(this.configuration).generatePKCE(options).then((request) => request(this.axios, this.basePath));
+    public beginAuth(options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).beginAuth(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3308,7 +3258,7 @@ export class Apis extends BaseAPI {
     }
 
     /**
-     * 指定した申請のstatusを変更のみ(新規はpost /applications)する。commentは常に必須(ないときは空文字列)。statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、accountManagerはpayment_finishedを除く任意の状態間で可能。ただしapprovedからの変更は、すでに支払われている人がいた場合不可。payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
+     * 指定した申請のstatusを変更のみ(新規はPOST /applications)する。commentは常に必須(ないときは空文字列)。 statusの変更は、作成者は\"change_requested -> pending_review\"のみが可能、 accountManagerはpayment_finishedを除く任意の状態間で可能。 ただしapprovedからの変更は、すでに支払われている人がいた場合不可。 payment_finishedへの変更は全ての支払い対象者への支払いが完了した場合に自動で行われる。
      * @param {string} applicationID
      * @param {StatusInput} statusInput
      * @param {*} [options] Override http request option.
@@ -3325,8 +3275,8 @@ export class Apis extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public generatePKCE(options?: RawAxiosRequestConfig) {
-        return AuthApiFp(this.configuration).generatePKCE(options).then((request) => request(this.axios, this.basePath));
+    public beginAuth(options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).beginAuth(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

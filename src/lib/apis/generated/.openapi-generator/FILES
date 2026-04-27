@@ -7,11 +7,9 @@ configuration.ts
 docs/AccountManagersApi.md
 docs/Application.md
 docs/ApplicationDetail.md
-docs/ApplicationFile.md
 docs/ApplicationTarget.md
 docs/ApplicationsApi.md
 docs/AuthApi.md
-docs/AuthInfo.md
 docs/Comment.md
 docs/CommentInput.md
 docs/FileMeta.md

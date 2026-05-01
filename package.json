@@ -62,7 +62,7 @@
     "globals": "^17.4.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
-    "msw": "^2.12.14",
+    "msw": "^2.13.5",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "rollup-plugin-brotli": "^3.1.0",

@@ -21,10 +21,9 @@ COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 RUN mkdir -p /app/override && \
-    chown -R appuser:appgroup /usr/share/nginx/html /app/override /var/cache/nginx /var/log/nginx /etc/nginx/conf.d && \
-    touch /var/run/nginx.pid && \
-    chown appuser:appgroup /var/run/nginx.pid && \
-    sed -i 's/^user/#user/' /etc/nginx/nginx.conf
+    chown -R appuser:appgroup /app/override /var/cache/nginx /var/log/nginx && \
+    sed -i 's/^user/#user/' /etc/nginx/nginx.conf && \
+    sed -i 's|^pid.*|pid /tmp/nginx.pid;|' /etc/nginx/nginx.conf
 
 USER appuser
 EXPOSE 8080

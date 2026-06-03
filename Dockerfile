@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM node:24.11.0-alpine AS build
+FROM --platform=$BUILDPLATFORM node:24.11.0-alpine@sha256:f36fed0b2129a8492535e2853c64fbdbd2d29dc1219ee3217023ca48aebd3787 AS build
 RUN apk add --update --no-cache openjdk17-jre-headless
 
 WORKDIR /app
@@ -13,7 +13,7 @@ RUN npm run gen-api
 
 RUN NODE_ENV=production npm run build
 
-FROM nginx:1.25-alpine
+FROM nginx:1.25-alpine@sha256:516475cc129da42866742567714ddc681e5eed7b9ee0b9e9c015e464b4221a00
 
 EXPOSE 80
 

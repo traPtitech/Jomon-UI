@@ -15,12 +15,19 @@ RUN NODE_ENV=production npm run build
 
 FROM nginx:1.25-alpine@sha256:516475cc129da42866742567714ddc681e5eed7b9ee0b9e9c015e464b4221a00
 
-EXPOSE 80
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-RUN mkdir -p /app/override
+RUN mkdir -p /app/override && \
+    chown -R appuser:appgroup /usr/share/nginx/html /app/override /var/cache/nginx /var/log/nginx /etc/nginx/conf.d && \
+    touch /var/run/nginx.pid && \
+    chown appuser:appgroup /var/run/nginx.pid && \
+    sed -i 's/^user/#user/' /etc/nginx/nginx.conf
+
+USER appuser
+EXPOSE 8080
 
 VOLUME ["/app/override"]
 

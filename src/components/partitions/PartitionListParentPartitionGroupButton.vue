@@ -50,17 +50,20 @@ const { isEditMode, isSaving, handleSave } = useEditor(
     <SearchSelect
       v-model="editedParentPartitionGroup"
       :options="partitionGroupOptions"
+      aria-label="親パーティショングループを保存"
       required
       label="親パーティショングループを編集" />
     <button @click="handleSave" :disabled="isSaving">
-      <CheckIcon class="h-4 w-4 text-text-secondary hover:text-text-primary" />
+      <CheckIcon aria-hidden="true" class="h-4 w-4 text-text-secondary hover:text-text-primary" />
     </button>
   </div>
   <button
     v-else-if="canEditPartition(me)"
     @click="isEditMode = true"
+    aria-label="親パーティショングループを編集"
     class="flex cursor-pointer items-baseline gap-2">
     <BriefcaseIcon
+      aria-hidden="true"
       class="h-3 w-3 text-text-secondary hover:text-text-primary" />
     &nbsp;
   </button>

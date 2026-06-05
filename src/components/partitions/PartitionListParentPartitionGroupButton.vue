@@ -54,7 +54,9 @@ const { isEditMode, isSaving, handleSave } = useEditor(
       required
       label="親パーティショングループを編集" />
     <button @click="handleSave" :disabled="isSaving">
-      <CheckIcon aria-hidden="true" class="h-4 w-4 text-text-secondary hover:text-text-primary" />
+      <CheckIcon
+        aria-hidden="true"
+        class="h-4 w-4 text-text-secondary hover:text-text-primary" />
     </button>
   </div>
   <button

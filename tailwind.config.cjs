@@ -1,15 +1,12 @@
 module.exports = {
-  content: [
-    './index.html',
-    './src/**/*.{vue,js,ts,jsx,tsx}'
-  ],
+  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
-    extend: {}
+    extend: {},
   },
   plugins: [require('daisyui')],
   daisyui: {
     themes: ['light', 'dark'],
     base: true,
-    styled: true
-  }
+    styled: true,
+  },
 }

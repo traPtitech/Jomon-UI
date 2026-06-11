@@ -27,34 +27,36 @@ const totalAmount = computed(() =>
 </script>
 
 <template>
-  <RouterLink
-    class="flex gap-2 px-3 py-4 sm:gap-5 sm:px-6"
-    :to="'/applications/' + application.id">
-    <div class="flex items-start justify-center">
-      <StatusChip :status="application.status" />
-    </div>
-    <div class="flex flex-grow flex-wrap">
-      <div class="flex flex-grow flex-col gap-2">
-        <span class="text-xl">{{ application.title }}</span>
-        <TagsPartition :tags="application.tags" />
+  <ul class="list">
+    <RouterLink
+      class="list-row"
+      :to="'/applications/' + application.id">
+      <div class="flex items-start justify-center">
+        <StatusChip :status="application.status" />
       </div>
-      <div class="flex flex-col gap-2">
-        <div class="flex flex-wrap items-center justify-end gap-x-4">
-          <div class="flex items-center gap-1">
-            <UserIcon
-              class="max-w-7"
-              :name="getUserName(application.createdBy)" />
-            <span>{{ getUserNameWithFallback(application.createdBy) }}</span>
-          </div>
-          <span v-if="application.partition">
-            {{ application.partition.name }}
-          </span>
+      <div class="flex flex-grow">
+        <div class="flex flex-grow flex-col gap-2">
+          <span class="text-xl">{{ application.title }}</span>
           <span>{{ formattedDate }}</span>
+          <TagsPartition :tags="application.tags" />
         </div>
-        <div class="text-right font-sans text-2xl font-bold">
-          {{ totalAmount }}円
+        <div class="flex flex-col gap-2">
+          <div class="flex flex-wrap items-center justify-end gap-x-4">
+            <div class="flex items-center gap-1">
+              <UserIcon
+                class="max-w-7"
+                :name="getUserName(application.createdBy)" />
+              <span>{{ getUserNameWithFallback(application.createdBy) }}</span>
+            </div>
+            <span v-if="application.partition">
+              {{ application.partition.name }}
+            </span>
+          </div>
+          <div class="text-right font-sans text-2xl font-bold">
+            {{ totalAmount }}円
+          </div>
         </div>
       </div>
-    </div>
-  </RouterLink>
+    </RouterLink>
+  </ul>
 </template>

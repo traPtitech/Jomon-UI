@@ -3,15 +3,15 @@ RUN apk add --update --no-cache openjdk17-jre-headless
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY scripts/ ./scripts/
 
-RUN npm ci
+RUN corepack enable pnpm && pnpm install --frozen-lockfile
 
 COPY . .
-RUN npm run gen-api
+RUN pnpm gen-api
 
-RUN NODE_ENV=production npm run build
+RUN NODE_ENV=production pnpm build
 
 FROM nginx:1.25-alpine@sha256:516475cc129da42866742567714ddc681e5eed7b9ee0b9e9c015e464b4221a00
 

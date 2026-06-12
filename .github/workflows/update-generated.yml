@@ -23,7 +23,7 @@ jobs:
       - run: pnpm exec msw init public/ --save
       - uses: peter-evans/create-pull-request@v6
         with:
-          commit-message: "chore: auto-update generated files"
-          title: "chore: auto-update generated files"
-          body: "Automated PR to update generated files (e.g. MSW worker and lockfile) after dependency updates."
-          branch: "update-generated-files"
+          commit-message: 'chore: auto-update generated files'
+          title: 'chore: auto-update generated files'
+          body: 'Automated PR to update generated files (e.g. MSW worker and lockfile) after dependency updates.'
+          branch: 'update-generated-files'

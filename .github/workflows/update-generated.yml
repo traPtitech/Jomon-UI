@@ -22,8 +22,14 @@ jobs:
       - run: pnpm install
       - run: pnpm exec msw init public/ --save
       - uses: peter-evans/create-pull-request@v6
+        id: cpr
         with:
           commit-message: 'chore: auto-update generated files'
           title: 'chore: auto-update generated files'
           body: 'Automated PR to update generated files (e.g. MSW worker and lockfile) after dependency updates.'
           branch: 'update-generated-files'
+      - name: Enable Auto-merge
+        if: steps.cpr.outputs.pull-request-number
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr merge --auto --merge "${{ steps.cpr.outputs.pull-request-number }}"

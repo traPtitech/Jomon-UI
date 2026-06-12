@@ -32,7 +32,7 @@
 ### Requirements
 
 - Node.js 24.11 or higher
-- npm (bundled with Node.js)
+- pnpm (via corepack)
 - JVM (Java 17+ recommended for OpenAPI Generator)
 
 We recommend locking Node.js versions via tools like [Volta](https://volta.sh/) or [fnm](https://github.com/Schniz/fnm) for consistent local environments.
@@ -42,45 +42,46 @@ We recommend locking Node.js versions via tools like [Volta](https://volta.sh/) 
 Install dependencies.
 
 ```sh
-npm install
+corepack enable pnpm
+pnpm install
 ```
 
 ### Development Flow
 
 **Local Development**
 
-- Start dev server: `npm run dev`
-- Type check in parallel: `npm run type-check` (keep running to catch errors early)
+- Start dev server: `pnpm dev`
+- Type check in parallel: `pnpm type-check` (keep running to catch errors early)
 - Format & Lint:
-  - Run `npm run format` and `npm run lint` before committing.
+  - Run `pnpm format` and `pnpm lint` before committing.
   - CI uses `lint:nofix` and `format:check` to ensure quality without modifying code.
 
 **CI (Pull Request)**
 
-1. `npm ci`
-2. `npm run gen-api` (Ensure generated code matches schema)
-3. `npm run lint:nofix`
-4. `npm run format:check`
-5. `npm run type-check`
-6. `npm run build`
+1. `pnpm install --frozen-lockfile`
+2. `pnpm gen-api` (Ensure generated code matches schema)
+3. `pnpm lint:nofix`
+4. `pnpm format:check`
+5. `pnpm type-check`
+6. `pnpm build`
 
 ### Scripts
 
 | Command                | Description                                                       |
 | ---------------------- | ----------------------------------------------------------------- |
-| `npm run dev`          | Start the Vite development server.                                |
-| `npm run build`        | Run `vue-tsc --noEmit` then produce a production build with Vite. |
-| `npm run serve`        | Preview an existing production build via `vite preview`.          |
-| `npm run build:watch`  | Continuously watch and rebuild during development.                |
-| `npm run lint`         | Execute ESLint with automatic fixes.                              |
-| `npm run lint:nofix`   | Execute ESLint without applying fixes.                            |
-| `npm run type-check`   | Run type-only checks using `vue-tsc --noEmit`.                    |
-| `npm run format`       | Format code using Prettier.                                       |
-| `npm run format:check` | Verify formatting differences with Prettier.                      |
-| `npm run gen-api`      | Generate the TypeScript client from the OpenAPI schema.           |
-| `npm run clean`        | Remove generated API clients in `src/lib/apis/generated`.         |
+| `pnpm dev`          | Start the Vite development server.                                |
+| `pnpm build`        | Run `vue-tsc --noEmit` then produce a production build with Vite. |
+| `pnpm serve`        | Preview an existing production build via `vite preview`.          |
+| `pnpm build:watch`  | Continuously watch and rebuild during development.                |
+| `pnpm lint`         | Execute ESLint with automatic fixes.                              |
+| `pnpm lint:nofix`   | Execute ESLint without applying fixes.                            |
+| `pnpm type-check`   | Run type-only checks using `vue-tsc --noEmit`.                    |
+| `pnpm format`       | Format code using Prettier.                                       |
+| `pnpm format:check` | Verify formatting differences with Prettier.                      |
+| `pnpm gen-api`      | Generate the TypeScript client from the OpenAPI schema.           |
+| `pnpm clean`        | Remove generated API clients in `src/lib/apis/generated`.         |
 
-> After `npm install`, the `postinstall` script automatically triggers `npm run gen-api`. When the API schema changes, run `npm run clean && npm run gen-api` manually.
+> After `pnpm install`, the `postinstall` script automatically triggers `pnpm gen-api`. When the API schema changes, run `pnpm clean && pnpm gen-api` manually.
 
 ### Project Structure
 
@@ -125,7 +126,7 @@ src/
 ### API Client Workflow
 
 1. Update `openapitools.json` and `scripts/generate-apis.ts` to sync schema changes.
-2. Run `npm run gen-api` to regenerate clients under `src/lib/apis/generated`.
+2. Run `pnpm gen-api` to regenerate clients under `src/lib/apis/generated`.
 3. Commit generated artifacts so reviewers can track differences.
 4. To refresh the MSW worker, run `npx msw init public/ --save`.
 
@@ -158,7 +159,7 @@ src/
 ### 必要条件
 
 - Node.js 24.11 以上
-- npm (Node.js に同梱)
+- pnpm (corepack経由)
 - JVM (OpenAPI Generator 利用のため Java 17 以上を推奨)
 
 Node.js 環境は [Volta](https://volta.sh/) や [fnm](https://github.com/Schniz/fnm) などのバージョンマネージャで固定すると安定します。
@@ -168,45 +169,46 @@ Node.js 環境は [Volta](https://volta.sh/) や [fnm](https://github.com/Schniz
 依存パッケージをインストールします。
 
 ```sh
-npm install
+corepack enable pnpm
+pnpm install
 ```
 
 ### 開発フロー
 
 **ローカル開発**
 
-- 開発サーバー: `npm run dev`
-- 型チェック並行実行: `npm run type-check` (エラーを早期発見するため常時実行推奨)
+- 開発サーバー: `pnpm dev`
+- 型チェック並行実行: `pnpm type-check` (エラーを早期発見するため常時実行推奨)
 - フォーマット・Lint:
-  - コミット前に `npm run format` と `npm run lint` を実行
+  - コミット前に `pnpm format` と `pnpm lint` を実行
   - CI では `lint:nofix` と `format:check` を使い、コードを書き換えずに品質をチェックします
 
 **CI (Pull Request)**
 
-1. `npm ci`
-2. `npm run gen-api` (生成コードが最新か確認)
-3. `npm run lint:nofix`
-4. `npm run format:check`
-5. `npm run type-check`
-6. `npm run build`
+1. `pnpm install --frozen-lockfile`
+2. `pnpm gen-api` (生成コードが最新か確認)
+3. `pnpm lint:nofix`
+4. `pnpm format:check`
+5. `pnpm type-check`
+6. `pnpm build`
 
 ### 主要スクリプト
 
 | コマンド               | 説明                                                                |
 | ---------------------- | ------------------------------------------------------------------- |
-| `npm run dev`          | Vite の開発サーバーを起動します。                                   |
-| `npm run build`        | `vue-tsc --noEmit` で型検証後、Vite で本番ビルドを生成します。      |
-| `npm run serve`        | 生成済みビルドを `vite preview` で確認します。                      |
-| `npm run build:watch`  | 監視モードでビルドを実行します。                                    |
-| `npm run lint`         | ESLint を自動修正付きで実行します。                                 |
-| `npm run lint:nofix`   | 自動修正なしで ESLint を実行します。                                |
-| `npm run type-check`   | `vue-tsc --noEmit` による型検証のみを実行します。                   |
-| `npm run format`       | Prettier でコード整形を行います。                                   |
-| `npm run format:check` | Prettier の整形差分を確認します。                                   |
-| `npm run gen-api`      | OpenAPI スキーマから TypeScript クライアントを生成します。          |
-| `npm run clean`        | 生成済み API クライアント (`src/lib/apis/generated`) を削除します。 |
+| `pnpm dev`          | Vite の開発サーバーを起動します。                                   |
+| `pnpm build`        | `vue-tsc --noEmit` で型検証後、Vite で本番ビルドを生成します。      |
+| `pnpm serve`        | 生成済みビルドを `vite preview` で確認します。                      |
+| `pnpm build:watch`  | 監視モードでビルドを実行します。                                    |
+| `pnpm lint`         | ESLint を自動修正付きで実行します。                                 |
+| `pnpm lint:nofix`   | 自動修正なしで ESLint を実行します。                                |
+| `pnpm type-check`   | `vue-tsc --noEmit` による型検証のみを実行します。                   |
+| `pnpm format`       | Prettier でコード整形を行います。                                   |
+| `pnpm format:check` | Prettier の整形差分を確認します。                                   |
+| `pnpm gen-api`      | OpenAPI スキーマから TypeScript クライアントを生成します。          |
+| `pnpm clean`        | 生成済み API クライアント (`src/lib/apis/generated`) を削除します。 |
 
-> `npm install` 後に `postinstall` スクリプトで `npm run gen-api` が自動実行されます。API スキーマ更新時は `npm run clean && npm run gen-api` を手動で再実行してください。
+> `pnpm install` 後に `postinstall` スクリプトで `pnpm gen-api` が自動実行されます。API スキーマ更新時は `pnpm clean && pnpm gen-api` を手動で再実行してください。
 
 ### プロジェクト構成
 
@@ -251,7 +253,7 @@ src/
 ### API クライアント運用
 
 1. `openapitools.json` と `scripts/generate-apis.ts` を更新してスキーマを同期します。
-2. `npm run gen-api` を実行し、`src/lib/apis/generated` にクライアントを再生成します。
+2. `pnpm gen-api` を実行し、`src/lib/apis/generated` にクライアントを再生成します。
 3. 生成物はコミットし、差分がレビューできるようにしてください。
 4. MSW のワーカーを更新する際は `npx msw init public/ --save` を利用します。
 

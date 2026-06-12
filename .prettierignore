@@ -1,6 +1,6 @@
 public/mockServiceWorker.js
 src/lib/apis/generated/**/*
-package-lock.json
+pnpm-lock.yaml
 dist
 coverage
 *.log

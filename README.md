@@ -67,8 +67,8 @@ pnpm install
 
 ### Scripts
 
-| Command                | Description                                                       |
-| ---------------------- | ----------------------------------------------------------------- |
+| Command             | Description                                                       |
+| ------------------- | ----------------------------------------------------------------- |
 | `pnpm dev`          | Start the Vite development server.                                |
 | `pnpm build`        | Run `vue-tsc --noEmit` then produce a production build with Vite. |
 | `pnpm serve`        | Preview an existing production build via `vite preview`.          |
@@ -194,8 +194,8 @@ pnpm install
 
 ### 主要スクリプト
 
-| コマンド               | 説明                                                                |
-| ---------------------- | ------------------------------------------------------------------- |
+| コマンド            | 説明                                                                |
+| ------------------- | ------------------------------------------------------------------- |
 | `pnpm dev`          | Vite の開発サーバーを起動します。                                   |
 | `pnpm build`        | `vue-tsc --noEmit` で型検証後、Vite で本番ビルドを生成します。      |
 | `pnpm serve`        | 生成済みビルドを `vite preview` で確認します。                      |

@@ -3,7 +3,7 @@ RUN apk add --update --no-cache openjdk17-jre-headless
 
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY scripts/ ./scripts/
 
 RUN corepack enable pnpm && pnpm install --frozen-lockfile

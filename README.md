@@ -128,7 +128,7 @@ src/
 1. Update `openapitools.json` and `scripts/generate-apis.ts` to sync schema changes.
 2. Run `pnpm gen-api` to regenerate clients under `src/lib/apis/generated`.
 3. Commit generated artifacts so reviewers can track differences.
-4. To refresh the MSW worker, run `npx msw init public/ --save`.
+4. To refresh the MSW worker, run `pnpm exec msw init public/ --save`.
 
 ### Links
 
@@ -255,7 +255,7 @@ src/
 1. `openapitools.json` と `scripts/generate-apis.ts` を更新してスキーマを同期します。
 2. `pnpm gen-api` を実行し、`src/lib/apis/generated` にクライアントを再生成します。
 3. 生成物はコミットし、差分がレビューできるようにしてください。
-4. MSW のワーカーを更新する際は `npx msw init public/ --save` を利用します。
+4. MSW のワーカーを更新する際は `pnpm exec msw init public/ --save` を利用します。
 
 ### リンク
 

@@ -1,4 +1,3 @@
-# Assign reiroop for Dependabot PRs
-package.json @reiroop
-package-lock.json @reiroop
-.github/workflows/ @reiroop
+package.json @Oxojo
+package-lock.json @Oxojo
+.github/workflows/ @Oxojo

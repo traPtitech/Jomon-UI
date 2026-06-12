@@ -1,0 +1,2 @@
+pnpm exec lint-staged
+gitleaks protect -v --staged

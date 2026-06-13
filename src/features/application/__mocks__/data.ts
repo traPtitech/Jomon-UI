@@ -3,14 +3,14 @@ import { fakerJA as faker } from '@faker-js/faker'
 import {
   type Application,
   type ApplicationDetail,
-  type ApplicationInput,
+  type PostApplicationInput,
 } from '@/lib/apis'
 
 import { createMockApplicationComment } from '@/features/applicationComment/__mocks__/data'
 import { createMockApplicationStatus } from '@/features/applicationStatus/__mocks__/data'
 import {
   createMockApplicationTarget,
-  createNewApplicationTargetFromApplicationTargetInput,
+  createMockApplicationTargetFromPostApplicationTargetInput,
 } from '@/features/applicationTarget/__mocks__/data'
 import { mockIdToMockFileEntry } from '@/features/file/__mocks__/data'
 import { pickRandomElements } from '@/features/mock-utils/randomPicker'
@@ -90,24 +90,26 @@ export const mockIdToMockApplicationDetail = new Map(
 )
 
 export const createNewApplicationFromApplicationInput = (
-  applicationInput: ApplicationInput
+  postApplicationInput: PostApplicationInput
 ): Application | undefined => {
-  const tags = getMockTagsByIds(applicationInput.tags)
+  const tags = getMockTagsByIds(postApplicationInput.tags)
   if (!tags) {
     return undefined
   }
 
-  const targets = applicationInput.targets.map(applicationTargetInput =>
-    createNewApplicationTargetFromApplicationTargetInput(applicationTargetInput)
+  const targets = postApplicationInput.targets.map(postApplicationTargetInput =>
+    createMockApplicationTargetFromPostApplicationTargetInput(
+      postApplicationTargetInput
+    )
   )
 
-  const partition = mockIdToMockPartition.get(applicationInput.partition)
+  const partition = mockIdToMockPartition.get(postApplicationInput.partition)
   if (!partition) {
     return undefined
   }
 
   return {
-    ...applicationInput,
+    ...postApplicationInput,
     id: faker.string.uuid(),
     status: 'pending_review',
     created_at: new Date().toISOString(),

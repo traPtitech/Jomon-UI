@@ -3,15 +3,17 @@ import { HttpResponse, type PathParams, http } from 'msw'
 import {
   type Application,
   type ApplicationDetail,
-  type ApplicationInput,
   type Comment,
   type CommentInput,
+  type PostApplicationInput,
+  type PutApplicationInput,
   type StatusDetail,
   type StatusInput,
 } from '@/lib/apis'
 
 import { createMockCommentFromCommentInput } from '@/features/applicationComment/__mocks__/data'
 import { createMockApplicationStatus } from '@/features/applicationStatus/__mocks__/data'
+import { createMockApplicationTargetFromPutApplicationTargetInput } from '@/features/applicationTarget/__mocks__/data'
 import { mockIdToMockPartition } from '@/features/partition/__mocks__/data'
 import { getMockTagsByIds } from '@/features/tag/__mocks__/data'
 import { loggedInUser } from '@/features/user/__mocks__/data'
@@ -44,12 +46,12 @@ export const applicationHandlers = [
     }
   ),
 
-  http.post<never, ApplicationInput, ApplicationDetail>(
+  http.post<never, PostApplicationInput, ApplicationDetail>(
     '/api/applications',
     async ({ request }) => {
-      const applicationInput: ApplicationInput = await request.json()
+      const postApplicationInput = await request.json()
       const newApplication =
-        createNewApplicationFromApplicationInput(applicationInput)
+        createNewApplicationFromApplicationInput(postApplicationInput)
       if (!newApplication) {
         return new HttpResponse(null, { status: 400 })
       }
@@ -74,7 +76,7 @@ export const applicationHandlers = [
     }
   ),
 
-  http.put<PathParams, ApplicationInput, ApplicationDetail>(
+  http.put<PathParams, PutApplicationInput, ApplicationDetail>(
     '/api/applications/:id',
     async ({ params, request }) => {
       const id = params.id as string
@@ -83,20 +85,29 @@ export const applicationHandlers = [
         return new HttpResponse(null, { status: 404 })
       }
 
-      const applicationInput = await request.json()
+      const putApplicationInput = await request.json()
       if (
-        applicationInput.created_by !== existingApplicationDetail.created_by
+        putApplicationInput.created_by !== existingApplicationDetail.created_by
       ) {
         return new HttpResponse(null, { status: 400 })
       }
 
-      const updatedTags = getMockTagsByIds(applicationInput.tags)
+      const updatedTargets = putApplicationInput.targets.map(newTarget => {
+        const existingTarget = existingApplicationDetail.targets.find(
+          existingTarget => existingTarget.target === newTarget.target
+        )
+        return existingTarget
+          ? { ...existingTarget, ...newTarget }
+          : createMockApplicationTargetFromPutApplicationTargetInput(newTarget)
+      })
+
+      const updatedTags = getMockTagsByIds(putApplicationInput.tags)
       if (!updatedTags) {
         return new HttpResponse(null, { status: 400 })
       }
 
       const updatedPartition = mockIdToMockPartition.get(
-        applicationInput.partition
+        putApplicationInput.partition
       )
       if (!updatedPartition) {
         return new HttpResponse(null, { status: 400 })
@@ -104,8 +115,8 @@ export const applicationHandlers = [
 
       const updatedApplicationDetail = {
         ...existingApplicationDetail,
-        ...applicationInput,
-        targets: existingApplicationDetail.targets, // FIXME: 今のAPI仕様ではこのエンドポイントのリクエストボディであるApplicationInputはtargetsを更新するための情報が足りておらず、targetsの更新処理を実装できない
+        ...putApplicationInput,
+        targets: updatedTargets,
         tags: updatedTags,
         partition: updatedPartition,
         updated_at: new Date().toISOString(),

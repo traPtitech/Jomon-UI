@@ -1,11 +1,13 @@
-<script setup lang="ts" generic="T extends string | null">
+<script setup lang="ts" generic="T extends string">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+
+import { XMarkIcon } from '@heroicons/vue/24/outline'
 
 import type { MenuState, SearchSelectProps } from './SearchSelect.types'
 import SearchSelectInput from './SearchSelectInput.vue'
 import SearchSelectOption from './SearchSelectOption.vue'
 
-const props = withDefaults(defineProps<SearchSelectProps<NonNullable<T>>>(), {
+const props = withDefaults(defineProps<SearchSelectProps<T>>(), {
   placeholder: '検索',
   disabled: false,
   required: false,
@@ -15,7 +17,7 @@ const emit = defineEmits<{
   (e: 'focus' | 'close'): void
   (e: 'keydown', value: KeyboardEvent): void
 }>()
-const model = defineModel<T>({ required: true })
+const model = defineModel<T[]>({ required: true })
 
 const menuState = ref<MenuState>('close')
 const searchTerm = ref('')
@@ -32,6 +34,13 @@ const filteredOptions = computed(() => {
   )
 })
 
+const getPlaceholderText = computed(() => {
+  if (model.value.length > 0) {
+    return `${String(model.value.length)}個選択中...`
+  }
+  return props.placeholder
+})
+
 const handleClickOutside = (event: MouseEvent) => {
   if (typeof Node === 'undefined') {
     return
@@ -42,23 +51,11 @@ const handleClickOutside = (event: MouseEvent) => {
   }
   if (dropdownRef.value && !dropdownRef.value.contains(target)) {
     menuState.value = 'close'
-    if (model.value) {
-      const selectedOption = props.options.find(
-        opt => opt.value === model.value
-      )
-      searchTerm.value = selectedOption?.key ?? ''
-    } else {
-      searchTerm.value = ''
-    }
   }
 }
 
 onMounted(() => {
   document.addEventListener('mousedown', handleClickOutside)
-  if (model.value && !searchTerm.value) {
-    const selectedOption = props.options.find(opt => opt.value === model.value)
-    searchTerm.value = selectedOption?.key ?? ''
-  }
 })
 
 onUnmounted(() => {
@@ -69,20 +66,16 @@ watch(menuState, () => {
   if (menuState.value === 'close') emit('close')
 })
 
-const handleSelect = (selectedValue: NonNullable<T>) => {
-  model.value = selectedValue
-  const selectedOption = props.options.find(opt => opt.value === selectedValue)
-  searchTerm.value = selectedOption?.key ?? selectedValue
-  menuState.value = 'close'
+const handleSelect = (selectedValue: T) => {
+  model.value = model.value.includes(selectedValue)
+    ? model.value.filter(v => v !== selectedValue)
+    : [...model.value, selectedValue]
+  searchTerm.value = '' // Clear search after selection
 }
 
 const handleInputFocus = () => {
   emit('focus')
   menuState.value = 'presearch'
-  if (model.value) {
-    const selectedOption = props.options.find(opt => opt.value === model.value)
-    searchTerm.value = selectedOption?.key ?? ''
-  }
 }
 
 const handleChange = () => {
@@ -127,20 +120,16 @@ const handleKeyDown = (e: KeyboardEvent) => {
     }
     case 'Escape':
       menuState.value = 'close'
-      if (model.value) {
-        const selectedOption = props.options.find(
-          opt => opt.value === model.value
-        )
-        searchTerm.value = selectedOption?.key ?? ''
-      } else {
-        searchTerm.value = ''
-      }
+      searchTerm.value = ''
       break
     case 'Tab':
       menuState.value = 'close'
       break
   }
 }
+
+const getKeyByValue = (value: T) =>
+  props.options.find(opt => opt.value === value)?.key || value
 </script>
 
 <template>
@@ -149,7 +138,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
       v-model:search-term="searchTerm"
       :is-options-opened="menuState !== 'close'"
       :label="label"
-      :placeholder="placeholder"
+      :placeholder="getPlaceholderText"
       :disabled="disabled"
       :required="required"
       @focus="handleInputFocus"
@@ -160,6 +149,20 @@ const handleKeyDown = (e: KeyboardEvent) => {
           ? (menuState = 'presearch')
           : (menuState = 'close')
       " />
+
+    <!-- Selected items for multiple selection -->
+    <div v-if="model.length > 0" class="mt-2 flex flex-wrap gap-1">
+      <div v-for="val in model" :key="val" class="text-xs">
+        {{ getKeyByValue(val) }}
+        <button
+          type="button"
+          class="ml-1 rounded-full hover:bg-blue-100"
+          :aria-label="`${getKeyByValue(val)} を選択解除`"
+          @click.stop="handleSelect(val)">
+          <XMarkIcon class="h-3 w-3" />
+        </button>
+      </div>
+    </div>
 
     <div
       v-if="menuState !== 'close'"
@@ -173,7 +176,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
           v-for="(option, index) in filteredOptions"
           :key="option.value"
           :option="option"
-          :selected="option.value === model"
+          :selected="model.includes(option.value)"
           :highlighted="index === highlightedIndex"
           @select="() => handleSelect(option.value)" />
       </div>

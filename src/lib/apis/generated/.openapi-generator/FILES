@@ -7,13 +7,9 @@ configuration.ts
 docs/AccountManagersApi.md
 docs/Application.md
 docs/ApplicationDetail.md
-docs/ApplicationFile.md
-docs/ApplicationInput.md
 docs/ApplicationTarget.md
-docs/ApplicationTargetInput.md
 docs/ApplicationsApi.md
 docs/AuthApi.md
-docs/AuthInfo.md
 docs/Comment.md
 docs/CommentInput.md
 docs/FileMeta.md
@@ -24,7 +20,11 @@ docs/PartitionGroupInput.md
 docs/PartitionInput.md
 docs/PartitionManagement.md
 docs/PartitionsApi.md
+docs/PostApplicationInput.md
+docs/PostApplicationTargetInput.md
 docs/PostFile200Response.md
+docs/PutApplicationInput.md
+docs/PutApplicationTargetInput.md
 docs/Status.md
 docs/StatusDetail.md
 docs/StatusEnum.md

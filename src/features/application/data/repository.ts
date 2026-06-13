@@ -1,7 +1,9 @@
 import apis, {
-  type ApplicationInput,
-  type ApplicationTargetInput,
   type CommentInput,
+  type PostApplicationInput,
+  type PostApplicationTargetInput,
+  type PutApplicationInput,
+  type PutApplicationTargetInput,
   type StatusInput,
 } from '@/lib/apis'
 
@@ -17,7 +19,8 @@ import type {
   Application,
   ApplicationDetail,
   ApplicationQuerySeed,
-  ApplicationSeed,
+  PostApplicationSeed,
+  PutApplicationSeed,
 } from '../entities'
 import { convertApplication, convertApplicationDetail } from './converter'
 
@@ -25,22 +28,40 @@ export const useApplicationRepository = () => {
   return createApplicationRepository()
 }
 
-const toApplicationTargetInput = (
-  target: ApplicationSeed['targets'][number]
-): ApplicationTargetInput => ({
+const toPostApplicationTargetInput = (
+  target: PostApplicationSeed['targets'][number]
+): PostApplicationTargetInput => ({
   amount: target.amount,
   target: target.target,
 })
 
-const toApplicationInput = (
-  application: ApplicationSeed
-): ApplicationInput => ({
+const toPostApplicationInput = (
+  application: PostApplicationSeed
+): PostApplicationInput => ({
   created_by: application.createdBy,
   title: application.title,
   content: application.content,
   tags: application.tags.map(tag => tag.id),
   partition: application.partition,
-  targets: application.targets.map(toApplicationTargetInput),
+  targets: application.targets.map(toPostApplicationTargetInput),
+})
+
+const toPutApplicationTargetInput = (
+  target: PutApplicationSeed['targets'][number]
+): PutApplicationTargetInput => ({
+  ...target,
+  paid_at: target.paidAt,
+})
+
+const toPutApplicationInput = (
+  application: PutApplicationSeed
+): PutApplicationInput => ({
+  created_by: application.createdBy,
+  title: application.title,
+  content: application.content,
+  tags: application.tags.map(tag => tag.id),
+  partition: application.partition,
+  targets: application.targets.map(toPutApplicationTargetInput),
 })
 
 const toCommentInput = (comment: string): CommentInput => ({
@@ -81,20 +102,22 @@ const createApplicationRepository = () => ({
   },
 
   createApplication: async (
-    application: ApplicationSeed
+    postApplicationSeed: PostApplicationSeed
   ): Promise<ApplicationDetail> => {
-    const { data } = await apis.postApplication(toApplicationInput(application))
+    const { data } = await apis.postApplication(
+      toPostApplicationInput(postApplicationSeed)
+    )
 
     return convertApplicationDetail(data)
   },
 
   editApplication: async (
     id: string,
-    application: ApplicationSeed
+    putApplicationSeed: PutApplicationSeed
   ): Promise<ApplicationDetail> => {
     const { data } = await apis.putApplicationDetail(
       id,
-      toApplicationInput(application)
+      toPutApplicationInput(putApplicationSeed)
     )
 
     return convertApplicationDetail(data)

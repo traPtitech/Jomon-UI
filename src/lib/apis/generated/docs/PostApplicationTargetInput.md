@@ -1,21 +1,21 @@
-# ApplicationFile
+# PostApplicationTargetInput
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**file** | **File** |  | [default to undefined]
-**name** | **string** |  | [default to undefined]
+**amount** | **number** |  | [default to undefined]
+**target** | **string** |  | [default to undefined]
 
 ## Example
 
 ```typescript
-import { ApplicationFile } from './api';
+import { PostApplicationTargetInput } from './api';
 
-const instance: ApplicationFile = {
-    file,
-    name,
+const instance: PostApplicationTargetInput = {
+    amount,
+    target,
 };
 ```
 

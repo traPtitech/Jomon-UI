@@ -1,5 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/applications' },
@@ -24,8 +24,8 @@ const routes: RouteRecordRaw[] = [
     component: () => import('./pages/NewPartitionPage.vue'),
   },
   {
-    path: '/partitions/:id',
-    component: () => import('./pages/PartitionDetailPage.vue'),
+    path: '/partitions/newGroup',
+    component: () => import('./pages/NewPartitionGroupPage.vue'),
   },
   {
     path: '/account-managers',

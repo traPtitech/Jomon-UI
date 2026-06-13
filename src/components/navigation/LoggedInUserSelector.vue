@@ -20,9 +20,11 @@ const label = 'ログインユーザーを変更'
 </script>
 
 <template>
+  <!-- @vue-expect-error -->
   <button popovertarget="user-select" :aria-label="label">
     <slot />
   </button>
+  <!-- @vue-expect-error -->
   <SearchSelect
     id="user-select"
     popover

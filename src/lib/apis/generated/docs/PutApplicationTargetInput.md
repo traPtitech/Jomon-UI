@@ -1,4 +1,4 @@
-# ApplicationTargetInput
+# PutApplicationTargetInput
 
 
 ## Properties
@@ -7,15 +7,17 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **amount** | **number** |  | [default to undefined]
 **target** | **string** |  | [default to undefined]
+**paid_at** | **string** |  | [default to undefined]
 
 ## Example
 
 ```typescript
-import { ApplicationTargetInput } from './api';
+import { PutApplicationTargetInput } from './api';
 
-const instance: ApplicationTargetInput = {
+const instance: PutApplicationTargetInput = {
     amount,
     target,
+    paid_at,
 };
 ```
 

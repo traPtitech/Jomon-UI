@@ -4,10 +4,10 @@ All URIs are relative to *https://raw.githubusercontent.com/api*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**generatePKCE**](#generatepkce) | **GET** /auth/genpkce | |
+|[**beginAuth**](#beginauth) | **GET** /auth/signin | |
 
-# **generatePKCE**
-> generatePKCE()
+# **beginAuth**
+> beginAuth()
 
 PKCEを取得する｡
 
@@ -22,7 +22,7 @@ import {
 const configuration = new Configuration();
 const apiInstance = new AuthApi(configuration);
 
-const { status, data } = await apiInstance.generatePKCE();
+const { status, data } = await apiInstance.beginAuth();
 ```
 
 ### Parameters

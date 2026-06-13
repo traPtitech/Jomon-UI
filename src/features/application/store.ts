@@ -71,7 +71,7 @@ export const useApplicationStore = defineStoreComposable('application', () => {
       error.value =
         '申請一覧の取得に失敗しました: ' +
         (e instanceof Error ? e.message : String(e))
-      throw new Error(error.value)
+      throw new Error(error.value, { cause: e })
     }
   }
 

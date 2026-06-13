@@ -38,7 +38,7 @@ export const useAccountManagerStore = defineStoreComposable(
         error.value =
           '会計管理者の取得に失敗しました: ' +
           (e instanceof Error ? e.message : String(e))
-        throw new Error(error.value)
+        throw new Error(error.value, { cause: e })
       }
     }
 

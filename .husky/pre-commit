@@ -1,0 +1,2 @@
+pnpm exec lint-staged
+pnpm exec esno ./scripts/gitleaks.ts protect -v --staged

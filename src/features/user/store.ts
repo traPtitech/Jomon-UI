@@ -49,7 +49,7 @@ export const useUserStore = defineStoreComposable('user', () => {
     } catch (e) {
       status.value = 'error'
       error.value = 'ユーザー一覧の取得に失敗しました: ' + String(e)
-      throw new Error(error.value)
+      throw new Error(error.value, { cause: e })
     }
   }
 

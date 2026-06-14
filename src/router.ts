@@ -24,6 +24,10 @@ const routes: RouteRecordRaw[] = [
     component: () => import('./pages/NewPartitionPage.vue'),
   },
   {
+    path: '/partitions/newGroup',
+    component: () => import('./pages/NewPartitionGroupPage.vue'),
+  },
+  {
     path: '/account-managers',
     component: () => import('./pages/AccountManagerPage.vue'),
   },

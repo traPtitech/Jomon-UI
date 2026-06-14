@@ -1,0 +1,39 @@
+name: Update generated files
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-generated:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version-file: ./.node-version
+          cache: pnpm
+      - run: pnpm install
+      - run: pnpm exec msw init public/ --save
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        id: cpr
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          commit-message: 'chore: auto-update generated files'
+          title: 'chore: auto-update generated files'
+          reviewers: Oxojo
+          body: 'Automated PR to update generated files (e.g. MSW worker and lockfile) after dependency updates.'
+          branch: 'update-generated-files'
+      - name: Enable Auto-merge
+        if: steps.cpr.outputs.pull-request-number
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr merge --auto --merge "${{ steps.cpr.outputs.pull-request-number }}"

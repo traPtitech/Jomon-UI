@@ -33,7 +33,7 @@ const totalAmount = computed(() =>
     <div class="flex items-start justify-center">
       <StatusChip :status="application.status" />
     </div>
-    <div class="flex flex-grow flex-wrap">
+    <div class="flex flex-grow">
       <div class="flex flex-grow flex-col gap-2">
         <span class="text-xl">{{ application.title }}</span>
         <TagsPartition :tags="application.tags" />

@@ -28,7 +28,7 @@
     "markdown-it": "14.2.0",
     "pinia": "3.0.4",
     "vue": "3.5.35",
-    "vue-router": "5.0.6",
+    "vue-router": "5.1.0",
     "vue-toastification": "2.0.0-rc.5"
   },
   "devDependencies": {

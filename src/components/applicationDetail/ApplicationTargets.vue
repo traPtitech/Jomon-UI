@@ -25,6 +25,7 @@ const hasAuthority = isApplicationCreator.value(me.value)
 
 const isEditMode = ref(false)
 const editedTargets = ref(props.application.targets.map(t => ({ ...t })))
+const canDeleteTargets = computed(() => editedTargets.value.length > 1)
 
 const selectedUserIds = computed(() =>
   isEditMode.value
@@ -33,6 +34,10 @@ const selectedUserIds = computed(() =>
 )
 
 const handleDeleteTarget = (id: string) => {
+  if (!canDeleteTargets.value) {
+    toast.error('払い戻し対象者は1人未満にできません')
+    return
+  }
   editedTargets.value = editedTargets.value.filter(target => target.id !== id)
 }
 
@@ -85,6 +90,7 @@ const handleUpdateTargets = async () => {
             v-if="editedTargets[i]"
             v-model:target-model="editedTargets[i]"
             :application="application"
+            :can-delete="canDeleteTargets"
             :selected-user-ids="selectedUserIds"
             @delete="handleDeleteTarget" />
           <div v-else class="text-error-primary">

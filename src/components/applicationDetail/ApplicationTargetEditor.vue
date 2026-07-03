@@ -11,6 +11,7 @@ import { useUserStore } from '@/features/user/store'
 
 const props = defineProps<{
   application: ApplicationDetail
+  canDelete: boolean
   selectedUserIds: string[]
 }>()
 
@@ -42,13 +43,17 @@ const targetAmountDraft = computed<number | null>({
 })
 
 const handleRemoveTarget = () => {
-  // TODO: confirmをカスタムモーダルに置き換える
-  const result = confirm('本当に削除しますか？')
-  if (!result) {
+  // 払い戻し対象者が一人の時にボタンを押せなくする
+  if (props.canDelete) {
+    // TODO: confirmをカスタムモーダルに置き換える
+    const result = confirm('本当に削除しますか？')
+    if (!result) {
+      return
+    }
+    emit('delete', targetModel.value.id)
     return
   }
 
-  emit('delete', targetModel.value.id)
   return
 }
 </script>
@@ -65,7 +70,11 @@ const handleRemoveTarget = () => {
           ¥
         </span>
       </BaseNumberInput>
-      <button @click="handleRemoveTarget">
+      <button
+        :disabled="!canDelete"
+        class="mt-auto mb-2 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-error-primary disabled:cursor-not-allowed disabled:opacity-30"
+        type="button"
+        @click="handleRemoveTarget">
         <TrashIcon class="w-6 cursor-pointer text-error-primary" />
       </button>
     </div>

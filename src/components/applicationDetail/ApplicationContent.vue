@@ -76,7 +76,10 @@ const handleUpdateContent = async () => {
         v-if="!isEditMode"
         class="w-full flex-1 rounded-lg border border-surface-secondary px-4 py-3">
         <MarkdownIt :text="application.content" />
-        <ApplicationAttachment :files="application.files" />
+        <ApplicationAttachment
+          :files="application.files"
+          :user-id="me?.id ?? ''"
+          :applicant-id="application.createdBy" />
       </div>
       <MarkdownTextarea
         v-else

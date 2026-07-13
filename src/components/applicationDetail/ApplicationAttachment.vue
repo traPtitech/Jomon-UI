@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { useToast } from 'vue-toastification'
 
-defineProps<{ files: string[] }>()
+defineProps<{
+  files: string[]
+  userId: string
+  applicantId: string
+}>()
 const toast = useToast()
 
 const handleFileUpload = () => {
@@ -44,7 +48,7 @@ const handleFileUpload = () => {
       </div>
     </div>
   </div>
-  <div class="flex justify-end">
+  <div v-if="userId === applicantId" class="flex justify-end">
     <label
       class="flex cursor-pointer items-center rounded-md border border-surface-secondary px-4 py-2 hover:bg-hover-primary"
       for="file_upload">

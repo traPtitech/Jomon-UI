@@ -48,7 +48,7 @@ const handleFileUpload = () => {
       </div>
     </div>
   </div>
-  <div v-if="userId === applicantId" class="flex justify-end">
+  <div v-if="userId && userId === applicantId" class="flex justify-end">
     <label
       class="flex cursor-pointer items-center rounded-md border border-surface-secondary px-4 py-2 hover:bg-hover-primary"
       for="file_upload">

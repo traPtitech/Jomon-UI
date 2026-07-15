@@ -17,7 +17,7 @@ import { useNewApplication } from './composables/useNewApplication'
 
 const { isTagFetched, fetchTags } = useTagStore()
 const { isUserFetched, fetchUsers, me } = useUserStore()
-const { isPartitionFetched, partitionOptions, fetchPartitions } =
+const { isPartitionFetched, availablePartitionOptions, fetchPartitions } =
   usePartitionStore()
 
 const { isSending, application, files, postApplication } = useNewApplication()
@@ -63,7 +63,7 @@ if (!isUserFetched.value) {
     <SearchSelect
       v-model="application.partition"
       class="w-full"
-      :options="partitionOptions"
+      :options="availablePartitionOptions"
       label="パーティション" />
     <SearchSelectTag v-model="application.tags" />
     <NewApplicationFileForm v-model="files" />

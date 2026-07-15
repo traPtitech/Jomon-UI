@@ -16,7 +16,7 @@ const application = defineModel<ApplicationDetail>('modelValue', {
 })
 
 const { me } = useUserStore()
-const { partitionOptions } = usePartitionStore()
+const { availablePartitionOptions } = usePartitionStore()
 const { isApplicationCreator } = useApplication(application.value)
 const { editApplication } = useApplicationStore()
 const toast = useToast()
@@ -61,7 +61,7 @@ const handleUpdatePartition = async () => {
         v-else
         v-model="editedPartition"
         label="パーティション"
-        :options="partitionOptions"
+        :options="availablePartitionOptions"
         @close="handleUpdatePartition" />
     </div>
   </div>

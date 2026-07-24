@@ -44,7 +44,7 @@
     "@types/luxon": "3.7.1",
     "@types/markdown-it": "14.1.2",
     "@types/node": "25.9.1",
-    "@typescript-eslint/eslint-plugin": "8.60.1",
+    "@typescript-eslint/eslint-plugin": "8.62.0",
     "@typescript-eslint/parser": "8.60.1",
     "@vitejs/plugin-vue": "6.0.7",
     "@vue/compiler-sfc": "3.5.35",

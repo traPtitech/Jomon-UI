@@ -3,3 +3,5 @@ allowBuilds:
   '@openapitools/openapi-generator-cli': true
   esbuild: true
   msw: true
+minimumReleaseAgeExclude:
+  - axios@1.21.1

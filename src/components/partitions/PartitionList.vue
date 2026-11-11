@@ -11,6 +11,7 @@ import PartitionListGroupName from './PartitionListGroupName.vue'
 import PartitionListPartitionBudget from './PartitionListPartitionBudget.vue'
 import PartitionListPartitionManagement from './PartitionListPartitionManagement.vue'
 import PartitionListPartitionName from './PartitionListPartitionName.vue'
+import PartitionListParentPartitionGroupButton from './PartitionListParentPartitionGroupButton.vue'
 
 const { partitions, isPartitionFetched, fetchPartitions, canEditPartition } =
   usePartitionStore()
@@ -110,8 +111,14 @@ const isEmptyGroupedPartitions = (groupedPartitions: GroupedPartitions) =>
                 partition.management.state === 'available'
               "
               class="flex flex-col px-4 py-3 md:flex-row md:justify-between">
-              <PartitionListPartitionName :partition="partition" />
-              <div class="flex justify-between space-x-4 md:justify-end">
+              <div class="flex items-center gap-1.5">
+                <PartitionListPartitionName :partition="partition" />
+                <PartitionListParentPartitionGroupButton
+                  v-if="userCanEditPartition"
+                  :partition="partition" />
+              </div>
+              <div
+                class="flex items-center justify-between space-x-4 md:justify-end">
                 <PartitionListPartitionBudget :partition="partition" />
                 <PartitionListPartitionManagement
                   v-if="userCanEditPartition"

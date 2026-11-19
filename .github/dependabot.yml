@@ -29,3 +29,13 @@ updates:
     cooldown:
       default-days: 7
     open-pull-requests-limit: 10
+  - package-ecosystem: docker
+    directory: '/'
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 10
+    target-branch: 'main'
+    labels:
+      - 'dependencies'

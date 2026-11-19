@@ -13,7 +13,7 @@ RUN pnpm gen-api
 
 RUN NODE_ENV=production pnpm build
 
-FROM nginx:1.25-alpine@sha256:516475cc129da42866742567714ddc681e5eed7b9ee0b9e9c015e464b4221a00
+FROM nginx:1.31-alpine@sha256:0563c36f94a6d3ec3584161b77859f740f7e20b4853f52c796a864ce6908e8ea
 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 

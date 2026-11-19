@@ -10,22 +10,10 @@ export interface BaseInputCommonProps {
 }
 
 export type TextInputType =
-  | 'text'
-  | 'email'
-  | 'password'
-  | 'search'
-  | 'tel'
-  | 'url'
+  'text' | 'email' | 'password' | 'search' | 'tel' | 'url'
 
 export type TextInputMode =
-  | 'none'
-  | 'text'
-  | 'tel'
-  | 'url'
-  | 'email'
-  | 'numeric'
-  | 'decimal'
-  | 'search'
+  'none' | 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search'
 
 // 足りなくなったら追加する
 export type TextAutocomplete =

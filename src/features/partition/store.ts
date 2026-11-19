@@ -25,6 +25,15 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
     }))
   )
 
+  const availablePartitionOptions = computed(() =>
+    partitions.value
+      .filter(partition => partition.management.state === 'available')
+      .map(partition => ({
+        key: partition.name,
+        value: partition.id,
+      }))
+  )
+
   const canEditPartition = computed(() => (user: User | undefined) => {
     if (!user) return false
     return user.accountManager
@@ -93,6 +102,7 @@ export const usePartitionStore = defineStoreComposable('partition', () => {
     error,
     isPartitionFetched,
     partitionOptions,
+    availablePartitionOptions,
     canEditPartition,
     fetchPartitions,
     fetchPartition,

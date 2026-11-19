@@ -33,7 +33,7 @@ if (
 ) {
   const worker = setupWorker(...handlers)
   await worker.start({
-    onUnhandledRequest: 'bypass',
+    onUnhandledFrame: 'bypass',
   })
 }
 
